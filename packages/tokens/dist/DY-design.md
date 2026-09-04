@@ -11,7 +11,7 @@
 | sys(시맨틱) | 318 |
 | cmp(컴포넌트) | 92 |
 | 컴포넌트 카탈로그 | 76 |
-| 대비 검사 | 76/76 통과 |
+| 대비 검사 | 82/82 통과 |
 
 | 산출물 | 용도 |
 |---|---|
@@ -162,7 +162,7 @@
 | `sys.color.bg.inverse` | #191b1e | #eff2f7 | {ref.color.neutral.12} | 반전 면(툴팁·토스트 다크) |
 | `sys.color.fg.default` | #191b1e | #eff2f7 | {ref.color.neutral.12} | 본문·제목(고대비) |
 | `sys.color.fg.muted` | #616368 | #bbbec3 | {ref.color.neutral.11} | 보조 텍스트·라벨(≥4.5:1) |
-| `sys.color.fg.subtle` | #727479 | #8a8c91 | {ref.color.neutral.10} | 장식·비필수 메타(≥3:1, 본문 금지) |
+| `sys.color.fg.subtle` | #727479 | #8a8c91 | {ref.color.neutral.10} | 장식·아이콘·placeholder 전용(≥3:1) — 정보 텍스트 금지(axe serious). 텍스트는 fg.muted 이상 |
 | `sys.color.fg.placeholder` | #84868b | #787a7f | {ref.color.neutral.9} | 입력 플레이스홀더 |
 | `sys.color.fg.disabled` | #9c9ea4 | #616368 | {ref.color.neutral.8} | 비활성 텍스트·아이콘 |
 | `sys.color.fg.on-inverse` | #fdfdff | #0c0d11 | {ref.color.neutral.1} | 반전 면 위 텍스트 |
@@ -392,6 +392,9 @@
 | light | `fg.muted` | `bg.canvas` | 5.76:1 | ≥4.5 | ✓ |
 | light | `fg.muted` | `bg.surface` | 5.92:1 | ≥4.5 | ✓ |
 | light | `fg.subtle` | `bg.canvas` | 4.48:1 | ≥3 | ✓ |
+| light | `fg.muted` | `bg.surface-sunken` | 5.42:1 | ≥4.5 | ✓ |
+| light | `fg.muted` | `bg.selected` | 5.31:1 | ≥4.5 | ✓ |
+| light | `fg.default` | `bg.selected` | 15.25:1 | ≥7 | ✓ |
 | light | `fg.link` | `bg.canvas` | 10.12:1 | ≥4.5 | ✓ |
 | light | `fg.on-inverse` | `bg.inverse` | 16.99:1 | ≥4.5 | ✓ |
 | light | `accent.fg` | `bg.canvas` | 10.12:1 | ≥4.5 | ✓ |
@@ -430,6 +433,9 @@
 | dark | `fg.muted` | `bg.canvas` | 10.42:1 | ≥4.5 | ✓ |
 | dark | `fg.muted` | `bg.surface` | 9.9:1 | ≥4.5 | ✓ |
 | dark | `fg.subtle` | `bg.canvas` | 5.77:1 | ≥3 | ✓ |
+| dark | `fg.muted` | `bg.surface-sunken` | 10.42:1 | ≥4.5 | ✓ |
+| dark | `fg.muted` | `bg.selected` | 8.83:1 | ≥4.5 | ✓ |
+| dark | `fg.default` | `bg.selected` | 14.67:1 | ≥7 | ✓ |
 | dark | `fg.link` | `bg.canvas` | 10.34:1 | ≥4.5 | ✓ |
 | dark | `fg.on-inverse` | `bg.inverse` | 17.31:1 | ≥4.5 | ✓ |
 | dark | `accent.fg` | `bg.canvas` | 10.34:1 | ≥4.5 | ✓ |

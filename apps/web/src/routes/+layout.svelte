@@ -15,6 +15,10 @@
   const home = () => role && goto(resolve(SCREENS[HOME_OF[role]].route as '/'));
 </script>
 
+<svelte:head>
+  <title>{data.screen ? `${SCREENS[data.screen].name} · BoomEyes` : 'BoomEyes'}</title>
+</svelte:head>
+
 {#if data.screen === 'B0-01' || !session.user}
   {@render children()}
 {:else}
@@ -30,7 +34,7 @@
         }}>⏻</IconButton
       >
     {/snippet}
-    {#snippet footer()}<span class="text-label-sm text-fg-subtle">wave {SCREENS['B1-02'].wave} · mock</span>{/snippet}
+    {#snippet footer()}<span class="text-label-sm text-fg-muted">wave {SCREENS['B1-02'].wave} · mock</span>{/snippet}
     {#if data.forbidden}
       <EmptyState
         title="접근 권한이 없습니다"

@@ -18,10 +18,10 @@
   $effect(() => {
     data.api.users().then((u) => (users = u));
   });
+  const demo = $derived(users.find((x) => x.role === meta?.role));
   async function enter() {
-    if (!meta) return;
-    const u = users.find((x) => x.role === meta.role);
-    if (!u) return;
+    const u = demo;
+    if (!meta || !u) return;
     login({ userId: u.id, role: u.role, display: u.display, org: u.org });
     const h = APP_HOME_OF[meta.role];
     if (h) await goto(resolve(SCREENS[h].route as '/'));
@@ -41,10 +41,10 @@
   <Card variant="brand">
     <span class="text-label-md text-fg-muted">데모 계정</span>
     <span class="text-heading-md"
-      >{users.find((u) => u.role === meta?.role)?.display ?? '…'}
-      <span class="text-body-sm text-fg-muted">({users.find((u) => u.role === meta?.role)?.id})</span></span
+      >{demo?.display ?? '…'}
+      <span class="text-body-sm text-fg-muted">({demo?.id ?? '…'})</span></span
     >
-    <Button size="lg" block onclick={enter}>입장</Button>
+    <Button size="lg" block onclick={enter} disabled={!demo}>입장</Button>
   </Card>
-  <p class="text-body-sm text-fg-subtle text-center">실인증·가입은 DISC-020 · DISC-023 확정 후</p>
+  <p class="text-body-sm text-fg-muted text-center">실인증·가입은 DISC-020 · DISC-023 확정 후</p>
 </main>

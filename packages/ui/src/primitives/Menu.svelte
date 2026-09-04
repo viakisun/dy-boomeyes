@@ -62,7 +62,7 @@
       {#each items as it, i (it.id)}
         {#if it.group && (i === 0 || items[i - 1]?.group !== it.group)}<div
             class={cx(
-              'px-inset-sm pt-inset-xs text-label-sm text-fg-subtle pb-stack-xs',
+              'px-inset-sm pt-inset-xs text-label-sm text-fg-muted pb-stack-xs',
               i > 0 && 'border-border-subtle mt-stack-xs border-t',
             )}
           >
@@ -79,7 +79,7 @@
             it.danger ? 'text-danger-fg hover:bg-danger-bg' : 'text-fg hover:bg-ui-hover',
           )}
         >
-          <span>{it.label}</span>{#if it.shortcut}<kbd class="text-code-sm text-fg-subtle">{it.shortcut}</kbd>{/if}
+          <span>{it.label}</span>{#if it.shortcut}<kbd class="text-code-sm text-fg-muted">{it.shortcut}</kbd>{/if}
         </button>
       {/each}
     </div>

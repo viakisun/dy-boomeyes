@@ -106,7 +106,7 @@
                   size="sm"
                 />
                 <span class="text-body-sm text-fg flex-1">{a.message}</span>
-                <span class="text-label-sm text-fg-subtle tabular-nums">{fmt(a.at)}</span>
+                <span class="text-label-sm text-fg-muted tabular-nums">{fmt(a.at)}</span>
               </a>
             </li>
           {/each}

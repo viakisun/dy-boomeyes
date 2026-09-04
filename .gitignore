@@ -13,3 +13,5 @@ __pycache__/
 .svelte-kit/
 apps/*/build/
 shots/
+test-results/
+playwright-report/

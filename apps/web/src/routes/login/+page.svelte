@@ -4,7 +4,7 @@
   import { page } from '$app/state';
   import { resolve } from '$app/paths';
   import { HOME_OF, SCREENS, type RoleId, type User } from '@boomeyes/domain';
-  import { Button, Card } from '@boomeyes/ui';
+  import { Card } from '@boomeyes/ui';
   import { login } from '$lib/session.svelte';
   let { data } = $props();
   const CARDS: { role: RoleId; surface: string; title: string; desc: string; state: string }[] = [
@@ -68,12 +68,12 @@
         onclick={() => enter(c.role)}
         aria-label="{c.title}로 로그인"
       >
-        {#snippet header()}<span class="text-label-md text-fg-subtle">{c.surface}</span>{/snippet}
+        {#snippet header()}<span class="text-label-md text-fg-muted">{c.surface}</span>{/snippet}
         <h2 class="text-heading-md">{c.title}</h2>
         <p class="text-body-sm text-fg-muted">{c.desc}</p>
         {#snippet footer()}<span class="text-label-md text-accent-fg"
             >{users.find((u) => u.role === c.role)?.id ?? '…'}</span
-          ><Button size="sm" variant="ghost">입장</Button>{/snippet}
+          ><span class="text-label-md text-accent-fg-strong">입장 →</span>{/snippet}
       </Card>
     {/each}
   </div>

@@ -8,6 +8,6 @@
 | 4 | B1-02 레이아웃(KPI · 피드 · 이상 장비 테이블 · 인스펙터) | AC-2 · AC-3 · `b1-02-dash.png` | B1-02 |
 | 5 | `packages/video` 루프 MP4·스냅샷 폴러·bbox SVG · `CameraTile`/`CameraWall`(wall 강제) | AC-4 · AC-7 | FR-004 FR-034 |
 | 6 | B1-02M 모달(채널 칩·전환·녹화 배지·저장 소스 탭·프로파일 플래그) | AC-5 · AC-6 · `b1-02m-cam.png` | B1-02M FR-005 |
-| 7 | e2e: 로그인→대시보드→모달→닫기 · axe · 시각 회귀 | 게이트 6 녹색 | QA |
+| 7 | e2e: 로그인→대시보드→모달→닫기 · axe · 시각 회귀 | 게이트 6 녹색 — `tests/e2e/web-dashboard.spec.ts`·`web-a11y.spec.ts` W0 선행(시각 회귀는 W1) | QA |
 
 W0 Exit는 1~4 + 6의 골격(모달 열림)까지. 5·6 완성과 7은 W1.

@@ -35,7 +35,7 @@
   <nav class="gap-stack-md px-inset-xs py-inset-sm flex flex-1 flex-col overflow-y-auto">
     {#each groups as g, gi (gi)}
       <div class="gap-stack-xs flex flex-col">
-        {#if g.label && !collapsed}<div class="px-inset-sm text-label-sm text-fg-subtle pb-stack-xs uppercase">
+        {#if g.label && !collapsed}<div class="px-inset-sm text-label-sm text-fg-muted pb-stack-xs uppercase">
             {g.label}
           </div>{/if}
         {#each g.items as it (it.id)}

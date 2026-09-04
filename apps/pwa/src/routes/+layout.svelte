@@ -23,6 +23,10 @@
   };
 </script>
 
+<svelte:head>
+  <title>{title} · BoomEyes</title>
+</svelte:head>
+
 {#if isLogin || !session.user}
   {@render children()}
 {:else}
