@@ -1,0 +1,284 @@
+{
+  "type": {
+    "display-lg": {
+      "$type": "typography",
+      "$value": {
+        "comfortable": {
+          "fontFamily": "{ref.font.family.sans}",
+          "fontSize": "40px",
+          "fontWeight": "{ref.font.weight.semibold}",
+          "lineHeight": 1.2,
+          "letterSpacing": "-0.02em"
+        },
+        "compact": {
+          "fontFamily": "{ref.font.family.sans}",
+          "fontSize": "32px",
+          "fontWeight": "{ref.font.weight.semibold}",
+          "lineHeight": 1.2,
+          "letterSpacing": "-0.02em"
+        }
+      },
+      "$description": "페이지 히어로·큰 수치 (PWA=Figma HSB40)"
+    },
+    "display-md": {
+      "$type": "typography",
+      "$value": {
+        "comfortable": {
+          "fontFamily": "{ref.font.family.sans}",
+          "fontSize": "32px",
+          "fontWeight": "{ref.font.weight.bold}",
+          "lineHeight": 1.25,
+          "letterSpacing": "-0.02em"
+        },
+        "compact": {
+          "fontFamily": "{ref.font.family.sans}",
+          "fontSize": "28px",
+          "fontWeight": "{ref.font.weight.semibold}",
+          "lineHeight": 1.2,
+          "letterSpacing": "-0.02em"
+        }
+      },
+      "$description": "화면 제목 큰 것 (PWA=HB32)"
+    },
+    "heading-xl": {
+      "$type": "typography",
+      "$value": {
+        "comfortable": {
+          "fontFamily": "{ref.font.family.sans}",
+          "fontSize": "24px",
+          "fontWeight": "{ref.font.weight.bold}",
+          "lineHeight": 1.3,
+          "letterSpacing": "-0.01em"
+        },
+        "compact": {
+          "fontFamily": "{ref.font.family.sans}",
+          "fontSize": "24px",
+          "fontWeight": "{ref.font.weight.semibold}",
+          "lineHeight": 1.25,
+          "letterSpacing": "-0.02em"
+        }
+      },
+      "$description": "페이지 제목 (PWA=HB24)"
+    },
+    "heading-lg": {
+      "$type": "typography",
+      "$value": {
+        "comfortable": {
+          "fontFamily": "{ref.font.family.sans}",
+          "fontSize": "22px",
+          "fontWeight": "{ref.font.weight.bold}",
+          "lineHeight": 1.35,
+          "letterSpacing": "-0.01em"
+        },
+        "compact": {
+          "fontFamily": "{ref.font.family.sans}",
+          "fontSize": "20px",
+          "fontWeight": "{ref.font.weight.semibold}",
+          "lineHeight": 1.3,
+          "letterSpacing": "-0.01em"
+        }
+      },
+      "$description": "섹션 제목 (PWA=HB22)"
+    },
+    "heading-md": {
+      "$type": "typography",
+      "$value": {
+        "comfortable": {
+          "fontFamily": "{ref.font.family.sans}",
+          "fontSize": "20px",
+          "fontWeight": "{ref.font.weight.semibold}",
+          "lineHeight": 1.4,
+          "letterSpacing": "-0.01em"
+        },
+        "compact": {
+          "fontFamily": "{ref.font.family.sans}",
+          "fontSize": "16px",
+          "fontWeight": "{ref.font.weight.semibold}",
+          "lineHeight": 1.4,
+          "letterSpacing": "-0.01em"
+        }
+      },
+      "$description": "카드·패널 제목 (PWA=HSB20)"
+    },
+    "heading-sm": {
+      "$type": "typography",
+      "$value": {
+        "comfortable": {
+          "fontFamily": "{ref.font.family.sans}",
+          "fontSize": "18px",
+          "fontWeight": "{ref.font.weight.semibold}",
+          "lineHeight": 1.4,
+          "letterSpacing": "-0.01em"
+        },
+        "compact": {
+          "fontFamily": "{ref.font.family.sans}",
+          "fontSize": "14px",
+          "fontWeight": "{ref.font.weight.semibold}",
+          "lineHeight": 1.4,
+          "letterSpacing": "-0.01em"
+        }
+      },
+      "$description": "소제목·리스트 그룹 (PWA=BSB18)"
+    },
+    "body-lg": {
+      "$type": "typography",
+      "$value": {
+        "comfortable": {
+          "fontFamily": "{ref.font.family.sans}",
+          "fontSize": "18px",
+          "fontWeight": "{ref.font.weight.medium}",
+          "lineHeight": 1.4,
+          "letterSpacing": "-0.01em"
+        },
+        "compact": {
+          "fontFamily": "{ref.font.family.sans}",
+          "fontSize": "14px",
+          "fontWeight": "{ref.font.weight.regular}",
+          "lineHeight": 1.5,
+          "letterSpacing": "-0.01em"
+        }
+      },
+      "$description": "강조 본문·주요 값 (PWA=BM18)"
+    },
+    "body-md": {
+      "$type": "typography",
+      "$value": {
+        "comfortable": {
+          "fontFamily": "{ref.font.family.sans}",
+          "fontSize": "16px",
+          "fontWeight": "{ref.font.weight.regular}",
+          "lineHeight": 1.4,
+          "letterSpacing": "-0.01em"
+        },
+        "compact": {
+          "fontFamily": "{ref.font.family.sans}",
+          "fontSize": "13px",
+          "fontWeight": "{ref.font.weight.regular}",
+          "lineHeight": 1.5,
+          "letterSpacing": "-0.01em"
+        }
+      },
+      "$description": "기본 본문 (PWA=BR16 · 웹 13px Linear 밀도)"
+    },
+    "body-sm": {
+      "$type": "typography",
+      "$value": {
+        "comfortable": {
+          "fontFamily": "{ref.font.family.sans}",
+          "fontSize": "14px",
+          "fontWeight": "{ref.font.weight.regular}",
+          "lineHeight": 1.4,
+          "letterSpacing": "-0.01em"
+        },
+        "compact": {
+          "fontFamily": "{ref.font.family.sans}",
+          "fontSize": "12px",
+          "fontWeight": "{ref.font.weight.regular}",
+          "lineHeight": 1.5,
+          "letterSpacing": "0em"
+        }
+      },
+      "$description": "보조 본문·설명 (PWA=DR14)"
+    },
+    "label-lg": {
+      "$type": "typography",
+      "$value": {
+        "comfortable": {
+          "fontFamily": "{ref.font.family.sans}",
+          "fontSize": "14px",
+          "fontWeight": "{ref.font.weight.medium}",
+          "lineHeight": 1.4,
+          "letterSpacing": "-0.01em"
+        },
+        "compact": {
+          "fontFamily": "{ref.font.family.sans}",
+          "fontSize": "13px",
+          "fontWeight": "{ref.font.weight.medium}",
+          "lineHeight": 1.4,
+          "letterSpacing": "0em"
+        }
+      },
+      "$description": "버튼·탭·필드 라벨 (PWA=DM14)"
+    },
+    "label-md": {
+      "$type": "typography",
+      "$value": {
+        "comfortable": {
+          "fontFamily": "{ref.font.family.sans}",
+          "fontSize": "13px",
+          "fontWeight": "{ref.font.weight.medium}",
+          "lineHeight": 1.4,
+          "letterSpacing": "-0.01em"
+        },
+        "compact": {
+          "fontFamily": "{ref.font.family.sans}",
+          "fontSize": "12px",
+          "fontWeight": "{ref.font.weight.medium}",
+          "lineHeight": 1.4,
+          "letterSpacing": "0em"
+        }
+      },
+      "$description": "배지·칩·메타 (PWA=LM13)"
+    },
+    "label-sm": {
+      "$type": "typography",
+      "$value": {
+        "comfortable": {
+          "fontFamily": "{ref.font.family.sans}",
+          "fontSize": "12px",
+          "fontWeight": "{ref.font.weight.medium}",
+          "lineHeight": 1.4,
+          "letterSpacing": "0em"
+        },
+        "compact": {
+          "fontFamily": "{ref.font.family.sans}",
+          "fontSize": "11px",
+          "fontWeight": "{ref.font.weight.medium}",
+          "lineHeight": 1.3,
+          "letterSpacing": "0.01em"
+        }
+      },
+      "$description": "하단 내비·캡션 — 최소 크기 (PWA=LM12)"
+    },
+    "code-md": {
+      "$type": "typography",
+      "$value": {
+        "comfortable": {
+          "fontFamily": "{ref.font.family.mono}",
+          "fontSize": "14px",
+          "fontWeight": "{ref.font.weight.regular}",
+          "lineHeight": 1.5,
+          "letterSpacing": "0em"
+        },
+        "compact": {
+          "fontFamily": "{ref.font.family.mono}",
+          "fontSize": "13px",
+          "fontWeight": "{ref.font.weight.regular}",
+          "lineHeight": 1.5,
+          "letterSpacing": "0em"
+        }
+      },
+      "$description": "식별자·프로토콜·계기 수치(모노)"
+    },
+    "code-sm": {
+      "$type": "typography",
+      "$value": {
+        "comfortable": {
+          "fontFamily": "{ref.font.family.mono}",
+          "fontSize": "12px",
+          "fontWeight": "{ref.font.weight.regular}",
+          "lineHeight": 1.5,
+          "letterSpacing": "0em"
+        },
+        "compact": {
+          "fontFamily": "{ref.font.family.mono}",
+          "fontSize": "12px",
+          "fontWeight": "{ref.font.weight.regular}",
+          "lineHeight": 1.5,
+          "letterSpacing": "0em"
+        }
+      },
+      "$description": "작은 코드·타임스탬프(모노)"
+    }
+  }
+}

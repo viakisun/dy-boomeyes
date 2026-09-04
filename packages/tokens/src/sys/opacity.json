@@ -1,0 +1,19 @@
+{
+  "opacity": {
+    "disabled": {
+      "$type": "number",
+      "$value": 0.4,
+      "$description": "비활성 컨트롤 전체"
+    },
+    "muted": {
+      "$type": "number",
+      "$value": 0.6,
+      "$description": "보조 아이콘"
+    },
+    "loading": {
+      "$type": "number",
+      "$value": 0.7,
+      "$description": "로딩 중 콘텐츠"
+    }
+  }
+}

@@ -1,0 +1,92 @@
+{
+  "nav": {
+    "sidebar": {
+      "width": {
+        "$type": "dimension",
+        "$value": "{sys.layout.sidebar.width}"
+      },
+      "collapsed": {
+        "$type": "dimension",
+        "$value": "{sys.layout.sidebar.collapsed}"
+      },
+      "item-height": {
+        "$type": "dimension",
+        "$value": "{sys.size.control.md}"
+      },
+      "item-padding-x": {
+        "$type": "dimension",
+        "$value": "{sys.space.inset.sm}"
+      },
+      "item-radius": {
+        "$type": "dimension",
+        "$value": "{sys.radius.control}"
+      },
+      "item-font": {
+        "$type": "typography",
+        "$value": "{sys.type.label-lg}"
+      },
+      "bg": {
+        "$type": "color",
+        "$value": "{sys.color.bg.canvas}"
+      },
+      "item-selected": {
+        "$type": "color",
+        "$value": "{sys.color.bg.selected}"
+      },
+      "item-hover": {
+        "$type": "color",
+        "$value": "{sys.color.bg.ui-hover}"
+      }
+    },
+    "topbar": {
+      "height": {
+        "$type": "dimension",
+        "$value": "{sys.layout.topbar.height}"
+      },
+      "bg": {
+        "$type": "color",
+        "$value": "{sys.color.bg.surface}"
+      },
+      "border": {
+        "$type": "color",
+        "$value": "{sys.color.border.subtle}"
+      }
+    },
+    "appbar": {
+      "height": {
+        "$type": "dimension",
+        "$value": "{sys.layout.appbar.height}"
+      },
+      "title": {
+        "$type": "typography",
+        "$value": "{sys.type.heading-md}"
+      },
+      "icon": {
+        "$type": "dimension",
+        "$value": "{sys.size.icon.lg}"
+      }
+    },
+    "bottomnav": {
+      "height": {
+        "$type": "dimension",
+        "$value": "{sys.layout.bottomnav.height}"
+      },
+      "icon": {
+        "$type": "dimension",
+        "$value": "{sys.size.icon.lg}"
+      },
+      "label": {
+        "$type": "typography",
+        "$value": "{sys.type.label-sm}"
+      },
+      "active": {
+        "$type": "color",
+        "$value": "{sys.color.accent.fg}"
+      },
+      "inactive": {
+        "$type": "color",
+        "$value": "{sys.color.fg.muted}"
+      }
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "permissions": {
+    "allow": [
+      "Bash(pnpm ssot:*)", "Bash(pnpm tokens:*)", "Bash(pnpm verify)", "Bash(pnpm install*)", "Bash(pnpm -v)",
+      "Bash(node tools/*)", "Bash(node packages/tokens/scripts/*)",
+      "Bash(git status*)", "Bash(git diff*)", "Bash(git log*)", "Bash(git branch*)", "Bash(git show*)"
+    ],
+    "deny": ["Bash(git add -A)", "Bash(git add --all)", "Bash(git push --force*)", "Bash(git push -f*)", "Write(.env*)", "Edit(.env*)"]
+  },
+  "hooks": {
+    "PreToolUse": [
+      { "matcher": "Edit|Write|MultiEdit", "hooks": [{ "type": "command", "command": "node \"$CLAUDE_PROJECT_DIR/tools/hooks/guard-generated.mjs\"", "timeout": 10 }] },
+      { "matcher": "Bash", "hooks": [{ "type": "command", "command": "node \"$CLAUDE_PROJECT_DIR/tools/hooks/guard-bash.mjs\"", "timeout": 10 }] }
+    ],
+    "PostToolUse": [
+      { "matcher": "Edit|Write|MultiEdit", "hooks": [{ "type": "command", "command": "node \"$CLAUDE_PROJECT_DIR/tools/hooks/on-edit.mjs\"", "timeout": 90 }] }
+    ]
+  }
+}

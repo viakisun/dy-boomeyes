@@ -1,0 +1,483 @@
+{
+  "color": {
+    "bg": {
+      "canvas": {
+        "$type": "color",
+        "$value": {
+          "light": "{ref.color.neutral.2}",
+          "dark": "{ref.color.neutral.1}"
+        },
+        "$description": "앱 바탕(페이지 배경)"
+      },
+      "surface": {
+        "$type": "color",
+        "$value": {
+          "light": "{ref.color.neutral.1}",
+          "dark": "{ref.color.neutral.2}"
+        },
+        "$description": "카드·패널·시트 기본면"
+      },
+      "surface-raised": {
+        "$type": "color",
+        "$value": {
+          "light": "{ref.color.neutral.1}",
+          "dark": "{ref.color.neutral.3}"
+        },
+        "$description": "떠 있는 면(메뉴·팝오버) — shadow와 함께"
+      },
+      "surface-sunken": {
+        "$type": "color",
+        "$value": {
+          "light": "{ref.color.neutral.3}",
+          "dark": "{ref.color.neutral.1}"
+        },
+        "$description": "가라앉은 면(코드·읽기 전용 영역)"
+      },
+      "overlay": {
+        "$type": "color",
+        "$value": {
+          "light": "{ref.color.alpha.black-60}",
+          "dark": "{ref.color.alpha.black-80}"
+        },
+        "$description": "모달 뒤 스크림"
+      },
+      "ui": {
+        "$type": "color",
+        "$value": "{ref.color.neutral.3}",
+        "$description": "컨트롤 기본 배경(입력·보조 버튼·칩)"
+      },
+      "ui-hover": {
+        "$type": "color",
+        "$value": "{ref.color.neutral.4}",
+        "$description": "컨트롤 hover"
+      },
+      "ui-active": {
+        "$type": "color",
+        "$value": "{ref.color.neutral.5}",
+        "$description": "컨트롤 active·pressed"
+      },
+      "selected": {
+        "$type": "color",
+        "$value": "{ref.color.accent.3}",
+        "$description": "선택 행·항목"
+      },
+      "selected-hover": {
+        "$type": "color",
+        "$value": "{ref.color.accent.4}",
+        "$description": "선택 행 hover"
+      },
+      "disabled": {
+        "$type": "color",
+        "$value": "{ref.color.neutral.3}",
+        "$description": "비활성 컨트롤 배경"
+      },
+      "inverse": {
+        "$type": "color",
+        "$value": "{ref.color.neutral.12}",
+        "$description": "반전 면(툴팁·토스트 다크)"
+      }
+    },
+    "fg": {
+      "default": {
+        "$type": "color",
+        "$value": "{ref.color.neutral.12}",
+        "$description": "본문·제목(고대비)"
+      },
+      "muted": {
+        "$type": "color",
+        "$value": "{ref.color.neutral.11}",
+        "$description": "보조 텍스트·라벨(≥4.5:1)"
+      },
+      "subtle": {
+        "$type": "color",
+        "$value": "{ref.color.neutral.10}",
+        "$description": "장식·비필수 메타(≥3:1, 본문 금지)"
+      },
+      "placeholder": {
+        "$type": "color",
+        "$value": "{ref.color.neutral.9}",
+        "$description": "입력 플레이스홀더"
+      },
+      "disabled": {
+        "$type": "color",
+        "$value": "{ref.color.neutral.8}",
+        "$description": "비활성 텍스트·아이콘"
+      },
+      "on-inverse": {
+        "$type": "color",
+        "$value": "{ref.color.neutral.1}",
+        "$description": "반전 면 위 텍스트"
+      },
+      "on-accent": {
+        "$type": "color",
+        "$value": "{ref.color.on.accent}",
+        "$description": "액센트 solid 위 텍스트"
+      },
+      "link": {
+        "$type": "color",
+        "$value": "{ref.color.accent.11}",
+        "$description": "링크·포인트 텍스트"
+      },
+      "link-hover": {
+        "$type": "color",
+        "$value": "{ref.color.accent.12}",
+        "$description": "링크 hover"
+      }
+    },
+    "border": {
+      "subtle": {
+        "$type": "color",
+        "$value": "{ref.color.neutral.5}",
+        "$description": "미묘한 분리선(표 행·리스트)"
+      },
+      "default": {
+        "$type": "color",
+        "$value": "{ref.color.neutral.6}",
+        "$description": "기본 테두리(카드·입력)"
+      },
+      "strong": {
+        "$type": "color",
+        "$value": "{ref.color.neutral.8}",
+        "$description": "hover·강조 테두리"
+      },
+      "emphasis": {
+        "$type": "color",
+        "$value": "{ref.color.neutral.9}",
+        "$description": "컨트롤 윤곽(≥3:1 — 고대비 입력·체크박스)"
+      },
+      "inverse": {
+        "$type": "color",
+        "$value": "{ref.color.alpha.white-24}",
+        "$description": "반전 면 위 분리선"
+      }
+    },
+    "accent": {
+      "solid": {
+        "$type": "color",
+        "$value": "{ref.color.accent.9}",
+        "$description": "주 버튼·FAB·선택 표시"
+      },
+      "solid-hover": {
+        "$type": "color",
+        "$value": "{ref.color.accent.10}"
+      },
+      "solid-active": {
+        "$type": "color",
+        "$value": {
+          "light": "{ref.color.accent.12}",
+          "dark": "{ref.color.accent.8}"
+        }
+      },
+      "fg": {
+        "$type": "color",
+        "$value": "{ref.color.accent.11}",
+        "$description": "액센트 텍스트·아이콘(≥4.5:1)"
+      },
+      "fg-strong": {
+        "$type": "color",
+        "$value": "{ref.color.accent.12}"
+      },
+      "bg": {
+        "$type": "color",
+        "$value": "{ref.color.accent.3}",
+        "$description": "액센트 tinted 배경(선택·강조 카드)"
+      },
+      "bg-hover": {
+        "$type": "color",
+        "$value": "{ref.color.accent.4}"
+      },
+      "bg-active": {
+        "$type": "color",
+        "$value": "{ref.color.accent.5}"
+      },
+      "bg-subtle": {
+        "$type": "color",
+        "$value": "{ref.color.accent.2}",
+        "$description": "아주 옅은 브랜드 면"
+      },
+      "border": {
+        "$type": "color",
+        "$value": "{ref.color.accent.7}"
+      },
+      "border-strong": {
+        "$type": "color",
+        "$value": "{ref.color.accent.8}"
+      },
+      "on-solid": {
+        "$type": "color",
+        "$value": "{ref.color.on.accent}",
+        "$description": "solid 위 텍스트"
+      }
+    },
+    "focus": {
+      "ring": {
+        "$type": "color",
+        "$value": "{ref.color.accent.9}",
+        "$description": "포커스 링(2px, offset 2px)"
+      },
+      "ring-offset": {
+        "$type": "color",
+        "$value": {
+          "light": "{ref.color.neutral.1}",
+          "dark": "{ref.color.neutral.1}"
+        },
+        "$description": "포커스 링 오프셋 색 = 바탕"
+      }
+    },
+    "status": {
+      "info": {
+        "solid": {
+          "$type": "color",
+          "$value": "{ref.color.blue.9}"
+        },
+        "solid-hover": {
+          "$type": "color",
+          "$value": "{ref.color.blue.10}"
+        },
+        "fg": {
+          "$type": "color",
+          "$value": "{ref.color.blue.11}"
+        },
+        "fg-strong": {
+          "$type": "color",
+          "$value": "{ref.color.blue.12}"
+        },
+        "bg": {
+          "$type": "color",
+          "$value": "{ref.color.blue.3}"
+        },
+        "bg-hover": {
+          "$type": "color",
+          "$value": "{ref.color.blue.4}"
+        },
+        "bg-subtle": {
+          "$type": "color",
+          "$value": "{ref.color.blue.2}"
+        },
+        "border": {
+          "$type": "color",
+          "$value": "{ref.color.blue.7}"
+        },
+        "border-strong": {
+          "$type": "color",
+          "$value": "{ref.color.blue.8}"
+        },
+        "on-solid": {
+          "$type": "color",
+          "$value": "{ref.color.on.blue}"
+        }
+      },
+      "success": {
+        "solid": {
+          "$type": "color",
+          "$value": "{ref.color.green.9}"
+        },
+        "solid-hover": {
+          "$type": "color",
+          "$value": "{ref.color.green.10}"
+        },
+        "fg": {
+          "$type": "color",
+          "$value": "{ref.color.green.11}"
+        },
+        "fg-strong": {
+          "$type": "color",
+          "$value": "{ref.color.green.12}"
+        },
+        "bg": {
+          "$type": "color",
+          "$value": "{ref.color.green.3}"
+        },
+        "bg-hover": {
+          "$type": "color",
+          "$value": "{ref.color.green.4}"
+        },
+        "bg-subtle": {
+          "$type": "color",
+          "$value": "{ref.color.green.2}"
+        },
+        "border": {
+          "$type": "color",
+          "$value": "{ref.color.green.7}"
+        },
+        "border-strong": {
+          "$type": "color",
+          "$value": "{ref.color.green.8}"
+        },
+        "on-solid": {
+          "$type": "color",
+          "$value": "{ref.color.on.green}"
+        }
+      },
+      "warning": {
+        "solid": {
+          "$type": "color",
+          "$value": "{ref.color.yellow.9}"
+        },
+        "solid-hover": {
+          "$type": "color",
+          "$value": "{ref.color.yellow.10}"
+        },
+        "fg": {
+          "$type": "color",
+          "$value": "{ref.color.yellow.11}"
+        },
+        "fg-strong": {
+          "$type": "color",
+          "$value": "{ref.color.yellow.12}"
+        },
+        "bg": {
+          "$type": "color",
+          "$value": "{ref.color.yellow.3}"
+        },
+        "bg-hover": {
+          "$type": "color",
+          "$value": "{ref.color.yellow.4}"
+        },
+        "bg-subtle": {
+          "$type": "color",
+          "$value": "{ref.color.yellow.2}"
+        },
+        "border": {
+          "$type": "color",
+          "$value": "{ref.color.yellow.7}"
+        },
+        "border-strong": {
+          "$type": "color",
+          "$value": "{ref.color.yellow.8}"
+        },
+        "on-solid": {
+          "$type": "color",
+          "$value": "{ref.color.on.yellow}"
+        }
+      },
+      "danger": {
+        "solid": {
+          "$type": "color",
+          "$value": "{ref.color.red.9}"
+        },
+        "solid-hover": {
+          "$type": "color",
+          "$value": "{ref.color.red.10}"
+        },
+        "fg": {
+          "$type": "color",
+          "$value": "{ref.color.red.11}"
+        },
+        "fg-strong": {
+          "$type": "color",
+          "$value": "{ref.color.red.12}"
+        },
+        "bg": {
+          "$type": "color",
+          "$value": "{ref.color.red.3}"
+        },
+        "bg-hover": {
+          "$type": "color",
+          "$value": "{ref.color.red.4}"
+        },
+        "bg-subtle": {
+          "$type": "color",
+          "$value": "{ref.color.red.2}"
+        },
+        "border": {
+          "$type": "color",
+          "$value": "{ref.color.red.7}"
+        },
+        "border-strong": {
+          "$type": "color",
+          "$value": "{ref.color.red.8}"
+        },
+        "on-solid": {
+          "$type": "color",
+          "$value": "{ref.color.on.red}"
+        }
+      },
+      "progress": {
+        "solid": {
+          "$type": "color",
+          "$value": "{ref.color.teal.9}"
+        },
+        "solid-hover": {
+          "$type": "color",
+          "$value": "{ref.color.teal.10}"
+        },
+        "fg": {
+          "$type": "color",
+          "$value": "{ref.color.teal.11}"
+        },
+        "fg-strong": {
+          "$type": "color",
+          "$value": "{ref.color.teal.12}"
+        },
+        "bg": {
+          "$type": "color",
+          "$value": "{ref.color.teal.3}"
+        },
+        "bg-hover": {
+          "$type": "color",
+          "$value": "{ref.color.teal.4}"
+        },
+        "bg-subtle": {
+          "$type": "color",
+          "$value": "{ref.color.teal.2}"
+        },
+        "border": {
+          "$type": "color",
+          "$value": "{ref.color.teal.7}"
+        },
+        "border-strong": {
+          "$type": "color",
+          "$value": "{ref.color.teal.8}"
+        },
+        "on-solid": {
+          "$type": "color",
+          "$value": "{ref.color.on.teal}"
+        }
+      },
+      "neutral": {
+        "solid": {
+          "$type": "color",
+          "$value": "{ref.color.neutral.11}",
+          "$description": "중립 tone은 11단을 solid로(흰 텍스트 대비)"
+        },
+        "solid-hover": {
+          "$type": "color",
+          "$value": "{ref.color.neutral.12}"
+        },
+        "fg": {
+          "$type": "color",
+          "$value": "{ref.color.neutral.11}"
+        },
+        "fg-strong": {
+          "$type": "color",
+          "$value": "{ref.color.neutral.12}"
+        },
+        "bg": {
+          "$type": "color",
+          "$value": "{ref.color.neutral.3}"
+        },
+        "bg-hover": {
+          "$type": "color",
+          "$value": "{ref.color.neutral.4}"
+        },
+        "bg-subtle": {
+          "$type": "color",
+          "$value": "{ref.color.neutral.2}"
+        },
+        "border": {
+          "$type": "color",
+          "$value": "{ref.color.neutral.7}"
+        },
+        "border-strong": {
+          "$type": "color",
+          "$value": "{ref.color.neutral.8}"
+        },
+        "on-solid": {
+          "$type": "color",
+          "$value": "{ref.color.on.neutral}"
+        }
+      }
+    }
+  }
+}

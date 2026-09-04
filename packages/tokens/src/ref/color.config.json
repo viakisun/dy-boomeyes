@@ -1,0 +1,55 @@
+{
+  "hues": [
+    {
+      "name": "neutral",
+      "neutral": true,
+      "hueFrom": "accent",
+      "chroma": 0.008,
+      "role": "neutral",
+      "solidStep": 11
+    },
+    {
+      "name": "navy",
+      "anchor": "#0d2877",
+      "role": "accent"
+    },
+    {
+      "name": "blue",
+      "anchor": "#155dfc",
+      "role": "info"
+    },
+    {
+      "name": "green",
+      "anchor": "#1c6831",
+      "chroma": 0.14,
+      "role": "success"
+    },
+    {
+      "name": "yellow",
+      "anchor": "#ffb013",
+      "role": "warning",
+      "ladder": {
+        "light": {
+          "8": 0.6,
+          "9": 0.82,
+          "10": 0.77
+        },
+        "dark": {
+          "8": 0.6,
+          "9": 0.82,
+          "10": 0.86
+        }
+      }
+    },
+    {
+      "name": "red",
+      "anchor": "#e71825",
+      "role": "danger"
+    },
+    {
+      "name": "teal",
+      "anchor": "#009487",
+      "role": "progress"
+    }
+  ]
+}

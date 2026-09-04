@@ -1,0 +1,110 @@
+{
+  "overlay": {
+    "toast": {
+      "width": {
+        "$type": "dimension",
+        "$value": "360px"
+      },
+      "radius": {
+        "$type": "dimension",
+        "$value": "{sys.radius.card}"
+      },
+      "bg": {
+        "$type": "color",
+        "$value": "{sys.color.bg.inverse}"
+      },
+      "fg": {
+        "$type": "color",
+        "$value": "{sys.color.fg.on-inverse}"
+      },
+      "shadow": {
+        "$type": "shadow",
+        "$value": "{sys.shadow.popover}"
+      }
+    },
+    "dialog": {
+      "width-sm": {
+        "$type": "dimension",
+        "$value": "400px"
+      },
+      "width-md": {
+        "$type": "dimension",
+        "$value": "560px"
+      },
+      "width-lg": {
+        "$type": "dimension",
+        "$value": "800px"
+      },
+      "radius": {
+        "$type": "dimension",
+        "$value": "{sys.radius.dialog}"
+      },
+      "padding": {
+        "$type": "dimension",
+        "$value": "{sys.space.inset.xl}"
+      },
+      "shadow": {
+        "$type": "shadow",
+        "$value": "{sys.shadow.modal}"
+      }
+    },
+    "sheet": {
+      "radius": {
+        "$type": "dimension",
+        "$value": "{sys.radius.sheet}"
+      },
+      "handle-width": {
+        "$type": "dimension",
+        "$value": "36px"
+      },
+      "handle-height": {
+        "$type": "dimension",
+        "$value": "4px"
+      },
+      "padding": {
+        "$type": "dimension",
+        "$value": "{sys.space.inset.lg}"
+      },
+      "shadow": {
+        "$type": "shadow",
+        "$value": "{sys.shadow.sheet}"
+      }
+    },
+    "popover": {
+      "radius": {
+        "$type": "dimension",
+        "$value": "{sys.radius.dialog}"
+      },
+      "padding": {
+        "$type": "dimension",
+        "$value": "{sys.space.inset.sm}"
+      },
+      "shadow": {
+        "$type": "shadow",
+        "$value": "{sys.shadow.popover}"
+      },
+      "bg": {
+        "$type": "color",
+        "$value": "{sys.color.bg.surface-raised}"
+      }
+    },
+    "tooltip": {
+      "bg": {
+        "$type": "color",
+        "$value": "{sys.color.bg.inverse}"
+      },
+      "fg": {
+        "$type": "color",
+        "$value": "{sys.color.fg.on-inverse}"
+      },
+      "font": {
+        "$type": "typography",
+        "$value": "{sys.type.label-md}"
+      },
+      "radius": {
+        "$type": "dimension",
+        "$value": "{sys.radius.control}"
+      }
+    }
+  }
+}

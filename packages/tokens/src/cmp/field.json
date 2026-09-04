@@ -1,0 +1,62 @@
+{
+  "field": {
+    "height": {
+      "md": {
+        "$type": "dimension",
+        "$value": "{sys.size.control.md}"
+      },
+      "lg": {
+        "$type": "dimension",
+        "$value": "{sys.size.control.lg}"
+      }
+    },
+    "padding-x": {
+      "$type": "dimension",
+      "$value": "{sys.space.inset.md}"
+    },
+    "radius": {
+      "$type": "dimension",
+      "$value": "{sys.radius.control}"
+    },
+    "border": {
+      "$type": "color",
+      "$value": "{sys.color.border.default}"
+    },
+    "border-hover": {
+      "$type": "color",
+      "$value": "{sys.color.border.strong}"
+    },
+    "border-focus": {
+      "$type": "color",
+      "$value": "{sys.color.focus.ring}"
+    },
+    "border-invalid": {
+      "$type": "color",
+      "$value": "{sys.color.status.danger.border-strong}"
+    },
+    "bg": {
+      "$type": "color",
+      "$value": "{sys.color.bg.surface}"
+    },
+    "bg-disabled": {
+      "$type": "color",
+      "$value": "{sys.color.bg.disabled}"
+    },
+    "placeholder": {
+      "$type": "color",
+      "$value": "{sys.color.fg.placeholder}"
+    },
+    "font": {
+      "$type": "typography",
+      "$value": "{sys.type.body-md}"
+    },
+    "label": {
+      "$type": "typography",
+      "$value": "{sys.type.label-md}"
+    },
+    "help": {
+      "$type": "typography",
+      "$value": "{sys.type.body-sm}"
+    }
+  }
+}

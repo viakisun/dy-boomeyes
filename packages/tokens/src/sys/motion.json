@@ -1,0 +1,48 @@
+{
+  "motion": {
+    "duration": {
+      "fast": {
+        "$type": "duration",
+        "$value": "{ref.motion.duration.fast}",
+        "$description": "hover·포커스 전환"
+      },
+      "base": {
+        "$type": "duration",
+        "$value": "{ref.motion.duration.base}",
+        "$description": "토글·메뉴 열림"
+      },
+      "moderate": {
+        "$type": "duration",
+        "$value": "{ref.motion.duration.moderate}",
+        "$description": "시트·패널 슬라이드"
+      },
+      "slow": {
+        "$type": "duration",
+        "$value": "{ref.motion.duration.slow}",
+        "$description": "페이지 전환·큰 레이아웃"
+      }
+    },
+    "easing": {
+      "standard": {
+        "$type": "cubicBezier",
+        "$value": "{ref.motion.easing.standard}",
+        "$description": "기본"
+      },
+      "enter": {
+        "$type": "cubicBezier",
+        "$value": "{ref.motion.easing.decelerate}",
+        "$description": "등장"
+      },
+      "exit": {
+        "$type": "cubicBezier",
+        "$value": "{ref.motion.easing.accelerate}",
+        "$description": "퇴장"
+      },
+      "spring": {
+        "$type": "cubicBezier",
+        "$value": "{ref.motion.easing.spring}",
+        "$description": "FAB·토글 강조(절제)"
+      }
+    }
+  }
+}

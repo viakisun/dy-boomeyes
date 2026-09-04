@@ -1,0 +1,140 @@
+{
+  "space": {
+    "inset": {
+      "xs": {
+        "$type": "dimension",
+        "$value": {
+          "comfortable": "{ref.space.8}",
+          "compact": "{ref.space.4}"
+        },
+        "$description": "칩·배지 내부"
+      },
+      "sm": {
+        "$type": "dimension",
+        "$value": {
+          "comfortable": "{ref.space.12}",
+          "compact": "{ref.space.8}"
+        },
+        "$description": "작은 컨트롤 내부"
+      },
+      "md": {
+        "$type": "dimension",
+        "$value": {
+          "comfortable": "{ref.space.16}",
+          "compact": "{ref.space.12}"
+        },
+        "$description": "버튼·입력·리스트 행 내부"
+      },
+      "lg": {
+        "$type": "dimension",
+        "$value": {
+          "comfortable": "{ref.space.20}",
+          "compact": "{ref.space.16}"
+        },
+        "$description": "카드·패널 내부(PWA 카드 20)"
+      },
+      "xl": {
+        "$type": "dimension",
+        "$value": {
+          "comfortable": "{ref.space.24}",
+          "compact": "{ref.space.24}"
+        },
+        "$description": "다이얼로그·시트 내부"
+      }
+    },
+    "stack": {
+      "xs": {
+        "$type": "dimension",
+        "$value": {
+          "comfortable": "{ref.space.4}",
+          "compact": "{ref.space.4}"
+        },
+        "$description": "라벨→값(카드 2~4)"
+      },
+      "sm": {
+        "$type": "dimension",
+        "$value": {
+          "comfortable": "{ref.space.8}",
+          "compact": "{ref.space.8}"
+        },
+        "$description": "배지→제목·필드 내부"
+      },
+      "md": {
+        "$type": "dimension",
+        "$value": {
+          "comfortable": "{ref.space.16}",
+          "compact": "{ref.space.12}"
+        },
+        "$description": "필드 그룹·문단"
+      },
+      "lg": {
+        "$type": "dimension",
+        "$value": {
+          "comfortable": "{ref.space.24}",
+          "compact": "{ref.space.16}"
+        },
+        "$description": "섹션 내 블록"
+      },
+      "xl": {
+        "$type": "dimension",
+        "$value": {
+          "comfortable": "{ref.space.32}",
+          "compact": "{ref.space.24}"
+        },
+        "$description": "섹션 간"
+      }
+    },
+    "inline": {
+      "xs": {
+        "$type": "dimension",
+        "$value": {
+          "comfortable": "{ref.space.4}",
+          "compact": "{ref.space.4}"
+        },
+        "$description": "아이콘↔텍스트"
+      },
+      "sm": {
+        "$type": "dimension",
+        "$value": {
+          "comfortable": "{ref.space.8}",
+          "compact": "{ref.space.8}"
+        },
+        "$description": "칩·버튼 간"
+      },
+      "md": {
+        "$type": "dimension",
+        "$value": {
+          "comfortable": "{ref.space.12}",
+          "compact": "{ref.space.12}"
+        },
+        "$description": "툴바 요소 간"
+      },
+      "lg": {
+        "$type": "dimension",
+        "$value": {
+          "comfortable": "{ref.space.16}",
+          "compact": "{ref.space.16}"
+        },
+        "$description": "필드 2열 간(PWA 16)"
+      }
+    },
+    "page": {
+      "gutter": {
+        "$type": "dimension",
+        "$value": {
+          "comfortable": "{ref.space.20}",
+          "compact": "{ref.space.24}"
+        },
+        "$description": "화면 좌우 여백(PWA 20 · 웹 24)"
+      },
+      "stack": {
+        "$type": "dimension",
+        "$value": {
+          "comfortable": "{ref.space.24}",
+          "compact": "{ref.space.32}"
+        },
+        "$description": "페이지 헤더↔본문"
+      }
+    }
+  }
+}

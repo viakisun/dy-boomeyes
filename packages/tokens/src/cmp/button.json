@@ -1,0 +1,59 @@
+{
+  "button": {
+    "height": {
+      "sm": {
+        "$type": "dimension",
+        "$value": "{sys.size.control.sm}"
+      },
+      "md": {
+        "$type": "dimension",
+        "$value": "{sys.size.control.md}"
+      },
+      "lg": {
+        "$type": "dimension",
+        "$value": "{sys.size.control.lg}"
+      }
+    },
+    "padding-x": {
+      "sm": {
+        "$type": "dimension",
+        "$value": "{sys.space.inset.sm}"
+      },
+      "md": {
+        "$type": "dimension",
+        "$value": "{sys.space.inset.md}"
+      },
+      "lg": {
+        "$type": "dimension",
+        "$value": "{sys.space.inset.lg}"
+      }
+    },
+    "gap": {
+      "$type": "dimension",
+      "$value": "{sys.space.inline.xs}",
+      "$description": "아이콘↔라벨"
+    },
+    "radius": {
+      "$type": "dimension",
+      "$value": "{sys.radius.control}"
+    },
+    "font": {
+      "sm": {
+        "$type": "typography",
+        "$value": "{sys.type.label-md}"
+      },
+      "md": {
+        "$type": "typography",
+        "$value": "{sys.type.label-lg}"
+      },
+      "lg": {
+        "$type": "typography",
+        "$value": "{sys.type.body-lg}"
+      }
+    },
+    "icon": {
+      "$type": "dimension",
+      "$value": "{sys.size.icon.md}"
+    }
+  }
+}

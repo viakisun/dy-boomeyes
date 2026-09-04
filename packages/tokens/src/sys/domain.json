@@ -1,0 +1,552 @@
+{
+  "color": {
+    "domain": {
+      "equipment": {
+        "normal": {
+          "solid": {
+            "$type": "color",
+            "$value": "{sys.color.status.success.solid}",
+            "$description": "정상 가동"
+          },
+          "fg": {
+            "$type": "color",
+            "$value": "{sys.color.status.success.fg}"
+          },
+          "bg": {
+            "$type": "color",
+            "$value": "{sys.color.status.success.bg}"
+          },
+          "border": {
+            "$type": "color",
+            "$value": "{sys.color.status.success.border}"
+          }
+        },
+        "caution": {
+          "solid": {
+            "$type": "color",
+            "$value": "{sys.color.status.warning.solid}",
+            "$description": "주의(임계 접근)"
+          },
+          "fg": {
+            "$type": "color",
+            "$value": "{sys.color.status.warning.fg}"
+          },
+          "bg": {
+            "$type": "color",
+            "$value": "{sys.color.status.warning.bg}"
+          },
+          "border": {
+            "$type": "color",
+            "$value": "{sys.color.status.warning.border}"
+          }
+        },
+        "fault": {
+          "solid": {
+            "$type": "color",
+            "$value": "{sys.color.status.danger.solid}",
+            "$description": "고장·E-코드"
+          },
+          "fg": {
+            "$type": "color",
+            "$value": "{sys.color.status.danger.fg}"
+          },
+          "bg": {
+            "$type": "color",
+            "$value": "{sys.color.status.danger.bg}"
+          },
+          "border": {
+            "$type": "color",
+            "$value": "{sys.color.status.danger.border}"
+          }
+        },
+        "offline": {
+          "solid": {
+            "$type": "color",
+            "$value": "{sys.color.status.neutral.solid}",
+            "$description": "통신 두절"
+          },
+          "fg": {
+            "$type": "color",
+            "$value": "{sys.color.status.neutral.fg}"
+          },
+          "bg": {
+            "$type": "color",
+            "$value": "{sys.color.status.neutral.bg}"
+          },
+          "border": {
+            "$type": "color",
+            "$value": "{sys.color.status.neutral.border}"
+          }
+        },
+        "maintenance": {
+          "solid": {
+            "$type": "color",
+            "$value": "{sys.color.status.progress.solid}",
+            "$description": "정비 중·정비소"
+          },
+          "fg": {
+            "$type": "color",
+            "$value": "{sys.color.status.progress.fg}"
+          },
+          "bg": {
+            "$type": "color",
+            "$value": "{sys.color.status.progress.bg}"
+          },
+          "border": {
+            "$type": "color",
+            "$value": "{sys.color.status.progress.border}"
+          }
+        }
+      },
+      "connect": {
+        "online": {
+          "solid": {
+            "$type": "color",
+            "$value": "{sys.color.status.success.solid}",
+            "$description": "연결됨"
+          },
+          "fg": {
+            "$type": "color",
+            "$value": "{sys.color.status.success.fg}"
+          },
+          "bg": {
+            "$type": "color",
+            "$value": "{sys.color.status.success.bg}"
+          },
+          "border": {
+            "$type": "color",
+            "$value": "{sys.color.status.success.border}"
+          }
+        },
+        "offline": {
+          "solid": {
+            "$type": "color",
+            "$value": "{sys.color.status.neutral.solid}",
+            "$description": "연결 끊김"
+          },
+          "fg": {
+            "$type": "color",
+            "$value": "{sys.color.status.neutral.fg}"
+          },
+          "bg": {
+            "$type": "color",
+            "$value": "{sys.color.status.neutral.bg}"
+          },
+          "border": {
+            "$type": "color",
+            "$value": "{sys.color.status.neutral.border}"
+          }
+        }
+      },
+      "severity": {
+        "critical": {
+          "solid": {
+            "$type": "color",
+            "$value": "{sys.color.status.danger.solid}",
+            "$description": "긴급 알림"
+          },
+          "fg": {
+            "$type": "color",
+            "$value": "{sys.color.status.danger.fg}"
+          },
+          "bg": {
+            "$type": "color",
+            "$value": "{sys.color.status.danger.bg}"
+          },
+          "border": {
+            "$type": "color",
+            "$value": "{sys.color.status.danger.border}"
+          }
+        },
+        "warning": {
+          "solid": {
+            "$type": "color",
+            "$value": "{sys.color.status.warning.solid}",
+            "$description": "경고 알림"
+          },
+          "fg": {
+            "$type": "color",
+            "$value": "{sys.color.status.warning.fg}"
+          },
+          "bg": {
+            "$type": "color",
+            "$value": "{sys.color.status.warning.bg}"
+          },
+          "border": {
+            "$type": "color",
+            "$value": "{sys.color.status.warning.border}"
+          }
+        },
+        "info": {
+          "solid": {
+            "$type": "color",
+            "$value": "{sys.color.status.info.solid}",
+            "$description": "정보 알림"
+          },
+          "fg": {
+            "$type": "color",
+            "$value": "{sys.color.status.info.fg}"
+          },
+          "bg": {
+            "$type": "color",
+            "$value": "{sys.color.status.info.bg}"
+          },
+          "border": {
+            "$type": "color",
+            "$value": "{sys.color.status.info.border}"
+          }
+        }
+      },
+      "task": {
+        "new": {
+          "solid": {
+            "$type": "color",
+            "$value": "{sys.color.status.info.solid}",
+            "$description": "신규 접수"
+          },
+          "fg": {
+            "$type": "color",
+            "$value": "{sys.color.status.info.fg}"
+          },
+          "bg": {
+            "$type": "color",
+            "$value": "{sys.color.status.info.bg}"
+          },
+          "border": {
+            "$type": "color",
+            "$value": "{sys.color.status.info.border}"
+          }
+        },
+        "assigned": {
+          "solid": {
+            "$type": "color",
+            "$value": "{sys.color.accent.solid}",
+            "$description": "배정됨"
+          },
+          "fg": {
+            "$type": "color",
+            "$value": "{sys.color.accent.fg}"
+          },
+          "bg": {
+            "$type": "color",
+            "$value": "{sys.color.accent.bg}"
+          },
+          "border": {
+            "$type": "color",
+            "$value": "{sys.color.accent.border}"
+          }
+        },
+        "in-progress": {
+          "solid": {
+            "$type": "color",
+            "$value": "{sys.color.status.progress.solid}",
+            "$description": "진행 중"
+          },
+          "fg": {
+            "$type": "color",
+            "$value": "{sys.color.status.progress.fg}"
+          },
+          "bg": {
+            "$type": "color",
+            "$value": "{sys.color.status.progress.bg}"
+          },
+          "border": {
+            "$type": "color",
+            "$value": "{sys.color.status.progress.border}"
+          }
+        },
+        "done": {
+          "solid": {
+            "$type": "color",
+            "$value": "{sys.color.status.success.solid}",
+            "$description": "완료"
+          },
+          "fg": {
+            "$type": "color",
+            "$value": "{sys.color.status.success.fg}"
+          },
+          "bg": {
+            "$type": "color",
+            "$value": "{sys.color.status.success.bg}"
+          },
+          "border": {
+            "$type": "color",
+            "$value": "{sys.color.status.success.border}"
+          }
+        },
+        "escalated": {
+          "solid": {
+            "$type": "color",
+            "$value": "{sys.color.status.danger.solid}",
+            "$description": "에스컬레이션(1h 미접수)"
+          },
+          "fg": {
+            "$type": "color",
+            "$value": "{sys.color.status.danger.fg}"
+          },
+          "bg": {
+            "$type": "color",
+            "$value": "{sys.color.status.danger.bg}"
+          },
+          "border": {
+            "$type": "color",
+            "$value": "{sys.color.status.danger.border}"
+          }
+        }
+      },
+      "doc": {
+        "pending": {
+          "solid": {
+            "$type": "color",
+            "$value": "{sys.color.status.warning.solid}",
+            "$description": "제출 대기·검토 중"
+          },
+          "fg": {
+            "$type": "color",
+            "$value": "{sys.color.status.warning.fg}"
+          },
+          "bg": {
+            "$type": "color",
+            "$value": "{sys.color.status.warning.bg}"
+          },
+          "border": {
+            "$type": "color",
+            "$value": "{sys.color.status.warning.border}"
+          }
+        },
+        "in-progress": {
+          "solid": {
+            "$type": "color",
+            "$value": "{sys.color.status.progress.solid}",
+            "$description": "작성 중"
+          },
+          "fg": {
+            "$type": "color",
+            "$value": "{sys.color.status.progress.fg}"
+          },
+          "bg": {
+            "$type": "color",
+            "$value": "{sys.color.status.progress.bg}"
+          },
+          "border": {
+            "$type": "color",
+            "$value": "{sys.color.status.progress.border}"
+          }
+        },
+        "approved": {
+          "solid": {
+            "$type": "color",
+            "$value": "{sys.color.status.info.solid}",
+            "$description": "승인"
+          },
+          "fg": {
+            "$type": "color",
+            "$value": "{sys.color.status.info.fg}"
+          },
+          "bg": {
+            "$type": "color",
+            "$value": "{sys.color.status.info.bg}"
+          },
+          "border": {
+            "$type": "color",
+            "$value": "{sys.color.status.info.border}"
+          }
+        },
+        "rejected": {
+          "solid": {
+            "$type": "color",
+            "$value": "{sys.color.status.danger.solid}",
+            "$description": "반려"
+          },
+          "fg": {
+            "$type": "color",
+            "$value": "{sys.color.status.danger.fg}"
+          },
+          "bg": {
+            "$type": "color",
+            "$value": "{sys.color.status.danger.bg}"
+          },
+          "border": {
+            "$type": "color",
+            "$value": "{sys.color.status.danger.border}"
+          }
+        },
+        "incomplete": {
+          "solid": {
+            "$type": "color",
+            "$value": "{sys.color.status.neutral.solid}",
+            "$description": "미완료"
+          },
+          "fg": {
+            "$type": "color",
+            "$value": "{sys.color.status.neutral.fg}"
+          },
+          "bg": {
+            "$type": "color",
+            "$value": "{sys.color.status.neutral.bg}"
+          },
+          "border": {
+            "$type": "color",
+            "$value": "{sys.color.status.neutral.border}"
+          }
+        }
+      },
+      "video": {
+        "live": {
+          "solid": {
+            "$type": "color",
+            "$value": "{sys.color.status.danger.solid}",
+            "$description": "라이브 표시(REC 점)"
+          },
+          "fg": {
+            "$type": "color",
+            "$value": "{sys.color.status.danger.fg}"
+          },
+          "bg": {
+            "$type": "color",
+            "$value": "{sys.color.status.danger.bg}"
+          },
+          "border": {
+            "$type": "color",
+            "$value": "{sys.color.status.danger.border}"
+          }
+        },
+        "recording": {
+          "solid": {
+            "$type": "color",
+            "$value": "{sys.color.status.danger.solid}",
+            "$description": "녹화 중"
+          },
+          "fg": {
+            "$type": "color",
+            "$value": "{sys.color.status.danger.fg}"
+          },
+          "bg": {
+            "$type": "color",
+            "$value": "{sys.color.status.danger.bg}"
+          },
+          "border": {
+            "$type": "color",
+            "$value": "{sys.color.status.danger.border}"
+          }
+        },
+        "ai": {
+          "solid": {
+            "$type": "color",
+            "$value": "{sys.color.status.warning.solid}",
+            "$description": "AI 이벤트(사람 인식)"
+          },
+          "fg": {
+            "$type": "color",
+            "$value": "{sys.color.status.warning.fg}"
+          },
+          "bg": {
+            "$type": "color",
+            "$value": "{sys.color.status.warning.bg}"
+          },
+          "border": {
+            "$type": "color",
+            "$value": "{sys.color.status.warning.border}"
+          }
+        },
+        "offline": {
+          "solid": {
+            "$type": "color",
+            "$value": "{sys.color.status.neutral.solid}",
+            "$description": "카메라 오프라인"
+          },
+          "fg": {
+            "$type": "color",
+            "$value": "{sys.color.status.neutral.fg}"
+          },
+          "bg": {
+            "$type": "color",
+            "$value": "{sys.color.status.neutral.bg}"
+          },
+          "border": {
+            "$type": "color",
+            "$value": "{sys.color.status.neutral.border}"
+          }
+        }
+      },
+      "map": {
+        "safe": {
+          "solid": {
+            "$type": "color",
+            "$value": "{sys.color.accent.solid}",
+            "$description": "안전(현장 정상)"
+          },
+          "fg": {
+            "$type": "color",
+            "$value": "{sys.color.accent.fg}"
+          },
+          "bg": {
+            "$type": "color",
+            "$value": "{sys.color.accent.bg}"
+          },
+          "border": {
+            "$type": "color",
+            "$value": "{sys.color.accent.border}"
+          }
+        },
+        "warning": {
+          "solid": {
+            "$type": "color",
+            "$value": "{sys.color.status.warning.solid}",
+            "$description": "주의 현장"
+          },
+          "fg": {
+            "$type": "color",
+            "$value": "{sys.color.status.warning.fg}"
+          },
+          "bg": {
+            "$type": "color",
+            "$value": "{sys.color.status.warning.bg}"
+          },
+          "border": {
+            "$type": "color",
+            "$value": "{sys.color.status.warning.border}"
+          }
+        },
+        "danger": {
+          "solid": {
+            "$type": "color",
+            "$value": "{sys.color.status.danger.solid}",
+            "$description": "위험 현장"
+          },
+          "fg": {
+            "$type": "color",
+            "$value": "{sys.color.status.danger.fg}"
+          },
+          "bg": {
+            "$type": "color",
+            "$value": "{sys.color.status.danger.bg}"
+          },
+          "border": {
+            "$type": "color",
+            "$value": "{sys.color.status.danger.border}"
+          }
+        },
+        "service": {
+          "solid": {
+            "$type": "color",
+            "$value": "{sys.color.status.progress.solid}",
+            "$description": "정비소"
+          },
+          "fg": {
+            "$type": "color",
+            "$value": "{sys.color.status.progress.fg}"
+          },
+          "bg": {
+            "$type": "color",
+            "$value": "{sys.color.status.progress.bg}"
+          },
+          "border": {
+            "$type": "color",
+            "$value": "{sys.color.status.progress.border}"
+          }
+        }
+      }
+    }
+  }
+}

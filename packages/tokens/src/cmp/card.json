@@ -1,0 +1,39 @@
+{
+  "card": {
+    "padding": {
+      "$type": "dimension",
+      "$value": "{sys.space.inset.lg}",
+      "$description": "PWA 20 · 웹 16"
+    },
+    "gap": {
+      "$type": "dimension",
+      "$value": "{sys.space.stack.md}",
+      "$description": "블록 간"
+    },
+    "radius": {
+      "$type": "dimension",
+      "$value": "{sys.radius.card}"
+    },
+    "bg": {
+      "$type": "color",
+      "$value": "{sys.color.bg.surface}"
+    },
+    "border": {
+      "$type": "color",
+      "$value": "{sys.color.border.default}"
+    },
+    "shadow": {
+      "$type": "shadow",
+      "$value": "{sys.shadow.raised}",
+      "$description": "interactive hover"
+    },
+    "title": {
+      "$type": "typography",
+      "$value": "{sys.type.heading-md}"
+    },
+    "meta": {
+      "$type": "typography",
+      "$value": "{sys.type.body-sm}"
+    }
+  }
+}

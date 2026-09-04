@@ -1,0 +1,16 @@
+{
+  "name": "@boomeyes/tokens",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "BoomEyes 디자인 시스템 — 토큰 원천(ref/sys/cmp) · 브랜드 팩 · 빌드(tokens.css · theme.css · <brand>-design.md) · 검사(명명·계층·대비)",
+  "exports": {
+    "./css": "./dist/DY.tokens.css",
+    "./theme": "./dist/DY.theme.css",
+    "./json": "./dist/DY.tokens.json"
+  },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "check": "node scripts/check.mjs"
+  }
+}

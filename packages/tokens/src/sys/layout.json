@@ -1,0 +1,98 @@
+{
+  "layout": {
+    "sidebar": {
+      "width": {
+        "$type": "dimension",
+        "$value": "240px",
+        "$description": "웹 사이드바"
+      },
+      "collapsed": {
+        "$type": "dimension",
+        "$value": "56px",
+        "$description": "접힘(아이콘만)"
+      }
+    },
+    "topbar": {
+      "height": {
+        "$type": "dimension",
+        "$value": "48px",
+        "$description": "웹 상단 바"
+      }
+    },
+    "inspector": {
+      "width": {
+        "$type": "dimension",
+        "$value": "360px",
+        "$description": "웹 우측 상세 패널"
+      }
+    },
+    "appbar": {
+      "height": {
+        "$type": "dimension",
+        "$value": "56px",
+        "$description": "PWA 상단 앱바"
+      }
+    },
+    "bottomnav": {
+      "height": {
+        "$type": "dimension",
+        "$value": "56px",
+        "$description": "PWA 하단 내비(+safe-area)"
+      }
+    },
+    "container": {
+      "max": {
+        "$type": "dimension",
+        "$value": "1400px",
+        "$description": "웹 본문 최대 폭"
+      }
+    },
+    "content": {
+      "max": {
+        "$type": "dimension",
+        "$value": "960px",
+        "$description": "읽기·상세 최대 폭"
+      }
+    },
+    "form": {
+      "max": {
+        "$type": "dimension",
+        "$value": "640px",
+        "$description": "폼 최대 폭"
+      }
+    },
+    "frame": {
+      "mobile": {
+        "$type": "dimension",
+        "$value": "390px",
+        "$description": "PWA 기준 뷰포트(375~430 대응)"
+      }
+    },
+    "breakpoint": {
+      "xs": {
+        "$type": "dimension",
+        "$value": "375px"
+      },
+      "sm": {
+        "$type": "dimension",
+        "$value": "640px"
+      },
+      "md": {
+        "$type": "dimension",
+        "$value": "768px"
+      },
+      "lg": {
+        "$type": "dimension",
+        "$value": "1024px"
+      },
+      "xl": {
+        "$type": "dimension",
+        "$value": "1280px"
+      },
+      "2xl": {
+        "$type": "dimension",
+        "$value": "1536px"
+      }
+    }
+  }
+}

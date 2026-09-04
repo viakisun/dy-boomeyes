@@ -1,0 +1,40 @@
+{
+  "table": {
+    "row-height": {
+      "$type": "dimension",
+      "$value": "{sys.size.row.default}"
+    },
+    "header-height": {
+      "$type": "dimension",
+      "$value": "{sys.size.row.dense}"
+    },
+    "cell-padding-x": {
+      "$type": "dimension",
+      "$value": "{sys.space.inset.md}"
+    },
+    "font": {
+      "$type": "typography",
+      "$value": "{sys.type.body-md}"
+    },
+    "header-font": {
+      "$type": "typography",
+      "$value": "{sys.type.label-md}"
+    },
+    "border": {
+      "$type": "color",
+      "$value": "{sys.color.border.subtle}"
+    },
+    "row-hover": {
+      "$type": "color",
+      "$value": "{sys.color.bg.ui}"
+    },
+    "row-selected": {
+      "$type": "color",
+      "$value": "{sys.color.bg.selected}"
+    },
+    "header-fg": {
+      "$type": "color",
+      "$value": "{sys.color.fg.muted}"
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "border": {
+    "width": {
+      "default": {
+        "$type": "dimension",
+        "$value": "{ref.border.width.1}",
+        "$description": "기본 1px"
+      },
+      "strong": {
+        "$type": "dimension",
+        "$value": "{ref.border.width.2}",
+        "$description": "선택·강조 2px"
+      },
+      "focus": {
+        "$type": "dimension",
+        "$value": "{ref.border.width.2}",
+        "$description": "포커스 링 두께"
+      }
+    }
+  }
+}

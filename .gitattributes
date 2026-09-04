@@ -1,0 +1,5 @@
+# 생성물 — 리뷰 diff 접힘 (원천: ssot/*.yaml · packages/tokens/src)
+docs/generated/** linguist-generated=true
+packages/domain/src/generated/** linguist-generated=true
+packages/tokens/dist/** linguist-generated=true
+* text=auto eol=lf

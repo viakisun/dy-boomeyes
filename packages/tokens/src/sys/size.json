@@ -1,0 +1,131 @@
+{
+  "size": {
+    "control": {
+      "xs": {
+        "$type": "dimension",
+        "$value": {
+          "comfortable": "{ref.size.32}",
+          "compact": "{ref.size.24}"
+        },
+        "$description": "아이콘 버튼 xs·인라인 칩"
+      },
+      "sm": {
+        "$type": "dimension",
+        "$value": {
+          "comfortable": "{ref.size.40}",
+          "compact": "{ref.size.28}"
+        },
+        "$description": "보조 버튼·필드 sm"
+      },
+      "md": {
+        "$type": "dimension",
+        "$value": {
+          "comfortable": "{ref.size.48}",
+          "compact": "{ref.size.32}"
+        },
+        "$description": "기본 버튼·입력(PWA 터치 48 · 웹 32)"
+      },
+      "lg": {
+        "$type": "dimension",
+        "$value": {
+          "comfortable": "{ref.size.56}",
+          "compact": "{ref.size.36}"
+        },
+        "$description": "주 CTA·큰 입력"
+      }
+    },
+    "icon": {
+      "sm": {
+        "$type": "dimension",
+        "$value": {
+          "comfortable": "{ref.size.16}",
+          "compact": "{ref.size.14}"
+        },
+        "$description": "인라인·메타"
+      },
+      "md": {
+        "$type": "dimension",
+        "$value": {
+          "comfortable": "{ref.size.20}",
+          "compact": "{ref.size.16}"
+        },
+        "$description": "버튼·리스트 기본"
+      },
+      "lg": {
+        "$type": "dimension",
+        "$value": {
+          "comfortable": "{ref.size.24}",
+          "compact": "{ref.size.20}"
+        },
+        "$description": "내비·헤더"
+      },
+      "xl": {
+        "$type": "dimension",
+        "$value": {
+          "comfortable": "{ref.size.32}",
+          "compact": "{ref.size.24}"
+        },
+        "$description": "빈 상태·강조"
+      }
+    },
+    "row": {
+      "default": {
+        "$type": "dimension",
+        "$value": {
+          "comfortable": "{ref.size.56}",
+          "compact": "{ref.size.36}"
+        },
+        "$description": "리스트·표 행(웹 36 Linear 밀도)"
+      },
+      "dense": {
+        "$type": "dimension",
+        "$value": {
+          "comfortable": "{ref.size.48}",
+          "compact": "{ref.size.32}"
+        },
+        "$description": "조밀 행"
+      }
+    },
+    "avatar": {
+      "sm": {
+        "$type": "dimension",
+        "$value": {
+          "comfortable": "{ref.size.32}",
+          "compact": "{ref.size.24}"
+        }
+      },
+      "md": {
+        "$type": "dimension",
+        "$value": {
+          "comfortable": "{ref.size.40}",
+          "compact": "{ref.size.32}"
+        }
+      },
+      "lg": {
+        "$type": "dimension",
+        "$value": {
+          "comfortable": "{ref.size.48}",
+          "compact": "{ref.size.40}"
+        }
+      }
+    },
+    "touch-min": {
+      "$type": "dimension",
+      "$value": "{ref.size.44}",
+      "$description": "터치 최소 영역(밀도 무관)"
+    },
+    "indicator": {
+      "$type": "dimension",
+      "$value": "{ref.size.8}",
+      "$description": "상태 점"
+    },
+    "badge": {
+      "$type": "dimension",
+      "$value": {
+        "comfortable": "{ref.size.24}",
+        "compact": "{ref.size.20}"
+      },
+      "$description": "배지·필 높이"
+    }
+  }
+}

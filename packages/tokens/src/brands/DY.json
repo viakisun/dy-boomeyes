@@ -1,0 +1,41 @@
+{
+  "id": "DY",
+  "name": "DY BoomEyes",
+  "owner": "DY(운영사) · 제작 VIA",
+  "issued": "2026-09-05",
+  "version": "0.1.0",
+  "accent": {
+    "hue": "navy",
+    "anchor": "#0d2877",
+    "pins": {
+      "light": {
+        "9": "#0d2877",
+        "10": "#081849",
+        "11": "#0d32a1",
+        "12": "#050f2e"
+      }
+    }
+  },
+  "font": {
+    "sans": "Pretendard Variable"
+  },
+  "reference": {
+    "figma": "kBZarC75huG1mzuUnIv0p7",
+    "figmaLibrary": "[DY] Crane Eyes",
+    "codebase": "DY-crane-eyes-back-office(SvelteKit) — 구조 참조"
+  },
+  "defaults": {
+    "web": {
+      "theme": "light",
+      "density": "compact"
+    },
+    "pwa": {
+      "theme": "light",
+      "density": "comfortable"
+    },
+    "wall": {
+      "theme": "dark",
+      "density": "comfortable"
+    }
+  }
+}

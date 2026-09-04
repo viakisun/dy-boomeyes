@@ -1,0 +1,686 @@
+[
+  {
+    "name": "Button",
+    "family": "Actions",
+    "platform": "both",
+    "ref": "Linear · CE Solid/Outline/Text/Capsule",
+    "variants": "variant solid/outline/ghost/link · tone accent/neutral/danger · size sm/md/lg · iconLeft/iconRight · pill",
+    "states": "hover/active/focus/disabled/loading",
+    "note": "CE 버튼 6종을 variant×tone으로 정규화. 주 CTA는 solid+accent 화면당 1개"
+  },
+  {
+    "name": "IconButton",
+    "family": "Actions",
+    "platform": "both",
+    "ref": "Linear · CE Icon Button",
+    "variants": "variant ghost/outline/solid · tone · size xs/sm/md/lg",
+    "states": "hover/active/focus/disabled",
+    "note": "aria-label 필수 · 툴팁 동반"
+  },
+  {
+    "name": "SplitButton",
+    "family": "Actions",
+    "platform": "web",
+    "ref": "Linear",
+    "variants": "tone · size",
+    "states": "",
+    "note": "주 동작 + 메뉴"
+  },
+  {
+    "name": "FloatingActionButton",
+    "family": "Actions",
+    "platform": "pwa",
+    "ref": "CE Floating Button",
+    "variants": "tone accent · extended(label)",
+    "states": "default/disabled/active",
+    "note": "우하단 · 56 · pill · shadow.popover"
+  },
+  {
+    "name": "RemoteControlButton",
+    "family": "Actions",
+    "platform": "pwa",
+    "ref": "CE RemoteControlButton",
+    "variants": "kind hydraulic/engine/temperature · on/off",
+    "states": "pressed/disabled",
+    "note": "원격 제어 전용 — 확인 단계 강제"
+  },
+  {
+    "name": "TextField",
+    "family": "Inputs",
+    "platform": "both",
+    "ref": "Linear · CE Input/short·long",
+    "variants": "size md/lg · prefix/suffix/clear · type text/number/tel/password",
+    "states": "focus/invalid/disabled/readonly/completed",
+    "note": "라벨·도움말·오류를 FieldWrapper가 담당"
+  },
+  {
+    "name": "TextArea",
+    "family": "Inputs",
+    "platform": "both",
+    "ref": "CE Input/long",
+    "variants": "autoGrow · maxLength counter",
+    "states": "focus/invalid/disabled",
+    "note": ""
+  },
+  {
+    "name": "Select",
+    "family": "Inputs",
+    "platform": "both",
+    "ref": "Linear",
+    "variants": "size · searchable(웹)",
+    "states": "open/focus/invalid/disabled",
+    "note": "PWA는 네이티브 시트 선택"
+  },
+  {
+    "name": "Combobox",
+    "family": "Inputs",
+    "platform": "web",
+    "ref": "Linear",
+    "variants": "multi · creatable · async",
+    "states": "open/loading",
+    "note": "검색형 선택(장비·현장·사용자)"
+  },
+  {
+    "name": "SearchField",
+    "family": "Inputs",
+    "platform": "both",
+    "ref": "Linear ⌘K · CE SearchBar",
+    "variants": "size · shortcutHint",
+    "states": "focus/loading/completed",
+    "note": ""
+  },
+  {
+    "name": "Checkbox",
+    "family": "Inputs",
+    "platform": "both",
+    "ref": "CE Check Box",
+    "variants": "size",
+    "states": "checked/indeterminate/disabled",
+    "note": ""
+  },
+  {
+    "name": "Radio",
+    "family": "Inputs",
+    "platform": "both",
+    "ref": "CE RadioButton",
+    "variants": "RadioGroup 방향 vertical/horizontal",
+    "states": "checked/disabled",
+    "note": ""
+  },
+  {
+    "name": "Switch",
+    "family": "Inputs",
+    "platform": "both",
+    "ref": "Linear",
+    "variants": "size",
+    "states": "on/off/disabled",
+    "note": "즉시 반영 설정에만"
+  },
+  {
+    "name": "SegmentedControl",
+    "family": "Inputs",
+    "platform": "both",
+    "ref": "CE Segmented Control",
+    "variants": "size · items 2~5",
+    "states": "selected/disabled",
+    "note": "탭과 구분: 값 선택 용도"
+  },
+  {
+    "name": "DatePicker",
+    "family": "Inputs",
+    "platform": "both",
+    "ref": "Linear",
+    "variants": "mode single/range",
+    "states": "",
+    "note": "PWA 네이티브 date 우선"
+  },
+  {
+    "name": "FileUpload",
+    "family": "Inputs",
+    "platform": "both",
+    "ref": "new",
+    "variants": "variant drop/button/capture(camera)",
+    "states": "uploading/error",
+    "note": "서류 촬영 capture=environment → 다운스케일"
+  },
+  {
+    "name": "FieldWrapper",
+    "family": "Inputs",
+    "platform": "both",
+    "ref": "new",
+    "variants": "label · help · error · required · counter",
+    "states": "",
+    "note": "모든 입력의 공통 껍데기"
+  },
+  {
+    "name": "Badge",
+    "family": "Display",
+    "platform": "both",
+    "ref": "CE Badge · Label/status",
+    "variants": "variant dot/count/pill · tone 6 · size sm/md",
+    "states": "",
+    "note": "숫자 99+ 처리"
+  },
+  {
+    "name": "StatusPill",
+    "family": "Display",
+    "platform": "both",
+    "ref": "CE Label/status · Label/Map",
+    "variants": "tone(domain 매핑) · icon · size",
+    "states": "",
+    "note": "색+아이콘+텍스트 병행"
+  },
+  {
+    "name": "StatusDot",
+    "family": "Display",
+    "platform": "both",
+    "ref": "CE Label/connect",
+    "variants": "tone · pulse(live)",
+    "states": "",
+    "note": "연결·라이브 표시"
+  },
+  {
+    "name": "Chip",
+    "family": "Display",
+    "platform": "both",
+    "ref": "CE Chip",
+    "variants": "variant filter/keyword/status/removable/dropdown · count",
+    "states": "selected/disabled",
+    "note": ""
+  },
+  {
+    "name": "Tag",
+    "family": "Display",
+    "platform": "web",
+    "ref": "Linear",
+    "variants": "tone · removable",
+    "states": "",
+    "note": "분류 라벨(현장·장비 모델)"
+  },
+  {
+    "name": "Avatar",
+    "family": "Display",
+    "platform": "both",
+    "ref": "Linear",
+    "variants": "size sm/md/lg · fallback initials · status",
+    "states": "",
+    "note": ""
+  },
+  {
+    "name": "KeyValueList",
+    "family": "Display",
+    "platform": "both",
+    "ref": "CE 카드 키-값 규칙",
+    "variants": "columns 1/2 · align",
+    "states": "",
+    "note": "라벨 muted · 값 default · 행 간 stack.xs"
+  },
+  {
+    "name": "Stat",
+    "family": "Display",
+    "platform": "both",
+    "ref": "new · CE 지표 3열",
+    "variants": "size · trend · tone",
+    "states": "loading",
+    "note": "큰 수치 + 단위 + 변화"
+  },
+  {
+    "name": "Card",
+    "family": "Display",
+    "platform": "both",
+    "ref": "CE Card layout · Linear",
+    "variants": "variant default/interactive/selected/brand · padding",
+    "states": "hover/selected",
+    "note": "PWA 카드 5유형(CTA·정보+버튼·배지+제목·지표·키-값) 프리셋"
+  },
+  {
+    "name": "DataTable",
+    "family": "Display",
+    "platform": "web",
+    "ref": "Linear 리스트",
+    "variants": "density · sortable · sticky header · selectable · rowActions · groupBy",
+    "states": "loading/empty/error",
+    "note": "행 36 · 셀 좌측 정렬 · 수치 우측 · 가상 스크롤"
+  },
+  {
+    "name": "List",
+    "family": "Display",
+    "platform": "both",
+    "ref": "Linear · CE",
+    "variants": "variant plain/card · leading/trailing · divider",
+    "states": "",
+    "note": "PWA 기본 목록"
+  },
+  {
+    "name": "Timeline",
+    "family": "Display",
+    "platform": "both",
+    "ref": "new",
+    "variants": "orientation · tone per item",
+    "states": "",
+    "note": "업무 이력·에스컬레이션"
+  },
+  {
+    "name": "EmptyState",
+    "family": "Display",
+    "platform": "both",
+    "ref": "Linear",
+    "variants": "icon · title · description · action",
+    "states": "",
+    "note": "목록 0건·필터 0건·오류 3종 문안 규칙"
+  },
+  {
+    "name": "Skeleton",
+    "family": "Display",
+    "platform": "both",
+    "ref": "Linear",
+    "variants": "shape text/rect/circle",
+    "states": "",
+    "note": "로딩 300ms 이후 표시"
+  },
+  {
+    "name": "ProgressBar",
+    "family": "Display",
+    "platform": "both",
+    "ref": "new · CE 부하율",
+    "variants": "tone · size · label",
+    "states": "indeterminate",
+    "note": "계기 대신 선형 우선"
+  },
+  {
+    "name": "Stepper",
+    "family": "Display",
+    "platform": "both",
+    "ref": "CE Stepper · Vertical Progress Step",
+    "variants": "orientation · current",
+    "states": "complete/current/upcoming",
+    "note": "업무 상태 진행"
+  },
+  {
+    "name": "Divider",
+    "family": "Display",
+    "platform": "both",
+    "ref": "—",
+    "variants": "orientation · inset",
+    "states": "",
+    "note": ""
+  },
+  {
+    "name": "Tooltip",
+    "family": "Display",
+    "platform": "web",
+    "ref": "Linear",
+    "variants": "placement · shortcut",
+    "states": "",
+    "note": "PWA는 툴팁 금지(터치)"
+  },
+  {
+    "name": "Sidebar",
+    "family": "Navigation",
+    "platform": "web",
+    "ref": "Linear",
+    "variants": "collapsed · sections · footer",
+    "states": "",
+    "note": "240/56 · 항목 32 · 단축키 힌트"
+  },
+  {
+    "name": "Topbar",
+    "family": "Navigation",
+    "platform": "web",
+    "ref": "Linear",
+    "variants": "breadcrumb · actions · search",
+    "states": "",
+    "note": "48 · 페이지 제목은 본문 헤더로"
+  },
+  {
+    "name": "CommandMenu",
+    "family": "Navigation",
+    "platform": "web",
+    "ref": "Linear ⌘K",
+    "variants": "groups · recent · actions",
+    "states": "open/loading",
+    "note": "이동·생성·검색 통합"
+  },
+  {
+    "name": "Tabs",
+    "family": "Navigation",
+    "platform": "both",
+    "ref": "CE Tab · Linear",
+    "variants": "variant underline/pill · size · scrollable",
+    "states": "selected/disabled",
+    "note": ""
+  },
+  {
+    "name": "Breadcrumb",
+    "family": "Navigation",
+    "platform": "web",
+    "ref": "Linear",
+    "variants": "collapse",
+    "states": "",
+    "note": ""
+  },
+  {
+    "name": "Pagination",
+    "family": "Navigation",
+    "platform": "web",
+    "ref": "CE 백오피스",
+    "variants": "size · pageSize",
+    "states": "",
+    "note": ""
+  },
+  {
+    "name": "Menu",
+    "family": "Navigation",
+    "platform": "both",
+    "ref": "Linear",
+    "variants": "items · groups · icons · shortcuts · danger item",
+    "states": "open",
+    "note": "드롭다운·컨텍스트 메뉴 공용"
+  },
+  {
+    "name": "AppBar",
+    "family": "Navigation",
+    "platform": "pwa",
+    "ref": "CE headerWrap",
+    "variants": "back · title center/left · actions · logo",
+    "states": "",
+    "note": "56 · 제목 heading-md"
+  },
+  {
+    "name": "BottomNav",
+    "family": "Navigation",
+    "platform": "pwa",
+    "ref": "CE btmNav",
+    "variants": "items 3~5 · badge",
+    "states": "selected",
+    "note": "56 + safe-area · label-sm · 역할별 항목 세트"
+  },
+  {
+    "name": "Inspector",
+    "family": "Navigation",
+    "platform": "web",
+    "ref": "Linear 상세 패널",
+    "variants": "width · resizable · tabs",
+    "states": "open/closed",
+    "note": "우측 360 · 목록 선택 시 상세"
+  },
+  {
+    "name": "Toast",
+    "family": "Feedback",
+    "platform": "both",
+    "ref": "CE Toast/Snackbar · Linear",
+    "variants": "tone · action · duration",
+    "states": "",
+    "note": "하단(PWA) · 우하단(웹) · 최대 3개"
+  },
+  {
+    "name": "Banner",
+    "family": "Feedback",
+    "platform": "both",
+    "ref": "CE 홈 상태 배너",
+    "variants": "tone · dismissible · action",
+    "states": "",
+    "note": "페이지 상단 고정 안내(오프라인·동의·점검)"
+  },
+  {
+    "name": "Dialog",
+    "family": "Feedback",
+    "platform": "both",
+    "ref": "Linear",
+    "variants": "size sm/md/lg · destructive",
+    "states": "open",
+    "note": "확인/파괴 동작 · 포커스 트랩"
+  },
+  {
+    "name": "BottomSheet",
+    "family": "Feedback",
+    "platform": "pwa",
+    "ref": "CE Bottom Sheet",
+    "variants": "snap points · handle",
+    "states": "open/expanded",
+    "note": "PWA 선택·확인·상세"
+  },
+  {
+    "name": "Drawer",
+    "family": "Feedback",
+    "platform": "web",
+    "ref": "Linear",
+    "variants": "side right/left · width",
+    "states": "open",
+    "note": "폼·상세 편집"
+  },
+  {
+    "name": "Popover",
+    "family": "Feedback",
+    "platform": "both",
+    "ref": "CE Popover",
+    "variants": "placement · arrow",
+    "states": "open",
+    "note": ""
+  },
+  {
+    "name": "Spinner",
+    "family": "Feedback",
+    "platform": "both",
+    "ref": "—",
+    "variants": "size",
+    "states": "",
+    "note": "버튼 내 로딩은 Button loading"
+  },
+  {
+    "name": "WebShell",
+    "family": "Layout",
+    "platform": "web",
+    "ref": "Linear",
+    "variants": "sidebar · topbar · content · inspector",
+    "states": "",
+    "note": "3열 · 데이터 밀도 compact 고정"
+  },
+  {
+    "name": "PwaShell",
+    "family": "Layout",
+    "platform": "pwa",
+    "ref": "CE 앱 구조",
+    "variants": "appbar · content · bottomnav · sheet host · offline banner",
+    "states": "",
+    "note": "safe-area · 뒤로가기 규칙"
+  },
+  {
+    "name": "PageHeader",
+    "family": "Layout",
+    "platform": "both",
+    "ref": "Linear",
+    "variants": "title · description · actions · tabs",
+    "states": "",
+    "note": ""
+  },
+  {
+    "name": "Section",
+    "family": "Layout",
+    "platform": "both",
+    "ref": "—",
+    "variants": "title · action · divider",
+    "states": "",
+    "note": ""
+  },
+  {
+    "name": "Grid",
+    "family": "Layout",
+    "platform": "both",
+    "ref": "—",
+    "variants": "cols · gap(sys.space)",
+    "states": "",
+    "note": ""
+  },
+  {
+    "name": "EquipmentCard",
+    "family": "Domain",
+    "platform": "both",
+    "ref": "CE 크레인 카드",
+    "variants": "status(domain.equipment) · telemetry summary · actions",
+    "states": "",
+    "note": "CPB 호기 카드 — 상태 점+필+수치"
+  },
+  {
+    "name": "TelemetryGauge",
+    "family": "Domain",
+    "platform": "both",
+    "ref": "CE 모니터링 계기",
+    "variants": "kind voltage/pressure/reach/temp · thresholds",
+    "states": "normal/caution/fault",
+    "note": "선형 우선 · 임계 마커 · 모노 수치"
+  },
+  {
+    "name": "TelemetryStrip",
+    "family": "Domain",
+    "platform": "both",
+    "ref": "new",
+    "variants": "items 3~6",
+    "states": "",
+    "note": "카드 하단 요약 지표 줄"
+  },
+  {
+    "name": "CameraTile",
+    "family": "Domain",
+    "platform": "both",
+    "ref": "new",
+    "variants": "channel main/ai · live/snapshot/rec · badges",
+    "states": "live/offline/loading",
+    "note": "16:9 · 라이브 점 · 채널 칩"
+  },
+  {
+    "name": "CameraWall",
+    "family": "Domain",
+    "platform": "web",
+    "ref": "new",
+    "variants": "cols · autoRotate · wall theme",
+    "states": "",
+    "note": "다크 강제([data-theme=dark]) · 쇼케이스"
+  },
+  {
+    "name": "VideoPlayer",
+    "family": "Domain",
+    "platform": "both",
+    "ref": "new",
+    "variants": "source hls/mp4/snapshot · bbox overlay · timeline",
+    "states": "",
+    "note": "AI bbox SVG 오버레이"
+  },
+  {
+    "name": "MapView",
+    "family": "Domain",
+    "platform": "both",
+    "ref": "CE 지도 · Linear",
+    "variants": "markers · cluster · fit",
+    "states": "",
+    "note": "MapLibre + 토큰화 마커"
+  },
+  {
+    "name": "MapMarker",
+    "family": "Domain",
+    "platform": "both",
+    "ref": "CE Map pin",
+    "variants": "status(domain.map) · selected · label",
+    "states": "",
+    "note": "safe=accent · service=progress"
+  },
+  {
+    "name": "TaskCard",
+    "family": "Domain",
+    "platform": "both",
+    "ref": "new",
+    "variants": "status(domain.task) · sla timer · assignee",
+    "states": "",
+    "note": "업무함 항목"
+  },
+  {
+    "name": "EscalationTimer",
+    "family": "Domain",
+    "platform": "both",
+    "ref": "new",
+    "variants": "deadline · tone by remaining",
+    "states": "",
+    "note": "1h 규칙 시각화"
+  },
+  {
+    "name": "CheckinCard",
+    "family": "Domain",
+    "platform": "pwa",
+    "ref": "CE 출근 카드",
+    "variants": "state before/after · geofence",
+    "states": "",
+    "note": "출근·퇴근 · 반경 밖 시트"
+  },
+  {
+    "name": "ChecklistForm",
+    "family": "Domain",
+    "platform": "pwa",
+    "ref": "new",
+    "variants": "items · photo per item",
+    "states": "",
+    "note": "일일점검"
+  },
+  {
+    "name": "DocumentCard",
+    "family": "Domain",
+    "platform": "both",
+    "ref": "new",
+    "variants": "status(domain.doc) · type 5 · actions",
+    "states": "",
+    "note": "서류 5종 워크플로"
+  },
+  {
+    "name": "SiteProfileForm",
+    "family": "Domain",
+    "platform": "web",
+    "ref": "new",
+    "variants": "preset 4 · axes 8 · retention",
+    "states": "",
+    "note": "현장 프로파일(DISC-028)"
+  },
+  {
+    "name": "BodycamSessionCard",
+    "family": "Domain",
+    "platform": "both",
+    "ref": "new",
+    "variants": "state · consent badge · upload",
+    "states": "",
+    "note": "바디캠 세션·동의"
+  },
+  {
+    "name": "ShowcaseOverlay",
+    "family": "Domain",
+    "platform": "both",
+    "ref": "new",
+    "variants": "mask · watermark",
+    "states": "",
+    "note": "쇼케이스 마스킹"
+  },
+  {
+    "name": "ProtocolUploader",
+    "family": "Domain",
+    "platform": "web",
+    "ref": "new",
+    "variants": "yaml/json · validation table",
+    "states": "",
+    "note": "프로토콜 업로드·오류 판정"
+  },
+  {
+    "name": "RuleThresholdRow",
+    "family": "Domain",
+    "platform": "web",
+    "ref": "new",
+    "variants": "metric · operator · value · tone",
+    "states": "",
+    "note": "알림 기준 편집"
+  },
+  {
+    "name": "WeatherStrip",
+    "family": "Domain",
+    "platform": "pwa",
+    "ref": "CE weather",
+    "variants": "hours 6 · wind",
+    "states": "",
+    "note": "홈 기상 요약"
+  }
+]

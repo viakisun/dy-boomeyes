@@ -1,0 +1,24 @@
+{
+  "badge": {
+    "height": {
+      "$type": "dimension",
+      "$value": "{sys.size.badge}"
+    },
+    "padding-x": {
+      "$type": "dimension",
+      "$value": "{sys.space.inset.xs}"
+    },
+    "radius": {
+      "$type": "dimension",
+      "$value": "{sys.radius.pill}"
+    },
+    "font": {
+      "$type": "typography",
+      "$value": "{sys.type.label-md}"
+    },
+    "dot": {
+      "$type": "dimension",
+      "$value": "{sys.size.indicator}"
+    }
+  }
+}

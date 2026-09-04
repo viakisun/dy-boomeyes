@@ -1,0 +1,43 @@
+{
+  "radius": {
+    "control": {
+      "$type": "dimension",
+      "$value": {
+        "comfortable": "{ref.radius.8}",
+        "compact": "{ref.radius.6}"
+      },
+      "$description": "버튼·입력·칩(사각)"
+    },
+    "card": {
+      "$type": "dimension",
+      "$value": {
+        "comfortable": "{ref.radius.12}",
+        "compact": "{ref.radius.8}"
+      },
+      "$description": "카드·패널"
+    },
+    "dialog": {
+      "$type": "dimension",
+      "$value": {
+        "comfortable": "{ref.radius.16}",
+        "compact": "{ref.radius.12}"
+      },
+      "$description": "다이얼로그·팝오버"
+    },
+    "sheet": {
+      "$type": "dimension",
+      "$value": "{ref.radius.16}",
+      "$description": "바텀시트 상단"
+    },
+    "pill": {
+      "$type": "dimension",
+      "$value": "{ref.radius.full}",
+      "$description": "배지·캡슐 버튼·FAB"
+    },
+    "none": {
+      "$type": "dimension",
+      "$value": "{ref.radius.0}",
+      "$description": "표 셀·풀블리드"
+    }
+  }
+}

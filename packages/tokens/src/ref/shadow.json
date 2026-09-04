@@ -1,0 +1,180 @@
+{
+  "shadow": {
+    "1": {
+      "$type": "shadow",
+      "$value": {
+        "light": [
+          {
+            "offsetX": "0px",
+            "offsetY": "1px",
+            "blur": "2px",
+            "spread": "0px",
+            "color": "#0000000f"
+          }
+        ],
+        "dark": [
+          {
+            "offsetX": "0px",
+            "offsetY": "1px",
+            "blur": "2px",
+            "spread": "0px",
+            "color": "#00000066"
+          },
+          {
+            "offsetX": "0px",
+            "offsetY": "0px",
+            "blur": "0px",
+            "spread": "1px",
+            "color": "#ffffff14"
+          }
+        ]
+      },
+      "$description": "살짝 뜬 면(카드 hover·드롭다운 트리거)"
+    },
+    "2": {
+      "$type": "shadow",
+      "$value": {
+        "light": [
+          {
+            "offsetX": "0px",
+            "offsetY": "2px",
+            "blur": "8px",
+            "spread": "0px",
+            "color": "#00000014"
+          },
+          {
+            "offsetX": "0px",
+            "offsetY": "0px",
+            "blur": "0px",
+            "spread": "1px",
+            "color": "#0000000a"
+          }
+        ],
+        "dark": [
+          {
+            "offsetX": "0px",
+            "offsetY": "2px",
+            "blur": "8px",
+            "spread": "0px",
+            "color": "#00000080"
+          },
+          {
+            "offsetX": "0px",
+            "offsetY": "0px",
+            "blur": "0px",
+            "spread": "1px",
+            "color": "#ffffff1a"
+          }
+        ]
+      },
+      "$description": "메뉴·드롭다운"
+    },
+    "3": {
+      "$type": "shadow",
+      "$value": {
+        "light": [
+          {
+            "offsetX": "0px",
+            "offsetY": "6px",
+            "blur": "16px",
+            "spread": "-2px",
+            "color": "#0000001f"
+          },
+          {
+            "offsetX": "0px",
+            "offsetY": "0px",
+            "blur": "0px",
+            "spread": "1px",
+            "color": "#0000000a"
+          }
+        ],
+        "dark": [
+          {
+            "offsetX": "0px",
+            "offsetY": "6px",
+            "blur": "16px",
+            "spread": "-2px",
+            "color": "#00000099"
+          },
+          {
+            "offsetX": "0px",
+            "offsetY": "0px",
+            "blur": "0px",
+            "spread": "1px",
+            "color": "#ffffff1f"
+          }
+        ]
+      },
+      "$description": "팝오버·커맨드 메뉴"
+    },
+    "4": {
+      "$type": "shadow",
+      "$value": {
+        "light": [
+          {
+            "offsetX": "0px",
+            "offsetY": "12px",
+            "blur": "32px",
+            "spread": "-4px",
+            "color": "#00000029"
+          },
+          {
+            "offsetX": "0px",
+            "offsetY": "0px",
+            "blur": "0px",
+            "spread": "1px",
+            "color": "#0000000f"
+          }
+        ],
+        "dark": [
+          {
+            "offsetX": "0px",
+            "offsetY": "12px",
+            "blur": "32px",
+            "spread": "-4px",
+            "color": "#000000b3"
+          },
+          {
+            "offsetX": "0px",
+            "offsetY": "0px",
+            "blur": "0px",
+            "spread": "1px",
+            "color": "#ffffff24"
+          }
+        ]
+      },
+      "$description": "모달·다이얼로그"
+    },
+    "up": {
+      "$type": "shadow",
+      "$value": {
+        "light": [
+          {
+            "offsetX": "0px",
+            "offsetY": "-8px",
+            "blur": "24px",
+            "spread": "-4px",
+            "color": "#0000001f"
+          }
+        ],
+        "dark": [
+          {
+            "offsetX": "0px",
+            "offsetY": "-8px",
+            "blur": "24px",
+            "spread": "-4px",
+            "color": "#00000099"
+          },
+          {
+            "offsetX": "0px",
+            "offsetY": "0px",
+            "blur": "0px",
+            "spread": "1px",
+            "color": "#ffffff1f"
+          }
+        ]
+      },
+      "$description": "바텀시트(위쪽 그림자)"
+    }
+  }
+}

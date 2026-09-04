@@ -1,0 +1,29 @@
+{
+  "shadow": {
+    "raised": {
+      "$type": "shadow",
+      "$value": "{ref.shadow.1}",
+      "$description": "카드 hover·트리거"
+    },
+    "overlay": {
+      "$type": "shadow",
+      "$value": "{ref.shadow.2}",
+      "$description": "메뉴·드롭다운"
+    },
+    "popover": {
+      "$type": "shadow",
+      "$value": "{ref.shadow.3}",
+      "$description": "팝오버·커맨드 메뉴"
+    },
+    "modal": {
+      "$type": "shadow",
+      "$value": "{ref.shadow.4}",
+      "$description": "모달"
+    },
+    "sheet": {
+      "$type": "shadow",
+      "$value": "{ref.shadow.up}",
+      "$description": "바텀시트"
+    }
+  }
+}
