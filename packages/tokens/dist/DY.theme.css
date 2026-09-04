@@ -396,12 +396,16 @@
   --spacing-layout-content-max: var(--sys-layout-content-max);
   --spacing-layout-form-max: var(--sys-layout-form-max);
   --spacing-layout-frame-mobile: var(--sys-layout-frame-mobile);
+  --spacing-layout-map-min: var(--sys-layout-map-min);
+  --spacing-layout-panel-height: var(--sys-layout-panel-height);
+  --spacing-layout-menu-min: var(--sys-layout-menu-min);
   --radius-control: var(--sys-radius-control);
   --radius-card: var(--sys-radius-card);
   --radius-dialog: var(--sys-radius-dialog);
   --radius-sheet: var(--sys-radius-sheet);
   --radius-pill: var(--sys-radius-pill);
   --radius-none: var(--sys-radius-none);
+  --radius-mark: var(--sys-radius-mark);
   --shadow-raised: var(--sys-shadow-raised);
   --shadow-overlay: var(--sys-shadow-overlay);
   --shadow-popover: var(--sys-shadow-popover);

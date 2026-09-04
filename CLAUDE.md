@@ -14,7 +14,7 @@
 
 - ✱ `docs/generated/**` · `packages/domain/src/generated/**` · `packages/tokens/dist/**` 직접 편집 — 원천을 고치고 build.
 - ✱ `git add -A/--all/.` · force push · `reset --hard` · `--no-verify` · 안전 디렉터리 밖 `rm -rf`.
-- 화면 코드의 hex·px·Tailwind 기본 팔레트(`bg-blue-500`, `p-4`의 기본 스케일 의미) — 토큰 유틸리티만(`bg-canvas` `text-fg-muted` `p-inset-md` `text-body-md`). `tokens:lint`는 웨이브 0에서 추가.
+- 화면 코드의 hex·px·Tailwind 기본 팔레트(`bg-blue-500`, `p-4`의 기본 스케일 의미) — 토큰 유틸리티만(`bg-canvas` `text-fg-muted` `p-inset-md` `text-body-md`). `pnpm tokens:lint`가 검사한다(hex · 기본 팔레트 · 임의값 `[420px]` · 숫자 스케일 `gap-1`(=1px) · `rounded-N` · `z-N` · `<style>`/`style=` px).
 - Figma 재동기 · 참조 시스템 그대로 채택 · 화면 전용 토큰 · 다크/브랜드 전용 컴포넌트.
 - 자율 배포 · 클라이언트(DY) 전달 문서 발행 · 파괴적 작업 — 사용자 승인 후.
 - 검증 없는 "완료" 보고. 캡처 없는 화면 완료, 테스트 없는 상태기계 완료는 완료가 아니다.
@@ -30,11 +30,11 @@
 ## 검증 명령
 
 ```
-pnpm verify          # ssot:check · tokens:check · ssot:build · tokens:build · 생성물 diff 0
+pnpm verify          # ssot:check · tokens:check · tokens:lint · lint · check · test · ssot:build · tokens:build · 생성물 diff 0
 pnpm ssot:check      # 스키마·ID·참조·어휘·화면 규칙·DISC 생애주기 → 마지막 줄을 PR에 인용
 node tools/ssot/check.mjs --specs | --docs | --commits <range>
 ```
-웨이브 0 추가 예정: `lint` `typecheck` `test` `capture` `tokens:lint` — `docs/QA.md`.
+`pnpm lint`(eslint·prettier) · `pnpm check`(svelte-check) · `pnpm test`(vitest) · `pnpm tokens:lint` · `pnpm capture`(빌드 후) — 게이트 정의는 `docs/QA.md`.
 
 ## 작업 방식
 

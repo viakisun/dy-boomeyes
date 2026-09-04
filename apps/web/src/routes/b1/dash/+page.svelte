@@ -72,9 +72,9 @@
     </section>
 
     <section class="gap-inline-lg grid grid-cols-1 lg:grid-cols-[3fr_2fr]">
-      <div class="gap-stack-sm flex min-h-[420px] flex-col">
+      <div class="gap-stack-sm min-h-layout-panel-height flex flex-col">
         <h2 class="text-heading-sm">위치 · 상태</h2>
-        <div class="min-h-[380px] flex-1"><MapView {markers} onselect={(id) => (selectedId = id)} /></div>
+        <div class="min-h-layout-map-min flex-1"><MapView {markers} onselect={(id) => (selectedId = id)} /></div>
         <div class="gap-inline-sm text-label-sm text-fg-muted flex flex-wrap">
           {#each Object.entries(LABEL) as [st, lb] (st)}<StatusPill
               tone={EQUIPMENT_TONE[st as Device['state']]}
@@ -88,7 +88,7 @@
           알림 피드 <Badge tone="danger" count={data.alerts.filter((a) => !a.acked).length} />
         </h2>
         <ul
-          class="rounded-card border-border bg-surface p-inset-xs flex max-h-[420px] flex-col gap-1 overflow-y-auto border"
+          class="rounded-card border-border bg-surface p-inset-xs max-h-layout-panel-height gap-stack-xs flex flex-col overflow-y-auto border"
           aria-label="알림"
         >
           {#each data.alerts as a (a.id)}
@@ -208,7 +208,7 @@
         {@const c = data.cases.find((x) => x.deviceId === selected.id && x.state !== 'done')}
         <div class="rounded-card border-border bg-surface-sunken p-inset-md text-body-sm border">
           <span class="text-label-md text-fg-muted">진행 중 업무</span>
-          <p class="mt-1 font-medium">{c?.id} {c?.title}</p>
+          <p class="mt-stack-xs font-medium">{c?.id} {c?.title}</p>
         </div>
       {/if}
       <Button variant="outline" tone="neutral" size="sm" onclick={() => goto(resolve('/b1/inbox' as '/'))}

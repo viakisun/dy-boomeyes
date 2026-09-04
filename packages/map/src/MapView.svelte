@@ -97,7 +97,7 @@
   .be-map {
     width: 100%;
     height: 100%;
-    min-height: 240px;
+    min-height: var(--sys-layout-map-min);
     border-radius: var(--sys-radius-card);
     overflow: hidden;
     background: var(--sys-color-bg-surface-sunken);
@@ -106,7 +106,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 2px;
+    gap: var(--sys-space-stack-xs);
     background: none;
     border: 0;
     padding: 0;
@@ -117,30 +117,29 @@
   :global(.be-marker__dot) {
     display: grid;
     place-items: center;
-    width: 22px;
-    height: 22px;
-    border-radius: 9999px;
+    width: var(--sys-size-badge);
+    height: var(--sys-size-badge);
+    border-radius: var(--sys-radius-pill);
     background: var(--pin);
     color: var(--sys-color-fg-on-accent);
-    border: 2px solid var(--sys-color-bg-surface);
+    border: var(--sys-border-width-strong) solid var(--sys-color-bg-surface);
     box-shadow: var(--sys-shadow-raised);
     font-weight: 700;
-    font-size: 12px;
   }
   :global(.be-marker__label) {
-    padding: 0 4px;
-    border-radius: 4px;
+    padding: 0 var(--sys-space-inline-xs);
+    border-radius: var(--sys-radius-control);
     background: var(--sys-color-bg-surface);
     box-shadow: var(--sys-shadow-raised);
     white-space: nowrap;
   }
   :global(.be-marker.is-selected .be-marker__dot) {
-    outline: 3px solid var(--sys-color-focus-ring);
+    outline: var(--sys-border-width-focus) solid var(--sys-color-focus-ring);
     outline-offset: 1px;
   }
   :global(.be-marker:focus-visible) {
-    outline: 2px solid var(--sys-color-focus-ring);
-    outline-offset: 2px;
-    border-radius: 4px;
+    outline: var(--sys-border-width-focus) solid var(--sys-color-focus-ring);
+    outline-offset: var(--sys-border-width-focus);
+    border-radius: var(--sys-radius-control);
   }
 </style>

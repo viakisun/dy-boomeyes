@@ -39,7 +39,7 @@
   role="tablist"
   class={cx(
     'flex overflow-x-auto',
-    variant === 'underline' ? 'gap-inline-md border-border border-b' : 'gap-inline-xs rounded-control bg-ui p-1',
+    variant === 'underline' ? 'gap-inline-md border-border border-b' : 'gap-inline-xs rounded-control bg-ui p-inset-xs',
     cls,
   )}
 >
@@ -62,13 +62,13 @@
               value === t.id ? 'border-accent text-accent-fg' : 'text-fg-muted hover:text-fg border-transparent',
             )
           : cx(
-              'rounded-control px-inset-sm py-1',
+              'rounded-control px-inset-sm py-stack-xs',
               value === t.id ? 'bg-surface text-fg shadow-raised' : 'text-fg-muted hover:text-fg',
             ),
       )}
     >
-      {t.label}{#if t.count !== undefined}<span class="rounded-pill bg-ui-active text-label-sm text-fg-muted px-1"
-          >{t.count}</span
+      {t.label}{#if t.count !== undefined}<span
+          class="rounded-pill bg-ui-active text-label-sm text-fg-muted px-inline-xs">{t.count}</span
         >{/if}
     </button>
   {/each}

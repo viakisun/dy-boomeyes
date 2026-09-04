@@ -38,6 +38,14 @@
       "$type": "dimension",
       "$value": "{ref.radius.0}",
       "$description": "표 셀·풀블리드"
+    },
+    "mark": {
+      "$type": "dimension",
+      "$value": {
+        "comfortable": "{ref.radius.4}",
+        "compact": "{ref.radius.2}"
+      },
+      "$description": "체크박스·소형 인디케이터(아이콘 크기 요소)"
     }
   }
 }

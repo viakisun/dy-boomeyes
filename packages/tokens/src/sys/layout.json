@@ -93,6 +93,27 @@
         "$type": "dimension",
         "$value": "1536px"
       }
+    },
+    "map": {
+      "min": {
+        "$type": "dimension",
+        "$value": "240px",
+        "$description": "지도 컴포넌트 최소 높이"
+      }
+    },
+    "panel": {
+      "height": {
+        "$type": "dimension",
+        "$value": "420px",
+        "$description": "대시보드 패널(지도 행·알림 피드) 높이"
+      }
+    },
+    "menu": {
+      "min": {
+        "$type": "dimension",
+        "$value": "192px",
+        "$description": "드롭다운 메뉴 최소 폭"
+      }
     }
   }
 }

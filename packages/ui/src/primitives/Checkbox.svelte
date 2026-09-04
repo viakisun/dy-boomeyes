@@ -22,7 +22,7 @@
     bind:checked
     {indeterminate}
     class={cx(
-      'size-size-icon-lg rounded-2 border-border-emphasis bg-surface accent-accent checked:border-accent checked:bg-accent shrink-0 cursor-pointer appearance-none border',
+      'size-size-icon-lg rounded-mark border-border-emphasis bg-surface accent-accent checked:border-accent checked:bg-accent shrink-0 cursor-pointer appearance-none border',
       FOCUS,
     )}
     {...rest}

@@ -542,6 +542,9 @@
       "sys.layout.breakpoint.lg": "1024px",
       "sys.layout.breakpoint.xl": "1280px",
       "sys.layout.breakpoint.2xl": "1536px",
+      "sys.layout.map.min": "240px",
+      "sys.layout.panel.height": "420px",
+      "sys.layout.menu.min": "192px",
       "sys.motion.duration.fast": "100ms",
       "sys.motion.duration.base": "150ms",
       "sys.motion.duration.moderate": "200ms",
@@ -579,6 +582,7 @@
       "sys.radius.sheet": "16px",
       "sys.radius.pill": "9999px",
       "sys.radius.none": "0px",
+      "sys.radius.mark": "4px",
       "sys.shadow.raised": [
         {
           "offsetX": "0px",
@@ -1850,6 +1854,9 @@
       "sys.layout.breakpoint.lg": "1024px",
       "sys.layout.breakpoint.xl": "1280px",
       "sys.layout.breakpoint.2xl": "1536px",
+      "sys.layout.map.min": "240px",
+      "sys.layout.panel.height": "420px",
+      "sys.layout.menu.min": "192px",
       "sys.motion.duration.fast": "100ms",
       "sys.motion.duration.base": "150ms",
       "sys.motion.duration.moderate": "200ms",
@@ -1887,6 +1894,7 @@
       "sys.radius.sheet": "16px",
       "sys.radius.pill": "9999px",
       "sys.radius.none": "0px",
+      "sys.radius.mark": "2px",
       "sys.shadow.raised": [
         {
           "offsetX": "0px",
@@ -3172,6 +3180,9 @@
       "sys.layout.breakpoint.lg": "1024px",
       "sys.layout.breakpoint.xl": "1280px",
       "sys.layout.breakpoint.2xl": "1536px",
+      "sys.layout.map.min": "240px",
+      "sys.layout.panel.height": "420px",
+      "sys.layout.menu.min": "192px",
       "sys.motion.duration.fast": "100ms",
       "sys.motion.duration.base": "150ms",
       "sys.motion.duration.moderate": "200ms",
@@ -3209,6 +3220,7 @@
       "sys.radius.sheet": "16px",
       "sys.radius.pill": "9999px",
       "sys.radius.none": "0px",
+      "sys.radius.mark": "4px",
       "sys.shadow.raised": [
         {
           "offsetX": "0px",
@@ -4522,6 +4534,9 @@
       "sys.layout.breakpoint.lg": "1024px",
       "sys.layout.breakpoint.xl": "1280px",
       "sys.layout.breakpoint.2xl": "1536px",
+      "sys.layout.map.min": "240px",
+      "sys.layout.panel.height": "420px",
+      "sys.layout.menu.min": "192px",
       "sys.motion.duration.fast": "100ms",
       "sys.motion.duration.base": "150ms",
       "sys.motion.duration.moderate": "200ms",
@@ -4559,6 +4574,7 @@
       "sys.radius.sheet": "16px",
       "sys.radius.pill": "9999px",
       "sys.radius.none": "0px",
+      "sys.radius.mark": "2px",
       "sys.shadow.raised": [
         {
           "offsetX": "0px",
@@ -8904,6 +8920,27 @@
       "css": "--sys-layout-breakpoint-2xl",
       "tailwind": null
     },
+    "sys.layout.map.min": {
+      "$type": "dimension",
+      "$description": "지도 컴포넌트 최소 높이",
+      "$value": "240px",
+      "css": "--sys-layout-map-min",
+      "tailwind": "--spacing-layout-map-min"
+    },
+    "sys.layout.panel.height": {
+      "$type": "dimension",
+      "$description": "대시보드 패널(지도 행·알림 피드) 높이",
+      "$value": "420px",
+      "css": "--sys-layout-panel-height",
+      "tailwind": "--spacing-layout-panel-height"
+    },
+    "sys.layout.menu.min": {
+      "$type": "dimension",
+      "$description": "드롭다운 메뉴 최소 폭",
+      "$value": "192px",
+      "css": "--sys-layout-menu-min",
+      "tailwind": "--spacing-layout-menu-min"
+    },
     "sys.motion.duration.fast": {
       "$type": "duration",
       "$description": "hover·포커스 전환",
@@ -9031,6 +9068,16 @@
       "$value": "{ref.radius.0}",
       "css": "--sys-radius-none",
       "tailwind": "--radius-none"
+    },
+    "sys.radius.mark": {
+      "$type": "dimension",
+      "$description": "체크박스·소형 인디케이터(아이콘 크기 요소)",
+      "$value": {
+        "comfortable": "{ref.radius.4}",
+        "compact": "{ref.radius.2}"
+      },
+      "css": "--sys-radius-mark",
+      "tailwind": "--radius-mark"
     },
     "sys.shadow.raised": {
       "$type": "shadow",

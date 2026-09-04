@@ -6,9 +6,9 @@
 
 | 구성 | 수 |
 |---|---|
-| 토큰 전체 | 611 |
+| 토큰 전체 | 615 |
 | ref(원시) | 205 |
-| sys(시맨틱) | 314 |
+| sys(시맨틱) | 318 |
 | cmp(컴포넌트) | 92 |
 | 컴포넌트 카탈로그 | 76 |
 | 대비 검사 | 76/76 통과 |
@@ -589,6 +589,9 @@
 | `sys.layout.breakpoint.lg` | 1024px | 1024px |  |
 | `sys.layout.breakpoint.xl` | 1280px | 1280px |  |
 | `sys.layout.breakpoint.2xl` | 1536px | 1536px |  |
+| `sys.layout.map.min` | 240px | 240px | 지도 컴포넌트 최소 높이 |
+| `sys.layout.panel.height` | 420px | 420px | 대시보드 패널(지도 행·알림 피드) 높이 |
+| `sys.layout.menu.min` | 192px | 192px | 드롭다운 메뉴 최소 폭 |
 
 ## 6. 형태 · 깊이 · 모션
 
@@ -602,6 +605,7 @@
 | `sys.radius.sheet` | 16px | 16px | {ref.radius.16} | 바텀시트 상단 |
 | `sys.radius.pill` | 9999px | 9999px | {ref.radius.full} | 배지·캡슐 버튼·FAB |
 | `sys.radius.none` | 0px | 0px | {ref.radius.0} | 표 셀·풀블리드 |
+| `sys.radius.mark` | 4px | 2px | comfortable: {ref.radius.4} · compact: {ref.radius.2} | 체크박스·소형 인디케이터(아이콘 크기 요소) |
 
 원시: 0=0px · 2=2px · 4=4px · 6=6px · 8=8px · 12=12px · 16=16px · 20=20px · full=9999px
 

@@ -7,10 +7,10 @@
 | # | 게이트 | 명령 | 실패 시 | 상태 |
 |---|---|---|---|---|
 | 1 | SSOT | `pnpm ssot:check` — 스키마·ID 문법·유일성·참조 무결성·어휘·화면 규칙(route·states·default)·DISC 생애주기 | 커밋 차단(hook) · CI 실패 | 있음 |
-| 2 | 토큰 | `pnpm tokens:check` — 문법·계층·모드 차원·대비 76쌍 · `tokens:lint`(화면 코드 hex/px/기본 팔레트 0건) | 커밋 차단 | check 있음 · lint W0 |
+| 2 | 토큰 | `pnpm tokens:check` — 문법·계층·모드 차원·대비 76쌍 · `tokens:lint`(화면 코드 hex/px/기본 팔레트 0건) | 커밋 차단 | 있음 |
 | 3 | 생성물 최신성 | `pnpm verify` 끝의 `git diff --exit-code` (docs/generated · domain/generated · tokens/dist) | CI 실패 | 있음 |
-| 4 | 타입·정적 | svelte-check(error 0) · ESLint(경계 규칙 `eslint-plugin-boundaries`) · Prettier | 커밋 차단 | W0 |
-| 5 | 단위 | Vitest — 업무·서류·장비·카메라·부품 상태기계 · 프로파일→피처플래그 · 프로토콜 파서 · scr 커버리지 | 푸시 차단 | W0 |
+| 4 | 타입·정적 | svelte-check(error 0) · ESLint(경계 규칙 `eslint-plugin-boundaries`) · Prettier | 커밋 차단 | 있음 |
+| 5 | 단위 | Vitest — 업무·서류·장비·카메라·부품 상태기계 · 프로파일→피처플래그 · 프로토콜 파서 · scr 커버리지 | 푸시 차단 | 있음(상태기계·라우트·mock) |
 | 6 | e2e·캡처 | Playwright — 라우트 × 상태 픽스처 전수 렌더 · 7역할 로그인 스모크 · 데모 장면 스크립트 · 시각 회귀(0.2%) · axe serious/critical 0 | PR 차단 | W0~W1 |
 | 7 | 추적·문서 | `check --specs`(frontmatter ID·AC ≥3) · `check --docs`(링크·ID) · `check --commits`(Refs 트레일러) | PR 차단 | 있음 |
 

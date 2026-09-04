@@ -18,5 +18,5 @@ body {
 }
 *:focus-visible {
   outline: var(--sys-border-width-focus) solid var(--sys-color-focus-ring);
-  outline-offset: 2px;
+  outline-offset: var(--sys-border-width-focus);
 }

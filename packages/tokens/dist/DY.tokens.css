@@ -445,6 +445,9 @@
   --sys-layout-breakpoint-lg: 1024px;
   --sys-layout-breakpoint-xl: 1280px;
   --sys-layout-breakpoint-2xl: 1536px;
+  --sys-layout-map-min: 240px;
+  --sys-layout-panel-height: 420px;
+  --sys-layout-menu-min: 192px;
   --sys-motion-duration-fast: 100ms;
   --sys-motion-duration-base: 150ms;
   --sys-motion-duration-moderate: 200ms;
@@ -462,6 +465,7 @@
   --sys-radius-sheet: 16px;
   --sys-radius-pill: 9999px;
   --sys-radius-none: 0px;
+  --sys-radius-mark: 4px;
   --sys-shadow-raised: 0px 1px 2px 0px #0000000f;
   --sys-shadow-overlay: 0px 2px 8px 0px #00000014, 0px 0px 0px 1px #0000000a;
   --sys-shadow-popover: 0px 6px 16px -2px #0000001f, 0px 0px 0px 1px #0000000a;
@@ -1447,6 +1451,7 @@
   --sys-radius-control: 6px;
   --sys-radius-card: 8px;
   --sys-radius-dialog: 12px;
+  --sys-radius-mark: 2px;
   --sys-size-control-xs: 24px;
   --sys-size-control-sm: 28px;
   --sys-size-control-md: 32px;

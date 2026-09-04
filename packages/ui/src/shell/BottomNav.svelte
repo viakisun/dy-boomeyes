@@ -15,19 +15,19 @@
       href={it.href}
       aria-current={it.active ? 'page' : undefined}
       class={cx(
-        'min-w-size-touch-min text-label-sm relative flex flex-1 flex-col items-center justify-center gap-1',
+        'min-w-size-touch-min text-label-sm gap-stack-xs relative flex flex-1 flex-col items-center justify-center',
         FOCUS,
         it.active ? 'text-accent-fg' : 'text-fg-muted',
         it.disabled && 'pointer-events-none opacity-40',
       )}
     >
       {#if it.icon}<it.icon size={24} aria-hidden="true" />{:else}<span
-          class="size-size-icon-lg rounded-4 bg-current opacity-30"
+          class="size-size-icon-lg rounded-mark bg-current opacity-30"
           aria-hidden="true"
         ></span>{/if}
       <span>{it.label}</span>
       {#if it.badge}<span
-          class="rounded-pill bg-danger text-label-sm text-danger-on-solid absolute top-1 right-[calc(50%-var(--spacing-size-icon-lg))] px-1"
+          class="rounded-pill bg-danger text-label-sm text-danger-on-solid top-stack-xs px-inline-xs absolute right-[calc(50%-var(--spacing-size-icon-lg))]"
           >{it.badge}</span
         >{/if}
     </a>

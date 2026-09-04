@@ -34,8 +34,8 @@
   </div>
   <nav class="gap-stack-md px-inset-xs py-inset-sm flex flex-1 flex-col overflow-y-auto">
     {#each groups as g, gi (gi)}
-      <div class="flex flex-col gap-1">
-        {#if g.label && !collapsed}<div class="px-inset-sm text-label-sm text-fg-subtle pb-1 uppercase">
+      <div class="gap-stack-xs flex flex-col">
+        {#if g.label && !collapsed}<div class="px-inset-sm text-label-sm text-fg-subtle pb-stack-xs uppercase">
             {g.label}
           </div>{/if}
         {#each g.items as it (it.id)}
@@ -53,11 +53,11 @@
             )}
           >
             {#if it.icon}<it.icon size={16} aria-hidden="true" />{:else}<span
-                class="size-size-icon-sm rounded-2 bg-current opacity-40"
+                class="size-size-icon-sm rounded-mark bg-current opacity-40"
                 aria-hidden="true"
               ></span>{/if}
             {#if !collapsed}<span class="flex-1 truncate">{it.label}</span>{#if it.badge}<span
-                  class="rounded-pill bg-danger text-label-sm text-danger-on-solid px-1">{it.badge}</span
+                  class="rounded-pill bg-danger text-label-sm text-danger-on-solid px-inline-xs">{it.badge}</span
                 >{/if}{/if}
           </a>
         {/each}

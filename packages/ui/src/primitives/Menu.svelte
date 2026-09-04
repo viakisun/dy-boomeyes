@@ -54,7 +54,7 @@
     <div
       role="menu"
       class={cx(
-        'z-dropdown rounded-dialog border-border bg-surface-raised p-inset-xs shadow-overlay absolute mt-1 min-w-48 border',
+        'z-dropdown rounded-dialog border-border bg-surface-raised p-inset-xs shadow-overlay mt-stack-xs min-w-layout-menu-min absolute border',
         align === 'end' ? 'right-0' : 'left-0',
       )}
       style="z-index: var(--sys-z-dropdown)"
@@ -62,8 +62,8 @@
       {#each items as it, i (it.id)}
         {#if it.group && (i === 0 || items[i - 1]?.group !== it.group)}<div
             class={cx(
-              'px-inset-sm pt-inset-xs text-label-sm text-fg-subtle pb-1',
-              i > 0 && 'border-border-subtle mt-1 border-t',
+              'px-inset-sm pt-inset-xs text-label-sm text-fg-subtle pb-stack-xs',
+              i > 0 && 'border-border-subtle mt-stack-xs border-t',
             )}
           >
             {it.group}
