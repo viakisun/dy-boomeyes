@@ -17,10 +17,7 @@
             "type": "string"
           },
           "phase": {
-            "enum": [
-              1,
-              2
-            ]
+            "enum": [1, 2]
           },
           "items": {
             "type": "array",
@@ -59,21 +56,12 @@
                   "additionalProperties": true
                 }
               },
-              "required": [
-                "title",
-                "screens",
-                "status"
-              ],
+              "required": ["title", "screens", "status"],
               "additionalProperties": false
             }
           }
         },
-        "required": [
-          "id",
-          "name",
-          "phase",
-          "items"
-        ],
+        "required": ["id", "name", "phase", "items"],
         "additionalProperties": false
       }
     },
@@ -128,13 +116,7 @@
             "additionalProperties": true
           }
         },
-        "required": [
-          "id",
-          "title",
-          "screens",
-          "status",
-          "disc"
-        ],
+        "required": ["id", "title", "screens", "status", "disc"],
         "additionalProperties": false
       }
     },
@@ -151,10 +133,7 @@
             "type": "string"
           },
           "phase": {
-            "enum": [
-              1,
-              2
-            ]
+            "enum": [1, 2]
           },
           "lead_wp": {
             "type": "string",
@@ -172,13 +151,7 @@
             "additionalProperties": true
           }
         },
-        "required": [
-          "id",
-          "name",
-          "phase",
-          "lead_wp",
-          "contrib_wp"
-        ],
+        "required": ["id", "name", "phase", "lead_wp", "contrib_wp"],
         "additionalProperties": false
       }
     },
@@ -208,30 +181,17 @@
             }
           },
           "note": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": ["string", "null"]
           },
           "status": {
-            "enum": [
-              "defined",
-              "undefined"
-            ]
+            "enum": ["defined", "undefined"]
           },
           "mgmt": {
             "type": "object",
             "additionalProperties": true
           }
         },
-        "required": [
-          "id",
-          "date",
-          "area",
-          "criterion",
-          "outputs",
-          "status"
-        ],
+        "required": ["id", "date", "area", "criterion", "outputs", "status"],
         "additionalProperties": false
       }
     },
@@ -281,13 +241,7 @@
             "additionalProperties": true
           }
         },
-        "required": [
-          "id",
-          "title",
-          "sw",
-          "outputs",
-          "done_when"
-        ],
+        "required": ["id", "title", "sw", "outputs", "done_when"],
         "additionalProperties": false
       }
     },
@@ -320,24 +274,11 @@
             "additionalProperties": true
           }
         },
-        "required": [
-          "id",
-          "title",
-          "date",
-          "criterion",
-          "outputs"
-        ],
+        "required": ["id", "title", "date", "criterion", "outputs"],
         "additionalProperties": false
       }
     }
   },
-  "required": [
-    "sections",
-    "rfp",
-    "outputs",
-    "acceptance",
-    "wp",
-    "milestones"
-  ],
+  "required": ["sections", "rfp", "outputs", "acceptance", "wp", "milestones"],
   "additionalProperties": false
 }

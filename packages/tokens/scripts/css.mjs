@@ -3,23 +3,34 @@ export const cssVar = (p) => '--' + p.replace(/\./g, '-');
 const q = (s) => (/[^a-zA-Z0-9-]/.test(s) ? `'${s}'` : s);
 export function cssValue(type, v) {
   switch (type) {
-    case 'fontFamily': return (Array.isArray(v) ? v : [v]).map(q).join(', ');
-    case 'cubicBezier': return `cubic-bezier(${v.join(', ')})`;
-    case 'shadow': return (Array.isArray(v) ? v : [v]).map((s) => `${s.inset ? 'inset ' : ''}${s.offsetX} ${s.offsetY} ${s.blur} ${s.spread ?? '0'} ${s.color}`).join(', ');
-    default: return String(v);
+    case 'fontFamily':
+      return (Array.isArray(v) ? v : [v]).map(q).join(', ');
+    case 'cubicBezier':
+      return `cubic-bezier(${v.join(', ')})`;
+    case 'shadow':
+      return (Array.isArray(v) ? v : [v])
+        .map((s) => `${s.inset ? 'inset ' : ''}${s.offsetX} ${s.offsetY} ${s.blur} ${s.spread ?? '0'} ${s.color}`)
+        .join(', ');
+    default:
+      return String(v);
   }
 }
 
 export function themeName(p) {
   const s = p.split('.');
-  if (s[0] === 'sys' && s[1] === 'color') { const r = s.slice(2);
+  if (s[0] === 'sys' && s[1] === 'color') {
+    const r = s.slice(2);
     if (r[0] === 'bg') return `--color-${r.slice(1).join('-')}`;
     if (r[0] === 'fg') return r[1] === 'default' ? '--color-fg' : `--color-fg-${r.slice(1).join('-')}`;
     if (r[0] === 'border') return r[1] === 'default' ? '--color-border' : `--color-border-${r.slice(1).join('-')}`;
-    if (r[0] === 'accent') return r[1] === 'solid' && r.length === 2 ? '--color-accent' : `--color-accent-${r.slice(1).join('-')}`;
-    if (r[0] === 'status') return r[2] === 'solid' && r.length === 3 ? `--color-${r[1]}` : `--color-${[r[1], ...r.slice(2)].join('-')}`;
-    if (r[0] === 'domain') return r[3] === 'solid' && r.length === 4 ? `--color-${r[1]}-${r[2]}` : `--color-${r.slice(1).join('-')}`;
-    return `--color-${r.join('-')}`; }
+    if (r[0] === 'accent')
+      return r[1] === 'solid' && r.length === 2 ? '--color-accent' : `--color-accent-${r.slice(1).join('-')}`;
+    if (r[0] === 'status')
+      return r[2] === 'solid' && r.length === 3 ? `--color-${r[1]}` : `--color-${[r[1], ...r.slice(2)].join('-')}`;
+    if (r[0] === 'domain')
+      return r[3] === 'solid' && r.length === 4 ? `--color-${r[1]}-${r[2]}` : `--color-${r.slice(1).join('-')}`;
+    return `--color-${r.join('-')}`;
+  }
   if (s[0] === 'ref' && s[1] === 'color' && s[2] !== 'on') return `--color-${s.slice(2).join('-')}`;
   if (s[0] === 'ref' && s[1] === 'space') return `--spacing-${s[2]}`;
   if (s[0] === 'sys' && s[1] === 'space') return `--spacing-${s.slice(2).join('-')}`;

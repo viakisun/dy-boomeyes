@@ -11,9 +11,31 @@
     "ssot:build": "node tools/ssot/build.mjs",
     "tokens:check": "node packages/tokens/scripts/check.mjs",
     "tokens:build": "node packages/tokens/scripts/build.mjs",
-    "verify": "pnpm ssot:check && pnpm tokens:check && pnpm ssot:build && pnpm tokens:build && git diff --exit-code -- docs/generated packages/domain/src/generated packages/tokens/dist"
+    "verify": "pnpm ssot:check && pnpm tokens:check && pnpm lint && pnpm check && pnpm test && pnpm ssot:build && pnpm tokens:build && git diff --exit-code -- docs/generated packages/domain/src/generated packages/tokens/dist",
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "check": "turbo run check",
+    "lint": "eslint . && prettier --check .",
+    "format": "prettier --write .",
+    "test": "turbo run test",
+    "capture": "node tools/capture/capture.mjs"
   },
   "devDependencies": {
+    "@eslint/js": "^9.0.0",
+    "eslint": "^9.0.0",
+    "eslint-config-prettier": "^10.0.0",
+    "eslint-plugin-boundaries": "^5.0.0",
+    "eslint-plugin-svelte": "^3.0.0",
+    "globals": "^16.0.0",
+    "playwright": "^1.61.0",
+    "prettier": "^3.5.0",
+    "prettier-plugin-svelte": "^4.1.1",
+    "prettier-plugin-tailwindcss": "^0.8.1",
+    "turbo": "^2.5.0",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.0.0",
+    "vitest": "^4.0.0",
     "yaml": "2.9.0"
-  }
+  },
+  "type": "module"
 }

@@ -9,3 +9,7 @@ build/
 .claude/settings.local.json
 __pycache__/
 *.pyc
+.turbo/
+.svelte-kit/
+apps/*/build/
+shots/

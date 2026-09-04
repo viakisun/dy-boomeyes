@@ -17,17 +17,10 @@
             "type": "string"
           },
           "app": {
-            "enum": [
-              "web",
-              "pwa"
-            ]
+            "enum": ["web", "pwa"]
           }
         },
-        "required": [
-          "id",
-          "name",
-          "app"
-        ],
+        "required": ["id", "name", "app"],
         "additionalProperties": false
       }
     },
@@ -58,10 +51,7 @@
             }
           },
           "phase": {
-            "enum": [
-              1,
-              2
-            ]
+            "enum": [1, 2]
           },
           "wave": {
             "type": "integer"
@@ -92,10 +82,7 @@
                   "type": "string"
                 }
               },
-              "required": [
-                "id",
-                "name"
-              ],
+              "required": ["id", "name"],
               "additionalProperties": false
             },
             "minItems": 1
@@ -113,10 +100,7 @@
                   "type": "string"
                 }
               },
-              "required": [
-                "to",
-                "label"
-              ],
+              "required": ["to", "label"],
               "additionalProperties": false
             }
           },
@@ -131,10 +115,7 @@
                 }
               },
               "out": {
-                "type": [
-                  "string",
-                  "null"
-                ],
+                "type": ["string", "null"],
                 "pattern": "^OUT-\\d{3}$"
               },
               "rfp": {
@@ -159,13 +140,7 @@
                 }
               }
             },
-            "required": [
-              "task",
-              "out",
-              "rfp",
-              "disc",
-              "if"
-            ],
+            "required": ["task", "out", "rfp", "disc", "if"],
             "additionalProperties": false
           },
           "note": {
@@ -176,26 +151,11 @@
             "additionalProperties": true
           }
         },
-        "required": [
-          "id",
-          "name",
-          "surface",
-          "route",
-          "roles",
-          "phase",
-          "wave",
-          "default",
-          "states",
-          "nav",
-          "trace"
-        ],
+        "required": ["id", "name", "surface", "route", "roles", "phase", "wave", "default", "states", "nav", "trace"],
         "additionalProperties": false
       }
     }
   },
-  "required": [
-    "surfaces",
-    "screens"
-  ],
+  "required": ["surfaces", "screens"],
   "additionalProperties": false
 }

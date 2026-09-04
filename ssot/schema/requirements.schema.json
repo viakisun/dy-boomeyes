@@ -44,12 +44,7 @@
                 }
               }
             },
-            "required": [
-              "text",
-              "rfp",
-              "sections",
-              "disc"
-            ],
+            "required": ["text", "rfp", "sections", "disc"],
             "additionalProperties": false
           },
           "screens": {
@@ -74,17 +69,10 @@
             }
           },
           "phase": {
-            "enum": [
-              1,
-              2
-            ]
+            "enum": [1, 2]
           },
           "kind": {
-            "enum": [
-              "core",
-              "proposed",
-              "option"
-            ]
+            "enum": ["core", "proposed", "option"]
           },
           "status": {
             "enum": [
@@ -108,17 +96,7 @@
             "additionalProperties": true
           }
         },
-        "required": [
-          "id",
-          "title",
-          "source",
-          "screens",
-          "if",
-          "acc",
-          "phase",
-          "kind",
-          "status"
-        ],
+        "required": ["id", "title", "source", "screens", "if", "acc", "phase", "kind", "status"],
         "additionalProperties": false
       }
     },
@@ -148,20 +126,11 @@
             "additionalProperties": true
           }
         },
-        "required": [
-          "id",
-          "title",
-          "criterion",
-          "source",
-          "verify"
-        ],
+        "required": ["id", "title", "criterion", "source", "verify"],
         "additionalProperties": false
       }
     }
   },
-  "required": [
-    "fr",
-    "nfr"
-  ],
+  "required": ["fr", "nfr"],
   "additionalProperties": false
 }

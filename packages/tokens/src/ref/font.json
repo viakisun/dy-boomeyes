@@ -18,13 +18,7 @@
       },
       "mono": {
         "$type": "fontFamily",
-        "$value": [
-          "JetBrains Mono",
-          "SF Mono",
-          "Menlo",
-          "Consolas",
-          "monospace"
-        ],
+        "$value": ["JetBrains Mono", "SF Mono", "Menlo", "Consolas", "monospace"],
         "$description": "코드·식별자·계기 수치"
       }
     },

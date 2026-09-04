@@ -22,16 +22,11 @@
             "type": "string"
           }
         },
-        "required": [
-          "term",
-          "definition"
-        ],
+        "required": ["term", "definition"],
         "additionalProperties": false
       }
     }
   },
-  "required": [
-    "terms"
-  ],
+  "required": ["terms"],
   "additionalProperties": false
 }

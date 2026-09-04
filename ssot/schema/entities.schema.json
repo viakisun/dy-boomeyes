@@ -32,10 +32,7 @@
             "type": "string"
           },
           "phase": {
-            "enum": [
-              1,
-              2
-            ]
+            "enum": [1, 2]
           },
           "note": {
             "type": "string"
@@ -45,14 +42,7 @@
             "additionalProperties": true
           }
         },
-        "required": [
-          "id",
-          "name",
-          "fields",
-          "relations",
-          "store",
-          "phase"
-        ],
+        "required": ["id", "name", "fields", "relations", "store", "phase"],
         "additionalProperties": false
       }
     },
@@ -87,20 +77,12 @@
                   "type": "string"
                 }
               },
-              "required": [
-                "from",
-                "to",
-                "by"
-              ],
+              "required": ["from", "to", "by"],
               "additionalProperties": false
             }
           }
         },
-        "required": [
-          "entity",
-          "states",
-          "transitions"
-        ],
+        "required": ["entity", "states", "transitions"],
         "additionalProperties": false
       }
     },
@@ -124,18 +106,12 @@
                   "type": "string"
                 }
               },
-              "required": [
-                "title",
-                "rule"
-              ],
+              "required": ["title", "rule"],
               "additionalProperties": false
             }
           }
         },
-        "required": [
-          "group",
-          "items"
-        ],
+        "required": ["group", "items"],
         "additionalProperties": false
       }
     },
@@ -160,13 +136,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "store",
-          "node",
-          "entities",
-          "purpose",
-          "phase"
-        ],
+        "required": ["store", "node", "entities", "purpose", "phase"],
         "additionalProperties": false
       }
     },
@@ -192,22 +162,11 @@
             "type": "string"
           }
         },
-        "required": [
-          "item",
-          "source",
-          "entities",
-          "tier"
-        ],
+        "required": ["item", "source", "entities", "tier"],
         "additionalProperties": false
       }
     }
   },
-  "required": [
-    "ent",
-    "machines",
-    "rules",
-    "stores",
-    "accumulation"
-  ],
+  "required": ["ent", "machines", "rules", "stores", "accumulation"],
   "additionalProperties": false
 }

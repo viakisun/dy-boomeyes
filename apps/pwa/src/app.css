@@ -1,0 +1,18 @@
+/* 앱 스타일 진입점 — 토큰(@theme)만 노출. 화면 코드는 sys/cmp 유틸리티·변수만 쓴다 (ADR-004). */
+@import 'tailwindcss';
+@import '@boomeyes/tokens/theme';
+
+html {
+  font: var(--sys-type-body-md);
+  color: var(--sys-color-fg-default);
+  background: var(--sys-color-bg-canvas);
+  -webkit-text-size-adjust: 100%;
+}
+body {
+  margin: 0;
+  min-height: 100dvh;
+}
+*:focus-visible {
+  outline: var(--sys-border-width-focus) solid var(--sys-color-focus-ring);
+  outline-offset: 2px;
+}

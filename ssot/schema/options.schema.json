@@ -22,19 +22,13 @@
               "type": "object",
               "properties": {
                 "code": {
-                  "type": [
-                    "string",
-                    "null"
-                  ]
+                  "type": ["string", "null"]
                 },
                 "name": {
                   "type": "string"
                 }
               },
-              "required": [
-                "code",
-                "name"
-              ],
+              "required": ["code", "name"],
               "additionalProperties": false
             }
           },
@@ -46,12 +40,7 @@
             }
           }
         },
-        "required": [
-          "id",
-          "name",
-          "choices",
-          "disc"
-        ],
+        "required": ["id", "name", "choices", "disc"],
         "additionalProperties": false
       }
     },
@@ -80,20 +69,10 @@
             "type": "string"
           },
           "group": {
-            "enum": [
-              "video",
-              "telemetry"
-            ]
+            "enum": ["video", "telemetry"]
           }
         },
-        "required": [
-          "item",
-          "role",
-          "products",
-          "if",
-          "owner",
-          "group"
-        ],
+        "required": ["item", "role", "products", "if", "owner", "group"],
         "additionalProperties": false
       }
     },
@@ -111,26 +90,15 @@
           "choices": {
             "type": "object",
             "additionalProperties": {
-              "type": [
-                "string",
-                "null"
-              ]
+              "type": ["string", "null"]
             }
           }
         },
-        "required": [
-          "id",
-          "name",
-          "choices"
-        ],
+        "required": ["id", "name", "choices"],
         "additionalProperties": false
       }
     }
   },
-  "required": [
-    "axes",
-    "candidates",
-    "profiles"
-  ],
+  "required": ["axes", "candidates", "profiles"],
   "additionalProperties": false
 }

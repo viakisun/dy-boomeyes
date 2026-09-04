@@ -1,0 +1,20 @@
+{
+  "name": "@boomeyes/domain",
+  "private": true,
+  "version": "0.0.1",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./generated/ids": "./src/generated/ids.ts",
+    "./generated/ssot.json": "./src/generated/ssot.json"
+  },
+  "scripts": {
+    "check": "tsc --noEmit -p tsconfig.json",
+    "test": "vitest run",
+    "lint": "eslint ."
+  },
+  "devDependencies": {
+    "typescript": "^6.0.3",
+    "vitest": "^4.0.0"
+  }
+}

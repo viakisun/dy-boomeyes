@@ -26,10 +26,7 @@
             "type": "string"
           },
           "phase": {
-            "enum": [
-              1,
-              2
-            ]
+            "enum": [1, 2]
           },
           "optional": {
             "type": "boolean"
@@ -55,11 +52,7 @@
                 }
               }
             },
-            "required": [
-              "text",
-              "disc",
-              "sections"
-            ],
+            "required": ["text", "disc", "sections"],
             "additionalProperties": false
           },
           "screens": {
@@ -77,17 +70,7 @@
             "additionalProperties": true
           }
         },
-        "required": [
-          "id",
-          "segment",
-          "protocol",
-          "data",
-          "trigger",
-          "phase",
-          "optional",
-          "basis",
-          "screens"
-        ],
+        "required": ["id", "segment", "protocol", "data", "trigger", "phase", "optional", "basis", "screens"],
         "additionalProperties": false
       }
     },
@@ -118,12 +101,7 @@
             "additionalProperties": true
           }
         },
-        "required": [
-          "id",
-          "resource",
-          "summary",
-          "if"
-        ],
+        "required": ["id", "resource", "summary", "if"],
         "additionalProperties": false
       }
     },
@@ -145,12 +123,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "topic",
-          "direction",
-          "payload",
-          "qos"
-        ],
+        "required": ["topic", "direction", "payload", "qos"],
         "additionalProperties": false
       }
     },
@@ -176,12 +149,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "event",
-          "publisher",
-          "subscribers",
-          "summary"
-        ],
+        "required": ["event", "publisher", "subscribers", "summary"],
         "additionalProperties": false
       }
     },
@@ -212,12 +180,7 @@
                 "type": "boolean"
               }
             },
-            "required": [
-              "group",
-              "fields",
-              "summary",
-              "required"
-            ],
+            "required": ["group", "fields", "summary", "required"],
             "additionalProperties": false
           }
         },
@@ -233,10 +196,7 @@
                 "type": "string"
               }
             },
-            "required": [
-              "id",
-              "summary"
-            ],
+            "required": ["id", "summary"],
             "additionalProperties": false
           }
         },
@@ -244,21 +204,10 @@
           "type": "string"
         }
       },
-      "required": [
-        "version",
-        "fields",
-        "identifiers",
-        "sample"
-      ],
+      "required": ["version", "fields", "identifiers", "sample"],
       "additionalProperties": false
     }
   },
-  "required": [
-    "if",
-    "api",
-    "topics",
-    "events",
-    "protocol"
-  ],
+  "required": ["if", "api", "topics", "events", "protocol"],
   "additionalProperties": false
 }

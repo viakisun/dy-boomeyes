@@ -20,12 +20,7 @@
           "type": "string"
         }
       },
-      "required": [
-        "name",
-        "alias_disc",
-        "owner",
-        "vendor"
-      ],
+      "required": ["name", "alias_disc", "owner", "vendor"],
       "additionalProperties": false
     },
     "set_version": {
@@ -64,13 +59,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "id",
-          "name",
-          "start",
-          "end",
-          "note"
-        ],
+        "required": ["id", "name", "start", "end", "note"],
         "additionalProperties": false
       }
     },
@@ -92,11 +81,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "milestone",
-          "when",
-          "criterion"
-        ],
+        "required": ["milestone", "when", "criterion"],
         "additionalProperties": false
       }
     },
@@ -115,11 +100,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "version",
-          "date",
-          "summary"
-        ],
+        "required": ["version", "date", "summary"],
         "additionalProperties": false
       }
     },
@@ -141,12 +122,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "kind",
-          "title",
-          "version",
-          "role"
-        ],
+        "required": ["kind", "title", "version", "role"],
         "additionalProperties": false
       }
     }

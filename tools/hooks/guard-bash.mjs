@@ -8,9 +8,16 @@ const RULES = [
   [/\bgit\s+commit\b[^|;&]*--no-verify/, '--no-verify 금지 — 게이트를 통과시키세요.'],
 ];
 for (const [re, msg] of RULES) if (re.test(cmd)) block(`[guard-bash] ${msg}`);
-const rm = /\brm\s+(-[a-zA-Z]*[rR][a-zA-Z]*\s+|-[a-zA-Z]*\s+-[a-zA-Z]*[rR][a-zA-Z]*\s+)([^|;&]+)/.exec(cmd);
+const rm = /\brm\s+(-[a-zA-Z]*[rR][a-zA-Z]*\s+|-[a-zA-Z]*\s+-[a-zA-Z]*[rR][a-zA-Z]*\s+)([^|;&\n]+)/.exec(cmd);
 if (rm) {
-  const targets = rm[2].trim().split(/\s+/).filter((t) => !t.startsWith('-'));
-  const SAFE = /^(\.\/)?(node_modules|dist|build|\.svelte-kit|\.turbo|coverage|\.venv|__pycache__)(\/|$)|\/(node_modules|dist|build|\.svelte-kit|\.turbo|coverage|__pycache__)(\/|$)/;
-  if (targets.some((t) => !SAFE.test(t))) block(`[guard-bash] rm -r 대상이 안전 디렉터리(node_modules·dist·build·.svelte-kit·coverage) 밖입니다: ${targets.join(' ')}`);
+  const targets = rm[2]
+    .trim()
+    .split(/\s+/)
+    .filter((t) => !t.startsWith('-'));
+  const SAFE =
+    /^(\.\/)?(node_modules|dist|build|\.svelte-kit|\.turbo|coverage|\.venv|__pycache__)(\/|$)|\/(node_modules|dist|build|\.svelte-kit|\.turbo|coverage|__pycache__)(\/|$)/;
+  if (targets.some((t) => !SAFE.test(t)))
+    block(
+      `[guard-bash] rm -r 대상이 안전 디렉터리(node_modules·dist·build·.svelte-kit·coverage) 밖입니다: ${targets.join(' ')}`,
+    );
 }

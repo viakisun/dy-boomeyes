@@ -24,10 +24,7 @@
             }
           },
           "scope_note": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": ["string", "null"]
           },
           "baseline": {
             "type": "string"
@@ -36,18 +33,10 @@
             "type": "string"
           },
           "track": {
-            "enum": [
-              "A",
-              "B",
-              "C"
-            ]
+            "enum": ["A", "B", "C"]
           },
           "status": {
-            "enum": [
-              "open",
-              "decided",
-              "dropped"
-            ]
+            "enum": ["open", "decided", "dropped"]
           },
           "resolved": {
             "type": "object",
@@ -65,11 +54,7 @@
                 "type": "string"
               }
             },
-            "required": [
-              "date",
-              "by",
-              "summary"
-            ],
+            "required": ["date", "by", "summary"],
             "additionalProperties": false
           },
           "source": {
@@ -80,22 +65,11 @@
             "additionalProperties": true
           }
         },
-        "required": [
-          "id",
-          "title",
-          "scope",
-          "baseline",
-          "ask",
-          "track",
-          "status",
-          "source"
-        ],
+        "required": ["id", "title", "scope", "baseline", "ask", "track", "status", "source"],
         "additionalProperties": false
       }
     }
   },
-  "required": [
-    "disc"
-  ],
+  "required": ["disc"],
   "additionalProperties": false
 }

@@ -33,10 +33,7 @@
             "type": "string"
           },
           "persona": {
-            "type": [
-              "object",
-              "null"
-            ],
+            "type": ["object", "null"],
             "properties": {
               "name": {
                 "type": "string"
@@ -51,12 +48,7 @@
                 "type": "string"
               }
             },
-            "required": [
-              "name",
-              "env",
-              "goal",
-              "pain"
-            ],
+            "required": ["name", "env", "goal", "pain"],
             "additionalProperties": false
           },
           "demo_account": {
@@ -69,10 +61,7 @@
                 "type": "string"
               }
             },
-            "required": [
-              "login",
-              "display"
-            ],
+            "required": ["login", "display"],
             "additionalProperties": false
           },
           "mgmt": {
@@ -80,20 +69,11 @@
             "additionalProperties": true
           }
         },
-        "required": [
-          "id",
-          "name",
-          "org",
-          "surfaces",
-          "summary",
-          "demo_account"
-        ],
+        "required": ["id", "name", "org", "surfaces", "summary", "demo_account"],
         "additionalProperties": false
       }
     }
   },
-  "required": [
-    "roles"
-  ],
+  "required": ["roles"],
   "additionalProperties": false
 }

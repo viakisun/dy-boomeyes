@@ -31,15 +31,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "name",
-          "role",
-          "org",
-          "env",
-          "goal",
-          "pain",
-          "surfaces"
-        ],
+        "required": ["name", "role", "org", "env", "goal", "pain", "surfaces"],
         "additionalProperties": false
       }
     },
@@ -64,11 +56,7 @@
             }
           }
         },
-        "required": [
-          "id",
-          "title",
-          "prep"
-        ],
+        "required": ["id", "title", "prep"],
         "additionalProperties": false
       }
     },
@@ -87,16 +75,10 @@
             "type": "string"
           },
           "action_930": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": ["string", "null"]
           },
           "action_1231": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": ["string", "null"]
           },
           "screens": {
             "type": "array",
@@ -112,29 +94,13 @@
             }
           },
           "note": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": ["string", "null"]
           },
           "tier": {
-            "enum": [
-              "core",
-              null
-            ]
+            "enum": ["core", null]
           }
         },
-        "required": [
-          "scenario",
-          "when",
-          "actor",
-          "action_930",
-          "action_1231",
-          "screens",
-          "refs",
-          "note",
-          "tier"
-        ],
+        "required": ["scenario", "when", "actor", "action_930", "action_1231", "screens", "refs", "note", "tier"],
         "additionalProperties": false
       }
     },
@@ -153,10 +119,7 @@
             }
           }
         },
-        "required": [
-          "title",
-          "paragraphs"
-        ],
+        "required": ["title", "paragraphs"],
         "additionalProperties": false
       }
     },
@@ -198,13 +161,7 @@
             }
           },
           "track": {
-            "enum": [
-              "D1",
-              "D2",
-              "D3",
-              "D4",
-              "D5"
-            ]
+            "enum": ["D1", "D2", "D3", "D4", "D5"]
           },
           "fixture": {
             "type": "object",
@@ -213,23 +170,11 @@
             }
           }
         },
-        "required": [
-          "scene",
-          "title",
-          "screens",
-          "steps",
-          "track"
-        ],
+        "required": ["scene", "title", "screens", "steps", "track"],
         "additionalProperties": false
       }
     }
   },
-  "required": [
-    "personas",
-    "scenarios",
-    "ops",
-    "narrative",
-    "demo"
-  ],
+  "required": ["personas", "scenarios", "ops", "narrative", "demo"],
   "additionalProperties": false
 }
