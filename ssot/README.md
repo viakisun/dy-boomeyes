@@ -29,7 +29,7 @@ node tools/ssot/check.mjs --docs     # md 링크·ID 실존
 - 어휘(영문 enum, 한글 라벨은 build의 라벨 맵): `phase 1|2` · 구현 상태 `reflected|phase2|structure|option|non-screen|documented|not-started|development|check|void` · FR `kind core|proposed|option` · DISC `status open|decided|dropped` + `track A|B|C` · 화면 `wave 0..7`(구현·캡처 여부는 TRACE.md가 계산).
 - 화면 `states[].id`는 kebab, `default`는 states 중 하나. 캡처 이름 = `${id.toLowerCase()}-${state}`(`b1-02-cam`). 구 변형 코드(A1-09·A1-10·A2-07·A2-08·A3-07)는 부모의 state + `legacy_codes`. 로그인 샷 4는 `B0-01`.
 - 파생값(DISC 범위·건수·커버리지)은 저장하지 않는다. `mgmt:` 슬롯은 관리 열(결정일·결정자·구현 상태 등) 전용.
-- ID 채번: 축의 마지막 번호 +1. 결번 재사용 금지. 화면 신설은 표면 내 다음 번호(`A1-12`).
+- ID 채번: 축의 마지막 번호 +1. 결번 재사용 금지. 화면 신설은 표면 내 다음 번호(예: A1의 마지막이 11이면 12).
 - 되돌리기 어려운 결정 → `docs/adr/`, 범위 변경 → DISC 등록 + spec 변경. DISC = 고객용 미결 원장, ADR = 내부 결정, 둘뿐.
 
 ## 원천 이관 (2026-09-05)
