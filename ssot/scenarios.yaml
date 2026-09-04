@@ -691,4 +691,192 @@ narrative:
     후에는 회수 장비의 운행 데이터를 리뷰해 다음 예지 모델의 재료로 넘긴다. 오운영이 임대 계약을 종료 처리하면 호기는 다음 현장을 기다린다.
   - 업무·조치·서류 이력은 수정 불가 형태로 보존된다(보존 기간은 DISC-022 협의). 2단계 완료 후에는 현장 전체 기간의 운영 리포트가 아카이브된다. 김현장이 다음 현장을 맡으면 — 현장 전환은 동시 1현장
     원칙에 따라 — 다시 개설 신청부터 시작한다.
-demo: []
+demo:
+- scene: 1
+  title: 상황 발생
+  surface: B1 관제 WEB (대형 모니터)
+  screens:
+  - B1-02
+  steps:
+  - CPB-003 전압 이상(E-021) 발생
+  - 카메라 월·이상 장비 테이블 상단에 표시
+  - 마커 상태 fault로 전환
+  message: '실시간 모니터링: 호기별 직접 체크 불필요'
+  acc:
+  - ACC-006
+  - ACC-007
+  - ACC-104
+  - ACC-110
+  track: D1
+  fixture:
+    device: CPB-003
+    event: E-021
+    account: control01
+- scene: 2
+  title: 운전자 인지
+  surface: A2 운전자 APP
+  screens:
+  - A2-02
+  - A2-03
+  steps:
+  - 알림 확인 → 대응 안내 열람
+  - 출근 체크인(반경 판정)
+  - 일일점검 5항목 제출
+  message: 현장 수행자도 같은 정보를 즉시 받음
+  acc:
+  - ACC-111
+  track: D1
+  fixture:
+    device: CPB-003
+    account: driver03
+- scene: 3
+  title: 현장 접수
+  surface: A1 안전관리자 APP
+  screens:
+  - A1-02
+  - A1-03
+  - A1-04
+  - A1-05
+  steps:
+  - 업무함에서 C-105 접수
+  - 실시간 영상(2채널) 확인 · 저장 영상 목록
+  - 정비 담당 호출
+  message: 안전관리자의 하루가 업무함으로 관리됨
+  acc:
+  - ACC-001
+  - ACC-002
+  - ACC-008
+  - ACC-105
+  - ACC-111
+  track: D1
+  fixture:
+    case: C-105
+    device: CPB-003
+    account: safety01
+- scene: 4
+  title: 원격 진단·배정
+  surface: B1 관제 WEB
+  screens:
+  - B1-02
+  - B1-03
+  steps:
+  - 고장코드 기반 원격 진단 확인
+  - 정비 현황 → 조치 보고 입력
+  - 수신함 처리
+  message: '가동률: 출동 전 원인·부품 파악 → 대응 속도'
+  acc:
+  - ACC-006
+  - ACC-010
+  - ACC-103
+  - ACC-106
+  track: D1
+  fixture:
+    case: C-105
+    event: E-021
+    account: control01
+- scene: 5
+  title: 완료·증빙
+  surface: A1 안전관리자 APP
+  screens:
+  - A1-03
+  - A1-08
+  - A1-06
+  steps:
+  - 정비 보고 수신
+  - 완료 확인 시트(조치 내용 필수)
+  - 기록 탭 이력 확인
+  message: 조치 이력 = 안전관리 활동 증빙
+  acc:
+  - ACC-001
+  - ACC-002
+  - ACC-111
+  track: D1
+  fixture:
+    case: C-105
+    account: safety01
+- scene: 6
+  title: 에스컬레이션
+  surface: A3 본사 APP + B1 관제 WEB
+  screens:
+  - B1-04
+  - A3-02
+  - B2-02
+  - B2-03
+  steps:
+  - CPB-004 통신 두절 방치
+  - 1시간 미접수 → 본사 통보(DemoClock 점프)
+  - 본사 지도·영상 확인 → 확인 요청
+  message: '감독 체계: 방치되는 문제가 없음'
+  acc:
+  - ACC-002
+  - ACC-110
+  track: D1
+  fixture:
+    device: CPB-004
+    account: hq01
+- scene: 7
+  title: 서류 흐름
+  surface: A2 운전자 APP → A1 안전관리자 APP
+  screens:
+  - A2-05
+  - A1-02
+  steps:
+  - 교육 이수증 촬영 제출
+  - 검토 업무 생성
+  - 승인/반려 → 재제출
+  message: '서류 대응: 전담 인력 없이 앱에서 완결'
+  acc:
+  - ACC-111
+  track: D4
+  fixture:
+    doc: 교육 이수증
+    account: driver03
+- scene: 8
+  title: 확장성
+  surface: B4 관리자 WEB
+  screens:
+  - B4-02
+  steps:
+  - 프로토콜 YAML 업로드
+  - 오류 샘플 파싱 테스트(필드 누락·타입 오류)
+  - 알림 발생 확인
+  message: 장비·데이터가 늘어도 코드 수정 없이 대응
+  acc:
+  - ACC-011
+  - ACC-012
+  - ACC-109
+  track: D4
+  fixture:
+    protocol: cpb.v0.1
+    account: ops01
+- scene: 9
+  title: 사업 가치
+  surface: B1 관제 WEB 임대 계약
+  screens:
+  - B1-06
+  steps:
+  - 만료 임박(D-27) 계약 확인
+  - 재배치 계획
+  - 안전관리자 대상 홍보 연계
+  message: 추가 일거리 확보 니즈로 마무리
+  acc:
+  - ACC-110
+  track: D4
+  fixture:
+    lease: D-27
+    account: control01
+- scene: 10
+  title: 쇼케이스
+  surface: B3 현장 WEB · B1 관제 WEB
+  screens:
+  - B3-06
+  - B1-07
+  steps:
+  - 쇼케이스 모드 전환
+  - 무사고 D+ · 실시간 영상 · 점검·서류 지표(읽기 전용·마스킹)
+  message: '"높으신 분이 오셨을 때" — 안전관리를 보여주는 얼굴'
+  acc:
+  - ACC-110
+  track: D5
+  fixture:
+    account: safety01

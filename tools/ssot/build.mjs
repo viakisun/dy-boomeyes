@@ -86,10 +86,17 @@ md += tbl(['상태', '건수'], [['미결', open.length], ['확정', discs.filte
 md += tbl(['ID', '항목', '트랙', '상태', '확정할 것', '관련 화면', '출처'], discs.map((x) => [`\`${x.id}\``, x.title, x.track, L.disc[x.status], x.ask, x.scope.join(' ') || (x.scope_note ?? '—'), x.source])) + '\n';
 writeFileSync(join(GEN_DOC, 'DECISIONS.md'), md);
 
+// ---- DEMO.md
+md = HEAD('시연 장면 ↔ 화면·상태·픽스처 (DEMO)', 'scenarios.yaml demo[]');
+md += tbl(['장면', '제목', '트랙', '표면', '화면', '조작·확인', '전달 메시지', 'ACC', '픽스처'], (d.scenarios.demo ?? []).map((s) => [s.scene, s.title, s.track, s.surface, s.screens.join(' '), s.steps.join(' → '), s.message, (s.acc ?? []).join(' '), Object.entries(s.fixture ?? {}).map(([k, v]) => `${k}=${v}`).join(' ')])) + '\n\n';
+const trackScreens = {}; for (const s of d.scenarios.demo ?? []) for (const scr of s.screens) (trackScreens[s.track] ??= new Set()).add(scr);
+md += tbl(['트랙', '장면', '화면'], Object.keys(trackScreens).sort(cmp).map((t) => [t, (d.scenarios.demo ?? []).filter((s) => s.track === t).map((s) => s.scene).join(' '), [...trackScreens[t]].sort(cmp).join(' ')])) + '\n';
+writeFileSync(join(GEN_DOC, 'DEMO.md'), md);
+
 // ---- SPECS.md
 md = HEAD('기능 스펙 인덱스 (SPECS)', 'specs/*/spec.md frontmatter');
 md += tbl(['기능', 'ID', '상태', '웨이브', '화면', 'FR', '파일'], specs.map((s) => [s.feature, s.id, s.status, s.wave, (s.screens ?? []).join(' '), (s.fr ?? []).join(' '), `[${s.path}](../../${s.path})`])) + '\n';
 writeFileSync(join(GEN_DOC, 'SPECS.md'), md);
 
-console.log(`✓ ssot:build → ssot.json · ids.ts · SCREENS.md(${screens.length}) · DOMAIN.md(${d.entities.ent.length}) · TRACE.md(fr ${frs.length}, 고아 ${orphans.length}) · DECISIONS.md(미결 ${open.length}) · SPECS.md(${specs.length})`);
+console.log(`✓ ssot:build → ssot.json · ids.ts · SCREENS.md(${screens.length}) · DOMAIN.md(${d.entities.ent.length}) · TRACE.md(fr ${frs.length}, 고아 ${orphans.length}) · DECISIONS.md(미결 ${open.length}) · DEMO.md(${(d.scenarios.demo ?? []).length}) · SPECS.md(${specs.length})`);
 if (check.errors.length) { console.error(`✗ check errors ${check.errors.length} — build 출력은 생성됐으나 게이트 실패`); process.exitCode = 1; }
