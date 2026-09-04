@@ -2,15 +2,17 @@
 
 기준일 2026-09-05. 웨이브 = 2주. 전략 근거: `../boomeyes/METHOD.md` · 범위 원천: `ssot/`(화면 53 · FR 36 · DISC 43 미결). 계약 기준선(9/10 동결 · 9/30 시연 · 12/31)은 `ssot/meta.yaml`에 그대로 두고, 여기서 재기준선을 관리한다 — DY 합의 전까지 "제안".
 
-## 현재 웨이브 — W0 준비 주 (9/1~9/5) ✓
+## 현재 웨이브 — W0 스캐폴드 (선행 착수 9/5 · 계획 9/8~9/19)
 
-| 산출 | 상태 |
+준비 주(9/1~9/5): 방법론 v1 · 아카이브 · DS v0.1 · SSOT yaml 11 + check/build · 저작 문서(INTENT·CLAUDE·AGENTS·ADR 7·PLAN·DEMO·QA·specs 2) · hooks·CI·skills·agents — 완료.
+
+| 산출 | 상태 (2026-09-05) |
 |---|---|
-| 방법론 v1 · 아카이브 · DS v0.1(`packages/tokens`) | 완료 |
-| SSOT yaml 11 · 스키마 · check/build · 생성 뷰 5 | 완료 (`✓ ssot: screens 53 · fr 36 · disc open 43 · refs 1259 · errors 0`) |
-| INTENT · CLAUDE · AGENTS · ADR 7 · PLAN · DEMO · QA · specs 2 | 완료 |
-| hooks(생성물 차단 · 위험 명령 · 편집 후 게이트) · CI · PR 템플릿 · skills 3 · agents 2 | 완료 (CI 1회 녹색은 리모트 생성 후) |
-| 남은 결정 | 리모트 리포 생성 시점 · W0 시작일 확인 · 세션 루트(현재: `boomeyes/` 루트 + 미러 훅 발화 확인) |
+| 워크스페이스 · `apps/web`·`pwa` · `packages/{tokens,domain,ui,mock,map,video}` | 완료 — main 12 커밋 |
+| B0-01 역할 카드 로그인 + 가드 · 앱 로그인 4 · B1-02 대시보드(지도 마커 5·KPI·피드·표·카메라 월·인스펙터) · B1-02M 골격 | 완료 — 캡처 5장(`pnpm capture`, 시각 고정·지도 idle 대기) |
+| 게이트: `pnpm verify`(ssot·tokens·tokens:lint·lint·check·test·생성물 diff 0) · `pnpm e2e` 17(로그인·가드·대시보드·모달·axe) · CI `e2e` 잡(capture 아티팩트) | 완료 — `✓ DY: lint files 56 · errors 0` · `17 passed` |
+| ADR-002(트랜스포트 목) · ADR-003(MapLibre) Accepted | 완료 — ADR-007은 프리뷰 구성 후 |
+| 남은 것 | S3+CloudFront 프리뷰(AWS 계정 DISC-006 — 사용자) · 리모트 리포 생성 → CI 1회 녹색 · 시각 회귀 기준선(W1) · W0 회고(9/19) → `current_wave: 1` |
 
 ## 웨이브 표 (제안)
 
