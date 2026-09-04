@@ -1,0 +1,99 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "boomeyes/ssot/roles",
+  "title": "roles",
+  "type": "object",
+  "properties": {
+    "roles": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z][a-z-]*$"
+          },
+          "name": {
+            "type": "string"
+          },
+          "org": {
+            "type": "string"
+          },
+          "surfaces": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[AB]\\d$"
+            }
+          },
+          "surface_note": {
+            "type": "string"
+          },
+          "summary": {
+            "type": "string"
+          },
+          "persona": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "env": {
+                "type": "string"
+              },
+              "goal": {
+                "type": "string"
+              },
+              "pain": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "name",
+              "env",
+              "goal",
+              "pain"
+            ],
+            "additionalProperties": false
+          },
+          "demo_account": {
+            "type": "object",
+            "properties": {
+              "login": {
+                "type": "string"
+              },
+              "display": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "login",
+              "display"
+            ],
+            "additionalProperties": false
+          },
+          "mgmt": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "org",
+          "surfaces",
+          "summary",
+          "demo_account"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "roles"
+  ],
+  "additionalProperties": false
+}

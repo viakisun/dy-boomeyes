@@ -1,0 +1,136 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "boomeyes/ssot/options",
+  "title": "options",
+  "type": "object",
+  "properties": {
+    "axes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^AX-\\d$"
+          },
+          "name": {
+            "type": "string"
+          },
+          "choices": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "code": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "name": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "code",
+                "name"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "disc": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^DISC-\\d{3}$"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "choices",
+          "disc"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "candidates": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "item": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string"
+          },
+          "products": {
+            "type": "string"
+          },
+          "if": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^IF-\\d{3}$"
+            }
+          },
+          "owner": {
+            "type": "string"
+          },
+          "group": {
+            "enum": [
+              "video",
+              "telemetry"
+            ]
+          }
+        },
+        "required": [
+          "item",
+          "role",
+          "products",
+          "if",
+          "owner",
+          "group"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "profiles": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "choices": {
+            "type": "object",
+            "additionalProperties": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "choices"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "axes",
+    "candidates",
+    "profiles"
+  ],
+  "additionalProperties": false
+}

@@ -1,0 +1,1440 @@
+# yaml-language-server: $schema=./schema/screens.schema.json
+# 생성: tools/ssot/convert_from_archive.py (아카이브 docset v0.3 + v2.0 델타) — 이후 이 파일이 원천
+surfaces:
+- id: A1
+  name: 현장 안전관리자 APP
+  app: pwa
+- id: A2
+  name: 운전자 APP
+  app: pwa
+- id: A3
+  name: 본사 안전관리자 APP
+  app: pwa
+- id: A4
+  name: 사업주 PWA
+  app: pwa
+- id: B0
+  name: 웹 공통 로그인
+  app: web
+- id: B1
+  name: 운영사 관제 WEB
+  app: web
+- id: B2
+  name: 건설사 본사 관리 WEB
+  app: web
+- id: B3
+  name: 현장 안전관리자 WEB
+  app: web
+- id: B4
+  name: 관리자 WEB 백오피스
+  app: web
+screens:
+- id: A1-01
+  name: 로그인
+  surface: A1
+  route: /a1/login
+  roles: &id001
+  - site-safety
+  phase: 1
+  wave: 1
+  default: login
+  states:
+  - id: login
+    name: login
+  nav:
+  - to: A1-02
+    label: 로그인
+  trace:
+    task:
+    - 4.3.2
+    out: OUT-002
+    rfp:
+    - RFP-018
+    disc:
+    - DISC-020
+    if:
+    - IF-009
+- id: A1-02
+  name: 업무함
+  surface: A1
+  route: /a1/inbox
+  roles: *id001
+  phase: 1
+  wave: 1
+  legacy_codes:
+  - A1-10
+  default: inbox
+  states:
+  - id: inbox
+    name: inbox
+  - id: filter
+    name: 「고장·이상」 필터 선택
+  nav:
+  - to: A1-03
+    label: 카드 탭
+  - to: A1-04
+    label: '탭: 관제'
+  - to: A1-06
+    label: '탭: 기록'
+  - to: A1-07
+    label: '탭: 메뉴'
+  trace:
+    task:
+    - 4.3.2
+    out: OUT-002
+    rfp:
+    - RFP-018
+    - RFP-020
+    - EXT-1
+    disc:
+    - DISC-016
+    if:
+    - IF-009
+    - IF-010
+    - IF-014
+- id: A1-03
+  name: 업무 상세
+  surface: A1
+  route: /a1/inbox/[case]
+  roles: *id001
+  phase: 1
+  wave: 1
+  default: case
+  states:
+  - id: case
+    name: case
+  nav:
+  - to: A1-08
+    label: 완료 처리
+  trace:
+    task:
+    - 4.3.2
+    out: OUT-002
+    rfp:
+    - RFP-015
+    - EXT-1
+    disc:
+    - DISC-012
+    - DISC-015
+    if:
+    - IF-009
+    - IF-010
+- id: A1-04
+  name: 관제(장비·영상)
+  surface: A1
+  route: /a1/monitor
+  roles: *id001
+  phase: 1
+  wave: 1
+  default: monitor
+  states:
+  - id: monitor
+    name: monitor
+  nav:
+  - to: A1-05
+    label: 타일 탭
+  trace:
+    task:
+    - 4.3.2
+    - 4.3.8
+    out: OUT-002
+    rfp:
+    - RFP-007
+    disc:
+    - DISC-004
+    if:
+    - IF-006
+    - IF-009
+- id: A1-05
+  name: 장비 상세
+  surface: A1
+  route: /a1/monitor/[device]
+  roles: *id001
+  phase: 1
+  wave: 1
+  default: dev
+  states:
+  - id: dev
+    name: dev
+  nav: []
+  trace:
+    task:
+    - 4.3.2
+    out: OUT-002
+    rfp:
+    - RFP-008
+    - RFP-010
+    - RFP-011
+    - RFP-012
+    - RFP-013
+    - RFP-014
+    - RFP-016
+    - RFP-017
+    - RFP-020
+    disc:
+    - DISC-008
+    - DISC-009
+    - DISC-010
+    - DISC-011
+    if:
+    - IF-006
+    - IF-007
+    - IF-009
+- id: A1-06
+  name: 기록
+  surface: A1
+  route: /a1/records
+  roles: *id001
+  phase: 1
+  wave: 2
+  default: rec
+  states:
+  - id: rec
+    name: rec
+  nav: []
+  trace:
+    task:
+    - 4.3.2
+    - 4.3.11
+    out: OUT-002
+    rfp:
+    - EXT-1
+    disc: []
+    if:
+    - IF-009
+- id: A1-07
+  name: 메뉴·현장 정보
+  surface: A1
+  route: /a1/menu
+  roles: *id001
+  phase: 1
+  wave: 2
+  legacy_codes:
+  - A1-09
+  default: menu
+  states:
+  - id: menu
+    name: menu
+  - id: apply
+    name: 신규 현장 개설 신청 폼 시트
+  nav: []
+  trace:
+    task:
+    - 4.3.2
+    - 4.3.9
+    out: OUT-002
+    rfp:
+    - RFP-018
+    disc: []
+    if:
+    - IF-009
+- id: A1-08
+  name: 완료 처리 시트
+  surface: A1
+  route: /a1/inbox/[case]?sheet=complete
+  roles: *id001
+  phase: 1
+  wave: 2
+  default: sheet
+  states:
+  - id: sheet
+    name: sheet
+  nav: []
+  trace:
+    task:
+    - 4.3.2
+    out: OUT-002
+    rfp:
+    - EXT-1
+    disc:
+    - DISC-015
+    if:
+    - IF-009
+    - IF-010
+- id: A1-11
+  name: 부품 점검 입력
+  surface: A1
+  route: /a1/parts/inspect
+  roles: *id001
+  phase: 1
+  wave: 2
+  default: default
+  states:
+  - id: default
+    name: 기본
+  nav: []
+  trace:
+    task:
+    - 5.3.3
+    out: OUT-014
+    rfp:
+    - RFP-016
+    - RFP-017
+    disc:
+    - DISC-038
+    - DISC-043
+    if:
+    - IF-009
+    - IF-011
+    - IF-019
+  note: 현장 점검 입력 — 태그 스캔 → 실측·사진·합불
+- id: A2-01
+  name: 로그인
+  surface: A2
+  route: /a2/login
+  roles: &id002
+  - driver
+  phase: 1
+  wave: 1
+  default: login
+  states:
+  - id: login
+    name: login
+  nav:
+  - to: A2-02
+    label: 로그인
+  trace:
+    task:
+    - 4.3.1
+    out: OUT-001
+    rfp:
+    - RFP-018
+    disc:
+    - DISC-020
+    if:
+    - IF-009
+- id: A2-02
+  name: 오늘(출근·알림)
+  surface: A2
+  route: /a2/today
+  roles: *id002
+  phase: 1
+  wave: 1
+  legacy_codes:
+  - A2-07
+  default: today
+  states:
+  - id: today
+    name: today
+  - id: checked
+    name: 체크인 후 (완료 카드·체크아웃 CTA)
+  nav:
+  - to: A2-03
+    label: 점검 시작
+  - to: A2-04
+    label: '탭: 내 장비'
+  - to: A2-05
+    label: '탭: 서류'
+  - to: A2-06
+    label: '탭: 메뉴'
+  trace:
+    task:
+    - 4.3.1
+    out: OUT-001
+    rfp:
+    - RFP-015
+    - RFP-018
+    - EXT-2
+    disc: []
+    if:
+    - IF-009
+    - IF-010
+    - IF-014
+- id: A2-03
+  name: 일일점검
+  surface: A2
+  route: /a2/today/inspect
+  roles: *id002
+  phase: 1
+  wave: 1
+  legacy_codes:
+  - A2-08
+  default: inspect
+  states:
+  - id: inspect
+    name: inspect
+  - id: inspected
+    name: 점검 제출 후 (전 항목 정상 5/5)
+  nav: []
+  trace:
+    task:
+    - 4.3.1
+    out: OUT-001
+    rfp:
+    - EXT-2
+    disc: []
+    if:
+    - IF-009
+- id: A2-04
+  name: 내 장비
+  surface: A2
+  route: /a2/device
+  roles: *id002
+  phase: 1
+  wave: 1
+  default: mydev
+  states:
+  - id: mydev
+    name: mydev
+  nav: []
+  trace:
+    task:
+    - 4.3.1
+    out: OUT-001
+    rfp:
+    - RFP-010
+    - RFP-011
+    - RFP-013
+    - RFP-016
+    - RFP-017
+    disc:
+    - DISC-010
+    - DISC-013
+    - DISC-014
+    if:
+    - IF-009
+    - IF-010
+- id: A2-05
+  name: 내 서류
+  surface: A2
+  route: /a2/docs
+  roles: *id002
+  phase: 1
+  wave: 2
+  default: docs
+  states:
+  - id: docs
+    name: docs
+  nav: []
+  trace:
+    task:
+    - 4.3.1
+    - 4.3.10
+    out: OUT-001
+    rfp:
+    - RFP-020
+    - EXT-2
+    disc:
+    - DISC-016
+    if:
+    - IF-009
+    - IF-011
+- id: A2-06
+  name: 메뉴·현장 정보
+  surface: A2
+  route: /a2/menu
+  roles: *id002
+  phase: 1
+  wave: 2
+  default: menu
+  states:
+  - id: menu
+    name: menu
+  nav: []
+  trace:
+    task:
+    - 4.3.1
+    out: OUT-001
+    rfp:
+    - RFP-018
+    disc: []
+    if:
+    - IF-009
+- id: A2-09
+  name: 교체·폐기 처리
+  surface: A2
+  route: /a2/parts/replace
+  roles: *id002
+  phase: 1
+  wave: 2
+  default: default
+  states:
+  - id: default
+    name: 기본
+  nav: []
+  trace:
+    task:
+    - 5.3.3
+    out: OUT-014
+    rfp:
+    - RFP-016
+    - RFP-017
+    disc:
+    - DISC-038
+    - DISC-043
+    if:
+    - IF-009
+    - IF-011
+    - IF-019
+  note: 교체·폐기 처리 — 사유·작업자·증빙 사진 → 재고 차감
+- id: A3-01
+  name: 로그인
+  surface: A3
+  route: /a3/login
+  roles: &id003
+  - hq-safety
+  phase: 1
+  wave: 2
+  default: login
+  states:
+  - id: login
+    name: login
+  nav:
+  - to: A3-02
+    label: 로그인
+  trace:
+    task:
+    - 4.3.2
+    out: OUT-002
+    rfp:
+    - RFP-018
+    - RFP-022
+    disc:
+    - DISC-020
+    if:
+    - IF-009
+- id: A3-02
+  name: 현장 목록(본사)
+  surface: A3
+  route: /a3/sites
+  roles: *id003
+  phase: 1
+  wave: 2
+  default: sites
+  states:
+  - id: sites
+    name: sites
+  nav:
+  - to: A3-03
+    label: 현장 카드
+  - to: A3-05
+    label: '탭: 업무'
+  - to: A3-06
+    label: '탭: 기록'
+  trace:
+    task:
+    - 4.3.2
+    out: OUT-002
+    rfp:
+    - RFP-022
+    - EXT-3
+    disc:
+    - DISC-015
+    if:
+    - IF-009
+    - IF-014
+- id: A3-03
+  name: 현장 상세
+  surface: A3
+  route: /a3/sites/[site]
+  roles: *id003
+  phase: 1
+  wave: 2
+  legacy_codes:
+  - A3-07
+  default: site
+  states:
+  - id: site
+    name: site
+  - id: normal
+    name: 정상 현장 상세 (대전 B)
+  nav:
+  - to: A3-04
+    label: 장비 열람
+  trace:
+    task:
+    - 4.3.2
+    out: OUT-002
+    rfp:
+    - RFP-022
+    disc:
+    - DISC-015
+    if:
+    - IF-009
+  note: 화면 구성 원칙 — A1과 공통 컴포넌트 + 역할별 액션 슬롯 교체 (처리 버튼 → 확인 요청)
+- id: A3-04
+  name: 장비 열람
+  surface: A3
+  route: /a3/sites/[site]/devices
+  roles: *id003
+  phase: 1
+  wave: 2
+  default: dev
+  states:
+  - id: dev
+    name: dev
+  nav: []
+  trace:
+    task:
+    - 4.3.2
+    - 4.3.8
+    out: OUT-002
+    rfp:
+    - RFP-007
+    - RFP-008
+    - RFP-022
+    disc: []
+    if:
+    - IF-006
+    - IF-009
+- id: A3-05
+  name: 업무(열람)
+  surface: A3
+  route: /a3/tasks
+  roles: *id003
+  phase: 1
+  wave: 2
+  default: inbox
+  states:
+  - id: inbox
+    name: inbox
+  nav: []
+  trace:
+    task:
+    - 4.3.2
+    out: OUT-002
+    rfp:
+    - RFP-022
+    - EXT-1
+    disc: []
+    if:
+    - IF-009
+  note: 전 현장 통합 열람 — 본사 스코프 (처리 권한 없음)
+- id: A3-06
+  name: 기록
+  surface: A3
+  route: /a3/records
+  roles: *id003
+  phase: 1
+  wave: 2
+  default: rec
+  states:
+  - id: rec
+    name: rec
+  nav: []
+  trace:
+    task:
+    - 4.3.11
+    out: OUT-002
+    rfp:
+    - RFP-022
+    disc: []
+    if:
+    - IF-009
+- id: A4-01
+  name: 로그인
+  surface: A4
+  route: /a4/login
+  roles: &id004
+  - owner
+  phase: 2
+  wave: 4
+  default: login
+  states:
+  - id: login
+    name: login
+  nav:
+  - to: A4-02
+    label: 로그인
+  trace:
+    task:
+    - 4.3.9
+    out: OUT-009
+    rfp:
+    - RFP-021
+    disc:
+    - DISC-020
+    - DISC-026
+    if: []
+- id: A4-02
+  name: 보유·가용 현황
+  surface: A4
+  route: /a4/fleet
+  roles: *id004
+  phase: 2
+  wave: 4
+  default: fleet
+  states:
+  - id: fleet
+    name: fleet
+  nav:
+  - to: A4-03
+    label: '탭: 요청'
+  - to: A4-04
+    label: '탭: 운전자'
+  - to: A4-05
+    label: '탭: 계약'
+  trace:
+    task:
+    - 4.3.9
+    out: OUT-009
+    rfp:
+    - RFP-021
+    - EXT-5
+    disc:
+    - DISC-026
+    if: []
+- id: A4-03
+  name: 투입 요청·배정
+  surface: A4
+  route: /a4/requests
+  roles: *id004
+  phase: 2
+  wave: 4
+  default: inbox
+  states:
+  - id: inbox
+    name: inbox
+  nav:
+  - to: A4-02
+    label: 배정 확정
+  trace:
+    task:
+    - 4.3.9
+    - 4.3.4
+    out: OUT-009
+    rfp:
+    - RFP-021
+    - EXT-5
+    disc:
+    - DISC-026
+    if: []
+- id: A4-04
+  name: 운전자 배치
+  surface: A4
+  route: /a4/drivers
+  roles: *id004
+  phase: 2
+  wave: 4
+  default: drivers
+  states:
+  - id: drivers
+    name: drivers
+  nav:
+  - to: A4-06
+    label: 서류 관리
+  trace:
+    task:
+    - 4.3.9
+    out: OUT-009
+    rfp:
+    - EXT-5
+    disc:
+    - DISC-026
+    if: []
+- id: A4-05
+  name: 임대 계약
+  surface: A4
+  route: /a4/leases
+  roles: *id004
+  phase: 2
+  wave: 4
+  default: lease
+  states:
+  - id: lease
+    name: lease
+  nav: []
+  trace:
+    task:
+    - 4.3.9
+    out: OUT-009
+    rfp:
+    - EXT-4
+    - EXT-5
+    disc:
+    - DISC-026
+    if: []
+- id: A4-06
+  name: 운전자 서류
+  surface: A4
+  route: /a4/drivers/docs
+  roles: *id004
+  phase: 2
+  wave: 4
+  default: docs
+  states:
+  - id: docs
+    name: docs
+  nav: []
+  trace:
+    task:
+    - 4.3.10
+    out: OUT-010
+    rfp:
+    - RFP-020
+    - EXT-5
+    disc:
+    - DISC-016
+    - DISC-026
+    if: []
+- id: B0-01
+  name: 웹 공통 로그인
+  surface: B0
+  route: /login
+  roles:
+  - control
+  - hq-safety
+  - site-safety
+  - ops-admin
+  phase: 1
+  wave: 0
+  legacy_codes:
+  - B1-01
+  - B2-01
+  - B3-01
+  - B4-01
+  default: login-b1
+  states:
+  - id: login-b1
+    name: B1 로그인
+  - id: login-b2
+    name: B2 로그인
+  - id: login-b3
+    name: B3 로그인
+  - id: login-b4
+    name: B4 로그인
+  nav:
+  - to: B1-02
+    label: '역할: 관제'
+  - to: B2-02
+    label: '역할: 본사'
+  - to: B3-02
+    label: '역할: 현장'
+  - to: B4-02
+    label: '역할: 관리자'
+  trace:
+    task:
+    - 4.3.5
+    out: OUT-005
+    rfp:
+    - RFP-019
+    disc:
+    - DISC-020
+    if:
+    - IF-009
+- id: B1-02
+  name: 관제 대시보드
+  surface: B1
+  route: /b1/dash
+  roles: &id005
+  - control
+  - maintenance
+  phase: 1
+  wave: 0
+  default: dash
+  states:
+  - id: dash
+    name: dash
+  nav:
+  - to: B1-02M
+    label: 카메라 타일
+  - to: B1-03
+    label: 수신함
+  - to: B1-04
+    label: 에스컬레이션
+  - to: B1-05
+    label: 서류 현황
+  - to: B1-06
+    label: 임대 계약
+  - to: B1-07
+    label: 쇼케이스
+  trace:
+    task:
+    - 4.3.3
+    out: OUT-003
+    rfp:
+    - RFP-009
+    - RFP-010
+    - RFP-013
+    - RFP-014
+    - RFP-015
+    - RFP-019
+    - RFP-021
+    disc: []
+    if:
+    - IF-004
+    - IF-009
+    - IF-010
+    - IF-013
+- id: B1-02M
+  name: 카메라 영상 모달
+  surface: B1
+  route: /b1/dash?cam=[camera]
+  roles: *id005
+  phase: 1
+  wave: 1
+  default: cam
+  states:
+  - id: cam
+    name: cam
+  nav: []
+  trace:
+    task:
+    - 4.3.3
+    - 4.3.8
+    out: OUT-003
+    rfp:
+    - RFP-007
+    - RFP-008
+    disc:
+    - DISC-004
+    - DISC-005
+    - DISC-007
+    if:
+    - IF-005
+    - IF-006
+    - IF-007
+    - IF-008
+- id: B1-03
+  name: 수신함
+  surface: B1
+  route: /b1/inbox
+  roles: *id005
+  phase: 1
+  wave: 1
+  default: inbox
+  states:
+  - id: inbox
+    name: inbox
+  nav: []
+  trace:
+    task:
+    - 4.3.9
+    - 4.3.4
+    out: OUT-009
+    rfp:
+    - RFP-020
+    - EXT-1
+    disc: []
+    if:
+    - IF-009
+    - IF-010
+  note: 신청·요청 처리 — 안전관리자 서류 대응의 운영사 측 창구 (과업 4.3.4의 수신함을 운영사 관제로 배치)
+- id: B1-04
+  name: 에스컬레이션
+  surface: B1
+  route: /b1/escalation
+  roles: *id005
+  phase: 1
+  wave: 1
+  default: esc
+  states:
+  - id: esc
+    name: esc
+  nav: []
+  trace:
+    task:
+    - 4.3.11
+    out: OUT-011
+    rfp:
+    - EXT-3
+    disc:
+    - DISC-015
+    if:
+    - IF-009
+    - IF-010
+    - IF-014
+  note: 미접수 에스컬레이션 — 임계 1h 자동 통보 (운영사·건설사 협의)
+- id: B1-05
+  name: 서류 현황
+  surface: B1
+  route: /b1/docs
+  roles: *id005
+  phase: 1
+  wave: 2
+  default: docs
+  states:
+  - id: docs
+    name: docs
+  nav: []
+  trace:
+    task:
+    - 4.3.10
+    out: OUT-010
+    rfp:
+    - RFP-020
+    disc:
+    - DISC-016
+    if:
+    - IF-009
+  note: '원본 니즈: 서류 등록·열람·만료 알림 — 등록·승인은 현장, 운영사는 모니터링·회신'
+- id: B1-06
+  name: 임대 계약
+  surface: B1
+  route: /b1/leases
+  roles: *id005
+  phase: 1
+  wave: 2
+  default: lease
+  states:
+  - id: lease
+    name: lease
+  nav: []
+  trace:
+    task:
+    - 4.3.9
+    out: OUT-009
+    rfp:
+    - EXT-4
+    disc: []
+    if:
+    - IF-009
+  note: '원본 니즈: 관제 기술 홍보를 통한 추가 일거리 확보 — 재배치·영업 연계'
+- id: B1-07
+  name: 쇼케이스
+  surface: B1
+  route: /b1/showcase
+  roles: *id005
+  phase: 2
+  wave: 2
+  default: show
+  states:
+  - id: show
+    name: show
+  nav: []
+  trace:
+    task:
+    - 4.3.3
+    out: OUT-003
+    rfp:
+    - RFP-021
+    disc:
+    - DISC-019
+    if:
+    - IF-009
+    - IF-010
+  note: '원본 니즈: 관제 기술 홍보 — 방문자·경영진 프레젠테이션 (읽기 전용)'
+- id: B1-08
+  name: 이벤트 복기
+  surface: B1
+  route: /b1/events/[event]
+  roles: *id005
+  phase: 1
+  wave: 2
+  default: default
+  states:
+  - id: default
+    name: 기본
+  nav: []
+  trace:
+    task:
+    - 5.3.1
+    out: OUT-012
+    rfp:
+    - RFP-008
+    disc:
+    - DISC-039
+    - DISC-040
+    if:
+    - IF-008
+    - IF-017
+    - IF-018
+    - IF-009
+  note: event_id + 공통 시각으로 일반 CCTV·AI CCTV·바디캠·CPB 상태/부품 이력 4소스 동기 재생 (영상·소모품 운영 검토 v2.0 §11)
+- id: B2-02
+  name: 본사 지도
+  surface: B2
+  route: /b2/map
+  roles: &id006
+  - hq-safety
+  phase: 1
+  wave: 2
+  default: work
+  states:
+  - id: work
+    name: work
+  nav:
+  - to: B2-03
+    label: 마커 선택
+  - to: B2-04
+    label: 보고 모드
+  trace:
+    task:
+    - 4.3.3
+    out: OUT-003
+    rfp:
+    - RFP-009
+    - RFP-022
+    disc: []
+    if:
+    - IF-009
+    - IF-010
+    - IF-013
+- id: B2-03
+  name: 현장 상세
+  surface: B2
+  route: /b2/sites/[site]
+  roles: *id006
+  phase: 1
+  wave: 2
+  default: site
+  states:
+  - id: site
+    name: site
+  nav: []
+  trace:
+    task:
+    - 4.3.3
+    - 4.3.8
+    out: OUT-003
+    rfp:
+    - RFP-007
+    - RFP-022
+    disc:
+    - DISC-015
+    if:
+    - IF-006
+    - IF-009
+  note: 본사 권한 경계 — 열람 + 확인 요청 (직접 처리 불가, DISC-015)
+- id: B2-04
+  name: 보고 모드
+  surface: B2
+  route: /b2/report
+  roles: *id006
+  phase: 2
+  wave: 2
+  default: report
+  states:
+  - id: report
+    name: report
+  nav: []
+  trace:
+    task:
+    - 4.3.3
+    out: OUT-003
+    rfp:
+    - RFP-022
+    disc: []
+    if:
+    - IF-009
+  note: 열람 전용 경영 보고 — ESC/클릭 종료
+- id: B3-02
+  name: 현장 콘솔
+  surface: B3
+  route: /b3/console
+  roles: &id007
+  - site-safety
+  phase: 2
+  wave: 4
+  default: console
+  states:
+  - id: console
+    name: console
+  nav:
+  - to: B3-03
+    label: 업무
+  - to: B3-04
+    label: 서류
+  - to: B3-05
+    label: 기록
+  - to: B3-06
+    label: 쇼케이스
+  trace:
+    task:
+    - 4.3.3
+    out: OUT-003
+    rfp:
+    - RFP-007
+    - RFP-019
+    - RFP-022
+    disc:
+    - DISC-019
+    if:
+    - IF-006
+    - IF-009
+    - IF-010
+  note: 현장 스코프 상시 콘솔 — 2단계 제안 표면 (DISC-019)
+- id: B3-03
+  name: 업무
+  surface: B3
+  route: /b3/tasks
+  roles: *id007
+  phase: 2
+  wave: 4
+  default: tasks
+  states:
+  - id: tasks
+    name: tasks
+  nav: []
+  trace:
+    task:
+    - 4.3.3
+    out: OUT-003
+    rfp:
+    - EXT-1
+    disc:
+    - DISC-019
+    if:
+    - IF-009
+    - IF-010
+  note: APP 완결성 + 데스크워크 — 업무 처리는 APP과 동일 모델
+- id: B3-04
+  name: 서류
+  surface: B3
+  route: /b3/docs
+  roles: *id007
+  phase: 2
+  wave: 4
+  default: docs
+  states:
+  - id: docs
+    name: docs
+  nav: []
+  trace:
+    task:
+    - 4.3.10
+    out: OUT-010
+    rfp:
+    - RFP-020
+    disc:
+    - DISC-016
+    - DISC-019
+    if:
+    - IF-009
+    - IF-011
+- id: B3-05
+  name: 기록
+  surface: B3
+  route: /b3/records
+  roles: *id007
+  phase: 2
+  wave: 4
+  default: rec
+  states:
+  - id: rec
+    name: rec
+  nav: []
+  trace:
+    task:
+    - 4.3.11
+    out: OUT-011
+    rfp:
+    - EXT-1
+    disc:
+    - DISC-019
+    if:
+    - IF-009
+- id: B3-06
+  name: 쇼케이스
+  surface: B3
+  route: /b3/showcase
+  roles: *id007
+  phase: 2
+  wave: 4
+  default: show
+  states:
+  - id: show
+    name: show
+  nav: []
+  trace:
+    task:
+    - 4.3.3
+    out: OUT-003
+    rfp:
+    - RFP-021
+    disc:
+    - DISC-019
+    if:
+    - IF-009
+  note: 쇼케이스 노출 범위 — 개인정보 마스킹 · DY 확인 (DISC-019)
+- id: B3-07
+  name: 현장 부품 현황
+  surface: B3
+  route: /b3/parts
+  roles: *id007
+  phase: 2
+  wave: 4
+  default: default
+  states:
+  - id: default
+    name: 기본
+  nav: []
+  trace:
+    task:
+    - 5.3.3
+    out: OUT-014
+    rfp:
+    - RFP-022
+    disc:
+    - DISC-019
+    - DISC-038
+    if:
+    - IF-009
+  note: 현장 스코프 부품 현황 (2단계 제안 표면)
+- id: B4-02
+  name: 프로토콜 관리
+  surface: B4
+  route: /b4/protocols
+  roles: &id008
+  - ops-admin
+  phase: 1
+  wave: 1
+  default: proto
+  states:
+  - id: proto
+    name: proto
+  nav:
+  - to: B4-03
+    label: 장비·현장
+  - to: B4-04
+    label: 사용자·권한
+  - to: B4-05
+    label: 알림 기준
+  - to: B4-06
+    label: 서류 관리
+  trace:
+    task:
+    - 4.3.6
+    - 4.3.4
+    out: OUT-006
+    rfp:
+    - RFP-023
+    disc:
+    - DISC-008
+    - DISC-009
+    if:
+    - IF-009
+    - IF-012
+- id: B4-03
+  name: 장비·현장·프로파일
+  surface: B4
+  route: /b4/assets
+  roles: *id008
+  phase: 1
+  wave: 2
+  default: assets
+  states:
+  - id: assets
+    name: assets
+  nav: []
+  trace:
+    task:
+    - 4.3.9
+    - 4.3.4
+    out: OUT-009
+    rfp: []
+    disc: []
+    if:
+    - IF-009
+- id: B4-04
+  name: 사용자·권한
+  surface: B4
+  route: /b4/users
+  roles: *id008
+  phase: 1
+  wave: 2
+  default: users
+  states:
+  - id: users
+    name: users
+  nav: []
+  trace:
+    task:
+    - 4.3.4
+    out: OUT-004
+    rfp: []
+    disc:
+    - DISC-015
+    if:
+    - IF-009
+- id: B4-05
+  name: 알림 기준
+  surface: B4
+  route: /b4/rules
+  roles: *id008
+  phase: 1
+  wave: 1
+  default: rules
+  states:
+  - id: rules
+    name: rules
+  nav: []
+  trace:
+    task:
+    - 4.3.11
+    - 4.3.4
+    out: OUT-011
+    rfp:
+    - RFP-015
+    - RFP-016
+    - RFP-017
+    disc:
+    - DISC-012
+    - DISC-013
+    - DISC-014
+    if:
+    - IF-009
+- id: B4-06
+  name: 서류 관리
+  surface: B4
+  route: /b4/docs
+  roles: *id008
+  phase: 1
+  wave: 2
+  default: docs
+  states:
+  - id: docs
+    name: docs
+  nav: []
+  trace:
+    task:
+    - 4.3.10
+    - 4.3.4
+    out: OUT-010
+    rfp:
+    - RFP-020
+    disc:
+    - DISC-016
+    if:
+    - IF-009
+    - IF-011
+- id: B4-07
+  name: 부품 대장
+  surface: B4
+  route: /b4/parts
+  roles: *id008
+  phase: 1
+  wave: 2
+  default: default
+  states:
+  - id: default
+    name: 기본
+  nav: []
+  trace:
+    task:
+    - 5.3.3
+    out: OUT-014
+    rfp:
+    - RFP-016
+    - RFP-017
+    disc:
+    - DISC-038
+    - DISC-043
+    if:
+    - IF-009
+    - IF-019
+  note: 부품 ID 중심 등록·장착·재고·발주 — 5군(직관·이송배관 / 엘보·리듀서 / 플랜지·클램프 / 가스켓·안전핀 / 엔드호스·피팅)
+- id: B4-08
+  name: 점검·교체 이력
+  surface: B4
+  route: /b4/parts/history
+  roles: *id008
+  phase: 1
+  wave: 2
+  default: default
+  states:
+  - id: default
+    name: 기본
+  nav: []
+  trace:
+    task:
+    - 5.3.3
+    out: OUT-014
+    rfp:
+    - RFP-016
+    - RFP-017
+    disc:
+    - DISC-038
+    if:
+    - IF-009
+  note: 점검(실측두께·외관·체결·OEM 합불)·교체·폐기 이력 — 누적 타설량·운전시간은 보조지표

@@ -1,0 +1,167 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "boomeyes/ssot/requirements",
+  "title": "requirements",
+  "type": "object",
+  "properties": {
+    "fr": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^FR-\\d{3}$"
+          },
+          "title": {
+            "type": "string"
+          },
+          "source": {
+            "type": "object",
+            "properties": {
+              "text": {
+                "type": "string"
+              },
+              "rfp": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^(RFP-\\d{3}|EXT-\\d)$"
+                }
+              },
+              "sections": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^[45]\\.3\\.\\d{1,2}$"
+                }
+              },
+              "disc": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^DISC-\\d{3}$"
+                }
+              }
+            },
+            "required": [
+              "text",
+              "rfp",
+              "sections",
+              "disc"
+            ],
+            "additionalProperties": false
+          },
+          "screens": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[AB]\\d-\\d{2}M?$"
+            }
+          },
+          "if": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^IF-\\d{3}$"
+            }
+          },
+          "acc": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^ACC-\\d{3}$"
+            }
+          },
+          "phase": {
+            "enum": [
+              1,
+              2
+            ]
+          },
+          "kind": {
+            "enum": [
+              "core",
+              "proposed",
+              "option"
+            ]
+          },
+          "status": {
+            "enum": [
+              "reflected",
+              "phase2",
+              "structure",
+              "option",
+              "non-screen",
+              "documented",
+              "not-started",
+              "development",
+              "check",
+              "void"
+            ]
+          },
+          "note": {
+            "type": "string"
+          },
+          "mgmt": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "source",
+          "screens",
+          "if",
+          "acc",
+          "phase",
+          "kind",
+          "status"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "nfr": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^NFR-\\d{3}$"
+          },
+          "title": {
+            "type": "string"
+          },
+          "criterion": {
+            "type": "string"
+          },
+          "source": {
+            "type": "string"
+          },
+          "verify": {
+            "type": "string"
+          },
+          "mgmt": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "criterion",
+          "source",
+          "verify"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "fr",
+    "nfr"
+  ],
+  "additionalProperties": false
+}

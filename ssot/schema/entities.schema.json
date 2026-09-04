@@ -1,0 +1,213 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "boomeyes/ssot/entities",
+  "title": "entities",
+  "type": "object",
+  "properties": {
+    "ent": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^ENT-\\d{2}$"
+          },
+          "name": {
+            "type": "string"
+          },
+          "fields": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "relations": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "store": {
+            "type": "string"
+          },
+          "phase": {
+            "enum": [
+              1,
+              2
+            ]
+          },
+          "note": {
+            "type": "string"
+          },
+          "mgmt": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "fields",
+          "relations",
+          "store",
+          "phase"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "machines": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "entity": {
+            "type": "string",
+            "pattern": "^ENT-\\d{2}$"
+          },
+          "states": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1
+          },
+          "transitions": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "from": {
+                  "type": "string"
+                },
+                "to": {
+                  "type": "string"
+                },
+                "by": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "from",
+                "to",
+                "by"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "entity",
+          "states",
+          "transitions"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "rules": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "group": {
+            "type": "string"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string"
+                },
+                "rule": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "title",
+                "rule"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "group",
+          "items"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "stores": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "store": {
+            "type": "string"
+          },
+          "node": {
+            "type": "string"
+          },
+          "entities": {
+            "type": "string"
+          },
+          "purpose": {
+            "type": "string"
+          },
+          "phase": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "store",
+          "node",
+          "entities",
+          "purpose",
+          "phase"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "accumulation": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "item": {
+            "type": "string"
+          },
+          "source": {
+            "type": "string"
+          },
+          "entities": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^ENT-\\d{2}$"
+            }
+          },
+          "tier": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "item",
+          "source",
+          "entities",
+          "tier"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "ent",
+    "machines",
+    "rules",
+    "stores",
+    "accumulation"
+  ],
+  "additionalProperties": false
+}

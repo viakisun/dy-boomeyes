@@ -1,0 +1,128 @@
+# yaml-language-server: $schema=./schema/meta.schema.json
+# 생성: tools/ssot/convert_from_archive.py (아카이브 docset v0.3 + v2.0 델타) — 이후 이 파일이 원천
+program:
+  name: BoomEyes(가칭)
+  alias_disc: DISC-021
+  owner: DY(운영사)
+  vendor: VIA
+set_version: v0.3
+next_set_version: v0.4-draft
+doc_numbers:
+  sow: VIA-BE-SOW-001
+  rtm: VIA-BE-RTM-001
+  sdd: VIA-BE-SDD-001
+  scn: VIA-BE-SCN-001
+fixed_clock: '2026-07-03T10:42:00+09:00'
+phases:
+- id: 1
+  name: 1단계
+  start: '2026-07-01'
+  end: '2026-09-30'
+  note: 기능 동결 2026-09-10 · 시연 2026-09-30 (계약 기준선 — 재기준선은 docs/PLAN.md)
+- id: 2
+  name: 2단계
+  start: '2026-10-01'
+  end: '2026-12-31'
+  note: 운영형 고도화 (범위 DISC-019)
+current_wave: 0
+schedule:
+- milestone: 설계 합의 · DISC 확정
+  when: 2026-07 중
+  criterion: 문서 세트 v1.0 승격
+- milestone: 1단계 개발 완료 (기능 동결)
+  when: '2026-09-10'
+  criterion: ACC-0xx
+- milestone: 프로토타입 2set 시연
+  when: '2026-09-30'
+  criterion: ACC-1xx · 시연 시나리오 장면 1~10
+- milestone: 2단계 운영형 고도화
+  when: 2026-10-01 ~ 12-31
+  criterion: 'ACC-1xx (범위: DISC-019)'
+history:
+- version: rev 2.0
+  date: '2026-07-03'
+  summary: 벡터 목업 기반 초판 — 화면 38종 · 25p
+- version: rev 4.0
+  date: '2026-07-04'
+  summary: 실브라우저 캡처 전환(Leaflet 실지도) · B0 공통 로그인 · 커버리지 부록
+- version: rev 5.0
+  date: '2026-07-05'
+  summary: 전수 검수 반영 — 전 웹 라이트 통일(로그인 딥틸 예외) · 수치·용어 정합 · 상태 커버리지 보강
+- version: rev 6.0
+  date: '2026-07-05'
+  summary: 추적성 체계 도입 — 헤더 고정 문법 · 화면별 근거 행 · 부록 4종 · TRACE 단일 소스
+- version: rev 7.0
+  date: '2026-07-05'
+  summary: 완전한 단일 문서화 — 문서·시스템 개요 신설 · 기준 편 전면 배치 · 1화면 1페이지 · 상태 변형 병합
+- version: rev 8.0
+  date: '2026-07-05'
+  summary: 시스템 설계 승격 — FR·NFR·IF·API·ENT 식별자 신설 · 시스템 구조 편(아키텍처·기기 연결·프로토콜·영상·미들웨어·데이터 모델·보안 — 현 2부) · 화면별 시퀀스 · 내비게이션 맵 ·
+    상태 전이도
+- version: rev 9.0
+  date: '2026-07-05'
+  summary: 아키텍처 도해 재작도 · 백엔드 아키텍처 제안 신설 — MQTT pub/sub 토픽 체계·LWT · 소비자 서비스 분해(SVC-01~08) · 이벤트 카탈로그 · 1단계 모듈러 모놀리스→2단계 분리
+    전략
+- version: rev 10.0
+  date: '2026-07-05'
+  summary: 3부 구조 재편 (0부 개요 · 1부 요구·추적 · 2부 시스템 설계 · 3부 UI 설계) · 물리 배치 장 신설 — SW-01~09·노드(EDGE/SRV/MGD) 식별자 · 장 번호 단일 소스(CH)
+- version: rev 11.0
+  date: '2026-07-05'
+  summary: 작업 분해(WP)·책임 배정(RACI) 레이어 — 0.3 RACI·읽기 가이드 · 1.5 WBS 2계층(A1~A9·B1·C1~C3) · 2.10 데이터 아키텍처(폴리글랏 저장소·축적·예지보전 3단 경로)
+    · 0부 사업 개요 우선 재배열
+- version: rev 12.0
+  date: '2026-07-05'
+  summary: 영상 원본 저장 위치 4안 병렬 비교(무NVR 포함 — 기본안 없음) · 2.9 ERD 도메인 재작도+저장소 연계 · 2.12 보안 2p(설계 입력 체크리스트) · DISC-022~024 신규(보존
+    기준·가입 방식·개인정보) — 통합본 rev3 동기
+- version: rev 13.0
+  date: '2026-07-05'
+  summary: 기술문서 완성도 개편 — 문서 정보·개정 이력 전용 페이지·목차 전진 배치 · 사업 개요 재서술 · 밀집 페이지 분할·1페이지 1주제 · 그림 번호 체계 · 부록(식별자 인덱스·근거 문서) · 개조식
+    통일 · 헤더 칩 5유형 · 티켓 모델 용어 정리
+- version: v0.1
+  date: '2026-07-06'
+  summary: BoomEyes 문서 세트 통합 재발행 — 구 rev 13.0 계승 · 세트 버전 v0.1 (과업지시서·개발관리대장과 동반 개정) · 문서 번호 VIA-BE-SDD-001 · 3문서 단일 소스(SSOT)
+    생성·세트 정합 기계 검증
+- version: v0.2
+  date: '2026-07-06'
+  summary: 사업주 도입 — 7역할·A4 사업주 PWA 6화면(2단계 제안, DISC-026)·ENT-12 · 1단계 핵심 목표 = 데이터 인입(DISC-025) · 과업 기간 연장(~2026-12-31) · 목차
+    3페이지·앱별 그룹 · 문구 명료화
+- version: v0.3
+  date: '2026-09-04'
+  summary: 영상 구성 옵션화 — DISC-004·005·007 확정 해제 · 옵션 카탈로그·현장 프로파일(DISC-028) · 카메라 이벤트·라이브 수신 경로(DISC-029) · 바디캠 후보 제품군(DISC-030)
+    · 개인정보 표준 패키지(DISC-031) · 텔레메트리 발행 주체(DISC-032) · IF-015~017 · API-016 · FR-029~031 · NFR-013 · ENT-14~15 · 현장 네트워크 BOM(EDGE-05~07)
+basis_docs:
+- kind: 문서 세트 (SSOT 생성)
+  title: BoomEyes 과업지시서 — VIA-BE-SOW-001
+  version: v0.3 (pdf)
+  role: 과업 절(4.3.x·5.3.x)·산출물(OUT)·일정·역할 경계의 권위 — VIA 개정 제안 (DY 승인 대상)
+- kind: 문서 세트 (SSOT 생성)
+  title: BoomEyes 개발관리대장 — VIA-BE-RTM-001
+  version: v0.3 (xlsx)
+  role: DY·VIA 공동 관리 문서 — 결정(01_DISC 마스터)·검수(02_ACC)·일정·추적(04_TRACE)·산출물 상태
+- kind: 원본 근거
+  title: CPB 관제 시스템 개발 — DY 원본 기획
+  version: '20260703'
+  role: 사업 배경·니즈의 원천
+- kind: 원본 근거
+  title: 과업지시서 초안 (DY)
+  version: rev3 (docx)
+  role: 과업 원문·계약 조항(대금·기간 등) — 과업지시서 v0.3의 원본
+- kind: 원본 근거
+  title: 역할·권한 정의안
+  version: rev0.4
+  role: 6역할 × 기능 권한 매트릭스 — 2.12장·B4-04의 기준
+- kind: 파생·산출
+  title: 시연 시나리오 (930)
+  version: rev02
+  role: 1단계 검수(ACC-1xx) 장면 1~10 — DISC-017
+- kind: 파생·산출
+  title: 문서 체계·추적성 구성안
+  version: v1.3
+  role: 문서 세트·명명·식별자 거버넌스
+- kind: 참고 자료
+  title: 바디캠·AI CCTV·CPB 업무보고 (VIA)
+  version: v1.0 (pptx · 2026-09)
+  role: 영상 옵션 원천 — 바디캠 3안 · 2채널 구성 · 이벤트 레인 · 녹화 3안 (DISC-028~030)
+- kind: 참고 자료
+  title: 바디캠·AI CCTV 옵션 검토 메모 (VIA)
+  version: v0.1 (2026-09-04)
+  role: 제품 스펙·데이터 수신 형태·현장 네트워크·개인정보 절차 (DISC-029~031)

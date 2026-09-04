@@ -1,0 +1,47 @@
+# yaml-language-server: $schema=./schema/glossary.schema.json
+# 생성: tools/ssot/convert_from_archive.py (아카이브 docset v0.3 + v2.0 델타) — 이후 이 파일이 원천
+terms:
+- term: CPB
+  definition: Concrete Placing Boom — 콘크리트 타설 붐 장비. 본 시스템의 관제 대상 (호기 1~120)
+- term: E-코드
+  definition: '고장 에러코드 (예: E-021 전압 이상) — 체계는 DISC-012로 DY 확정 대상'
+- term: NVR
+  definition: Network Video Recorder — 녹화 옵션 중 하나(소형 NVR, PoE 내장) · 현장 프로파일에서 선택 (DISC-005·007·028)
+- term: 건설사
+  definition: CPB를 임차해 현장에서 사용하는 고객사 (G/S 건설 등)
+- term: 바디캠
+  definition: 착용형 카메라 — 이동형 영상정보처리기기 · 운영 A 파일 수집 / B 도킹+API / C LTE 라이브 (DISC-030)
+- term: 쇼케이스
+  definition: 방문자·경영진 대상 읽기 전용 프레젠테이션 모드 (개인정보 마스킹)
+- term: 수송관·필터
+  definition: 도달률 기반 점검·교체 알림 대상 마모·교체 부품 (임계값 DISC-013·014)
+- term: 업무 (Case)
+  definition: 티켓 모델 — 알림·요청에서 발행 → 담당 처리 → 완료(해소). ENT-06, 상태 모델은 2.11장
+- term: 업무함
+  definition: 업무(티켓)의 수신·처리 인박스 (Task Inbox) — 현장 안전관리자가 처리 주체
+- term: 에스컬레이션
+  definition: ITSM 표준 용어 — 발행된 티켓(업무)이 임계 시간(제안 1h) 내 미접수일 때 상위(본사·관제)로 자동 통보하는 규칙
+- term: 운영사
+  definition: CPB를 보유·임대·정비·관제하는 회사 (DY)
+- term: 이동형 영상정보처리기기
+  definition: 착용·휴대하거나 이동 가능한 물체에 부착한 카메라 — 바디캠·CPB 장착 카메라 (개인정보보호법 제2조 제7호의2 · 제25조의2)
+- term: 타설
+  definition: 콘크리트를 부어 넣는 작업 — CPB의 주 가동 상태
+- term: 텔레메트리
+  definition: 제어기 또는 CPB 제어 장치가 송신하는 장비 상태 데이터 (GPS·LTE·CAN·IO·전압·단선·고장코드) — 발행 주체는 DISC-032
+- term: 현장 프로파일
+  definition: 현장 개설 시 선택하는 영상·네트워크·바디캠·개인정보·텔레메트리 옵션 조합 (DISC-028)
+- term: 호기
+  definition: '운영사가 보유한 CPB 장비의 일련 단위 (예: 1~5호기)'
+- term: 마모·교체 부품
+  replaces: 소모품
+  definition: CPB 이송계통에서 마모·손상으로 점검·교체하는 부품 — 직관·이송배관 / 엘보·리듀서 / 플랜지·클램프 / 가스켓·안전핀(R-clip) / 엔드호스·엔드피팅. 사용 가능 여부는 두께 측정과 OEM
+    기준으로 판단 (DISC-038)
+- term: 이벤트 복기
+  definition: event_id와 공통 시각을 기준으로 일반 CCTV·AI CCTV·바디캠·CPB 상태·부품 이력을 함께 재생·검토하는 절차 (B1-08 · FR-033 · DISC-039)
+- term: AI 판단 불가
+  definition: 영상 장애(정지화면·흐림·가림·수신 끊김) 중 AI 판단이 불가한 상태 — 화면은 정상으로 표시하지 않고 이 상태를 명시한다 (FR-034)
+- term: event_id
+  definition: 감지 이벤트의 고유 식별자 — 알림·클립·복기·부품 이력을 연결하는 축 (DISC-039)
+- term: 부품 태그
+  definition: 부품에 부착하는 QR/RFID 식별 태그 — 점검·교체 입력 시 스캔 (IF-019 · DISC-043)

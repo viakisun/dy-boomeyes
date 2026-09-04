@@ -1,0 +1,565 @@
+# yaml-language-server: $schema=./schema/interfaces.schema.json
+# 생성: tools/ssot/convert_from_archive.py (아카이브 docset v0.3 + v2.0 델타) — 이후 이 파일이 원천
+if:
+- id: IF-001
+  segment: CPB 전장 → 제어기
+  protocol: CAN / CAN FD (또는 USB-CAN)
+  data: 펌프·붐대 등 장비 상태값 (DY 데이터맵)
+  trigger: 상시 수집
+  phase: 1
+  optional: false
+  basis:
+    text: 별첨 1-3.2 · 03시트
+    disc: []
+    sections: []
+  screens:
+  - A1-05
+  - A2-04
+- id: IF-002
+  segment: CPB 전장 → 제어기
+  protocol: DI/DO 접점 (전압 감시 릴레이·단선 감지 회로)
+  data: 380V 정상/이상 · 하네스 단선 · IO 채널
+  trigger: 상태 변화 시
+  phase: 1
+  optional: false
+  basis:
+    text: 별첨 1-3.2 (전장 변환은 DY 범위)
+    disc: []
+    sections: []
+  screens:
+  - A1-05
+  - B4-05
+- id: IF-003
+  segment: GNSS 위성 → GPS 모듈
+  protocol: GNSS (LTE 모듈 내장 또는 외장)
+  data: 위도·경도·정확도(3~10m)·수신 상태
+  trigger: 상시
+  phase: 1
+  optional: false
+  basis:
+    text: 별첨 1-3.2 · 03시트
+    disc: []
+    sections: []
+  screens:
+  - B1-02
+  - B2-02
+- id: IF-004
+  segment: 제어기 → 브로커/서버
+  protocol: MQTT pub (QoS 1 · LWT=통신두절) — 토픽 cpb/v1/{site}/{device}/… · 1단계 HTTP 폴백 / JSON (cpb.v0.1) / LTE
+  data: 텔레메트리 전 항목 (2.6 프로토콜)
+  trigger: 주기 송신 + 이벤트
+  phase: 1
+  optional: false
+  basis:
+    text: 별첨 1-3.5 · 05시트 · 2.2
+    disc: []
+    sections: []
+  screens:
+  - B1-02
+  - A1-05
+- id: IF-005
+  segment: 카메라 2대 → 현장망 (PoE)
+  protocol: RTSP / ONVIF · PoE 급전 — 일반(전방 조망) · AI(붐 끝 하향, 사람·차량 분류 온보드)
+  data: 실시간 영상 2채널 — 메인/서브스트림 (기종·해상도 현장 프로파일)
+  trigger: 상시 스트림
+  phase: 1
+  optional: false
+  basis:
+    text: DISC-004·029 · 4.3.8
+    disc:
+    - DISC-004
+    - DISC-029
+    sections:
+    - 4.3.8
+  screens:
+  - B1-02M
+  - A1-04
+- id: IF-006
+  segment: 현장망 → APP/WEB (라이브)
+  protocol: L1 LTE 라우터 VPN + 서버 풀 → HLS/WebRTC 중계 · L2 ISUP · L3 현장 박스 푸시 (옵션)
+  data: 본 스트림 + 저해상 스냅샷(5~10초 주기)
+  trigger: 선택 시 본 스트림
+  phase: 1
+  optional: false
+  basis:
+    text: DISC-029 · 4.3.8
+    disc:
+    - DISC-029
+    sections:
+    - 4.3.8
+  screens:
+  - B1-02M
+  - A1-04
+  - B3-02
+- id: IF-007
+  segment: 카메라/현장 → 서버 (녹화)
+  protocol: 옵션 — 서브스트림 서버 녹화 · SD/NVR/Edge 구간 회수(ISAPI ContentMgmt search/download)
+  data: 저장 영상 — 보존 기간 현장별
+  trigger: 상시 또는 회수 시
+  phase: 2
+  optional: false
+  basis:
+    text: DISC-005·007·028
+    disc:
+    - DISC-005
+    - DISC-007
+    - DISC-028
+    sections: []
+  screens:
+  - B1-02M
+- id: IF-008
+  segment: 서버 영상 스토어(S3) → APP/WEB
+  protocol: HTTPS — 저장 영상 조회·접근 권한
+  data: 영상 메타 (camera_id·유형·ingest_type·stream_url·retention 현장별)
+  trigger: 조회 시
+  phase: 2
+  optional: false
+  basis:
+    text: DISC-005·007·028
+    disc:
+    - DISC-005
+    - DISC-007
+    - DISC-028
+    sections: []
+  screens:
+  - B1-02M
+- id: IF-009
+  segment: AWS 서버 ↔ APP/WEB
+  protocol: HTTPS / JSON (조회·명령 API)
+  data: 화면 데이터 전반 (2.6 API 목록)
+  trigger: 요청 시
+  phase: 1
+  optional: false
+  basis:
+    text: 4.3.5
+    disc: []
+    sections:
+    - 4.3.5
+  screens: []
+  note: 전 화면
+- id: IF-010
+  segment: 실시간 GW(SVC-04) → APP/WEB
+  protocol: WebSocket 또는 SSE (Polling 폴백) — 권한 스코프별 팬아웃
+  data: 실시간 상태·알림·토스트 갱신
+  trigger: 이벤트 푸시
+  phase: 1
+  optional: false
+  basis:
+    text: 별첨 1-3.5 · 2.11 · 2.2
+    disc: []
+    sections: []
+  screens:
+  - B1-02
+  - A1-02
+- id: IF-011
+  segment: APP/WEB → AWS 서버
+  protocol: HTTPS 멀티파트 업로드
+  data: 서류 파일 (촬영 업로드 · 제작증·성적서 등)
+  trigger: 제출 시
+  phase: 1
+  optional: false
+  basis:
+    text: 4.3.10
+    disc: []
+    sections:
+    - 4.3.10
+  screens:
+  - A2-05
+  - B3-04
+- id: IF-012
+  segment: 관리자 WEB → AWS 서버
+  protocol: HTTPS 업로드 / YAML·JSON
+  data: 프로토콜 정의 파일 · 샘플 데이터
+  trigger: 업로드 시
+  phase: 1
+  optional: false
+  basis:
+    text: 06시트
+    disc: []
+    sections: []
+  screens:
+  - B4-02
+- id: IF-013
+  segment: APP/WEB → 지도 타일 서버
+  protocol: HTTPS (CARTO/OSM 타일)
+  data: 라이트 베이스맵 타일
+  trigger: 지도 표시 시
+  phase: 1
+  optional: false
+  basis:
+    text: 화면 설계 (B1-02·B2-02)
+    disc: []
+    sections: []
+  screens:
+  - B1-02
+  - B2-02
+- id: IF-014
+  segment: AWS 서버 → PWA
+  protocol: Web Push (PWA 알림)
+  data: 고장·에스컬레이션·서류 알림 딥링크
+  trigger: 이벤트 발생 시
+  phase: 1
+  optional: false
+  basis:
+    text: 4.3.1·4.3.2 (푸시 딥링크)
+    disc: []
+    sections:
+    - 4.3.1
+    - 4.3.2
+  screens:
+  - A1-02
+  - A2-02
+  - A3-02
+- id: IF-015
+  segment: AI 카메라 → 미들웨어 (이벤트)
+  protocol: E1 HTTP POST(EventNotificationAlert XML + 스냅샷, VPN 불요) · E2 alertStream · E3 ONVIF 이벤트 · E4 ISUP · E5 MQTT(AXIS)
+    — 정규화·CPB 결합은 SVC-01
+  data: 사람/차량 감지 이벤트 (대상·구역·시각·스냅샷)
+  trigger: 이벤트 발생 시
+  phase: 2
+  optional: false
+  basis:
+    text: DISC-029 · FR-028
+    disc:
+    - DISC-029
+    sections: []
+  screens:
+  - A1-04
+  - B1-02M
+- id: IF-016
+  segment: 바디캠 → 서버 (업로드)
+  protocol: A 도킹 → 폴더/FTP · B AXIS Content Destination API(HTTPS·인증서 · MKV/MP4 + 메타·GNSS·북마크) · C 제조사 플랫폼 API
+  data: 착용 영상 파일 · 세션(체크인~체크아웃) · 위치 · 태그
+  trigger: 도킹 시 / 상시
+  phase: 1
+  optional: true
+  basis:
+    text: DISC-030
+    disc:
+    - DISC-030
+    sections: []
+  screens:
+  - B3-02
+  - A1-04
+- id: IF-017
+  segment: 바디캠 스토어(S3) → APP/WEB
+  protocol: HTTPS — 세션·태그·보존 홀드·열람 로그
+  data: 바디캠 영상 메타 · 재생 URL
+  trigger: 조회 시
+  phase: 1
+  optional: true
+  basis:
+    text: DISC-030·031
+    disc:
+    - DISC-030
+    - DISC-031
+    sections: []
+  screens:
+  - B3-02
+  - A1-04
+- id: IF-018
+  segment: 현장 수집 계층 ↔ 서버 (시간 동기·재전송)
+  protocol: NTP/PTP 시각 동기 · 로컬 버퍼(Edge/SD) → 복구 후 누락분 재전송(세그먼트·이벤트)
+  data: 영상 세그먼트·이벤트·바디캠 파일의 공통 시각·event_id
+  trigger: 장애 복구 시 / 상시
+  phase: 2
+  optional: false
+  basis:
+    text: v2.0 §8·12 / DISC-039·040
+    disc:
+    - DISC-039
+    - DISC-040
+    sections: []
+  screens:
+  - B1-08
+  - B1-02M
+- id: IF-019
+  segment: 부품 태그 → PWA
+  protocol: QR(카메라 스캔) 또는 RFID(NFC) — 방식 DISC-043
+  data: 부품 ID · 품번 · 로트
+  trigger: 점검·교체 시
+  phase: 2
+  optional: false
+  basis:
+    text: v2.0 §12 부품 태그 / DISC-043
+    disc:
+    - DISC-043
+    sections: []
+  screens:
+  - A1-11
+  - A2-09
+api:
+- id: API-001
+  resource: 인증·세션
+  summary: 로그인 · 토큰 발급 · 역할 확인 (B0 공통)
+  if:
+  - IF-009
+- id: API-002
+  resource: 사용자·권한
+  summary: 계정 CRUD · 7역할 권한 매트릭스 (사업주 포함 — DISC-026)
+  if:
+  - IF-009
+- id: API-003
+  resource: 텔레메트리 수신
+  summary: 제어기 JSON 수신 · 검증 · 저장 (서버측 IF-004)
+  if:
+  - IF-004
+- id: API-004
+  resource: 장비 조회
+  summary: 장비 목록·상세·실시간 상태
+  if:
+  - IF-009
+- id: API-005
+  resource: 현황 집계
+  summary: 지역 분포·KPI·현장별 요약
+  if:
+  - IF-009
+- id: API-006
+  resource: 업무(케이스)
+  summary: 목록·상세·접수·완료·이력 (append-only)
+  if:
+  - IF-009
+- id: API-007
+  resource: 신청·승인
+  summary: 현장 개설·장비 추가·서류 요청 + 승인/반려
+  if:
+  - IF-009
+- id: API-008
+  resource: 서류
+  summary: 업로드·조회·검토(승인/반려)·완비율
+  if:
+  - IF-011
+  - IF-009
+- id: API-009
+  resource: 알림
+  summary: 목록·확인 처리·기준(임계값) 관리
+  if:
+  - IF-009
+  - IF-010
+  - IF-014
+- id: API-010
+  resource: 영상 메타·접근
+  summary: 카메라(현장 프로파일별)·스트림·저장 영상 접근 정보 · 카메라 이벤트 수신
+  if:
+  - IF-008
+  - IF-009
+  - IF-015
+- id: API-011
+  resource: 프로토콜 관리
+  summary: 정의 업로드·버전·파싱/알림 테스트
+  if:
+  - IF-012
+- id: API-012
+  resource: 마스터 관리
+  summary: 현장·호기(1~120)·배정·임대 기간
+  if:
+  - IF-009
+- id: API-013
+  resource: 근태·점검
+  summary: 출근 체크인/아웃 · 일일점검 제출
+  if:
+  - IF-009
+- id: API-014
+  resource: 기록·리포트
+  summary: 기간 집계 · 이력 조회 · PDF 내보내기
+  if:
+  - IF-009
+- id: API-015
+  resource: 에스컬레이션
+  summary: 미접수 임계 판정 · 자동 통보 이력
+  if:
+  - IF-010
+  - IF-014
+- id: API-016
+  resource: 바디캠·개인정보
+  summary: 바디캠 세션·영상 메타·홀드 · 동의 상태·촬영 표시·열람 로그 (옵션)
+  if:
+  - IF-016
+  - IF-017
+  - IF-009
+- id: API-017
+  resource: 부품·재고
+  summary: 부품 등록·장착·점검·교체·폐기 이력 · 재고·안전재고·발주 (FR-032·035)
+  if:
+  - IF-009
+  - IF-019
+- id: API-018
+  resource: 이벤트 복기
+  summary: event_id 기준 4소스 세그먼트·메타 조회 · 공통 시각 정렬 · 원본 보존 잠금 (FR-033 · NFR-015)
+  if:
+  - IF-008
+  - IF-017
+  - IF-018
+topics:
+- topic: cpb/v1/{site_id}/{device_id}/telemetry
+  direction: 제어기 → 브로커
+  payload: 주기 텔레메트리 (cpb.v0.1 JSON)
+  qos: QoS 1 · retain 없음
+- topic: cpb/v1/{site_id}/{device_id}/event
+  direction: 제어기 → 브로커
+  payload: 고장코드·임계 초과 등 이벤트
+  qos: QoS 1
+- topic: cpb/v1/{site_id}/{device_id}/health
+  direction: 제어기 → 브로커
+  payload: 에이전트 상태 (Health Check)
+  qos: QoS 1 · retain
+- topic: cpb/v1/{site_id}/{device_id}/lwt
+  direction: 브로커 발행 (Last Will)
+  payload: 비정상 연결 종료 = 통신 두절 감지
+  qos: 브로커 내장 — 「마지막 수신」 시나리오
+events:
+- event: telemetry.normalized
+  publisher: SVC-01
+  subscribers:
+  - SVC-02
+  - SVC-04
+  - SVC-08
+  summary: 검증·파싱 완료된 표준 텔레메트리
+- event: alert.raised
+  publisher: SVC-02
+  subscribers:
+  - SVC-03
+  - SVC-04
+  - SVC-05
+  summary: 알림 8종 판정 결과 (등급 포함)
+- event: case.created
+  publisher: SVC-03
+  subscribers:
+  - SVC-04
+  - SVC-05
+  summary: 업무 카드 생성
+- event: case.escalated
+  publisher: SVC-03
+  subscribers:
+  - SVC-04
+  - SVC-05
+  summary: 1h 미접수 — 본사·관제 통보
+- event: doc.expiring
+  publisher: SVC-06
+  subscribers:
+  - SVC-05
+  summary: 서류 만료 D-30 (스케줄러)
+- event: maintenance.due
+  publisher: SVC-08
+  subscribers:
+  - SVC-03
+  - SVC-05
+  summary: 예지보전 도래 (2단계)
+protocol:
+  version: cpb.v0.1
+  fields:
+  - group: 공통 헤더
+    fields:
+    - protocol_version
+    - device_id
+    - controller_id
+    - site_id
+    - timestamp
+    - sequence
+    summary: 장비 데이터 공통 식별자 — 버전 관리
+    required: true
+  - group: GPS
+    fields:
+    - latitude
+    - longitude
+    - accuracy
+    - speed
+    - heading
+    - fix_status
+    summary: 위치·수신 상태 → 지도 표시
+    required: true
+  - group: LTE/Wi-Fi
+    fields:
+    - network_type
+    - signal_strength
+    - carrier
+    - ip_address
+    - last_connected_at
+    summary: 통신 상태 (불량 기준 NFR-009)
+    required: true
+  - group: CAN
+    fields:
+    - can_channel
+    - can_id
+    - signal_name
+    - raw_value
+    - parsed_value
+    - unit
+    - status
+    summary: 장비 상태값 — 프로토콜 기반 파싱 (DISC-008)
+    required: true
+  - group: IO
+    fields:
+    - channel
+    - direction
+    - value
+    - status
+    summary: 입출력 채널 (DISC-009)
+    required: true
+  - group: 전압
+    fields:
+    - voltage_status
+    - voltage_value
+    - phase_status
+    - alert_level
+    summary: 380V 정상/이상 (DISC-010)
+    required: true
+  - group: 단선
+    fields:
+    - harness_id
+    - channel
+    - disconnected
+    - detected_at
+    summary: 하네스 단선 (DISC-011)
+    required: true
+  - group: 고장코드
+    fields:
+    - error_code
+    - error_name
+    - severity
+    - message
+    - source
+    summary: DY 정의 고장코드 (DISC-012)
+    required: true
+  - group: 수송관/필터
+    fields:
+    - part_type
+    - usage_value
+    - threshold
+    - remaining_ratio
+    - alert_required
+    summary: 소모품 임계 (DISC-013·014)
+    required: true
+  - group: 영상 메타데이터
+    fields:
+    - camera_id
+    - 유형(general/ai)
+    - ingest_type
+    - stream_url
+    - retention(현장별)
+    summary: 카메라 2채널·저장 영상 접근 정보 (현장 프로파일)
+    required: true
+  identifiers:
+  - id: site_id
+    summary: 현장 식별자
+  - id: device_id
+    summary: CPB 장비 식별자 — 텔레메트리·영상 연결 축
+  - id: controller_id
+    summary: Linux 제어기 식별자 (T2 시 CPB 제어 장치 식별자)
+  - id: camera_id
+    summary: CCTV 식별자
+  - id: bodycam_id
+    summary: 바디캠 식별자 (옵션)
+  - id: user_id
+    summary: 사용자 식별자
+  sample: |-
+    { "protocol_version": "cpb.v0.1", "device_id": "CPB-026", "controller_id": "CTRL-026-A",
+      "site_id": "SITE-GS-001", "timestamp": "2026-08-05T09:41:23+09:00",
+      "gps": { "latitude": 37.3941, "longitude": 127.1111, "accuracy": 5.2, "fix_status": "fixed" },
+      "network": { "type": "LTE", "signal_strength": -72, "status": "connected" },
+      "can": [ { "channel": "can0", "can_id": "0x18FF01", "signal_name": "pump_status", "parsed_value": "normal" } ],
+      "io": [ { "channel": "DI1", "direction": "input", "value": 1, "status": "normal" } ],
+      "power": { "voltage_status": "normal", "voltage_value": 380.0 },
+      "harness": { "disconnected": false },
+      "error": { "error_code": null, "severity": "none" },
+      "consumables": [ { "part_type": "pipe", "usage_value": 82, "threshold": 100, "alert_required": false } ] }

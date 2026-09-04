@@ -1,0 +1,1197 @@
+# yaml-language-server: $schema=./schema/contract.schema.json
+# 생성: tools/ssot/convert_from_archive.py (아카이브 docset v0.3 + v2.0 델타) — 이후 이 파일이 원천
+sections:
+- id: 4.3.1
+  name: 운전자 PWA APP
+  phase: 1
+  items:
+  - title: 로그인
+    screens:
+    - A2-01
+    status: reflected
+  - title: 본인 장비 확인
+    screens:
+    - A2-04
+    status: reflected
+  - title: 장비 기본 상태 확인
+    screens:
+    - A2-04
+    status: reflected
+  - title: 현장 정보 확인
+    screens:
+    - A2-06
+    status: reflected
+  - title: 고장·이상 알림 확인
+    screens:
+    - A2-02
+    status: reflected
+  - title: 간단 상태 확인·메모
+    screens:
+    - A2-02
+    status: reflected
+  - title: 내 서류 제출·관리 (촬영 업로드·만료 재제출)
+    screens:
+    - A2-05
+    status: reflected
+  - title: 출근 체크인
+    screens:
+    - A2-02
+    status: reflected
+  - title: 작업 전 일일점검 입력·전송
+    screens:
+    - A2-03
+    status: reflected
+  - title: 퇴근 체크아웃
+    screens: []
+    status: reflected
+- id: 4.3.2
+  name: 현장 안전관리자 PWA APP
+  phase: 1
+  items:
+  - title: 본인 현장 CPB 장비 목록
+    screens:
+    - A1-04
+    status: reflected
+  - title: 장비 상세 상태
+    screens:
+    - A1-05
+    status: reflected
+  - title: 실시간 CCTV 영상
+    screens:
+    - A1-04
+    - A1-05
+    status: reflected
+  - title: 저장 영상 조회 화면 구조
+    screens:
+    - A1-05
+    status: structure
+  - title: 관련 서류 열람 (제작증·비파괴)
+    screens:
+    - A1-05
+    status: reflected
+  - title: 알림 확인
+    screens:
+    - A1-02
+    status: reflected
+  - title: 현장 기본정보
+    screens:
+    - A1-07
+    status: reflected
+  - title: 이벤트 기반 업무함 (생성·완료·이력)
+    screens:
+    - A1-02
+    - A1-03
+    - A1-08
+    status: reflected
+  - title: 요청·신청 (장비·서류=업무 / 개설·종료=메뉴)
+    screens:
+    - A1-07
+    status: reflected
+  - title: 업무 목록 정렬·필터 (심각도·기한·발생)
+    screens:
+    - A1-02
+    status: reflected
+  - title: 본사 안전관리자 권한 모드
+    screens:
+    - A3-01
+    - A3-02
+    - A3-03
+    - A3-04
+    - A3-05
+    - A3-06
+    status: reflected
+    note: 별도 표면
+- id: 4.3.3
+  name: CPB 관제 반응형 WEB
+  phase: 1
+  items:
+  - title: 전체 CPB 현황
+    screens:
+    - B1-02
+    status: reflected
+  - title: 장비 상태 요약
+    screens:
+    - B1-02
+    status: reflected
+  - title: 지도 기반 위치 표시 (실지도)
+    screens:
+    - B1-02
+    - B2-02
+    status: reflected
+  - title: 호기별 장비 목록
+    screens:
+    - B1-06
+    status: reflected
+  - title: 장비 상세
+    screens:
+    - B1-02
+    - B2-03
+    status: reflected
+  - title: 실시간 영상 보기
+    screens:
+    - B1-02M
+    status: reflected
+  - title: 알림 목록
+    screens:
+    - B1-04
+    status: reflected
+  - title: 서류 현황
+    screens:
+    - B1-05
+    status: reflected
+  - title: 현장별 장비 배정 현황
+    screens:
+    - B2-02
+    - B4-03
+    status: reflected
+  - title: 스코프 3단 (운영사/본사/현장)
+    screens:
+    - B1-02
+    - B1-02M
+    - B1-03
+    - B1-04
+    - B1-05
+    - B1-06
+    - B1-07
+    - B1-08
+    - B2-02
+    - B2-03
+    - B2-04
+    - B3-02
+    - B3-03
+    - B3-04
+    - B3-05
+    - B3-06
+    - B3-07
+    status: reflected
+  - title: 쇼케이스 모드 (2단계 제안)
+    screens:
+    - B1-07
+    - B3-06
+    status: structure
+- id: 4.3.4
+  name: 관리자(백오피스) WEB
+  phase: 1
+  items:
+  - title: 장비 등록
+    screens:
+    - B4-03
+    status: reflected
+  - title: 현장 등록
+    screens:
+    - B4-03
+    status: reflected
+  - title: 현장별 장비 배정
+    screens:
+    - B4-03
+    status: reflected
+  - title: 사용자 등록
+    screens:
+    - B4-04
+    status: reflected
+  - title: 사용자 권한 설정
+    screens:
+    - B4-04
+    status: reflected
+  - title: 서류 등록
+    screens:
+    - B4-06
+    status: reflected
+  - title: 기본 알림 기준 등록
+    screens:
+    - B4-05
+    status: reflected
+  - title: 신청·요청 수신함
+    screens:
+    - B1-03
+    status: reflected
+    note: 운영사 관제로 배치
+  - title: 프로토콜 업로드
+    screens:
+    - B4-02
+    status: reflected
+  - title: 샘플 데이터 테스트
+    screens:
+    - B4-02
+    status: reflected
+- id: 4.3.5
+  name: AWS 서버/API/DB
+  phase: 1
+  items:
+  - title: 사용자 인증
+    screens:
+    - B0-01
+    status: reflected
+  - title: 권한 관리
+    screens:
+    - B4-04
+    status: reflected
+  - title: 수신 API·조회 API·파일 저장·로그·알림 생성·시연 데이터
+    screens: []
+    status: non-screen
+    note: 서버 구현
+- id: 4.3.6
+  name: 미들웨어·프로토콜 관리 기능
+  phase: 1
+  items:
+  - title: YAML 프로토콜 업로드·버전 등록
+    screens:
+    - B4-02
+    status: reflected
+  - title: 샘플 데이터 입력·파일 업로드·파싱 결과 확인
+    screens:
+    - B4-02
+    status: reflected
+  - title: 필드 누락·타입 오류·알림 테스트·화면 반영 확인
+    screens:
+    - B4-02
+    status: reflected
+- id: 4.3.7
+  name: Linux 제어기 샘플 에이전트
+  phase: 1
+  items:
+  - title: 장비ID·제어기ID·인증키 설정, 텔레메트리 샘플 송신, 실패 로그
+    screens: []
+    status: non-screen
+    note: 에이전트 구현
+- id: 4.3.8
+  name: CCTV 실시간 영상 연동
+  phase: 1
+  items:
+  - title: 카메라 선정·RTSP/ONVIF·PoE·LTE 송출
+    screens: []
+    status: non-screen
+    note: HW·연동
+  - title: 관제 WEB·안전관리자 APP 영상 표시
+    screens:
+    - B1-02M
+    - A1-04
+    status: reflected
+  - title: 장비-카메라 매핑
+    screens:
+    - B4-03
+    status: reflected
+  - title: 해상도·FPS·비트레이트 조정
+    screens:
+    - B1-02M
+    status: reflected
+    note: 4MP · 8fps 표기)
+- id: 4.3.9
+  name: 현장 개설 및 장비 배정
+  phase: 1
+  items:
+  - title: 현장 등록 (현장명·주소·건설사·담당자)
+    screens:
+    - B4-03
+    status: reflected
+    note: 신청
+  - title: CPB 장비 등록
+    screens:
+    - B4-03
+    status: reflected
+  - title: 현장별 장비 배정
+    screens:
+    - B4-03
+    - B1-03
+    status: reflected
+    note: 승인
+  - title: 설치일·완료예정일·임대기간 등록
+    screens:
+    - B1-06
+    status: reflected
+  - title: 현장별 장비 목록
+    screens:
+    - B2-02
+    status: reflected
+- id: 4.3.10
+  name: 서류 관리
+  phase: 1
+  items:
+  - title: 장비별·현장별 서류 첨부
+    screens:
+    - B4-06
+    status: reflected
+  - title: 제작증·비파괴검사 성적서
+    screens:
+    - A1-05
+    - B1-05
+    status: reflected
+  - title: 열람·다운로드
+    screens:
+    - B3-04
+    status: reflected
+  - title: 서류 미비 알림
+    screens:
+    - B1-05
+    status: reflected
+  - title: 운전자 서류 (제출·확인·반려·만료·출근연동)
+    screens:
+    - A2-05
+    - A1-02
+    status: reflected
+- id: 4.3.11
+  name: 기본 알림 및 이력 관리
+  phase: 1
+  items:
+  - title: 알림 8종 (통신·GPS·전압·단선·고장·서류·수송관·필터)
+    screens:
+    - A2-02
+    - A1-02
+    - B4-05
+    status: reflected
+  - title: 알림 확인 상태
+    screens:
+    - A1-02
+    status: reflected
+  - title: 기본 이력 저장
+    screens:
+    - A1-06
+    - A3-06
+    - B3-05
+    status: reflected
+  - title: 에스컬레이션 (제안 1시간)
+    screens:
+    - B1-04
+    status: reflected
+- id: 5.3.1
+  name: NVR 기반 저장 영상 조회 구조
+  phase: 2
+  items:
+  - title: 저장 영상 조회 UI 구조 선확보 — 저장 방식은 현장 프로파일 옵션 (DISC-005·007·028)
+    screens:
+    - B1-02M
+    - A1-05
+    status: structure
+- id: 5.3.2
+  name: 데이터 축적 구조
+  phase: 2
+  items:
+  - title: 비화면 (데이터 축적)
+    screens: []
+    status: non-screen
+- id: 5.3.3
+  name: 규칙 기반 예지보전 구조
+  phase: 2
+  items:
+  - title: 알림 기준 화면에 임계값 구조 선확보
+    screens:
+    - B4-05
+    status: structure
+- id: 5.3.4
+  name: 운영 리포트
+  phase: 2
+  items:
+  - title: 기록·리포트 / 보고 모드 구조 선확보
+    screens:
+    - B3-05
+    - B2-04
+    status: structure
+- id: 5.3.5
+  name: 권한 및 사용자 고도화
+  phase: 2
+  items:
+  - title: 6역할 매트릭스 선반영 — 고도화는 2단계
+    screens:
+    - B4-04
+    status: structure
+- id: 5.3.6
+  name: 서류 워크플로우 고도화
+  phase: 2
+  items:
+  - title: 요청·승인·반려·만료 흐름 선확보
+    screens:
+    - B3-04
+    - B1-05
+    status: structure
+- id: 5.3.7
+  name: 미들웨어 운영 기능 고도화
+  phase: 2
+  items:
+  - title: 업로드·테스트 확보 — 버전 이력·롤백은 2단계
+    screens:
+    - B4-02
+    status: structure
+rfp:
+- id: RFP-001
+  title: 개발 일정 (9/30 시연)
+  screens: []
+  status: documented
+  disc: []
+  note: 문서 소관 — 과업지시서 1.3 · 일정
+- id: RFP-002
+  title: 개발 비용 산정
+  screens: []
+  status: not-started
+  disc: []
+  note: 문서 소관 — 견적 별도
+- id: RFP-003
+  title: 운영 유지비 산정
+  screens: []
+  status: documented
+  disc:
+  - DISC-018
+  note: 문서 소관 — 개발관리대장 11_COST
+- id: RFP-004
+  title: 서버 비용·관리
+  screens: []
+  status: documented
+  disc:
+  - DISC-006
+  note: 문서 소관 — 과업 4.3.5
+- id: RFP-005
+  title: Linux 제어기 2set
+  screens: []
+  status: documented
+  disc:
+  - DISC-001
+  - DISC-002
+  note: 문서 소관 — 별첨 · 원본 첨부자료 03시트
+- id: RFP-006
+  title: (결번)
+  screens: []
+  status: void
+  disc: []
+- id: RFP-007
+  title: CCTV 실시간 영상
+  screens:
+  - A1-04
+  - A3-04
+  - B1-02M
+  - B2-03
+  - B3-02
+  status: reflected
+  disc:
+  - DISC-004
+- id: RFP-008
+  title: 저장 영상 7일 조회
+  screens:
+  - B1-02M
+  - A1-05
+  - A3-04
+  status: reflected
+  disc:
+  - DISC-005
+  - DISC-007
+  note: 재생은 2단계
+- id: RFP-009
+  title: GPS 위치 확인
+  screens:
+  - B1-02
+  - B2-02
+  status: reflected
+  disc: []
+  note: 실지도
+- id: RFP-010
+  title: LTE/Wi-Fi 통신 상태
+  screens:
+  - A1-05
+  - A2-04
+  - B1-02
+  status: reflected
+  disc: []
+- id: RFP-011
+  title: CAN 데이터 연동
+  screens:
+  - A1-05
+  - A2-04
+  status: reflected
+  disc:
+  - DISC-008
+- id: RFP-012
+  title: IO 데이터 연동
+  screens:
+  - A1-05
+  status: reflected
+  disc:
+  - DISC-009
+  note: 전압 · 단선 간접)
+- id: RFP-013
+  title: 380V 전압 상태
+  screens:
+  - A1-05
+  - A2-04
+  - B1-02
+  status: reflected
+  disc:
+  - DISC-010
+  note: E-021
+- id: RFP-014
+  title: 하네스 단선
+  screens:
+  - A1-05
+  - B1-02
+  status: reflected
+  disc:
+  - DISC-011
+  note: E-014
+- id: RFP-015
+  title: 고장 에러코드·원격 진단
+  screens:
+  - A1-03
+  - A2-02
+  - B1-02
+  - B4-05
+  status: reflected
+  disc:
+  - DISC-012
+- id: RFP-016
+  title: 수송관 점검 알림
+  screens:
+  - A2-04
+  - A1-05
+  - B4-05
+  status: reflected
+  disc:
+  - DISC-013
+- id: RFP-017
+  title: 필터류 교체 알림
+  screens:
+  - A2-04
+  - A1-05
+  - B4-05
+  status: reflected
+  disc:
+  - DISC-014
+- id: RFP-018
+  title: 모바일 앱 (PWA)
+  screens:
+  - A1-01
+  - A1-02
+  - A1-03
+  - A1-04
+  - A1-05
+  - A1-06
+  - A1-07
+  - A1-08
+  - A1-11
+  - A2-01
+  - A2-02
+  - A2-03
+  - A2-04
+  - A2-05
+  - A2-06
+  - A2-09
+  - A3-01
+  - A3-02
+  - A3-03
+  - A3-04
+  - A3-05
+  - A3-06
+  status: reflected
+  disc: []
+- id: RFP-019
+  title: PC 상황실 S/W
+  screens:
+  - B1-02
+  - B1-02M
+  - B1-03
+  - B1-04
+  - B1-05
+  - B1-06
+  - B1-07
+  - B1-08
+  - B0-01
+  status: reflected
+  disc: []
+- id: RFP-020
+  title: 서류 관리 (권한별)
+  screens:
+  - A2-05
+  - A1-02
+  - B3-04
+  - B1-05
+  - B4-06
+  status: reflected
+  disc:
+  - DISC-016
+- id: RFP-021
+  title: CPB 회사용 화면 (전체 스코프)
+  screens:
+  - B1-02
+  - B1-02M
+  - B1-03
+  - B1-04
+  - B1-05
+  - B1-06
+  - B1-07
+  - B1-08
+  status: reflected
+  disc: []
+  note: 쇼케이스
+- id: RFP-022
+  title: 안전관리자용 화면 (자사 범위)
+  screens:
+  - A3-01
+  - A3-02
+  - A3-03
+  - A3-04
+  - A3-05
+  - A3-06
+  - B2-02
+  - B2-03
+  - B2-04
+  - B3-02
+  - B3-03
+  - B3-04
+  - B3-05
+  - B3-06
+  - B3-07
+  status: reflected
+  disc:
+  - DISC-015
+- id: RFP-023
+  title: 프로토콜 관리 (업로드·테스트)
+  screens:
+  - B4-02
+  status: reflected
+  disc: []
+- id: RFP-024
+  title: 샘플 에이전트
+  screens: []
+  status: development
+  disc: []
+  note: 개발 소관 — 별첨 1-3.6
+- id: RFP-025
+  title: 프로토타입 시연 (9/30)
+  screens: []
+  status: reflected
+  disc:
+  - DISC-017
+  note: 전 목업 7종 · 화면 41종 완비
+- id: EXT-1
+  label: 확장-1
+  title: 업무함 구조·행위 권한 (Task Inbox)
+  screens:
+  - A1-02
+  - A1-03
+  - A1-08
+  - A3-05
+  - B3-03
+  - B1-03
+  status: reflected
+  disc: []
+- id: EXT-2
+  label: 확장-2
+  title: 출근·일일점검·운전자 서류 흐름
+  screens:
+  - A2-02
+  - A2-03
+  - A2-05
+  status: reflected
+  disc: []
+- id: EXT-3
+  label: 확장-3
+  title: 에스컬레이션 (미접수 자동 통보)
+  screens:
+  - B1-04
+  - A3-02
+  - A1-02
+  status: reflected
+  disc: []
+- id: EXT-4
+  label: 확장-4
+  title: 임대 계약 관리
+  screens:
+  - B1-06
+  status: reflected
+  disc: []
+  note: 2단계 제안
+- id: EXT-5
+  label: 확장-5
+  title: 사업주 스코프 — 보유·가용 현황·투입 요청·운전자 배치
+  screens:
+  - A4-01
+  - A4-02
+  - A4-03
+  - A4-04
+  - A4-05
+  - A4-06
+  status: phase2
+  disc:
+  - DISC-026
+  note: 제안 (DISC-026
+outputs:
+- id: OUT-001
+  name: 운전자 PWA APP
+  phase: 1
+  lead_wp: WP-A3
+  contrib_wp:
+  - WP-A1
+  - WP-A4
+- id: OUT-002
+  name: 현장 안전관리자 PWA APP
+  phase: 1
+  lead_wp: WP-A3
+  contrib_wp:
+  - WP-A1
+  - WP-A4
+- id: OUT-003
+  name: CPB 관제 반응형 WEB
+  phase: 1
+  lead_wp: WP-A2
+  contrib_wp:
+  - WP-A1
+  - WP-A4
+  - WP-A7
+- id: OUT-004
+  name: 관리자 WEB
+  phase: 1
+  lead_wp: WP-A2
+  contrib_wp:
+  - WP-A1
+  - WP-A4
+  - WP-A5
+- id: OUT-005
+  name: AWS 서버/API/DB
+  phase: 1
+  lead_wp: WP-A4
+  contrib_wp:
+  - WP-A8
+- id: OUT-006
+  name: 미들웨어·프로토콜 관리 기능
+  phase: 1
+  lead_wp: WP-A5
+  contrib_wp:
+  - WP-A4
+- id: OUT-007
+  name: Linux 제어기 샘플 에이전트
+  phase: 1
+  lead_wp: WP-A6
+  contrib_wp:
+  - WP-C2
+- id: OUT-008
+  name: CCTV 실시간 영상 연동
+  phase: 1
+  lead_wp: WP-A7
+  contrib_wp:
+  - WP-C3
+  - WP-A8
+- id: OUT-009
+  name: 현장 개설 및 장비 배정 기능
+  phase: 1
+  lead_wp: WP-A4
+  contrib_wp:
+  - WP-A2
+  - WP-A3
+- id: OUT-010
+  name: 서류 관리 기능
+  phase: 1
+  lead_wp: WP-A4
+  contrib_wp:
+  - WP-A2
+  - WP-A3
+- id: OUT-011
+  name: 알림 및 이력 관리 기능
+  phase: 1
+  lead_wp: WP-A4
+  contrib_wp:
+  - WP-A2
+  - WP-A3
+- id: OUT-012
+  name: NVR 기반 저장 영상 조회 구조
+  phase: 2
+  lead_wp: WP-A7
+  contrib_wp:
+  - WP-C3
+- id: OUT-013
+  name: 데이터 축적 구조
+  phase: 2
+  lead_wp: WP-A9
+  contrib_wp:
+  - WP-A4
+  - WP-A8
+- id: OUT-014
+  name: 규칙 기반 예지보전 구조
+  phase: 2
+  lead_wp: WP-A9
+  contrib_wp:
+  - WP-A4
+- id: OUT-015
+  name: 운영 리포트
+  phase: 2
+  lead_wp: WP-A4
+  contrib_wp:
+  - WP-A2
+- id: OUT-016
+  name: 최종 문서 산출물
+  phase: 2
+  lead_wp: WP-B1
+  contrib_wp: []
+acceptance:
+- id: ACC-001
+  date: '2026-09-10'
+  area: 로그인
+  criterion: 사용자 로그인 가능
+  outputs:
+  - OUT-001
+  - OUT-002
+  - OUT-003
+  - OUT-004
+  - OUT-005
+  note: '원본 참조: OUT-012~015 (구 번호 체계 — v0.1 재매핑)'
+  status: defined
+- id: ACC-002
+  date: '2026-09-10'
+  area: 권한 분리
+  criterion: CPB 회사용/건설사 안전관리자용 화면 분리
+  outputs:
+  - OUT-003
+  - OUT-004
+  note: '원본 참조: OUT-012 (구 번호 체계 — v0.1 재매핑)'
+  status: defined
+- id: ACC-005
+  date: '2026-09-10'
+  area: 지도
+  criterion: GPS 데이터 기반 장비 위치 표시
+  outputs:
+  - OUT-003
+  note: '원본 참조: OUT-007,012,013 (구 번호 체계 — v0.1 재매핑)'
+  status: defined
+- id: ACC-006
+  date: '2026-09-10'
+  area: 상태 표시
+  criterion: LTE, CAN, IO, 전압, 단선 상태 표시
+  outputs:
+  - OUT-003
+  - OUT-005
+  note: '원본 참조: OUT-007,008 (구 번호 체계 — v0.1 재매핑)'
+  status: defined
+- id: ACC-007
+  date: '2026-09-10'
+  area: 영상
+  criterion: 실시간 영상 표시 화면 구현
+  outputs:
+  - OUT-008
+  note: '원본 참조: OUT-016 (구 번호 체계 — v0.1 재매핑)'
+  status: defined
+- id: ACC-008
+  date: '2026-09-10'
+  area: 저장 영상
+  criterion: 저장 영상 조회 화면 구현
+  outputs:
+  - OUT-012
+  note: '원본 참조: OUT-016 (구 번호 체계 — v0.1 재매핑)'
+  status: defined
+- id: ACC-009
+  date: '2026-09-10'
+  area: 정의 필요
+  criterion: 매핑표 참조 존재 — 검수 기준 정의 보완 필요 (rev2 플래그)
+  outputs: []
+  note: null
+  status: undefined
+- id: ACC-010
+  date: '2026-09-10'
+  area: 정의 필요
+  criterion: 매핑표 참조 존재 — 검수 기준 정의 보완 필요 (rev2 플래그)
+  outputs: []
+  note: null
+  status: undefined
+- id: ACC-011
+  date: '2026-09-10'
+  area: 프로토콜
+  criterion: 프로토콜 파일 업로드 및 검증 가능
+  outputs:
+  - OUT-006
+  note: '원본 참조: OUT-009 (구 번호 체계 — v0.1 재매핑)'
+  status: defined
+- id: ACC-012
+  date: '2026-09-10'
+  area: 샘플 테스트
+  criterion: 샘플 데이터 입력 및 파싱 결과 확인 가능
+  outputs:
+  - OUT-006
+  note: '원본 참조: OUT-010 (구 번호 체계 — v0.1 재매핑)'
+  status: defined
+- id: ACC-013
+  date: '2026-09-10'
+  area: 에이전트
+  criterion: Linux 에이전트 샘플코드 제공
+  outputs:
+  - OUT-007
+  note: '원본 참조: OUT-011 (구 번호 체계 — v0.1 재매핑)'
+  status: defined
+- id: ACC-014
+  date: '2026-09-10'
+  area: 정의 필요
+  criterion: 매핑표 참조 존재 — 검수 기준 정의 보완 필요 (rev2 플래그)
+  outputs: []
+  note: null
+  status: undefined
+- id: ACC-101
+  date: '2026-09-30'
+  area: 장비 연동
+  criterion: 프로토타입 장비 2set 데이터 수신
+  outputs:
+  - OUT-005
+  - OUT-007
+  note: '원본 참조: OUT-020 (구 번호 체계 — v0.1 재매핑)'
+  status: defined
+- id: ACC-102
+  date: '2026-09-30'
+  area: 정의 필요
+  criterion: 매핑표 참조 존재 — 검수 기준 정의 보완 필요 (rev2 플래그)
+  outputs: []
+  note: null
+  status: undefined
+- id: ACC-103
+  date: '2026-09-30'
+  area: 정의 필요
+  criterion: 매핑표 참조 존재 — 검수 기준 정의 보완 필요 (rev2 플래그)
+  outputs: []
+  note: null
+  status: undefined
+- id: ACC-104
+  date: '2026-09-30'
+  area: 영상 시연
+  criterion: CCTV 실시간 영상 표시
+  outputs:
+  - OUT-008
+  note: '원본 참조: OUT-016 (구 번호 체계 — v0.1 재매핑)'
+  status: defined
+- id: ACC-105
+  date: '2026-09-30'
+  area: 저장 시연
+  criterion: 7일 저장 정책 기준 저장 영상 조회 구조 시연
+  outputs:
+  - OUT-012
+  note: '원본 참조: OUT-016 (구 번호 체계 — v0.1 재매핑) · 저장 방식은 현장 프로파일 옵션 (DISC-005·028)'
+  status: defined
+- id: ACC-106
+  date: '2026-09-30'
+  area: 정의 필요
+  criterion: 매핑표 참조 존재 — 검수 기준 정의 보완 필요 (rev2 플래그)
+  outputs: []
+  note: null
+  status: undefined
+- id: ACC-107
+  date: '2026-09-30'
+  area: 정의 필요
+  criterion: 매핑표 참조 존재 — 검수 기준 정의 보완 필요 (rev2 플래그)
+  outputs: []
+  note: null
+  status: undefined
+- id: ACC-108
+  date: '2026-09-30'
+  area: 정의 필요
+  criterion: 매핑표 참조 존재 — 검수 기준 정의 보완 필요 (rev2 플래그)
+  outputs: []
+  note: null
+  status: undefined
+- id: ACC-109
+  date: '2026-09-30'
+  area: 미들웨어 시연
+  criterion: 프로토콜 업로드 및 샘플 데이터 테스트 시연
+  outputs:
+  - OUT-006
+  note: '원본 참조: OUT-009,010 (구 번호 체계 — v0.1 재매핑)'
+  status: defined
+- id: ACC-110
+  date: '2026-09-30'
+  area: 콘솔
+  criterion: PC 상황실 관제 화면 시연
+  outputs:
+  - OUT-003
+  note: '원본 참조: OUT-013 (구 번호 체계 — v0.1 재매핑)'
+  status: defined
+- id: ACC-111
+  date: '2026-09-30'
+  area: 모바일
+  criterion: 모바일 PWA 화면 시연
+  outputs:
+  - OUT-001
+  - OUT-002
+  note: '원본 참조: OUT-012 (구 번호 체계 — v0.1 재매핑)'
+  status: defined
+wp:
+- id: WP-A1
+  title: UI 설계·디자인 시스템
+  sw: []
+  outputs: []
+  done_when: 화면 41종·컴포넌트 확정 (본 설계서 합의)
+  phase1: 41화면·디자인 시스템
+  phase2: 신규 화면·고도화 지원
+  depends: WP-C1 (DISC-019·021)
+  chapter_key: design
+- id: WP-A2
+  title: 웹 프론트엔드
+  sw:
+  - SW-07
+  outputs:
+  - OUT-003
+  - OUT-004
+  done_when: B0~B4 21화면 구현 · ACC-002·110
+  phase1: 21화면 · IF-009/010 계약 · 시퀀스
+  phase2: 리포트·쇼케이스 고도화
+  depends: WP-A1 · WP-A4(API)
+  chapter_key: ifc
+- id: WP-A3
+  title: 모바일 PWA
+  sw:
+  - SW-08
+  outputs:
+  - OUT-001
+  - OUT-002
+  done_when: A1~A3 20화면 · ACC-001·111
+  phase1: 20화면 · 딥링크(IF-014) · 업로드(IF-011)
+  phase2: 오프라인·고도화
+  depends: WP-A1 · WP-A4(API)
+  chapter_key: ifc
+- id: WP-A4
+  title: 백엔드 코어
+  sw:
+  - SW-02
+  - SW-03
+  - SW-05
+  - SW-09
+  outputs:
+  - OUT-005
+  - OUT-009
+  - OUT-010
+  - OUT-011
+  - OUT-015
+  done_when: API-001~015 · 이벤트 계약 · ACC-006
+  phase1: SVC 모듈·상태 머신(2.11)·수신
+  phase2: SW-09 분리 · 리포트 고도화
+  depends: WP-C2(데이터맵) · WP-A5(파서)
+  chapter_key: backend
+- id: WP-A5
+  title: 미들웨어·파서
+  sw:
+  - SW-04
+  outputs:
+  - OUT-006
+  done_when: 업로드·검증·테스트 9단계 · ACC-011·012·109
+  phase1: 파서 공용화 · B4-02 백엔드
+  phase2: 버전 이력·롤백·배포 승인
+  depends: WP-C2(데이터맵·고장코드)
+  chapter_key: mw
+- id: WP-A6
+  title: 엣지 에이전트
+  sw:
+  - SW-01
+  outputs:
+  - OUT-007
+  done_when: 샘플 송신·로그 예시 · ACC-013
+  phase1: IF-001~004 · LWT · cpb.v0.1 · 로컬 로그
+  phase2: 운영용 에이전트 (별도 협의)
+  depends: WP-C2 · WP-C3(제어기)
+  chapter_key: hw
+- id: WP-A7
+  title: 영상·스트리밍
+  sw:
+  - SW-06
+  outputs:
+  - OUT-008
+  - OUT-012
+  done_when: 실시간 표시 · ACC-007·104·105
+  phase1: RTSP/중계·스냅샷 전략(NFR-003)
+  phase2: 서버 저장 영상(1일) 조회 (OUT-012)
+  depends: WP-C3(카메라 2대)
+  chapter_key: video
+- id: WP-A8
+  title: 인프라·배치
+  sw: []
+  outputs: []
+  done_when: 배치도 기준 프로비저닝·보안(2.12)
+  phase1: SRV-01·02 (+03) · MGD 구성 · CI/CD
+  phase2: SRV-04 · 시계열 스토어
+  depends: WP-C1 (DISC-006 AWS 계정)
+  chapter_key: deploy
+- id: WP-A9
+  title: 데이터 플랫폼·예지보전 기초
+  sw: []
+  outputs:
+  - OUT-013
+  - OUT-014
+  done_when: 축적 카탈로그 전수 적재 검증
+  phase1: DB 스키마 · S3 원시 적재 시작(1단계부터)
+  phase2: 시계열 이관·규칙 예지·DS 기초
+  depends: WP-A4 · WP-A8
+  chapter_key: dataarch
+- id: WP-B1
+  title: PM·추적·검수 조율
+  sw: []
+  outputs:
+  - OUT-016
+  done_when: M1~M7 마일스톤 · ACC 전수 조율
+  phase1: 1부 추적 관리·개정
+  phase2: CDR 개정·최종 문서
+  depends: 전 WP 횡단
+  chapter_key: req
+- id: WP-C1
+  title: 발주 결정 (DY)
+  sw: []
+  outputs: []
+  done_when: DISC-001~032 결정 완료
+  phase1: 설계 합의(7월 중)
+  phase2: 2단계 범위 확정 (DISC-019)
+  depends: —
+  chapter_key: disc
+- id: WP-C2
+  title: 발주 데이터 제공 (DY)
+  sw: []
+  outputs: []
+  done_when: 데이터맵·고장코드·임계값 수령
+  phase1: CAN 데이터맵 · E-코드 · 수송관/필터 기준
+  phase2: 판정 기준 보정
+  depends: —
+  chapter_key: proto
+- id: WP-C3
+  title: 발주 HW 구매·장착 (DY)
+  sw: []
+  outputs: []
+  done_when: 제어기·CCTV·LTE 2set 장착
+  phase1: 제어기 2set · 카메라 2대 · LTE 모뎀 개통
+  phase2: —
+  depends: —
+  chapter_key: hw
+milestones:
+- id: M1
+  title: M1 범위 확정
+  date: '2026-07-05'
+  criterion: RFP/VIA/OUT/ACC 매핑 및 논의사항 초안 확정
+  outputs:
+  - OUT-016
+- id: M2
+  title: M2 설계 확정
+  date: '2026-07-12'
+  criterion: UX/UI, API, DB 초안 확정
+  outputs:
+  - OUT-016
+- id: M3
+  title: M3 프로토콜 구조 확정
+  date: '2026-08-02'
+  criterion: 프로토콜 업로드/테스트 구조 및 샘플 에이전트 v0.1
+  outputs:
+  - OUT-006
+  - OUT-007
+- id: M4
+  title: M4 영상 구조 연동
+  date: '2026-08-16'
+  criterion: 실시간 영상 및 저장 영상 조회 화면 v0.1
+  outputs:
+  - OUT-008
+- id: M5
+  title: M5 통합 베타
+  date: '2026-08-31'
+  criterion: 알림, 이력, 권한, 장비 데이터 통합
+  outputs:
+  - OUT-003
+  - OUT-004
+  - OUT-005
+  - OUT-006
+  - OUT-007
+  - OUT-008
+  - OUT-009
+  - OUT-010
+  - OUT-011
+- id: M6
+  title: M6 개발 완료
+  date: '2026-09-10'
+  criterion: 비아 소프트웨어 기능 동결
+  outputs: []
+- id: M7
+  title: M7 최종 시연
+  date: '2026-09-30'
+  criterion: 2set 장비 기준 프로토타입 시연
+  outputs: []

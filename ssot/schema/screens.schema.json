@@ -1,0 +1,201 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "boomeyes/ssot/screens",
+  "title": "screens",
+  "type": "object",
+  "properties": {
+    "surfaces": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[AB]\\d$"
+          },
+          "name": {
+            "type": "string"
+          },
+          "app": {
+            "enum": [
+              "web",
+              "pwa"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "app"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "screens": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[AB]\\d-\\d{2}M?$"
+          },
+          "name": {
+            "type": "string"
+          },
+          "surface": {
+            "type": "string",
+            "pattern": "^[AB]\\d$"
+          },
+          "route": {
+            "type": "string"
+          },
+          "roles": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[a-z][a-z-]*$"
+            }
+          },
+          "phase": {
+            "enum": [
+              1,
+              2
+            ]
+          },
+          "wave": {
+            "type": "integer"
+          },
+          "legacy_codes": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[AB]\\d-\\d{2}$"
+            }
+          },
+          "default": {
+            "type": "string"
+          },
+          "states": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "pattern": "^[a-z0-9][a-z0-9-]*$"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "note": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "id",
+                "name"
+              ],
+              "additionalProperties": false
+            },
+            "minItems": 1
+          },
+          "nav": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "to": {
+                  "type": "string",
+                  "pattern": "^[AB]\\d-\\d{2}M?$"
+                },
+                "label": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "to",
+                "label"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "trace": {
+            "type": "object",
+            "properties": {
+              "task": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^[45]\\.3\\.\\d{1,2}$"
+                }
+              },
+              "out": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "pattern": "^OUT-\\d{3}$"
+              },
+              "rfp": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^(RFP-\\d{3}|EXT-\\d)$"
+                }
+              },
+              "disc": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^DISC-\\d{3}$"
+                }
+              },
+              "if": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^IF-\\d{3}$"
+                }
+              }
+            },
+            "required": [
+              "task",
+              "out",
+              "rfp",
+              "disc",
+              "if"
+            ],
+            "additionalProperties": false
+          },
+          "note": {
+            "type": "string"
+          },
+          "mgmt": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "surface",
+          "route",
+          "roles",
+          "phase",
+          "wave",
+          "default",
+          "states",
+          "nav",
+          "trace"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "surfaces",
+    "screens"
+  ],
+  "additionalProperties": false
+}

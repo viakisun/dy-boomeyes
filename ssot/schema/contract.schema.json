@@ -1,0 +1,343 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "boomeyes/ssot/contract",
+  "title": "contract",
+  "type": "object",
+  "properties": {
+    "sections": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[45]\\.3\\.\\d{1,2}$"
+          },
+          "name": {
+            "type": "string"
+          },
+          "phase": {
+            "enum": [
+              1,
+              2
+            ]
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string"
+                },
+                "screens": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "pattern": "^[AB]\\d-\\d{2}M?$"
+                  }
+                },
+                "status": {
+                  "enum": [
+                    "reflected",
+                    "phase2",
+                    "structure",
+                    "option",
+                    "non-screen",
+                    "documented",
+                    "not-started",
+                    "development",
+                    "check",
+                    "void"
+                  ]
+                },
+                "note": {
+                  "type": "string"
+                },
+                "mgmt": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              },
+              "required": [
+                "title",
+                "screens",
+                "status"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "phase",
+          "items"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "rfp": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^(RFP-\\d{3}|EXT-\\d)$"
+          },
+          "label": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "screens": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[AB]\\d-\\d{2}M?$"
+            }
+          },
+          "status": {
+            "enum": [
+              "reflected",
+              "phase2",
+              "structure",
+              "option",
+              "non-screen",
+              "documented",
+              "not-started",
+              "development",
+              "check",
+              "void"
+            ]
+          },
+          "disc": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^DISC-\\d{3}$"
+            }
+          },
+          "note": {
+            "type": "string"
+          },
+          "mgmt": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "screens",
+          "status",
+          "disc"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "outputs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^OUT-\\d{3}$"
+          },
+          "name": {
+            "type": "string"
+          },
+          "phase": {
+            "enum": [
+              1,
+              2
+            ]
+          },
+          "lead_wp": {
+            "type": "string",
+            "pattern": "^WP-[ABC]\\d$"
+          },
+          "contrib_wp": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^WP-[ABC]\\d$"
+            }
+          },
+          "mgmt": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "phase",
+          "lead_wp",
+          "contrib_wp"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "acceptance": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^ACC-\\d{3}$"
+          },
+          "date": {
+            "type": "string"
+          },
+          "area": {
+            "type": "string"
+          },
+          "criterion": {
+            "type": "string"
+          },
+          "outputs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^OUT-\\d{3}$"
+            }
+          },
+          "note": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "status": {
+            "enum": [
+              "defined",
+              "undefined"
+            ]
+          },
+          "mgmt": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "id",
+          "date",
+          "area",
+          "criterion",
+          "outputs",
+          "status"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "wp": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^WP-[ABC]\\d$"
+          },
+          "title": {
+            "type": "string"
+          },
+          "sw": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^SW-\\d{2}$"
+            }
+          },
+          "outputs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^OUT-\\d{3}$"
+            }
+          },
+          "done_when": {
+            "type": "string"
+          },
+          "phase1": {
+            "type": "string"
+          },
+          "phase2": {
+            "type": "string"
+          },
+          "depends": {
+            "type": "string"
+          },
+          "chapter_key": {
+            "type": "string"
+          },
+          "mgmt": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "sw",
+          "outputs",
+          "done_when"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "milestones": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string"
+          },
+          "criterion": {
+            "type": "string"
+          },
+          "outputs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^OUT-\\d{3}$"
+            }
+          },
+          "mgmt": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "date",
+          "criterion",
+          "outputs"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "sections",
+    "rfp",
+    "outputs",
+    "acceptance",
+    "wp",
+    "milestones"
+  ],
+  "additionalProperties": false
+}

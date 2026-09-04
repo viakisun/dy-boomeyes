@@ -1,0 +1,101 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "boomeyes/ssot/decisions",
+  "title": "decisions",
+  "type": "object",
+  "properties": {
+    "disc": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^DISC-\\d{3}$"
+          },
+          "title": {
+            "type": "string"
+          },
+          "scope": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[AB]\\d-\\d{2}M?$"
+            }
+          },
+          "scope_note": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "baseline": {
+            "type": "string"
+          },
+          "ask": {
+            "type": "string"
+          },
+          "track": {
+            "enum": [
+              "A",
+              "B",
+              "C"
+            ]
+          },
+          "status": {
+            "enum": [
+              "open",
+              "decided",
+              "dropped"
+            ]
+          },
+          "resolved": {
+            "type": "object",
+            "properties": {
+              "date": {
+                "type": "string"
+              },
+              "by": {
+                "type": "string"
+              },
+              "summary": {
+                "type": "string"
+              },
+              "adr": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "date",
+              "by",
+              "summary"
+            ],
+            "additionalProperties": false
+          },
+          "source": {
+            "type": "string"
+          },
+          "mgmt": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "scope",
+          "baseline",
+          "ask",
+          "track",
+          "status",
+          "source"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "disc"
+  ],
+  "additionalProperties": false
+}

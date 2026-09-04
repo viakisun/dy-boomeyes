@@ -1,0 +1,264 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "boomeyes/ssot/interfaces",
+  "title": "interfaces",
+  "type": "object",
+  "properties": {
+    "if": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^IF-\\d{3}$"
+          },
+          "segment": {
+            "type": "string"
+          },
+          "protocol": {
+            "type": "string"
+          },
+          "data": {
+            "type": "string"
+          },
+          "trigger": {
+            "type": "string"
+          },
+          "phase": {
+            "enum": [
+              1,
+              2
+            ]
+          },
+          "optional": {
+            "type": "boolean"
+          },
+          "basis": {
+            "type": "object",
+            "properties": {
+              "text": {
+                "type": "string"
+              },
+              "disc": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^DISC-\\d{3}$"
+                }
+              },
+              "sections": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^[45]\\.3\\.\\d{1,2}$"
+                }
+              }
+            },
+            "required": [
+              "text",
+              "disc",
+              "sections"
+            ],
+            "additionalProperties": false
+          },
+          "screens": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[AB]\\d-\\d{2}M?$"
+            }
+          },
+          "note": {
+            "type": "string"
+          },
+          "mgmt": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "id",
+          "segment",
+          "protocol",
+          "data",
+          "trigger",
+          "phase",
+          "optional",
+          "basis",
+          "screens"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "api": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^API-\\d{3}$"
+          },
+          "resource": {
+            "type": "string"
+          },
+          "summary": {
+            "type": "string"
+          },
+          "if": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^IF-\\d{3}$"
+            }
+          },
+          "mgmt": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "id",
+          "resource",
+          "summary",
+          "if"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "topics": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "topic": {
+            "type": "string"
+          },
+          "direction": {
+            "type": "string"
+          },
+          "payload": {
+            "type": "string"
+          },
+          "qos": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "topic",
+          "direction",
+          "payload",
+          "qos"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "events": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "event": {
+            "type": "string"
+          },
+          "publisher": {
+            "type": "string"
+          },
+          "subscribers": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^SVC-\\d{2}$"
+            }
+          },
+          "summary": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "event",
+          "publisher",
+          "subscribers",
+          "summary"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "protocol": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "type": "string"
+        },
+        "fields": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "group": {
+                "type": "string"
+              },
+              "fields": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "summary": {
+                "type": "string"
+              },
+              "required": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "group",
+              "fields",
+              "summary",
+              "required"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "identifiers": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "summary": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "summary"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "sample": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "version",
+        "fields",
+        "identifiers",
+        "sample"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "if",
+    "api",
+    "topics",
+    "events",
+    "protocol"
+  ],
+  "additionalProperties": false
+}

@@ -1,0 +1,110 @@
+# yaml-language-server: $schema=./schema/roles.schema.json
+# 생성: tools/ssot/convert_from_archive.py (아카이브 docset v0.3 + v2.0 델타) — 이후 이 파일이 원천
+roles:
+- id: driver
+  name: 운전자
+  org: 사업주 소속
+  surfaces:
+  - A2
+  surface_note: A2 운전자 APP
+  summary: 배정 장비 1대 — 체크인·일일점검·본인 서류 (소속·배치 = 사업주, DISC-026)
+  persona:
+    name: 박기사
+    env: 폰만 사용 — 장갑·야외·직사광
+    goal: 체크인·일일점검·서류 제출을 최소 조작으로
+    pain: 복잡한 앱 조작 곤란 · 서류 원본 지참 부담
+  demo_account:
+    login: driver03
+    display: 박기사
+- id: site-safety
+  name: 현장 안전관리자
+  org: 건설사 (현장)
+  surfaces:
+  - A1
+  - B3
+  surface_note: A1 APP · B3 WEB
+  summary: 현장 업무함의 처리 주체 — 고장·서류·점검 업무 완결
+  persona:
+    name: 김현장
+    env: 현장 사무실 PC 상주 · 순회 시 폰
+    goal: 담당 현장의 장비·서류·업무 완결 처리 (동시 1현장)
+    pain: 서류 요청 반복 대응 · 고장 시 상황 파악 지연
+  demo_account:
+    login: safety01
+    display: 김현장
+- id: hq-safety
+  name: 본사 안전관리자
+  org: 건설사 (본사)
+  surfaces:
+  - A3
+  - B2
+  surface_note: A3 APP · B2 WEB
+  summary: 자사 전 현장 열람·확인 요청 — 직접 처리 불가
+  persona:
+    name: 최본부
+    env: 사무실 PC · 이동 중 폰
+    goal: 자사 전 현장 안전 현황 파악·경영 보고
+    pain: 현장별 전화·방문으로만 파악 — 취합에 반나절
+  demo_account:
+    login: hq01
+    display: 최본부
+- id: control
+  name: CPB 관제 담당
+  org: 운영사 (DY)
+  surfaces:
+  - B1
+  surface_note: B1 관제 WEB
+  summary: 전국 전 장비 관제·원격 진단·수신함 승인·에스컬레이션
+  persona:
+    name: 이관제
+    env: 관제실 대형 모니터 상시
+    goal: 전국 호기 이상 조기 감지 · 원격 진단 후 정비 연결
+    pain: 장비 상태를 실시간으로 알 방법이 없음
+  demo_account:
+    login: control01
+    display: 이관제
+- id: maintenance
+  name: 정비 담당
+  org: 운영사 (DY)
+  surfaces:
+  - B1
+  surface_note: B1 연계 (호출·보고)
+  summary: 고장 출동·조치 보고 — 완료 확인은 현장
+  persona:
+    name: 정정비
+    env: 이동 중 폰 · 현장 방문
+    goal: 원인을 알고 출동 — 1회 방문 종결
+    pain: 증상만 듣고 출동 → 재방문 빈발
+  demo_account:
+    login: maint01
+    display: 정정비
+- id: ops-admin
+  name: CPB 운영 관리자
+  org: 운영사 (DY)
+  surfaces:
+  - B4
+  surface_note: B4 백오피스
+  summary: 호기·현장·사용자·프로토콜·알림 기준 마스터 관리
+  persona:
+    name: 오운영
+    env: 사무실 PC
+    goal: 호기·현장·계약·알림 기준 마스터 관리 · 예지보전 기준 운영 (제조사 관점)
+    pain: 기준값이 경험치 — 실측 근거 부족
+  demo_account:
+    login: ops01
+    display: 오운영
+- id: owner
+  name: 사업주 (장비 소유주)
+  org: 사업주
+  surfaces:
+  - A4
+  surface_note: A4 사업주 PWA (2단계 제안)
+  summary: CPB 보유·가용 관리 · 투입 요청 승인·호기 배정 · 운전자 배치·서류 — DISC-026
+  persona:
+    name: 차사장
+    env: 폰 위주 · 사무실 PC 병행
+    goal: 보유 호기 가용·투입 파악 · 요청 승인·배정·운전자 배치를 한 화면에서
+    pain: 가용 대수를 수첩·전화로 관리 — 요청 올 때마다 현장별 전화 확인
+  demo_account:
+    login: owner01
+    display: 차사장

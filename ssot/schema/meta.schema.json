@@ -1,0 +1,167 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "boomeyes/ssot/meta",
+  "title": "meta",
+  "type": "object",
+  "properties": {
+    "program": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "alias_disc": {
+          "type": "string"
+        },
+        "owner": {
+          "type": "string"
+        },
+        "vendor": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "alias_disc",
+        "owner",
+        "vendor"
+      ],
+      "additionalProperties": false
+    },
+    "set_version": {
+      "type": "string"
+    },
+    "next_set_version": {
+      "type": "string"
+    },
+    "doc_numbers": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "fixed_clock": {
+      "type": "string"
+    },
+    "phases": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "start": {
+            "type": "string"
+          },
+          "end": {
+            "type": "string"
+          },
+          "note": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "start",
+          "end",
+          "note"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "current_wave": {
+      "type": "integer"
+    },
+    "schedule": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "milestone": {
+            "type": "string"
+          },
+          "when": {
+            "type": "string"
+          },
+          "criterion": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "milestone",
+          "when",
+          "criterion"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "history": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string"
+          },
+          "summary": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "version",
+          "date",
+          "summary"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "basis_docs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "kind": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind",
+          "title",
+          "version",
+          "role"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "program",
+    "set_version",
+    "next_set_version",
+    "doc_numbers",
+    "fixed_clock",
+    "phases",
+    "current_wave",
+    "schedule",
+    "history",
+    "basis_docs"
+  ],
+  "additionalProperties": false
+}

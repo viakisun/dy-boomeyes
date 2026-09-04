@@ -1,0 +1,265 @@
+# yaml-language-server: $schema=./schema/options.schema.json
+# 생성: tools/ssot/convert_from_archive.py (아카이브 docset v0.3 + v2.0 델타) — 이후 이 파일이 원천
+axes:
+- id: AX-1
+  name: 카메라 구성
+  choices:
+  - code: null
+    name: 기본 2채널 — 일반(전방 조망) + AI(붐 끝 하향, 사람·차량 분류 온보드)
+  - code: null
+    name: 1채널·기종·해상도 현장별
+  disc:
+  - DISC-004
+  - DISC-027
+- id: AX-2
+  name: 이벤트 수신
+  choices:
+  - code: E1
+    name: HTTP 리스닝(카메라→서버 POST)
+  - code: E2
+    name: alertStream
+  - code: E3
+    name: ONVIF
+  - code: E4
+    name: ISUP 등록
+  - code: E5
+    name: 네이티브 MQTT(AXIS)
+  disc:
+  - DISC-029
+- id: AX-3
+  name: 라이브
+  choices:
+  - code: L1
+    name: LTE 라우터 VPN + 서버 풀(RTSP→HLS/WebRTC)
+  - code: L2
+    name: ISUP
+  - code: L3
+    name: 현장 박스 푸시
+  disc:
+  - DISC-029
+- id: AX-4
+  name: 녹화·저장
+  choices:
+  - code: null
+    name: 서버 서브스트림 N일
+  - code: null
+    name: SD 병행(ISAPI 구간 회수)
+  - code: null
+    name: 소형 NVR(PoE 내장)
+  - code: null
+    name: Edge PC+SSD
+  disc:
+  - DISC-005
+  - DISC-007
+- id: AX-5
+  name: 현장 네트워크
+  choices:
+  - code: null
+    name: LTE 라우터(VPN) + PoE 인젝터 또는 산업용 PoE 스위치(12~48V DC
+  - code: null
+    name: DIN)
+  - code: null
+    name: NVR PoE 내장 시 스위치 불요
+  disc:
+  - DISC-028
+- id: AX-6
+  name: 바디캠
+  choices:
+  - code: A
+    name: 파일 수집(도킹→폴더/FTP)
+  - code: B
+    name: 도킹+컨트롤러+API
+  - code: C
+    name: LTE 라이브
+  - code: null
+    name: 목적지 자체 S3/VMS/제조사 플랫폼
+  disc:
+  - DISC-030
+- id: AX-7
+  name: 개인정보
+  choices:
+  - code: null
+    name: 표준 패키지 — 방침
+  - code: null
+    name: 동의서
+  - code: null
+    name: 촬영 표시
+  - code: null
+    name: 음성 정책
+  - code: null
+    name: 처리자/수탁자 역할
+  - code: null
+    name: 보관·파기·열람
+  disc:
+  - DISC-031
+- id: AX-8
+  name: 텔레메트리 발행
+  choices:
+  - code: T1
+    name: Linux 게이트웨이
+  - code: T2
+    name: CPB 제어 장치 직접 MQTT
+  disc:
+  - DISC-032
+candidates:
+- item: 카메라 ① 일반
+  role: 전방 전체 조망 스트리밍 (4MP·IR·실외)
+  products: '우선 후보: AXIS P3925-LRE M12 (780g · EN 50155 · IP6K9K · EIS · M12 · RTSP/VAPIX/MQTT · microSD) — v2.0 §13 (DISC-040)'
+  if:
+  - IF-005
+  owner: 'DY: 선정·장착·설정'
+  group: video
+- item: 카메라 ② AI
+  role: 붐 끝 하향 — 사람·차량 분류 온보드 (2단계 · DISC-027)
+  products: '우선 후보: Hanwha TNV-C8014RM (466g · EN 50155 · IP66/IK10 · EIS · M12 · 사람·차량 AI · RTSP/MQTT/SUNAPI · ONVIF Profile
+    M) · Hikvision DS-2CD3186G2-ISU 계열은 이동 붐 비권장(진동 인증·EIS·M12 미확인) — v2.0 §13 (DISC-040)'
+  if:
+  - IF-005
+  - IF-015
+  owner: 'DY: 선정·장착'
+  group: video
+- item: PoE 급전
+  role: 카메라 전원·네트워크 — 인젝터 2 또는 산업용 PoE 스위치(4~8포트 · 12~48V DC · DIN · -40~75°C)
+  products: '예: Teltonika TSW202 · 소형 NVR 채택 시 NVR PoE 내장 · LTE 라우터의 패시브 PoE는 급전 불가'
+  if:
+  - IF-005
+  owner: 옵션 N1~N4 (DISC-028)
+  group: video
+- item: LTE 라우터
+  role: 영상·텔레메트리 1회선 공용 · VPN(서버 풀 라이브)
+  products: '예: Teltonika RUTX50 · 데이터 플랜 = 운영비(DISC-018) 연동'
+  if:
+  - IF-006
+  - IF-007
+  owner: 1단계
+  group: video
+- item: 영상 중계 서버
+  role: RTSP → WEB 표시용 중계 (HLS/WebRTC) · VPN 서버 풀
+  products: L1 옵션 · ISUP(L2) 시 플랫폼 SDK
+  if:
+  - IF-006
+  owner: 1단계 선택
+  group: video
+- item: 녹화 장치 (옵션)
+  role: 카메라 microSD(ANR · ISAPI 구간 회수) · 소형 NVR(PoE 내장) · Edge PC+SSD(산업용 스위치 필수)
+  products: 현장 프로파일에서 선택 — 통신 두절 시 공백 여부가 옵션별로 다름
+  if:
+  - IF-007
+  owner: DISC-005·007·028
+  group: video
+- item: 서버 영상 스토어
+  role: AWS S3 — 서브스트림 녹화 N일 · 이벤트 클립
+  products: 보존 기간 현장별 · 라이프사이클(Standard→IA→Glacier)
+  if:
+  - IF-007
+  - IF-008
+  owner: 2단계
+  group: video
+- item: 바디캠 (옵션)
+  role: 착용 영상 — 현장당 3~4대 · 도킹/컨트롤러/LTE
+  products: '후보: Transcend DrivePro Body 70 + DPD6N(도킹 수집) · AXIS W120 + W701 Mk II + W800(Body Worn Integration API, 직접 연동형)
+    · Motorola V500(VideoManager 제조사 연동형) — v2.0 §14 (DISC-030·041)'
+  if:
+  - IF-016
+  - IF-017
+  owner: DISC-030 · 개인정보 DISC-031
+  group: video
+- item: Linux 제어기
+  role: 상태 데이터 수집·서버 전송 게이트웨이 (원격 제어 아님) — T1 옵션 · T2(CPB 제어 장치 직접 MQTT) 시 불요 (DISC-032)
+  products: Seeed Studio reComputer Industrial 계열 후보
+  if:
+  - IF-001
+  - IF-002
+  - IF-004
+  owner: 'DY: 확정·구매·장착·AS'
+  group: telemetry
+- item: LTE 모뎀/라우터
+  role: 외부망 접속 · VPN — 텔레메트리 + 영상 1회선 공용 (PoE 급전 별도)
+  products: '예: Teltonika RUTX50(5G/LTE · WireGuard/OpenVPN · 9~50V DC) · 통신사·SIM·요금제 DY 확정'
+  if:
+  - IF-004
+  - IF-006
+  owner: 통신비 별도
+  group: telemetry
+- item: GPS/GNSS 모듈+안테나
+  role: 위치 수집 (3~10m)
+  products: LTE 모듈 내장 GNSS 또는 외장
+  if:
+  - IF-003
+  owner: 실외 설치 위치 검토
+  group: telemetry
+- item: CAN 인터페이스
+  role: CPB 상태값 수집
+  products: CAN/CAN FD 또는 USB-CAN
+  if:
+  - IF-001
+  owner: 'DY: 데이터맵·결선'
+  group: telemetry
+- item: DI/DO 인터페이스
+  role: 접점 신호 수신
+  products: GPIO/DI·DO
+  if:
+  - IF-002
+  owner: 'DY: 채널 정의'
+  group: telemetry
+- item: 전압 감시 릴레이
+  role: 380V 상태 → 안전 접점 변환
+  products: DY 전장 범위
+  if:
+  - IF-002
+  owner: 비아 회로 제외
+  group: telemetry
+- item: 단선 감지 회로
+  role: 하네스 단선 → 접점 신호
+  products: DY 전장 범위
+  if:
+  - IF-002
+  owner: 비아 회로 제외
+  group: telemetry
+- item: 전원 변환 장치
+  role: CPB 전원 → 제어기 DC
+  products: 전장 안전 검토
+  if: []
+  owner: DY
+  group: telemetry
+- item: 샘플 에이전트
+  role: JSON 텔레메트리 송신 (실패 시 로컬 로그·재전송)
+  products: 비아 제공 (운영용은 별도 협의)
+  if:
+  - IF-004
+  owner: 1단계
+  group: telemetry
+profiles:
+- id: P-LITE
+  name: 라이트
+  choices:
+    AX-1: 1채널
+    AX-2: E1
+    AX-3: L1
+    AX-4: 서버 서브스트림
+    AX-5: PoE 인젝터
+    AX-6: null
+    AX-7: 표준 패키지
+    AX-8: T1
+- id: P-SD
+  name: SD 병행
+  choices:
+    AX-1: 2채널
+    AX-2: E1
+    AX-3: L1
+    AX-4: 서버 서브스트림 + SD 병행
+    AX-5: 산업용 PoE 스위치
+    AX-6: A
+    AX-7: 표준 패키지
+    AX-8: T1
+- id: P-NVR
+  name: NVR
+  choices:
+    AX-1: 2채널
+    AX-2: E5
+    AX-3: L3
+    AX-4: 소형 NVR
+    AX-5: NVR PoE 내장
+    AX-6: B
+    AX-7: 표준 패키지
+    AX-8: T2

@@ -1,0 +1,235 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "boomeyes/ssot/scenarios",
+  "title": "scenarios",
+  "type": "object",
+  "properties": {
+    "personas": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string"
+          },
+          "org": {
+            "type": "string"
+          },
+          "env": {
+            "type": "string"
+          },
+          "goal": {
+            "type": "string"
+          },
+          "pain": {
+            "type": "string"
+          },
+          "surfaces": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "role",
+          "org",
+          "env",
+          "goal",
+          "pain",
+          "surfaces"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "scenarios": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "prep": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "prep"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "ops": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "scenario": {
+            "type": "string"
+          },
+          "when": {
+            "type": "string"
+          },
+          "actor": {
+            "type": "string"
+          },
+          "action_930": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "action_1231": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "screens": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[AB]\\d-\\d{2}M?$"
+            }
+          },
+          "refs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "note": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "tier": {
+            "enum": [
+              "core",
+              null
+            ]
+          }
+        },
+        "required": [
+          "scenario",
+          "when",
+          "actor",
+          "action_930",
+          "action_1231",
+          "screens",
+          "refs",
+          "note",
+          "tier"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "narrative": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "paragraphs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "title",
+          "paragraphs"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "demo": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "scene": {
+            "type": "integer"
+          },
+          "title": {
+            "type": "string"
+          },
+          "surface": {
+            "type": "string"
+          },
+          "screens": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[AB]\\d-\\d{2}M?$"
+            }
+          },
+          "steps": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "message": {
+            "type": "string"
+          },
+          "acc": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^ACC-\\d{3}$"
+            }
+          },
+          "track": {
+            "enum": [
+              "D1",
+              "D2",
+              "D3",
+              "D4",
+              "D5"
+            ]
+          },
+          "fixture": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "scene",
+          "title",
+          "screens",
+          "steps",
+          "track"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "personas",
+    "scenarios",
+    "ops",
+    "narrative",
+    "demo"
+  ],
+  "additionalProperties": false
+}

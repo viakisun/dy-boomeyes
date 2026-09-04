@@ -1,0 +1,484 @@
+# yaml-language-server: $schema=./schema/entities.schema.json
+# 생성: tools/ssot/convert_from_archive.py (아카이브 docset v0.3 + v2.0 델타) — 이후 이 파일이 원천
+ent:
+- id: ENT-01
+  name: 현장 (Site)
+  fields:
+  - site_id
+  - 현장명
+  - 주소
+  - 건설사
+  - 담당 안전관리자
+  - video_profile(옵션 조합
+  - DISC-028)
+  relations:
+  - 1─N 장비
+  - 1─N 사용자(현장)
+  - 1─N 업무
+  - 1─N 바디캠
+  store: RDS
+  phase: 1
+- id: ENT-02
+  name: 장비 (Device/CPB)
+  fields:
+  - device_id
+  - 호기(1~120)
+  - 상태
+  - 설치일
+  - 완료예정일
+  relations:
+  - N─1 현장
+  - N─1 사업주(보유)
+  - 1─1 제어기
+  - 1─N 카메라
+  - 1─N 알림
+  store: RDS · 최신 상태는 Redis
+  phase: 1
+- id: ENT-03
+  name: 제어기 (Controller)
+  fields:
+  - controller_id
+  - 프로토콜 버전
+  - 인증키
+  - 마지막 수신
+  relations:
+  - 1─1 장비
+  - N─1 프로토콜 버전
+  store: RDS
+  phase: 1
+- id: ENT-04
+  name: 카메라 (Camera)
+  fields:
+  - camera_id
+  - 유형(general/ai)
+  - ingest_type(E1~E5)
+  - recording_mode
+  - stream_url
+  - 보존(현장별)
+  relations:
+  - N─1 장비 (기본 2대)
+  store: RDS · 영상은 S3/SD/현장 녹화기 (프로파일)
+  phase: 1
+- id: ENT-05
+  name: 사용자 (User)
+  fields:
+  - user_id
+  - 역할(7종)
+  - 소속(운영사/건설사/사업주)
+  - 연락처
+  relations:
+  - N─M 현장
+  - 1─N 업무(담당)
+  store: RDS · 세션은 Redis
+  phase: 1
+- id: ENT-06
+  name: 업무 (Case)
+  fields:
+  - case_id(C-xxx)
+  - 유형(고장/서류/점검/통신)
+  - 상태
+  - 기한
+  - 심각도
+  relations:
+  - N─1 장비/현장
+  - 1─N 이력
+  store: RDS
+  phase: 1
+- id: ENT-07
+  name: 서류 (Document)
+  fields:
+  - doc_id
+  - 유형(5종)
+  - 대상(장비/운전자/현장)
+  - 유효기간
+  - 상태
+  relations:
+  - N─1 장비
+  - 사용자
+  - 현장
+  store: RDS · 파일은 S3
+  phase: 1
+- id: ENT-08
+  name: 알림 (Alert)
+  fields:
+  - alert_id
+  - 유형(8종)
+  - 등급
+  - 확인 상태
+  - 발생 시각
+  relations:
+  - N─1 장비
+  - 1─N 업무 생성
+  store: RDS
+  phase: 1
+- id: ENT-09
+  name: 이력 (History)
+  fields:
+  - 시각
+  - 구분
+  - 내용
+  - 행위자 — append-only
+  relations:
+  - N─1 업무/장비/서류
+  store: RDS (append-only)
+  phase: 1
+- id: ENT-10
+  name: 임대 계약 (Lease)
+  fields:
+  - 호기 범위
+  - 설치지역
+  - 건설사
+  - 기간
+  - 잔여(D-)
+  relations:
+  - N─1 장비
+  - N─1 현장
+  - N─1 사업주(임대인)
+  store: RDS
+  phase: 1
+- id: ENT-11
+  name: 프로토콜 버전 (Protocol)
+  fields:
+  - 버전
+  - 정의 파일(YAML/JSON)
+  - 운영/테스트 구분
+  relations:
+  - 1─N 제어기
+  store: RDS · 정의 파일은 S3
+  phase: 1
+- id: ENT-12
+  name: 텔레메트리 (Telemetry)
+  fields:
+  - timestamp
+  - GPS
+  - 통신
+  - CAN
+  - IO
+  - 전압
+  - 단선
+  - 고장
+  - 소모품
+  relations:
+  - N─1 장비 — 시계열 저장
+  store: 시계열 DB · 원시는 S3
+  phase: 1
+- id: ENT-13
+  name: 사업주 (Owner)
+  fields:
+  - owner_id
+  - 상호
+  - 대표
+  - 연락처
+  - 보유 호기 수
+  relations:
+  - 1─N 장비(보유)
+  - 1─N 운전자(소속)
+  - 1─N 임대 계약
+  store: RDS — 2단계 제안 (DISC-026)
+  phase: 2
+- id: ENT-14
+  name: 바디캠 (BodyCam)
+  fields:
+  - bodycam_id
+  - 착용자(user_id)
+  - 현장
+  - 세션(체크인~체크아웃)
+  - 파일
+  - 태그
+  - 보존 홀드
+  relations:
+  - N─1 현장
+  - N─1 사용자
+  - 1─N 이력
+  store: RDS · 영상은 S3 (보존 현장별) — 옵션 (DISC-030)
+  phase: 2
+- id: ENT-15
+  name: 개인정보 동의 (Consent)
+  fields:
+  - consent_id
+  - user_id
+  - 항목(영상
+  - 음성
+  - 위치)
+  - 목적
+  - 기간
+  - 철회
+  relations:
+  - N─1 사용자
+  - N─1 현장
+  store: RDS — 표준 패키지 (DISC-031)
+  phase: 1
+- id: ENT-16
+  name: 부품 (Part)
+  fields:
+  - part_id
+  - 품번
+  - 부품군(직관·이송배관/엘보·리듀서/플랜지·클램프/가스켓·안전핀/엔드호스·피팅)
+  - 압력등급
+  - 기준두께
+  - 로트
+  - 호환규격
+  - 장착 위치·설치일
+  - 누적 타설량·운전시간
+  - 상태(장착/재고/폐기)
+  relations:
+  - N─1 장비(장착)
+  - 1─N 부품 이력
+  - N─1 재고
+  store: RDS — 2단계 제안 (DISC-038)
+  phase: 2
+- id: ENT-17
+  name: 부품 이력 (PartEvent)
+  fields:
+  - event_id
+  - part_id
+  - 구분(등록/장착/점검/교체/폐기)
+  - 실측두께·외관·체결·OEM 합불
+  - 사유
+  - 작업자
+  - 증빙(사진)
+  - 시각
+  relations:
+  - N─1 부품
+  - N─1 사용자
+  - 0─1 이벤트(영상 복기 연결)
+  store: RDS (append-only) · 사진은 S3
+  phase: 2
+- id: ENT-18
+  name: 재고·발주 (Stock)
+  fields:
+  - stock_id
+  - 품번
+  - 현재고
+  - 안전재고
+  - 발주 상태·수량·일자
+  relations:
+  - 1─N 부품
+  store: RDS — 2단계 제안
+  phase: 2
+machines:
+  task:
+    entity: ENT-06
+    states:
+    - new
+    - assigned
+    - in-progress
+    - done
+    - escalated
+    transitions:
+    - from: new
+      to: assigned
+      by: 관제 배정 / 자동
+    - from: assigned
+      to: in-progress
+      by: 담당자 접수
+    - from: in-progress
+      to: done
+      by: 정비 보고 → 현장 완료 확인 (2단계, DISC-015)
+    - from: new
+      to: escalated
+      by: 1h 미접수 자동 (제안)
+    - from: escalated
+      to: in-progress
+      by: 접수
+  doc:
+    entity: ENT-07
+    states:
+    - valid
+    - expiring
+    - submitted
+    - review
+    - approved
+    - rejected
+    transitions:
+    - from: valid
+      to: expiring
+      by: D-30 스케줄러
+    - from: expiring
+      to: submitted
+      by: 촬영 업로드
+    - from: submitted
+      to: review
+      by: 자동
+    - from: review
+      to: approved
+      by: 현장 승인
+    - from: review
+      to: rejected
+      by: 반려(사유)
+    - from: rejected
+      to: submitted
+      by: 재제출
+  equipment:
+    entity: ENT-02
+    states:
+    - normal
+    - caution
+    - fault
+    - offline
+    - maintenance
+    transitions:
+    - from: normal
+      to: caution
+      by: 임계 접근(수송관·필터·전압)
+    - from: caution
+      to: fault
+      by: E-코드 / 임계 초과
+    - from: '*'
+      to: offline
+      by: LWT 통신 두절
+    - from: fault
+      to: maintenance
+      by: 정비 출동
+    - from: maintenance
+      to: normal
+      by: 현장 완료 확인
+  camera:
+    entity: ENT-04
+    states:
+    - live
+    - snapshot
+    - recording
+    - offline
+    - ai-unavailable
+    transitions:
+    - from: live
+      to: snapshot
+      by: 저대역 전략(NFR-003)
+    - from: '*'
+      to: offline
+      by: 수신 끊김
+    - from: '*'
+      to: ai-unavailable
+      by: 정지화면·흐림·가림 (FR-034)
+    - from: offline
+      to: live
+      by: 복구 + 누락분 재전송(IF-018)
+  part:
+    entity: ENT-16
+    states:
+    - registered
+    - installed
+    - inspected
+    - due
+    - replaced
+    - discarded
+    transitions:
+    - from: registered
+      to: installed
+      by: 장착(위치·설치일·로트)
+    - from: installed
+      to: inspected
+      by: 점검 입력(A1-11)
+    - from: inspected
+      to: due
+      by: OEM 기준 합불=불 / 임계
+    - from: due
+      to: replaced
+      by: 교체(A2-09) → 재고 차감
+    - from: replaced
+      to: discarded
+      by: 폐기(사유·증빙)
+rules:
+- group: 업무(케이스) 상태 모델
+  items:
+  - title: 상태 흐름
+    rule: 신규 → 진행 중(접수) → 완료 · 이력은 append-only 증빙
+  - title: 고장 완료 확인
+    rule: 정비 보고 → 현장 안전관리자 완료 확인의 2단계 (DISC-015)
+  - title: 정렬·필터
+    rule: 심각도·기한·발생시각 정렬 · 미처리(기본)/전체/고장이상 칩
+- group: 서류 상태 모델
+  items:
+  - title: 상태 흐름
+    rule: 유효 → 만료 임박(D-30 알림) → 제출(촬영 업로드) → 검토 대기 → 승인/반려(사유)→재제출
+  - title: 역할 경계
+    rule: 등록·승인=현장(WEB·APP) · 운영사=완비 모니터링·요청 회신 · 유형 5종(DISC-016)
+- group: 에스컬레이션 · 알림
+  items:
+  - title: 티켓 생애주기와의 관계
+    rule: '업무(티켓) 흐름: 발행 → 처리 → 완료(해소) — 에스컬레이션 = 미접수로 흐름이 멈췄을 때 작동하는 보완 규칙'
+  - title: 중대 업무 미접수
+    rule: 임계 1시간(협의) 경과 시 건설사 본사 + 관제 자동 통보
+  - title: 기한 업무 초과
+    rule: 기한 경과 즉시 본사 통보 · 통보 이력은 업무 이력에 기록
+  - title: 알림 8종
+    rule: '통신·GPS·전압·단선·고장코드·서류 미비·수송관·필터 (기준 등록: B4-05)'
+- group: 권한 경계
+  items:
+  - title: 본사 안전관리자
+    rule: 열람 + 확인 요청만 — 직접 처리 불가 (DISC-015)
+  - title: 운영사
+    rule: 안전관리자 권한 부여 불가 — 법적 안전관리 책임은 건설사
+  - title: 인증
+    rule: 웹 4종 공통 로그인(B0) · 계정 발급·인증키 정책 DISC-020
+stores:
+- store: RDS (PostgreSQL)
+  node: MGD-02
+  entities: ENT-01~11 — 현장·장비·사용자·업무·서류·알림·이력·계약
+  purpose: 운영 OLTP · 트랜잭션 · append-only 이력
+  phase: 1단계
+- store: 시계열 DB
+  node: MGD-06 (Timestream 또는 TimescaleDB)
+  entities: ENT-12 텔레메트리 시계열
+  purpose: 장비 최신 상태 · 기간 집계 · 추세 (예지 쿼리)
+  phase: 2단계 (스키마는 1단계 정의)
+- store: S3 (데이터 레이크 기초)
+  node: MGD-03
+  entities: 서류 파일 + 원시 텔레메트리 아카이브 (Parquet 제안)
+  purpose: 콜드 — 전 기간 보존 · 재처리·학습 원천
+  phase: 1단계부터 적재
+- store: Redis
+  node: MGD-04
+  entities: 장비 최신 상태 핫 뷰 · 세션
+  purpose: 실시간 화면·팬아웃 보조
+  phase: 1단계
+accumulation:
+- item: 상태 이력
+  source: IF-004 · SVC-01
+  entities:
+  - ENT-12
+  tier: 웜+콜드
+- item: GPS 이력
+  source: IF-003·004
+  entities:
+  - ENT-12
+  tier: 웜+콜드
+- item: 통신 이력 (두절 포함)
+  source: IF-004 · LWT
+  entities:
+  - ENT-12
+  - ENT-08
+  tier: 웜+콜드
+- item: 고장 이력
+  source: error 필드 · SVC-02
+  entities:
+  - ENT-08
+  - ENT-09
+  tier: RDS+콜드
+- item: 전압 이력
+  source: power 필드
+  entities:
+  - ENT-12
+  tier: 웜+콜드
+- item: 단선 이력
+  source: harness 필드
+  entities:
+  - ENT-12
+  - ENT-08
+  tier: 웜+콜드
+- item: 소모품 사용량
+  source: consumables 필드
+  entities:
+  - ENT-12
+  tier: 웜+콜드
+- item: 알림 이력
+  source: SVC-02
+  entities:
+  - ENT-08
+  tier: RDS
+- item: 점검 이력
+  source: API-013 (일일점검)
+  entities:
+  - ENT-09
+  tier: RDS+콜드
