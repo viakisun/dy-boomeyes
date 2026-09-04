@@ -24,7 +24,7 @@ DY의 Figma "[DY] Crane Eyes"(navy 브랜드, 모바일 컴포넌트 36세트)�
 
 ## 결과
 - 디자이너 리뷰 = 브랜드 앵커·역할 이름 단위 리뷰(값은 생성).
-- 참조 스냅샷은 `../boomeyes/archive/design-reference/`, `docs/design/figma/`(읽기 전용).
+- 참조 스냅샷은 `archive/design-reference/`, `docs/design/figma/`(읽기 전용).
 
 ## Rules
 - [ ] 색은 앵커 hex → OKLCH 12단 자동 생성. 램프 값을 손으로 고치지 않는다(앵커·사다리를 고친다).

@@ -1,6 +1,6 @@
 # BoomEyes — 세션 진입 가이드
 
-**프로젝트**: DY CPB 관제 플랫폼(웹 백오피스 + 현장 PWA) 코드 목업 → 프로덕션. 방법론: `../boomeyes/METHOD.md`(v1). 규칙: [CLAUDE.md](CLAUDE.md) · 의도: [INTENT.md](INTENT.md).
+**프로젝트**: DY CPB 관제 플랫폼(웹 백오피스 + 현장 PWA) 코드 목업 → 프로덕션. 방법론: `METHOD.md`(v1). 규칙: [CLAUDE.md](CLAUDE.md) · 의도: [INTENT.md](INTENT.md).
 
 ## Read Order (작업 시작 시)
 
@@ -25,8 +25,8 @@
 | 데모 장면·트랙 | `docs/DEMO.md` · `ssot/scenarios.yaml` `demo[]` |
 | 품질 게이트·패리티 체크리스트 | `docs/QA.md` |
 | 용어 | `ssot/glossary.yaml` |
-| 계약 문서(SOW·관리대장·설계서) 생성 | `docsset` skill — v0.4 이식 전엔 `../boomeyes/archive/…/boomeyes_build` |
-| 참조 자료(원본·Figma·CraneEyes) | `../boomeyes/archive/README.md` |
+| 계약 문서(SOW·관리대장·설계서) 생성 | `docsset` skill — v0.4 이식 전엔 `archive/…/boomeyes_build` |
+| 참조 자료(원본·Figma·CraneEyes) | `archive/README.md` |
 
 ## Task Type Matrix
 

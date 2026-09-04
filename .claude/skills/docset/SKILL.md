@@ -11,7 +11,7 @@ user-invocable: true
 # docset — 계약 문서 세트
 
 ## 현재 상태
-- 발행본 v0.3과 생성 파이프라인은 `../boomeyes/archive/2026-09-05_docset-v0.3/` (읽기 전용). 원천은 이제 `ssot/*.yaml`.
+- 발행본 v0.3과 생성 파이프라인은 `archive/2026-09-05_docset-v0.3/` (읽기 전용). 원천은 이제 `ssot/*.yaml`.
 - 생성기 이식(v0.4)은 별도 작업: `tools/docs-gen/`이 `ssot/*.yaml`을 읽어 docx·xlsx·pdf를 만든다(아카이브 `gen_*.py` 참조).
 
 ## 이식 전 절차
