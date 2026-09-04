@@ -294,6 +294,10 @@ export const MACHINES = {
         "assigned"
       ],
       [
+        "new",
+        "in-progress"
+      ],
+      [
         "assigned",
         "in-progress"
       ],

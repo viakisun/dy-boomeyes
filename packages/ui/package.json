@@ -19,7 +19,8 @@
   },
   "dependencies": {
     "@boomeyes/domain": "workspace:*",
-    "@boomeyes/tokens": "workspace:*"
+    "@boomeyes/tokens": "workspace:*",
+    "@lucide/svelte": "^1.41.0"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^7.1.2",

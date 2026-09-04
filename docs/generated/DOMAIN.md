@@ -34,6 +34,7 @@
 | from | to | 계기 |
 |---|---|---|
 | new | assigned | 관제 배정 / 자동 |
+| new | in-progress | 담당자 직접 접수(배정 없이) |
 | assigned | in-progress | 담당자 접수 |
 | in-progress | done | 정비 보고 → 현장 완료 확인 (2단계, DISC-015) |
 | new | escalated | 1h 미접수 자동 (제안) |

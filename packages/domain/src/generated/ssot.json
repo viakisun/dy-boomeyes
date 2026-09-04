@@ -4313,6 +4313,11 @@
             "by": "관제 배정 / 자동"
           },
           {
+            "from": "new",
+            "to": "in-progress",
+            "by": "담당자 직접 접수(배정 없이)"
+          },
+          {
             "from": "assigned",
             "to": "in-progress",
             "by": "담당자 접수"

@@ -2,3 +2,5 @@
 export * from './generated/ids';
 export * from './machines';
 export * from './session';
+export * from './types';
+export * from './api';
