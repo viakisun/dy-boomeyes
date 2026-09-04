@@ -18,6 +18,7 @@ export default ts.config(
       'packages/tokens/**',
       'tools/**',
       '.claude/**',
+      'archive/**',
     ],
   },
   js.configs.recommended,

@@ -266,7 +266,7 @@ export function checkDocs(d) {
   const files = [];
   const walk = (dir) => {
     for (const e of readdirSync(dir)) {
-      if (['node_modules', '.git', 'dist', '.svelte-kit'].includes(e)) continue;
+      if (['node_modules', '.git', 'dist', '.svelte-kit', 'archive'].includes(e)) continue;
       const p = join(dir, e);
       if (statSync(p).isDirectory()) walk(p);
       else if (p.endsWith('.md')) files.push(p);

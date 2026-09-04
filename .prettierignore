@@ -10,3 +10,4 @@ packages/tokens/dist
 *.md
 ssot/*.yaml
 *.yml
+archive
