@@ -8,7 +8,7 @@ const CATEGORIES = {
   cmp: null,
 };
 const SYS_COLOR =
-  /^sys\.color\.(bg|fg|border|accent|focus|status\.(info|success|warning|danger|progress|neutral)|domain\.[a-z-]+\.[a-z-]+)(\.[a-z0-9-]+)*$/;
+  /^sys\.color\.(bg|fg|border|accent|focus|media|status\.(info|success|warning|danger|progress|neutral)|domain\.[a-z-]+\.[a-z-]+)(\.[a-z0-9-]+)*$/;
 const STATE_SUFFIX = /-(hover|active|selected|disabled|focus|strong|subtle|raised|sunken)$/;
 export const TONES = ['info', 'success', 'warning', 'danger', 'progress', 'neutral'];
 export function runChecks(flat, modes) {

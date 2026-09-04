@@ -408,6 +408,12 @@
       "sys.color.status.neutral.border": "#bbbec3",
       "sys.color.status.neutral.border-strong": "#9c9ea4",
       "sys.color.status.neutral.on-solid": "#ffffff",
+      "sys.color.media.bg": "#191b1e",
+      "sys.color.media.surface": "#616368",
+      "sys.color.media.fg": "#fdfdff",
+      "sys.color.media.muted": "#ffffff99",
+      "sys.color.media.scrim": "#00000099",
+      "sys.color.media.border": "#ffffff29",
       "sys.color.domain.equipment.normal.solid": "#067831",
       "sys.color.domain.equipment.normal.fg": "#015e24",
       "sys.color.domain.equipment.normal.bg": "#e6f6e8",
@@ -1710,6 +1716,12 @@
       "sys.color.status.neutral.border": "#bbbec3",
       "sys.color.status.neutral.border-strong": "#9c9ea4",
       "sys.color.status.neutral.on-solid": "#ffffff",
+      "sys.color.media.bg": "#191b1e",
+      "sys.color.media.surface": "#616368",
+      "sys.color.media.fg": "#fdfdff",
+      "sys.color.media.muted": "#ffffff99",
+      "sys.color.media.scrim": "#00000099",
+      "sys.color.media.border": "#ffffff29",
       "sys.color.domain.equipment.normal.solid": "#067831",
       "sys.color.domain.equipment.normal.fg": "#015e24",
       "sys.color.domain.equipment.normal.bg": "#e6f6e8",
@@ -3026,6 +3038,12 @@
       "sys.color.status.neutral.border": "#4b4d52",
       "sys.color.status.neutral.border-strong": "#616368",
       "sys.color.status.neutral.on-solid": "#191b1e",
+      "sys.color.media.bg": "#0c0d11",
+      "sys.color.media.surface": "#1a1c20",
+      "sys.color.media.fg": "#eff2f7",
+      "sys.color.media.muted": "#ffffff99",
+      "sys.color.media.scrim": "#00000099",
+      "sys.color.media.border": "#ffffff29",
       "sys.color.domain.equipment.normal.solid": "#147e37",
       "sys.color.domain.equipment.normal.fg": "#8dd198",
       "sys.color.domain.equipment.normal.bg": "#102514",
@@ -4370,6 +4388,12 @@
       "sys.color.status.neutral.border": "#4b4d52",
       "sys.color.status.neutral.border-strong": "#616368",
       "sys.color.status.neutral.on-solid": "#191b1e",
+      "sys.color.media.bg": "#0c0d11",
+      "sys.color.media.surface": "#1a1c20",
+      "sys.color.media.fg": "#eff2f7",
+      "sys.color.media.muted": "#ffffff99",
+      "sys.color.media.scrim": "#00000099",
+      "sys.color.media.border": "#ffffff29",
       "sys.color.domain.equipment.normal.solid": "#147e37",
       "sys.color.domain.equipment.normal.fg": "#8dd198",
       "sys.color.domain.equipment.normal.bg": "#102514",
@@ -7932,6 +7956,57 @@
       "$value": "{ref.color.on.neutral}",
       "css": "--sys-color-status-neutral-on-solid",
       "tailwind": "--color-neutral-on-solid"
+    },
+    "sys.color.media.bg": {
+      "$type": "color",
+      "$description": "영상·월보드 바탕 — 테마와 무관하게 항상 어둡다",
+      "$value": {
+        "light": "{ref.color.neutral.12}",
+        "dark": "{ref.color.neutral.1}"
+      },
+      "css": "--sys-color-media-bg",
+      "tailwind": "--color-media-bg"
+    },
+    "sys.color.media.surface": {
+      "$type": "color",
+      "$description": "미디어 위 컨트롤 면",
+      "$value": {
+        "light": "{ref.color.neutral.11}",
+        "dark": "{ref.color.neutral.3}"
+      },
+      "css": "--sys-color-media-surface",
+      "tailwind": "--color-media-surface"
+    },
+    "sys.color.media.fg": {
+      "$type": "color",
+      "$description": "미디어 위 텍스트 — 항상 밝다",
+      "$value": {
+        "light": "{ref.color.neutral.1}",
+        "dark": "{ref.color.neutral.12}"
+      },
+      "css": "--sys-color-media-fg",
+      "tailwind": "--color-media-fg"
+    },
+    "sys.color.media.muted": {
+      "$type": "color",
+      "$description": "미디어 위 보조 텍스트",
+      "$value": "{ref.color.alpha.white-60}",
+      "css": "--sys-color-media-muted",
+      "tailwind": "--color-media-muted"
+    },
+    "sys.color.media.scrim": {
+      "$type": "color",
+      "$description": "미디어 위 칩·자막 배경",
+      "$value": "{ref.color.alpha.black-60}",
+      "css": "--sys-color-media-scrim",
+      "tailwind": "--color-media-scrim"
+    },
+    "sys.color.media.border": {
+      "$type": "color",
+      "$description": "미디어 타일 경계",
+      "$value": "{ref.color.alpha.white-16}",
+      "css": "--sys-color-media-border",
+      "tailwind": "--color-media-border"
     },
     "sys.color.domain.equipment.normal.solid": {
       "$type": "color",

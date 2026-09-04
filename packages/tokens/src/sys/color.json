@@ -478,6 +478,47 @@
           "$value": "{ref.color.on.neutral}"
         }
       }
+    },
+    "media": {
+      "bg": {
+        "$type": "color",
+        "$value": {
+          "light": "{ref.color.neutral.12}",
+          "dark": "{ref.color.neutral.1}"
+        },
+        "$description": "영상·월보드 바탕 — 테마와 무관하게 항상 어둡다"
+      },
+      "surface": {
+        "$type": "color",
+        "$value": {
+          "light": "{ref.color.neutral.11}",
+          "dark": "{ref.color.neutral.3}"
+        },
+        "$description": "미디어 위 컨트롤 면"
+      },
+      "fg": {
+        "$type": "color",
+        "$value": {
+          "light": "{ref.color.neutral.1}",
+          "dark": "{ref.color.neutral.12}"
+        },
+        "$description": "미디어 위 텍스트 — 항상 밝다"
+      },
+      "muted": {
+        "$type": "color",
+        "$value": "{ref.color.alpha.white-60}",
+        "$description": "미디어 위 보조 텍스트"
+      },
+      "scrim": {
+        "$type": "color",
+        "$value": "{ref.color.alpha.black-60}",
+        "$description": "미디어 위 칩·자막 배경"
+      },
+      "border": {
+        "$type": "color",
+        "$value": "{ref.color.alpha.white-16}",
+        "$description": "미디어 타일 경계"
+      }
     }
   }
 }

@@ -268,6 +268,12 @@
   --color-neutral-border: var(--sys-color-status-neutral-border);
   --color-neutral-border-strong: var(--sys-color-status-neutral-border-strong);
   --color-neutral-on-solid: var(--sys-color-status-neutral-on-solid);
+  --color-media-bg: var(--sys-color-media-bg);
+  --color-media-surface: var(--sys-color-media-surface);
+  --color-media-fg: var(--sys-color-media-fg);
+  --color-media-muted: var(--sys-color-media-muted);
+  --color-media-scrim: var(--sys-color-media-scrim);
+  --color-media-border: var(--sys-color-media-border);
   --color-equipment-normal: var(--sys-color-domain-equipment-normal-solid);
   --color-equipment-normal-fg: var(--sys-color-domain-equipment-normal-fg);
   --color-equipment-normal-bg: var(--sys-color-domain-equipment-normal-bg);

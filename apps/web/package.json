@@ -26,6 +26,8 @@
     "@boomeyes/domain": "workspace:*",
     "@boomeyes/mock": "workspace:*",
     "@boomeyes/tokens": "workspace:*",
-    "@boomeyes/ui": "workspace:*"
+    "@boomeyes/ui": "workspace:*",
+    "@boomeyes/map": "workspace:*",
+    "@boomeyes/video": "workspace:*"
   }
 }

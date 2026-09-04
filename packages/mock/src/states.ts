@@ -5,7 +5,16 @@ export type Fixture = (db: Db) => Db;
 
 export const FIXTURES: Record<string, Fixture> = {
   'B1-02:show': (db) => db, // 쇼케이스 진입 전 = 기본
-  'B1-02:quiet': (db) => ({ ...db, devices: db.devices.map((d) => ({ ...d, state: 'normal', telemetry: { ...d.telemetry, errorCode: null, voltageStatus: 'normal', lte: 'connected' } })), alerts: [], cases: db.cases.filter((c) => c.state === 'done') }),
+  'B1-02:quiet': (db) => ({
+    ...db,
+    devices: db.devices.map((d) => ({
+      ...d,
+      state: 'normal',
+      telemetry: { ...d.telemetry, errorCode: null, voltageStatus: 'normal', lte: 'connected' },
+    })),
+    alerts: [],
+    cases: db.cases.filter((c) => c.state === 'done'),
+  }),
   'B1-02M:cam': (db) => db,
   'A1-02:filter': (db) => db,
   'A2-02:checked': (db) => db,

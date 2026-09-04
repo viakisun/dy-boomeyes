@@ -311,6 +311,12 @@
   --sys-color-status-neutral-border: #bbbec3;
   --sys-color-status-neutral-border-strong: #9c9ea4;
   --sys-color-status-neutral-on-solid: #ffffff;
+  --sys-color-media-bg: #191b1e;
+  --sys-color-media-surface: #616368;
+  --sys-color-media-fg: #fdfdff;
+  --sys-color-media-muted: #ffffff99;
+  --sys-color-media-scrim: #00000099;
+  --sys-color-media-border: #ffffff29;
   --sys-color-domain-equipment-normal-solid: #067831;
   --sys-color-domain-equipment-normal-fg: #015e24;
   --sys-color-domain-equipment-normal-bg: #e6f6e8;
@@ -948,6 +954,9 @@
   --sys-color-status-neutral-border: #4b4d52;
   --sys-color-status-neutral-border-strong: #616368;
   --sys-color-status-neutral-on-solid: #191b1e;
+  --sys-color-media-bg: #0c0d11;
+  --sys-color-media-surface: #1a1c20;
+  --sys-color-media-fg: #eff2f7;
   --sys-color-domain-equipment-normal-solid: #147e37;
   --sys-color-domain-equipment-normal-fg: #8dd198;
   --sys-color-domain-equipment-normal-bg: #102514;
@@ -1286,6 +1295,9 @@
     --sys-color-status-neutral-border: #4b4d52;
     --sys-color-status-neutral-border-strong: #616368;
     --sys-color-status-neutral-on-solid: #191b1e;
+    --sys-color-media-bg: #0c0d11;
+    --sys-color-media-surface: #1a1c20;
+    --sys-color-media-fg: #eff2f7;
     --sys-color-domain-equipment-normal-solid: #147e37;
     --sys-color-domain-equipment-normal-fg: #8dd198;
     --sys-color-domain-equipment-normal-bg: #102514;

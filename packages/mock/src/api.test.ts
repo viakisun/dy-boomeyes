@@ -12,7 +12,15 @@ describe('[FR-008] MockApi 업무 흐름', () => {
   });
   it('[FR-001] 시드 계정 7 · 스코프별 장비', async () => {
     const api = bootMock({ capture: true });
-    expect((await api.users()).map((u) => u.role).sort()).toEqual(['control', 'driver', 'hq-safety', 'maintenance', 'ops-admin', 'owner', 'site-safety']);
+    expect((await api.users()).map((u) => u.role).sort()).toEqual([
+      'control',
+      'driver',
+      'hq-safety',
+      'maintenance',
+      'ops-admin',
+      'owner',
+      'site-safety',
+    ]);
     expect((await api.devices({ role: 'control' })).length).toBe(5);
     expect((await api.devices({ role: 'site-safety', siteIds: ['SITE-001'] })).length).toBe(3);
   });

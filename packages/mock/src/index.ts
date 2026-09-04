@@ -10,11 +10,17 @@ export { seed, type Db } from './seed';
 export { createMockApi } from './api';
 export { FIXTURES, applyState } from './states';
 
-export interface MockOptions { screen?: ScrId; state?: string | null; capture?: boolean; latencyMs?: number }
+export interface MockOptions {
+  screen?: ScrId;
+  state?: string | null;
+  capture?: boolean;
+  latencyMs?: number;
+}
 
 /** 화면 진입 시 호출: capture면 시각 고정, 상태 픽스처 적용 후 ApiClient 생성 */
 export function bootMock(opts: MockOptions = {}) {
-  if (opts.capture) clock.freeze(FIXED_CLOCK); else clock.reset();
+  if (opts.capture) clock.freeze(FIXED_CLOCK);
+  else clock.reset();
   let db = seed();
   if (opts.screen) db = applyState(db, opts.screen, opts.state ?? SCREENS[opts.screen].default);
   return createMockApi(db, { latencyMs: opts.capture ? 0 : (opts.latencyMs ?? 120) });

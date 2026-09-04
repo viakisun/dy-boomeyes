@@ -1,0 +1,68 @@
+<script lang="ts">
+  import type { Snippet } from 'svelte';
+  import { cx, FOCUS } from '../lib/cx';
+  import type { NavGroup } from './nav';
+  // 웹 사이드바 — 240 / 접힘 56 · 항목 32(compact) · 선택 = bg-selected (DY-design §9 · cmp.nav.sidebar)
+  let {
+    groups,
+    collapsed = $bindable(false),
+    brand,
+    footer,
+  }: { groups: NavGroup[]; collapsed?: boolean; brand?: Snippet; footer?: Snippet } = $props();
+</script>
+
+<aside
+  class={cx(
+    'border-border-subtle bg-canvas ease-standard flex h-full shrink-0 flex-col border-r transition-[width] duration-150',
+    collapsed ? 'w-layout-sidebar-collapsed' : 'w-layout-sidebar-width',
+  )}
+  style="z-index: var(--sys-z-nav)"
+  aria-label="주 내비게이션"
+>
+  <div class="h-layout-topbar-height gap-inline-sm px-inset-sm flex items-center">
+    {#if brand}{@render brand()}{/if}
+    <button
+      type="button"
+      class={cx(
+        'size-size-control-sm rounded-control text-fg-muted hover:bg-ui-hover ml-auto inline-flex items-center justify-center',
+        FOCUS,
+      )}
+      aria-label={collapsed ? '사이드바 펼치기' : '사이드바 접기'}
+      aria-expanded={!collapsed}
+      onclick={() => (collapsed = !collapsed)}>{collapsed ? '»' : '«'}</button
+    >
+  </div>
+  <nav class="gap-stack-md px-inset-xs py-inset-sm flex flex-1 flex-col overflow-y-auto">
+    {#each groups as g, gi (gi)}
+      <div class="flex flex-col gap-1">
+        {#if g.label && !collapsed}<div class="px-inset-sm text-label-sm text-fg-subtle pb-1 uppercase">
+            {g.label}
+          </div>{/if}
+        {#each g.items as it (it.id)}
+          <a
+            href={it.href}
+            aria-current={it.active ? 'page' : undefined}
+            aria-disabled={it.disabled || undefined}
+            title={collapsed ? it.label : undefined}
+            class={cx(
+              'h-size-control-md gap-inline-sm rounded-control px-inset-sm text-label-lg flex items-center transition-colors duration-100',
+              FOCUS,
+              it.active ? 'bg-selected text-accent-fg-strong' : 'text-fg-muted hover:bg-ui-hover hover:text-fg',
+              it.disabled && 'pointer-events-none opacity-40',
+              collapsed && 'justify-center px-0',
+            )}
+          >
+            {#if it.icon}<it.icon size={16} aria-hidden="true" />{:else}<span
+                class="size-size-icon-sm rounded-2 bg-current opacity-40"
+                aria-hidden="true"
+              ></span>{/if}
+            {#if !collapsed}<span class="flex-1 truncate">{it.label}</span>{#if it.badge}<span
+                  class="rounded-pill bg-danger text-label-sm text-danger-on-solid px-1">{it.badge}</span
+                >{/if}{/if}
+          </a>
+        {/each}
+      </div>
+    {/each}
+  </nav>
+  {#if footer}<div class="border-border-subtle p-inset-sm border-t">{@render footer()}</div>{/if}
+</aside>

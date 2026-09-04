@@ -1,6 +1,10 @@
 /* 앱 스타일 진입점 — 토큰(@theme)만 노출. 화면 코드는 sys/cmp 유틸리티·변수만 쓴다 (ADR-004). */
 @import 'tailwindcss';
 @import '@boomeyes/tokens/theme';
+/* 워크스페이스 패키지의 컴포넌트도 유틸리티 스캔 대상 (node_modules 심링크는 기본 제외) */
+@source '../../../packages/ui/src';
+@source '../../../packages/video/src';
+@source '../../../packages/map/src';
 
 html {
   font: var(--sys-type-body-md);

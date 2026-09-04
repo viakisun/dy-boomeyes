@@ -6,9 +6,9 @@
 
 | 구성 | 수 |
 |---|---|
-| 토큰 전체 | 605 |
+| 토큰 전체 | 611 |
 | ref(원시) | 205 |
-| sys(시맨틱) | 308 |
+| sys(시맨틱) | 314 |
 | cmp(컴포넌트) | 92 |
 | 컴포넌트 카탈로그 | 76 |
 | 대비 검사 | 76/76 통과 |
@@ -188,6 +188,12 @@
 | `sys.color.accent.on-solid` | #ffffff | #ffffff | {ref.color.on.accent} | solid 위 텍스트 |
 | `sys.color.focus.ring` | #0d2877 | #4064b8 | {ref.color.accent.9} | 포커스 링(2px, offset 2px) |
 | `sys.color.focus.ring-offset` | #fdfdff | #0c0d11 | light: {ref.color.neutral.1} · dark: {ref.color.neutral.1} | 포커스 링 오프셋 색 = 바탕 |
+| `sys.color.media.bg` | #191b1e | #0c0d11 | light: {ref.color.neutral.12} · dark: {ref.color.neutral.1} | 영상·월보드 바탕 — 테마와 무관하게 항상 어둡다 |
+| `sys.color.media.surface` | #616368 | #1a1c20 | light: {ref.color.neutral.11} · dark: {ref.color.neutral.3} | 미디어 위 컨트롤 면 |
+| `sys.color.media.fg` | #fdfdff | #eff2f7 | light: {ref.color.neutral.1} · dark: {ref.color.neutral.12} | 미디어 위 텍스트 — 항상 밝다 |
+| `sys.color.media.muted` | #ffffff99 | #ffffff99 | {ref.color.alpha.white-60} | 미디어 위 보조 텍스트 |
+| `sys.color.media.scrim` | #00000099 | #00000099 | {ref.color.alpha.black-60} | 미디어 위 칩·자막 배경 |
+| `sys.color.media.border` | #ffffff29 | #ffffff29 | {ref.color.alpha.white-16} | 미디어 타일 경계 |
 
 ### 3.3 상태 (`sys.color.status.<tone>.*`) — tone = info · success · warning · danger · progress · neutral
 
