@@ -1,6 +1,6 @@
 import { redirect } from '@sveltejs/kit';
 import { canAccess, screenForPath, type ScrId } from '@boomeyes/domain';
-import { bootMock, optionsFromUrl } from '@boomeyes/mock';
+import { bootMock, clock, optionsFromUrl } from '@boomeyes/mock';
 import { session } from '$lib/session.svelte';
 import type { LayoutLoad } from './$types';
 
@@ -16,5 +16,5 @@ export const load: LayoutLoad = ({ url }) => {
   const surface = url.pathname.split('/')[1] ?? 'a1';
   if (screen && !LOGINS.includes(screen) && !user && !opts.capture) throw redirect(302, `/${surface}/login`);
   const forbidden = !!(user && screen && !canAccess(user.role, screen));
-  return { api, screen, capture: !!opts.capture, forbidden, surface };
+  return { api, clock, screen, capture: !!opts.capture, forbidden, surface };
 };

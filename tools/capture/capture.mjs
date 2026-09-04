@@ -1,6 +1,6 @@
 // capture.mjs — ssot 화면 레지스트리 기반 캡처 (QA §3). 빌드된 앱을 vite preview로 띄우고 라우트×상태 전수 촬영.
 //   node tools/capture/capture.mjs [--wave N] [--only B1-02,B0-01] [--web http://...] [--pwa http://...] [--no-serve]
-// 출력 shots/<code-lower>-<state>.png · 시각 고정(meta.fixed_clock) · Math.random 고정 · 애니메이션 off
+// 출력 shots/<code-lower>-<state>.png · 시각 고정은 앱 DemoClock(?capture=1) · 애니메이션 off
 import { readFileSync, mkdirSync, existsSync } from 'node:fs';
 import { join, dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -55,20 +55,7 @@ if (!args.includes('--no-serve'))
   }
 const browser = await chromium.launch();
 const ctx = await browser.newContext({ deviceScaleFactor: 2, locale: 'ko-KR', reducedMotion: 'reduce' });
-await ctx.addInitScript((iso) => {
-  const fixed = new Date(iso).getTime();
-  const D = Date;
-  const P = new Proxy(D, {
-    construct(t, a) {
-      return a.length ? new D(...a) : new D(fixed);
-    },
-    get(t, k) {
-      return k === 'now' ? () => fixed : Reflect.get(t, k);
-    },
-  });
-  globalThis.Date = P;
-  Math.random = () => 0.42;
-}, ssot.meta.fixed_clock);
+// 시각·난수 고정은 앱의 DemoClock(?capture=1)이 담당한다 — 브라우저 Date 프록시는 MapLibre 로드를 막는다
 let n = 0,
   fail = 0;
 for (const s of screens) {
@@ -90,7 +77,14 @@ for (const s of screens) {
       const frame = await page.$('[data-capture-frame]');
       const target = dialog ?? (phone ? frame : null);
       if (target) await target.screenshot({ path: join(OUT, `${name}.png`) });
-      else await page.screenshot({ path: join(OUT, `${name}.png`), fullPage: !phone });
+      else if (phone) await page.screenshot({ path: join(OUT, `${name}.png`) });
+      else {
+        // fullPage(captureBeyondViewport)는 WebGL 캔버스 서브트리(타일·DOM 마커)를 간헐적으로 비운 채 찍는다 → 뷰포트를 문서 높이로 늘려 일반 촬영
+        const h = await page.evaluate(() => document.documentElement.scrollHeight);
+        await page.setViewportSize({ width: 1280, height: Math.max(842, h) });
+        await page.waitForTimeout(300);
+        await page.screenshot({ path: join(OUT, `${name}.png`) });
+      }
       n++;
       console.log('ok', name);
     } catch (e) {

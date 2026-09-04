@@ -4,6 +4,7 @@
   import 'maplibre-gl/dist/maplibre-gl.css';
   import { onMount } from 'svelte';
   import type { MapViewProps } from './types';
+  import { fanOffsets } from './fan';
   let {
     markers,
     center = [127.5, 36.3],
@@ -26,6 +27,12 @@
     maintenance: 'var(--sys-color-domain-equipment-maintenance-solid)',
   };
   const GLYPH: Record<string, string> = { normal: '', caution: '!', fault: '✕', offline: '·', maintenance: '⚙' };
+  // 겹치는 마커 펼침 — 마커 변경·줌 종료마다 화면 좌표로 다시 계산
+  function relayout() {
+    if (!map) return;
+    const off = fanOffsets(markers.map((m) => ({ id: m.id, ...map!.project([m.lng, m.lat]) })));
+    for (const [id, h] of handles) h.setOffset([off.get(id) ?? 0, 0]);
+  }
   function pin(m: MapViewProps['markers'][number]) {
     const d = document.createElement('button');
     d.type = 'button';
@@ -51,6 +58,7 @@
       ready = true;
     });
     map.once('idle', () => el?.setAttribute('data-map-ready', ''));
+    map.on('zoomend', relayout);
     return () => {
       map?.remove();
       map = undefined;
@@ -79,6 +87,7 @@
         h.remove();
         handles.delete(id);
       }
+    relayout();
   });
 </script>
 

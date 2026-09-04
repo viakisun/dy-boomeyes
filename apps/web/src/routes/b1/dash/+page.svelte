@@ -44,7 +44,7 @@
       <div>
         <h1 class="text-heading-xl">관제 대시보드</h1>
         <p class="text-body-sm text-fg-muted">
-          전국 CPB {data.kpis.total}대 · 실시간(mock) · {fmt(new Date().toISOString())}
+          전국 CPB {data.kpis.total}대 · 실시간(mock) · {fmt(data.clock.iso())}
         </p>
       </div>
       <Button variant="outline" tone="neutral" size="sm" onclick={() => goto(resolve('/b1/showcase' as '/'))}
@@ -273,7 +273,7 @@
       <ul class="divide-border-subtle rounded-card border-border text-body-sm divide-y border">
         {#each [0, 1, 2] as i (i)}<li class="px-inset-md py-inset-xs flex items-center justify-between">
             <span class="font-mono tabular-nums"
-              >{fmt(new Date(Date.now() - (i + 1) * 3600000).toISOString())} ~ +60분</span
+              >{fmt(new Date(data.clock.now().getTime() - (i + 1) * 3600000).toISOString())} ~ +60분</span
             ><span class="text-fg-muted">{source === 'server' ? '서브스트림 1Mbps' : 'SD 구간 회수'}</span><Button
               size="sm"
               variant="link">재생</Button

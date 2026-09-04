@@ -28,8 +28,8 @@
 
 ## 3. 캡처 규약 (`tools/capture`, W0)
 
-- 뷰포트: PWA 440×900(프레임 셀렉터 `[data-capture-frame]` 390×800 클립) · 웹 1280×842 fullPage · 모달/시트 `[data-capture-dialog]` 클립. DPR 2 · `ko-KR`.
-- 시각 고정 `ssot/meta.yaml fixed_clock`(2026-07-03 10:42) · `Math.random` 고정 · 지도 타일 로드 대기 · 애니메이션 비활성.
+- 뷰포트: PWA 440×900(프레임 셀렉터 `[data-capture-frame]` 390×800 클립) · 웹 1280×842(문서 높이로 확장) · 모달/시트 `[data-capture-dialog]` 클립. DPR 2 · `ko-KR`.
+- 시각 고정은 **앱의 DemoClock**(`?capture=1` → `ssot/meta.yaml fixed_clock` 2026-07-03 10:42)이 담당 — 화면 코드는 `new Date()` 대신 `data.clock`을 쓴다. 브라우저 `Date` 프록시는 쓰지 않는다(MapLibre 로드를 막음). 지도는 `[data-map-ready]`(idle) 대기 · 애니메이션 비활성. 웹 전체 화면은 `fullPage` 대신 뷰포트를 문서 높이로 늘려 찍는다 — 헤드리스 `fullPage`(captureBeyondViewport)는 WebGL 캔버스 서브트리(타일·마커)를 간헐적으로 비운다.
 - 이름 = `${code.toLowerCase()}-${state}` (`b1-02-dash` `b1-02m-cam`). 상태 목록은 `screens.yaml`에서 생성(매니페스트 손 편집 금지).
 - 데모 계정: `roles.yaml demo_account`. 픽스처 ID: CPB-003(E-021) · CPB-004(통신 두절) · C-105 · D-27.
 

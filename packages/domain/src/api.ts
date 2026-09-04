@@ -18,6 +18,12 @@ export interface ApiClient {
   kpis(scope: Scope): Promise<Kpis>;
 }
 
+/** 시각 원천 — 화면은 new Date() 대신 이것을 쓴다 (capture 모드에서 고정, 데모에서 점프) */
+export interface Clock {
+  now(): Date;
+  iso(): string;
+}
+
 /** 실시간 스트림 — WS/SSE(W3) 또는 mock 리플레이 */
 export interface RealtimeClient {
   subscribe(handler: (event: RealtimeEvent) => void): () => void;
