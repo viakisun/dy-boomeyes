@@ -90,6 +90,8 @@ export const SCENE_FIXTURES: Record<number, Fixture> = {
   }),
   // 9: 사업 가치 — 시드 그대로(LS-001 D-27 expiring이 B1-06 최상단, 재배치는 화면에서)
   9: (db) => db,
+  // 10: 쇼케이스 — 시드 그대로(entry /b1/showcase · 계정 safety01은 레이아웃이 control로 대체)
+  10: (db) => db,
 };
 
 /** 장면 1 타임라인: firstMs 뒤 E-021 발생 — db 변형(CPB-003 fault · 알림 · C-105) 후 alert.raised 1회. 다른 장면은 발행하지 않는다(결정성) */

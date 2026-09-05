@@ -80,3 +80,15 @@ test('[B1-06] 장면 9: control01 세션 · LS-001 D-27 최상단 · 재배치 �
   await expect(page.locator('table tbody tr').first()).toContainText('재배치');
   await expect(bar.getByRole('link', { name: '다음 →' })).toHaveAttribute('href', /scene=10$/);
 });
+
+test('[B1-07] 장면 10: 쇼케이스에서 시작(control 대체 세션) · 다크 강제 · 장면 바 10/10 · 이전(장면 9) [FR-023] [FR-024]', async ({
+  page,
+}) => {
+  await page.goto('/b1/showcase?scene=10');
+  await expect(page.locator(root(SCR['B1-07']))).toBeVisible();
+  await expect(page.locator('[data-showcase]')).toHaveAttribute('data-theme', 'dark');
+  const bar = page.locator('[data-demo-bar]');
+  await expect(bar).toContainText('장면 10/10');
+  await expect(bar).toContainText('쇼케이스');
+  await expect(bar.getByRole('link', { name: '← 이전' })).toHaveAttribute('href', /\/b1\/leases\?scene=9$/);
+});
