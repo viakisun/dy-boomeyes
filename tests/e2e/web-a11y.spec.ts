@@ -8,6 +8,16 @@ const PAGES: { scr: string; url: string; ready: (page: Page) => Promise<void> }[
   { scr: SCR['B0-01'], url: '/login', ready: (p) => expect(p.getByText('control01', { exact: true })).toBeVisible() },
   { scr: SCR['B1-02'], url: '/b1/dash?state=dash&capture=1', ready: markersReady },
   { scr: SCR['B1-02M'], url: '/b1/dash?state=dash&capture=1&cam=CAM-3-2', ready: markersReady },
+  {
+    scr: SCR['B1-03'],
+    url: '/b1/inbox?state=inbox&capture=1',
+    ready: (p) => expect(p.getByText('RQ-003', { exact: false }).first()).toBeVisible(),
+  },
+  {
+    scr: SCR['B1-04'],
+    url: '/b1/escalation?state=esc&capture=1',
+    ready: (p) => expect(p.getByText('C-105', { exact: false }).first()).toBeVisible(),
+  },
 ];
 
 for (const { scr, url, ready } of PAGES) {

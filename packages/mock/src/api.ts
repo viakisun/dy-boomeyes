@@ -24,7 +24,7 @@ export function createMockApi(db: Db, opts: { latencyMs?: number } = {}): ApiCli
   const wait = () => delay(opts.latencyMs ?? 0);
   const devScope = (scope: Scope) =>
     db.devices.filter((d) => inScope(scope, d.siteId) && (!scope.ownerId || d.ownerId === scope.ownerId));
-  return {
+  const impl: ApiClient & { db: Db } = {
     db,
     async users() {
       await wait();
@@ -155,6 +155,14 @@ export function createMockApi(db: Db, opts: { latencyMs?: number } = {}): ApiCli
       };
     },
   };
+  // API 경계에서는 복사본을 돌려준다 — 실 HTTP처럼. 같은 객체 참조를 돌려주면 in-place 전이가 Svelte 키드 each에 보이지 않는다(승인 후 표가 안 바뀌던 사고)
+  for (const key of Object.keys(impl) as (keyof typeof impl)[]) {
+    if (key === 'db') continue;
+    const fn = impl[key] as (...args: unknown[]) => Promise<unknown>;
+    (impl as unknown as Record<string, unknown>)[key] = async (...args: unknown[]) =>
+      structuredClone(await fn(...args));
+  }
+  return impl;
 }
 function must(db: Db, id: string): Case {
   const c = db.cases.find((x) => x.id === id);

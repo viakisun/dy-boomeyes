@@ -13,6 +13,7 @@
 | 게이트: `pnpm verify`(ssot·tokens·tokens:lint·lint·check·test·생성물 diff 0) · `pnpm e2e` 19(로그인·가드·대시보드·realtime·모달·axe) · CI `e2e` 잡(capture 아티팩트) | 완료 — `✓ DY: lint files 56 · errors 0` · `19 passed` |
 | ADR-002(트랜스포트 목) · ADR-003(MapLibre) Accepted | 완료 — ADR-007은 프리뷰 구성 후 |
 | 리뷰어 판정(머지 불가 4건) 반영 — capture 모드 셸 렌더 · 시간대 고정 · 지도 대기 FAIL · mock realtime(AC-3) · 마커 갱신 · lint 규칙 보강 | 완료 — 다크 렌더(shell-auth AC-6)는 W1로 이동 |
+| W1 선행(9/5): task-escalation 화면 4(A1-02 · A1-03 · B1-03 · B1-04) + ui 4(DataTable · TaskCard · Timeline · EscalationTimer) + mock(요청 · 에스컬레이션) + domain(profile · protocol) · e2e 29 · 캡처 `--wave 1` | 진행 중 — `feat/w1-domain`, `current_wave`는 W0 회고 후 1 |
 | 남은 것 | S3+CloudFront 프리뷰(AWS 계정 DISC-006 — 사용자) · 리모트 리포 생성 → CI 1회 녹색 · 시각 회귀 기준선(W1) · W0 회고(9/19) → `current_wave: 1` · `?capture=1` 가드 우회 제거(W3 실 인증 전) |
 
 ## 웨이브 표 (제안)

@@ -38,7 +38,7 @@ export function navFor(
       label: s.name,
       href: resolve(s.route),
       active: id === currentScr,
-      disabled: s.wave > CURRENT_WAVE,
+      disabled: s.wave > CURRENT_WAVE && id !== currentScr, // 현재 화면은 비활성 처리하지 않는다(대비·포커스)
     });
   }
   return [...bySurface.entries()].map(([surface, items]) => ({ label: surface, items }));

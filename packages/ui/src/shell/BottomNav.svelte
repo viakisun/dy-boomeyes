@@ -14,6 +14,8 @@
     <a
       href={it.href}
       aria-current={it.active ? 'page' : undefined}
+      aria-disabled={it.disabled || undefined}
+      tabindex={it.disabled ? -1 : undefined}
       class={cx(
         'min-w-size-touch-min text-label-sm gap-stack-xs relative flex flex-1 flex-col items-center justify-center',
         FOCUS,

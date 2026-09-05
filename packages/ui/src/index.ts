@@ -28,6 +28,20 @@ export { default as Dialog } from './primitives/Dialog.svelte';
 export { default as EmptyState } from './primitives/EmptyState.svelte';
 export { default as Banner } from './primitives/Banner.svelte';
 export { default as Stat } from './primitives/Stat.svelte';
+export { default as DataTable } from './primitives/DataTable.svelte';
+export type { Column } from './lib/table';
+export { default as TaskCard } from './primitives/TaskCard.svelte';
+export { default as Timeline } from './primitives/Timeline.svelte';
+export { default as EscalationTimer } from './primitives/EscalationTimer.svelte';
+export {
+  TASK_LABEL,
+  CASE_KIND_LABEL,
+  SEVERITY_LABEL,
+  REQUEST_KIND_LABEL,
+  REQUEST_STATE_LABEL,
+  REQUEST_TONE,
+} from './lib/labels';
+export { fmtDateTime, fmtTime, dueLabel, elapsedLabel } from './lib/format';
 export { default as WebShell } from './shell/WebShell.svelte';
 export { default as PwaShell } from './shell/PwaShell.svelte';
 export { default as Sidebar } from './shell/Sidebar.svelte';
