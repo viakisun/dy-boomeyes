@@ -1,5 +1,6 @@
 // MockApi — 인메모리 ApiClient (ADR-002). 상태기계로만 전이한다.
 import {
+  ESCALATE_AFTER_MS,
   canTransition,
   transition,
   type Alert,
@@ -17,8 +18,6 @@ import type { Db } from './seed';
 
 const inScope = (scope: Scope, siteId: string) => !scope.siteIds?.length || scope.siteIds.includes(siteId);
 const delay = (ms = 0) => new Promise<void>((r) => setTimeout(r, ms));
-/** 미접수 에스컬레이션 임계 — entities.rules "임계 1시간(협의)" */
-export const ESCALATE_AFTER_MS = 60 * 60 * 1000;
 
 export function createMockApi(db: Db, opts: { latencyMs?: number } = {}): ApiClient & { db: Db } {
   const wait = () => delay(opts.latencyMs ?? 0);

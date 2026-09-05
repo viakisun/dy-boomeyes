@@ -30,6 +30,7 @@
         label="로그아웃"
         onclick={() => {
           logout();
+          data.resetMock(); // 다음 로그인은 새 시드로
           goto(resolve('/login'));
         }}>⏻</IconButton
       >

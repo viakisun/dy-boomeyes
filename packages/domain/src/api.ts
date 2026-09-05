@@ -37,6 +37,15 @@ export interface Clock {
 export interface RealtimeClient {
   subscribe(handler: (event: RealtimeEvent) => void): () => void;
 }
+/** 영상 소스 — 라이브 대체(루프 MP4) · 스냅샷 · 저장 영상 메타. mock 구현은 W1 video-basics, 실 스트림은 W3 (ADR-002) */
+export interface MediaSource {
+  live(cameraId: string): Promise<{ kind: 'mp4' | 'hls'; url: string } | null>;
+  snapshot(cameraId: string): Promise<{ url: string; at: string } | null>;
+  recordings(
+    cameraId: string,
+    source: 'server' | 'sd' | 'nvr',
+  ): Promise<{ id: string; at: string; durationSec: number; source: 'server' | 'sd' | 'nvr' }[]>;
+}
 export type RealtimeEvent =
   | { type: 'alert.raised'; alert: Alert }
   | { type: 'device.updated'; device: Device }

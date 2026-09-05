@@ -1,10 +1,11 @@
 <script lang="ts">
   // 미접수 경과 — 임계(기본 1h) 넘으면 danger, 아니면 warning. 색 + 텍스트
+  import { ESCALATE_AFTER_MS } from '@boomeyes/domain';
   import { elapsedLabel } from '../lib/format';
   import StatusPill from './StatusPill.svelte';
   let {
     elapsedMs,
-    thresholdMs = 3_600_000,
+    thresholdMs = ESCALATE_AFTER_MS,
     class: cls,
   }: { elapsedMs: number; thresholdMs?: number; class?: string } = $props();
   const over = $derived(elapsedMs >= thresholdMs);

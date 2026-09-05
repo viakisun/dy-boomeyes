@@ -34,3 +34,15 @@ test('[A1-03] C-105 접수 → in-progress · 이력 · 완료 확인 · 정비 
   await expect(page.locator('ol[aria-label="이력"] li').first()).toContainText('접수');
   await expect(page.getByRole('button', { name: '완료 확인' })).toBeVisible();
 });
+
+test('[A1-02] realtime 알림 도착 → 앱바 배지 · 토스트 · 배지 탭 → 업무 C-105 [FR-011]', async ({ page }) => {
+  await page.goto('/a1/login');
+  await page.getByRole('button', { name: '입장' }).click();
+  await expect(page.locator(`[data-scr="${SCR['A1-02']}"]`)).toBeVisible();
+  const badge = page.getByRole('link', { name: /새 알림/ });
+  await expect(badge).toBeVisible({ timeout: 10_000 }); // 대본 첫 알림 6s
+  await expect(badge).toContainText('1');
+  await expect(page.getByRole('status').first()).toContainText('CPB-003 호스 주변 인원 접근');
+  await badge.click();
+  await expect(page).toHaveURL(/\/a1\/inbox\/C-105$/);
+});

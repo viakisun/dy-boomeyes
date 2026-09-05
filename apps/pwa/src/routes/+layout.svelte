@@ -2,8 +2,9 @@
   import '../app.css';
   import { goto } from '$app/navigation';
   import { resolve } from '$app/paths';
-  import { APP_HOME_OF, SCREENS, type RoleId } from '@boomeyes/domain';
-  import { Button, EmptyState, IconButton, PwaShell, Toast } from '@boomeyes/ui';
+  import { onMount } from 'svelte';
+  import { APP_HOME_OF, SCREENS, type Alert, type RoleId } from '@boomeyes/domain';
+  import { Badge, Button, EmptyState, IconButton, PwaShell, Toast, toast } from '@boomeyes/ui';
   import { navFor } from '$lib/nav';
   import { logout, session } from '$lib/session.svelte';
   let { data, children } = $props();
@@ -21,6 +22,22 @@
     const h = role && APP_HOME_OF[role];
     if (h) goto(resolve(SCREENS[h].route as '/'));
   };
+  // 실시간 알림(mock realtime, task-escalation AC-5) — 앱바 배지 + 토스트, 배지 탭 → 최신 알림의 업무
+  let live = $state<Alert[]>([]);
+  onMount(() =>
+    data.realtime.subscribe((e) => {
+      if (e.type !== 'alert.raised' || !session.user) return;
+      live = [e.alert, ...live];
+      toast(e.alert.message);
+    }),
+  );
+  // 배지 탭 → 최신 알림의 업무(A1) 또는 앱 첫 화면. href는 템플릿에서 resolve()로 감싼다(no-navigation-without-resolve)
+  const alertPath = $derived.by(() => {
+    const a = live[0];
+    if (a?.caseId && data.surface === 'a1') return `/a1/inbox/${a.caseId}`;
+    const h = role && APP_HOME_OF[role];
+    return h ? SCREENS[h].route : '/';
+  });
 </script>
 
 <svelte:head>
@@ -31,13 +48,22 @@
   {@render children()}
 {:else}
   <PwaShell {title} {tabs}>
-    {#snippet actions()}<IconButton
+    {#snippet actions()}
+      {#if live.length}<a
+          href={resolve(alertPath as '/')}
+          aria-label="새 알림 {live.length}건"
+          class="size-size-control-md rounded-control inline-flex items-center justify-center"
+          onclick={() => (live = [])}><Badge tone="danger" count={live.length} /></a
+        >{/if}
+      <IconButton
         label="로그아웃"
         onclick={() => {
           logout();
+          data.resetMock();
           goto(resolve(`/${data.surface}/login` as '/'));
         }}>⏻</IconButton
-      >{/snippet}
+      >
+    {/snippet}
     {#if data.forbidden}
       <EmptyState
         title="접근 권한이 없습니다"
