@@ -19,6 +19,7 @@ import {
   type Device,
   type Doc,
   type DocState,
+  type DocSummary,
   type Escalation,
   type Kpis,
   type Request,
@@ -309,7 +310,8 @@ export function createMockApi(db: Db, opts: { latencyMs?: number } = {}): ApiCli
       d.history.push({ at: clock.iso(), by, action: decision === 'approved' ? '승인' : '반려', note });
       const c = db.cases.find((x) => x.docId === id && x.state !== 'done');
       if (c) {
-        if (c.state === 'new' || c.state === 'assigned' || c.state === 'escalated') c.state = 'in-progress';
+        // 접수 전(new/assigned/escalated) 업무도 승인/반려가 곧 처리다 — 상태기계로 in-progress를 거쳐 done
+        if (c.state !== 'in-progress') c.state = transition('task', c.state, 'in-progress');
         c.state = transition('task', c.state, 'done');
         c.history.push({ at: clock.iso(), by, action: decision === 'approved' ? '승인 — 완료' : '반려 — 완료', note });
       }
@@ -321,6 +323,7 @@ export function createMockApi(db: Db, opts: { latencyMs?: number } = {}): ApiCli
       const d: Doc = {
         id: `DOC-${String(db.docs.length + 1).padStart(3, '0')}`,
         ...input,
+        siteId: siteOfSubject(db, input.subjectId),
         state: expiring ? 'expiring' : 'valid',
         submittedAt: clock.iso(),
         history: [{ at: clock.iso(), by, action: '등록' }],
@@ -331,22 +334,51 @@ export function createMockApi(db: Db, opts: { latencyMs?: number } = {}): ApiCli
     async docCompleteness(scope) {
       await wait();
       const list = await impl.docs(scope);
+      const done = (d: Doc) => d.state === 'valid' || d.state === 'approved';
+      const row = (
+        subjectId: string,
+        subject: string,
+        kind: DocSummary['kind'],
+        siteId: string,
+        ds: Doc[],
+      ): DocSummary => ({
+        subjectId,
+        subject,
+        kind,
+        siteId,
+        total: ds.length,
+        complete: ds.filter(done).length,
+        rate: Math.round((ds.filter(done).length / ds.length) * 100),
+        expiring: ds.filter((d) => d.state === 'expiring').length,
+      });
+      // 현장 차원(AC-4): 현장에 속한 서류 전체 → 그 다음 장비·운전자별
+      const sites = db.sites
+        .filter((st) => inScope(scope, st.id) && list.some((d) => d.siteId === st.id))
+        .map((st) =>
+          row(
+            st.id,
+            st.name,
+            'site',
+            st.id,
+            list.filter((d) => d.siteId === st.id),
+          ),
+        );
       const groups = new Map<string, Doc[]>();
       for (const d of list) groups.set(d.subjectId, [...(groups.get(d.subjectId) ?? []), d]);
-      const done = (d: Doc) => d.state === 'valid' || d.state === 'approved';
-      return [...groups.entries()].map(([subjectId, ds]) => {
-        const dev = db.devices.find((x) => x.id === subjectId);
-        const user = db.users.find((x) => x.id === subjectId);
-        return {
-          subjectId,
-          subject: dev ? `${dev.id} · ${dev.unitNo}호기` : (user?.display ?? subjectId),
-          kind: dev ? ('device' as const) : ('driver' as const),
-          total: ds.length,
-          complete: ds.filter(done).length,
-          rate: Math.round((ds.filter(done).length / ds.length) * 100),
-          expiring: ds.filter((d) => d.state === 'expiring').length,
-        };
-      });
+      const subjects = [...groups.entries()]
+        .filter(([subjectId]) => !db.sites.some((st) => st.id === subjectId))
+        .map(([subjectId, ds]) => {
+          const dev = db.devices.find((x) => x.id === subjectId);
+          const user = db.users.find((x) => x.id === subjectId);
+          return row(
+            subjectId,
+            dev ? `${dev.id} · ${dev.unitNo}호기` : (user?.display ?? subjectId),
+            dev ? 'device' : 'driver',
+            ds[0]?.siteId ?? '',
+            ds,
+          );
+        });
+      return [...sites, ...subjects];
     },
     async leases(scope) {
       await wait();
@@ -377,6 +409,13 @@ export function createMockApi(db: Db, opts: { latencyMs?: number } = {}): ApiCli
       structuredClone(await fn(...args));
   }
   return impl;
+}
+/** 서류 대상의 현장 — 장비면 그 현장, 사용자면 첫 현장, 현장 자신이면 그대로 */
+function siteOfSubject(db: Db, subjectId: string): string {
+  if (db.sites.some((s) => s.id === subjectId)) return subjectId;
+  const dev = db.devices.find((d) => d.id === subjectId);
+  if (dev) return dev.siteId;
+  return db.users.find((u) => u.id === subjectId)?.siteIds[0] ?? 'SITE-001';
 }
 function must(db: Db, id: string): Case {
   const c = db.cases.find((x) => x.id === id);

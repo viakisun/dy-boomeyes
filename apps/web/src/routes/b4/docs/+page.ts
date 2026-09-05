@@ -4,6 +4,11 @@ import type { PageLoad } from './$types';
 export const load: PageLoad = async ({ parent, url }) => {
   const { api } = await parent();
   const scope = { role: 'ops-admin' as const };
-  const [docs, devices, users] = await Promise.all([api.docs(scope), api.devices(scope), api.users()]);
-  return { docs, devices, users, tab: url.searchParams.get('tab') === 'register' ? 'register' : 'list' };
+  const [docs, devices, users, sites] = await Promise.all([
+    api.docs(scope),
+    api.devices(scope),
+    api.users(),
+    api.sites(scope),
+  ]);
+  return { docs, devices, users, sites, tab: url.searchParams.get('tab') === 'register' ? 'register' : 'list' };
 };

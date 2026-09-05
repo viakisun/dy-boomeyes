@@ -12,7 +12,13 @@ export function screenForPath(pathname: string, search = '', app?: 'web' | 'pwa'
   const cands = compiled.filter((c) => (!app || c.app === app) && c.re.test(pathname));
   if (!cands.length) return undefined;
   const params = new URLSearchParams(search);
-  const withQuery = cands.find((c) => c.hasQuery && params.has(c.query.split('=')[0] ?? ''));
+  // 쿼리 템플릿 `sheet=complete`는 값까지, `cam=[camera]`는 키만 맞으면 된다 — `?sheet=review`(반려 시트)는 A1-08이 아니다
+  const matches = (query: string) => {
+    const [k = '', v = ''] = query.split('=');
+    const actual = params.get(k);
+    return actual !== null && (!v || /^\[[a-z]+\]$/.test(v) || actual === v);
+  };
+  const withQuery = cands.find((c) => c.hasQuery && matches(c.query));
   return (withQuery ?? cands.find((c) => !c.hasQuery) ?? cands[0])?.id;
 }
 

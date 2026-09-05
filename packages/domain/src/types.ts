@@ -50,7 +50,8 @@ export interface Device {
 export interface DocSummary {
   subjectId: string;
   subject: string;
-  kind: 'device' | 'driver';
+  kind: 'site' | 'device' | 'driver';
+  siteId: string;
   total: number;
   complete: number;
   rate: number;
@@ -112,6 +113,8 @@ export interface Doc {
   kind: DocKind;
   subject: string;
   subjectId: string;
+  /** 대상이 속한 현장(장비 → 현장, 사용자 → 첫 현장, 현장 자신) — 완비율의 현장 차원 */
+  siteId: string;
   state: DocState;
   expiresAt: string | null;
   submittedAt: string | null;

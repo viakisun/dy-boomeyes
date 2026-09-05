@@ -34,9 +34,11 @@
     { key: 'id', label: '서류' },
     { key: 'kind', label: '유형' },
     { key: 'subject', label: '대상' },
+    { key: 'site', label: '현장' },
     { key: 'state', label: '상태' },
     { key: 'expires', label: '만료' },
   ];
+  const siteName = (id: string) => data.sites.find((s) => s.id === id)?.name ?? id;
   const rate = $derived(
     data.completeness.length
       ? Math.round(data.completeness.reduce((a, c) => a + c.rate, 0) / data.completeness.length)
@@ -78,12 +80,14 @@
       <Stat label="전체" value={data.docs.length} unit="건" tone="neutral" hint="5유형" />
     </div>
     <section class="gap-stack-sm flex flex-col" aria-label="대상별 완비율">
-      <h2 class="text-heading-md">대상별 완비율</h2>
-      <ul class="gap-inline-sm flex flex-wrap">
+      <h2 class="text-heading-md">완비율 — 현장 · 장비 · 운전자</h2>
+      <ul class="gap-inline-sm flex flex-wrap" aria-label="대상별 완비율">
         {#each data.completeness as c (c.subjectId)}
-          <li>
-            <Badge tone={c.rate === 100 ? 'success' : c.expiring ? 'danger' : 'warning'}
-              >{c.subject} {c.rate}% ({c.complete}/{c.total})</Badge
+          <li data-kind={c.kind}>
+            <Badge
+              tone={c.rate === 100 ? 'success' : c.expiring ? 'danger' : 'warning'}
+              variant={c.kind === 'site' ? 'solid' : 'subtle'}
+              >{c.kind === 'site' ? '현장 ' : ''}{c.subject} {c.rate}% ({c.complete}/{c.total})</Badge
             >
           </li>
         {/each}
@@ -105,6 +109,7 @@
         {#if key === 'id'}<span class="text-code-md">{row.id}</span>
         {:else if key === 'kind'}{DOC_KIND_LABEL[row.kind]}
         {:else if key === 'subject'}{row.subject}
+        {:else if key === 'site'}<span class="text-body-sm text-fg-muted">{siteName(row.siteId)}</span>
         {:else if key === 'state'}<StatusPill tone={DOC_TONE[row.state]} label={DOC_STATE_LABEL[row.state]} size="sm" />
         {:else if key === 'expires'}
           {#if row.expiresAt}{@const d = dueLabel(row.expiresAt, now)}<span
@@ -119,6 +124,7 @@
       <div class="gap-stack-xs flex flex-col">
         <span class="text-label-md text-fg-muted">{selected.id} · {DOC_KIND_LABEL[selected.kind]}</span>
         <span class="text-heading-sm">{selected.subject}</span>
+        <span class="text-body-sm text-fg-muted">현장 {siteName(selected.siteId)}</span>
         <div class="gap-inline-sm flex flex-wrap items-center">
           <StatusPill tone={DOC_TONE[selected.state]} label={DOC_STATE_LABEL[selected.state]} size="sm" />
           {#if selected.expiresAt}<span class="text-body-sm text-fg-muted">만료 {fmtDateTime(selected.expiresAt)}</span

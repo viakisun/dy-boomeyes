@@ -67,3 +67,22 @@ test('[A1-03] 서류 업무 반려(사유 필수) → rejected · 이력 note ·
   await expect(page.locator('ol[aria-label="이력"] li').first()).toContainText('반려');
   await expect(page.getByText('완료 상태 — 할 일이 없습니다')).toBeVisible();
 });
+
+test('[A1-03] 접수 전(new) 서류 업무(docnew): 승인/반려 대신 접수 → 접수 후 승인/반려 → 반려(사유) → 완료 [FR-015] [FR-008]', async ({
+  page,
+}) => {
+  await page.goto('/a1/inbox/C-106?state=docnew&capture=1');
+  await expect(page.locator(`[data-scr="${SCR['A1-03']}"]`)).toBeVisible();
+  await expect(page.getByRole('button', { name: '접수' })).toBeVisible();
+  await expect(page.getByRole('button', { name: '승인', exact: true })).toHaveCount(0);
+  await page.getByRole('button', { name: '접수' }).click();
+  await expect(page.getByRole('button', { name: '승인', exact: true })).toBeVisible();
+  await page.getByRole('button', { name: '반려', exact: true }).click();
+  await expect(page).toHaveURL(/sheet=review/);
+  await expect(page.locator(`[data-scr="${SCR['A1-03']}"]`)).toBeVisible(); // 반려 시트는 A1-08이 아니다
+  const sheet = page.locator('dialog[open][data-bottom-sheet]');
+  await sheet.getByLabel('반려 사유(필수)').fill('원본 대조 필요');
+  await sheet.getByRole('button', { name: '반려' }).click();
+  await expect(page.locator('[data-doc="DOC-004"]')).toContainText('반려 사유: 원본 대조 필요');
+  await expect(page.getByText('완료 상태 — 할 일이 없습니다')).toBeVisible();
+});

@@ -193,6 +193,23 @@ describe('[FR-015] 서류 제출·검토', () => {
     expect(r.state).toBe('approved');
     expect((await api.case(task!.id))?.state).toBe('done');
   });
+  it('접수 전(new) 검토 업무: 접수(new→in-progress) 후 승인 → done · 접수 없이 승인해도 상태기계(new→in-progress→done)를 거친다', async () => {
+    const api = bootMock({ capture: true });
+    await api.submitDoc('DOC-001', { name: 'a.png', type: 'image/png', size: 1 }, 'driver03');
+    const task = (await api.cases({ role: 'site-safety', siteIds: ['SITE-001'] })).find((c) => c.docId === 'DOC-001')!;
+    expect(task.state).toBe('new');
+    await api.acceptCase(task.id, 'safety01');
+    expect((await api.case(task.id))?.state).toBe('in-progress');
+    await api.reviewDoc('DOC-001', 'approved', 'safety01');
+    expect((await api.case(task.id))?.state).toBe('done');
+    // 픽스처 docnew: C-106을 new로 두고 바로 승인 — 직접 대입 없이 전이 2번
+    const api2 = bootMock({ capture: true, screen: 'A1-03', state: 'docnew' });
+    expect((await api2.case('C-106'))?.state).toBe('new');
+    await api2.reviewDoc('DOC-004', 'approved', 'safety01');
+    const done = await api2.case('C-106');
+    expect(done?.state).toBe('done');
+    expect(done?.history.at(-1)?.action).toBe('승인 — 완료');
+  });
   it('반려는 사유 필수 · rejected → 재제출 submitted', async () => {
     const api = bootMock({ capture: true });
     await api.submitDoc('DOC-001', { name: 'a.png', type: 'image/png', size: 1 }, 'driver03');
@@ -219,6 +236,17 @@ describe('[FR-015] 서류 제출·검토', () => {
     const cpb3 = sum.find((s) => s.subjectId === 'CPB-003');
     expect(cpb3?.rate).toBe(100);
     expect(sum.find((s) => s.subjectId === 'CPB-001')?.expiring).toBe(1);
+    const all = await api.docCompleteness({ role: 'control' });
+    const site = all.find((c) => c.kind === 'site');
+    expect(site?.subjectId).toBe('SITE-001');
+    expect(site?.total).toBe(7); // 시드 6 + 등록 1(CPB-001 → SITE-001)
+    expect(all.filter((c) => c.kind === 'site')).toHaveLength(1);
+    const bySite = await api.registerDoc(
+      { kind: 'license', subject: '현장 선임증', subjectId: 'SITE-002', expiresAt: null },
+      'ops01',
+    );
+    expect(bySite.siteId).toBe('SITE-002');
+    expect((await api.docCompleteness({ role: 'control' })).filter((c) => c.kind === 'site')).toHaveLength(2);
   });
 });
 

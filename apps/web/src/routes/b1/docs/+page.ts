@@ -4,10 +4,11 @@ import type { PageLoad } from './$types';
 export const load: PageLoad = async ({ parent, url }) => {
   const { api } = await parent();
   const scope = { role: 'control' as const };
-  const [docs, completeness, requests] = await Promise.all([
+  const [docs, completeness, requests, sites] = await Promise.all([
     api.docs(scope),
     api.docCompleteness(scope),
     api.requests(scope),
+    api.sites(scope),
   ]);
-  return { docs, completeness, requests, doc: url.searchParams.get('doc') };
+  return { docs, completeness, requests, sites, doc: url.searchParams.get('doc') };
 };

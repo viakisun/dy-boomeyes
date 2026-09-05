@@ -22,12 +22,18 @@
   let over = $state(false);
   const id = `fu-${Math.random().toString(36).slice(2, 8)}`;
   let preview = $state<string | null>(null);
+  const revoke = () => {
+    if (preview) URL.revokeObjectURL(preview);
+    preview = null;
+  };
+  $effect(() => revoke); // 언마운트 시 objectURL 해제
   const acceptAttr = $derived(mode === 'image' ? 'image/*' : accept);
   const hintText = $derived(mode === 'image' ? '사진 촬영 · 이미지' : hint);
   async function take(files: FileList | null | undefined) {
     const f = files?.[0];
     if (!f || disabled) return;
     if (mode === 'image') {
+      revoke(); // 재선택 시 이전 objectURL 해제
       preview = URL.createObjectURL(f);
       onfile?.({ name: f.name, text: '', type: f.type, size: f.size, url: preview });
     } else onfile?.({ name: f.name, text: await f.text() });

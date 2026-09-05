@@ -30,7 +30,9 @@
   let busy = $state(false);
   let picked = $state<string | null>(null);
   const selected = $derived(data.docs.find((d) => d.id === picked) ?? data.docs[0] ?? null);
+  // 대상 = 현장 · 장비 · 운전자/안전관리자 (AC-5)
   const subjects = $derived([
+    ...data.sites.map((s) => ({ id: s.id, label: `현장 · ${s.name} (${s.id})` })),
     ...data.devices.map((d) => ({ id: d.id, label: `${d.id} · ${d.unitNo}호기` })),
     ...data.users
       .filter((u) => u.role === 'driver' || u.role === 'site-safety')

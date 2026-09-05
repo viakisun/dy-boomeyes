@@ -11,6 +11,10 @@ test('[B1-05] 완비율·만료 임박 · 표 · 인스펙터 이력·요청 회
   const rows = page.locator('table tbody tr');
   await expect(rows).toHaveCount(6);
   await expect(rows.first()).toContainText('DOC-001'); // 만료 빠른 순
+  await expect(rows.first()).toContainText('한빛 초등학교'); // 현장 열
+  const badges = page.locator('ul[aria-label="대상별 완비율"] li');
+  await expect(page.locator('ul[aria-label="대상별 완비율"] li[data-kind="site"]')).toHaveCount(1);
+  await expect(badges.first()).toContainText('현장 한빛 초등학교 건설 현장 50% (3/6)'); // valid 2 + approved 1 / 6
   const aside = page.getByRole('complementary', { name: '서류 상세' });
   await expect(aside).toContainText('DOC-001');
   await expect(aside.getByRole('link', { name: /요청 회신 — RQ-003/ })).toBeVisible();
@@ -34,4 +38,12 @@ test('[B4-06] 5유형 등록 → valid · 만료 D-10이면 expiring · 목록·
   await expect(page.getByRole('status').first()).toContainText('등록 — DOC-007 만료 임박');
   await expect(page.locator('table tbody tr')).toHaveCount(7);
   await expect(page.getByRole('complementary', { name: '서류 상세' })).toContainText('DOC-007');
+  // 현장을 대상으로 등록(AC-5 현장) → valid
+  await page.getByRole('tab', { name: '등록' }).click();
+  await form.getByLabel('유형').selectOption('license');
+  await form.getByLabel('대상').selectOption('SITE-002');
+  await form.getByLabel('서류명').fill('대전 B 물류센터 안전관리자 선임증');
+  await form.getByRole('button', { name: '등록' }).click();
+  await expect(page.getByRole('status').first()).toContainText('등록 — DOC-008 유효');
+  await expect(page.locator('table tbody tr')).toHaveCount(8);
 });

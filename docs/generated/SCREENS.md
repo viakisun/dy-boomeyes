@@ -18,7 +18,7 @@
 |---|---|---|---|---|---|---|---|---|---|
 | `A1-01` | 로그인 | A1 | `/a1/login` | site-safety | 1 | 1 | 1 (login) | FR-001 | shell-auth |
 | `A1-02` | 업무함 | A1 | `/a1/inbox` | site-safety | 1 | 1 | 3 (inbox filter push) | FR-008 FR-009 FR-011 FR-015 | demo-scripts documents notifications task-escalation |
-| `A1-03` | 업무 상세 | A1 | `/a1/inbox/[case]` | site-safety | 1 | 1 | 1 (case) | FR-006 FR-008 | demo-scripts documents task-escalation |
+| `A1-03` | 업무 상세 | A1 | `/a1/inbox/[case]` | site-safety | 1 | 1 | 2 (case docnew) | FR-006 FR-008 | demo-scripts documents task-escalation |
 | `A1-04` | 관제(장비·영상) | A1 | `/a1/monitor` | site-safety | 1 | 1 | 2 (monitor plite) | FR-004 FR-028 FR-030 FR-034 | demo-scripts video-basics |
 | `A1-05` | 장비 상세 | A1 | `/a1/monitor/[device]` | site-safety | 1 | 1 | 2 (dev plite) | FR-002 FR-005 FR-007 FR-016 FR-036 | demo-scripts video-basics |
 | `A1-06` | 기록 | A1 | `/a1/records` | site-safety | 1 | 2 | 1 (rec) | FR-012 | records-reports |
