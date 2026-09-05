@@ -22,7 +22,7 @@
     bind:group
     {value}
     class={cx(
-      'size-size-icon-lg rounded-pill border-border-emphasis bg-surface checked:border-accent shrink-0 cursor-pointer appearance-none border checked:border-4',
+      'size-size-icon-lg rounded-pill border-border-emphasis bg-surface checked:border-accent checked:border-radio shrink-0 cursor-pointer appearance-none border',
       FOCUS,
     )}
     {...rest}

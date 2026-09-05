@@ -9,7 +9,7 @@ W0는 9/5에 선행 완료(회고 `docs/retro/W0.md` · 방법론 v1.1). `curren
 | 산출 | 상태 (2026-09-05) |
 |---|---|
 | 기능 4 구현·merge — task-escalation · driver-daily · admin-protocol-rules · video-basics(specs `draft` → 구현됨, 잔여 AC는 각 `tasks.md`) | 완료 — main 33 커밋 · e2e 56 · axe 15 · 캡처 22장(`--wave 1`) |
-| 다크 렌더(shell-auth AC-6) — 완료(`?theme=` · 웹 토글 · `capture --dark` · e2e 6) · 시각 회귀 기준선(0.2%) · demo-scripts 장면 1~8 — 완료(`?scene=N` · DemoBar · 장면 1 타임라인 · 장면 6 1시간 경과 · e2e 10 · W2 화면은 자리) · PWA manifest/SW · `maintenance` 로그인 경로 · tokens:lint 잔여(border-N · ring-N · duration-N · max-w-*) · 카탈로그 밖 컴포넌트 검사 · PWA 측 AX-1 픽스처 | 진행 예정 |
+| 다크 렌더(shell-auth AC-6) — 완료(`?theme=` · 웹 토글 · `capture --dark` · e2e 6) · 시각 회귀 기준선(0.2%) · demo-scripts 장면 1~8 — 완료(`?scene=N` · DemoBar · 장면 1 타임라인 · 장면 6 1시간 경과 · e2e 10 · W2 화면은 자리) · PWA manifest/SW · `maintenance` 로그인 경로 · tokens:lint 잔여 — 완료(duration-N · border-N · ring-N · max-w-sm… 규칙 + duration-*/border-strong/border-radio 유틸리티) · 카탈로그 검사 — 완료(`tokens:check`에 catalog) · PWA 측 AX-1 픽스처 | 진행 예정 |
 | 사용자 입력 | 리모트 리포 → CI 1회 녹색 · AWS 계정(DISC-006) → 프리뷰 → ADR-007 · DISC-033/036/038/040/042/043 |
 
 ### W0 스캐폴드 — 완료(9/5)

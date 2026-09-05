@@ -31,7 +31,7 @@
     >{/if}
   <div
     class={cx(
-      'gap-inline-xs rounded-control bg-surface px-inset-md focus-within:border-focus-ring hover:border-border-strong flex items-center border transition-colors duration-100',
+      'gap-inline-xs rounded-control bg-surface px-inset-md focus-within:border-focus-ring hover:border-border-strong duration-fast flex items-center border transition-colors',
       size === 'lg' ? 'h-size-control-lg' : 'h-size-control-md',
       error ? 'border-danger-border-strong' : 'border-border',
       rest.disabled && 'bg-disabled opacity-60',

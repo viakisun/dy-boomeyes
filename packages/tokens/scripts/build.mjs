@@ -79,6 +79,18 @@ function emitTheme(ctx) {
       ...bps,
     ]),
     block('@theme inline', lines),
+    // Tailwind v4에는 duration·border-width 테마 네임스페이스가 없다 → sys 토큰을 정적 유틸리티로 브리지 (tokens:lint가 duration-N · border-N을 막는다)
+    ...['fast', 'base', 'moderate', 'slow'].map((d) =>
+      block(`@utility duration-${d}`, [`transition-duration: var(--sys-motion-duration-${d});`]),
+    ),
+    ...[
+      ['', 'border-width'],
+      ['t-', 'border-top-width'],
+      ['r-', 'border-right-width'],
+      ['b-', 'border-bottom-width'],
+      ['l-', 'border-left-width'],
+    ].map(([side, prop]) => block(`@utility border-${side}strong`, [`${prop}: var(--sys-border-width-strong);`])),
+    block('@utility border-radio', ['border-width: var(--sys-border-width-radio);']),
     '',
   ].join('\n\n');
 }

@@ -29,7 +29,7 @@
 |---|---|---|
 | CSS 변수 | `--<layer>-<path-kebab>` | `--sys-color-bg-canvas` · `--sys-type-body-md`(font 축약) · `--sys-type-body-md-font-size` |
 | Tailwind(색) | `bg.<x>`→`bg-<x>` · `fg.<x>`→`text-fg-<x>`(default는 `text-fg`) · `border.<x>`→`border-border-<x>` · `accent.solid`→`bg-accent` · `status.<tone>.solid`→`bg-<tone>` · `domain.<e>.<s>.solid`→`bg-<e>-<s>` | `bg-canvas` `text-fg-muted` `bg-danger` `text-danger-fg` `bg-equipment-fault` |
-| Tailwind(치수) | `ref.space.16`→`p-16` · `sys.space.inset.md`→`p-inset-md` · `sys.size.control.md`→`h-size-control-md` · `sys.radius.card`→`rounded-card` · `sys.shadow.modal`→`shadow-modal` · `sys.type.body-md`→`text-body-md`(행간·굵기·자간 포함) | |
+| Tailwind(치수) | `ref.space.16`→`p-16` · `sys.space.inset.md`→`p-inset-md` · `sys.size.control.md`→`h-size-control-md` · `sys.radius.card`→`rounded-card` · `sys.shadow.modal`→`shadow-modal` · `sys.type.body-md`→`text-body-md`(행간·굵기·자간 포함) · `sys.motion.duration.fast`→`duration-fast` · `sys.border.width.strong`→`border-strong`/`border-b-strong` · `sys.layout.toast.width`→`max-w-layout-toast-width` · `sys.layout.prose.width`→`max-w-layout-prose-width` | |
 | Svelte | 컴포넌트 PascalCase · prop `variant tone size` · boolean 상태 `disabled loading selected invalid` · 이벤트 `onselect onchange` | `<Button variant="outline" tone="danger" size="sm">` |
 | data 속성 | 모드 = `data-theme="light|dark"` · `data-density="compact|comfortable"` — 문서 루트에만 · 국소 강제는 `CameraWall` 등 컴포넌트 내부에서만 | |
 

@@ -40,7 +40,10 @@ export function bootMock(opts: MockOptions = {}) {
   if (opts.capture) clock.freeze(FIXED_CLOCK);
   else clock.unfreeze(); // 고정만 해제 — jump() 오프셋(장면 6 "1시간 경과")은 invalidateAll을 지나도 유지, resetMock이 초기화
   if (opts.scene) active = opts.scene;
-  else if (opts.state || opts.capture) active = null;
+  else if (opts.state || opts.capture) {
+    if (active !== null) clock.reset(); // 장면 해제 — "1시간 경과" 오프셋이 픽스처로 새지 않게
+    active = null;
+  }
   const scene = opts.scene ?? active;
   const key = scene
     ? `scene|${scene}`

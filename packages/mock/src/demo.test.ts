@@ -11,7 +11,6 @@ describe('[FR-011] demo-scripts 장면', () => {
     expect(sceneOf(11)).toBeNull();
   });
   it('장면 1 픽스처 = 상황 발생 전(CPB-003 정상 · C-105 없음) → 타임라인이 E-021을 만든다', async () => {
-    clock.freeze();
     const api = bootMock({ scene: 1, capture: false, latencyMs: 0 });
     expect((await api.device('CPB-003'))?.state).toBe('normal');
     expect(await api.case('C-105')).toBeUndefined();
@@ -22,7 +21,6 @@ describe('[FR-011] demo-scripts 장면', () => {
     clock.reset();
   });
   it('[FR-010] 장면 6 픽스처: CPB-004 55분 방치 → 에스컬레이션 0 → 1시간 경과 → C-104(경과 큰 순) 통보 대상 본사', async () => {
-    clock.freeze();
     const api = bootMock({ scene: 6, capture: false, latencyMs: 0 });
     expect(await api.escalations()).toHaveLength(0);
     clock.jump(H);

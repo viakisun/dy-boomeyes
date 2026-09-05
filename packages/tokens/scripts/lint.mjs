@@ -37,6 +37,28 @@ const RULES = [
   },
   { id: 'z', re: /(?<![\w-])-?z-\d+(?![\w-])/g, why: 'z-N → z 토큰(z-dropdown 등)' },
   {
+    id: 'duration',
+    re: /(?<![\w-])duration-\d+(?![\w-])/g,
+    why: 'duration-N(ms) → duration-fast/base/moderate/slow (sys.motion.duration)',
+  },
+  {
+    id: 'border',
+    re: /(?<![\w-])border(?:-[trblxyse])?-(\d+)(?![\w-])/g,
+    skip: (m) => m[1] === '0',
+    why: 'border-N(px) → border(1px) · border-strong · border-b-strong · border-radio (sys.border.width)',
+  },
+  {
+    id: 'ring',
+    re: /(?<![\w-])ring(?:-offset)?-(\d+)(?![\w-])/g,
+    skip: (m) => m[1] === '0',
+    why: 'ring-N(px) → 포커스는 FOCUS(outline-2 offset-2 outline-focus-ring)',
+  },
+  {
+    id: 'maxw',
+    re: /(?<![\w-])max-w-(?:xs|sm|md|lg|xl|[2-7]xl|prose)(?![\w-])/g,
+    why: 'max-w-(sm…) 기본 컨테이너 스케일 → max-w-layout-*(sys.layout)',
+  },
+  {
     id: 'reset',
     re: /(?<![\w-])(?:rounded(?:-[a-z]{1,2})?-(?:xs|sm|md|lg|xl|[2-4]xl)|text-(?:xs|sm|base|lg|xl|[2-9]xl)|shadow-(?:xs|sm|md|lg|xl|2xl))(?![\w-])/g,
     why: 'theme.css가 초기화한 Tailwind 기본 스케일 — 클래스가 조용히 무효 → rounded-card/control · text-body-md · shadow-raised',
@@ -58,6 +80,10 @@ const PROBES = {
   radius: 'rounded-4',
   z: 'z-10',
   reset: 'rounded-md',
+  duration: 'duration-100',
+  border: 'border-b-2',
+  ring: 'ring-2',
+  maxw: 'max-w-sm',
   px: 'width: 4px',
 };
 for (const r of [...RULES, PX]) {

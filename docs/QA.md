@@ -7,7 +7,7 @@
 | # | 게이트 | 명령 | 실패 시 | 상태 |
 |---|---|---|---|---|
 | 1 | SSOT | `pnpm ssot:check` — 스키마·ID 문법·유일성·참조 무결성·어휘·화면 규칙(route·states·default)·DISC 생애주기 | 커밋 차단(hook) · CI 실패 | 있음 |
-| 2 | 토큰 | `pnpm tokens:check` — 문법·계층·모드 차원·대비 76쌍 · `tokens:lint`(화면 코드 hex/px/기본 팔레트 0건) | 커밋 차단 | 있음 |
+| 2 | 토큰 | `pnpm tokens:check` — 문법·계층·모드 차원·대비 76쌍 · `tokens:lint`(hex · 기본 팔레트 · 임의값 · 숫자 스케일 · rounded-N · z-N · duration-N · border-N · ring-N · max-w-sm… · 초기화된 기본 스케일 · style px — 규칙 생존 프로브) · `catalog`(컴포넌트 파일 ⊆ components.json) | 커밋 차단 | 있음 |
 | 3 | 생성물 최신성 | `pnpm verify` 끝의 `git diff --exit-code` (docs/generated · domain/generated · tokens/dist) | CI 실패 | 있음 |
 | 4 | 타입·정적 | svelte-check(error 0) · ESLint(경계 규칙 `eslint-plugin-boundaries`) · Prettier | 커밋 차단 | 있음 |
 | 5 | 단위 | Vitest — 업무·서류·장비·카메라·부품 상태기계 · 프로파일→피처플래그 · 프로토콜 파서 · scr 커버리지 | 푸시 차단 | 있음(상태기계·라우트·mock) |
@@ -36,7 +36,7 @@
 - PWA 긴 화면은 뷰포트를 문서 높이로 늘린 뒤 `[data-capture-frame]`을 찍는다(sticky 하단 내비가 문서 중간에 찍히는 것 방지). 스냅샷 mock의 시각도 Asia/Seoul.
 - 이름 = `${code.toLowerCase()}-${state}` (`b1-02-dash` `b1-02m-cam`). 상태 목록은 `screens.yaml`에서 생성(매니페스트 손 편집 금지).
 - 다크: `?theme=dark|light`는 문서 루트 `data-theme`에만 적용(저장 안 함, 캡처·e2e용). `pnpm capture --dark`는 화면 기본 상태를 한 번 더 찍는다(`<name>-dark.png`, CI 포함). 웹 탑바 토글은 `localStorage dy.theme`에 기기 단위로 유지 — 로그아웃·`resetMock`에도 남는다(`app.html`이 첫 페인트 전에 적용, `?theme=`가 있으면 그 값이 우선) · PWA는 시스템 다크를 따르고 토글이 없다(DY-design §10). 대비는 `tokens:check`가 light·dark 82쌍 모두 검사.
-- capture 모드(`?capture=1`)는 로그인 없이 화면 첫 역할의 데모 세션을 합성해 **셸까지** 그린다(가드 우회 — W3 실 인증 전 제거). 시연 `?scene=N`도 같은 방식으로 장면 계정 세션을 합성한다(`specs/demo-scripts`, 함께 제거). 브라우저 컨텍스트는 `timezoneId: 'Asia/Seoul'`, 표시 포맷터도 `timeZone: 'Asia/Seoul'` 고정. 지도 `[data-map-ready]` 대기 타임아웃은 FAIL로 센다(빈 지도를 녹색으로 세지 않는다). 셸 렌더 시 스크롤 컨테이너는 `<main>`이라 캡처는 main 내용 높이로 뷰포트를 키운다. 외부 의존: CARTO 스타일·타일(네트워크 필요).
+- capture 모드(`?capture=1`)는 로그인 없이 화면 첫 역할의 데모 세션을 합성해 **셸까지** 그린다(가드 우회 — W3 실 인증 전 제거). 시연 `?scene=N`은 장면 계정으로 `login()`해 localStorage에 남긴다 — 장면이 `?state=`·새로고침으로 해제돼도 로그아웃 전까지 그 계정이 유지된다(`specs/demo-scripts`, 함께 제거). 브라우저 컨텍스트는 `timezoneId: 'Asia/Seoul'`, 표시 포맷터도 `timeZone: 'Asia/Seoul'` 고정. 지도 `[data-map-ready]` 대기 타임아웃은 FAIL로 센다(빈 지도를 녹색으로 세지 않는다). 셸 렌더 시 스크롤 컨테이너는 `<main>`이라 캡처는 main 내용 높이로 뷰포트를 키운다. 외부 의존: CARTO 스타일·타일(네트워크 필요).
 - 데모 계정: `roles.yaml demo_account`. 픽스처 ID: CPB-003(E-021) · CPB-004(통신 두절) · C-105 · D-27.
 - `?state=` 픽스처는 capture·e2e 재현 전용 — 화면 기본 픽스처(`states[].default`)도 capture 모드에서만 적용하고, 실사용(live) 흐름은 순수 시드에서 시작한다(W1 사고: 기본 픽스처가 live에 적용돼 A2-03이 출근 상태로 열림). 브라우저 mock db는 `bootMock` 키(live / capture|screen|state)별로 세션 동안 유지, 로그아웃에 `resetMock()`.
 

@@ -6,6 +6,7 @@
       "ref.border.width.1": "1px",
       "ref.border.width.2": "2px",
       "ref.border.width.3": "3px",
+      "ref.border.width.4": "4px",
       "ref.font.family.sans": [
         "Pretendard Variable",
         "Pretendard",
@@ -308,6 +309,7 @@
       "sys.border.width.default": "1px",
       "sys.border.width.strong": "2px",
       "sys.border.width.focus": "2px",
+      "sys.border.width.radio": "4px",
       "sys.color.bg.canvas": "#f8faff",
       "sys.color.bg.surface": "#fdfdff",
       "sys.color.bg.surface-raised": "#fdfdff",
@@ -526,6 +528,8 @@
       "sys.color.domain.map.service.fg": "#005a52",
       "sys.color.domain.map.service.bg": "#e4f6f2",
       "sys.color.domain.map.service.border": "#8ec8bf",
+      "sys.layout.toast.width": "384px",
+      "sys.layout.prose.width": "520px",
       "sys.layout.sidebar.width": "240px",
       "sys.layout.sidebar.collapsed": "56px",
       "sys.layout.topbar.height": "48px",
@@ -1319,6 +1323,7 @@
       "ref.border.width.1": "1px",
       "ref.border.width.2": "2px",
       "ref.border.width.3": "3px",
+      "ref.border.width.4": "4px",
       "ref.font.family.sans": [
         "Pretendard Variable",
         "Pretendard",
@@ -1621,6 +1626,7 @@
       "sys.border.width.default": "1px",
       "sys.border.width.strong": "2px",
       "sys.border.width.focus": "2px",
+      "sys.border.width.radio": "4px",
       "sys.color.bg.canvas": "#f8faff",
       "sys.color.bg.surface": "#fdfdff",
       "sys.color.bg.surface-raised": "#fdfdff",
@@ -1839,6 +1845,8 @@
       "sys.color.domain.map.service.fg": "#005a52",
       "sys.color.domain.map.service.bg": "#e4f6f2",
       "sys.color.domain.map.service.border": "#8ec8bf",
+      "sys.layout.toast.width": "384px",
+      "sys.layout.prose.width": "520px",
       "sys.layout.sidebar.width": "240px",
       "sys.layout.sidebar.collapsed": "56px",
       "sys.layout.topbar.height": "48px",
@@ -2632,6 +2640,7 @@
       "ref.border.width.1": "1px",
       "ref.border.width.2": "2px",
       "ref.border.width.3": "3px",
+      "ref.border.width.4": "4px",
       "ref.font.family.sans": [
         "Pretendard Variable",
         "Pretendard",
@@ -2948,6 +2957,7 @@
       "sys.border.width.default": "1px",
       "sys.border.width.strong": "2px",
       "sys.border.width.focus": "2px",
+      "sys.border.width.radio": "4px",
       "sys.color.bg.canvas": "#0c0d11",
       "sys.color.bg.surface": "#121417",
       "sys.color.bg.surface-raised": "#1a1c20",
@@ -3166,6 +3176,8 @@
       "sys.color.domain.map.service.fg": "#80cfc3",
       "sys.color.domain.map.service.bg": "#0b2421",
       "sys.color.domain.map.service.border": "#1a5851",
+      "sys.layout.toast.width": "384px",
+      "sys.layout.prose.width": "520px",
       "sys.layout.sidebar.width": "240px",
       "sys.layout.sidebar.collapsed": "56px",
       "sys.layout.topbar.height": "48px",
@@ -3987,6 +3999,7 @@
       "ref.border.width.1": "1px",
       "ref.border.width.2": "2px",
       "ref.border.width.3": "3px",
+      "ref.border.width.4": "4px",
       "ref.font.family.sans": [
         "Pretendard Variable",
         "Pretendard",
@@ -4303,6 +4316,7 @@
       "sys.border.width.default": "1px",
       "sys.border.width.strong": "2px",
       "sys.border.width.focus": "2px",
+      "sys.border.width.radio": "4px",
       "sys.color.bg.canvas": "#0c0d11",
       "sys.color.bg.surface": "#121417",
       "sys.color.bg.surface-raised": "#1a1c20",
@@ -4521,6 +4535,8 @@
       "sys.color.domain.map.service.fg": "#80cfc3",
       "sys.color.domain.map.service.bg": "#0b2421",
       "sys.color.domain.map.service.border": "#1a5851",
+      "sys.layout.toast.width": "384px",
+      "sys.layout.prose.width": "520px",
       "sys.layout.sidebar.width": "240px",
       "sys.layout.sidebar.collapsed": "56px",
       "sys.layout.topbar.height": "48px",
@@ -5359,6 +5375,13 @@
       "$description": null,
       "$value": "3px",
       "css": "--ref-border-width-3",
+      "tailwind": null
+    },
+    "ref.border.width.4": {
+      "$type": "dimension",
+      "$description": null,
+      "$value": "4px",
+      "css": "--ref-border-width-4",
       "tailwind": null
     },
     "ref.font.family.sans": {
@@ -7256,6 +7279,13 @@
       "css": "--sys-border-width-focus",
       "tailwind": null
     },
+    "sys.border.width.radio": {
+      "$type": "dimension",
+      "$description": "라디오 선택 점(테두리로 채움)",
+      "$value": "{ref.border.width.4}",
+      "css": "--sys-border-width-radio",
+      "tailwind": null
+    },
     "sys.color.bg.canvas": {
       "$type": "color",
       "$description": "앱 바탕(페이지 배경)",
@@ -8811,6 +8841,20 @@
       "$value": "{sys.color.status.progress.border}",
       "css": "--sys-color-domain-map-service-border",
       "tailwind": "--color-map-service-border"
+    },
+    "sys.layout.toast.width": {
+      "$type": "dimension",
+      "$description": "토스트 최대 너비",
+      "$value": "384px",
+      "css": "--sys-layout-toast-width",
+      "tailwind": "--spacing-layout-toast-width"
+    },
+    "sys.layout.prose.width": {
+      "$type": "dimension",
+      "$description": "설명 문단 최대 너비(빈 상태 등) — 65ch@14px 근사",
+      "$value": "520px",
+      "css": "--sys-layout-prose-width",
+      "tailwind": "--spacing-layout-prose-width"
     },
     "sys.layout.sidebar.width": {
       "$type": "dimension",
