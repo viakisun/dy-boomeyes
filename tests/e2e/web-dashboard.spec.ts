@@ -97,7 +97,7 @@ test('[B1-02M] P-LITE 현장의 AI 채널(CAM-5-2)은 딥링크로도 열리지 
   page,
 }) => {
   await page.goto('/b1/dash?state=cam&capture=1&cam=CAM-5-2');
-  await expect(page.locator(`[data-scr="${SCR['B1-02']}"]`)).toBeVisible();
+  await expect(page.locator(root(SCR['B1-02']))).toBeVisible();
   await expect(page.locator('dialog[open]')).toHaveCount(0);
   await page.goto('/b1/dash?state=cam&capture=1&cam=CAM-5-1');
   const dialog = page.locator('dialog[open]');

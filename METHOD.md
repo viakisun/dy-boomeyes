@@ -1,4 +1,6 @@
-# BoomEyes AI 개발 방법론 v1 — 제안 (2026-09-05)
+# BoomEyes AI 개발 방법론 v1.1 (2026-09-05 · W0 회고 반영)
+
+개정 이력: v1(제안, 9/5 오전) → v1.1(W0 회고 `docs/retro/W0.md`, 9/5 밤) — 변경점은 §11.
 
 한 줄: **사람은 의도·결정·검수를, 에이전트는 명세→구현→검증 루프를, 시스템은 단일 원천에서 문서·코드·검사를 생성한다.**
 
@@ -39,8 +41,8 @@ INTENT ──▶ SPEC ──▶ PLAN ──▶ IMPLEMENT ──▶ VERIFY ──
 | Plan | spec | `tasks.md`(순서·DoD) · `docs/PLAN.md` 갱신 | AI(플랜 모드) → 사람 승인 | 작업당 검증 방법 명시 |
 | Implement | tasks · cmp 토큰 · 목 데이터 | 코드 · 상태 픽스처 · 테스트 | AI implementer + reviewer 서브에이전트 | hooks(typecheck·lint) |
 | Verify | 코드 | 게이트 리포트 · 캡처 | 시스템(CI) + verifier 서브에이전트 | 전부 통과 |
-| Review | 프리뷰 URL · 캡처 · 리포트 | 승인/수정 | 사람 | 데모 관점 검수 |
-| Merge | PR | main | 시스템 | squash · 트레일러 |
+| Review | 브랜치 · 캡처 · 게이트 출력 | 판정 "머지 가능/불가" + 심각도별 근거(file:line) | reviewer 에이전트 + 사람(데모 관점) | "머지 가능" 인용 없으면 merge 금지 |
+| Merge | PR | main | 시스템 | ff/squash · 트레일러 · verify 녹색 + reviewer 판정 인용 |
 | Generate | main | 문서 세트 · 레지스트리 문서 · DS 문서 | 시스템 | 정합 검사 |
 | Learn | 회고 | ADR · CLAUDE.md 규칙 · 메모리 · 방법론 개정 | 사람+AI | — |
 
@@ -89,18 +91,21 @@ boomeyes/                 git 루트 = Claude 세션 진입점(메모리 키) �
 - **완료 보고 규칙**: 게이트 출력을 인용한다. 캡처 없는 화면 완료, 테스트 없는 상태기계 완료는 완료가 아니다.
 - **컨텍스트 위생**: 생성물(`dist/` `generated/`)은 편집 금지 · 큰 파일은 요약 대신 링크 · 한 작업의 컨텍스트는 spec + tasks + 관련 코드로 제한.
 - **모델 사용**: 계획·명세·리뷰는 상위 모델, 반복 구현·조사는 하위 모델. 플랜 모드는 feature 이상에서 필수.
+- **머지 규칙**(v1.1): 브랜치는 `pnpm verify` 녹색과 reviewer 판정 "머지 가능" 인용 둘 다 있어야 merge. 판정 대기 중엔 다음 브랜치에서 작업한다(W0 1회 위반 → CLAUDE.md SOP).
+- **명령 체인**(v1.1): 게이트 → 커밋은 `&&`로만 잇는다. `;`로 이으면 빨간 게이트를 지나 커밋된다(W0 2회).
+- **API 경계·픽스처**(v1.1): mock/실 API 모두 반환은 복사본(`structuredClone`), 화면은 `$state.snapshot`으로 넘긴다. `?state=` 픽스처는 capture·e2e 전용이며 실사용 흐름은 순수 시드(ADR-002 Rules · QA §3).
 
 ## 6. 품질 게이트 (DoD)
 
 | 게이트 | 검사 | 실패 시 |
 |---|---|---|
 | 타입·정적 | svelte-check(error 0) · ESLint(경계 규칙) · Prettier | 커밋 차단 |
-| 토큰 | 화면 코드 hex/px/기본 팔레트 0건 · `tokens:check`(문법·계층·대비) | 커밋 차단 |
-| 단위 | 업무·서류·장비 상태기계 · 프로파일→피처플래그 · 프로토콜 파서 | 푸시 차단 |
-| e2e | 라우트 × 상태 픽스처 전수 렌더 · 7역할 로그인 · 데모 장면 스크립트 | PR 차단 |
-| 시각·접근성 | 캡처 회귀 0.2% · axe serious/critical 0 · 대비·터치 44 | PR 차단 |
-| 커버리지 | SCR 레지스트리 = 라우트 = 캡처 · FR→테스트 ID 매핑 | PR 차단 |
-| 문서 정합 | `ssot` 스키마 · 생성 문서 최신 · 계약 문서 세트 `check_set` | 발행 차단 |
+| 토큰 | `tokens:check`(문법·계층·대비 82쌍) · `tokens:lint`(hex · 기본 팔레트 · 임의값 · 숫자 스케일 · rounded-N · z-N · 초기화된 기본 스케일 · style px — 규칙 생존 프로브 포함) | 커밋 차단 |
+| 단위 | 상태기계 · 프로파일→플래그 · 프로토콜 검증·파서 · 요청/에스컬레이션/출근/점검/규칙 mock | 푸시 차단 |
+| e2e | 역할 로그인 8 · 가드/403 · 화면별 AC 스모크 · realtime · 오프라인 · axe serious/critical 0(W1 착수 시점 55건) | PR 차단 |
+| 캡처 | 라우트 × 상태 전수(웨이브 이하) · 셸 포함 · TZ 고정 · 지도 idle 실패 집계 · 시각 회귀 기준선(0.2%)은 W1 항목 | PR 차단 |
+| 커버리지 | SCR 레지스트리 = 라우트 = 캡처(`current_wave` 이하 route·spec 필수) · FR→테스트 ID 매핑 | PR 차단 |
+| 문서 정합 | `ssot` 스키마 · 생성 문서 최신 · `--specs/--docs/--commits` · 계약 문서 세트 `check_set`(v0.4 이식 후) | 커밋·PR·발행 차단 |
 
 ## 7. 리듬과 측정
 
@@ -108,13 +113,14 @@ boomeyes/                 git 루트 = Claude 세션 진입점(메모리 키) �
 - 주: 데모 빌드 · DY 싱크 · `PLAN.md` 갱신 · 미결 결정 정리.
 - 웨이브(2~4주): 회고 → `CLAUDE.md`·skills·방법론 개정 · 문서 세트 발행 여부 결정.
 - 측정: spec→merge 리드타임 · 게이트 첫 통과율 · 재작업률(리뷰 후 수정 PR 비율) · 데모 장면 커버리지 · SCR/FR 추적 커버리지 · 문서 정합 실패 수.
+- W0 실측(9/5): 브랜치 8 · 첫 판정 "머지 가능" 1/8 · 리뷰가 잡은 결함 17(미구현 AC 6 · 게이트 우회 3 · 데이터 유실/비반응 3 · 문서 드리프트 3 · AX-1 우회 2) · 사고 SOP 11건. 상세 `docs/retro/W0.md`.
 
 ## 8. 도입 2주
 
-| 주 | 할 일 | 산출물 |
-|---|---|---|
-| 1 | 문서 초판 · SSOT 구조화(v0.3 파이썬 → `ssot/*.yaml` 변환 스크립트, 영상·소모품 v2.0 델타 반영) · 게이트 스캐폴드(CI·hooks) · skills 4종(spec · screen · capture · docset) | `INTENT.md` `CLAUDE.md` `AGENTS.md` `docs/PLAN.md` `docs/DEMO.md` `docs/QA.md` ADR 6 · `specs/` 인덱스 + 웨이브 0·1 기능 스펙 · `ssot/` |
-| 2 | 웨이브 0을 이 루프로 수행 — 스캐폴드 · `packages/ui`가 cmp 토큰 소비 · 셸 2종 · B0-01·B1-02 관통 · 캡처·게이트 통과 | 첫 프리뷰 URL · 회고 → 방법론 v1.1 |
+| 주 | 할 일 | 산출물 | 결과 |
+|---|---|---|---|
+| 1 | 문서 초판 · SSOT 구조화(v0.3 파이썬 → `ssot/*.yaml` 변환 스크립트, 영상·소모품 v2.0 델타 반영) · 게이트 스캐폴드(CI·hooks) · skills 4종(spec · screen · capture · docset) | `INTENT.md` `CLAUDE.md` `AGENTS.md` `docs/PLAN.md` `docs/DEMO.md` `docs/QA.md` ADR 6 · `specs/` 인덱스 + 웨이브 0·1 기능 스펙 · `ssot/` | 완료(9/5 오전) — ADR 7 · spec 2 · ssot yaml 11 |
+| 2 | 웨이브 0을 이 루프로 수행 — 스캐폴드 · `packages/ui`가 cmp 토큰 소비 · 셸 2종 · B0-01·B1-02 관통 · 캡처·게이트 통과 | 첫 프리뷰 URL · 회고 → 방법론 v1.1 | 완료(9/5) — W0 + W1 기능 4 선행 · 회고 → v1.1(이 문서) · 프리뷰 URL은 AWS 계정 대기 |
 
 ## 9. 하지 않는 것
 
@@ -123,7 +129,12 @@ boomeyes/                 git 루트 = Claude 세션 진입점(메모리 키) �
 ## 10. 사용자 결정 필요
 
 1. 리포 구조 — ~~형제 유지 vs 포함~~ → **결정(2026-09-05): `boomeyes/` 단일 루트**(코드 리포를 루트로 통합, 아카이브는 로컬 보관).
-2. `ssot/*.yaml` 전환을 1주차에 할지(권장) — 계약 문서 v0.4 발행 시점과 연동.
-3. 프리뷰 배포 인프라 — S3+CloudFront(플랜) vs 임시 호스팅.
-4. 리뷰 정책 — 사람 1명 승인 + reviewer 에이전트 필수.
-5. 웨이브 길이 — 2주(권장) vs 4주.
+2. ~~`ssot/*.yaml` 전환을 1주차에 할지~~ → **결정(9/5): 1주차에 전환 완료**(yaml 11 · check/build).
+3. 프리뷰 배포 인프라 — S3+CloudFront(ADR-007 Proposed) — **대기: AWS 계정(DISC-006)**.
+4. ~~리뷰 정책~~ → **결정(9/5): reviewer 에이전트 판정 필수 + 사람 1명**(§5 머지 규칙).
+5. ~~웨이브 길이~~ → **결정(9/5): 2주**(`docs/PLAN.md`).
+
+## 11. 개정 이력
+
+- v1.1(2026-09-05): W0 회고(`docs/retro/W0.md`) 반영 — §2 Review/Merge 행 · §5 머지 규칙·명령 체인·API 경계/픽스처 · §6 게이트 현행화 · §7 W0 실측 · §8 결과 열 · §10 결정 현행화.
+- v1(2026-09-05): 제안 승인.
