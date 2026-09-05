@@ -130,6 +130,7 @@ ent:
   - 건설사
   - 기간
   - 잔여(D-)
+  - 상태(active/expiring/relocated/ended — 상태기계 lease)
   relations:
   - N─1 장비
   - N─1 현장

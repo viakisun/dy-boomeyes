@@ -4170,7 +4170,8 @@
           "설치지역",
           "건설사",
           "기간",
-          "잔여(D-)"
+          "잔여(D-)",
+          "상태(active/expiring/relocated/ended — 상태기계 lease)"
         ],
         "relations": [
           "N─1 장비",
@@ -7254,7 +7255,9 @@
           "A3-03",
           "B4-04",
           "B2-03",
-          "B1-04"
+          "B1-04",
+          "A3-05",
+          "A3-02"
         ],
         "scope_note": null,
         "baseline": "정비 보고→현장 확인 2단계 · 본사=열람·확인 요청",
@@ -9381,6 +9384,8 @@
         ],
         "specs": [
           "demo-scripts",
+          "documents",
+          "notifications",
           "task-escalation"
         ]
       },
@@ -9400,6 +9405,7 @@
         ],
         "specs": [
           "demo-scripts",
+          "documents",
           "task-escalation"
         ]
       },
@@ -9468,7 +9474,9 @@
           "IF-009"
         ],
         "disc_all": [],
-        "specs": []
+        "specs": [
+          "records-reports"
+        ]
       },
       "A1-07": {
         "fr": [
@@ -9482,7 +9490,9 @@
         "disc_all": [
           "DISC-034"
         ],
-        "specs": []
+        "specs": [
+          "sites-assets-leases"
+        ]
       },
       "A1-08": {
         "fr": [
@@ -9495,7 +9505,9 @@
         "disc_all": [
           "DISC-015"
         ],
-        "specs": []
+        "specs": [
+          "task-escalation"
+        ]
       },
       "A1-11": {
         "fr": [
@@ -9512,7 +9524,9 @@
           "DISC-043",
           "DISC-044"
         ],
-        "specs": []
+        "specs": [
+          "equipment-parts"
+        ]
       },
       "A2-01": {
         "fr": [
@@ -9547,7 +9561,8 @@
         ],
         "specs": [
           "demo-scripts",
-          "driver-daily"
+          "driver-daily",
+          "notifications"
         ]
       },
       "A2-03": {
@@ -9600,7 +9615,9 @@
           "DISC-045",
           "DISC-046"
         ],
-        "specs": []
+        "specs": [
+          "documents"
+        ]
       },
       "A2-06": {
         "fr": [
@@ -9610,7 +9627,10 @@
           "IF-009"
         ],
         "disc_all": [],
-        "specs": []
+        "specs": [
+          "driver-daily",
+          "sites-assets-leases"
+        ]
       },
       "A2-09": {
         "fr": [
@@ -9627,7 +9647,9 @@
           "DISC-043",
           "DISC-044"
         ],
-        "specs": []
+        "specs": [
+          "equipment-parts"
+        ]
       },
       "A3-01": {
         "fr": [
@@ -9655,7 +9677,10 @@
         "disc_all": [
           "DISC-015"
         ],
-        "specs": []
+        "specs": [
+          "notifications",
+          "task-escalation"
+        ]
       },
       "A3-03": {
         "fr": [
@@ -9667,7 +9692,9 @@
         "disc_all": [
           "DISC-015"
         ],
-        "specs": []
+        "specs": [
+          "sites-assets-leases"
+        ]
       },
       "A3-04": {
         "fr": [
@@ -9679,7 +9706,9 @@
           "IF-009"
         ],
         "disc_all": [],
-        "specs": []
+        "specs": [
+          "video-basics"
+        ]
       },
       "A3-05": {
         "fr": [
@@ -9688,8 +9717,12 @@
         "if_all": [
           "IF-009"
         ],
-        "disc_all": [],
-        "specs": []
+        "disc_all": [
+          "DISC-015"
+        ],
+        "specs": [
+          "task-escalation"
+        ]
       },
       "A3-06": {
         "fr": [
@@ -9700,7 +9733,9 @@
           "IF-009"
         ],
         "disc_all": [],
-        "specs": []
+        "specs": [
+          "records-reports"
+        ]
       },
       "A4-01": {
         "fr": [
@@ -9887,7 +9922,9 @@
         "disc_all": [
           "DISC-016"
         ],
-        "specs": []
+        "specs": [
+          "documents"
+        ]
       },
       "B1-06": {
         "fr": [
@@ -9900,7 +9937,9 @@
         "disc_all": [
           "DISC-037"
         ],
-        "specs": []
+        "specs": [
+          "sites-assets-leases"
+        ]
       },
       "B1-07": {
         "fr": [
@@ -9914,7 +9953,9 @@
         "disc_all": [
           "DISC-019"
         ],
-        "specs": []
+        "specs": [
+          "owner-showcase"
+        ]
       },
       "B1-08": {
         "fr": [
@@ -9932,7 +9973,9 @@
           "DISC-040",
           "DISC-044"
         ],
-        "specs": []
+        "specs": [
+          "event-replay"
+        ]
       },
       "B2-02": {
         "fr": [
@@ -9947,7 +9990,9 @@
           "IF-013"
         ],
         "disc_all": [],
-        "specs": []
+        "specs": [
+          "sites-assets-leases"
+        ]
       },
       "B2-03": {
         "fr": [
@@ -9962,7 +10007,9 @@
         "disc_all": [
           "DISC-015"
         ],
-        "specs": []
+        "specs": [
+          "video-basics"
+        ]
       },
       "B2-04": {
         "fr": [
@@ -9974,7 +10021,9 @@
           "IF-009"
         ],
         "disc_all": [],
-        "specs": []
+        "specs": [
+          "records-reports"
+        ]
       },
       "B3-02": {
         "fr": [
@@ -10106,7 +10155,9 @@
           "DISC-034",
           "DISC-040"
         ],
-        "specs": []
+        "specs": [
+          "sites-assets-leases"
+        ]
       },
       "B4-04": {
         "fr": [
@@ -10118,7 +10169,9 @@
         "disc_all": [
           "DISC-015"
         ],
-        "specs": []
+        "specs": [
+          "sites-assets-leases"
+        ]
       },
       "B4-05": {
         "fr": [
@@ -10153,7 +10206,9 @@
           "DISC-016",
           "DISC-046"
         ],
-        "specs": []
+        "specs": [
+          "documents"
+        ]
       },
       "B4-07": {
         "fr": [
@@ -10168,7 +10223,9 @@
           "DISC-043",
           "DISC-044"
         ],
-        "specs": []
+        "specs": [
+          "equipment-parts"
+        ]
       },
       "B4-08": {
         "fr": [
@@ -10181,9 +10238,11 @@
           "DISC-038",
           "DISC-044"
         ],
-        "specs": []
+        "specs": [
+          "equipment-parts"
+        ]
       }
     },
-    "summary": "screens 53 · fr 37 · disc open 46 (A21/B12/C13) · refs 1327"
+    "summary": "screens 53 · fr 37 · disc open 46 (A21/B12/C13) · refs 1329"
   }
 }

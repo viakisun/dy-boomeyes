@@ -13,12 +13,13 @@
 | `admin-protocol-rules` | B4-02 · B4-05 | 1 | draft |
 | `demo-scripts` | 장면 1~8 재생(`?scene=N`) — B1-02 · B1-03 · B1-04 · A2-02 · A2-03 · A1-02~05 · B4-02 | 1 | draft |
 | `video-basics` | A1-04 · A1-05 · B1-02M(영상) · A3-04 · B2-03 | 1~2 | draft |
-| `documents` | A2-05 · A1-02 · B1-05 · B3-04 · B4-06 · A4-06 | 2 | — |
-| `sites-assets-leases` | B4-03 · B4-04 · B1-06 · A1-07 · A3-03 · B2-02 | 2 | — |
-| `records-reports` | A1-06 · A3-06 · B3-05 · B2-04 | 2 | — |
-| `equipment-parts` | B4-07 · B4-08 · A1-11 · A2-09 · B3-07 | 2~4 | — |
-| `event-replay` | B1-08 | 2~4 | — |
-| `owner-showcase` | A4-02~05 · B1-07 · B3-02 · B3-06 | 4 | — |
+| `documents` | A2-05 · A1-02 · B1-05 · B3-04 · B4-06 · A4-06 | 2 | draft |
+| `sites-assets-leases` | B4-03 · B4-04 · B1-06 · A1-07 · A2-06 · A3-03 · B2-02 | 2 | draft |
+| `records-reports` | A1-06 · A3-06 · B3-05 · B2-04 | 2 | draft |
+| `equipment-parts` | B4-07 · B4-08 · A1-11 · A2-09 · B3-07 | 2~4 | draft(W2 구조) |
+| `event-replay` | B1-08 | 2~4 | draft(W2 구조) |
+| `owner-showcase` | A4-02~05 · B1-07 · B3-02 · B3-06 | 2(B1-07)~4 | draft |
+| `notifications` | A1-02 · A2-02 · A3-02 — 로컬 알림 스텁(IF-014) | 2 | draft |
 
 ## 절차
 
