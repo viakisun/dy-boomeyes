@@ -23,7 +23,6 @@ import {
   type Escalation,
   type Kpis,
   type Request,
-  type RequestState,
   type Scope,
   type Site,
   type User,
@@ -385,6 +384,23 @@ export function createMockApi(db: Db, opts: { latencyMs?: number } = {}): ApiCli
       await wait();
       return db.leases.filter((l) => inScope(scope, l.siteId));
     },
+    async lease(id) {
+      await wait();
+      return db.leases.find((l) => l.id === id);
+    },
+    async planRelocation(leaseId, toSiteId, note, by) {
+      await wait();
+      const l = db.leases.find((x) => x.id === leaseId);
+      if (!l) throw new Error(`lease ${leaseId}`);
+      const to = db.sites.find((x) => x.id === toSiteId);
+      if (!to) throw new Error(`site ${toSiteId}`);
+      if (to.id === l.siteId) throw new Error('현재 현장과 다른 현장을 고르세요');
+      l.state = transition('lease', l.state, 'relocated'); // expiring에서만 (ENT-10)
+      l.toSiteId = to.id;
+      l.note = note;
+      l.history.push({ at: clock.iso(), by, action: `재배치 계획 — ${to.name}`, note });
+      return l;
+    },
     // sites-assets-leases(W2 B5) 마스터 — db를 직접 변이한다(경계는 복사본을 돌려주므로)
     async createSite(input) {
       await wait();
@@ -548,12 +564,12 @@ function inspectionOf(db: Db, user: User, device: Device | undefined): Inspectio
   }
   return i;
 }
-/** 승인/반려 — doc 상태기계(submitted → review → approved|rejected). submitted에서 바로 못 가면 review를 거친다 */
+/** 승인/반려 — request 상태기계(ENT-20: submitted → review → approved|rejected). submitted에서 바로 못 가면 review를 거친다 */
 function decide(db: Db, id: string, to: 'approved' | 'rejected', by: string, action: string, note?: string): Request {
   const r = db.requests.find((x) => x.id === id);
   if (!r) throw new Error(`request ${id}`);
-  if (!canTransition('doc', r.state, to)) r.state = transition('doc', r.state, 'review') as RequestState;
-  r.state = transition('doc', r.state, to) as RequestState;
+  if (!canTransition('request', r.state, to)) r.state = transition('request', r.state, 'review');
+  r.state = transition('request', r.state, to);
   r.history.push({ at: clock.iso(), by, action, note });
   return r;
 }

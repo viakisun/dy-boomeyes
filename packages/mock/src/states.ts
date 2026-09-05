@@ -131,6 +131,9 @@ export const FIXTURES: Record<string, Fixture> = {
   // sites-assets-leases(W2 B5): 마스터 — 시드 그대로(현장 2 · 장비 5 · 계정 7)
   'B4-03:assets': (db) => db,
   'B4-04:users': (db) => db,
+  // sites-assets-leases(W2 B6): 임대 계약(LS-001 D-27 expiring 최상단) · 본사 지도(hq 2현장 · 장비 5) — 시드 그대로
+  'B1-06:lease': (db) => db,
+  'B2-02:work': (db) => db,
 };
 
 function checkedIn(db: Db) {

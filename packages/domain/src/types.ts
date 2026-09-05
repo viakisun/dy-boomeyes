@@ -125,6 +125,7 @@ export interface Doc {
   /** 제출 파일 메타(mock: objectURL) */
   file?: { name: string; type: string; size: number; url?: string };
 } // ENT-07
+export type LeaseState = 'active' | 'expiring' | 'relocated' | 'ended';
 export interface Lease {
   id: string;
   deviceId: string;
@@ -132,6 +133,12 @@ export interface Lease {
   ownerId: string;
   from: string;
   to: string;
+  /** 상태기계 lease(ENT-10): active → expiring(D-30) → relocated | ended */
+  state: LeaseState;
+  /** 재배치 계획 대상 현장(B1-06) */
+  toSiteId?: string;
+  note?: string;
+  history: HistoryItem[];
 } // ENT-10
 export interface User {
   id: string;
@@ -156,7 +163,7 @@ export interface Kpis {
   escalated: number;
 }
 
-/** FR-017 신청·요청(현장 개설 · 장비 배정 · 서류) — 운영사 수신함(B1-03)에서 승인/반려. 상태는 doc 상태기계의 부분집합. ENT 등재는 ssot 후속 */
+/** FR-017 신청·요청(현장 개설 · 장비 배정 · 서류, ENT-20) — 운영사 수신함(B1-03)에서 승인/반려. 상태기계 request(submitted → review → approved|rejected → submitted) */
 export type RequestState = 'submitted' | 'review' | 'approved' | 'rejected';
 export interface Request {
   id: string;

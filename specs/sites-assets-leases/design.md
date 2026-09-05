@@ -28,3 +28,10 @@
 - 컴포넌트(카탈로그): PageHeader · Select(네이티브, label 연결, 옵션 disabled) · KeyValueList(dl) · SiteProfileForm(프리셋 Select + 8축 KeyValueList + 축 편집 비활성 버튼 + 표준 패키지 문구).
 - "즉시 반영" 검증: 프리셋 적용 뒤 같은 db를 읽는 카메라 월 미리보기(`CameraWall`, B1-02·A1-04와 같은 `visibleIn`)가 채널 수를 바꾼다 — e2e `[B4-03]` 6 → 3. 계정을 바꿔 B1-02·A1-04에서 다시 보는 흐름은 e2e 한 테스트에 담기지 않는다(QA §3: 전체 로드 = mock db 초기화) → Vitest `[FR-029]`가 `profileFlags` 체인을 검사.
 - B4-04 "가드 즉시 반영": 인스펙터 접근 화면 = `canAccess`(라우트 가드와 같은 함수)로 계산 · 내 계정 역할 변경은 세션(`login`)도 갱신.
+
+## W2 B6 — B1-06 · B2-02 구현 메모
+- `Lease.state`(lease 상태기계 ENT-10) · `toSiteId` · `note` · `history` — 시드 LS-001 `expiring`(D-27, 이력 "만료 임박 D-30") · LS-002 `active`. `planRelocation(leaseId, toSiteId, note, by)` = `transition('lease', state, 'relocated')`(expiring에서만) + 대상 현장·메모·이력. 만료 D-30 스케줄러(active → expiring)는 서버 W3.
+- 수신함 `decide()`는 `request` 상태기계(ENT-20)로 전이한다 — doc 기계 차용 종료. domain `machines.test`에 lease·request 전이 표 테스트.
+- B1-06: PageHeader + Stat 4 + DataTable(만료 빠른 순) + Inspector(계약 상세 · 재배치 계획 폼(expiring만) · 홍보 연계 문구 · Timeline). `?lease=` 선택.
+- B2-02: hq 스코프(`users → me.siteIds`) · MapView 마커(장비 5) + 현장 카드(링크 → B2-03) · Stat 4(kpis) · "보고 모드" 링크(B2-04, B8) · 처리 버튼 없음. 마커 선택은 그 호기의 현장 상세로.
+- 장면 9: `SCENE_FIXTURES[9]` = 시드(entry `/b1/leases` · control01 자동 파생) · e2e는 재배치까지.
