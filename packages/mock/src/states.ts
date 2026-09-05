@@ -1,6 +1,6 @@
 // 상태 픽스처 — ssot/screens.yaml states[].id 별 시드 변형. 키 = `${code}:${state}`. 없으면 기본 시드.
 import { INSPECTION_ITEMS } from '@boomeyes/domain';
-import { clock, H, MIN } from './clock';
+import { clock, DAY, H, MIN } from './clock';
 import type { Db } from './seed';
 
 export type Fixture = (db: Db) => Db;
@@ -151,7 +151,79 @@ export const FIXTURES: Record<string, Fixture> = {
   'A1-07:apply': (db) => db,
   'A2-06:menu': (db) => db,
   'A3-03:site': (db) => db,
+  // records-reports(W2 B8): 출근·점검 시드가 비어 있어 기록 픽스처가 오늘 출근(driver03 −2h)·점검 제출(−1h)을 채운다 (AC-1 4종 칩)
+  'A1-06:rec': (db) => withDaily(db),
+  'A3-06:rec': (db) => withDaily(db),
+  // 보고 모드: 30일 창에만 드는 SITE-002 완료 업무(20일 전) · 서류(CPB-004 제작증) · 점검(10일 전) — 7일/30일 차이가 보이게
+  'B2-04:report': (db) => {
+    const d = withDaily(db);
+    return {
+      ...d,
+      cases: [
+        ...d.cases,
+        {
+          id: 'C-090',
+          kind: 'inspection',
+          title: '일일점검 미제출 — CPB-004',
+          deviceId: 'CPB-004',
+          siteId: 'SITE-002',
+          state: 'done',
+          severity: 'info',
+          assigneeId: 'safety01',
+          dueAt: clock.minus(19 * DAY),
+          createdAt: clock.minus(20 * DAY),
+          history: [
+            { at: clock.minus(20 * DAY), by: 'system', action: '발행' },
+            { at: clock.minus(19 * DAY), by: 'safety01', action: '완료 확인', note: '점검 제출 확인' },
+          ],
+        },
+      ],
+      docs: [
+        ...d.docs,
+        {
+          id: 'DOC-007',
+          kind: 'cert',
+          subject: 'CPB-004 제작증',
+          subjectId: 'CPB-004',
+          siteId: 'SITE-002',
+          state: 'valid',
+          expiresAt: null,
+          submittedAt: clock.minus(15 * DAY),
+          history: [{ at: clock.minus(15 * DAY), by: 'ops01', action: '등록' }],
+        },
+      ],
+      inspections: [
+        ...d.inspections,
+        {
+          id: 'INS-CPB-004-old',
+          userId: 'driver03',
+          deviceId: 'CPB-004',
+          date: clock.minus(10 * DAY).slice(0, 10),
+          items: INSPECTION_ITEMS.map((x) => ({ ...x, ok: true })),
+          submittedAt: clock.minus(10 * DAY),
+        },
+      ],
+    };
+  },
 };
+/** 오늘 출근·점검 1건씩(driver03 · CPB-003) — 기록 4종이 모두 보이게 */
+function withDaily(db: Db): Db {
+  return {
+    ...db,
+    attendance: [...db.attendance, checkedIn(db)],
+    inspections: [
+      ...db.inspections,
+      {
+        id: 'INS-driver03',
+        userId: 'driver03',
+        deviceId: 'CPB-003',
+        date: clock.iso().slice(0, 10),
+        items: INSPECTION_ITEMS.map((x) => ({ ...x, ok: true })),
+        submittedAt: clock.minus(H),
+      },
+    ],
+  };
+}
 
 function checkedIn(db: Db) {
   const site = db.sites.find((s) => s.id === 'SITE-001');

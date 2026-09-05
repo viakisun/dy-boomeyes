@@ -47,7 +47,7 @@ HLS/WebRTC 중계·RTSP·VPN · MQTT/SSE 서버 · 실인증 · S3 업로드 · 
 | 2 | `pwa/a2/today?scene=2` | driver03 | 알림 → 체크인 → 점검 제출(같은 장면 안에서 db 유지) |
 | 3 | `pwa/a1/inbox?scene=3` | safety01 | C-105 접수 → 영상(A1-04/05) → 정비 호출 |
 | 4 | `web/b1/dash?scene=4` | control01 | C-105 접수됨 상태 · `?case=C-105` 패널 |
-| 5 | `pwa/a1/inbox/C-105?scene=5` | safety01 | 정비 호출 이력 · A1-08/A1-06은 W2 자리 |
+| 5 | `pwa/a1/inbox/C-105?scene=5` | safety01 | 정비 호출 이력 → 완료 확인 시트(조치 내용 필수) → 기록 탭(A1-06) 최상단에 완료 확인 행 |
 | 6 | `web/b1/escalation?scene=6` | control01 | CPB-004 55분 방치 → 장면 바 "1시간 경과" → 본사·관제 통보 |
 | 7 | `pwa/a2/docs?scene=7` | driver03 | A2-05는 W2 자리 |
 | 8 | `web/b4/protocols?scene=8` | ops01 | YAML 업로드 · 오류 샘플 · 알림 미리보기 |

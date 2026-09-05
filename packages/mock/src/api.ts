@@ -22,6 +22,8 @@ import {
   type DocSummary,
   type Escalation,
   type Kpis,
+  type RecordItem,
+  type SiteReport,
   type Request,
   type Scope,
   type Site,
@@ -523,6 +525,135 @@ export function createMockApi(db: Db, opts: { latencyMs?: number } = {}): ApiCli
       if (!u) throw new Error(`user ${userId}`);
       u.status = status;
       return u;
+    },
+    async records(scope, opts = {}) {
+      await wait();
+      const since = clock.now().getTime() - (opts.days ?? 30) * DAY;
+      const out: RecordItem[] = [];
+      const siteOfDevice = (id: string) => db.devices.find((d) => d.id === id)?.siteId ?? '';
+      const noteOf = (n?: string) => (n ? { note: n } : {});
+      for (const c of db.cases)
+        if (inScope(scope, c.siteId))
+          for (const h of c.history)
+            out.push({
+              at: h.at,
+              kind: 'task',
+              actor: h.by,
+              subjectId: c.id,
+              siteId: c.siteId,
+              text: `${h.action} — ${c.title}`,
+              ...noteOf(h.note),
+            });
+      for (const i of db.inspections) {
+        const siteId = siteOfDevice(i.deviceId);
+        if (i.submittedAt && inScope(scope, siteId))
+          out.push({
+            at: i.submittedAt,
+            kind: 'inspection',
+            actor: i.userId,
+            subjectId: i.deviceId,
+            siteId,
+            text: `일일점검 제출 — ${i.deviceId} (${i.items.filter((x) => x.ok).length}/${i.items.length} 정상)`,
+          });
+      }
+      for (const a of db.attendance) {
+        if (!inScope(scope, a.siteId)) continue;
+        if (a.checkinAt)
+          out.push({
+            at: a.checkinAt,
+            kind: 'attendance',
+            actor: a.userId,
+            subjectId: a.deviceId,
+            siteId: a.siteId,
+            text: `출근 체크인 — ${a.deviceId}`,
+          });
+        if (a.checkoutAt)
+          out.push({
+            at: a.checkoutAt,
+            kind: 'attendance',
+            actor: a.userId,
+            subjectId: a.deviceId,
+            siteId: a.siteId,
+            text: `퇴근 체크아웃 — ${a.deviceId}`,
+          });
+      }
+      for (const d of db.docs)
+        if (inScope(scope, d.siteId))
+          for (const h of d.history)
+            out.push({
+              at: h.at,
+              kind: 'doc',
+              actor: h.by,
+              subjectId: d.id,
+              siteId: d.siteId,
+              text: `${h.action} — ${d.subject}`,
+              ...noteOf(h.note),
+            });
+      if (!scope.siteIds?.length) {
+        // 전국 스코프(관제·운영사)만: 규칙 변경 · 임대 계약 이력
+        for (const h of db.rules.history)
+          out.push({
+            at: h.at,
+            kind: 'rule',
+            actor: h.by,
+            subjectId: 'rules',
+            siteId: '',
+            text: h.action,
+            ...noteOf(h.note),
+          });
+        for (const l of db.leases)
+          for (const h of l.history)
+            out.push({
+              at: h.at,
+              kind: 'lease',
+              actor: h.by,
+              subjectId: l.id,
+              siteId: l.siteId,
+              text: `${h.action} — ${l.id}`,
+              ...noteOf(h.note),
+            });
+      }
+      return out
+        .filter((r) => Date.parse(r.at) >= since && (!opts.kind || r.kind === opts.kind))
+        .sort((a, b) => (a.at < b.at ? 1 : -1));
+    },
+    async report(scope, days) {
+      await wait();
+      const since = clock.now().getTime() - days * DAY;
+      const inWin = (at: string) => Date.parse(at) >= since;
+      const docRows = await impl.docCompleteness(scope);
+      return db.sites
+        .filter((s) => inScope(scope, s.id))
+        .map((s): SiteReport => {
+          const devices = db.devices.filter((d) => d.siteId === s.id);
+          const ids = new Set(devices.map((d) => d.id));
+          const cases = db.cases.filter((c) => c.siteId === s.id && inWin(c.createdAt));
+          const done = cases.filter((c) => c.state === 'done').length;
+          const inspections = db.inspections.filter(
+            (i) => ids.has(i.deviceId) && !!i.submittedAt && inWin(i.submittedAt),
+          );
+          const inspected = new Set(inspections.map((i) => i.deviceId)).size;
+          const docs = docRows.find((r) => r.kind === 'site' && r.siteId === s.id);
+          return {
+            siteId: s.id,
+            site: s.name,
+            days,
+            devices: devices.length,
+            abnormal: devices.filter((d) => d.state !== 'normal').length,
+            casesTotal: cases.length,
+            casesDone: done,
+            caseRate: cases.length ? Math.round((done / cases.length) * 100) : 100,
+            inspections: inspections.length,
+            inspectionRate: devices.length ? Math.round((inspected / devices.length) * 100) : 0,
+            docRate: docs?.rate ?? 0,
+            docTotal: docs?.total ?? 0,
+            // 에스컬레이션은 이력으로 센다 — escalations()와 달리 전이 부작용이 없다
+            escalated: db.cases.filter(
+              (c) => c.siteId === s.id && c.history.some((h) => h.action.startsWith('에스컬레이션') && inWin(h.at)),
+            ).length,
+            alerts: db.alerts.filter((a) => ids.has(a.deviceId) && inWin(a.at)).length,
+          };
+        });
     },
     async kpis(scope): Promise<Kpis> {
       await wait();

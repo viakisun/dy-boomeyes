@@ -75,6 +75,16 @@ const PAGES: { scr: string; url: string; ready: (page: Page) => Promise<void> }[
     ready: (p) => expect(p.locator('ul[aria-label="미처리 업무"] li')).toHaveCount(4),
   },
   {
+    scr: SCR['A1-06'],
+    url: '/a1/records?state=rec&capture=1',
+    ready: (p) => expect(p.locator('ol[aria-label="기록"] li').first()).toBeVisible(),
+  },
+  {
+    scr: SCR['A3-06'],
+    url: '/a3/records?state=rec&capture=1',
+    ready: (p) => expect(p.locator('ol[aria-label="기록"] li').first()).toBeVisible(),
+  },
+  {
     scr: SCR['A3-04'],
     url: '/a3/sites/SITE-001/devices?state=dev&capture=1',
     ready: (p) => expect(p.locator('[data-camera]')).toHaveCount(6),
