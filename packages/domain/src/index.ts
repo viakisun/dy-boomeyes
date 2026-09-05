@@ -5,3 +5,5 @@ export * from './session';
 export * from './types';
 export * from './api';
 export * from './routes';
+export * from './profile';
+export * from './protocol';
