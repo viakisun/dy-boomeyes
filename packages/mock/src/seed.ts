@@ -1,5 +1,6 @@
 // 시드 — 데모 픽스처(INTENT §7 · docs/DEMO.md): CPB-003 E-021 전압 이상 · CPB-004 통신 두절 · C-105 · D-27 임대 · 교육 이수증
 import ssot from '@boomeyes/domain/generated/ssot.json';
+import { CPB_V0_1 } from '@boomeyes/domain';
 import type {
   Alert,
   Attendance,
@@ -11,7 +12,10 @@ import type {
   Inspection,
   Lease,
   Owner,
+  ProtocolVersion,
   Request,
+  RuleSet,
+  SampleTest,
   Site,
   User,
 } from '@boomeyes/domain';
@@ -29,6 +33,9 @@ export interface Db {
   attendance: Attendance[];
   inspections: Inspection[];
   consents: Consent[];
+  protocols: ProtocolVersion[];
+  samples: SampleTest[];
+  rules: RuleSet;
   docs: Doc[];
   leases: Lease[];
 }
@@ -419,6 +426,138 @@ export function seed(): Db {
       ],
     },
   ];
+  // admin-protocol-rules: 프로토콜 2(운영 cpb.v0.1 · 테스트 cpb.v0.2) · 샘플 3 · 규칙(알림 8 · 고장코드 · 시나리오)
+  const protocols: ProtocolVersion[] = [
+    {
+      id: 'PV-001',
+      version: CPB_V0_1.version,
+      kind: 'production',
+      def: CPB_V0_1,
+      uploadedAt: t(30 * DAY),
+      uploadedBy: 'ops01',
+      lastReceivedAt: t(20_000),
+      note: '별첨 1-3.3 텔레메트리 항목 — 운영',
+    },
+    {
+      id: 'PV-002',
+      version: 'cpb.v0.2',
+      kind: 'test',
+      def: {
+        ...CPB_V0_1,
+        version: 'cpb.v0.2',
+        groups: CPB_V0_1.groups.map((g) =>
+          g.group === '전압' ? { ...g, fields: [...g.fields, { name: 'frequency_hz', type: 'number' as const }] } : g,
+        ),
+      },
+      uploadedAt: t(2 * DAY),
+      uploadedBy: 'ops01',
+      lastReceivedAt: null,
+      note: '전압 그룹에 주파수 추가 — 테스트',
+    },
+  ];
+  const base = JSON.parse(
+    (ssot as { interfaces: { protocol: { sample: string } } }).interfaces.protocol.sample,
+  ) as Record<string, unknown>;
+  const missing = structuredClone(base);
+  delete (missing.gps as Record<string, unknown>).latitude;
+  delete missing.power;
+  const wrongType = structuredClone(base);
+  (wrongType.power as Record<string, unknown>).voltage_value = '380';
+  (wrongType.gps as Record<string, unknown>).fix_status = 'lost';
+  (wrongType.harness as Record<string, unknown>).disconnected = 'no';
+  const abnormal = structuredClone(base);
+  abnormal.error = { error_code: 'E-021', error_name: '380V 전압 이상', severity: 'critical' };
+  abnormal.power = { voltage_status: 'abnormal', voltage_value: 342 };
+  abnormal.consumables = [{ part_type: 'pipe', usage_value: 96, threshold: 100 }];
+  const samples: SampleTest[] = [
+    { id: 'S-OK', label: '정상', json: JSON.stringify(base, null, 2) },
+    { id: 'S-ALERT', label: '이상 값', json: JSON.stringify(abnormal, null, 2) },
+    { id: 'S-MISSING', label: '필드 누락', json: JSON.stringify(missing, null, 2) },
+    { id: 'S-TYPE', label: '타입 오류', json: JSON.stringify(wrongType, null, 2) },
+  ];
+  const rules: RuleSet = {
+    alerts: [
+      { kind: 'comm', label: '통신 두절', severity: 'critical', roles: ['control', 'site-safety'], enabled: true },
+      { kind: 'gps', label: 'GPS 미수신', severity: 'info', roles: ['control'], enabled: true },
+      {
+        kind: 'voltage',
+        label: '380V 전압 이상',
+        severity: 'critical',
+        roles: ['control', 'site-safety', 'driver'],
+        enabled: true,
+      },
+      { kind: 'harness', label: '하네스 단선', severity: 'critical', roles: ['control', 'site-safety'], enabled: true },
+      {
+        kind: 'error',
+        label: '고장코드',
+        severity: 'critical',
+        roles: ['control', 'site-safety', 'driver', 'maintenance'],
+        enabled: true,
+      },
+      {
+        kind: 'doc',
+        label: '서류 미비·만료',
+        severity: 'warning',
+        roles: ['site-safety', 'hq-safety'],
+        threshold: { caution: 30, danger: 0, unit: '일' },
+        enabled: true,
+      },
+      {
+        kind: 'pipe',
+        label: '수송관 도달률',
+        severity: 'warning',
+        roles: ['site-safety', 'driver'],
+        threshold: { caution: 0.9, danger: 1, unit: '비율' },
+        enabled: true,
+      },
+      {
+        kind: 'filter',
+        label: '필터 도달률',
+        severity: 'warning',
+        roles: ['site-safety', 'driver'],
+        threshold: { caution: 0.9, danger: 1, unit: '비율' },
+        enabled: true,
+      },
+    ],
+    errorCodes: [
+      {
+        code: 'E-011',
+        name: '제어기 통신 두절',
+        severity: 'critical',
+        guide: 'LTE 신호·게이트웨이 전원 확인, 5분 내 미복구 시 정비 호출',
+      },
+      {
+        code: 'E-021',
+        name: '380V 전압 이상',
+        severity: 'critical',
+        guide: '상 전압 확인(342V 이하 저전압), 릴레이·입력 전원 점검 후 재기동',
+      },
+      { code: 'E-031', name: '하네스 단선', severity: 'critical', guide: '단선 채널 커넥터 점검, 작업 중지' },
+      {
+        code: 'E-041',
+        name: '수송관 도달률 임계 초과',
+        severity: 'warning',
+        guide: '두께 실측 후 교체 부품 발주(OEM 기준 DISC-038)',
+      },
+    ],
+    scenarios: [
+      { id: 'SC-1', title: '정상 타설', severity: 'none', locked: false, note: '알림 없음 — 로그만' },
+      {
+        id: 'SC-2',
+        title: '호스 주변 인원 접근',
+        severity: 'critical',
+        locked: false,
+        note: '즉시 알림 (AI 카메라 이벤트)',
+      },
+      { id: 'SC-3', title: '배관·호스 이상', severity: 'critical', locked: false, note: '긴급' },
+      { id: 'SC-4', title: '영상 장애', severity: 'warning', locked: false, note: 'AI 판단 불가 표시 + 알림' },
+      { id: 'SC-5', title: '전도', severity: 'critical', locked: true, note: '현장 검증 후 적용 (DISC-042)' },
+      { id: 'SC-6', title: '무동작', severity: 'warning', locked: true, note: '현장 검증 후 적용 (DISC-042)' },
+    ],
+    updatedAt: t(5 * DAY),
+    updatedBy: 'ops01',
+    history: [{ at: t(5 * DAY), by: 'ops01', action: '알림 기준 등록 — 8종 · 고장코드 4' }],
+  };
   return {
     users,
     sites,
@@ -431,6 +570,9 @@ export function seed(): Db {
     attendance,
     inspections,
     consents,
+    protocols,
+    samples,
+    rules,
     docs,
     leases,
   };

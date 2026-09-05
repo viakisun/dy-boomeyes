@@ -121,3 +121,60 @@ describe('[FR-013] 출근 체크인 · [FR-014] 일일점검 (driver-daily)', ()
     ).toBe(0.92);
   });
 });
+
+describe('[FR-020] 프로토콜 관리 (B4-02)', () => {
+  it('운영 1 · 테스트 1 · 샘플 3(정상/누락/타입) 파싱 결과', async () => {
+    const api = bootMock({ capture: true });
+    const ps = await api.protocols();
+    expect(ps.map((p) => `${p.version}:${p.kind}`)).toEqual(['cpb.v0.1:production', 'cpb.v0.2:test']);
+    const samples = await api.samples();
+    expect(samples.map((s) => s.id)).toEqual(['S-OK', 'S-ALERT', 'S-MISSING', 'S-TYPE']);
+    const ok = await api.testSample('PV-001', JSON.parse(samples[0]!.json));
+    expect(ok.ok).toBe(true);
+    const alert = await api.testSample('PV-001', JSON.parse(samples[1]!.json));
+    expect(alert.ok).toBe(true);
+    expect(alert.alerts.map((a) => a.kind)).toEqual(['error', 'voltage', 'pipe']);
+    const missing = await api.testSample('PV-001', JSON.parse(samples[2]!.json));
+    expect(missing.errors.map((e) => e.path)).toEqual(expect.arrayContaining(['gps.latitude', 'power']));
+    const wrong = await api.testSample('PV-001', JSON.parse(samples[3]!.json));
+    expect(wrong.errors.map((e) => e.path)).toEqual(
+      expect.arrayContaining(['power.voltage_value', 'gps.fix_status', 'harness.disconnected']),
+    );
+  });
+  it('업로드: 깨진 정의는 행 경로·사유 · 정상 정의는 테스트 버전 추가', async () => {
+    const api = bootMock({ capture: true });
+    const bad = await api.uploadProtocol({ version: 'v9', groups: [] }, { filename: 'bad.yaml', by: 'ops01' });
+    expect(bad.ok).toBe(false);
+    expect(bad.errors.map((e) => e.path)).toEqual(expect.arrayContaining(['version', 'groups']));
+    const def = { ...(await api.protocols())[0]!.def, version: 'cpb.v0.3' };
+    const good = await api.uploadProtocol(def, { filename: 'cpb-v0.3.yaml', by: 'ops01' });
+    expect(good.ok).toBe(true);
+    expect(good.version?.kind).toBe('test');
+    expect((await api.protocols()).length).toBe(3);
+  });
+});
+
+describe('[FR-011] 알림 기준 · 고장코드 (B4-05)', () => {
+  it('알림 8종 · 고장코드 4 · 시나리오 잠금 2 · 저장 시 이력', async () => {
+    const api = bootMock({ capture: true });
+    const r = await api.rules();
+    expect(r.alerts.map((a) => a.kind)).toEqual([
+      'comm',
+      'gps',
+      'voltage',
+      'harness',
+      'error',
+      'doc',
+      'pipe',
+      'filter',
+    ]);
+    expect(r.errorCodes.find((c) => c.code === 'E-021')?.severity).toBe('critical');
+    expect(r.scenarios.filter((s) => s.locked).map((s) => s.title)).toEqual(['전도', '무동작']);
+    const alerts = r.alerts.map((a) =>
+      a.kind === 'pipe' ? { ...a, threshold: { caution: 0.85, danger: 1, unit: '비율' } } : a,
+    );
+    const saved = await api.saveRules({ alerts }, 'ops01');
+    expect(saved.alerts.find((a) => a.kind === 'pipe')?.threshold?.caution).toBe(0.85);
+    expect(saved.history.at(-1)).toMatchObject({ by: 'ops01', action: '알림 기준 저장' });
+  });
+});

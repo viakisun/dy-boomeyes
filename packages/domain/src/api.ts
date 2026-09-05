@@ -1,7 +1,13 @@
 // ApiClient 인터페이스 — 구현: @boomeyes/mock(인메모리) · @boomeyes/api-client(http, W3). 화면은 이 인터페이스만 의존 (ADR-002).
+import type { Issue, ParseResult } from './protocol';
 import type {
   Alert,
+  AlertRule,
   Attendance,
+  ErrorCode,
+  ProtocolVersion,
+  RuleSet,
+  SampleTest,
   Camera,
   Case,
   Device,
@@ -46,6 +52,17 @@ export interface ApiClient {
   checkout(userId: string): Promise<Attendance>;
   /** FR-014 — 5항목 제출 */
   submitInspection(userId: string, items: InspectionItem[]): Promise<Inspection>;
+  /** FR-020 프로토콜 — 목록 · 업로드(객체로 파싱된 정의; YAML 파싱은 앱) · 샘플 테스트 */
+  protocols(): Promise<ProtocolVersion[]>;
+  uploadProtocol(
+    def: unknown,
+    meta: { filename: string; by: string },
+  ): Promise<{ ok: boolean; errors: Issue[]; version?: ProtocolVersion }>;
+  samples(): Promise<SampleTest[]>;
+  testSample(versionId: string, sample: unknown): Promise<ParseResult>;
+  /** FR-011 알림 기준 · 고장코드 · 시나리오 등급 (B4-05) */
+  rules(): Promise<RuleSet>;
+  saveRules(patch: { alerts?: AlertRule[]; errorCodes?: ErrorCode[] }, by: string): Promise<RuleSet>;
   docs(scope: Scope): Promise<Doc[]>;
   leases(scope: Scope): Promise<Lease[]>;
   kpis(scope: Scope): Promise<Kpis>;

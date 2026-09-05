@@ -57,6 +57,8 @@ export const FIXTURES: Record<string, Fixture> = {
     ),
   }),
   'A3-03:normal': (db) => db,
+  'B4-02:proto': (db) => db,
+  'B4-05:rules': (db) => db,
 };
 
 function checkedIn(db: Db) {

@@ -5,7 +5,11 @@ import {
   INSPECTION_ITEMS,
   canTransition,
   distanceM,
+  parseSample,
   transition,
+  validateProtocol,
+  type ProtocolDef,
+  type ProtocolVersion,
   type Attendance,
   type Inspection,
   type Today,
@@ -180,6 +184,58 @@ export function createMockApi(db: Db, opts: { latencyMs?: number } = {}): ApiCli
       i.items = items;
       i.submittedAt = clock.iso();
       return i;
+    },
+    async protocols() {
+      await wait();
+      return db.protocols;
+    },
+    async uploadProtocol(def, meta) {
+      await wait();
+      const r = validateProtocol(def);
+      if (!r.ok) return { ok: false, errors: r.errors };
+      const d = def as ProtocolDef;
+      const version: ProtocolVersion = {
+        id: `PV-${String(db.protocols.length + 1).padStart(3, '0')}`,
+        version: d.version,
+        kind: 'test',
+        def: d,
+        uploadedAt: clock.iso(),
+        uploadedBy: meta.by,
+        lastReceivedAt: null,
+        note: `업로드 — ${meta.filename}`,
+      };
+      db.protocols.push(version);
+      return { ok: true, errors: [], version };
+    },
+    async samples() {
+      await wait();
+      return db.samples;
+    },
+    async testSample(versionId, sample) {
+      await wait();
+      const v = db.protocols.find((p) => p.id === versionId);
+      if (!v) throw new Error(`protocol ${versionId}`);
+      return parseSample(v.def, sample);
+    },
+    async rules() {
+      await wait();
+      return db.rules;
+    },
+    async saveRules(patch, by) {
+      await wait();
+      const changed: string[] = [];
+      if (patch.alerts) {
+        db.rules.alerts = patch.alerts;
+        changed.push('알림 기준');
+      }
+      if (patch.errorCodes) {
+        db.rules.errorCodes = patch.errorCodes;
+        changed.push('고장코드');
+      }
+      db.rules.updatedAt = clock.iso();
+      db.rules.updatedBy = by;
+      db.rules.history.push({ at: clock.iso(), by, action: `${changed.join(' · ') || '규칙'} 저장` });
+      return db.rules;
     },
     async docs(scope) {
       await wait();

@@ -24,10 +24,11 @@
   },
   "dependencies": {
     "@boomeyes/domain": "workspace:*",
+    "@boomeyes/map": "workspace:*",
     "@boomeyes/mock": "workspace:*",
     "@boomeyes/tokens": "workspace:*",
     "@boomeyes/ui": "workspace:*",
-    "@boomeyes/map": "workspace:*",
-    "@boomeyes/video": "workspace:*"
+    "@boomeyes/video": "workspace:*",
+    "yaml": "2.9.0"
   }
 }
