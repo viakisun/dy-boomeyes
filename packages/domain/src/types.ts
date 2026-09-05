@@ -110,6 +110,7 @@ export interface User {
   siteIds: string[];
   /** 운전자 배정 장비 (driver-daily) */
   deviceId?: string;
+  phone?: string;
 } // ENT-05
 export interface Kpis {
   total: number;
@@ -184,6 +185,8 @@ export interface Today {
   consent: Consent;
   /** 촬영 중 표시 — 배정 장비 카메라가 살아 있으면 true (FR-031 촬영 표시) */
   filming: boolean;
+  /** 정비 담당(대응 안내 연락처) */
+  maintenance: User | undefined;
 }
 
 export interface Scope {

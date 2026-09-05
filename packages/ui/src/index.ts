@@ -47,6 +47,7 @@ export {
   ERROR_CODE_LABEL,
 } from './lib/labels';
 export { fmtDateTime, fmtTime, dueLabel, elapsedLabel } from './lib/format';
+export { connectivity } from './lib/connectivity.svelte';
 export { default as WebShell } from './shell/WebShell.svelte';
 export { default as PwaShell } from './shell/PwaShell.svelte';
 export { default as Sidebar } from './shell/Sidebar.svelte';

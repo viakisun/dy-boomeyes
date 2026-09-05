@@ -37,7 +37,9 @@ export function bootMock(opts: MockOptions = {}) {
   const browser = typeof window !== 'undefined';
   if (browser && cache?.key === key) return cache.api;
   let db = seed();
-  if (opts.screen) db = applyState(db, opts.screen, opts.state ?? SCREENS[opts.screen].default);
+  // 화면 기본 픽스처는 capture(캡처·e2e)에서만 — 실사용 흐름(live)은 순수 시드(예: A2-03 기본 'inspect'가 체크인을 만들면 안 된다)
+  const state = opts.state ?? (opts.capture && opts.screen ? SCREENS[opts.screen].default : null);
+  if (opts.screen && state) db = applyState(db, opts.screen, state);
   const api = createMockApi(db, { latencyMs: opts.capture ? 0 : (opts.latencyMs ?? 120) });
   if (browser) cache = { key, api };
   return api;

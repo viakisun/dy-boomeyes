@@ -57,7 +57,8 @@ test('[A2-03] 체크인 후 5항목 제출 → 제출 완료 · 오늘 배너 su
 });
 
 test('[A2-03] 미체크인이면 제출 불가 안내 [FR-014]', async ({ page }) => {
-  await page.goto('/a2/today/inspect?state=none&capture=1');
+  await login(page); // 로그인 직후 = 미체크인
+  await page.goto('/a2/today/inspect');
   await expect(page.getByText('출근 체크인 후에 점검을 제출할 수 있습니다')).toBeVisible();
   await expect(page.getByRole('button', { name: '점검 제출' })).toBeDisabled();
 });
@@ -71,4 +72,27 @@ test('[A2-04] 내 장비: 342V 이상 · E-021 · 수송관 62% 정상 · 필터
   await expect(page.getByRole('meter', { name: '수송관 도달률' })).toHaveAttribute('aria-valuetext', '62% 정상');
   await expect(page.getByRole('meter', { name: '필터 도달률' })).toHaveAttribute('aria-valuetext', '92% 임계 접근');
   await expect(page.getByText('AI 판단 불가')).toHaveCount(0); // CPB-003 채널은 라이브·스냅샷
+});
+
+test('[A2-02] 오프라인 → 셸 배너 · 체크인 보류(비활성) · 복구 → 활성 [FR-013]', async ({ page }) => {
+  await login(page);
+  const checkin = page.getByRole('button', { name: '출근 체크인' });
+  await expect(checkin).toBeEnabled();
+  await page.context().setOffline(true);
+  await expect(page.getByRole('status').filter({ hasText: '오프라인' })).toBeVisible();
+  await expect(checkin).toBeDisabled();
+  await page.context().setOffline(false);
+  await expect(page.getByRole('status').filter({ hasText: '오프라인' })).toHaveCount(0);
+  await expect(checkin).toBeEnabled();
+});
+
+test('[A2-03] 오프라인 → 점검 제출 보류(비활성) · 복구 → 활성 [FR-014]', async ({ page }) => {
+  await page.goto('/a2/today/inspect?state=inspect&capture=1'); // 체크인 후 픽스처
+  const submit = page.getByRole('button', { name: '점검 제출' });
+  await expect(submit).toBeEnabled();
+  await page.context().setOffline(true);
+  await expect(page.getByRole('status').filter({ hasText: '오프라인' })).toBeVisible();
+  await expect(submit).toBeDisabled();
+  await page.context().setOffline(false);
+  await expect(submit).toBeEnabled();
 });

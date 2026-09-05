@@ -15,6 +15,7 @@
     SEVERITY_LABEL,
     SEVERITY_TONE,
     StatusPill,
+    connectivity,
     cx,
     fmtDateTime,
     toast,
@@ -25,7 +26,7 @@
   let busy = $state(false);
   let denied = $state<string | null>(null);
   let opened = $state<Alert | null>(null);
-  const online = $derived(typeof navigator === 'undefined' ? true : navigator.onLine);
+  const online = $derived(connectivity.online); // 오프라인이면 체크인·제출 보류(셸 배너가 안내)
   const t = $derived(data.today);
   // mock GPS — 현장 좌표(반경 안) · ?gps=out 이면 약 5km 밖
   const pos = () => {
@@ -55,8 +56,6 @@
 </script>
 
 <div class="gap-stack-md flex flex-col" data-scr={SCR['A2-02']}>
-  {#if !online}<Banner tone="neutral">오프라인 — 체크인·점검 제출은 연결 후 가능합니다</Banner>{/if}
-
   <CheckinCard
     attendance={t.attendance}
     siteName={t.site?.name}
@@ -151,7 +150,7 @@
     {:else}
       <p class="text-body-sm text-fg-muted">안내에 따라 조치하고, 이상이 계속되면 안전관리자에게 알리세요.</p>
     {/if}
-    <p class="text-body-sm">정비 연락처: 정정비 · 010-0000-0009</p>
+    <p class="text-body-sm">정비 연락처: {t.maintenance?.display ?? '정비 담당'} · {t.maintenance?.phone ?? '-'}</p>
   {/if}
   {#snippet footer()}<Button onclick={() => (opened = null)}>확인</Button>{/snippet}
 </Dialog>

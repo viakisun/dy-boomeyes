@@ -45,6 +45,7 @@ export function demoUsers(): User[] {
     siteIds:
       r.id === 'site-safety' || r.id === 'driver' ? ['SITE-001'] : r.id === 'hq-safety' ? ['SITE-001', 'SITE-002'] : [],
     deviceId: r.id === 'driver' ? 'CPB-003' : undefined,
+    phone: r.id === 'maintenance' ? '010-0000-0009' : undefined,
   }));
 }
 

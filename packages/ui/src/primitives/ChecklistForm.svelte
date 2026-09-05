@@ -22,13 +22,7 @@
   };
 </script>
 
-<form
-  class="gap-stack-md flex flex-col"
-  onsubmit={(e) => {
-    e.preventDefault();
-    onsubmit?.(items);
-  }}
->
+<form class="gap-stack-md flex flex-col" onsubmit={(e) => e.preventDefault()}>
   <fieldset class="rounded-card border-border bg-surface border" {disabled}>
     <legend class="text-label-md text-fg-muted px-inset-md pt-inset-sm">{legend}</legend>
     <ul class="divide-border-subtle divide-y">

@@ -3,12 +3,12 @@
   import { invalidateAll } from '$app/navigation';
   import { resolve } from '$app/paths';
   import { SCR, type InspectionItem } from '@boomeyes/domain';
-  import { Banner, ChecklistForm, StatusPill, fmtDateTime, toast } from '@boomeyes/ui';
+  import { Banner, ChecklistForm, StatusPill, connectivity, fmtDateTime, toast } from '@boomeyes/ui';
   let { data } = $props();
   const t = $derived(data.today);
   let items = $state<InspectionItem[]>(structuredClone(data.today.inspection.items));
   let busy = $state(false);
-  const online = $derived(typeof navigator === 'undefined' ? true : navigator.onLine);
+  const online = $derived(connectivity.online);
   const abnormal = $derived(t.inspection.items.filter((i) => !i.ok).length);
   async function submit(list: InspectionItem[]) {
     busy = true;
@@ -31,8 +31,6 @@
       >{t.device?.id ?? '배정 장비 없음'} · {t.site?.name ?? ''} · {t.inspection.date}</span
     >
   </header>
-
-  {#if !online}<Banner tone="neutral">오프라인 — 제출은 연결 후 가능합니다</Banner>{/if}
 
   {#if t.inspection.submittedAt}
     <section

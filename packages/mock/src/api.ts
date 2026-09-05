@@ -145,7 +145,8 @@ export function createMockApi(db: Db, opts: { latencyMs?: number } = {}): ApiCli
         : [];
       const consent = db.consents.find((c) => c.userId === userId) ?? { userId, items: [] };
       const filming = !!device && db.cameras.some((c) => c.deviceId === device.id && c.state !== 'offline');
-      return { user, device, site, attendance, inspection, alerts, consent, filming };
+      const maintenance = db.users.find((u) => u.role === 'maintenance');
+      return { user, device, site, attendance, inspection, alerts, consent, filming, maintenance };
     },
     async checkin(userId, pos) {
       await wait();

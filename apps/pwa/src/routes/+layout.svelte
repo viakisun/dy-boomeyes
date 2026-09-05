@@ -4,7 +4,7 @@
   import { resolve } from '$app/paths';
   import { onMount } from 'svelte';
   import { APP_HOME_OF, SCREENS, type Alert, type RoleId } from '@boomeyes/domain';
-  import { Badge, Button, EmptyState, IconButton, PwaShell, Toast, toast } from '@boomeyes/ui';
+  import { Badge, Button, EmptyState, IconButton, PwaShell, Toast, connectivity, toast } from '@boomeyes/ui';
   import { navFor } from '$lib/nav';
   import { logout, session } from '$lib/session.svelte';
   let { data, children } = $props();
@@ -47,7 +47,7 @@
 {#if isLogin || !session.user}
   {@render children()}
 {:else}
-  <PwaShell {title} {tabs}>
+  <PwaShell {title} {tabs} offline={!connectivity.online}>
     {#snippet actions()}
       {#if live.length}<a
           href={resolve(alertPath as '/')}
