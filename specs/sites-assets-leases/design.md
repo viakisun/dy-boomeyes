@@ -35,3 +35,9 @@
 - B1-06: PageHeader + Stat 4 + DataTable(만료 빠른 순) + Inspector(계약 상세 · 재배치 계획 폼(expiring만) · 홍보 연계 문구 · Timeline). `?lease=` 선택.
 - B2-02: hq 스코프(`users → me.siteIds`) · MapView 마커(장비 5) + 현장 카드(링크 → B2-03) · Stat 4(kpis) · "보고 모드" 링크(B2-04, B8) · 처리 버튼 없음. 마커 선택은 그 호기의 현장 상세로.
 - 장면 9: `SCENE_FIXTURES[9]` = 시드(entry `/b1/leases` · control01 자동 파생) · e2e는 재배치까지.
+
+## W2 B7 — A1-07 · A2-06 · A3-03 구현 메모
+- `createRequest(input)` = request 상태기계 submitted → review(자동, "수신함 등록 — 검토 중" 이력) · id `RQ-${n}`(시드 5 → 첫 신청 RQ-006 — spec 픽스처 ID는 런타임 결과). B1-03은 코드 변경 없이 새 신청을 최상단(requestedAt desc)에 보인다.
+- A1-07: 현장 기본정보 KeyValueList(현장명·주소·기간·담당·영상 채널·장비·타설 일정 DISC-034 미확정) · 내 신청 목록(requesterId = me) · "현장 개설 신청" 시트(BottomSheet `capture`, 종류 Select 현장 개설/장비 배정 · 현장명 또는 필요 대수 · 주소 · 기간 · 메모). `?state=apply`는 화면이 직접 읽어 시트를 연 채 시작(screenForPath 무관, 캡처·e2e). 로그아웃은 셸 앱바(중복 금지). `List` 컴포넌트는 만들지 않았다(`ul` + 카드 관례).
+- A2-06: `today(me)` 하나로 현장·장비·동의·정비 연락처 — KeyValueList + EquipmentCard(summary) + 동의 Badge(`CONSENT_LABEL`, ui labels) + 앱 정보(계정·역할·wave). 버튼 0.
+- A3-03: hq 스코프 · Stat 4(장비·이상·미처리 업무·서류 완비율 = docCompleteness 현장 행) · 기본정보 · 미처리 업무마다 "확인 요청"(`requestConfirm(caseId)` — 현장 단위 API 없음) · 장비 열람 링크(A3-04) · 처리 버튼 0. `normal` 픽스처 = SITE-002 장비를 정상으로(이상 0, capture `STATE_PARAMS` SITE-002) — "이상" 정의는 A3-02와 같은 `state !== 'normal'`.

@@ -49,6 +49,14 @@ export interface ApiClient {
   request(id: string): Promise<Request | undefined>;
   approveRequest(id: string, by: string, note?: string): Promise<Request>;
   rejectRequest(id: string, by: string, note: string): Promise<Request>;
+  /** FR-017 신청(A1-07) — request 상태기계 submitted → review(자동, 수신함 등록) → B1-03 */
+  createRequest(input: {
+    kind: Request['kind'];
+    title: string;
+    siteId: string;
+    requesterId: string;
+    note?: string;
+  }): Promise<Request>;
   /** FR-010 — 임계(1h) 경과한 new 업무를 escalated로 전이하고 통보 목록을 돌려준다 */
   escalations(): Promise<Escalation[]>;
   /** driver-daily — 오늘(배정 장비 · 출근 · 점검 · 알림 · 동의) */

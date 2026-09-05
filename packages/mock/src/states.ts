@@ -125,7 +125,19 @@ export const FIXTURES: Record<string, Fixture> = {
       d.id === 'CPB-003' ? { ...d, telemetry: { ...d.telemetry, filterRatio: 0.92 } } : d,
     ),
   }),
-  'A3-03:normal': (db) => db,
+  // A3-03 normal: 대전 B(SITE-002) 장비를 정상으로 — 이상 0 렌더 (sites-assets-leases AC-7)
+  'A3-03:normal': (db) => ({
+    ...db,
+    devices: db.devices.map((d) =>
+      d.siteId === 'SITE-002'
+        ? {
+            ...d,
+            state: 'normal' as const,
+            telemetry: { ...d.telemetry, lte: 'connected' as const, errorCode: null, at: clock.iso() },
+          }
+        : d,
+    ),
+  }),
   'B4-02:proto': (db) => db,
   'B4-05:rules': (db) => db,
   // sites-assets-leases(W2 B5): 마스터 — 시드 그대로(현장 2 · 장비 5 · 계정 7)
@@ -134,6 +146,11 @@ export const FIXTURES: Record<string, Fixture> = {
   // sites-assets-leases(W2 B6): 임대 계약(LS-001 D-27 expiring 최상단) · 본사 지도(hq 2현장 · 장비 5) — 시드 그대로
   'B1-06:lease': (db) => db,
   'B2-02:work': (db) => db,
+  // sites-assets-leases(W2 B7): 메뉴·현장 정보 — 시드 그대로(apply는 화면이 ?state=apply를 읽어 시트를 연다)
+  'A1-07:menu': (db) => db,
+  'A1-07:apply': (db) => db,
+  'A2-06:menu': (db) => db,
+  'A3-03:site': (db) => db,
 };
 
 function checkedIn(db: Db) {
