@@ -26,7 +26,9 @@ export const load: LayoutLoad = ({ url }) => {
   const surface = url.pathname.split('/')[1] ?? 'a1';
   if (screen && !LOGINS.includes(screen) && !user && !opts.capture) throw redirect(302, `/${surface}/login`);
   const forbidden = !!(user && screen && !canAccess(user.role, screen));
+  const t = url.searchParams.get('theme');
+  const theme: 'dark' | 'light' | null = t === 'dark' || t === 'light' ? t : null; // 캡처·e2e용 루트 테마(저장 안 함)
   const realtime = createMockRealtime({ enabled: !opts.capture });
   const media = createMockMedia(api.db);
-  return { api, clock, realtime, media, resetMock, screen, capture: !!opts.capture, forbidden, surface };
+  return { api, clock, realtime, media, resetMock, screen, capture: !!opts.capture, forbidden, surface, theme };
 };

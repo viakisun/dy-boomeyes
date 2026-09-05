@@ -4,6 +4,13 @@
     <meta charset="utf-8" />
     <link rel="icon" href="%sveltekit.assets%/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <script>
+      // 저장된 테마(dy.theme)를 첫 페인트 전에 루트에 적용 — packages/ui lib/theme.svelte.ts와 키 공유
+      try {
+        var t = localStorage.getItem('dy.theme');
+        if (t === 'dark' || t === 'light') document.documentElement.dataset.theme = t;
+      } catch (e) {}
+    </script>
     %sveltekit.head%
   </head>
   <body data-sveltekit-preload-data="hover">

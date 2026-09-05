@@ -1,6 +1,7 @@
 // capture.mjs — ssot 화면 레지스트리 기반 캡처 (QA §3). 빌드된 앱을 vite preview로 띄우고 라우트×상태 전수 촬영.
-//   node tools/capture/capture.mjs [--wave N] [--only B1-02,B0-01] [--web http://...] [--pwa http://...] [--no-serve]
+//   node tools/capture/capture.mjs [--wave N] [--only B1-02,B0-01] [--dark] [--web http://...] [--pwa http://...] [--no-serve]
 // 출력 shots/<code-lower>-<state>.png · 시각 고정은 앱 DemoClock(?capture=1) · 애니메이션 off
+// --dark: 화면 기본 상태를 ?theme=dark(루트 data-theme)로 한 번 더 찍는다 → <code-lower>-<state>-dark.png (shell-auth AC-6)
 import { readFileSync, mkdirSync, existsSync } from 'node:fs';
 import { join, dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -16,6 +17,7 @@ const opt = (k, d) => {
 };
 const WAVE = Number(opt('--wave', ssot.meta.current_wave));
 const ONLY = opt('--only', '') ? opt('--only').split(',') : null;
+const DARK = args.includes('--dark');
 const PORTS = { web: 4173, pwa: 4174 };
 const BASE = { web: opt('--web', `http://localhost:${PORTS.web}`), pwa: opt('--pwa', `http://localhost:${PORTS.pwa}`) };
 const OUT = join(ROOT, 'shots');
@@ -71,48 +73,52 @@ for (const s of screens) {
   const phone = app === 'pwa';
   for (const st of s.states) {
     const route = s.route.replace(/\[[a-z]+\]/g, (m) => PARAMS[m] ?? 'X');
-    const url = `${BASE[app]}${route}${route.includes('?') ? '&' : '?'}state=${st.id}&capture=1`;
-    const name = `${s.id.toLowerCase()}-${st.id}`;
-    const page = await ctx.newPage();
-    await page.setViewportSize(phone ? { width: 440, height: 900 } : { width: 1280, height: 842 });
-    try {
-      await page.goto(url, { waitUntil: 'networkidle' });
-      await page.waitForSelector(`[data-scr="${s.id}"]`, { timeout: 10_000 });
-      await page.addStyleTag({ content: '*,*::before,*::after{animation:none!important;transition:none!important}' });
-      if (await page.$('.be-map')) await page.waitForSelector('[data-map-ready]', { timeout: 20_000 }); // 타임아웃 = FAIL (빈 지도를 녹색으로 세지 않는다)
-      await page.waitForTimeout(300);
-      const dialog = await page.$('dialog[open][data-capture-dialog], [data-capture-dialog]:not(dialog)');
-      const frame = await page.$('[data-capture-frame]');
-      const target = dialog ?? (phone ? frame : null);
-      if (phone && frame && !dialog) {
-        // 긴 앱 화면: sticky 하단 내비가 뷰포트 바닥(문서 중간)에 찍히지 않도록 뷰포트를 문서 높이로
-        const h = await page.evaluate(() => Math.ceil(document.documentElement.scrollHeight));
-        if (h > 900) {
-          await page.setViewportSize({ width: 440, height: h });
-          await page.waitForTimeout(200);
-        }
-      }
-      if (target) await target.screenshot({ path: join(OUT, `${name}.png`) });
-      else if (phone) await page.screenshot({ path: join(OUT, `${name}.png`) });
-      else {
-        // fullPage(captureBeyondViewport)는 WebGL 캔버스 서브트리(타일·DOM 마커)를 간헐적으로 비운 채 찍는다 → 뷰포트를 문서 높이로 늘려 일반 촬영
-        // 셸이 있으면 스크롤 컨테이너는 <main>(h-dvh 안) — main 내용 높이 + 상단 오프셋만큼 뷰포트를 키운다
-        const h = await page.evaluate(() => {
-          const m = document.querySelector('main');
-          const doc = document.documentElement.scrollHeight;
-          return m ? Math.max(doc, Math.ceil(m.getBoundingClientRect().top + m.scrollHeight)) : doc;
-        });
-        await page.setViewportSize({ width: 1280, height: Math.max(842, h) });
+    const base = `${BASE[app]}${route}${route.includes('?') ? '&' : '?'}state=${st.id}&capture=1`;
+    const name0 = `${s.id.toLowerCase()}-${st.id}`;
+    const variants = [{ url: base, name: name0 }];
+    if (DARK && st.id === s.default) variants.push({ url: `${base}&theme=dark`, name: `${name0}-dark` });
+    for (const { url, name } of variants) {
+      const page = await ctx.newPage();
+      await page.setViewportSize(phone ? { width: 440, height: 900 } : { width: 1280, height: 842 });
+      try {
+        await page.goto(url, { waitUntil: 'networkidle' });
+        await page.waitForSelector(`[data-scr="${s.id}"]`, { timeout: 10_000 });
+        await page.addStyleTag({ content: '*,*::before,*::after{animation:none!important;transition:none!important}' });
+        if (await page.$('.be-map')) await page.waitForSelector('[data-map-ready]', { timeout: 20_000 }); // 타임아웃 = FAIL (빈 지도를 녹색으로 세지 않는다)
         await page.waitForTimeout(300);
-        await page.screenshot({ path: join(OUT, `${name}.png`) });
+        const dialog = await page.$('dialog[open][data-capture-dialog], [data-capture-dialog]:not(dialog)');
+        const frame = await page.$('[data-capture-frame]');
+        const target = dialog ?? (phone ? frame : null);
+        if (phone && frame && !dialog) {
+          // 긴 앱 화면: sticky 하단 내비가 뷰포트 바닥(문서 중간)에 찍히지 않도록 뷰포트를 문서 높이로
+          const h = await page.evaluate(() => Math.ceil(document.documentElement.scrollHeight));
+          if (h > 900) {
+            await page.setViewportSize({ width: 440, height: h });
+            await page.waitForTimeout(200);
+          }
+        }
+        if (target) await target.screenshot({ path: join(OUT, `${name}.png`) });
+        else if (phone) await page.screenshot({ path: join(OUT, `${name}.png`) });
+        else {
+          // fullPage(captureBeyondViewport)는 WebGL 캔버스 서브트리(타일·DOM 마커)를 간헐적으로 비운 채 찍는다 → 뷰포트를 문서 높이로 늘려 일반 촬영
+          // 셸이 있으면 스크롤 컨테이너는 <main>(h-dvh 안) — main 내용 높이 + 상단 오프셋만큼 뷰포트를 키운다
+          const h = await page.evaluate(() => {
+            const m = document.querySelector('main');
+            const doc = document.documentElement.scrollHeight;
+            return m ? Math.max(doc, Math.ceil(m.getBoundingClientRect().top + m.scrollHeight)) : doc;
+          });
+          await page.setViewportSize({ width: 1280, height: Math.max(842, h) });
+          await page.waitForTimeout(300);
+          await page.screenshot({ path: join(OUT, `${name}.png`) });
+        }
+        n++;
+        console.log('ok', name);
+      } catch (e) {
+        fail++;
+        console.log('FAIL', name, String(e.message).split('\n')[0]);
       }
-      n++;
-      console.log('ok', name);
-    } catch (e) {
-      fail++;
-      console.log('FAIL', name, String(e.message).split('\n')[0]);
+      await page.close();
     }
-    await page.close();
   }
 }
 await browser.close();

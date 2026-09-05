@@ -27,6 +27,8 @@ export const load: LayoutLoad = ({ url }) => {
   if (screen !== 'B0-01' && !user && !opts.capture)
     throw redirect(302, `/login?next=${encodeURIComponent(url.pathname + url.search)}`);
   const forbidden = !!(user && screen && !canAccess(user.role, screen));
+  const t = url.searchParams.get('theme');
+  const theme: 'dark' | 'light' | null = t === 'dark' || t === 'light' ? t : null; // 캡처·e2e용 루트 테마(저장 안 함)
   const realtime = createMockRealtime({ enabled: !opts.capture });
   const media = createMockMedia(api.db);
   return {
@@ -38,5 +40,6 @@ export const load: LayoutLoad = ({ url }) => {
     screen: screen as ScrId | undefined,
     capture: !!opts.capture,
     forbidden,
+    theme,
   };
 };
