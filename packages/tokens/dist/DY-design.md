@@ -10,7 +10,7 @@
 | ref(원시) | 205 |
 | sys(시맨틱) | 318 |
 | cmp(컴포넌트) | 92 |
-| 컴포넌트 카탈로그 | 76 |
+| 컴포넌트 카탈로그 | 78 |
 | 대비 검사 | 82/82 통과 |
 
 | 산출물 | 용도 |
@@ -762,7 +762,7 @@ cmp 층은 sys만 참조한다(ref 직접 참조 금지 — 검사로 강제). �
 | `cmp.table.row-selected` | #ebf1ff | #ebf1ff | {sys.color.bg.selected} |  |
 | `cmp.table.header-fg` | #616368 | #616368 | {sys.color.fg.muted} |  |
 
-## 8. 컴포넌트 카탈로그 (76)
+## 8. 컴포넌트 카탈로그 (78)
 
 이름 PascalCase · prop 어휘 고정: `variant`(형태) · `tone`(색 의도: accent/neutral/info/success/warning/danger/progress) · `size`(sm/md/lg) · 상태 boolean(`disabled` `loading` `selected` `invalid`). 플랫폼 both = 같은 Svelte 컴포넌트가 밀도 토큰으로 두 플랫폼을 소화.
 
@@ -876,6 +876,8 @@ cmp 층은 sys만 참조한다(ref 직접 참조 금지 — 검사로 강제). �
 | **ProtocolUploader** | web | new | yaml/json · validation table |  | 프로토콜 업로드·오류 판정 |
 | **RuleThresholdRow** | web | new | metric · operator · value · tone |  | 알림 기준 편집 |
 | **WeatherStrip** | pwa | CE weather | hours 6 · wind |  | 홈 기상 요약 |
+| **BboxOverlay** | both | — | boxes[] 정규화 좌표 · label · tone warning/danger | hidden/visible | AI 채널 클립·스냅샷 위 SVG 오버레이. 텍스트 대체 필수(사람 1 — 호스 주변) |
+| **HealthBadge** | both | — | state live/snapshot/recording/offline/ai-unavailable · size sm/md | — | camera 상태기계 값 그대로 표시(labels.ts). 장애 채널을 정상으로 표시하지 않는다(FR-034) |
 
 ## 9. 플랫폼 가이드 — 웹 백오피스 (Linear 참조)
 

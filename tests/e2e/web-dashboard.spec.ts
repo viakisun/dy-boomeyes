@@ -43,3 +43,16 @@ test('[B1-02M] ?cam= 모달 열림 · Esc 닫힘 [FR-004]', async ({ page }) => 
   await expect(dialog).toHaveCount(0);
   await expect(page).not.toHaveURL(/cam=/);
 });
+
+test('[B1-02] mock realtime 알림 도착 → 피드 상단·토스트 · 클릭 → 업무 C-105 [FR-011]', async ({ page }) => {
+  await page.goto('/login');
+  await page.getByText('control01', { exact: true }).click(); // capture 없이 — realtime이 켜진 실제 흐름
+  await expect(page).toHaveURL(/\/b1\/dash/);
+  const rows = page.locator('ul[aria-label="알림"] li');
+  await expect(rows).toHaveCount(8);
+  await expect(rows).toHaveCount(9, { timeout: 10_000 }); // 대본 첫 알림 6s
+  await expect(page.getByRole('status').first()).toContainText('CPB-003 호스 주변 인원 접근');
+  await expect(rows.first().locator('a')).toHaveAttribute('href', /\/b1\/inbox\?case=C-105$/);
+  await rows.first().locator('a').click();
+  await expect(page).toHaveURL(/\/b1\/inbox\?case=C-105$/);
+});

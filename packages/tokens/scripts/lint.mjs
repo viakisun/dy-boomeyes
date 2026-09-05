@@ -16,7 +16,7 @@ const RULES = [
   { id: 'hex', re: /#[0-9a-f]{3,8}\b/gi, why: 'hex 색 → sys 색 토큰' },
   {
     id: 'palette',
-    re: new RegExp(`\\b(?:${PREFIX})-(?:${PALETTE})-(?:50|[1-9]00|950)\b|\\b(?:${PREFIX})-(?:white|black)\\b`, 'g'),
+    re: new RegExp(`\\b(?:${PREFIX})-(?:${PALETTE})-(?:50|[1-9]00|950)\\b|\\b(?:${PREFIX})-(?:white|black)\\b`, 'g'),
     why: 'Tailwind 기본 팔레트 → 토큰 유틸리티(bg-canvas · text-fg-muted · bg-danger)',
   },
   {
@@ -48,6 +48,26 @@ const PX = {
   skip: (m) => ['0', '1', '-1'].includes(m[1]),
   why: 'px 직접값 → var(--sys-…) 토큰(0·1px 허용)',
 };
+
+// 규칙 생존 프로브 — 정규식 오타(예: 템플릿 리터럴의 \b → 백스페이스)로 규칙이 조용히 죽는 사고 방지
+const PROBES = {
+  hex: '#0d2877',
+  palette: 'bg-blue-500',
+  arbitrary: 'min-h-[420px]',
+  scale: 'gap-1',
+  radius: 'rounded-4',
+  z: 'z-10',
+  reset: 'rounded-md',
+  px: 'width: 4px',
+};
+for (const r of [...RULES, PX]) {
+  const probe = PROBES[r.id];
+  const m = [...probe.matchAll(r.re)];
+  if (!m.length || r.skip?.(m[0])) {
+    console.error(`✗ DY: lint 규칙 '${r.id}' 죽음 — 프로브 '${probe}' 미검출`);
+    process.exit(2);
+  }
+}
 
 function* walk(dir) {
   for (const name of readdirSync(dir)) {
@@ -89,8 +109,8 @@ for (const scope of SCOPES) {
         if (isComment(line)) return;
         const report = (rule, m) => errors.push(`${rel}:${i + 1}: [${rule.id}] ${m[0].trim()} — ${rule.why}`);
         for (const rule of RULES) for (const m of line.matchAll(rule.re)) if (!rule.skip?.(m)) report(rule, m);
-        if (ext === '.svelte' && /<style/.test(line)) inStyle = true;
-        if (ext === '.css' || inStyle || /style[:=]|\.style\.|cssText/.test(line))
+        if (ext === '.svelte' && /<style\b/.test(line)) inStyle = true;
+        if (ext === '.css' || inStyle || /\bstyle[:=]|\.style\.|cssText/.test(line))
           for (const m of line.matchAll(PX.re)) if (!PX.skip(m)) report(PX, m);
         if (ext === '.svelte' && /<\/style>/.test(line)) inStyle = false;
       });

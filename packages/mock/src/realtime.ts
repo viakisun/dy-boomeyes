@@ -24,6 +24,7 @@ const SCRIPT: Omit<Alert, 'id' | 'at' | 'acked'>[] = [
     message: 'CPB-004 통신 두절 지속 (LWT 재수신 없음)',
     caseId: null,
   },
+  { deviceId: 'CPB-001', kind: 'filter', severity: 'info', message: 'CPB-001 필터 도달률 50% — 정보', caseId: null },
 ];
 
 export function createMockRealtime(

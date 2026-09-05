@@ -2,7 +2,7 @@
 
 | # | 작업 | DoD | Refs |
 |---|---|---|---|
-| 1 | ui 프리미티브 `DataTable` · `List/ListRow` · `Timeline` · `FilterBar` (cmp 토큰만) | 데모 렌더 · `tokens:lint` 0건 · 다크 렌더 | ADR-004 |
+| 1 | ui `DataTable` · `TaskCard` · `Timeline` · `EscalationTimer` (카탈로그 이름 · cmp 토큰만) | 데모 렌더 · `tokens:lint` 0건 · 다크 렌더 | ADR-004 |
 | 2 | mock: 업무 5 + 이력 · 신청 5 · `transition` · `requests/approve/reject` · `escalations`(DemoClock) · realtime case 이벤트 · 픽스처 `inbox` `filter` `case` `esc` | Vitest `[FR-008]` `[FR-010]` (전이 · 1h 경과 판정) | ENT-06 ENT-09 |
 | 3 | A1-02 업무함 + 필터 + 스코프 | AC-1 · AC-2 · AC-8 · `a1-02-inbox.png` `a1-02-filter.png` | A1-02 FR-008 FR-009 FR-024 |
 | 4 | A1-03 상세 + 접수/완료 + 타임라인 + 정비 호출 | AC-3 · AC-4 · `a1-03-case.png` | A1-03 FR-006 |

@@ -22,11 +22,11 @@ fr: [FR-013, FR-014, FR-011, FR-006, FR-031, FR-002, FR-007]
 - **AC-2** Given 현장 반경 안의 위치(mock GPS) When 출근 체크인 Then 체크인 시각이 기록되고 화면이 `checked` 상태(퇴근 체크아웃 버튼)로 바뀌며, 반경 밖이면 체크인이 거부되고 사유가 표시된다 [FR-013]
 - **AC-3** Given 체크인 후 When 일일점검(A2-03)에서 5항목을 체크하고 제출 Then 제출 시각·결과가 이력(ENT-09)에 기록되고 `inspected` 상태가 되며, 미제출 상태의 오늘 화면에는 "작업 전 점검 필요" 배너가 남는다 [FR-014]
 - **AC-4** Given 고장 알림(E-021) When 알림을 열람 Then 대응 안내(고장코드 설명 · 정비 연락처)가 표시되고 알림 확인 상태가 갱신된다 [FR-011, FR-006]
-- **AC-5** Given CPB-003 When 내 장비(A2-04) 로드 Then 통신·전압·단선·고장코드와 수송관·필터 도달률이 보이고, 임계 접근(CPB-002 96%처럼 `caution`)은 색 + 텍스트로 경고한다 [FR-002, FR-007]
+- **AC-5** Given CPB-003과 `mydev` 픽스처(필터 도달률 92% = 임계 접근) When 내 장비(A2-04) 로드 Then 통신·전압·단선·고장코드와 수송관 62% · 필터 92%가 보이고, 임계 접근은 warning 색 + 텍스트로 경고한다 [FR-002, FR-007]
 - **AC-6** Given 오프라인 When 체크인·점검 제출 시도 Then 오프라인 배너가 뜨고 제출이 보류된다는 안내가 표시된다(전송 큐는 W2) [FR-013, FR-014]
 
 ## 상태 픽스처
-`screens.yaml` A2-02 `today` `checked` · A2-03 `inspect` `inspected` · A2-04 `mydev`. 픽스처 ID: CPB-003(E-021) · driver03 · SITE-001.
+`screens.yaml` A2-02 `today` `checked` · A2-03 `inspect` `inspected` · A2-04 `mydev`. 픽스처 ID: CPB-003(E-021) · driver03 · SITE-001. `mydev`는 CPB-003 filterRatio를 0.92(임계 접근)로 변형한다.
 
 ## 비범위
 오프라인 전송 큐·Web Push(W2) · 서류 제출 A2-05(documents) · 현장 정보 A2-06(W2) · 바디캠 세션 연동(W4).

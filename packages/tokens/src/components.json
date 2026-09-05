@@ -682,5 +682,23 @@
     "variants": "hours 6 · wind",
     "states": "",
     "note": "홈 기상 요약"
+  },
+  {
+    "name": "BboxOverlay",
+    "family": "Domain",
+    "platform": "both",
+    "ref": "—",
+    "variants": "boxes[] 정규화 좌표 · label · tone warning/danger",
+    "states": "hidden/visible",
+    "note": "AI 채널 클립·스냅샷 위 SVG 오버레이. 텍스트 대체 필수(사람 1 — 호스 주변)"
+  },
+  {
+    "name": "HealthBadge",
+    "family": "Domain",
+    "platform": "both",
+    "ref": "—",
+    "variants": "state live/snapshot/recording/offline/ai-unavailable · size sm/md",
+    "states": "—",
+    "note": "camera 상태기계 값 그대로 표시(labels.ts). 장애 채널을 정상으로 표시하지 않는다(FR-034)"
   }
 ]
