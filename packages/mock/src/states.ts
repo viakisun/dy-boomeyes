@@ -212,6 +212,8 @@ export const FIXTURES: Record<string, Fixture> = {
   'A2-09:default': (db) => db,
   // event-replay(W2 B10): EV-001 시드 그대로
   'B1-08:default': (db) => db,
+  // owner-showcase(W2 B11): 시드 집계 그대로(무사고 D+ = 현장 개설일 기준)
+  'B1-07:show': (db) => db,
 };
 /** 오늘 출근·점검 1건씩(driver03 · CPB-003) — 기록 4종이 모두 보이게 */
 function withDaily(db: Db): Db {

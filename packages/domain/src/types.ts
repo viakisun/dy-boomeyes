@@ -381,6 +381,29 @@ export interface ReplayEvent {
   /** 긴급 이벤트 원본 보존 잠금(NFR-015) — 삭제·편집 없음 */
   locked: boolean;
 }
+/** FR-023 쇼케이스(B1-07) — 읽기 전용 집계 · 이름·연락처는 마스킹된 채로 온다(mask.ts) */
+export interface Showcase {
+  /** 스코프 안 현장의 무사고 일수 최솟값 — 사고 기록이 없어 현장 개설일(period.from) 기준 */
+  daysWithoutAccident: number;
+  /** 오늘(24시간) 점검이 제출된 호기 비율 % */
+  inspectionRate: number;
+  /** 서류 완비율 %(valid·approved / 전체) */
+  docRate: number;
+  alerts24h: number;
+  devices: number;
+  normal: number;
+  sites: {
+    id: string;
+    name: string;
+    company: string;
+    daysWithoutAccident: number;
+    devices: number;
+    abnormal: number;
+    /** 마스킹된 현장 안전관리자 · 임대인 연락처 */
+    safety: string;
+    contact: string;
+  }[];
+}
 export interface Scope {
   role: RoleId;
   siteIds?: string[];

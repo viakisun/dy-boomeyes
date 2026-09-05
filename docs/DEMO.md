@@ -52,7 +52,7 @@ HLS/WebRTC 중계·RTSP·VPN · MQTT/SSE 서버 · 실인증 · S3 업로드 · 
 | 7 | `pwa/a2/docs?scene=7` | driver03 | A2-05는 W2 자리 |
 | 8 | `web/b4/protocols?scene=8` | ops01 | YAML 업로드 · 오류 샘플 · 알림 미리보기 |
 | 9 | `web/b1/leases?scene=9` | control01 | LS-001 D-27 만료 임박 최상단 → 재배치 계획(대상 현장 · 메모) → relocated · 이력 · 안전관리자 홍보 연계 문구 |
-| 10 | `web/b1/showcase?scene=10` | 장면 계정(scenarios.yaml) | W2 B11 |
+| 10 | `web/b1/showcase?scene=10` | safety01 → control01 대체(B1-07 권한) | 다크 강제 쇼케이스 · 무사고 D+ · 점검·서류 지표 · 카메라 월 · 마스킹(DISC-031) · Esc/클릭 → B1-02 |
 
 리셋 = 같은 `?scene=N`으로 새로고침(장면 db는 세션 캐시 키 `scene|N`).
 

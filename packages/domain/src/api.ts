@@ -31,6 +31,7 @@ import type {
   RecordItem,
   RecordKind,
   ReplayEvent,
+  Showcase,
   SiteReport,
   VideoProfile,
 } from './types';
@@ -157,6 +158,8 @@ export interface ApiClient {
   stock(): Promise<Stock[]>;
   /** FR-033 이벤트 복기(W2 구조, DISC-044) — event_id로 4소스 레인 메타 · 없으면 undefined(404) */
   event(id: string): Promise<ReplayEvent | undefined>;
+  /** FR-023 쇼케이스(B1-07) — 읽기 전용 집계 + 마스킹, 상태 전이 없음 */
+  showcase(scope: Scope): Promise<Showcase>;
 }
 
 /** 시각 원천 — 화면은 new Date() 대신 이것을 쓴다 (capture 모드에서 고정, 데모에서 점프) */

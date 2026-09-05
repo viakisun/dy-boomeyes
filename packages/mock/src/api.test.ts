@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { INSPECTION_ITEMS, canAccess, profileAxes, profileFlags } from '@boomeyes/domain';
+import { INSPECTION_ITEMS, canAccess, profileAxes, profileFlags, maskName, maskPhone } from '@boomeyes/domain';
 import { bootMock, clock, DAY, H, MIN } from './index';
 
 describe('[FR-008] MockApi 업무 흐름', () => {
@@ -469,5 +469,32 @@ describe('[FR-033] 이벤트 복기(W2 구조) — EV-001 lookup · 4레인 · �
     expect(ev!.lanes.cpb.markers.some((m) => m.label.startsWith('부품'))).toBe(false); // P-004 점검은 2일 전 — 창 밖
     expect(ev!.lanes.cpb.note).toContain('부품 이력 없음');
     expect(await api.event('EV-999')).toBeUndefined();
+  });
+});
+
+describe('[FR-023] 쇼케이스 — 마스킹 · 읽기 전용 집계', () => {
+  it('maskName/maskPhone', () => {
+    expect(maskName('홍길동')).toBe('홍*동');
+    expect(maskName('김현장')).toBe('김*장');
+    expect(maskName('차사장 중기')).toBe('차****기');
+    expect(maskName('홍길')).toBe('홍*');
+    expect(maskPhone('010-1234-5678')).toBe('010-****-5678');
+    expect(maskPhone('01012345678')).toBe('010-****-5678');
+  });
+  it('showcase(control): 무사고 D+ = 현장 개설일 최솟값(대전 B 63일) · 서류 50% · 24시간 알림 · 현장별 마스킹 · 전이 없음', async () => {
+    const api = bootMock({ capture: true });
+    const s = await api.showcase({ role: 'control' });
+    expect(s.daysWithoutAccident).toBe(63); // 2026-05-01 → 고정 시각 2026-07-03
+    expect(s.sites.map((x) => x.daysWithoutAccident)).toEqual([124, 63]);
+    expect(s.docRate).toBe(50);
+    expect(s.alerts24h).toBeGreaterThanOrEqual(5);
+    expect(s.devices).toBe(5);
+    expect(s.sites[0]?.safety).toBe('김*장');
+    expect(s.sites[0]?.contact).toBe('차****기 · 010-****-0001');
+    expect(JSON.stringify(s)).not.toContain('김현장');
+    expect((await api.case('C-105'))?.state).toBe('new');
+    const hq = await api.showcase({ role: 'hq-safety', siteIds: ['SITE-002'] });
+    expect(hq.sites).toHaveLength(1);
+    expect(hq.devices).toBe(2);
   });
 });

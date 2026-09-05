@@ -25,6 +25,9 @@ import {
   type Part,
   type RecordItem,
   type ReplayEvent,
+  type Showcase,
+  maskName,
+  maskPhone,
   type SiteReport,
   type Request,
   type Scope,
@@ -759,6 +762,45 @@ export function createMockApi(db: Db, opts: { latencyMs?: number } = {}): ApiCli
               : `부품 이력 없음 — 창 ±${ev.windowSec}초 안에 점검·교체 없음`,
           },
         },
+      };
+    },
+    // owner-showcase(W2 B11): 읽기 전용 집계 — 무사고 D+는 현장 개설일 기준(사고 기록 없음) · 24시간 점검·알림 · 서류 완비율 · 마스킹(정책 DISC-031 미확정)
+    async showcase(scope): Promise<Showcase> {
+      await wait();
+      const now = clock.now().getTime();
+      const sites = db.sites.filter((s) => inScope(scope, s.id));
+      const ds = devScope(scope);
+      const ids = new Set(ds.map((d) => d.id));
+      const daysSince = (from?: string) => (from ? Math.max(0, Math.floor((now - Date.parse(from)) / DAY)) : 0);
+      const inspected = new Set(
+        db.inspections
+          .filter((i) => ids.has(i.deviceId) && !!i.submittedAt && now - Date.parse(i.submittedAt) < DAY)
+          .map((i) => i.deviceId),
+      ).size;
+      const docs = await impl.docs(scope);
+      const done = docs.filter((d) => d.state === 'valid' || d.state === 'approved').length;
+      const owner = db.owners[0];
+      return {
+        daysWithoutAccident: sites.length ? Math.min(...sites.map((s) => daysSince(s.period?.from))) : 0,
+        inspectionRate: ds.length ? Math.round((inspected / ds.length) * 100) : 0,
+        docRate: docs.length ? Math.round((done / docs.length) * 100) : 0,
+        alerts24h: db.alerts.filter((a) => ids.has(a.deviceId) && now - Date.parse(a.at) < DAY).length,
+        devices: ds.length,
+        normal: ds.filter((d) => d.state === 'normal').length,
+        sites: sites.map((s) => {
+          const safety = db.users.find((u) => u.id === s.safetyUserId);
+          const mine = ds.filter((d) => d.siteId === s.id);
+          return {
+            id: s.id,
+            name: s.name,
+            company: s.company,
+            daysWithoutAccident: daysSince(s.period?.from),
+            devices: mine.length,
+            abnormal: mine.filter((d) => d.state !== 'normal').length,
+            safety: safety ? `${maskName(safety.display)}${safety.phone ? ` · ${maskPhone(safety.phone)}` : ''}` : '—',
+            contact: owner ? `${maskName(owner.name)} · ${maskPhone(owner.contact)}` : '—',
+          };
+        }),
       };
     },
     async kpis(scope): Promise<Kpis> {
