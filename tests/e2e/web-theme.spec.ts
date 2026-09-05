@@ -52,3 +52,19 @@ test('[B1-02] 탑바 테마 토글 → data-theme 전환 · 새로고침 후 유
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
   expect(await shellBg(page)).toBe(CANVAS.light);
 });
+
+test('[B1-02] 저장된 dark + ?theme=light → 쿼리가 우선(라이트) · 저장값은 그대로 · 로그아웃 후에도 저장 테마 유지 [FR-024]', async ({
+  page,
+}) => {
+  await page.goto('/b1/dash?state=dash&capture=1');
+  await page.getByRole('button', { name: '다크 모드' }).click();
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+  await page.goto('/b1/dash?state=dash&capture=1&theme=light');
+  await expect(page.locator(`[data-scr="${SCR['B1-02']}"]`)).toBeVisible();
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
+  expect(await shellBg(page)).toBe(CANVAS.light);
+  expect(await page.evaluate(() => localStorage.getItem('dy.theme'))).toBe('dark'); // 쿼리는 저장하지 않는다
+  await page.getByRole('button', { name: '로그아웃' }).click();
+  await expect(page).toHaveURL(/\/login/);
+  expect(await page.evaluate(() => localStorage.getItem('dy.theme'))).toBe('dark'); // 기기 단위 설정
+});
