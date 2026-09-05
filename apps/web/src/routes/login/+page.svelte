@@ -1,5 +1,5 @@
 <script lang="ts">
-  // B0-01 웹 공통 로그인 — 역할 카드 4 + 데모 계정 (specs/shell-auth AC-1·AC-5). 상태 login-b1..b4 = 카드 강조
+  // B0-01 웹 공통 로그인 — 역할 카드 5(B1~B4 + 정비 담당) + 데모 계정 (specs/shell-auth AC-1·AC-5). 상태 login-b1..b4·login-maint = 카드 강조
   import { goto } from '$app/navigation';
   import { page } from '$app/state';
   import { resolve } from '$app/paths';
@@ -35,6 +35,13 @@
       title: '관리자 백오피스',
       desc: '장비·현장·사용자·프로토콜·알림 기준',
       state: 'login-b4',
+    },
+    {
+      role: 'maintenance',
+      surface: 'B1 연계',
+      title: '정비 담당',
+      desc: '고장 출동 · 조치 보고 — 대시보드·수신함·에스컬레이션 열람',
+      state: 'login-maint',
     },
   ];
   const stateParam = $derived(page.url.searchParams.get('state') ?? 'login-b1');

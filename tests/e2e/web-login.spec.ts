@@ -8,6 +8,7 @@ const WEB: { role: string; login: string; home: string }[] = [
   { role: 'hq-safety', login: 'hq01', home: '/b2/map' },
   { role: 'site-safety', login: 'safety01', home: '/b3/console' },
   { role: 'ops-admin', login: 'ops01', home: '/b4/protocols' },
+  { role: 'maintenance', login: 'maint01', home: '/b1/escalation' },
 ];
 const at = (path: string) => new RegExp(`${path.replace(/\//g, '\\/')}(\\?|$)`);
 
