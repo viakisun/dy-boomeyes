@@ -6,17 +6,6 @@ import type { Db } from './seed';
 export type Fixture = (db: Db) => Db;
 
 export const FIXTURES: Record<string, Fixture> = {
-  'B1-02:show': (db) => db, // 쇼케이스 진입 전 = 기본
-  'B1-02:quiet': (db) => ({
-    ...db,
-    devices: db.devices.map((d) => ({
-      ...d,
-      state: 'normal',
-      telemetry: { ...d.telemetry, errorCode: null, voltageStatus: 'normal', lte: 'connected' },
-    })),
-    alerts: [],
-    cases: db.cases.filter((c) => c.state === 'done'),
-  }),
   // 영상: 모달은 AI 채널에 복구 후 누락분 재전송 표시 · 모니터는 오프라인/AI 판단 불가/흐림 채널을 한 화면에 (video-basics AC-1 · AC-5)
   'B1-02M:cam': (db) => ({
     ...db,

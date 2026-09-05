@@ -403,7 +403,7 @@ export function createMockApi(db: Db, opts: { latencyMs?: number } = {}): ApiCli
           return row(
             subjectId,
             dev ? `${dev.id} · ${dev.unitNo}호기` : (user?.display ?? subjectId),
-            dev ? 'device' : 'driver',
+            dev ? 'device' : user?.role === 'driver' ? 'driver' : 'person',
             ds[0]?.siteId ?? '',
             ds,
           );

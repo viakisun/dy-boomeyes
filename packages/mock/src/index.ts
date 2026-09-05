@@ -47,16 +47,16 @@ export function bootMock(opts: MockOptions = {}) {
   const scene = opts.scene ?? active;
   const key = scene
     ? `scene|${scene}`
-    : opts.state
-      ? `${opts.capture ? 'capture' : 'live'}|${opts.screen}|${opts.state}`
-      : opts.capture
-        ? 'capture'
-        : 'live';
+    : opts.capture
+      ? opts.state
+        ? `capture|${opts.screen}|${opts.state}`
+        : 'capture'
+      : 'live';
   const browser = typeof window !== 'undefined';
   if (browser && cache?.key === key) return cache.api;
   let db = seed();
-  // 화면 기본 픽스처는 capture(캡처·e2e)에서만 — 실사용 흐름(live)은 순수 시드(예: A2-03 기본 'inspect'가 체크인을 만들면 안 된다)
-  const state = opts.state ?? (opts.capture && opts.screen ? SCREENS[opts.screen].default : null);
+  // ?state= 픽스처(명시·기본)는 capture(캡처·e2e)에서만 — 실사용 흐름(live)은 ?state=가 붙어도 순수 시드(QA §3)
+  const state = opts.capture && opts.screen ? (opts.state ?? SCREENS[opts.screen].default) : null;
   if (scene)
     db = SCENE_FIXTURES[scene]?.(db) ?? db; // 장면이 우선 — ?state= 와 조합하지 않는다
   else if (opts.screen && state) db = applyState(db, opts.screen, state);
