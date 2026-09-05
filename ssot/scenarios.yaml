@@ -869,8 +869,8 @@ demo:
   title: 쇼케이스
   surface: B3 현장 WEB · B1 관제 WEB
   screens:
-  - B3-06
   - B1-07
+  - B3-06
   steps:
   - 쇼케이스 모드 전환
   - 무사고 D+ · 실시간 영상 · 점검·서류 지표(읽기 전용·마스킹)

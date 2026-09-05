@@ -24,6 +24,8 @@
 | `ENT-16` | 부품 (Part) | 2 | part_id · 품번 · 부품군(직관·이송배관/엘보·리듀서/플랜지·클램프/가스켓·안전핀/엔드호스·피팅) · 압력등급 · 기준두께 · 로트 · 호환규격 · 장착 위치·설치일 · 누적 타설량·운전시간 · 상태(장착/재고/폐기) | N─1 장비(장착) · 1─N 부품 이력 · N─1 재고 | RDS — 2단계 제안 (DISC-038) |
 | `ENT-17` | 부품 이력 (PartEvent) | 2 | event_id · part_id · 구분(등록/장착/점검/교체/폐기) · 실측두께·외관·체결·OEM 합불 · 사유 · 작업자 · 증빙(사진) · 시각 | N─1 부품 · N─1 사용자 · 0─1 이벤트(영상 복기 연결) | RDS (append-only) · 사진은 S3 |
 | `ENT-18` | 재고·발주 (Stock) | 2 | stock_id · 품번 · 현재고 · 안전재고 · 발주 상태·수량·일자 | 1─N 부품 | RDS — 2단계 제안 |
+| `ENT-19` | 이벤트 (Event) | 2 | event_id · 발생 시각(t0)·복기 창(±초) · 종류(알림 유형) · 장비 · 소스 4 참조(일반 CCTV·AI CCTV·바디캠·CPB 상태/부품 이력) 세그먼트 메타 · 연결(알림·업무·부품 이력) · 원본 보존 잠금 | N─1 장비 · 1─1 알림 · 0─1 업무 · 1─N 부품 이력 | RDS · 세그먼트 메타는 S3(NFR-015 잠금) — 2단계 제안 (DISC-039) |
+| `ENT-20` | 신청·요청 (Request) | 1 | request_id · 유형(현장 개설/장비 배정/서류) · 요청자 · 대상(현장·장비·서류) · 상태 · 사유·회신 | N─1 사용자 · N─1 현장 · 0─1 서류 | RDS |
 
 ## 상태기계
 
@@ -87,6 +89,28 @@
 | inspected | due | OEM 기준 합불=불 / 임계 |
 | due | replaced | 교체(A2-09) → 재고 차감 |
 | replaced | discarded | 폐기(사유·증빙) |
+
+### request (ENT-20)
+
+상태: `submitted` `review` `approved` `rejected`
+
+| from | to | 계기 |
+|---|---|---|
+| submitted | review | 자동(수신함 등록) |
+| review | approved | 승인(B1-03) |
+| review | rejected | 반려·사유(B1-03) |
+| rejected | submitted | 재제출(A1-07·A2-05) |
+
+### lease (ENT-10)
+
+상태: `active` `expiring` `relocated` `ended`
+
+| from | to | 계기 |
+|---|---|---|
+| active | expiring | 만료 D-30 스케줄러 |
+| expiring | relocated | 재배치 계획(B1-06) — 제안, DISC-037 정합 후 |
+| expiring | ended | 만료 |
+| active | ended | 조기 종료 |
 
 ## 규칙
 

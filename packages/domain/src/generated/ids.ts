@@ -94,6 +94,7 @@ export const FR = {
   'FR-034': 'FR-034',
   'FR-035': 'FR-035',
   'FR-036': 'FR-036',
+  'FR-037': 'FR-037',
 } as const;
 export type FrId = keyof typeof FR;
 
@@ -116,6 +117,8 @@ export const ENT = {
   'ENT-16': 'ENT-16',
   'ENT-17': 'ENT-17',
   'ENT-18': 'ENT-18',
+  'ENT-19': 'ENT-19',
+  'ENT-20': 'ENT-20',
 } as const;
 export type EntId = keyof typeof ENT;
 
@@ -163,6 +166,9 @@ export const DISC = {
   'DISC-041': 'DISC-041',
   'DISC-042': 'DISC-042',
   'DISC-043': 'DISC-043',
+  'DISC-044': 'DISC-044',
+  'DISC-045': 'DISC-045',
+  'DISC-046': 'DISC-046',
 } as const;
 export type DiscId = keyof typeof DISC;
 
@@ -224,7 +230,7 @@ export type RoleId = keyof typeof ROLE;
 
 export const SCREENS = {
   'A1-01': { name: "로그인", surface: 'A1', app: 'pwa', route: "/a1/login", roles: ["site-safety"], phase: 1, wave: 1, default: 'login', states: ["login"] },
-  'A1-02': { name: "업무함", surface: 'A1', app: 'pwa', route: "/a1/inbox", roles: ["site-safety"], phase: 1, wave: 1, default: 'inbox', states: ["inbox","filter"] },
+  'A1-02': { name: "업무함", surface: 'A1', app: 'pwa', route: "/a1/inbox", roles: ["site-safety"], phase: 1, wave: 1, default: 'inbox', states: ["inbox","filter","push"] },
   'A1-03': { name: "업무 상세", surface: 'A1', app: 'pwa', route: "/a1/inbox/[case]", roles: ["site-safety"], phase: 1, wave: 1, default: 'case', states: ["case"] },
   'A1-04': { name: "관제(장비·영상)", surface: 'A1', app: 'pwa', route: "/a1/monitor", roles: ["site-safety"], phase: 1, wave: 1, default: 'monitor', states: ["monitor","plite"] },
   'A1-05': { name: "장비 상세", surface: 'A1', app: 'pwa', route: "/a1/monitor/[device]", roles: ["site-safety"], phase: 1, wave: 1, default: 'dev', states: ["dev","plite"] },
@@ -233,10 +239,10 @@ export const SCREENS = {
   'A1-08': { name: "완료 처리 시트", surface: 'A1', app: 'pwa', route: "/a1/inbox/[case]?sheet=complete", roles: ["site-safety"], phase: 1, wave: 2, default: 'sheet', states: ["sheet"] },
   'A1-11': { name: "부품 점검 입력", surface: 'A1', app: 'pwa', route: "/a1/parts/inspect", roles: ["site-safety"], phase: 1, wave: 2, default: 'default', states: ["default"] },
   'A2-01': { name: "로그인", surface: 'A2', app: 'pwa', route: "/a2/login", roles: ["driver"], phase: 1, wave: 1, default: 'login', states: ["login"] },
-  'A2-02': { name: "오늘(출근·알림)", surface: 'A2', app: 'pwa', route: "/a2/today", roles: ["driver"], phase: 1, wave: 1, default: 'today', states: ["today","checked"] },
+  'A2-02': { name: "오늘(출근·알림)", surface: 'A2', app: 'pwa', route: "/a2/today", roles: ["driver"], phase: 1, wave: 1, default: 'today', states: ["today","checked","queued"] },
   'A2-03': { name: "일일점검", surface: 'A2', app: 'pwa', route: "/a2/today/inspect", roles: ["driver"], phase: 1, wave: 1, default: 'inspect', states: ["inspect","inspected"] },
   'A2-04': { name: "내 장비", surface: 'A2', app: 'pwa', route: "/a2/device", roles: ["driver"], phase: 1, wave: 1, default: 'mydev', states: ["mydev"] },
-  'A2-05': { name: "내 서류", surface: 'A2', app: 'pwa', route: "/a2/docs", roles: ["driver"], phase: 1, wave: 2, default: 'docs', states: ["docs"] },
+  'A2-05': { name: "내 서류", surface: 'A2', app: 'pwa', route: "/a2/docs", roles: ["driver"], phase: 1, wave: 2, default: 'docs', states: ["docs","queued"] },
   'A2-06': { name: "메뉴·현장 정보", surface: 'A2', app: 'pwa', route: "/a2/menu", roles: ["driver"], phase: 1, wave: 2, default: 'menu', states: ["menu"] },
   'A2-09': { name: "교체·폐기 처리", surface: 'A2', app: 'pwa', route: "/a2/parts/replace", roles: ["driver"], phase: 1, wave: 2, default: 'default', states: ["default"] },
   'A3-01': { name: "로그인", surface: 'A3', app: 'pwa', route: "/a3/login", roles: ["hq-safety"], phase: 1, wave: 2, default: 'login', states: ["login"] },
@@ -442,6 +448,60 @@ export const MACHINES = {
       [
         "replaced",
         "discarded"
+      ]
+    ]
+  },
+  "request": {
+    "entity": "ENT-20",
+    "states": [
+      "submitted",
+      "review",
+      "approved",
+      "rejected"
+    ],
+    "transitions": [
+      [
+        "submitted",
+        "review"
+      ],
+      [
+        "review",
+        "approved"
+      ],
+      [
+        "review",
+        "rejected"
+      ],
+      [
+        "rejected",
+        "submitted"
+      ]
+    ]
+  },
+  "lease": {
+    "entity": "ENT-10",
+    "states": [
+      "active",
+      "expiring",
+      "relocated",
+      "ended"
+    ],
+    "transitions": [
+      [
+        "active",
+        "expiring"
+      ],
+      [
+        "expiring",
+        "relocated"
+      ],
+      [
+        "expiring",
+        "ended"
+      ],
+      [
+        "active",
+        "ended"
       ]
     ]
   }

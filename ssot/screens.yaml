@@ -69,6 +69,8 @@ screens:
     name: inbox
   - id: filter
     name: 「고장·이상」 필터 선택
+  - id: push
+    name: 알림 권한 시트(켜기 · 거부 안내)
   nav:
   - to: A1-03
     label: 카드 탭
@@ -160,7 +162,9 @@ screens:
     name: dev
   - id: plite
     name: P-LITE 현장(1채널 · 저장 소스 서버만)
-  nav: []
+  nav:
+  - to: A1-11
+    label: 부품 점검
   trace:
     task:
     - 4.3.2
@@ -281,7 +285,7 @@ screens:
     - IF-009
     - IF-011
     - IF-019
-  note: 현장 점검 입력 — 태그 스캔 → 실측·사진·합불
+  note: 현장 점검 입력 — 태그 스캔 → 실측·사진·합불 · 단계 귀속은 DISC-044(1단계 = 구조·자리, 실동작 2단계)
 - id: A2-01
   name: 로그인
   surface: A2
@@ -322,6 +326,8 @@ screens:
     name: today
   - id: checked
     name: 체크인 후 (완료 카드·체크아웃 CTA)
+  - id: queued
+    name: 오프라인 · 체크인 동기 대기 1건
   nav:
   - to: A2-03
     label: 점검 시작
@@ -380,7 +386,9 @@ screens:
   states:
   - id: mydev
     name: mydev
-  nav: []
+  nav:
+  - to: A2-09
+    label: 교체·폐기
   trace:
     task:
     - 4.3.1
@@ -409,6 +417,8 @@ screens:
   states:
   - id: docs
     name: docs
+  - id: queued
+    name: 오프라인 · 서류 제출 동기 대기
   nav: []
   trace:
     task:
@@ -470,7 +480,7 @@ screens:
     - IF-009
     - IF-011
     - IF-019
-  note: 교체·폐기 처리 — 사유·작업자·증빙 사진 → 재고 차감
+  note: 교체·폐기 처리 — 사유·작업자·증빙 사진 → 재고 차감 · 단계 귀속은 DISC-044(1단계 = 구조·자리, 실동작 2단계)
 - id: A3-01
   name: 로그인
   surface: A3
@@ -809,6 +819,7 @@ screens:
     label: '역할: 현장'
   - to: B4-02
     label: '역할: 관리자'
+  note: B3-02(현장 콘솔)는 wave 4(DISC-019) — 그전엔 자리 화면으로 진입
   trace:
     task:
     - 4.3.5
@@ -845,6 +856,8 @@ screens:
     label: 임대 계약
   - to: B1-07
     label: 쇼케이스
+  - to: B1-08
+    label: 이벤트 복기
   trace:
     task:
     - 4.3.3
@@ -1037,7 +1050,7 @@ screens:
     - IF-017
     - IF-018
     - IF-009
-  note: event_id + 공통 시각으로 일반 CCTV·AI CCTV·바디캠·CPB 상태/부품 이력 4소스 동기 재생 (영상·소모품 운영 검토 v2.0 §11)
+  note: event_id + 공통 시각으로 일반 CCTV·AI CCTV·바디캠·CPB 상태/부품 이력 4소스 동기 재생 (영상·소모품 운영 검토 v2.0 §11) · 단계 귀속은 DISC-044(1단계 = 구조·자리, 실동작 2단계)
 - id: B2-02
   name: 본사 지도
   surface: B2
@@ -1289,6 +1302,8 @@ screens:
     label: 알림 기준
   - to: B4-06
     label: 서류 관리
+  - to: B4-07
+    label: 부품 대장
   trace:
     task:
     - 4.3.6
@@ -1314,13 +1329,17 @@ screens:
   - id: assets
     name: assets
   nav: []
+  note: W2 = 프리셋(P-LITE/P-SD/P-NVR) 전환·8축 표시 · 축 편집·보존/홀드·열람 로그는 W4(FR-029/031)
   trace:
     task:
     - 4.3.9
     - 4.3.4
     out: OUT-009
     rfp: []
-    disc: []
+    disc:
+    - DISC-028
+    - DISC-034
+    - DISC-026
     if:
     - IF-009
 - id: B4-04
@@ -1406,7 +1425,9 @@ screens:
   states:
   - id: default
     name: 기본
-  nav: []
+  nav:
+  - to: B4-08
+    label: 점검·교체 이력
   trace:
     task:
     - 5.3.3
@@ -1420,7 +1441,7 @@ screens:
     if:
     - IF-009
     - IF-019
-  note: 부품 ID 중심 등록·장착·재고·발주 — 5군(직관·이송배관 / 엘보·리듀서 / 플랜지·클램프 / 가스켓·안전핀 / 엔드호스·피팅)
+  note: 부품 ID 중심 등록·장착·재고·발주 — 5군(직관·이송배관 / 엘보·리듀서 / 플랜지·클램프 / 가스켓·안전핀 / 엔드호스·피팅) · 단계 귀속은 DISC-044(1단계 = 구조·자리, 실동작 2단계)
 - id: B4-08
   name: 점검·교체 이력
   surface: B4
@@ -1444,4 +1465,4 @@ screens:
     - DISC-038
     if:
     - IF-009
-  note: 점검(실측두께·외관·체결·OEM 합불)·교체·폐기 이력 — 누적 타설량·운전시간은 보조지표
+  note: 점검(실측두께·외관·체결·OEM 합불)·교체·폐기 이력 — 누적 타설량·운전시간은 보조지표 · 단계 귀속은 DISC-044(1단계 = 구조·자리, 실동작 2단계)
