@@ -545,6 +545,7 @@
       "sys.layout.map.min": "240px",
       "sys.layout.panel.height": "420px",
       "sys.layout.menu.min": "192px",
+      "sys.layout.field.short": "96px",
       "sys.motion.duration.fast": "100ms",
       "sys.motion.duration.base": "150ms",
       "sys.motion.duration.moderate": "200ms",
@@ -1857,6 +1858,7 @@
       "sys.layout.map.min": "240px",
       "sys.layout.panel.height": "420px",
       "sys.layout.menu.min": "192px",
+      "sys.layout.field.short": "96px",
       "sys.motion.duration.fast": "100ms",
       "sys.motion.duration.base": "150ms",
       "sys.motion.duration.moderate": "200ms",
@@ -3183,6 +3185,7 @@
       "sys.layout.map.min": "240px",
       "sys.layout.panel.height": "420px",
       "sys.layout.menu.min": "192px",
+      "sys.layout.field.short": "96px",
       "sys.motion.duration.fast": "100ms",
       "sys.motion.duration.base": "150ms",
       "sys.motion.duration.moderate": "200ms",
@@ -4537,6 +4540,7 @@
       "sys.layout.map.min": "240px",
       "sys.layout.panel.height": "420px",
       "sys.layout.menu.min": "192px",
+      "sys.layout.field.short": "96px",
       "sys.motion.duration.fast": "100ms",
       "sys.motion.duration.base": "150ms",
       "sys.motion.duration.moderate": "200ms",
@@ -8940,6 +8944,13 @@
       "$value": "192px",
       "css": "--sys-layout-menu-min",
       "tailwind": "--spacing-layout-menu-min"
+    },
+    "sys.layout.field.short": {
+      "$type": "dimension",
+      "$description": "짧은 입력(숫자·등급 select) 폭",
+      "$value": "96px",
+      "css": "--sys-layout-field-short",
+      "tailwind": "--spacing-layout-field-short"
     },
     "sys.motion.duration.fast": {
       "$type": "duration",

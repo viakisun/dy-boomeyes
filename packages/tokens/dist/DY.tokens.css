@@ -448,6 +448,7 @@
   --sys-layout-map-min: 240px;
   --sys-layout-panel-height: 420px;
   --sys-layout-menu-min: 192px;
+  --sys-layout-field-short: 96px;
   --sys-motion-duration-fast: 100ms;
   --sys-motion-duration-base: 150ms;
   --sys-motion-duration-moderate: 200ms;

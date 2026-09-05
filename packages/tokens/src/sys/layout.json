@@ -114,6 +114,13 @@
         "$value": "192px",
         "$description": "드롭다운 메뉴 최소 폭"
       }
+    },
+    "field": {
+      "short": {
+        "$type": "dimension",
+        "$value": "96px",
+        "$description": "짧은 입력(숫자·등급 select) 폭"
+      }
     }
   }
 }

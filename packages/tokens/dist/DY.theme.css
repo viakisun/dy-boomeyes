@@ -399,6 +399,7 @@
   --spacing-layout-map-min: var(--sys-layout-map-min);
   --spacing-layout-panel-height: var(--sys-layout-panel-height);
   --spacing-layout-menu-min: var(--sys-layout-menu-min);
+  --spacing-layout-field-short: var(--sys-layout-field-short);
   --radius-control: var(--sys-radius-control);
   --radius-card: var(--sys-radius-card);
   --radius-dialog: var(--sys-radius-dialog);

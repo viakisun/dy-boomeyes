@@ -18,6 +18,16 @@ const PAGES: { scr: string; url: string; ready: (page: Page) => Promise<void> }[
     url: '/b1/escalation?state=esc&capture=1',
     ready: (p) => expect(p.getByText('C-105', { exact: false }).first()).toBeVisible(),
   },
+  {
+    scr: SCR['B4-02'],
+    url: '/b4/protocols?state=proto&capture=1',
+    ready: (p) => expect(p.getByText('cpb.v0.1').first()).toBeVisible(),
+  },
+  {
+    scr: SCR['B4-05'],
+    url: '/b4/rules?state=rules&capture=1',
+    ready: (p) => expect(p.getByText('수송관 도달률').first()).toBeVisible(),
+  },
 ];
 
 for (const { scr, url, ready } of PAGES) {

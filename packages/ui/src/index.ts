@@ -37,6 +37,8 @@ export { default as CheckinCard } from './primitives/CheckinCard.svelte';
 export { default as ChecklistForm } from './primitives/ChecklistForm.svelte';
 export { default as TelemetryGauge } from './primitives/TelemetryGauge.svelte';
 export { default as TelemetryStrip } from './primitives/TelemetryStrip.svelte';
+export { default as FileUpload } from './primitives/FileUpload.svelte';
+export { default as RuleThresholdRow } from './primitives/RuleThresholdRow.svelte';
 export {
   TASK_LABEL,
   CASE_KIND_LABEL,
