@@ -25,8 +25,8 @@
   } = $props();
 </script>
 
-<label for={id} class={cx('gap-stack-xs text-label-md text-fg-muted flex flex-col', cls)}>
-  {#if label}<span>{label}</span>{/if}
+<div class={cx('gap-stack-xs text-label-md text-fg-muted flex flex-col', cls)}>
+  {#if label}<label for={id}>{label}</label>{/if}
   <select
     {id}
     bind:value
@@ -43,4 +43,4 @@
   </select>
   {#if error}<span class="text-label-sm text-danger-fg">{error}</span>
   {:else if help}<span class="text-label-sm text-fg-muted">{help}</span>{/if}
-</label>
+</div>

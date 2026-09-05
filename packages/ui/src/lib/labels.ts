@@ -10,6 +10,9 @@ import type {
   TaskState,
   LeaseState,
   RecordKind,
+  PartEvent,
+  PartGroup,
+  PartState,
 } from '@boomeyes/domain';
 import type { Tone } from './cx';
 
@@ -96,4 +99,35 @@ export const RECORD_KIND_LABEL: Record<RecordKind, string> = {
   doc: '서류',
   rule: '규칙',
   lease: '임대',
+};
+/** ENT-16 부품 상태(part 상태기계) · 부품군 · 이력 구분 */
+export const PART_STATE_LABEL: Record<PartState, string> = {
+  registered: '등록',
+  installed: '장착',
+  inspected: '점검됨',
+  due: '교체 대상',
+  replaced: '교체됨',
+  discarded: '폐기',
+};
+export const PART_TONE: Record<PartState, Tone> = {
+  registered: 'neutral',
+  installed: 'success',
+  inspected: 'info',
+  due: 'warning',
+  replaced: 'progress',
+  discarded: 'neutral',
+};
+export const PART_GROUP_LABEL: Record<PartGroup, string> = {
+  pipe: '직관·이송배관',
+  elbow: '엘보·리듀서',
+  flange: '플랜지·클램프',
+  gasket: '가스켓·안전핀',
+  endhose: '엔드호스·피팅',
+};
+export const PART_EVENT_LABEL: Record<PartEvent['kind'], string> = {
+  register: '등록',
+  install: '장착',
+  inspect: '점검',
+  replace: '교체',
+  discard: '폐기',
 };

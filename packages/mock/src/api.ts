@@ -22,6 +22,7 @@ import {
   type DocSummary,
   type Escalation,
   type Kpis,
+  type Part,
   type RecordItem,
   type SiteReport,
   type Request,
@@ -655,6 +656,84 @@ export function createMockApi(db: Db, opts: { latencyMs?: number } = {}): ApiCli
           };
         });
     },
+    // equipment-parts(W2 B9, 구조): part 상태기계 실소비 — 스캔·발주는 2단계
+    async parts(scope) {
+      await wait();
+      const ids = new Set(devScope(scope).map((d) => d.id));
+      return db.parts.filter((p) => ids.has(p.deviceId));
+    },
+    async part(id) {
+      await wait();
+      return db.parts.find((p) => p.id === id);
+    },
+    async partEvents(partId) {
+      await wait();
+      return db.partEvents.filter((e) => !partId || e.partId === partId).sort((a, b) => (a.at < b.at ? 1 : -1));
+    },
+    async inspectPart(id, input, by) {
+      await wait();
+      const p = partOf(db, id);
+      if (!(input.thicknessMm > 0)) throw new Error('실측 두께(mm)는 0보다 커야 합니다');
+      if (p.state === 'installed') p.state = transition('part', p.state, 'inspected');
+      else if (p.state !== 'inspected') throw new Error(`${p.id}는 ${p.state} 상태 — 점검 대상이 아닙니다`);
+      if (!input.pass) p.state = transition('part', p.state, 'due'); // 불합 → 교체 대상 (inspected → due, ENT-16)
+      p.lastThicknessMm = input.thicknessMm;
+      db.partEvents.push({
+        id: nextPartEvent(db),
+        partId: p.id,
+        kind: 'inspect',
+        at: clock.iso(),
+        by,
+        thicknessMm: input.thicknessMm,
+        visual: input.visual,
+        fastening: input.fastening,
+        pass: input.pass,
+        ...(input.photo ? { photo: input.photo } : {}),
+        ...(input.note ? { note: input.note } : {}),
+      });
+      return p;
+    },
+    async replacePart(id, input, by) {
+      await wait();
+      const p = partOf(db, id);
+      if (!input.reason.trim()) throw new Error('사유는 필수입니다');
+      const st = db.stock.find((s) => s.partNo === p.partNo);
+      if (!st || st.onHand < 1) throw new Error(`재고 없음 — ${p.partNo} (발주는 2단계)`);
+      p.state = transition('part', p.state, 'replaced'); // due에서만
+      st.onHand -= 1;
+      db.partEvents.push({
+        id: nextPartEvent(db),
+        partId: p.id,
+        kind: 'replace',
+        at: clock.iso(),
+        by,
+        reason: input.reason.trim(),
+        worker: input.worker,
+        ...(input.photo ? { photo: input.photo } : {}),
+        note: `재고 ${st.onHand + 1} → ${st.onHand}`,
+      });
+      return p;
+    },
+    async discardPart(id, input, by) {
+      await wait();
+      const p = partOf(db, id);
+      if (!input.reason.trim()) throw new Error('사유는 필수입니다');
+      p.state = transition('part', p.state, 'discarded'); // replaced에서만
+      db.partEvents.push({
+        id: nextPartEvent(db),
+        partId: p.id,
+        kind: 'discard',
+        at: clock.iso(),
+        by,
+        reason: input.reason.trim(),
+        ...(input.photo ? { photo: input.photo } : {}),
+      });
+      return p;
+    },
+    async stock() {
+      await wait();
+      return db.stock;
+    },
     async kpis(scope): Promise<Kpis> {
       await wait();
       const ds = devScope(scope);
@@ -688,6 +767,12 @@ function siteOfSubject(db: Db, subjectId: string): string {
   if (dev) return dev.siteId;
   return db.users.find((u) => u.id === subjectId)?.siteIds[0] ?? 'SITE-001';
 }
+function partOf(db: Db, id: string): Part {
+  const p = db.parts.find((x) => x.id === id);
+  if (!p) throw new Error(`part ${id}`);
+  return p;
+}
+const nextPartEvent = (db: Db) => `PE-${String(db.partEvents.length + 1).padStart(3, '0')}`;
 function must(db: Db, id: string): Case {
   const c = db.cases.find((x) => x.id === id);
   if (!c) throw new Error(`case ${id}`);

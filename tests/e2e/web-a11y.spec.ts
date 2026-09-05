@@ -64,6 +64,16 @@ const PAGES: { scr: string; url: string; ready: (page: Page) => Promise<void> }[
     url: '/b4/rules?state=rules&capture=1',
     ready: (p) => expect(p.getByText('수송관 도달률').first()).toBeVisible(),
   },
+  {
+    scr: SCR['B4-07'],
+    url: '/b4/parts?state=default&capture=1',
+    ready: (p) => expect(p.locator('table').first().locator('tbody tr')).toHaveCount(5),
+  },
+  {
+    scr: SCR['B4-08'],
+    url: '/b4/parts/history?state=default&capture=1',
+    ready: (p) => expect(p.locator('table tbody tr')).toHaveCount(3),
+  },
 ];
 
 for (const { scr, url, ready } of PAGES) {

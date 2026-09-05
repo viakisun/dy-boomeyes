@@ -152,4 +152,7 @@
       {/each}
     </div>
   </section>
+  <a href={resolve(`/a1/parts/inspect` as '/')} class="text-body-md text-accent-fg" data-link="parts"
+    >마모·교체 부품 점검 입력 ›</a
+  >
 </div>
