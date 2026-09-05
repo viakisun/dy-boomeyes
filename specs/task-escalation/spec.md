@@ -2,7 +2,7 @@
 id: SPEC-task-escalation
 status: draft
 wave: 1
-screens: [A1-02, A1-03, B1-03, B1-04]
+screens: [A1-02, A1-03, B1-03, B1-04, A1-08, A3-02, A3-05]
 fr: [FR-008, FR-009, FR-011, FR-006, FR-002, FR-017, FR-018, FR-010, FR-024]
 ---
 # task-escalation — 업무함 · 업무 상세 · 운영사 수신함 · 에스컬레이션
@@ -28,8 +28,14 @@ fr: [FR-008, FR-009, FR-011, FR-006, FR-002, FR-017, FR-018, FR-010, FR-024]
 - **AC-7** Given `new` 상태로 1시간을 넘긴 업무(DemoClock 점프) When 에스컬레이션(B1-04) 로드 Then 해당 업무가 `escalated`로 표시되고 경과 시간·통보 대상(건설사 본사 안전관리자 + 관제, `entities.rules`)·통보 시각이 보인다 [FR-010]
 - **AC-8** Given `site-safety` 로그인 When A1-02 Then 자기 현장(SITE-001)의 업무만 보이고, `control`의 B1-03·B1-04는 전국 범위다 [FR-024]
 
+- **AC-9** Given C-105 `in-progress`(정비 보고 수신) When 완료 처리 시트(A1-08, `/a1/inbox/C-105?sheet=complete`)에서 조치 내용(필수)을 입력해 완료 Then `in-progress → done`으로 전이되고 이력에 행위자·조치 내용이 남으며 시트는 A1-03 위 `[data-capture-dialog]`로 열린다(모달형, `data-scr` 스왑) [FR-008]
+- **AC-10** Given `hq01`(SITE-001·002) When 현장 목록(A3-02) Then 현장 카드 2에 이상 장비·미처리 업무·에스컬레이션 배지가 보이고 탭(업무 · 기록)으로 A3-05·A3-06에 가며, 에스컬레이션 알림(FR-010)은 이 화면으로 딥링크된다 [FR-010, FR-024]
+- **AC-11** Given `hq01` When 업무(열람, A3-05) Then 전 현장 업무가 통합 목록으로 보이고 접수·완료 버튼은 없으며 "확인 요청"만 있다(DISC-015 권한 경계) [FR-024]
+
 ## 상태 픽스처
 `screens.yaml` A1-02 `inbox` `filter` · A1-03 `case` · B1-03 `inbox` · B1-04 `esc`. 픽스처 ID: C-105(E-021 · CPB-003) · C-104(에스컬레이션 대상, `escalated`).
+
+`A1-08:sheet`(C-105 in-progress · 시트 열림) · `A3-02:sites` · `A3-05:inbox`(W2).
 
 ## 비범위
 Web Push 실수신(IF-014, W2 스텁) · 서류 검토 흐름(A2-05·documents) · 본사 앱 A3-02·A3-05(W2) · 실 알림 서버(W3).

@@ -2,8 +2,8 @@
 id: SPEC-driver-daily
 status: draft
 wave: 1
-screens: [A2-02, A2-03, A2-04]
-fr: [FR-013, FR-014, FR-011, FR-006, FR-031, FR-002, FR-007]
+screens: [A2-02, A2-03, A2-04, A2-06]
+fr: [FR-013, FR-014, FR-011, FR-006, FR-031, FR-002, FR-007, FR-037, FR-018]
 ---
 # driver-daily — 운전자 오늘 · 일일점검 · 내 장비
 
@@ -23,7 +23,8 @@ fr: [FR-013, FR-014, FR-011, FR-006, FR-031, FR-002, FR-007]
 - **AC-3** Given 체크인 후 When 일일점검(A2-03)에서 5항목을 체크하고 제출 Then 제출 시각·결과가 이력(ENT-09)에 기록되고 `inspected` 상태가 되며, 미제출 상태의 오늘 화면에는 "작업 전 점검 필요" 배너가 남는다 [FR-014]
 - **AC-4** Given 고장 알림(E-021) When 알림을 열람 Then 대응 안내(고장코드 설명 · 정비 연락처)가 표시되고 알림 확인 상태가 갱신된다 [FR-011, FR-006]
 - **AC-5** Given CPB-003과 `mydev` 픽스처(필터 도달률 92% = 임계 접근) When 내 장비(A2-04) 로드 Then 통신·전압·단선·고장코드와 수송관 62% · 필터 92%가 보이고, 임계 접근은 warning 색 + 텍스트로 경고한다 [FR-002, FR-007]
-- **AC-6** Given 오프라인 When 체크인·점검 제출 시도 Then 오프라인 배너가 뜨고 제출이 보류된다는 안내가 표시된다(전송 큐는 W2) [FR-013, FR-014]
+- **AC-6** Given 오프라인(`?net=off` 또는 `setOffline`) When 체크인·점검 제출 Then 항목이 아웃박스에 저장되어 카드에 "동기 대기" pill과 배너 "동기 대기 n건"이 뜨고, 새로고침 후에도 남으며, 연결되면 순서대로 전송되어 이력이 생긴다(ADR-010 · `queued` 픽스처); 전송 실패(`?net=fail`)는 "전송 실패 n건 · 재시도"다 [FR-037, FR-013, FR-014]
+- **AC-7** Given `driver03` When 메뉴(A2-06) Then 배정 현장 기본정보·동의 요약·앱 정보가 보이고 편집 액션은 없다 [FR-018, FR-031]
 
 ## 상태 픽스처
 `screens.yaml` A2-02 `today` `checked` · A2-03 `inspect` `inspected` · A2-04 `mydev`. 픽스처 ID: CPB-003(E-021) · driver03 · SITE-001. `mydev`는 CPB-003 filterRatio를 0.92(임계 접근)로 변형한다.

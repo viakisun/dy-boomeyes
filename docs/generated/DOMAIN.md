@@ -15,7 +15,7 @@
 | `ENT-07` | 서류 (Document) | 1 | doc_id · 유형(5종) · 대상(장비/운전자/현장) · 유효기간 · 상태 | N─1 장비 · 사용자 · 현장 | RDS · 파일은 S3 |
 | `ENT-08` | 알림 (Alert) | 1 | alert_id · 유형(8종) · 등급 · 확인 상태 · 발생 시각 | N─1 장비 · 1─N 업무 생성 | RDS |
 | `ENT-09` | 이력 (History) | 1 | 시각 · 구분 · 내용 · 행위자 — append-only | N─1 업무/장비/서류 | RDS (append-only) |
-| `ENT-10` | 임대 계약 (Lease) | 1 | 호기 범위 · 설치지역 · 건설사 · 기간 · 잔여(D-) | N─1 장비 · N─1 현장 · N─1 사업주(임대인) | RDS |
+| `ENT-10` | 임대 계약 (Lease) | 1 | 호기 범위 · 설치지역 · 건설사 · 기간 · 잔여(D-) · 상태(active/expiring/relocated/ended — 상태기계 lease) | N─1 장비 · N─1 현장 · N─1 사업주(임대인) | RDS |
 | `ENT-11` | 프로토콜 버전 (Protocol) | 1 | 버전 · 정의 파일(YAML/JSON) · 운영/테스트 구분 | 1─N 제어기 | RDS · 정의 파일은 S3 |
 | `ENT-12` | 텔레메트리 (Telemetry) | 1 | timestamp · GPS · 통신 · CAN · IO · 전압 · 단선 · 고장 · 소모품 | N─1 장비 — 시계열 저장 | 시계열 DB · 원시는 S3 |
 | `ENT-13` | 사업주 (Owner) | 2 | owner_id · 상호 · 대표 · 연락처 · 보유 호기 수 | 1─N 장비(보유) · 1─N 운전자(소속) · 1─N 임대 계약 | RDS — 2단계 제안 (DISC-026) |

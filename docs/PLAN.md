@@ -2,9 +2,20 @@
 
 기준일 2026-09-05. 웨이브 = 2주. 전략 근거: `METHOD.md` · 범위 원천: `ssot/`(화면 53 · FR 36 · DISC 43 미결). 계약 기준선(9/10 동결 · 9/30 시연 · 12/31)은 `ssot/meta.yaml`에 그대로 두고, 여기서 재기준선을 관리한다 — DY 합의 전까지 "제안".
 
-## 현재 웨이브 — W1 시연 경로 (선행 착수 9/5 · 계획 9/22~10/3)
+## 현재 웨이브 — W2 1단계 잔여 (선행 착수 9/5 · 계획 10/6~10/17)
 
-W0는 9/5에 선행 완료(회고 `docs/retro/W0.md` · 방법론 v1.1). `current_wave: 1` — wave 1 화면 14는 route·spec 필수(check 통과).
+W1은 9/5에 선행 완료(사용자 결정 항목만 잔여). 계획 `~/.claude/plans/form-tingly-gray.md` → 브랜치 B0~B15. `current_wave: 2` — wave ≤ 2 화면 41 전부 route(check) · spec(TRACE "spec 없는 화면 0").
+
+| 산출 | 상태 (2026-09-05) |
+|---|---|
+| B0 SSOT 정합(nav 5 · states 3 · ENT-19/20 · request/lease 기계 · FR-037/NFR-016 · DISC-044~046 · ADR-009/010/011 Proposed) | 완료 — PR #2 |
+| B1 spec 신규 7(documents · sites-assets-leases · records-reports · equipment-parts · event-replay · owner-showcase · notifications) + 확장 4 · `current_wave: 2` | 완료 — 자리 화면 27이 캡처 매니페스트에 등장(93장) |
+| B2~B11 화면 25 실화면(자리+ 포함) · B12 오프라인 큐 · B13 로컬 알림 · B14 문서 생성기(설계서) · B15 마감 | 진행 예정 — 순서·의존은 계획 파일 |
+| 사용자 결정 | ADR-009/010/011 승인 · ADR-008 기준선 · DISC-036/038/043/015/044~046 · AWS(DISC-006) · v0.4 발행 |
+
+### W1 시연 경로 — 완료(9/5)
+
+W0는 9/5에 선행 완료(회고 `docs/retro/W0.md` · 방법론 v1.1).
 
 | 산출 | 상태 (2026-09-05) |
 |---|---|
