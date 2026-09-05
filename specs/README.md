@@ -8,10 +8,10 @@
 |---|---|---|---|
 | `shell-auth` | B0-01 · A1-01 · A2-01 · A3-01 · A4-01 + WebShell/PwaShell | 0~1 | draft |
 | `control-dashboard` | B1-02 · B1-02M | 0~1 | draft |
-| `task-escalation` | B1-03 · B1-04 · A1-02 · A1-03 · A1-08 · A2-04 · A3-02 · A3-05 · B3-03 | 1~2 | — |
-| `driver-daily` | A2-02 · A2-03 · A2-05 · A2-06 | 1~2 | — |
-| `admin-protocol-rules` | B4-02 · B4-05 | 1 | — |
-| `video-basics` | A1-04 · A1-05 · B1-02M(영상) · A3-04 · B2-03 | 1~2 | — |
+| `task-escalation` | B1-03 · B1-04 · A1-02 · A1-03 · A1-08 · A2-04 · A3-02 · A3-05 · B3-03 | 1~2 | draft |
+| `driver-daily` | A2-02 · A2-03 · A2-04 · A2-05 · A2-06 | 1~2 | draft |
+| `admin-protocol-rules` | B4-02 · B4-05 | 1 | draft |
+| `video-basics` | A1-04 · A1-05 · B1-02M(영상) · A3-04 · B2-03 | 1~2 | draft |
 | `documents` | A2-05 · A1-02 · B1-05 · B3-04 · B4-06 · A4-06 | 2 | — |
 | `sites-assets-leases` | B4-03 · B4-04 · B1-06 · A1-07 · A3-03 · B2-02 | 2 | — |
 | `records-reports` | A1-06 · A3-06 · B3-05 · B2-04 | 2 | — |

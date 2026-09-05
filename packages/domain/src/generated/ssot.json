@@ -9128,7 +9128,9 @@
           "DISC-016",
           "DISC-036"
         ],
-        "specs": []
+        "specs": [
+          "task-escalation"
+        ]
       },
       "A1-03": {
         "fr": [
@@ -9144,7 +9146,9 @@
           "DISC-015",
           "DISC-035"
         ],
-        "specs": []
+        "specs": [
+          "task-escalation"
+        ]
       },
       "A1-04": {
         "fr": [
@@ -9171,7 +9175,9 @@
           "DISC-040",
           "DISC-042"
         ],
-        "specs": []
+        "specs": [
+          "video-basics"
+        ]
       },
       "A1-05": {
         "fr": [
@@ -9195,7 +9201,9 @@
           "DISC-010",
           "DISC-011"
         ],
-        "specs": []
+        "specs": [
+          "video-basics"
+        ]
       },
       "A1-06": {
         "fr": [
@@ -9279,7 +9287,9 @@
           "DISC-031",
           "DISC-036"
         ],
-        "specs": []
+        "specs": [
+          "driver-daily"
+        ]
       },
       "A2-03": {
         "fr": [
@@ -9291,7 +9301,9 @@
         "disc_all": [
           "DISC-033"
         ],
-        "specs": []
+        "specs": [
+          "driver-daily"
+        ]
       },
       "A2-04": {
         "fr": [
@@ -9308,7 +9320,9 @@
           "DISC-013",
           "DISC-014"
         ],
-        "specs": []
+        "specs": [
+          "driver-daily"
+        ]
       },
       "A2-05": {
         "fr": [
@@ -9556,7 +9570,8 @@
           "DISC-042"
         ],
         "specs": [
-          "control-dashboard"
+          "control-dashboard",
+          "video-basics"
         ]
       },
       "B1-03": {
@@ -9570,7 +9585,9 @@
           "IF-010"
         ],
         "disc_all": [],
-        "specs": []
+        "specs": [
+          "task-escalation"
+        ]
       },
       "B1-04": {
         "fr": [
@@ -9586,7 +9603,9 @@
           "DISC-015",
           "DISC-035"
         ],
-        "specs": []
+        "specs": [
+          "task-escalation"
+        ]
       },
       "B1-05": {
         "fr": [
@@ -9790,7 +9809,9 @@
           "DISC-008",
           "DISC-009"
         ],
-        "specs": []
+        "specs": [
+          "admin-protocol-rules"
+        ]
       },
       "B4-03": {
         "fr": [
@@ -9844,7 +9865,9 @@
           "DISC-014",
           "DISC-036"
         ],
-        "specs": []
+        "specs": [
+          "admin-protocol-rules"
+        ]
       },
       "B4-06": {
         "fr": [
