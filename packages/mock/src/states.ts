@@ -35,6 +35,15 @@ export const FIXTURES: Record<string, Fixture> = {
     ),
   }),
   'A1-05:dev': (db) => db,
+  // 현장 프로파일 AX-1 P-LITE(1채널 · 저장 서버만): SITE-001을 P-LITE로 — A1-04 타일 1채널 · A1-05 소스 탭 서버만 (video-basics AC-4 · PWA 측 검증)
+  'A1-04:plite': (db) => ({
+    ...db,
+    sites: db.sites.map((s) => (s.id === 'SITE-001' ? { ...s, videoProfile: 'P-LITE' as const } : s)),
+  }),
+  'A1-05:plite': (db) => ({
+    ...db,
+    sites: db.sites.map((s) => (s.id === 'SITE-001' ? { ...s, videoProfile: 'P-LITE' as const } : s)),
+  }),
   'A1-02:filter': (db) => db, // 필터 칩은 URL이 결정 — 시드 동일
   'B1-03:inbox': (db) => db,
   // 에스컬레이션 화면: C-105를 65분 전 발행으로 두면 escalations()가 escalated로 전이한다 (AC-7)

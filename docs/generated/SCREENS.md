@@ -19,8 +19,8 @@
 | `A1-01` | 로그인 | A1 | `/a1/login` | site-safety | 1 | 1 | 1 (login) | FR-001 | shell-auth |
 | `A1-02` | 업무함 | A1 | `/a1/inbox` | site-safety | 1 | 1 | 2 (inbox filter) | FR-008 FR-009 FR-011 FR-015 | demo-scripts task-escalation |
 | `A1-03` | 업무 상세 | A1 | `/a1/inbox/[case]` | site-safety | 1 | 1 | 1 (case) | FR-006 FR-008 | demo-scripts task-escalation |
-| `A1-04` | 관제(장비·영상) | A1 | `/a1/monitor` | site-safety | 1 | 1 | 1 (monitor) | FR-004 FR-028 FR-030 FR-034 | demo-scripts video-basics |
-| `A1-05` | 장비 상세 | A1 | `/a1/monitor/[device]` | site-safety | 1 | 1 | 1 (dev) | FR-002 FR-005 FR-007 FR-016 FR-036 | demo-scripts video-basics |
+| `A1-04` | 관제(장비·영상) | A1 | `/a1/monitor` | site-safety | 1 | 1 | 2 (monitor plite) | FR-004 FR-028 FR-030 FR-034 | demo-scripts video-basics |
+| `A1-05` | 장비 상세 | A1 | `/a1/monitor/[device]` | site-safety | 1 | 1 | 2 (dev plite) | FR-002 FR-005 FR-007 FR-016 FR-036 | demo-scripts video-basics |
 | `A1-06` | 기록 | A1 | `/a1/records` | site-safety | 1 | 2 | 1 (rec) | FR-012 | — |
 | `A1-07` | 메뉴·현장 정보 | A1 | `/a1/menu` | site-safety | 1 | 2 | 2 (menu apply) | FR-017 FR-018 FR-026 | — |
 | `A1-08` | 완료 처리 시트 | A1 | `/a1/inbox/[case]?sheet=complete` | site-safety | 1 | 2 | 1 (sheet) | FR-008 | — |
@@ -44,7 +44,7 @@
 | `A4-04` | 운전자 배치 | A4 | `/a4/drivers` | owner | 2 | 4 | 1 (drivers) | FR-027 | — |
 | `A4-05` | 임대 계약 | A4 | `/a4/leases` | owner | 2 | 4 | 1 (lease) | FR-025 | — |
 | `A4-06` | 운전자 서류 | A4 | `/a4/drivers/docs` | owner | 2 | 4 | 1 (docs) | FR-027 | — |
-| `B0-01` | 웹 공통 로그인 | B0 | `/login` | control hq-safety site-safety ops-admin | 1 | 0 | 4 (login-b1 login-b2 login-b3 login-b4) | FR-001 FR-031 | shell-auth |
+| `B0-01` | 웹 공통 로그인 | B0 | `/login` | control hq-safety site-safety ops-admin maintenance | 1 | 0 | 5 (login-b1 login-b2 login-b3 login-b4 login-maint) | FR-001 FR-031 | shell-auth |
 | `B1-02` | 관제 대시보드 | B1 | `/b1/dash` | control maintenance | 1 | 0 | 1 (dash) | FR-002 FR-003 FR-006 FR-024 FR-034 FR-036 | control-dashboard demo-scripts |
 | `B1-02M` | 카메라 영상 모달 | B1 | `/b1/dash?cam=[camera]` | control maintenance | 1 | 1 | 1 (cam) | FR-004 FR-005 FR-024 FR-028 FR-029 FR-034 | control-dashboard video-basics |
 | `B1-03` | 수신함 | B1 | `/b1/inbox` | control maintenance | 1 | 1 | 1 (inbox) | FR-017 FR-018 FR-024 | demo-scripts task-escalation |

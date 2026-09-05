@@ -4875,6 +4875,10 @@
           {
             "id": "monitor",
             "name": "monitor"
+          },
+          {
+            "id": "plite",
+            "name": "P-LITE 현장(1채널 · AI 채널 숨김)"
           }
         ],
         "nav": [
@@ -4916,6 +4920,10 @@
           {
             "id": "dev",
             "name": "dev"
+          },
+          {
+            "id": "plite",
+            "name": "P-LITE 현장(1채널 · 저장 소스 서버만)"
           }
         ],
         "nav": [],
@@ -5856,7 +5864,8 @@
           "control",
           "hq-safety",
           "site-safety",
-          "ops-admin"
+          "ops-admin",
+          "maintenance"
         ],
         "phase": 1,
         "wave": 0,
@@ -5883,6 +5892,10 @@
           {
             "id": "login-b4",
             "name": "B4 로그인"
+          },
+          {
+            "id": "login-maint",
+            "name": "정비 담당 로그인(B1 연계)"
           }
         ],
         "nav": [

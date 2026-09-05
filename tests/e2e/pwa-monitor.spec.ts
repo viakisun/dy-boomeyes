@@ -50,3 +50,22 @@ test('[A1-05] CPB-003 상세: 342V · E-021 · 도달률 · 서류 완비율 · 
   await expect(page.getByRole('list', { name: '저장 영상 목록' }).locator('li')).toHaveCount(2);
   await expect(page.getByText('구간 회수 가능').first()).toBeVisible();
 });
+
+test('[A1-04] plite 픽스처(SITE-001 P-LITE): 장비 3 × 1채널 — AI 채널 숨김 · 프로파일 P-LITE [FR-004] [FR-005]', async ({
+  page,
+}) => {
+  await page.goto('/a1/monitor?state=plite&capture=1');
+  await expect(page.locator(`[data-scr="${SCR['A1-04']}"]`)).toBeVisible();
+  await expect(page.locator('[data-camera]')).toHaveCount(3);
+  await expect(page.locator('[data-camera="CAM-3-2"]')).toHaveCount(0);
+  await expect(page.getByText('프로파일 P-LITE')).toBeVisible();
+});
+
+test('[A1-05] plite 픽스처: CPB-003 채널 1(일반만) · 저장 소스 탭 서버만(SD·NVR 없음) [FR-005]', async ({ page }) => {
+  await page.goto('/a1/monitor/CPB-003?state=plite&capture=1');
+  await expect(page.locator(`[data-scr="${SCR['A1-05']}"]`)).toBeVisible();
+  await expect(page.locator('[data-camera]')).toHaveCount(1);
+  await expect(page.getByRole('tab', { name: '서버' })).toBeVisible();
+  await expect(page.getByRole('tab', { name: 'SD' })).toHaveCount(0);
+  await expect(page.getByRole('tab', { name: 'NVR' })).toHaveCount(0);
+});

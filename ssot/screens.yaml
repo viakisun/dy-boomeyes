@@ -130,6 +130,8 @@ screens:
   states:
   - id: monitor
     name: monitor
+  - id: plite
+    name: P-LITE 현장(1채널 · AI 채널 숨김)
   nav:
   - to: A1-05
     label: 타일 탭
@@ -156,6 +158,8 @@ screens:
   states:
   - id: dev
     name: dev
+  - id: plite
+    name: P-LITE 현장(1채널 · 저장 소스 서버만)
   nav: []
   trace:
     task:
@@ -776,6 +780,7 @@ screens:
   - hq-safety
   - site-safety
   - ops-admin
+  - maintenance
   phase: 1
   wave: 0
   legacy_codes:
@@ -793,6 +798,8 @@ screens:
     name: B3 로그인
   - id: login-b4
     name: B4 로그인
+  - id: login-maint
+    name: 정비 담당 로그인(B1 연계)
   nav:
   - to: B1-02
     label: '역할: 관제'
