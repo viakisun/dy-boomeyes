@@ -90,4 +90,19 @@ test('[B1-02] 현장 프로파일 AX-1 — P-LITE 현장(5호기) 선택 시 카
   await expect(page.getByText('CPB-005 · 5호기')).toBeVisible();
   await expect(wall.locator('button[aria-label*="카메라"]')).toHaveCount(1);
   await expect(wall.locator('button[aria-label*="일반 카메라"]')).toHaveCount(1);
+  await expect(page.getByText('5호기 1채널')).toBeVisible(); // 헤더 채널 수 = 타일 수
+});
+
+test('[B1-02M] P-LITE 현장의 AI 채널(CAM-5-2)은 딥링크로도 열리지 않는다 · 일반 채널(CAM-5-1)은 칩 1개 [FR-005]', async ({
+  page,
+}) => {
+  await page.goto('/b1/dash?state=cam&capture=1&cam=CAM-5-2');
+  await expect(page.locator(`[data-scr="${SCR['B1-02']}"]`)).toBeVisible();
+  await expect(page.locator('dialog[open]')).toHaveCount(0);
+  await page.goto('/b1/dash?state=cam&capture=1&cam=CAM-5-1');
+  const dialog = page.locator('dialog[open]');
+  await expect(dialog).toBeVisible();
+  await expect(dialog.getByRole('button', { name: /전방|붐 끝/ })).toHaveCount(1);
+  await expect(dialog.getByRole('tab', { name: '서버 녹화' })).toBeVisible();
+  await expect(dialog.getByRole('tab', { name: 'SD 녹화' })).toHaveCount(0);
 });

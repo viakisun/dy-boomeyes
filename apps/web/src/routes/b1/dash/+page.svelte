@@ -44,7 +44,8 @@
     return profileFlags(s?.videoProfile ?? 'P-SD').channels === 2 || c.kind === 'general';
   };
   const wallCams = $derived(data.cameras.filter((c) => (!selectedId || c.deviceId === selectedId) && visible(c)));
-  const modalCam = $derived(data.cam ? (data.cameras.find((c) => c.id === data.cam) ?? null) : null);
+  // ?cam= 딥링크도 현장 프로파일(AX-1) 밖 채널은 열지 않는다
+  const modalCam = $derived(data.cam ? (data.cameras.find((c) => c.id === data.cam && visible(c)) ?? null) : null);
   const modalDevice = $derived(modalCam ? data.devices.find((d) => d.id === modalCam.deviceId) : null);
   let source = $state('server');
   // 모달: 현장 프로파일 → 저장 소스 탭 · 스냅샷 주기 (video-basics AC-4) · AI 이벤트 bbox (피드의 최신 이벤트)
@@ -213,7 +214,9 @@
 
     <section class="gap-stack-sm flex flex-col">
       <h2 class="text-heading-sm">
-        카메라 월 {#if selected}<span class="text-body-sm text-fg-muted">— {selected.unitNo}호기 2채널</span>{/if}
+        카메라 월 {#if selected}<span class="text-body-sm text-fg-muted"
+            >— {selected.unitNo}호기 {wallCams.length}채널</span
+          >{/if}
       </h2>
       <div
         class="gap-inline-md rounded-card bg-media-bg p-inset-md grid grid-cols-2 md:grid-cols-4"
