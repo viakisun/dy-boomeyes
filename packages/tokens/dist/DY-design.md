@@ -580,7 +580,7 @@
 | 토큰 | 값 | 원천 | 설명 |
 |---|---|---|---|
 | `sys.layout.toast.width` | 384px | 384px | 토스트 최대 너비 |
-| `sys.layout.prose.width` | 640px | 640px | 설명 문단 최대 너비(빈 상태 등) |
+| `sys.layout.prose.width` | 520px | 520px | 설명 문단 최대 너비(빈 상태 등) — 65ch@14px 근사 |
 | `sys.layout.sidebar.width` | 240px | 240px | 웹 사이드바 |
 | `sys.layout.sidebar.collapsed` | 56px | 56px | 접힘(아이콘만) |
 | `sys.layout.topbar.height` | 48px | 48px | 웹 상단 바 |

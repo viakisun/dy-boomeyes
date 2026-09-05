@@ -49,7 +49,8 @@ const RULES = [
   },
   {
     id: 'ring',
-    re: /(?<![\w-])ring(?:-offset)?-\d+(?![\w-])/g,
+    re: /(?<![\w-])ring(?:-offset)?-(\d+)(?![\w-])/g,
+    skip: (m) => m[1] === '0',
     why: 'ring-N(px) → 포커스는 FOCUS(outline-2 offset-2 outline-focus-ring)',
   },
   {
