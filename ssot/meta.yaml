@@ -24,7 +24,7 @@ phases:
   start: '2026-10-01'
   end: '2026-12-31'
   note: 운영형 고도화 (범위 DISC-019)
-current_wave: 2
+current_wave: 1
 schedule:
 - milestone: 설계 합의 · DISC 확정
   when: 2026-07 중
