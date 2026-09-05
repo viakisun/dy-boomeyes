@@ -60,6 +60,7 @@ export {
   EQUIPMENT_LABEL,
   LEASE_STATE_LABEL,
   LEASE_TONE,
+  CONSENT_LABEL,
 } from './lib/labels';
 export { fmtDateTime, fmtTime, dueLabel, elapsedLabel } from './lib/format';
 export { connectivity } from './lib/connectivity.svelte';

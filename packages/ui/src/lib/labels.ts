@@ -81,3 +81,9 @@ export const LEASE_TONE: Record<LeaseState, Tone> = {
   relocated: 'info',
   ended: 'neutral',
 };
+/** ENT-15 개인정보 동의 항목(FR-031 표준 패키지) */
+export const CONSENT_LABEL: Record<'video' | 'audio' | 'location', string> = {
+  video: '영상',
+  audio: '음성',
+  location: '위치',
+};

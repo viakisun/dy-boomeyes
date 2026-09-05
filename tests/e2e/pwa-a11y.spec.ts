@@ -60,6 +60,21 @@ const PAGES: { scr: string; url: string; ready: (page: Page) => Promise<void> }[
     ready: (p) => expect(p.getByText('AI 판단 불가').first()).toBeVisible(),
   },
   {
+    scr: SCR['A1-07'],
+    url: '/a1/menu?state=menu&capture=1',
+    ready: (p) => expect(p.locator('ul[aria-label="내 신청"] li')).toHaveCount(3),
+  },
+  {
+    scr: SCR['A2-06'],
+    url: '/a2/menu?state=menu&capture=1',
+    ready: (p) => expect(p.locator('[aria-label="동의 항목"]')).toBeVisible(),
+  },
+  {
+    scr: SCR['A3-03'],
+    url: '/a3/sites/SITE-001?state=site&capture=1',
+    ready: (p) => expect(p.locator('ul[aria-label="미처리 업무"] li')).toHaveCount(4),
+  },
+  {
     scr: SCR['A3-04'],
     url: '/a3/sites/SITE-001/devices?state=dev&capture=1',
     ready: (p) => expect(p.locator('[data-camera]')).toHaveCount(6),

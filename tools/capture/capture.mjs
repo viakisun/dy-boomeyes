@@ -30,7 +30,7 @@ const PARAMS = {
   '[event]': 'EV-001',
 };
 // 상태 픽스처가 다른 개체를 다루면 여기서 파라미터를 바꾼다 (docnew = C-106 서류 검토 업무)
-const STATE_PARAMS = { 'A1-03:docnew': { '[case]': 'C-106' } };
+const STATE_PARAMS = { 'A1-03:docnew': { '[case]': 'C-106' }, 'A3-03:normal': { '[site]': 'SITE-002' } };
 const surfaces = Object.fromEntries(ssot.screens.surfaces.map((s) => [s.id, s.app]));
 const screens = ssot.screens.screens.filter((s) => s.wave <= WAVE && (!ONLY || ONLY.includes(s.id)));
 

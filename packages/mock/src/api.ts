@@ -136,6 +136,29 @@ export function createMockApi(db: Db, opts: { latencyMs?: number } = {}): ApiCli
       await wait();
       return decide(db, id, 'rejected', by, '반려', note);
     },
+    async createRequest(input) {
+      await wait();
+      if (!input.title.trim()) throw new Error('신청 제목은 필수입니다');
+      if (!db.sites.some((s) => s.id === input.siteId)) throw new Error(`site ${input.siteId}`);
+      const r: Request = {
+        id: `RQ-${String(db.requests.length + 1).padStart(3, '0')}`,
+        kind: input.kind,
+        title: input.title.trim(),
+        requesterId: input.requesterId,
+        siteId: input.siteId,
+        state: 'submitted',
+        requestedAt: clock.iso(),
+        ...(input.note ? { note: input.note } : {}),
+        history: [
+          { at: clock.iso(), by: input.requesterId, action: '신청', ...(input.note ? { note: input.note } : {}) },
+        ],
+      };
+      // 자동(수신함 등록): submitted → review — B1-03 수신함에 검토 중으로 나타난다 (ENT-20)
+      r.state = transition('request', r.state, 'review');
+      r.history.push({ at: clock.iso(), by: 'system', action: '수신함 등록 — 검토 중' });
+      db.requests.push(r);
+      return r;
+    },
     async escalations() {
       await wait();
       const now = clock.now().getTime();

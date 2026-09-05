@@ -337,3 +337,24 @@ describe('[FR-019] 임대 계약 · 재배치 (lease 상태기계)', () => {
     await expect(api.planRelocation('LS-001', 'SITE-002', 'x', 'control01')).rejects.toThrow('전이 불가'); // relocated에서 재계획 없음
   });
 });
+
+describe('[FR-017] 신청(A1-07) → 수신함', () => {
+  it('createRequest: RQ-006 · submitted → review(자동) · 이력 2 · 수신함(control) 최상단 · 승인까지 request 기계', async () => {
+    const api = bootMock({ capture: true });
+    const r = await api.createRequest({
+      kind: 'site-open',
+      title: '한빛 2공구 개설 신청',
+      siteId: 'SITE-001',
+      requesterId: 'safety01',
+      note: '전주시 덕진구 · 2026-10-01~2027-03-31',
+    });
+    expect(r.id).toBe('RQ-006');
+    expect(r.state).toBe('review');
+    expect(r.history.map((h) => h.action)).toEqual(['신청', '수신함 등록 — 검토 중']);
+    expect((await api.requests({ role: 'control' }))[0]?.id).toBe('RQ-006');
+    expect((await api.approveRequest('RQ-006', 'control01', '승인')).state).toBe('approved');
+    await expect(
+      api.createRequest({ kind: 'site-open', title: ' ', siteId: 'SITE-001', requesterId: 'safety01' }),
+    ).rejects.toThrow('제목');
+  });
+});
