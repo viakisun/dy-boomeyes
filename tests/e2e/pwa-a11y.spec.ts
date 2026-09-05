@@ -94,6 +94,16 @@ const PAGES: { scr: string; url: string; ready: (page: Page) => Promise<void> }[
     url: '/a1/monitor/CPB-003?state=dev&capture=1',
     ready: (p) => expect(p.getByText('E-021').first()).toBeVisible(),
   },
+  {
+    scr: SCR['A1-11'],
+    url: '/a1/parts/inspect?state=default&capture=1',
+    ready: (p) => expect(p.getByRole('form', { name: '부품 점검' })).toBeVisible(),
+  },
+  {
+    scr: SCR['A2-09'],
+    url: '/a2/parts/replace?state=default&capture=1',
+    ready: (p) => expect(p.getByRole('form', { name: '교체 처리' })).toBeVisible(),
+  },
 ];
 
 for (const { scr, url, ready } of PAGES) {

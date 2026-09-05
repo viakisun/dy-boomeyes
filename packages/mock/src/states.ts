@@ -205,6 +205,11 @@ export const FIXTURES: Record<string, Fixture> = {
       ],
     };
   },
+  // equipment-parts(W2 B9): 자리+ — 시드 그대로(P-001~005 · P-004 due · 재고 5)
+  'B4-07:default': (db) => db,
+  'B4-08:default': (db) => db,
+  'A1-11:default': (db) => db,
+  'A2-09:default': (db) => db,
 };
 /** 오늘 출근·점검 1건씩(driver03 · CPB-003) — 기록 4종이 모두 보이게 */
 function withDaily(db: Db): Db {

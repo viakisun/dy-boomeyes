@@ -12,9 +12,12 @@ import type {
   Inspection,
   Lease,
   Owner,
+  Part,
+  PartEvent,
   ProtocolVersion,
   Request,
   RuleSet,
+  Stock,
   SampleTest,
   Site,
   User,
@@ -38,6 +41,10 @@ export interface Db {
   rules: RuleSet;
   docs: Doc[];
   leases: Lease[];
+  /** ENT-16~18 마모·교체 부품(W2 구조) */
+  parts: Part[];
+  partEvents: PartEvent[];
+  stock: Stock[];
 }
 
 /** 데모 계정 7 — ssot roles.demo_account (capture 모드 세션 합성에도 쓴다) */
@@ -637,6 +644,119 @@ export function seed(): Db {
     updatedBy: 'ops01',
     history: [{ at: t(5 * DAY), by: 'ops01', action: '알림 기준 등록 — 8종 · 고장코드 4' }],
   };
+  // equipment-parts(W2 B9, 구조): CPB-003 5군 각 1 — P-004 가스켓은 점검 불합으로 due · 이력 3 · 재고 5 (임계·주기는 DISC-038)
+  const parts: Part[] = [
+    {
+      id: 'P-001',
+      partNo: 'DY-PIPE-125',
+      group: 'pipe',
+      deviceId: 'CPB-003',
+      position: '붐 1단 직관',
+      installedAt: t(60 * DAY),
+      lot: 'L2604-07',
+      baseThicknessMm: 4.5,
+      lastThicknessMm: null,
+      pouredM3: 1820,
+      runHours: 310,
+      state: 'installed',
+    },
+    {
+      id: 'P-002',
+      partNo: 'DY-ELB-90',
+      group: 'elbow',
+      deviceId: 'CPB-003',
+      position: '붐 2단 엘보',
+      installedAt: t(60 * DAY),
+      lot: 'L2604-07',
+      baseThicknessMm: 6.0,
+      lastThicknessMm: 5.2,
+      pouredM3: 1820,
+      runHours: 310,
+      state: 'inspected',
+    },
+    {
+      id: 'P-003',
+      partNo: 'DY-FLG-125',
+      group: 'flange',
+      deviceId: 'CPB-003',
+      position: '붐 3단 플랜지',
+      installedAt: t(45 * DAY),
+      lot: 'L2605-02',
+      baseThicknessMm: 8.0,
+      lastThicknessMm: null,
+      pouredM3: 1210,
+      runHours: 205,
+      state: 'installed',
+    },
+    {
+      id: 'P-004',
+      partNo: 'DY-GSK-125',
+      group: 'gasket',
+      deviceId: 'CPB-003',
+      position: '엔드호스 접속부 가스켓',
+      installedAt: t(30 * DAY),
+      lot: 'L2606-01',
+      baseThicknessMm: 3.5,
+      lastThicknessMm: 3.1,
+      pouredM3: 820,
+      runHours: 140,
+      state: 'due',
+    },
+    {
+      id: 'P-005',
+      partNo: 'DY-EH-125',
+      group: 'endhose',
+      deviceId: 'CPB-003',
+      position: '엔드호스',
+      installedAt: t(30 * DAY),
+      lot: 'L2606-01',
+      baseThicknessMm: 5.0,
+      lastThicknessMm: null,
+      pouredM3: 820,
+      runHours: 140,
+      state: 'installed',
+    },
+  ];
+  const partEvents: PartEvent[] = [
+    {
+      id: 'PE-001',
+      partId: 'P-001',
+      kind: 'install',
+      at: t(60 * DAY),
+      by: 'maint01',
+      note: '붐 1단 직관 장착 · 로트 L2604-07',
+    },
+    {
+      id: 'PE-002',
+      partId: 'P-002',
+      kind: 'inspect',
+      at: t(5 * DAY),
+      by: 'safety01',
+      thicknessMm: 5.2,
+      visual: 'ok',
+      fastening: 'ok',
+      pass: true,
+    },
+    {
+      id: 'PE-003',
+      partId: 'P-004',
+      kind: 'inspect',
+      at: t(2 * DAY),
+      by: 'safety01',
+      thicknessMm: 3.1,
+      visual: 'wear',
+      fastening: 'ok',
+      pass: false,
+      note: '마모 한계 접근 — 교체 대상',
+    },
+  ];
+  const stock: Stock[] = [
+    { id: 'ST-001', partNo: 'DY-PIPE-125', group: 'pipe', onHand: 3, safety: 2 },
+    { id: 'ST-002', partNo: 'DY-ELB-90', group: 'elbow', onHand: 2, safety: 1 },
+    { id: 'ST-003', partNo: 'DY-FLG-125', group: 'flange', onHand: 4, safety: 2 },
+    { id: 'ST-004', partNo: 'DY-GSK-125', group: 'gasket', onHand: 10, safety: 4 },
+    { id: 'ST-005', partNo: 'DY-EH-125', group: 'endhose', onHand: 1, safety: 1 },
+  ];
   return {
     users,
     sites,
@@ -654,5 +774,8 @@ export function seed(): Db {
     rules,
     docs,
     leases,
+    parts,
+    partEvents,
+    stock,
   };
 }

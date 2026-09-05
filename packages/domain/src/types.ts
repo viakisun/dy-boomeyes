@@ -309,6 +309,49 @@ export interface RuleSet {
   history: HistoryItem[];
 }
 
+/** ENT-16 마모·교체 부품 — 상태기계 part(registered → installed → inspected → due → replaced → discarded). W2 = 구조(DISC-044) · 임계·주기 OEM 미확정(DISC-038) */
+export type PartState = 'registered' | 'installed' | 'inspected' | 'due' | 'replaced' | 'discarded';
+export type PartGroup = 'pipe' | 'elbow' | 'flange' | 'gasket' | 'endhose';
+export interface Part {
+  id: string;
+  partNo: string;
+  group: PartGroup;
+  deviceId: string;
+  position: string;
+  installedAt: string;
+  lot: string;
+  /** 기준두께 · 최근 실측(mm) — 합불 판정은 입력자(OEM 기준 미확정) */
+  baseThicknessMm: number;
+  lastThicknessMm: number | null;
+  /** 보조지표(단독 폐기 기준 아님, FR-032 note) */
+  pouredM3: number;
+  runHours: number;
+  state: PartState;
+}
+/** ENT-17 부품 이력(append-only) — 점검 실측·외관·체결·합불 · 교체/폐기 사유·작업자·증빙 */
+export interface PartEvent {
+  id: string;
+  partId: string;
+  kind: 'register' | 'install' | 'inspect' | 'replace' | 'discard';
+  at: string;
+  by: string;
+  thicknessMm?: number;
+  visual?: 'ok' | 'wear' | 'crack';
+  fastening?: 'ok' | 'loose';
+  pass?: boolean;
+  reason?: string;
+  worker?: string;
+  photo?: { name: string; url?: string };
+  note?: string;
+}
+/** ENT-18 재고·발주 — 발주·안전재고 편집은 2단계 */
+export interface Stock {
+  id: string;
+  partNo: string;
+  group: PartGroup;
+  onHand: number;
+  safety: number;
+}
 export interface Scope {
   role: RoleId;
   siteIds?: string[];

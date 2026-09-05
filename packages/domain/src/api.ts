@@ -20,7 +20,10 @@ import type {
   InspectionItem,
   Kpis,
   Lease,
+  Part,
+  PartEvent,
   Request,
+  Stock,
   Scope,
   Site,
   Today,
@@ -125,6 +128,32 @@ export interface ApiClient {
   records(scope: Scope, opts?: { days?: number; kind?: RecordKind }): Promise<RecordItem[]>;
   /** FR-023 보고 모드 — 현장별 기간 요약(7 | 30일). 상태 전이 부작용 없음 */
   report(scope: Scope, days: number): Promise<SiteReport[]>;
+  /** FR-032 부품(W2 구조, DISC-044) — 대장 · 이력 · 재고. 스캔(FR-035 · DISC-043)·발주는 2단계 */
+  parts(scope: Scope): Promise<Part[]>;
+  part(id: string): Promise<Part | undefined>;
+  partEvents(partId?: string): Promise<PartEvent[]>;
+  /** 점검 입력(A1-11) — installed → inspected · 불합이면 inspected → due (ENT-16 전이는 installed→inspected→due 2단) */
+  inspectPart(
+    id: string,
+    input: {
+      thicknessMm: number;
+      visual: 'ok' | 'wear' | 'crack';
+      fastening: 'ok' | 'loose';
+      pass: boolean;
+      photo?: { name: string; url?: string };
+      note?: string;
+    },
+    by: string,
+  ): Promise<Part>;
+  /** 교체(A2-09) — due → replaced · 재고 −1(재고 0이면 오류) */
+  replacePart(
+    id: string,
+    input: { reason: string; worker: string; photo?: { name: string; url?: string } },
+    by: string,
+  ): Promise<Part>;
+  /** 폐기(A2-09) — replaced → discarded */
+  discardPart(id: string, input: { reason: string; photo?: { name: string; url?: string } }, by: string): Promise<Part>;
+  stock(): Promise<Stock[]>;
 }
 
 /** 시각 원천 — 화면은 new Date() 대신 이것을 쓴다 (capture 모드에서 고정, 데모에서 점프) */

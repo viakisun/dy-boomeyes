@@ -65,6 +65,9 @@
         {/each}
       </ul>
     </section>
+    <a href={resolve('/a2/parts/replace' as '/')} class="text-body-md text-accent-fg" data-link="parts"
+      >마모·교체 부품 교체·폐기 처리 ›</a
+    >
   {:else}
     <EmptyState title="배정된 장비가 없습니다" />
   {/if}

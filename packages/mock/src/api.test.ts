@@ -395,3 +395,56 @@ describe('[FR-012] 기록 병합 · [FR-023] 보고 모드 집계', () => {
     expect((await api.case('C-105'))?.state).toBe('new'); // report는 escalations()와 달리 전이시키지 않는다
   });
 });
+
+describe('[FR-032] 마모·교체 부품 — part 상태기계 실소비(W2 구조)', () => {
+  it('대장 5(CPB-003) · 점검 합(installed → inspected) · 불(→ inspected → due) · 교체(due → replaced, 재고 −1) · 폐기(replaced → discarded) · 이력 append', async () => {
+    const api = bootMock({ capture: true });
+    const site = { role: 'site-safety' as const, siteIds: ['SITE-001'] };
+    expect((await api.parts(site)).map((p) => p.id)).toEqual(['P-001', 'P-002', 'P-003', 'P-004', 'P-005']);
+    expect((await api.parts({ role: 'hq-safety', siteIds: ['SITE-002'] })).length).toBe(0);
+    const ok = await api.inspectPart(
+      'P-001',
+      { thicknessMm: 4.2, visual: 'ok', fastening: 'ok', pass: true },
+      'safety01',
+    );
+    expect(ok.state).toBe('inspected');
+    expect(ok.lastThicknessMm).toBe(4.2);
+    const bad = await api.inspectPart(
+      'P-003',
+      { thicknessMm: 2.9, visual: 'wear', fastening: 'loose', pass: false, note: '마모' },
+      'safety01',
+    );
+    expect(bad.state).toBe('due');
+    await expect(
+      api.inspectPart('P-004', { thicknessMm: 3, visual: 'ok', fastening: 'ok', pass: true }, 'safety01'),
+    ).rejects.toThrow('점검 대상이 아닙니다'); // due
+    await expect(
+      api.inspectPart('P-002', { thicknessMm: 0, visual: 'ok', fastening: 'ok', pass: true }, 'safety01'),
+    ).rejects.toThrow('0보다');
+    await expect(api.replacePart('P-002', { reason: 'x', worker: 'driver03' }, 'driver03')).rejects.toThrow(
+      '전이 불가',
+    ); // inspected → replaced 없음
+    const before = (await api.stock()).find((s) => s.partNo === 'DY-GSK-125')!.onHand;
+    const rep = await api.replacePart(
+      'P-004',
+      { reason: '마모 한계', worker: 'driver03', photo: { name: 'gasket.jpg' } },
+      'driver03',
+    );
+    expect(rep.state).toBe('replaced');
+    expect((await api.stock()).find((s) => s.partNo === 'DY-GSK-125')!.onHand).toBe(before - 1);
+    await expect(api.discardPart('P-004', { reason: ' ' }, 'driver03')).rejects.toThrow('사유');
+    expect((await api.discardPart('P-004', { reason: '균열' }, 'driver03')).state).toBe('discarded');
+    const ev = await api.partEvents('P-004');
+    expect(ev.map((e) => e.kind)).toEqual(['discard', 'replace', 'inspect']); // 최신순
+    expect(ev[1]?.note).toBe(`재고 ${before} → ${before - 1}`);
+    expect((await api.partEvents()).length).toBe(3 + 4);
+  });
+  it('재고 0이면 교체 불가(상태 유지)', async () => {
+    const api = bootMock({ capture: true });
+    for (const s of api.db.stock) if (s.partNo === 'DY-GSK-125') s.onHand = 0;
+    await expect(api.replacePart('P-004', { reason: '마모', worker: 'driver03' }, 'driver03')).rejects.toThrow(
+      '재고 없음',
+    );
+    expect((await api.part('P-004'))?.state).toBe('due');
+  });
+});
