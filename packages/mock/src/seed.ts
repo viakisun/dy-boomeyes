@@ -461,10 +461,13 @@ export function seed(): Db {
   const missing = structuredClone(base);
   delete (missing.gps as Record<string, unknown>).latitude;
   delete missing.power;
+  missing.harness = { disconnected: true }; // 오류 샘플도 알림을 낸다 — 장면 8 "오류 샘플 파싱 테스트 → 알림 발생 확인"
   const wrongType = structuredClone(base);
   (wrongType.power as Record<string, unknown>).voltage_value = '380';
   (wrongType.gps as Record<string, unknown>).fix_status = 'lost';
   (wrongType.harness as Record<string, unknown>).disconnected = 'no';
+  wrongType.error = { error_code: 'E-011', error_name: '제어기 통신 두절', severity: 'critical' };
+  wrongType.network = { type: 'LTE', status: 'lost' };
   const abnormal = structuredClone(base);
   abnormal.error = { error_code: 'E-021', error_name: '380V 전압 이상', severity: 'critical' };
   abnormal.power = { voltage_status: 'abnormal', voltage_value: 342 };

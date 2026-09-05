@@ -17,6 +17,7 @@
     fmtDateTime,
     toast,
   } from '@boomeyes/ui';
+  import { untrack } from 'svelte';
   import { session } from '$lib/session.svelte';
   let { data } = $props();
   const ROLES: { id: RoleId; label: string }[] = [
@@ -33,25 +34,34 @@
     { id: 'scenarios', label: '시나리오 등급' },
   ];
   const SEVERITIES: Severity[] = ['critical', 'warning', 'info'];
-  // 편집 사본 — 저장 전까지 로컬, 저장 후 invalidateAll로 다시 읽는다
-  let alerts = $state<AlertRule[]>(structuredClone(data.rules.alerts));
-  let codes = $state<ErrorCode[]>(structuredClone(data.rules.errorCodes));
-  let dirty = $state(false);
+  // 편집 사본 — 최초 1회만 데이터에서 초기화(untrack), 탭별 dirty. 저장은 해당 탭만 보내고 그쪽만 리셋한다(다른 탭 편집 유실 방지)
+  let alerts = $state<AlertRule[]>(untrack(() => structuredClone(data.rules.alerts)));
+  let codes = $state<ErrorCode[]>(untrack(() => structuredClone(data.rules.errorCodes)));
+  let dirtyAlerts = $state(false);
+  let dirtyCodes = $state(false);
+  const dirty = $derived(data.tab === 'codes' ? dirtyCodes : dirtyAlerts);
   let busy = $state(false);
   const me = () => session.user?.userId ?? 'ops01';
   const field = 'h-size-control-sm rounded-control border-border bg-surface px-inset-sm text-body-sm border w-full';
   async function save() {
+    const target = data.tab === 'codes' ? 'codes' : 'alerts';
     busy = true;
     try {
-      await data.api.saveRules(
-        data.tab === 'codes' ? { errorCodes: $state.snapshot(codes) } : { alerts: $state.snapshot(alerts) },
+      const saved = await data.api.saveRules(
+        target === 'codes' ? { errorCodes: $state.snapshot(codes) } : { alerts: $state.snapshot(alerts) },
         me(),
       );
-      dirty = false;
+      if (target === 'codes') {
+        codes = structuredClone(saved.errorCodes);
+        dirtyCodes = false;
+      } else {
+        alerts = structuredClone(saved.alerts);
+        dirtyAlerts = false;
+      }
       await invalidateAll();
-      alerts = structuredClone(data.rules.alerts);
-      codes = structuredClone(data.rules.errorCodes);
-      toast(`${data.tab === 'codes' ? '고장코드' : '알림 기준'} 저장 완료`);
+      toast(`${target === 'codes' ? '고장코드' : '알림 기준'} 저장 완료`);
+    } catch (e) {
+      toast(`저장 실패 — ${(e as Error).message}`);
     } finally {
       busy = false;
     }
@@ -83,7 +93,7 @@
             disabled={busy}
             onchange={(r) => {
               alerts[i] = r;
-              dirty = true;
+              dirtyAlerts = true;
             }}
           />
         {/each}
@@ -110,7 +120,7 @@
                     disabled={busy}
                     onchange={(e) => {
                       codes[i] = { ...c, name: e.currentTarget.value };
-                      dirty = true;
+                      dirtyCodes = true;
                     }}
                   /></td
                 >
@@ -122,7 +132,7 @@
                     disabled={busy}
                     onchange={(e) => {
                       codes[i] = { ...c, severity: e.currentTarget.value as Severity };
-                      dirty = true;
+                      dirtyCodes = true;
                     }}
                   >
                     {#each SEVERITIES as s (s)}<option value={s}>{SEVERITY_LABEL[s]}</option>{/each}
@@ -136,7 +146,7 @@
                     disabled={busy}
                     onchange={(e) => {
                       codes[i] = { ...c, guide: e.currentTarget.value };
-                      dirty = true;
+                      dirtyCodes = true;
                     }}
                   /></td
                 >
@@ -146,7 +156,9 @@
         </table>
       </section>
     {:else}
-      <Banner tone="neutral">2단계 항목 — 전도·무동작은 현장 검증 후 적용합니다 (DISC-042)</Banner>
+      <Banner tone="neutral"
+        >시나리오별 등급은 2단계(2026-10 ~) 적용 항목 — 전도·무동작은 현장 검증 후 잠금을 풉니다 (FR-036 · DISC-042)</Banner
+      >
       <section
         class="rounded-card border-border bg-surface divide-border-subtle divide-y border"
         aria-label="시나리오 등급"
@@ -166,7 +178,13 @@
     {#if data.tab !== 'scenarios'}
       <div class="gap-inline-sm flex items-center">
         <Button onclick={save} disabled={busy || !dirty}>저장</Button>
-        <span class="text-body-sm text-fg-muted">{dirty ? '저장되지 않은 변경이 있습니다' : '변경 없음'}</span>
+        <span class="text-body-sm text-fg-muted"
+          >{dirty ? '저장되지 않은 변경이 있습니다' : '변경 없음'}{data.tab === 'alerts' && dirtyCodes
+            ? ' · 고장코드 탭에 미저장 변경'
+            : data.tab === 'codes' && dirtyAlerts
+              ? ' · 알림 기준 탭에 미저장 변경'
+              : ''}</span
+        >
       </div>
     {/if}
   </div>

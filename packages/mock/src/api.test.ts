@@ -136,10 +136,12 @@ describe('[FR-020] 프로토콜 관리 (B4-02)', () => {
     expect(alert.alerts.map((a) => a.kind)).toEqual(['error', 'voltage', 'pipe']);
     const missing = await api.testSample('PV-001', JSON.parse(samples[2]!.json));
     expect(missing.errors.map((e) => e.path)).toEqual(expect.arrayContaining(['gps.latitude', 'power']));
+    expect(missing.alerts.map((a) => a.kind)).toEqual(['harness']); // 오류 샘플도 알림 미리보기
     const wrong = await api.testSample('PV-001', JSON.parse(samples[3]!.json));
     expect(wrong.errors.map((e) => e.path)).toEqual(
       expect.arrayContaining(['power.voltage_value', 'gps.fix_status', 'harness.disconnected']),
     );
+    expect(wrong.alerts.map((a) => a.kind)).toEqual(['error', 'comm']); // 타입이 틀린 harness/gps 값은 알림으로 오인하지 않는다
   });
   it('업로드: 깨진 정의는 행 경로·사유 · 정상 정의는 테스트 버전 추가', async () => {
     const api = bootMock({ capture: true });

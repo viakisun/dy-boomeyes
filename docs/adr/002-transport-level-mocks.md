@@ -30,4 +30,4 @@ relates_to: [IF-009, IF-010, IF-006]
 - [x] 화면은 인터페이스만 의존. `@boomeyes/mock` import는 앱 조립 지점(`+layout.ts`)에서만(ESLint 경계 규칙).
 - [x] `?state=`·`?capture=1`은 mock 구현이 해석(시각 고정 `meta.fixed_clock`). 화면은 `new Date()` 대신 `data.clock`.
 - [x] 브라우저 `Date`·`Math.random` 프록시(캡처 도구의 init script)는 금지 — MapLibre 로드를 막는다(QA §3).
-- [ ] 최하층(`packages/domain`) 런타임 의존 추가는 두 앱 번들에 실린다 — W1 `yaml`(프로토콜 업로드 파싱) 승격 시 번들 크기 확인 후 여기에 기록.
+- [x] 최하층(`packages/domain`) 런타임 의존 추가는 두 앱 번들에 실린다 — W1 `yaml`(프로토콜 업로드 파싱)은 domain에 올리지 않고 `apps/web`에만 둔다(PWA 미사용 · 화면이 파싱해 객체를 API에 넘김).

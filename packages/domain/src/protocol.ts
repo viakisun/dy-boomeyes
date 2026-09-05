@@ -9,6 +9,8 @@ export interface FieldSpec {
   /** 샘플 JSON 키가 ssot 필드명과 다를 때 (별첨 JSON v1.0 vs 프로토콜 시트 불일치 — 설계서 2.6) */
   alias?: string;
   type: FieldType;
+  /** 숫자 필드의 단위(V · m · dBm · m³ …) — number 타입은 필수 (AC-2 단위 검증) */
+  unit?: string;
   required?: boolean;
   nullable?: boolean;
   enum?: readonly string[];
@@ -58,7 +60,7 @@ export const CPB_V0_1: ProtocolDef = {
         s('controller_id', { required: true }),
         s('site_id', { required: true }),
         s('timestamp', { required: true }),
-        n('sequence'),
+        n('sequence', { unit: 'count' }),
       ],
     },
     {
@@ -66,11 +68,11 @@ export const CPB_V0_1: ProtocolDef = {
       key: 'gps',
       required: true,
       fields: [
-        n('latitude', { required: true, min: -90, max: 90 }),
-        n('longitude', { required: true, min: -180, max: 180 }),
-        n('accuracy'),
-        n('speed'),
-        n('heading'),
+        n('latitude', { required: true, min: -90, max: 90, unit: 'deg' }),
+        n('longitude', { required: true, min: -180, max: 180, unit: 'deg' }),
+        n('accuracy', { unit: 'm' }),
+        n('speed', { unit: 'km/h' }),
+        n('heading', { unit: 'deg' }),
         s('fix_status', { enum: ['fixed', 'no-fix'] }),
       ],
     },
@@ -80,7 +82,7 @@ export const CPB_V0_1: ProtocolDef = {
       required: true,
       fields: [
         s('network_type', { alias: 'type', required: true }),
-        n('signal_strength'),
+        n('signal_strength', { unit: 'dBm' }),
         s('carrier'),
         s('ip_address'),
         s('last_connected_at'),
@@ -110,7 +112,7 @@ export const CPB_V0_1: ProtocolDef = {
       fields: [
         s('channel', { required: true }),
         s('direction', { enum: ['input', 'output'] }),
-        n('value', { required: true }),
+        n('value', { required: true, unit: 'level' }),
         s('status'),
       ],
     },
@@ -120,7 +122,7 @@ export const CPB_V0_1: ProtocolDef = {
       required: true,
       fields: [
         s('voltage_status', { required: true, enum: ['normal', 'abnormal'] }),
-        n('voltage_value', { required: true }),
+        n('voltage_value', { required: true, unit: 'V' }),
         s('phase_status'),
         s('alert_level'),
       ],
@@ -150,9 +152,9 @@ export const CPB_V0_1: ProtocolDef = {
       required: true,
       fields: [
         s('part_type', { required: true, enum: ['pipe', 'filter'] }),
-        n('usage_value', { required: true }),
-        n('threshold', { required: true }),
-        n('remaining_ratio'),
+        n('usage_value', { required: true, unit: 'm³' }),
+        n('threshold', { required: true, unit: 'm³' }),
+        n('remaining_ratio', { unit: 'ratio' }),
         b('alert_required'),
       ],
     },
@@ -207,6 +209,8 @@ export function validateProtocol(def: unknown): { ok: boolean; errors: Issue[] }
       names.add(String(f.name));
       if (!TYPES.includes(f.type as FieldType))
         errors.push({ path: `${fp}.type`, reason: `타입은 ${TYPES.join('|')}` });
+      if (f.type === 'number' && (typeof f.unit !== 'string' || !f.unit))
+        errors.push({ path: `${fp}.unit`, reason: '숫자 필드는 단위(unit) 필요' });
       if (f.enum !== undefined && (!Array.isArray(f.enum) || f.enum.some((e) => typeof e !== 'string')))
         errors.push({ path: `${fp}.enum`, reason: 'enum은 문자열 배열' });
     });
@@ -280,36 +284,43 @@ export function parseSample(def: ProtocolDef, sample: unknown): ParseResult {
   if (typeof sample.protocol_version === 'string' && sample.protocol_version !== def.version)
     r.errors.push({ path: 'protocol_version', reason: `정의 버전 ${def.version}과 다름` });
   r.ok = r.errors.length === 0;
-  if (r.ok) r.alerts = previewAlerts(sample);
+  // 오류가 있어도 파싱 가능한 값에서 발생할 알림을 미리 본다(D4 장면 8: 오류 샘플 → 알림 확인). 타입이 틀린 값은 previewAlerts가 무시
+  r.alerts = previewAlerts(sample);
   return r;
 }
 
 const SEV: Record<string, Severity> = { critical: 'critical', warning: 'warning', info: 'info' };
-/** 정상 파싱된 샘플에서 발생할 알림 — 알림 8종 중 텔레메트리 유래 6종(FR-011) */
+/** 샘플에서 발생할 알림 — 알림 8종 중 텔레메트리 유래 6종(FR-011). 타입이 맞는 값만 본다(오류 샘플에서도 best-effort) */
 export function previewAlerts(sample: Record<string, unknown>): ParseResult['alerts'] {
   const out: ParseResult['alerts'] = [];
-  const err = sample.error as { error_code?: string | null; severity?: string; message?: string } | undefined;
-  if (err?.error_code)
-    out.push({ kind: 'error', severity: SEV[err.severity ?? ''] ?? 'critical', message: `고장코드 ${err.error_code}` });
-  const power = sample.power as { voltage_status?: string; voltage_value?: number } | undefined;
-  if (power && power.voltage_status !== 'normal')
-    out.push({ kind: 'voltage', severity: 'critical', message: `380V 전압 이상 (${power.voltage_value ?? '-'}V)` });
-  const harness = sample.harness as { disconnected?: boolean } | undefined;
-  if (harness?.disconnected) out.push({ kind: 'harness', severity: 'critical', message: '하네스 단선' });
-  const net = sample.network as { status?: string } | undefined;
-  if (net?.status && net.status !== 'connected')
+  const obj = (v: unknown) => (isObj(v) ? v : undefined);
+  const err = obj(sample.error);
+  if (typeof err?.error_code === 'string' && err.error_code)
+    out.push({
+      kind: 'error',
+      severity: SEV[String(err.severity ?? '')] ?? 'critical',
+      message: `고장코드 ${err.error_code}`,
+    });
+  const power = obj(sample.power);
+  if (power?.voltage_status === 'abnormal')
+    out.push({
+      kind: 'voltage',
+      severity: 'critical',
+      message: `380V 전압 이상 (${typeof power.voltage_value === 'number' ? power.voltage_value : '-'}V)`,
+    });
+  const harness = obj(sample.harness);
+  if (harness?.disconnected === true) out.push({ kind: 'harness', severity: 'critical', message: '하네스 단선' });
+  const net = obj(sample.network);
+  if (net?.status === 'lost' || net?.status === 'degraded')
     out.push({ kind: 'comm', severity: 'warning', message: `통신 ${net.status}` });
-  const gps = sample.gps as { fix_status?: string } | undefined;
-  if (gps?.fix_status && gps.fix_status !== 'fixed') out.push({ kind: 'gps', severity: 'info', message: 'GPS 미수신' });
-  const parts = (sample.consumables ?? []) as {
-    part_type?: string;
-    usage_value?: number;
-    threshold?: number;
-    alert_required?: boolean;
-  }[];
+  const gps = obj(sample.gps);
+  if (gps?.fix_status === 'no-fix') out.push({ kind: 'gps', severity: 'info', message: 'GPS 미수신' });
+  const parts = Array.isArray(sample.consumables) ? sample.consumables.filter(isObj) : [];
   for (const p of parts) {
-    const ratio = p.threshold ? (p.usage_value ?? 0) / p.threshold : 0;
-    if (p.alert_required || ratio >= 0.9)
+    const usage = typeof p.usage_value === 'number' ? p.usage_value : 0;
+    const threshold = typeof p.threshold === 'number' ? p.threshold : 0;
+    const ratio = threshold ? usage / threshold : 0;
+    if (p.alert_required === true || ratio >= 0.9)
       out.push({
         kind: p.part_type === 'filter' ? 'filter' : 'pipe',
         severity: ratio >= 1 ? 'critical' : 'warning',

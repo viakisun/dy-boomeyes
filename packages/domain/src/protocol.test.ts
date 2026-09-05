@@ -33,6 +33,18 @@ describe('[FR-020] 프로토콜 정의 cpb.v0.1 ↔ ssot 대조', () => {
       expect.arrayContaining(['version', 'groups[0].group', 'groups[0].required', 'groups[0].fields[0].type']),
     );
   });
+  it('숫자 필드는 단위(unit)가 있어야 한다 · 정의의 숫자 필드는 전부 단위를 가진다', () => {
+    const noUnit = {
+      version: 'cpb.v0.9',
+      groups: [{ group: 'g', key: 'g', required: true, fields: [{ name: 'x', type: 'number' }] }],
+    };
+    expect(validateProtocol(noUnit).errors).toContainEqual({
+      path: 'groups[0].fields[0].unit',
+      reason: '숫자 필드는 단위(unit) 필요',
+    });
+    for (const g of CPB_V0_1.groups)
+      for (const f of g.fields) if (f.type === 'number') expect(f.unit, `${g.group}.${f.name}`).toBeTruthy();
+  });
 });
 
 describe('[FR-020] 샘플 파싱 (정상 · 필드 누락 · 타입 오류)', () => {
@@ -42,12 +54,14 @@ describe('[FR-020] 샘플 파싱 (정상 · 필드 누락 · 타입 오류)', ()
     expect(r.ok).toBe(true);
     expect(r.alerts).toEqual([]);
   });
-  it('필수 필드 누락 → 경로·사유', () => {
+  it('필수 필드 누락 → 경로·사유 · 오류가 있어도 파싱 가능한 값의 알림은 미리 본다(장면 8)', () => {
     const s = sample();
     delete (s.gps as Record<string, unknown>).latitude;
     delete s.power;
+    s.harness = { disconnected: true };
     const r = parseSample(CPB_V0_1, s);
     expect(r.ok).toBe(false);
+    expect(r.alerts.map((a) => a.kind)).toEqual(['harness']);
     expect(r.errors).toEqual(
       expect.arrayContaining([
         { path: 'gps.latitude', reason: '필수 필드 누락' },
@@ -60,7 +74,9 @@ describe('[FR-020] 샘플 파싱 (정상 · 필드 누락 · 타입 오류)', ()
     (s.power as Record<string, unknown>).voltage_value = '380';
     (s.gps as Record<string, unknown>).fix_status = 'lost';
     (s.io as Record<string, unknown>[])[0]!.extra = 1;
+    (s.harness as Record<string, unknown>).disconnected = 'no'; // 문자열 — 알림으로 오인하지 않는다
     const r = parseSample(CPB_V0_1, s);
+    expect(r.alerts).toEqual([]);
     expect(r.errors).toEqual(
       expect.arrayContaining([
         { path: 'power.voltage_value', reason: '타입 number 필요, string' },

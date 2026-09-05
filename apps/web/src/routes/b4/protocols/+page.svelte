@@ -17,6 +17,7 @@
     toast,
     type Column,
   } from '@boomeyes/ui';
+  import { untrack } from 'svelte';
   import { parse as parseYaml } from 'yaml';
   import { session } from '$lib/session.svelte';
   let { data } = $props();
@@ -61,14 +62,17 @@
         toast(`테스트 버전 등록 — ${r.version.version}`);
         await invalidateAll();
       }
+    } catch (e) {
+      toast(`업로드 실패 — ${(e as Error).message}`);
     } finally {
       busy = false;
     }
   }
 
   // 샘플 테스트 (AC-3)
-  let sampleId = $state(data.samples[0]?.id ?? '');
-  let sampleText = $state(data.samples[0]?.json ?? '');
+  // 편집 사본 — 최초 1회만 데이터에서 초기화(untrack: 이후엔 pickSample이 갱신)
+  let sampleId = $state(untrack(() => data.samples[0]?.id ?? ''));
+  let sampleText = $state(untrack(() => data.samples[0]?.json ?? ''));
   let result = $state<ParseResult | { ok: false; errors: Issue[]; warnings: Issue[]; alerts: [] } | null>(null);
   const tabs = $derived(data.samples.map((s) => ({ id: s.id, label: s.label })));
   function pickSample(id: string) {
@@ -90,7 +94,11 @@
       };
       return;
     }
-    result = await data.api.testSample(selected.id, obj);
+    try {
+      result = await data.api.testSample(selected.id, obj);
+    } catch (e) {
+      toast(`샘플 테스트 실패 — ${(e as Error).message}`);
+    }
   }
 </script>
 
@@ -170,7 +178,9 @@
           {#if result}
             <StatusPill
               tone={result.ok ? 'success' : 'danger'}
-              label={result.ok ? `정상 파싱 · 알림 ${result.alerts.length}건` : `오류 ${result.errors.length}건`}
+              label={result.ok
+                ? `정상 파싱 · 알림 ${result.alerts.length}건`
+                : `오류 ${result.errors.length}건 · 알림 ${result.alerts.length}건`}
               size="sm"
             />
           {/if}
@@ -191,7 +201,7 @@
           {#if result.warnings.length}
             <p class="text-label-sm text-fg-muted">경고 {result.warnings.length}건 — 정의에 없는 필드는 무시됩니다</p>
           {/if}
-          {#if result.ok && result.alerts.length}
+          {#if result.alerts.length}
             <div class="gap-inline-xs flex flex-wrap" aria-label="발생 알림 미리보기">
               {#each result.alerts as a, i (i)}
                 <Badge tone={SEVERITY_TONE[a.severity]} variant="subtle"
@@ -199,7 +209,7 @@
                 >
               {/each}
             </div>
-          {:else if result.ok}
+          {:else}
             <p class="text-label-sm text-fg-muted">발생할 알림 없음</p>
           {/if}
         {/if}
@@ -233,7 +243,9 @@
             </span>
             <div class="gap-inline-xs flex flex-wrap">
               {#each g.fields as f (f.name)}
-                <Badge tone={f.required ? 'accent' : 'neutral'} variant="outline">{f.alias ?? f.name}:{f.type}</Badge>
+                <Badge tone={f.required ? 'accent' : 'neutral'} variant="outline"
+                  >{f.alias ?? f.name}:{f.type}{f.unit ? ` (${f.unit})` : ''}</Badge
+                >
               {/each}
             </div>
           </li>
