@@ -20,6 +20,21 @@ const PAGES: { scr: string; url: string; ready: (page: Page) => Promise<void> }[
     ready: (p) => expect(p.getByRole('button', { name: '접수', exact: true })).toBeVisible(),
   },
   {
+    scr: SCR['A1-08'],
+    url: '/a1/inbox/C-105?sheet=complete&state=sheet&capture=1',
+    ready: (p) => expect(p.locator('dialog[open][data-bottom-sheet]')).toBeVisible(),
+  },
+  {
+    scr: SCR['A3-02'],
+    url: '/a3/sites?state=sites&capture=1',
+    ready: (p) => expect(p.locator('ul[aria-label="현장"] li')).toHaveCount(2),
+  },
+  {
+    scr: SCR['A3-05'],
+    url: '/a3/tasks?state=inbox&capture=1',
+    ready: (p) => expect(p.locator('ul[aria-label="업무"] li')).toHaveCount(4),
+  },
+  {
     scr: SCR['A2-02'],
     url: '/a2/today?state=today&capture=1',
     ready: (p) => expect(p.getByRole('button', { name: '출근 체크인' })).toBeVisible(),

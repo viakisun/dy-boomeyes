@@ -35,6 +35,28 @@ test('[A1-03] C-105 접수 → in-progress · 이력 · 완료 확인 · 정비 
   await expect(page.getByRole('button', { name: '완료 확인' })).toBeVisible();
 });
 
+test('[A1-08] 완료 처리 시트: 접수 후 완료 확인 → ?sheet=complete 시트 → 조치 내용 필수 → done · 이력 note · 시트는 A1-03 위 [FR-008]', async ({
+  page,
+}) => {
+  // 실사용 흐름(live) — capture 모드는 화면 코드별 db 캐시라 모달(A1-08)↔부모(A1-03) 이동 시 db가 바뀐다(QA §3)
+  await page.goto('/a1/login');
+  await page.getByRole('button', { name: '입장' }).click();
+  await page.goto('/a1/inbox/C-105');
+  await page.getByRole('button', { name: '접수', exact: true }).click();
+  await expect(page.getByText('진행 중', { exact: true })).toBeVisible();
+  await page.getByRole('button', { name: '완료 확인' }).click();
+  await expect(page).toHaveURL(/sheet=complete/);
+  await expect(page.locator(`[data-scr="${SCR['A1-08']}"]`).first()).toBeVisible();
+  const sheet = page.locator('dialog[open][data-bottom-sheet]');
+  await expect(sheet).toContainText('완료 처리');
+  await expect(sheet.getByRole('button', { name: '완료 확인' })).toBeDisabled(); // 조치 내용 필수
+  await sheet.getByLabel('조치 내용(필수)').fill('전압 릴레이 교체');
+  await sheet.getByRole('button', { name: '완료 확인' }).click();
+  await expect(page).toHaveURL(/\/a1\/inbox\/C-105$/); // 시트 닫힘
+  await expect(page.getByText('완료 상태 — 할 일이 없습니다')).toBeVisible(); // in-progress → done
+  await expect(page.locator('ol[aria-label="이력"] li').first()).toContainText('전압 릴레이 교체');
+});
+
 test('[A1-02] realtime 알림 도착 → 앱바 배지 · 토스트 · 배지 탭 → 업무 C-105 [FR-011]', async ({ page }) => {
   await page.goto('/a1/login');
   await page.getByRole('button', { name: '입장' }).click();

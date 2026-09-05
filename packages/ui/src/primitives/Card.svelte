@@ -15,6 +15,8 @@
   }: HTMLAttributes<HTMLElement> & {
     variant?: 'default' | 'interactive' | 'brand' | 'flat';
     selected?: boolean;
+    /** as="a"일 때 링크 대상 */
+    href?: string;
     padding?: 'none' | 'sm' | 'md';
     as?: 'div' | 'article' | 'section' | 'button' | 'a';
     class?: string;

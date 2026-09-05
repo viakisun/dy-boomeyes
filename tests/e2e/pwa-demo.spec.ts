@@ -49,15 +49,16 @@ test('[A1-02] 장면 3: safety01 세션 · C-105 접수 → 진행 중 · 정비
   );
 });
 
-test('[A1-03] 장면 5: 정비 호출 이력이 있는 C-105(진행 중) · 완료 확인 · A1-08 시트 경로는 A1-03 위 모달(W2) · 기록(A1-06)은 웨이브 2 자리 화면 [FR-008] [FR-024]', async ({
+test('[A1-03] 장면 5: 정비 호출 이력이 있는 C-105(진행 중) · 완료 확인 → A1-08 시트 · 기록(A1-06)은 자리 화면(B8까지) [FR-008] [FR-024]', async ({
   page,
 }) => {
   await page.goto('/a1/inbox/C-105?scene=5');
   await expect(page.locator(root(SCR['A1-03']))).toBeVisible();
   await expect(page.locator('ol[aria-label="이력"]')).toContainText('정비 담당 호출');
   await expect(page.getByRole('button', { name: '완료 확인' })).toBeVisible();
-  await page.goto(`${SCREENS['A1-08'].route.replace('[case]', 'C-105')}&scene=5`); // /a1/inbox/C-105?sheet=complete — A1-03과 같은 경로
-  await expect(page.locator(root(SCR['A1-03']))).toBeVisible();
+  await page.goto(`${SCREENS['A1-08'].route.replace('[case]', 'C-105')}&scene=5`); // /a1/inbox/C-105?sheet=complete — A1-03 위 시트
+  await expect(page.locator(root(SCR['A1-08'])).first()).toBeVisible();
+  await expect(page.locator('dialog[open][data-bottom-sheet]')).toContainText('완료 처리');
   await page.goto(`${SCREENS['A1-06'].route}?scene=5`);
   await expect(page.locator(root(SCR['A1-06']))).toContainText('웨이브 2에서 구현됩니다');
   await expect(page.locator('[data-demo-bar]')).toContainText('장면 5/10');

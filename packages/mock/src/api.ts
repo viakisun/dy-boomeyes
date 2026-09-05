@@ -87,6 +87,7 @@ export function createMockApi(db: Db, opts: { latencyMs?: number } = {}): ApiCli
     },
     async completeCase(id, by, note) {
       await wait();
+      if (!note?.trim()) throw new Error('조치 내용은 필수입니다'); // A1-08 완료 시트(task-escalation AC-9)
       const c = must(db, id);
       c.state = transition('task', 'in-progress', 'done');
       c.history.push({ at: clock.iso(), by, action: '완료 확인', note });
@@ -96,6 +97,22 @@ export function createMockApi(db: Db, opts: { latencyMs?: number } = {}): ApiCli
       await wait();
       const c = must(db, id);
       c.history.push({ at: clock.iso(), by, action: '정비 담당 호출', note: 'maint01 통보' });
+      return c;
+    },
+    async requestConfirm(id, by, note) {
+      await wait();
+      const c = must(db, id);
+      c.history.push({ at: clock.iso(), by, action: '확인 요청(본사)', note });
+      db.alerts.unshift({
+        id: `AL-R${String(db.alerts.length + 1).padStart(2, '0')}`,
+        deviceId: c.deviceId ?? '',
+        kind: 'doc',
+        severity: 'info',
+        message: `${c.id} 본사 확인 요청 — ${by}`,
+        at: clock.iso(),
+        acked: false,
+        caseId: c.id,
+      });
       return c;
     },
     async requests(scope) {
