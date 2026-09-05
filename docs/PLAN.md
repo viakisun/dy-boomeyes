@@ -8,9 +8,10 @@ W0는 9/5에 선행 완료(회고 `docs/retro/W0.md` · 방법론 v1.1). `curren
 
 | 산출 | 상태 (2026-09-05) |
 |---|---|
-| 기능 4 구현·merge — task-escalation · driver-daily · admin-protocol-rules · video-basics(specs `draft` → 구현됨, 잔여 AC는 각 `tasks.md`) | 완료 — main 33 커밋 · e2e 56 · axe 15 · 캡처 22장(`--wave 1`) |
-| 다크 렌더(shell-auth AC-6) — 완료(`?theme=` · 웹 토글 · `capture --dark` · e2e 6) · 시각 회귀 기준선(0.2%) · demo-scripts 장면 1~8 — 완료(`?scene=N` · DemoBar · 장면 1 타임라인 · 장면 6 1시간 경과 · e2e 10 · W2 화면은 자리) · PWA manifest/SW — 완료(AC-7 · e2e 2) · `maintenance` 로그인 경로 — 완료(B0-01 카드 5 · e2e) · tokens:lint 잔여 — 완료(duration-N · border-N · ring-N · max-w-sm… 규칙 + duration-*/border-strong/border-radio 유틸리티) · 카탈로그 검사 — 완료(`tokens:check`에 catalog) · PWA 측 AX-1 픽스처 — 완료(`A1-04:plite` `A1-05:plite` · e2e 2) | 진행 예정 |
-| 사용자 입력 | 리모트 리포 → CI 1회 녹색 · AWS 계정(DISC-006) → 프리뷰 → ADR-007 · DISC-033/036/038/040/042/043 |
+| 기능 4 구현·merge — task-escalation · driver-daily · admin-protocol-rules · video-basics(specs `draft` → 구현됨, 잔여 AC는 각 `tasks.md`) | 완료 — e2e 78 · axe 15 · 캡처 25장 + 다크 16장(`pnpm capture --dark`) |
+| 다크 렌더(shell-auth AC-6) — 완료(`?theme=` · 웹 토글 · `capture --dark` · e2e 6) · 시각 회귀 기준선(0.2%) — **ADR-008 Proposed, 사용자 결정 대기**(저장 위치 A 리포/B CI/C S3 · 범위) · demo-scripts 장면 1~8 — 완료(`?scene=N` · DemoBar · 장면 1 타임라인 · 장면 6 1시간 경과 · e2e 10 · W2 화면은 자리) · PWA manifest/SW — 완료(AC-7 · e2e 2) · `maintenance` 로그인 경로 — 완료(B0-01 카드 5 · e2e) · tokens:lint 잔여 — 완료(duration-N · border-N · ring-N · max-w-sm… 규칙 + duration-*/border-strong/border-radio 유틸리티) · 카탈로그 검사 — 완료(`tokens:check`에 catalog) · PWA 측 AX-1 픽스처 — 완료(`A1-04:plite` `A1-05:plite` · e2e 2) | 진행 예정 |
+| 사용자 입력 | 리모트 리포 → CI 1회 녹색 · AWS 계정(DISC-006) → 프리뷰 → ADR-007 · ADR-008(시각 회귀 기준선) · DISC-033/036/038/040/042/043 |
+| W1 Exit 대비 | 장면 1~8 mock 재생 ✓(`?scene=N`, W2 화면은 자리) · states 전수 캡처 ✓(41장 fail 0) · axe critical 0 ✓ — 프리뷰 URL·시각 회귀 기준선만 사용자 입력 대기 · 회고는 웨이브 종료(10/3) 또는 사용자 지시 시 |
 
 ### W0 스캐폴드 — 완료(9/5)
 
