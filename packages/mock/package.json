@@ -12,7 +12,8 @@
     "lint": "eslint ."
   },
   "dependencies": {
-    "@boomeyes/domain": "workspace:*"
+    "@boomeyes/domain": "workspace:*",
+    "@boomeyes/video": "workspace:*"
   },
   "devDependencies": {
     "typescript": "^6.0.3",

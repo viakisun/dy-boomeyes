@@ -1,7 +1,15 @@
 // 정적 SPA — 서버 렌더 없음 (ADR-001 · ADR-007). 화면 진입마다 mock 부트(?state= · ?capture=1) + 역할 가드
 import { redirect } from '@sveltejs/kit';
 import { SCREENS, canAccess, screenForPath, type RoleId, type ScrId } from '@boomeyes/domain';
-import { bootMock, clock, createMockRealtime, demoSession, optionsFromUrl, resetMock } from '@boomeyes/mock';
+import {
+  bootMock,
+  clock,
+  createMockMedia,
+  createMockRealtime,
+  demoSession,
+  optionsFromUrl,
+  resetMock,
+} from '@boomeyes/mock';
 import { session } from '$lib/session.svelte';
 import type { LayoutLoad } from './$types';
 
@@ -20,5 +28,15 @@ export const load: LayoutLoad = ({ url }) => {
     throw redirect(302, `/login?next=${encodeURIComponent(url.pathname + url.search)}`);
   const forbidden = !!(user && screen && !canAccess(user.role, screen));
   const realtime = createMockRealtime({ enabled: !opts.capture });
-  return { api, clock, realtime, resetMock, screen: screen as ScrId | undefined, capture: !!opts.capture, forbidden };
+  const media = createMockMedia(api.db);
+  return {
+    api,
+    clock,
+    realtime,
+    media,
+    resetMock,
+    screen: screen as ScrId | undefined,
+    capture: !!opts.capture,
+    forbidden,
+  };
 };

@@ -254,6 +254,8 @@ export function seed(): Db {
       at: t(6 * H),
       acked: true,
       caseId: 'C-103',
+      cameraId: 'CAM-3-2',
+      bbox: { x: 0.58, y: 0.4, w: 0.2, h: 0.5 },
     },
     {
       id: 'AL-004',

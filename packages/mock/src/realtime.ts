@@ -9,6 +9,8 @@ const SCRIPT: Omit<Alert, 'id' | 'at' | 'acked'>[] = [
     severity: 'warning',
     message: 'CPB-003 호스 주변 인원 접근 (AI 판단)',
     caseId: 'C-105',
+    cameraId: 'CAM-3-2',
+    bbox: { x: 0.58, y: 0.4, w: 0.2, h: 0.5 },
   },
   {
     deviceId: 'CPB-002',

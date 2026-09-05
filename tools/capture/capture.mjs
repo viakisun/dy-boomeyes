@@ -84,6 +84,14 @@ for (const s of screens) {
       const dialog = await page.$('dialog[open][data-capture-dialog], [data-capture-dialog]:not(dialog)');
       const frame = await page.$('[data-capture-frame]');
       const target = dialog ?? (phone ? frame : null);
+      if (phone && frame && !dialog) {
+        // 긴 앱 화면: sticky 하단 내비가 뷰포트 바닥(문서 중간)에 찍히지 않도록 뷰포트를 문서 높이로
+        const h = await page.evaluate(() => Math.ceil(document.documentElement.scrollHeight));
+        if (h > 900) {
+          await page.setViewportSize({ width: 440, height: h });
+          await page.waitForTimeout(200);
+        }
+      }
       if (target) await target.screenshot({ path: join(OUT, `${name}.png`) });
       else if (phone) await page.screenshot({ path: join(OUT, `${name}.png`) });
       else {

@@ -46,11 +46,16 @@ export interface Device {
     boomAngle: number;
   };
 }
+/** FR-034 카메라 헬스 — 정지화면·흐림·가림·수신 끊김이면 "정상" 표시 금지 */
+export type CameraHealth = 'ok' | 'frozen' | 'blurry' | 'occluded' | 'lost';
 export interface Camera {
   id: string;
   deviceId: string;
   kind: 'general' | 'ai';
   state: CameraState;
+  health?: CameraHealth;
+  /** 복구 후 누락분 재전송 표시 (IF-018) */
+  backfill?: { segments: number; since: string };
   ingest: 'E1' | 'E2' | 'E3' | 'E4' | 'E5';
   live: 'L1' | 'L2' | 'L3';
   recording: 'server' | 'sd' | 'nvr' | 'edge';
@@ -66,6 +71,9 @@ export interface Alert {
   at: string;
   acked: boolean;
   caseId: string | null;
+  /** AI 카메라 이벤트(IF-015) — 카메라 · 정규화 bbox(0~1) */
+  cameraId?: string;
+  bbox?: { x: number; y: number; w: number; h: number };
 } // ENT-08
 export interface Case {
   id: string;

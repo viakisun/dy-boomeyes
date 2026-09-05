@@ -34,6 +34,16 @@ const PAGES: { scr: string; url: string; ready: (page: Page) => Promise<void> }[
     url: '/a2/device?state=mydev&capture=1',
     ready: (p) => expect(p.getByRole('meter', { name: '필터 도달률' })).toBeVisible(),
   },
+  {
+    scr: SCR['A1-04'],
+    url: '/a1/monitor?state=monitor&capture=1',
+    ready: (p) => expect(p.getByText('AI 판단 불가').first()).toBeVisible(),
+  },
+  {
+    scr: SCR['A1-05'],
+    url: '/a1/monitor/CPB-003?state=dev&capture=1',
+    ready: (p) => expect(p.getByText('E-021').first()).toBeVisible(),
+  },
 ];
 
 for (const { scr, url, ready } of PAGES) {

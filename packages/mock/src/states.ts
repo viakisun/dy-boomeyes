@@ -17,7 +17,24 @@ export const FIXTURES: Record<string, Fixture> = {
     alerts: [],
     cases: db.cases.filter((c) => c.state === 'done'),
   }),
-  'B1-02M:cam': (db) => db,
+  // 영상: 모달은 AI 채널에 복구 후 누락분 재전송 표시 · 모니터는 오프라인/AI 판단 불가/흐림 채널을 한 화면에 (video-basics AC-1 · AC-5)
+  'B1-02M:cam': (db) => ({
+    ...db,
+    cameras: db.cameras.map((c) =>
+      c.id === 'CAM-3-2' ? { ...c, backfill: { segments: 3, since: clock.minus(40 * MIN) } } : c,
+    ),
+  }),
+  'A1-04:monitor': (db) => ({
+    ...db,
+    cameras: db.cameras.map((c) =>
+      c.id === 'CAM-1-1'
+        ? { ...c, state: 'offline' as const, health: 'lost' as const }
+        : c.id === 'CAM-2-1'
+          ? { ...c, health: 'blurry' as const }
+          : c,
+    ),
+  }),
+  'A1-05:dev': (db) => db,
   'A1-02:filter': (db) => db, // 필터 칩은 URL이 결정 — 시드 동일
   'B1-03:inbox': (db) => db,
   // 에스컬레이션 화면: C-105를 65분 전 발행으로 두면 escalations()가 escalated로 전이한다 (AC-7)

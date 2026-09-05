@@ -1,7 +1,7 @@
 # admin-protocol-rules — 기술 설계
 
 ## 레이아웃 (WebShell · compact)
-- **B4-02 프로토콜 관리**: 상단 `DataTable` 버전 목록(버전 · 운영/테스트 · 필드 수 · 마지막 수신 · 상태) · 인스펙터(선택 버전 필드 표: 이름 · 타입 · 단위 · 필수) · 하단 2패널 — `ProtocolUploader`(`FileUpload` + 검증 결과 `List`: 행 번호 · 사유) · 샘플 테스트(`Tabs` 샘플 3 · `<pre>` JSON(`sys.type.code-md`) · 결과 `Banner` + 발생 알림 미리보기).
+- **B4-02 프로토콜 관리**: 상단 `DataTable` 버전 목록(버전 · 운영/테스트 · 필드 수 · 마지막 수신 · 상태) · 인스펙터(선택 버전 필드 표: 이름 · 타입 · 단위 · 필수) · 하단 2패널 — `ProtocolUploader`(`FileUpload` + 검증 결과 `List`: 행 번호 · 사유) · 샘플 테스트(`Tabs` 샘플 4 · `<pre>` JSON(`sys.type.code-md`) · 결과 `Banner` + 발생 알림 미리보기).
 - **B4-05 알림 기준**: `Tabs`(알림 기준 · 고장코드 · 시나리오 등급) · `RuleThresholdRow` 목록(인라인 `TextField`/`Select` · 저장 바 · 변경 표시) · `Timeline` 변경 이력. 시나리오 탭의 전도·무동작 행은 잠금 `Badge`("현장 검증 후", DISC-042).
 
 ## 컴포넌트 · 토큰

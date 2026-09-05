@@ -8,6 +8,7 @@ import { applyState } from './states';
 export { clock, H, MIN, DAY } from './clock';
 export { seed, demoUsers, type Db } from './seed';
 export { createMockRealtime } from './realtime';
+export { createMockMedia } from './media';
 export { createMockApi } from './api';
 export { FIXTURES, applyState } from './states';
 

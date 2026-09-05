@@ -56,3 +56,25 @@ test('[B1-02] mock realtime 알림 도착 → 피드 상단·토스트 · 클릭
   await rows.first().locator('a').click();
   await expect(page).toHaveURL(/\/b1\/inbox\?case=C-105$/);
 });
+
+test('[B1-02M] 라이브/스냅샷 전환 · P-SD 소스 탭(서버·SD, NVR 없음) · 누락분 재전송 · bbox · SD 회수 [FR-004] [FR-005] [FR-034]', async ({
+  page,
+}) => {
+  await page.goto('/b1/dash?state=cam&capture=1&cam=CAM-3-2');
+  const dialog = page.locator('dialog[open]');
+  await expect(dialog).toBeVisible();
+  const player = dialog.locator('[data-camera="CAM-3-2"]');
+  await expect(player).toHaveAttribute('data-mode', 'snapshot'); // AI 채널 기본 스냅샷
+  await expect(player.locator('img[alt*="스냅샷"]')).toBeVisible();
+  await dialog.getByRole('button', { name: '라이브', exact: true }).click();
+  await expect(player.locator('video')).toHaveCount(1);
+  await expect(player.locator('video')).toHaveAttribute('src', /boom.*\.mp4/);
+  await expect(dialog.getByRole('tab', { name: '서버 녹화' })).toBeVisible();
+  await expect(dialog.getByRole('tab', { name: 'SD 녹화' })).toBeVisible();
+  await expect(dialog.getByRole('tab', { name: /NVR/ })).toHaveCount(0);
+  await expect(dialog.getByText(/누락분 재전송 3세그먼트/)).toBeVisible();
+  await expect(player.locator('svg[data-bbox] rect')).toHaveCount(1);
+  await dialog.getByRole('tab', { name: 'SD 녹화' }).click();
+  await expect(dialog.getByRole('list', { name: '저장 영상 목록' }).locator('li')).toHaveCount(2);
+  await expect(dialog.getByRole('button', { name: 'SD 구간 회수 요청' })).toBeVisible();
+});

@@ -2,7 +2,7 @@
   // B1-02 관제 대시보드 (specs/control-dashboard AC-1~5) · B1-02M 카메라 모달(?cam=)
   import { goto } from '$app/navigation';
   import { resolve } from '$app/paths';
-  import type { Alert, Device } from '@boomeyes/domain';
+  import { profileFlags, type Alert, type Device, type StorageSource } from '@boomeyes/domain';
   import { onMount } from 'svelte';
   import { MapView } from '@boomeyes/map';
   import {
@@ -17,7 +17,7 @@
     cx,
     toast,
   } from '@boomeyes/ui';
-  import { CameraTile } from '@boomeyes/video';
+  import { CameraTile, SOURCE_LABEL, VideoPlayer } from '@boomeyes/video';
   let { data } = $props();
   const LABEL = { normal: '정상', caution: '주의', fault: '고장', offline: '두절', maintenance: '정비' } as const;
   const ORDER = { fault: 0, offline: 1, caution: 2, maintenance: 3, normal: 4 } as const;
@@ -41,9 +41,23 @@
   const modalCam = $derived(data.cam ? (data.cameras.find((c) => c.id === data.cam) ?? null) : null);
   const modalDevice = $derived(modalCam ? data.devices.find((d) => d.id === modalCam.deviceId) : null);
   let source = $state('server');
+  // 모달: 현장 프로파일 → 저장 소스 탭 · 스냅샷 주기 (video-basics AC-4) · AI 이벤트 bbox (피드의 최신 이벤트)
+  const modalSite = $derived(modalDevice ? data.sites.find((s) => s.id === modalDevice.siteId) : undefined);
+  const modalFlags = $derived(profileFlags(modalSite?.videoProfile ?? 'P-SD'));
+  const modalSource = $derived<StorageSource>(
+    modalFlags.sources.includes(source as StorageSource) ? (source as StorageSource) : modalFlags.sources[0]!,
+  );
   // 실시간 알림(mock realtime, AC-3) — 도착분을 피드 상단에 붙이고 토스트
   let live = $state<Alert[]>([]);
   const feed = $derived([...live, ...data.alerts]);
+  const modalBoxes = $derived(
+    modalCam
+      ? feed
+          .filter((a) => a.cameraId === modalCam.id && a.bbox)
+          .slice(0, 1)
+          .map((a) => ({ ...a.bbox!, label: '사람', score: 0.91 }))
+      : [],
+  );
   onMount(() =>
     data.realtime.subscribe((e) => {
       if (e.type !== 'alert.raised') return;
@@ -195,7 +209,7 @@
       <h2 class="text-heading-sm">
         카메라 월 {#if selected}<span class="text-body-sm text-fg-muted">— {selected.unitNo}호기 2채널</span>{/if}
       </h2>
-      <div class="gap-inline-md rounded-card bg-media-bg p-inset-md grid grid-cols-2 md:grid-cols-4">
+      <div class="gap-inline-md rounded-card bg-media-bg p-inset-md grid grid-cols-2 md:grid-cols-4" data-theme="dark">
         {#each wallCams as c (c.id)}<CameraTile
             camera={c}
             deviceLabel="{data.devices.find((d) => d.id === c.deviceId)?.unitNo}호기"
@@ -266,48 +280,50 @@
             onclick={() => openCam(c.id)}>{c.kind === 'ai' ? 'AI · 붐 끝' : '일반 · 전방'}</Button
           >
         {/each}
-        <span class="gap-inline-xs ml-auto flex">
-          <Badge tone="info">라이브 {modalCam.live}</Badge><Badge tone="progress"
-            >녹화 {modalCam.recording} · {modalCam.retentionDays}일</Badge
-          ><Badge tone="neutral">이벤트 {modalCam.ingest}</Badge>
+        <span class="gap-inline-xs ml-auto flex flex-wrap">
+          <Badge tone="info">라이브 {modalCam.live}</Badge>
+          <Badge tone="danger" variant={modalCam.state === 'recording' ? 'solid' : 'subtle'}
+            >● REC {SOURCE_LABEL[modalCam.recording === 'edge' ? 'server' : modalCam.recording]} · {modalCam.retentionDays}일</Badge
+          >
+          <Badge tone="neutral">이벤트 {modalCam.ingest}</Badge>
         </span>
       </div>
-      <div class="rounded-card relative">
-        <CameraTile camera={modalCam} deviceLabel="{modalDevice?.unitNo}호기" compact />
-        {#if modalCam.kind === 'ai' && modalCam.state !== 'offline'}<svg
-            class="pointer-events-none absolute inset-0 h-full w-full"
-            viewBox="0 0 160 90"
-            aria-hidden="true"
-            ><rect
-              x="96"
-              y="38"
-              width="28"
-              height="44"
-              fill="none"
-              stroke="var(--sys-color-domain-video-ai-solid)"
-              stroke-width="1.5"
-            /><text x="96" y="35" fill="var(--sys-color-domain-video-ai-solid)" font-size="6">사람 0.91</text></svg
-          >{/if}
-      </div>
+      <VideoPlayer
+        camera={modalCam}
+        media={data.media}
+        capture={data.capture}
+        snapshotEveryMs={modalFlags.snapshotEveryMs}
+        boxes={modalBoxes}
+        deviceLabel="{modalDevice?.unitNo}호기"
+      />
       <Tabs
-        tabs={[
-          { id: 'server', label: '서버 녹화' },
-          { id: 'sd', label: 'SD 회수' },
-          { id: 'nvr', label: 'NVR', disabled: true },
-        ]}
-        bind:value={source}
+        tabs={modalFlags.sources.map((s) => ({ id: s, label: `${SOURCE_LABEL[s]} 녹화` }))}
+        value={modalSource}
+        onchange={(id) => (source = id)}
         size="sm"
       />
-      <ul class="divide-border-subtle rounded-card border-border text-body-sm divide-y border">
-        {#each [0, 1, 2] as i (i)}<li class="px-inset-md py-inset-xs flex items-center justify-between">
-            <span class="font-mono tabular-nums"
-              >{fmt(new Date(data.clock.now().getTime() - (i + 1) * 3600000).toISOString())} ~ +60분</span
-            ><span class="text-fg-muted">{source === 'server' ? '서브스트림 1Mbps' : 'SD 구간 회수'}</span><Button
-              size="sm"
-              variant="link">재생</Button
-            >
-          </li>{/each}
-      </ul>
+      {#await data.media.recordings(modalCam.id, modalSource)}
+        <span class="text-body-sm text-fg-muted">목록 불러오는 중</span>
+      {:then list}
+        <ul
+          class="divide-border-subtle rounded-card border-border text-body-sm divide-y border"
+          aria-label="저장 영상 목록"
+        >
+          {#each list as r (r.id)}
+            <li class="px-inset-md py-inset-xs gap-inline-sm flex items-center justify-between">
+              <span class="font-mono tabular-nums">{fmt(r.at)} ~ +{Math.round(r.durationSec / 60)}분</span>
+              <span class="text-fg-muted flex-1"
+                >{SOURCE_LABEL[r.source]}{modalFlags.sdRecall && r.source === 'sd' ? ' · 구간 회수' : ''}</span
+              >
+              <Button size="sm" variant="link">재생</Button>
+            </li>
+          {/each}
+        </ul>
+      {/await}
+      {#if modalFlags.sdRecall && modalSource === 'sd'}
+        <Button size="sm" variant="outline" tone="neutral">SD 구간 회수 요청</Button>
+      {/if}
+      {#if modalFlags.nvrTimeline}<span class="text-label-sm text-fg-muted">NVR 타임라인 — W4</span>{/if}
     </div>
   {/if}
   {#snippet footer()}<Button variant="ghost" tone="neutral" onclick={closeCam}>닫기 (Esc)</Button>{/snippet}

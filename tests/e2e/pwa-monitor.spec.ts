@@ -1,0 +1,52 @@
+// [A1-04] 현장 모니터 · [A1-05] 장비 상세 — 영상·헬스·서류·저장 영상 (specs/video-basics AC-1 · AC-2 · AC-3 · AC-5 · AC-6)
+import { expect, test } from '@playwright/test';
+import { SCR } from '../../packages/domain/src/generated/ids';
+
+test('[A1-04] 장비 3 × 2채널 · 오프라인/AI 판단 불가/흐림은 "정상"이 아니다 · 프로파일 P-SD [FR-004] [FR-034]', async ({
+  page,
+}) => {
+  await page.goto('/a1/monitor?state=monitor&capture=1');
+  await expect(page.locator(`[data-scr="${SCR['A1-04']}"]`)).toBeVisible();
+  await expect(page.locator('[data-camera]')).toHaveCount(6);
+  await expect(page.locator('[data-camera="CAM-1-1"] [data-health="lost"]')).toContainText('수신 끊김');
+  await expect(page.locator('[data-camera="CAM-2-2"] [data-faulty="true"]')).toContainText('AI 판단 불가');
+  await expect(page.locator('[data-camera="CAM-2-1"] [data-faulty="true"]')).toContainText('흐림');
+  await expect(page.locator('[data-faulty="true"]').filter({ hasText: /^정상$/ })).toHaveCount(0);
+  await expect(page.locator('[data-camera="CAM-3-1"] [data-faulty="false"]')).toContainText('LIVE');
+  await expect(page.getByText('프로파일 P-SD')).toBeVisible();
+});
+
+test('[A1-04] AI 이벤트 도착 → 배너 · CAM-3-2 타일 bbox [FR-028] [FR-004]', async ({ page }) => {
+  await page.goto('/a1/login');
+  await page.getByRole('button', { name: '입장' }).click();
+  await page.goto('/a1/monitor');
+  await expect(page.locator(`[data-scr="${SCR['A1-04']}"]`)).toBeVisible();
+  await expect(page.getByText(/AI 이벤트 · CPB-003 호스 주변 인원 접근/)).toBeVisible({ timeout: 10_000 });
+  await expect(page.locator('[data-camera="CAM-3-2"] svg[data-bbox] rect')).toHaveCount(1);
+  await expect(page.locator('[data-camera="CAM-3-1"] svg[data-bbox]')).toHaveCount(0);
+});
+
+test('[A1-04] 바디캠 탭 자리(P-SD 옵션 A) [FR-030]', async ({ page }) => {
+  await page.goto('/a1/monitor?state=monitor&capture=1');
+  await page.getByRole('tab', { name: '바디캠' }).click();
+  await expect(page.getByText('W4 실연동')).toBeVisible();
+});
+
+test('[A1-05] CPB-003 상세: 342V · E-021 · 도달률 · 서류 완비율 · D-27 · 저장 영상 서버/SD [FR-002] [FR-007] [FR-016] [FR-005]', async ({
+  page,
+}) => {
+  await page.goto('/a1/monitor/CPB-003?state=dev&capture=1');
+  await expect(page.locator(`[data-scr="${SCR['A1-05']}"]`)).toBeVisible();
+  await expect(page.getByText('342V · 이상')).toBeVisible();
+  await expect(page.getByText('E-021', { exact: false }).first()).toBeVisible();
+  await expect(page.getByRole('meter', { name: '수송관 도달률' })).toHaveAttribute('aria-valuetext', '62% 정상');
+  await expect(page.getByText(/완비율 \d+%/)).toBeVisible();
+  await expect(page.getByText(/박기사 교육 이수증 · 만료 임박 · D-27/)).toBeVisible();
+  await expect(page.getByRole('tab', { name: '서버' })).toBeVisible();
+  await expect(page.getByRole('tab', { name: 'SD' })).toBeVisible();
+  await expect(page.getByRole('tab', { name: 'NVR' })).toHaveCount(0);
+  await expect(page.getByRole('list', { name: '저장 영상 목록' }).locator('li')).toHaveCount(3);
+  await page.getByRole('tab', { name: 'SD' }).click();
+  await expect(page.getByRole('list', { name: '저장 영상 목록' }).locator('li')).toHaveCount(2);
+  await expect(page.getByText('구간 회수 가능').first()).toBeVisible();
+});

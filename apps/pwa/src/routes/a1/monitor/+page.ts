@@ -1,0 +1,15 @@
+// A1-04 현장 모니터 — 장비별 2채널 타일 · 헬스 · AI 이벤트 · 바디캠 자리 (specs/video-basics AC-1 · AC-2 · AC-5 · AC-6)
+import { profileFlags, type RoleId } from '@boomeyes/domain';
+import { session } from '$lib/session.svelte';
+import type { PageLoad } from './$types';
+
+export const load: PageLoad = async ({ parent, url }) => {
+  const { api } = await parent();
+  const users = await api.users();
+  const me = users.find((u) => u.id === session.user?.userId);
+  const scope = { role: (me?.role ?? 'site-safety') as RoleId, siteIds: me?.siteIds };
+  const [devices, cameras, sites] = await Promise.all([api.devices(scope), api.cameras(), api.sites(scope)]);
+  const site = sites[0];
+  const flags = profileFlags(site?.videoProfile ?? 'P-SD');
+  return { devices, cameras, site, flags, tab: url.searchParams.get('tab') === 'bodycam' ? 'bodycam' : 'cameras' };
+};
