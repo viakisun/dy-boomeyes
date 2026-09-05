@@ -17,7 +17,7 @@
     cx,
     toast,
   } from '@boomeyes/ui';
-  import { CameraTile, SOURCE_LABEL, VideoPlayer } from '@boomeyes/video';
+  import { CameraWall, SOURCE_LABEL, VideoPlayer, visibleIn } from '@boomeyes/video';
   let { data } = $props();
   const LABEL = { normal: '정상', caution: '주의', fault: '고장', offline: '두절', maintenance: '정비' } as const;
   const ORDER = { fault: 0, offline: 1, caution: 2, maintenance: 3, normal: 4 } as const;
@@ -38,12 +38,7 @@
     })),
   );
   // 현장 프로파일 AX-1: 1채널(P-LITE)이면 AI 채널을 숨긴다 (video-basics design · profileFlags.channels)
-  const visible = (c: Camera) => {
-    const d = data.devices.find((x) => x.id === c.deviceId);
-    const s = d ? site(d) : undefined;
-    return profileFlags(s?.videoProfile ?? 'P-SD').channels === 2 || c.kind === 'general';
-  };
-  const wallCams = $derived(data.cameras.filter((c) => (!selectedId || c.deviceId === selectedId) && visible(c)));
+  const visible = (c: Camera) => visibleIn(c, data.devices, data.sites);
   // ?cam= 딥링크도 현장 프로파일(AX-1) 밖 채널은 열지 않는다
   const modalCam = $derived(data.cam ? (data.cameras.find((c) => c.id === data.cam && visible(c)) ?? null) : null);
   const modalDevice = $derived(modalCam ? data.devices.find((d) => d.id === modalCam.deviceId) : null);
@@ -214,24 +209,13 @@
       </div>
     </section>
 
-    <section class="gap-stack-sm flex flex-col">
-      <h2 class="text-heading-sm">
-        카메라 월 {#if selected}<span class="text-body-sm text-fg-muted"
-            >— {selected.unitNo}호기 {wallCams.length}채널</span
-          >{/if}
-      </h2>
-      <div
-        class="gap-inline-md rounded-card bg-media-bg p-inset-md grid grid-cols-2 md:grid-cols-4"
-        data-theme="dark"
-        data-wall
-      >
-        {#each wallCams as c (c.id)}<CameraTile
-            camera={c}
-            deviceLabel="{data.devices.find((d) => d.id === c.deviceId)?.unitNo}호기"
-            onclick={openCam}
-          />{/each}
-      </div>
-    </section>
+    <CameraWall
+      cameras={data.cameras}
+      devices={data.devices}
+      sites={data.sites}
+      deviceId={selectedId}
+      onopen={openCam}
+    />
   </div>
 
   {#if selected}

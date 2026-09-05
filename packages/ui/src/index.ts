@@ -34,6 +34,7 @@ export { default as DataTable } from './primitives/DataTable.svelte';
 export type { Column } from './lib/table';
 export { default as TaskCard } from './primitives/TaskCard.svelte';
 export { default as DocumentCard } from './primitives/DocumentCard.svelte';
+export { default as EquipmentCard } from './primitives/EquipmentCard.svelte';
 export { default as Timeline } from './primitives/Timeline.svelte';
 export { default as EscalationTimer } from './primitives/EscalationTimer.svelte';
 export { default as CheckinCard } from './primitives/CheckinCard.svelte';
@@ -52,6 +53,7 @@ export {
   ERROR_CODE_LABEL,
   DOC_STATE_LABEL,
   DOC_KIND_LABEL,
+  EQUIPMENT_LABEL,
 } from './lib/labels';
 export { fmtDateTime, fmtTime, dueLabel, elapsedLabel } from './lib/format';
 export { connectivity } from './lib/connectivity.svelte';

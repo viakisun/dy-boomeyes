@@ -25,3 +25,8 @@ video 패키지: `VideoPlayer`(muted · autoplay · playsinline · 정지 버튼
 
 ## 열린 질문
 DISC-028(옵션 카탈로그) · DISC-029(수신 경로 → 배지 3종 표기) · DISC-040(기종) · DISC-030(바디캠 범위).
+
+## W2 — 본사 열람(A3-04 · B2-03)
+- `CameraWall`(`packages/video`, 카탈로그): B1-02 월을 추출 — `[data-wall]` 다크 강제 · AX-1 필터(`visibleIn`, `packages/video/src/wall.ts`) · 헤더 "N호기 M채널" · `onopen`. B1-02는 모달(`?cam=`)만 페이지에 남긴다.
+- `EquipmentCard`(`packages/ui`, 카탈로그): 헤더(호기 · 상태 pill) · `summary`(현장 · 마지막 수신 · 고장코드) · 자식(타일) · `actions` 슬롯. A1-04·A3-04·B2-03이 사용; A2-04·A1-05 헤더와 B1-02 인스펙터는 후속 정리 후보(시각 동일 유지 우선).
+- A3-04 = A1-04의 열람 전용 변형(링크·액션 없음, `A3-04:dev` 픽스처는 `A1-04:monitor`와 같은 카메라 변형). B2-03 = 장비 카드 + 현장 전체 월 + 인스펙터(미처리 업무 · `requestConfirm`).

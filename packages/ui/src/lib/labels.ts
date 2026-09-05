@@ -1,5 +1,14 @@
 // 도메인 상태 → 한글 라벨 (색은 cx.ts의 *_TONE, 라벨은 여기 — 색 + 텍스트 병행 규칙)
-import type { Case, DocKind, DocState, Request, RequestState, Severity, TaskState } from '@boomeyes/domain';
+import type {
+  Case,
+  DocKind,
+  DocState,
+  EquipmentState,
+  Request,
+  RequestState,
+  Severity,
+  TaskState,
+} from '@boomeyes/domain';
 import type { Tone } from './cx';
 
 export const TASK_LABEL: Record<TaskState, string> = {
@@ -28,6 +37,13 @@ export const REQUEST_STATE_LABEL: Record<RequestState, string> = {
   rejected: '반려',
 };
 /** 고장코드 설명 — B4-05 고장코드 표(admin-protocol-rules)로 옮길 임시 원천 */
+export const EQUIPMENT_LABEL: Record<EquipmentState, string> = {
+  normal: '정상',
+  caution: '주의',
+  fault: '고장',
+  offline: '두절',
+  maintenance: '정비',
+};
 export const DOC_STATE_LABEL: Record<DocState, string> = {
   valid: '유효',
   expiring: '만료 임박',
