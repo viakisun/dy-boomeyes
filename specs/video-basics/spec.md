@@ -16,6 +16,8 @@ fr: [FR-004, FR-005, FR-034, FR-028, FR-030, FR-002, FR-007, FR-016, FR-022]
 | A1-04 | 현장 모니터 | `/a1/monitor` | `monitor` |
 | A1-05 | 장비 상세 | `/a1/monitor/[device]` | `dev` |
 | B1-02M | 카메라 영상 모달 | `/b1/dash?cam=[camera]` | `cam` |
+| A3-04 | 장비 열람(본사) | `/a3/sites/[site]/devices` | `dev` |
+| B2-03 | 현장 상세(본사 웹) | `/b2/sites/[site]` | `site` |
 
 ## 수용 기준
 - **AC-1** Given `safety01`·SITE-001 장비 3(CPB-001~003)과 `monitor` 픽스처(CAM-1-1 오프라인 · CAM-2-2 AI 판단 불가) When 현장 모니터(A1-04) 로드 Then 장비별 2채널 타일(일반/AI)에 라이브·스냅샷·오프라인·AI 판단 불가 배지가 camera 상태기계 값 그대로 표시되고, 장애 채널은 "정상"으로 표시되지 않는다 [FR-004, FR-034]
@@ -30,7 +32,7 @@ fr: [FR-004, FR-005, FR-034, FR-028, FR-030, FR-002, FR-007, FR-016, FR-022]
 - **AC-9** Given `hq01` When 장비 열람(A3-04, `/a3/sites/SITE-001/devices`) Then A1-04와 같은 타일·헬스 배지가 열람 전용으로 보이고 AI 채널 표시는 현장 프로파일을 따른다 [FR-004, FR-034, FR-022]
 
 ## 상태 픽스처
-`screens.yaml` A1-04 `monitor` · A1-05 `dev` · B1-02M `cam`. 픽스처 ID: CPB-003 · CAM-3-1(일반) · CAM-3-2(AI) · CAM-2-2(AI 판단 불가) · DOC-001(D-27). `monitor`는 CAM-1-1을 offline, CAM-2-2를 ai-unavailable로 변형한다.
+`screens.yaml` A1-04 `monitor` `plite` · A1-05 `dev` `plite` · B1-02M `cam` · A3-04 `dev` · B2-03 `site`. 픽스처 ID: CPB-003 · CAM-3-1(일반) · CAM-3-2(AI) · CAM-2-2(AI 판단 불가) · DOC-001(D-27). `monitor`는 CAM-1-1을 offline, CAM-2-2를 ai-unavailable로 변형한다.
 
 ## 비범위
 HLS/WebRTC 실스트림(IF-006 L1~L3, W3) · 저장 영상 실재생(목록·타임라인 자리만, W4) · 바디캠 실연동(W4) · 본사·건설사 영상 실스트림(W3).

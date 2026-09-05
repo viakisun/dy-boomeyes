@@ -16,6 +16,8 @@ fr: [FR-013, FR-014, FR-011, FR-006, FR-031, FR-002, FR-007, FR-037, FR-018]
 | A2-02 | 오늘 | `/a2/today` | `today`(기본) · `checked`(체크인 후) |
 | A2-03 | 일일점검 | `/a2/today/inspect` | `inspect`(기본) · `inspected`(제출 후) |
 | A2-04 | 내 장비 | `/a2/device` | `mydev` |
+| A2-02 | 오늘(오프라인 대기) | `/a2/today` | `queued` |
+| A2-06 | 메뉴·현장 정보 | `/a2/menu` | `menu` |
 
 ## 수용 기준
 - **AC-1** Given `driver03` 로그인 When 오늘(A2-02) 로드 Then 배정 장비 CPB-003·현장명, 출근 상태(미체크인), 오늘의 알림(E-021 고장 알림) 카드, 촬영 중 표시와 개인정보 동의 상태 배지가 보인다 [FR-013, FR-011, FR-031]
@@ -30,4 +32,4 @@ fr: [FR-013, FR-014, FR-011, FR-006, FR-031, FR-002, FR-007, FR-037, FR-018]
 `screens.yaml` A2-02 `today` `checked` · A2-03 `inspect` `inspected` · A2-04 `mydev`. 픽스처 ID: CPB-003(E-021) · driver03 · SITE-001. `mydev`는 CPB-003 filterRatio를 0.92(임계 접근)로 변형한다.
 
 ## 비범위
-오프라인 전송 큐·Web Push(W2) · 서류 제출 A2-05(documents) · 현장 정보 A2-06(W2) · 바디캠 세션 연동(W4).
+Web Push(`notifications` spec) · 서류 제출 A2-05(documents) · 서버 측 멱등·재전송(W3) · 바디캠 세션 연동(W4).

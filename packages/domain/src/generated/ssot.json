@@ -7255,7 +7255,9 @@
           "A3-03",
           "B4-04",
           "B2-03",
-          "B1-04"
+          "B1-04",
+          "A3-05",
+          "A3-02"
         ],
         "scope_note": null,
         "baseline": "정비 보고→현장 확인 2단계 · 본사=열람·확인 요청",
@@ -9715,7 +9717,9 @@
         "if_all": [
           "IF-009"
         ],
-        "disc_all": [],
+        "disc_all": [
+          "DISC-015"
+        ],
         "specs": [
           "task-escalation"
         ]
@@ -10239,6 +10243,6 @@
         ]
       }
     },
-    "summary": "screens 53 · fr 37 · disc open 46 (A21/B12/C13) · refs 1327"
+    "summary": "screens 53 · fr 37 · disc open 46 (A21/B12/C13) · refs 1329"
   }
 }
