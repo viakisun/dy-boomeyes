@@ -37,8 +37,8 @@ jobs:
       - run: pnpm build
       - name: e2e (역할 로그인 8 · 대시보드 · axe)
         run: pnpm e2e
-      - name: capture (라우트 × 상태 전수)
-        run: pnpm capture
+      - name: capture (라우트 × 상태 전수 · 기본 상태 다크 변형)
+        run: pnpm capture --dark
       - uses: actions/upload-artifact@v4
         if: always()
         with:

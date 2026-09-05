@@ -4,7 +4,17 @@
   import { resolve } from '$app/paths';
   import { onMount } from 'svelte';
   import { APP_HOME_OF, SCREENS, type Alert, type RoleId } from '@boomeyes/domain';
-  import { Badge, Button, EmptyState, IconButton, PwaShell, Toast, connectivity, toast } from '@boomeyes/ui';
+  import {
+    Badge,
+    Button,
+    EmptyState,
+    IconButton,
+    PwaShell,
+    Toast,
+    applyTheme,
+    connectivity,
+    toast,
+  } from '@boomeyes/ui';
   import { navFor } from '$lib/nav';
   import { logout, session } from '$lib/session.svelte';
   let { data, children } = $props();
@@ -18,6 +28,10 @@
   );
   const isLogin = $derived(data.screen?.endsWith('-01') && data.screen.startsWith('A'));
   const title = $derived(data.screen ? SCREENS[data.screen].name : 'BoomEyes');
+  // 테마: PWA는 시스템 다크를 따르고 강제하지 않는다(DY-design §10) — ?theme=은 캡처·e2e용 루트 적용만
+  $effect(() => {
+    if (data.theme) applyTheme(data.theme, false);
+  });
   const home = () => {
     const h = role && APP_HOME_OF[role];
     if (h) goto(resolve(SCREENS[h].route as '/'));

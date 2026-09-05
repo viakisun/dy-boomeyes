@@ -50,6 +50,7 @@ export {
 } from './lib/labels';
 export { fmtDateTime, fmtTime, dueLabel, elapsedLabel } from './lib/format';
 export { connectivity } from './lib/connectivity.svelte';
+export { theme, applyTheme, toggleTheme, isDark, THEME_KEY, type Theme } from './lib/theme.svelte';
 export { default as WebShell } from './shell/WebShell.svelte';
 export { default as PwaShell } from './shell/PwaShell.svelte';
 export { default as Sidebar } from './shell/Sidebar.svelte';

@@ -35,6 +35,7 @@
 - axe `video-caption`은 `incomplete`(수동 검토)로 분류되며 게이트는 `violations`만 본다 — 라이브 대체 영상은 무음 합성 루프(자막 대상 음성 없음)라 면제. 실스트림(W3)에서 음성이 생기면 자막·설명 정책을 정한다(DISC-031 개인정보 음성 항목과 함께).
 - PWA 긴 화면은 뷰포트를 문서 높이로 늘린 뒤 `[data-capture-frame]`을 찍는다(sticky 하단 내비가 문서 중간에 찍히는 것 방지). 스냅샷 mock의 시각도 Asia/Seoul.
 - 이름 = `${code.toLowerCase()}-${state}` (`b1-02-dash` `b1-02m-cam`). 상태 목록은 `screens.yaml`에서 생성(매니페스트 손 편집 금지).
+- 다크: `?theme=dark|light`는 문서 루트 `data-theme`에만 적용(저장 안 함, 캡처·e2e용). `pnpm capture --dark`는 화면 기본 상태를 한 번 더 찍는다(`<name>-dark.png`, CI 포함). 웹 탑바 토글은 `localStorage dy.theme`에 유지(`app.html`이 첫 페인트 전에 적용) · PWA는 시스템 다크를 따르고 토글이 없다(DY-design §10). 대비는 `tokens:check`가 light·dark 82쌍 모두 검사.
 - capture 모드(`?capture=1`)는 로그인 없이 화면 첫 역할의 데모 세션을 합성해 **셸까지** 그린다(가드 우회 — W3 실 인증 전 제거). 브라우저 컨텍스트는 `timezoneId: 'Asia/Seoul'`, 표시 포맷터도 `timeZone: 'Asia/Seoul'` 고정. 지도 `[data-map-ready]` 대기 타임아웃은 FAIL로 센다(빈 지도를 녹색으로 세지 않는다). 셸 렌더 시 스크롤 컨테이너는 `<main>`이라 캡처는 main 내용 높이로 뷰포트를 키운다. 외부 의존: CARTO 스타일·타일(네트워크 필요).
 - 데모 계정: `roles.yaml demo_account`. 픽스처 ID: CPB-003(E-021) · CPB-004(통신 두절) · C-105 · D-27.
 - `?state=` 픽스처는 capture·e2e 재현 전용 — 화면 기본 픽스처(`states[].default`)도 capture 모드에서만 적용하고, 실사용(live) 흐름은 순수 시드에서 시작한다(W1 사고: 기본 픽스처가 live에 적용돼 A2-03이 출근 상태로 열림). 브라우저 mock db는 `bootMock` 키(live / capture|screen|state)별로 세션 동안 유지, 로그아웃에 `resetMock()`.

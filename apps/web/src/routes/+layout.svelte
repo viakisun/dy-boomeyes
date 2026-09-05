@@ -3,7 +3,7 @@
   import { goto } from '$app/navigation';
   import { resolve } from '$app/paths';
   import { CURRENT_WAVE, HOME_OF, SCREENS, type RoleId } from '@boomeyes/domain';
-  import { Button, EmptyState, IconButton, Toast, WebShell } from '@boomeyes/ui';
+  import { Button, EmptyState, IconButton, Toast, WebShell, applyTheme, theme, toggleTheme } from '@boomeyes/ui';
   import { navFor } from '$lib/nav';
   import { logout, session } from '$lib/session.svelte';
   let { data, children } = $props();
@@ -13,6 +13,11 @@
     data.screen ? [{ label: SCREENS[data.screen].surface }, { label: SCREENS[data.screen].name }] : [],
   );
   const home = () => role && goto(resolve(SCREENS[HOME_OF[role]].route as '/'));
+  // 테마(shell-auth AC-6): ?theme=은 루트 data-theme에 적용만(저장 안 함) · 탑바 토글은 localStorage에 유지
+  $effect(() => {
+    if (data.theme) applyTheme(data.theme, false);
+  });
+  const dark = $derived(theme.value ? theme.value === 'dark' : theme.system);
 </script>
 
 <svelte:head>
@@ -26,6 +31,7 @@
     {#snippet brand()}<a href={resolve('/')} class="text-heading-sm text-accent-fg-strong">BoomEyes</a>{/snippet}
     {#snippet actions()}
       <span class="text-body-sm text-fg-muted">{session.user?.display} · {session.user?.org}</span>
+      <IconButton label={dark ? '라이트 모드' : '다크 모드'} onclick={toggleTheme}>{dark ? '☀' : '☾'}</IconButton>
       <IconButton
         label="로그아웃"
         onclick={() => {
