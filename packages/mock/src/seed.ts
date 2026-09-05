@@ -15,6 +15,7 @@ import type {
   Part,
   PartEvent,
   ProtocolVersion,
+  ReplayEvent,
   Request,
   RuleSet,
   Stock,
@@ -45,6 +46,8 @@ export interface Db {
   parts: Part[];
   partEvents: PartEvent[];
   stock: Stock[];
+  /** ENT-19 이벤트 복기 스텁(W2) */
+  events: ReplayEvent[];
 }
 
 /** 데모 계정 7 — ssot roles.demo_account (capture 모드 세션 합성에도 쓴다) */
@@ -257,6 +260,7 @@ export function seed(): Db {
       at: t(20_000),
       acked: false,
       caseId: 'C-105',
+      eventId: 'EV-001',
     },
     {
       id: 'AL-002',
@@ -757,6 +761,58 @@ export function seed(): Db {
     { id: 'ST-004', partNo: 'DY-GSK-125', group: 'gasket', onHand: 10, safety: 4 },
     { id: 'ST-005', partNo: 'DY-EH-125', group: 'endhose', onHand: 1, safety: 1 },
   ];
+  // event-replay(W2 B10, 구조): EV-001 = AL-001(E-021) · t0 = 알림 시각 · 창 ±60초 · 4레인 메타(실영상 seek·채번은 2단계 DISC-039) · 원본 보존 잠금(NFR-015)
+  const t0 = new Date(now.getTime() - 20_000);
+  const off = (sec: number) => new Date(t0.getTime() + sec * 1000).toISOString();
+  const events: ReplayEvent[] = [
+    {
+      id: 'EV-001',
+      kind: 'voltage',
+      deviceId: 'CPB-003',
+      at: t0.toISOString(),
+      windowSec: 60,
+      alertId: 'AL-001',
+      caseId: 'C-105',
+      locked: true,
+      lanes: {
+        general: {
+          source: 'general',
+          available: true,
+          cameraId: 'CAM-3-1',
+          segments: [{ from: off(-60), to: off(60), label: '서버 세그먼트 · 라이브 대체 루프(목업)' }],
+          markers: [{ at: off(0), label: 't0 — 전방 조망' }],
+        },
+        ai: {
+          source: 'ai',
+          available: true,
+          cameraId: 'CAM-3-2',
+          segments: [{ from: off(-60), to: off(60), label: 'SD 병행 세그먼트 · 라이브 대체 루프(목업)' }],
+          markers: [
+            { at: off(-12), label: 'AI 사람 접근 후보(bbox)' },
+            { at: off(0), label: 't0 — 붐 끝 하향' },
+          ],
+        },
+        bodycam: {
+          source: 'bodycam',
+          available: false,
+          note: '현장 프로파일 P-SD 바디캠 A — 세션 연동은 W4(IF-017 · DISC-030)',
+          segments: [],
+          markers: [],
+        },
+        cpb: {
+          source: 'cpb',
+          available: true,
+          segments: [],
+          markers: [
+            { at: off(-30), label: '전압 378V · 정상' },
+            { at: off(-5), label: '전압 351V · 하강' },
+            { at: off(0), label: '전압 342V · E-021 발생' },
+            { at: off(2), label: 'AL-001 긴급 알림 · C-105 발행' },
+          ],
+        },
+      },
+    },
+  ];
   return {
     users,
     sites,
@@ -777,5 +833,6 @@ export function seed(): Db {
     parts,
     partEvents,
     stock,
+    events,
   };
 }

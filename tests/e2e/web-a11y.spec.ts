@@ -65,6 +65,11 @@ const PAGES: { scr: string; url: string; ready: (page: Page) => Promise<void> }[
     ready: (p) => expect(p.getByText('수송관 도달률').first()).toBeVisible(),
   },
   {
+    scr: SCR['B1-08'],
+    url: '/b1/events/EV-001?state=default&capture=1',
+    ready: (p) => expect(p.locator('section[aria-label="복기 타임라인"] ol')).toHaveCount(4),
+  },
+  {
     scr: SCR['B4-07'],
     url: '/b4/parts?state=default&capture=1',
     ready: (p) => expect(p.locator('table').first().locator('tbody tr')).toHaveCount(5),

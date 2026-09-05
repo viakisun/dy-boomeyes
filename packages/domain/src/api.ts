@@ -30,6 +30,7 @@ import type {
   User,
   RecordItem,
   RecordKind,
+  ReplayEvent,
   SiteReport,
   VideoProfile,
 } from './types';
@@ -154,6 +155,8 @@ export interface ApiClient {
   /** 폐기(A2-09) — replaced → discarded */
   discardPart(id: string, input: { reason: string; photo?: { name: string; url?: string } }, by: string): Promise<Part>;
   stock(): Promise<Stock[]>;
+  /** FR-033 이벤트 복기(W2 구조, DISC-044) — event_id로 4소스 레인 메타 · 없으면 undefined(404) */
+  event(id: string): Promise<ReplayEvent | undefined>;
 }
 
 /** 시각 원천 — 화면은 new Date() 대신 이것을 쓴다 (capture 모드에서 고정, 데모에서 점프) */

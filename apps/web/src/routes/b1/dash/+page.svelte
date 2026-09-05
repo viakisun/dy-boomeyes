@@ -138,11 +138,11 @@
           aria-label="알림"
         >
           {#each feed as a (a.id)}
-            <li>
+            <li class="flex flex-col">
               <a
                 href={a.caseId ? resolve(`/b1/inbox?case=${a.caseId}` as '/') : resolve('/b1/dash' as '/')}
                 class={cx(
-                  'gap-inline-sm rounded-control px-inset-sm py-inset-xs hover:bg-ui-hover flex items-start',
+                  'gap-inline-sm rounded-control px-inset-sm py-inset-xs hover:bg-ui-hover flex min-w-0 items-start',
                   !a.acked && 'bg-surface-sunken',
                 )}
               >
@@ -154,6 +154,13 @@
                 <span class="text-body-sm text-fg flex-1">{a.message}</span>
                 <span class="text-label-sm text-fg-muted tabular-nums">{fmt(a.at)}</span>
               </a>
+              {#if a.eventId}
+                <a
+                  href={resolve(`/b1/events/${a.eventId}` as '/')}
+                  class="text-label-sm text-accent-fg px-inset-sm py-inset-xs self-end"
+                  aria-label="복기 {a.eventId}">복기 ›</a
+                >
+              {/if}
             </li>
           {/each}
         </ul>

@@ -448,3 +448,26 @@ describe('[FR-032] 마모·교체 부품 — part 상태기계 실소비(W2 구�
     expect((await api.part('P-004'))?.state).toBe('due');
   });
 });
+
+describe('[FR-033] 이벤트 복기(W2 구조) — EV-001 lookup · 4레인 · 잠금 · 404', () => {
+  it('event(EV-001): AL-001·C-105 연결 · t0 = 알림 시각 · 창 ±60 · 바디캠 없음 · CPB 레인 마커(창 밖 부품 이력은 제외) · 잠금', async () => {
+    const api = bootMock({ capture: true });
+    const ev = await api.event('EV-001');
+    expect(ev).toBeDefined();
+    expect(ev!.alertId).toBe('AL-001');
+    expect(ev!.caseId).toBe('C-105');
+    expect(ev!.locked).toBe(true);
+    expect(ev!.windowSec).toBe(60);
+    const alert = (await api.alerts({ role: 'control' })).find((a) => a.id === 'AL-001');
+    expect(alert?.eventId).toBe('EV-001');
+    expect(alert?.at).toBe(ev!.at);
+    expect(Object.keys(ev!.lanes).sort()).toEqual(['ai', 'bodycam', 'cpb', 'general']);
+    expect(ev!.lanes.bodycam.available).toBe(false);
+    expect(ev!.lanes.general.cameraId).toBe('CAM-3-1');
+    expect(ev!.lanes.ai.cameraId).toBe('CAM-3-2');
+    expect(ev!.lanes.cpb.markers.map((m) => m.label)).toContain('전압 342V · E-021 발생');
+    expect(ev!.lanes.cpb.markers.some((m) => m.label.startsWith('부품'))).toBe(false); // P-004 점검은 2일 전 — 창 밖
+    expect(ev!.lanes.cpb.note).toContain('부품 이력 없음');
+    expect(await api.event('EV-999')).toBeUndefined();
+  });
+});

@@ -24,6 +24,7 @@ import {
   type Kpis,
   type Part,
   type RecordItem,
+  type ReplayEvent,
   type SiteReport,
   type Request,
   type Scope,
@@ -733,6 +734,32 @@ export function createMockApi(db: Db, opts: { latencyMs?: number } = {}): ApiCli
     async stock() {
       await wait();
       return db.stock;
+    },
+    // event-replay(W2 B10, 구조): 4레인 메타 + 창 안의 부품 이력을 CPB 레인 마커로 합친다(실 세그먼트 조회는 API-018 2단계)
+    async event(id): Promise<ReplayEvent | undefined> {
+      await wait();
+      const ev = db.events.find((e) => e.id === id);
+      if (!ev) return undefined;
+      const t0 = Date.parse(ev.at);
+      const inWindow = (at: string) => Math.abs(Date.parse(at) - t0) <= ev.windowSec * 1000;
+      const partIds = new Set(db.parts.filter((p) => p.deviceId === ev.deviceId).map((p) => p.id));
+      const partMarkers = db.partEvents
+        .filter((e) => partIds.has(e.partId) && inWindow(e.at))
+        .map((e) => ({ at: e.at, label: `부품 ${e.partId} ${e.kind}` }));
+      const cpb = ev.lanes.cpb;
+      return {
+        ...ev,
+        lanes: {
+          ...ev.lanes,
+          cpb: {
+            ...cpb,
+            markers: [...cpb.markers, ...partMarkers].sort((a, b) => (a.at < b.at ? -1 : 1)),
+            note: partMarkers.length
+              ? `부품 이력 ${partMarkers.length}건`
+              : `부품 이력 없음 — 창 ±${ev.windowSec}초 안에 점검·교체 없음`,
+          },
+        },
+      };
     },
     async kpis(scope): Promise<Kpis> {
       await wait();
