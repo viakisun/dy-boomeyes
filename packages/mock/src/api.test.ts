@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { INSPECTION_ITEMS } from '@boomeyes/domain';
 import { bootMock, clock, H, MIN } from './index';
 
 describe('[FR-008] MockApi 업무 흐름', () => {
@@ -78,5 +79,45 @@ describe('[FR-010] 에스컬레이션 (B1-04)', () => {
   it('B1-04 esc 픽스처는 C-105를 65분 전 발행으로 둔다', async () => {
     const api = bootMock({ capture: true, screen: 'B1-04', state: 'esc' });
     expect((await api.escalations()).map((e) => e.case.id).sort()).toEqual(['C-104', 'C-105']);
+  });
+});
+
+describe('[FR-013] 출근 체크인 · [FR-014] 일일점검 (driver-daily)', () => {
+  it('오늘: 배정 CPB-003 · 미체크인 · 동의 3항목 · 촬영 중', async () => {
+    const api = bootMock({ capture: true });
+    const t = await api.today('driver03');
+    expect(t.device?.id).toBe('CPB-003');
+    expect(t.site?.id).toBe('SITE-001');
+    expect(t.attendance.checkinAt).toBeNull();
+    expect(t.inspection.items.map((i) => i.id)).toEqual(INSPECTION_ITEMS.map((i) => i.id));
+    expect(t.consent.items.map((c) => `${c.kind}:${c.agreed}`)).toEqual(['video:true', 'audio:false', 'location:true']);
+    expect(t.filming).toBe(true);
+  });
+  it('반경 밖 체크인은 거리와 함께 거부 · 반경 안은 기록 · 체크아웃', async () => {
+    const api = bootMock({ capture: true });
+    await expect(api.checkin('driver03', { lat: 36.0, lng: 127.0 })).rejects.toThrow(/반경 밖 — \d+m/);
+    const t = await api.today('driver03');
+    const a = await api.checkin('driver03', { lat: t.site!.lat + 0.0005, lng: t.site!.lng });
+    expect(a.checkinAt).toBeTruthy();
+    expect((await api.today('driver03')).attendance.checkinAt).toBe(a.checkinAt);
+    expect((await api.checkout('driver03')).checkoutAt).toBeTruthy();
+  });
+  it('점검 5항목 제출 → submittedAt · 픽스처 inspected/checked/mydev', async () => {
+    const api = bootMock({ capture: true });
+    const r = await api.submitInspection(
+      'driver03',
+      INSPECTION_ITEMS.map((x) => ({ ...x, ok: true })),
+    );
+    expect(r.submittedAt).toBeTruthy();
+    expect(r.items.every((i) => i.ok)).toBe(true);
+    expect(
+      (await bootMock({ capture: true, screen: 'A2-03', state: 'inspected' }).today('driver03')).inspection.submittedAt,
+    ).toBeTruthy();
+    expect(
+      (await bootMock({ capture: true, screen: 'A2-02', state: 'checked' }).today('driver03')).attendance.checkinAt,
+    ).toBeTruthy();
+    expect(
+      (await bootMock({ capture: true, screen: 'A2-04', state: 'mydev' }).device('CPB-003'))?.telemetry.filterRatio,
+    ).toBe(0.92);
   });
 });

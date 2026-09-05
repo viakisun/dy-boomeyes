@@ -108,6 +108,8 @@ export interface User {
   display: string;
   org: string;
   siteIds: string[];
+  /** 운전자 배정 장비 (driver-daily) */
+  deviceId?: string;
 } // ENT-05
 export interface Kpis {
   total: number;
@@ -139,6 +141,49 @@ export interface Escalation {
   elapsedMs: number;
   notifyTo: RoleId[];
   notifiedAt: string;
+}
+
+/** FR-013 출근 체크인·퇴근 체크아웃 — 현장 반경 판정은 rules.ts CHECKIN_RADIUS_M */
+export interface Attendance {
+  userId: string;
+  deviceId: string;
+  siteId: string;
+  checkinAt: string | null;
+  checkoutAt: string | null;
+  lat?: number;
+  lng?: number;
+}
+/** FR-014 작업 전 일일점검 — 항목은 rules.ts INSPECTION_ITEMS(DISC-033 확정 전 임시) */
+export interface InspectionItem {
+  id: string;
+  label: string;
+  ok: boolean;
+  note?: string;
+}
+export interface Inspection {
+  id: string;
+  userId: string;
+  deviceId: string;
+  date: string;
+  items: InspectionItem[];
+  submittedAt: string | null;
+}
+/** ENT-15 개인정보 동의 — FR-031 표준 패키지(영상 · 음성 · 위치) */
+export interface Consent {
+  userId: string;
+  items: { kind: 'video' | 'audio' | 'location'; agreed: boolean; at: string }[];
+}
+/** A2-02 오늘 화면 묶음 */
+export interface Today {
+  user: User;
+  device: Device | undefined;
+  site: Site | undefined;
+  attendance: Attendance;
+  inspection: Inspection;
+  alerts: Alert[];
+  consent: Consent;
+  /** 촬영 중 표시 — 배정 장비 카메라가 살아 있으면 true (FR-031 촬영 표시) */
+  filming: boolean;
 }
 
 export interface Scope {

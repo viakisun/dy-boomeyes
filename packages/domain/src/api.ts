@@ -1,5 +1,22 @@
 // ApiClient 인터페이스 — 구현: @boomeyes/mock(인메모리) · @boomeyes/api-client(http, W3). 화면은 이 인터페이스만 의존 (ADR-002).
-import type { Alert, Camera, Case, Device, Doc, Escalation, Kpis, Lease, Request, Scope, Site, User } from './types';
+import type {
+  Alert,
+  Attendance,
+  Camera,
+  Case,
+  Device,
+  Doc,
+  Escalation,
+  Inspection,
+  InspectionItem,
+  Kpis,
+  Lease,
+  Request,
+  Scope,
+  Site,
+  Today,
+  User,
+} from './types';
 
 export interface ApiClient {
   users(): Promise<User[]>;
@@ -22,6 +39,13 @@ export interface ApiClient {
   rejectRequest(id: string, by: string, note: string): Promise<Request>;
   /** FR-010 — 임계(1h) 경과한 new 업무를 escalated로 전이하고 통보 목록을 돌려준다 */
   escalations(): Promise<Escalation[]>;
+  /** driver-daily — 오늘(배정 장비 · 출근 · 점검 · 알림 · 동의) */
+  today(userId: string): Promise<Today>;
+  /** FR-013 — 현장 반경 밖이면 Error(거리 포함) */
+  checkin(userId: string, pos: { lat: number; lng: number }): Promise<Attendance>;
+  checkout(userId: string): Promise<Attendance>;
+  /** FR-014 — 5항목 제출 */
+  submitInspection(userId: string, items: InspectionItem[]): Promise<Inspection>;
   docs(scope: Scope): Promise<Doc[]>;
   leases(scope: Scope): Promise<Lease[]>;
   kpis(scope: Scope): Promise<Kpis>;

@@ -1,6 +1,20 @@
 // 시드 — 데모 픽스처(INTENT §7 · docs/DEMO.md): CPB-003 E-021 전압 이상 · CPB-004 통신 두절 · C-105 · D-27 임대 · 교육 이수증
 import ssot from '@boomeyes/domain/generated/ssot.json';
-import type { Alert, Camera, Case, Device, Doc, Lease, Owner, Request, Site, User } from '@boomeyes/domain';
+import type {
+  Alert,
+  Attendance,
+  Camera,
+  Case,
+  Consent,
+  Device,
+  Doc,
+  Inspection,
+  Lease,
+  Owner,
+  Request,
+  Site,
+  User,
+} from '@boomeyes/domain';
 import { clock, DAY, H, MIN } from './clock';
 
 export interface Db {
@@ -12,6 +26,9 @@ export interface Db {
   alerts: Alert[];
   cases: Case[];
   requests: Request[];
+  attendance: Attendance[];
+  inspections: Inspection[];
+  consents: Consent[];
   docs: Doc[];
   leases: Lease[];
 }
@@ -27,6 +44,7 @@ export function demoUsers(): User[] {
     org: r.org,
     siteIds:
       r.id === 'site-safety' || r.id === 'driver' ? ['SITE-001'] : r.id === 'hq-safety' ? ['SITE-001', 'SITE-002'] : [],
+    deviceId: r.id === 'driver' ? 'CPB-003' : undefined,
   }));
 }
 
@@ -387,5 +405,32 @@ export function seed(): Db {
       ],
     },
   ];
-  return { users, sites, owners, devices, cameras, alerts, cases, requests, docs, leases };
+  // driver-daily: 출근·점검은 비어 있음(픽스처가 채움) · 동의는 표준 패키지(영상·위치 동의, 음성 미동의)
+  const attendance: Attendance[] = [];
+  const inspections: Inspection[] = [];
+  const consents: Consent[] = [
+    {
+      userId: 'driver03',
+      items: [
+        { kind: 'video', agreed: true, at: t(30 * DAY) },
+        { kind: 'audio', agreed: false, at: t(30 * DAY) },
+        { kind: 'location', agreed: true, at: t(30 * DAY) },
+      ],
+    },
+  ];
+  return {
+    users,
+    sites,
+    owners,
+    devices,
+    cameras,
+    alerts,
+    cases,
+    requests,
+    attendance,
+    inspections,
+    consents,
+    docs,
+    leases,
+  };
 }

@@ -1,8 +1,14 @@
 // MockApi — 인메모리 ApiClient (ADR-002). 상태기계로만 전이한다.
 import {
+  CHECKIN_RADIUS_M,
   ESCALATE_AFTER_MS,
+  INSPECTION_ITEMS,
   canTransition,
+  distanceM,
   transition,
+  type Attendance,
+  type Inspection,
+  type Today,
   type Alert,
   type ApiClient,
   type Case,
@@ -12,6 +18,8 @@ import {
   type Request,
   type RequestState,
   type Scope,
+  type Site,
+  type User,
 } from '@boomeyes/domain';
 import { clock } from './clock';
 import type { Db } from './seed';
@@ -124,6 +132,54 @@ export function createMockApi(db: Db, opts: { latencyMs?: number } = {}): ApiCli
       }
       return out.sort((a, b) => b.elapsedMs - a.elapsedMs);
     },
+    async today(userId): Promise<Today> {
+      await wait();
+      const user = db.users.find((u) => u.id === userId);
+      if (!user) throw new Error(`user ${userId}`);
+      const device = db.devices.find((d) => d.id === user.deviceId);
+      const site = db.sites.find((s) => s.id === device?.siteId);
+      const attendance = attendanceOf(db, user, device, site);
+      const inspection = inspectionOf(db, user, device);
+      const alerts = device
+        ? db.alerts.filter((a) => a.deviceId === device.id).sort((a, b) => (a.at < b.at ? 1 : -1))
+        : [];
+      const consent = db.consents.find((c) => c.userId === userId) ?? { userId, items: [] };
+      const filming = !!device && db.cameras.some((c) => c.deviceId === device.id && c.state !== 'offline');
+      return { user, device, site, attendance, inspection, alerts, consent, filming };
+    },
+    async checkin(userId, pos) {
+      await wait();
+      const user = db.users.find((u) => u.id === userId);
+      if (!user) throw new Error(`user ${userId}`);
+      const device = db.devices.find((d) => d.id === user.deviceId);
+      const site = db.sites.find((s) => s.id === device?.siteId);
+      if (!site) throw new Error('배정 현장 없음');
+      const dist = distanceM(pos, site);
+      if (dist > CHECKIN_RADIUS_M) throw new Error(`현장 반경 밖 — ${Math.round(dist)}m (기준 ${CHECKIN_RADIUS_M}m)`);
+      const a = attendanceOf(db, user, device, site);
+      a.checkinAt = clock.iso();
+      a.checkoutAt = null;
+      a.lat = pos.lat;
+      a.lng = pos.lng;
+      return a;
+    },
+    async checkout(userId) {
+      await wait();
+      const a = db.attendance.find((x) => x.userId === userId);
+      if (!a?.checkinAt) throw new Error('체크인 전');
+      a.checkoutAt = clock.iso();
+      return a;
+    },
+    async submitInspection(userId, items) {
+      await wait();
+      const user = db.users.find((u) => u.id === userId);
+      if (!user) throw new Error(`user ${userId}`);
+      const device = db.devices.find((d) => d.id === user.deviceId);
+      const i = inspectionOf(db, user, device);
+      i.items = items;
+      i.submittedAt = clock.iso();
+      return i;
+    },
     async docs(scope) {
       await wait();
       if (!scope.siteIds?.length) return db.docs;
@@ -167,6 +223,31 @@ function must(db: Db, id: string): Case {
   const c = db.cases.find((x) => x.id === id);
   if (!c) throw new Error(`case ${id}`);
   return c;
+}
+/** 출근 기록 — 없으면 빈 기록을 만들어 db에 넣는다 */
+function attendanceOf(db: Db, user: User, device: Device | undefined, site: Site | undefined): Attendance {
+  let a = db.attendance.find((x) => x.userId === user.id);
+  if (!a) {
+    a = { userId: user.id, deviceId: device?.id ?? '', siteId: site?.id ?? '', checkinAt: null, checkoutAt: null };
+    db.attendance.push(a);
+  }
+  return a;
+}
+/** 오늘 점검 — 없으면 미제출 5항목 */
+function inspectionOf(db: Db, user: User, device: Device | undefined): Inspection {
+  let i = db.inspections.find((x) => x.userId === user.id);
+  if (!i) {
+    i = {
+      id: `INS-${user.id}`,
+      userId: user.id,
+      deviceId: device?.id ?? '',
+      date: clock.iso().slice(0, 10),
+      items: INSPECTION_ITEMS.map((x) => ({ ...x, ok: false })),
+      submittedAt: null,
+    };
+    db.inspections.push(i);
+  }
+  return i;
 }
 /** 승인/반려 — doc 상태기계(submitted → review → approved|rejected). submitted에서 바로 못 가면 review를 거친다 */
 function decide(db: Db, id: string, to: 'approved' | 'rejected', by: string, action: string, note?: string): Request {
