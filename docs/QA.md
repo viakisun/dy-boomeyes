@@ -32,6 +32,7 @@
 
 - 뷰포트: PWA 440×900(프레임 셀렉터 `[data-capture-frame]` 390×800 클립) · 웹 1280×842(문서 높이로 확장) · 모달/시트 `[data-capture-dialog]` 클립. DPR 2 · `ko-KR`.
 - 시각 고정은 **앱의 DemoClock**(`?capture=1` → `ssot/meta.yaml fixed_clock` 2026-07-03 10:42)이 담당 — 화면 코드는 `new Date()` 대신 `data.clock`을 쓴다. 브라우저 `Date` 프록시는 쓰지 않는다(MapLibre 로드를 막음). 지도는 `[data-map-ready]`(idle) 대기 · 애니메이션 비활성. 웹 전체 화면은 `fullPage` 대신 뷰포트를 문서 높이로 늘려 찍는다 — 헤드리스 `fullPage`(captureBeyondViewport)는 WebGL 캔버스 서브트리(타일·마커)를 간헐적으로 비운다.
+- axe `video-caption`은 `incomplete`(수동 검토)로 분류되며 게이트는 `violations`만 본다 — 라이브 대체 영상은 무음 합성 루프(자막 대상 음성 없음)라 면제. 실스트림(W3)에서 음성이 생기면 자막·설명 정책을 정한다(DISC-031 개인정보 음성 항목과 함께).
 - PWA 긴 화면은 뷰포트를 문서 높이로 늘린 뒤 `[data-capture-frame]`을 찍는다(sticky 하단 내비가 문서 중간에 찍히는 것 방지). 스냅샷 mock의 시각도 Asia/Seoul.
 - 이름 = `${code.toLowerCase()}-${state}` (`b1-02-dash` `b1-02m-cam`). 상태 목록은 `screens.yaml`에서 생성(매니페스트 손 편집 금지).
 - capture 모드(`?capture=1`)는 로그인 없이 화면 첫 역할의 데모 세션을 합성해 **셸까지** 그린다(가드 우회 — W3 실 인증 전 제거). 브라우저 컨텍스트는 `timezoneId: 'Asia/Seoul'`, 표시 포맷터도 `timeZone: 'Asia/Seoul'` 고정. 지도 `[data-map-ready]` 대기 타임아웃은 FAIL로 센다(빈 지도를 녹색으로 세지 않는다). 셸 렌더 시 스크롤 컨테이너는 `<main>`이라 캡처는 main 내용 높이로 뷰포트를 키운다. 외부 의존: CARTO 스타일·타일(네트워크 필요).

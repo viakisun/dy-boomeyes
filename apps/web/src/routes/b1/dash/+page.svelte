@@ -2,7 +2,7 @@
   // B1-02 관제 대시보드 (specs/control-dashboard AC-1~5) · B1-02M 카메라 모달(?cam=)
   import { goto } from '$app/navigation';
   import { resolve } from '$app/paths';
-  import { profileFlags, type Alert, type Device, type StorageSource } from '@boomeyes/domain';
+  import { profileFlags, type Alert, type Camera, type Device, type StorageSource } from '@boomeyes/domain';
   import { onMount } from 'svelte';
   import { MapView } from '@boomeyes/map';
   import {
@@ -37,7 +37,13 @@
       selected: d.id === selectedId,
     })),
   );
-  const wallCams = $derived(data.cameras.filter((c) => !selectedId || c.deviceId === selectedId));
+  // 현장 프로파일 AX-1: 1채널(P-LITE)이면 AI 채널을 숨긴다 (video-basics design · profileFlags.channels)
+  const visible = (c: Camera) => {
+    const d = data.devices.find((x) => x.id === c.deviceId);
+    const s = d ? site(d) : undefined;
+    return profileFlags(s?.videoProfile ?? 'P-SD').channels === 2 || c.kind === 'general';
+  };
+  const wallCams = $derived(data.cameras.filter((c) => (!selectedId || c.deviceId === selectedId) && visible(c)));
   const modalCam = $derived(data.cam ? (data.cameras.find((c) => c.id === data.cam) ?? null) : null);
   const modalDevice = $derived(modalCam ? data.devices.find((d) => d.id === modalCam.deviceId) : null);
   let source = $state('server');
@@ -209,7 +215,11 @@
       <h2 class="text-heading-sm">
         카메라 월 {#if selected}<span class="text-body-sm text-fg-muted">— {selected.unitNo}호기 2채널</span>{/if}
       </h2>
-      <div class="gap-inline-md rounded-card bg-media-bg p-inset-md grid grid-cols-2 md:grid-cols-4" data-theme="dark">
+      <div
+        class="gap-inline-md rounded-card bg-media-bg p-inset-md grid grid-cols-2 md:grid-cols-4"
+        data-theme="dark"
+        data-wall
+      >
         {#each wallCams as c (c.id)}<CameraTile
             camera={c}
             deviceLabel="{data.devices.find((d) => d.id === c.deviceId)?.unitNo}호기"
@@ -272,7 +282,7 @@
   {#if modalCam}
     <div class="gap-stack-md flex flex-col" data-scr="B1-02M">
       <div class="gap-inline-sm flex flex-wrap items-center">
-        {#each data.cameras.filter((c) => c.deviceId === modalCam.deviceId) as c (c.id)}
+        {#each data.cameras.filter((c) => c.deviceId === modalCam.deviceId && visible(c)) as c (c.id)}
           <Button
             size="sm"
             variant={c.id === modalCam.id ? 'solid' : 'outline'}

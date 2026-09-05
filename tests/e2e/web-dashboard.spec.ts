@@ -78,3 +78,16 @@ test('[B1-02M] 라이브/스냅샷 전환 · P-SD 소스 탭(서버·SD, NVR 없
   await expect(dialog.getByRole('list', { name: '저장 영상 목록' }).locator('li')).toHaveCount(2);
   await expect(dialog.getByRole('button', { name: 'SD 구간 회수 요청' })).toBeVisible();
 });
+
+test('[B1-02] 현장 프로파일 AX-1 — P-LITE 현장(5호기) 선택 시 카메라 월 1채널, P-SD(3호기)는 2채널 [FR-004] [FR-005]', async ({
+  page,
+}) => {
+  await page.goto(DASH);
+  await page.locator('.be-map[data-ready]').waitFor({ timeout: 20_000 });
+  const wall = page.locator('[data-wall]');
+  await expect(wall.locator('button[aria-label*="카메라"]')).toHaveCount(2); // 기본 선택 3호기(SITE-001 · P-SD)
+  await page.locator('.be-marker[data-state="maintenance"]').click(); // 5호기 · SITE-002 · P-LITE
+  await expect(page.getByText('CPB-005 · 5호기')).toBeVisible();
+  await expect(wall.locator('button[aria-label*="카메라"]')).toHaveCount(1);
+  await expect(wall.locator('button[aria-label*="일반 카메라"]')).toHaveCount(1);
+});

@@ -20,7 +20,7 @@ export const load: PageLoad = async ({ parent, params, url }) => {
   const source = url.searchParams.get('source');
   return {
     device,
-    cameras,
+    cameras: cameras.filter((c) => flags.channels === 2 || c.kind === 'general'), // AX-1 1채널이면 AI 채널 숨김
     site,
     driver,
     deviceDocs,

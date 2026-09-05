@@ -12,7 +12,9 @@
     { id: 'cameras', label: '카메라' },
     ...(data.flags.bodycam ? [{ id: 'bodycam', label: '바디캠' }] : []),
   ]);
-  const camsOf = (deviceId: string) => data.cameras.filter((c) => c.deviceId === deviceId);
+  // AX-1 1채널 프로파일이면 AI 채널 숨김
+  const camsOf = (deviceId: string) =>
+    data.cameras.filter((c) => c.deviceId === deviceId && (data.flags.channels === 2 || c.kind === 'general'));
   // AI 이벤트(mock realtime, IF-015) — 카메라별 최신 이벤트 → 타일 bbox + 배너 (AC-2)
   let events = $state<Record<string, Alert>>({});
   onMount(() =>

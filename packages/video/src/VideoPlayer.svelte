@@ -1,6 +1,7 @@
 <script lang="ts">
   // 플레이어 — 라이브(루프 MP4) / 스냅샷(주기 폴링) 전환 · 헬스 배지 · bbox · 정지/재생. capture 모드는 첫 프레임 정지·폴링 없음 (결정적 캡처)
   import type { Camera, MediaSource } from '@boomeyes/domain';
+  import { untrack } from 'svelte';
   import { Button, cx, fmtTime } from '@boomeyes/ui';
   import BboxOverlay, { type Box } from './BboxOverlay.svelte';
   import HealthBadge from './HealthBadge.svelte';
@@ -25,7 +26,7 @@
   } = $props();
   let live = $state<{ kind: 'mp4' | 'hls'; url: string } | null>(null);
   let snap = $state<{ url: string; at: string } | null>(null);
-  let paused = $state(capture);
+  let paused = $state(untrack(() => capture)); // capture 모드는 첫 프레임 정지(초기값만)
   const off = $derived(camera.state === 'offline' || camera.health === 'lost');
   $effect(() => {
     const id = camera.id;
