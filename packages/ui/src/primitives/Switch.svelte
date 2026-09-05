@@ -24,14 +24,14 @@
       onchange?.(checked);
     }}
     class={cx(
-      'h-size-icon-lg w-size-control-xs rounded-pill ease-standard relative shrink-0 transition-colors duration-150',
+      'h-size-icon-lg w-size-control-xs rounded-pill ease-standard duration-base relative shrink-0 transition-colors',
       checked ? 'bg-accent' : 'bg-border-strong',
       FOCUS,
     )}
   >
     <span
       class={cx(
-        'size-size-icon-sm rounded-pill bg-surface shadow-raised ease-standard top-stack-xs left-inline-xs absolute transition-transform duration-150',
+        'size-size-icon-sm rounded-pill bg-surface shadow-raised ease-standard top-stack-xs left-inline-xs duration-base absolute transition-transform',
         checked &&
           'translate-x-[calc(var(--spacing-size-control-xs)-var(--spacing-size-icon-sm)-2*var(--spacing-inline-xs))]',
       )}

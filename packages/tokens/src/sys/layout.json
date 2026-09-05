@@ -1,5 +1,19 @@
 {
   "layout": {
+    "toast": {
+      "width": {
+        "$type": "dimension",
+        "$value": "384px",
+        "$description": "토스트 최대 너비"
+      }
+    },
+    "prose": {
+      "width": {
+        "$type": "dimension",
+        "$value": "640px",
+        "$description": "설명 문단 최대 너비(빈 상태 등)"
+      }
+    },
     "sidebar": {
       "width": {
         "$type": "dimension",

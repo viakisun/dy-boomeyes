@@ -55,7 +55,7 @@
 
 <button
   class={cx(
-    'gap-inline-xs ease-standard inline-flex items-center justify-center font-medium whitespace-nowrap transition-colors duration-100 select-none disabled:pointer-events-none disabled:opacity-40',
+    'gap-inline-xs ease-standard duration-fast inline-flex items-center justify-center font-medium whitespace-nowrap transition-colors select-none disabled:pointer-events-none disabled:opacity-40',
     FOCUS,
     variant === 'link' ? 'h-auto px-0' : SIZE[size],
     STYLE[variant][tone],
@@ -68,7 +68,7 @@
   {...rest}
 >
   {#if loading}<span
-      class="size-size-icon-sm rounded-pill animate-spin border-2 border-current border-t-transparent"
+      class="size-size-icon-sm rounded-pill border-strong animate-spin border-current border-t-transparent"
       aria-hidden="true"
     ></span>{/if}
   {@render children?.()}

@@ -46,7 +46,7 @@
 
 <button
   class={cx(
-    'rounded-control inline-flex shrink-0 items-center justify-center transition-colors duration-100 disabled:pointer-events-none disabled:opacity-40',
+    'rounded-control duration-fast inline-flex shrink-0 items-center justify-center transition-colors disabled:pointer-events-none disabled:opacity-40',
     FOCUS,
     SIZE[size],
     STYLE[variant][tone],

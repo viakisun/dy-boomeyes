@@ -15,6 +15,11 @@
         "$type": "dimension",
         "$value": "{ref.border.width.2}",
         "$description": "포커스 링 두께"
+      },
+      "radio": {
+        "$type": "dimension",
+        "$value": "{ref.border.width.4}",
+        "$description": "라디오 선택 점(테두리로 채움)"
       }
     }
   }

@@ -28,6 +28,6 @@
       >{@render icon()}</span
     >{/if}
   <p class={cx('text-heading-sm', tone === 'danger' ? 'text-danger-fg' : 'text-fg')}>{title}</p>
-  {#if description}<p class="text-body-sm text-fg-muted max-w-prose">{description}</p>{/if}
+  {#if description}<p class="text-body-sm text-fg-muted max-w-layout-prose-width">{description}</p>{/if}
   {#if action}<div class="pt-stack-xs">{@render action()}</div>{/if}
 </div>

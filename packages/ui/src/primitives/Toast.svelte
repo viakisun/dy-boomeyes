@@ -14,7 +14,7 @@
 >
   {#each toasts as t (t.id)}
     <div
-      class="gap-inline-md rounded-card bg-inverse px-inset-md py-inset-sm text-body-md text-fg-on-inverse shadow-popover pointer-events-auto flex w-full max-w-sm items-center"
+      class="gap-inline-md rounded-card bg-inverse px-inset-md py-inset-sm text-body-md text-fg-on-inverse shadow-popover max-w-layout-toast-width pointer-events-auto flex w-full items-center"
       role="status"
     >
       <span class={cx('size-size-indicator rounded-pill shrink-0', TONE[t.tone].dot)} aria-hidden="true"></span>

@@ -53,12 +53,12 @@
       onclick={() => select(t.id)}
       onkeydown={(e) => onkey(e, i)}
       class={cx(
-        'gap-inline-xs inline-flex items-center whitespace-nowrap transition-colors duration-100 disabled:opacity-40',
+        'gap-inline-xs duration-fast inline-flex items-center whitespace-nowrap transition-colors disabled:opacity-40',
         FOCUS,
         size === 'sm' ? 'text-label-md' : 'text-label-lg',
         variant === 'underline'
           ? cx(
-              'px-inset-xs py-inset-sm -mb-px border-b-2',
+              'px-inset-xs py-inset-sm border-b-strong -mb-px',
               value === t.id ? 'border-accent text-accent-fg' : 'text-fg-muted hover:text-fg border-transparent',
             )
           : cx(

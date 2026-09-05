@@ -13,7 +13,7 @@
 
 <aside
   class={cx(
-    'border-border-subtle bg-canvas ease-standard flex h-full shrink-0 flex-col border-r transition-[width] duration-150',
+    'border-border-subtle bg-canvas ease-standard duration-base flex h-full shrink-0 flex-col border-r transition-[width]',
     collapsed ? 'w-layout-sidebar-collapsed' : 'w-layout-sidebar-width',
   )}
   style="z-index: var(--sys-z-nav)"
@@ -45,7 +45,7 @@
             aria-disabled={it.disabled || undefined}
             title={collapsed ? it.label : undefined}
             class={cx(
-              'h-size-control-md gap-inline-sm rounded-control px-inset-sm text-label-lg flex items-center transition-colors duration-100',
+              'h-size-control-md gap-inline-sm rounded-control px-inset-sm text-label-lg duration-fast flex items-center transition-colors',
               FOCUS,
               it.active ? 'bg-selected text-accent-fg-strong' : 'text-fg-muted hover:bg-ui-hover hover:text-fg',
               it.disabled && 'pointer-events-none opacity-40',

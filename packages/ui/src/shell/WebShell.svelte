@@ -43,7 +43,7 @@
       {#if inspector}
         <aside
           class={cx(
-            'border-border-subtle bg-surface ease-standard shrink-0 overflow-y-auto border-l transition-[width] duration-200',
+            'border-border-subtle bg-surface ease-standard duration-moderate shrink-0 overflow-y-auto border-l transition-[width]',
             inspectorOpen ? 'w-layout-inspector-width' : 'w-0 border-l-0',
           )}
           aria-label="상세 패널"

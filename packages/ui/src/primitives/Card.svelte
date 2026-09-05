@@ -39,7 +39,7 @@
           ? 'bg-surface-sunken border-transparent'
           : 'border-border bg-surface',
     variant === 'interactive' &&
-      cx('hover:border-border-strong hover:shadow-raised cursor-pointer transition-shadow duration-150', FOCUS),
+      cx('hover:border-border-strong hover:shadow-raised duration-base cursor-pointer transition-shadow', FOCUS),
     cls,
   )}
   aria-pressed={as === 'button' && selected ? true : undefined}

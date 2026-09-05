@@ -386,6 +386,8 @@
   --color-map-service-fg: var(--sys-color-domain-map-service-fg);
   --color-map-service-bg: var(--sys-color-domain-map-service-bg);
   --color-map-service-border: var(--sys-color-domain-map-service-border);
+  --spacing-layout-toast-width: var(--sys-layout-toast-width);
+  --spacing-layout-prose-width: var(--sys-layout-prose-width);
   --spacing-layout-sidebar-width: var(--sys-layout-sidebar-width);
   --spacing-layout-sidebar-collapsed: var(--sys-layout-sidebar-collapsed);
   --spacing-layout-topbar-height: var(--sys-layout-topbar-height);
@@ -500,5 +502,45 @@
   --text-code-sm--line-height: var(--sys-type-code-sm-line-height);
   --text-code-sm--font-weight: var(--sys-type-code-sm-font-weight);
   --text-code-sm--letter-spacing: var(--sys-type-code-sm-letter-spacing);
+}
+
+@utility duration-fast {
+  transition-duration: var(--sys-motion-duration-fast);
+}
+
+@utility duration-base {
+  transition-duration: var(--sys-motion-duration-base);
+}
+
+@utility duration-moderate {
+  transition-duration: var(--sys-motion-duration-moderate);
+}
+
+@utility duration-slow {
+  transition-duration: var(--sys-motion-duration-slow);
+}
+
+@utility border-strong {
+  border-width: var(--sys-border-width-strong);
+}
+
+@utility border-t-strong {
+  border-top-width: var(--sys-border-width-strong);
+}
+
+@utility border-r-strong {
+  border-right-width: var(--sys-border-width-strong);
+}
+
+@utility border-b-strong {
+  border-bottom-width: var(--sys-border-width-strong);
+}
+
+@utility border-l-strong {
+  border-left-width: var(--sys-border-width-strong);
+}
+
+@utility border-radio {
+  border-width: var(--sys-border-width-radio);
 }
 

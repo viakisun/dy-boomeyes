@@ -6,9 +6,9 @@
 
 | 구성 | 수 |
 |---|---|
-| 토큰 전체 | 616 |
-| ref(원시) | 205 |
-| sys(시맨틱) | 319 |
+| 토큰 전체 | 620 |
+| ref(원시) | 206 |
+| sys(시맨틱) | 322 |
 | cmp(컴포넌트) | 92 |
 | 컴포넌트 카탈로그 | 79 |
 | 대비 검사 | 82/82 통과 |
@@ -64,7 +64,7 @@
 |---|---|---|
 | CSS 변수 | `--<layer>-<path-kebab>` | `--sys-color-bg-canvas` · `--sys-type-body-md`(font 축약) · `--sys-type-body-md-font-size` |
 | Tailwind(색) | `bg.<x>`→`bg-<x>` · `fg.<x>`→`text-fg-<x>`(default는 `text-fg`) · `border.<x>`→`border-border-<x>` · `accent.solid`→`bg-accent` · `status.<tone>.solid`→`bg-<tone>` · `domain.<e>.<s>.solid`→`bg-<e>-<s>` | `bg-canvas` `text-fg-muted` `bg-danger` `text-danger-fg` `bg-equipment-fault` |
-| Tailwind(치수) | `ref.space.16`→`p-16` · `sys.space.inset.md`→`p-inset-md` · `sys.size.control.md`→`h-size-control-md` · `sys.radius.card`→`rounded-card` · `sys.shadow.modal`→`shadow-modal` · `sys.type.body-md`→`text-body-md`(행간·굵기·자간 포함) | |
+| Tailwind(치수) | `ref.space.16`→`p-16` · `sys.space.inset.md`→`p-inset-md` · `sys.size.control.md`→`h-size-control-md` · `sys.radius.card`→`rounded-card` · `sys.shadow.modal`→`shadow-modal` · `sys.type.body-md`→`text-body-md`(행간·굵기·자간 포함) · `sys.motion.duration.fast`→`duration-fast` · `sys.border.width.strong`→`border-strong`/`border-b-strong` · `sys.layout.toast.width`→`max-w-layout-toast-width` · `sys.layout.prose.width`→`max-w-layout-prose-width` | |
 | Svelte | 컴포넌트 PascalCase · prop `variant tone size` · boolean 상태 `disabled loading selected invalid` · 이벤트 `onselect onchange` | `<Button variant="outline" tone="danger" size="sm">` |
 | data 속성 | 모드 = `data-theme="light|dark"` · `data-density="compact|comfortable"` — 문서 루트에만 · 국소 강제는 `CameraWall` 등 컴포넌트 내부에서만 | |
 
@@ -579,6 +579,8 @@
 
 | 토큰 | 값 | 원천 | 설명 |
 |---|---|---|---|
+| `sys.layout.toast.width` | 384px | 384px | 토스트 최대 너비 |
+| `sys.layout.prose.width` | 640px | 640px | 설명 문단 최대 너비(빈 상태 등) |
 | `sys.layout.sidebar.width` | 240px | 240px | 웹 사이드바 |
 | `sys.layout.sidebar.collapsed` | 56px | 56px | 접힘(아이콘만) |
 | `sys.layout.topbar.height` | 48px | 48px | 웹 상단 바 |
@@ -623,6 +625,7 @@
 | `sys.border.width.default` | 1px | {ref.border.width.1} | 기본 1px |
 | `sys.border.width.strong` | 2px | {ref.border.width.2} | 선택·강조 2px |
 | `sys.border.width.focus` | 2px | {ref.border.width.2} | 포커스 링 두께 |
+| `sys.border.width.radio` | 4px | {ref.border.width.4} | 라디오 선택 점(테두리로 채움) |
 
 ### 6.3 그림자 (`sys.shadow.*`) — 테마별
 
