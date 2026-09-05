@@ -12,6 +12,8 @@ import type {
   Case,
   Device,
   Doc,
+  DocKind,
+  DocSummary,
   Escalation,
   Inspection,
   InspectionItem,
@@ -66,6 +68,18 @@ export interface ApiClient {
   rules(): Promise<RuleSet>;
   saveRules(patch: { alerts?: AlertRule[]; errorCodes?: ErrorCode[] }, by: string): Promise<RuleSet>;
   docs(scope: Scope): Promise<Doc[]>;
+  doc(id: string): Promise<Doc | undefined>;
+  /** 촬영 제출(IF-011) — expiring|rejected → submitted → review(자동) + 서류 검토 업무 생성 */
+  submitDoc(id: string, file: { name: string; type: string; size: number; url?: string }, by: string): Promise<Doc>;
+  /** 현장 검토 — review → approved|rejected(사유 필수) · 연결 업무 done */
+  reviewDoc(id: string, decision: 'approved' | 'rejected', by: string, note?: string): Promise<Doc>;
+  /** 관리자 등록(B4-06) — 만료 D-30 이내면 expiring */
+  registerDoc(
+    input: { kind: DocKind; subject: string; subjectId: string; expiresAt: string | null },
+    by: string,
+  ): Promise<Doc>;
+  /** 완비율(%)·만료 임박 — 대상(장비·운전자)별 */
+  docCompleteness(scope: Scope): Promise<DocSummary[]>;
   leases(scope: Scope): Promise<Lease[]>;
   kpis(scope: Scope): Promise<Kpis>;
 }

@@ -17,6 +17,7 @@
     fmtDateTime,
     toast,
     type Column,
+    Inspector,
   } from '@boomeyes/ui';
   import { session } from '$lib/session.svelte';
   let { data } = $props();
@@ -81,10 +82,7 @@
     {/if}
   </div>
 
-  <aside
-    class="rounded-card border-border bg-surface p-inset-lg gap-stack-md sticky top-0 hidden h-fit flex-col border xl:flex"
-    aria-label="업무 상세"
-  >
+  <Inspector label="업무 상세">
     {#if selected}
       <div class="gap-stack-xs flex flex-col">
         <div class="flex items-center justify-between">
@@ -102,5 +100,5 @@
     {:else}
       <EmptyState title="업무를 선택하세요" />
     {/if}
-  </aside>
+  </Inspector>
 </div>

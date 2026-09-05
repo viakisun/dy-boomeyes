@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { INSPECTION_ITEMS } from '@boomeyes/domain';
-import { bootMock, clock, H, MIN } from './index';
+import { bootMock, clock, DAY, H, MIN } from './index';
 
 describe('[FR-008] MockApi 업무 흐름', () => {
   it('C-105 접수 → 완료 (task 상태기계)', async () => {
@@ -178,5 +178,91 @@ describe('[FR-011] 알림 기준 · 고장코드 (B4-05)', () => {
     const saved = await api.saveRules({ alerts }, 'ops01');
     expect(saved.alerts.find((a) => a.kind === 'pipe')?.threshold?.caution).toBe(0.85);
     expect(saved.history.at(-1)).toMatchObject({ by: 'ops01', action: '알림 기준 저장' });
+  });
+});
+
+describe('[FR-015] 서류 제출·검토', () => {
+  it('DOC-001 expiring → submitDoc → review(자동) + 검토 업무 생성 → reviewDoc approved → 업무 done', async () => {
+    const api = bootMock({ capture: true });
+    const d = await api.submitDoc('DOC-001', { name: 'cert.png', type: 'image/png', size: 10 }, 'driver03');
+    expect(d.state).toBe('review');
+    const cases = await api.cases({ role: 'site-safety', siteIds: ['SITE-001'] });
+    const task = cases.find((c) => c.docId === 'DOC-001');
+    expect(task?.state).toBe('new');
+    const r = await api.reviewDoc('DOC-001', 'approved', 'safety01');
+    expect(r.state).toBe('approved');
+    expect((await api.case(task!.id))?.state).toBe('done');
+  });
+  it('접수 전(new) 검토 업무: 접수(new→in-progress) 후 승인 → done · 접수 없이 승인해도 상태기계(new→in-progress→done)를 거친다', async () => {
+    const api = bootMock({ capture: true });
+    await api.submitDoc('DOC-001', { name: 'a.png', type: 'image/png', size: 1 }, 'driver03');
+    const task = (await api.cases({ role: 'site-safety', siteIds: ['SITE-001'] })).find((c) => c.docId === 'DOC-001')!;
+    expect(task.state).toBe('new');
+    await api.acceptCase(task.id, 'safety01');
+    expect((await api.case(task.id))?.state).toBe('in-progress');
+    await api.reviewDoc('DOC-001', 'approved', 'safety01');
+    expect((await api.case(task.id))?.state).toBe('done');
+    // 픽스처 docnew: C-106을 new로 두고 바로 승인 — 직접 대입 없이 전이 2번
+    const api2 = bootMock({ capture: true, screen: 'A1-03', state: 'docnew' });
+    expect((await api2.case('C-106'))?.state).toBe('new');
+    await api2.reviewDoc('DOC-004', 'approved', 'safety01');
+    const done = await api2.case('C-106');
+    expect(done?.state).toBe('done');
+    expect(done?.history.at(-1)?.action).toBe('승인 — 완료');
+  });
+  it('반려는 사유 필수 · rejected → 재제출 submitted', async () => {
+    const api = bootMock({ capture: true });
+    await api.submitDoc('DOC-001', { name: 'a.png', type: 'image/png', size: 1 }, 'driver03');
+    await expect(api.reviewDoc('DOC-001', 'rejected', 'safety01')).rejects.toThrow('반려 사유');
+    const r = await api.reviewDoc('DOC-001', 'rejected', 'safety01', '흐림');
+    expect(r.state).toBe('rejected');
+    expect((await api.submitDoc('DOC-001', { name: 'b.png', type: 'image/png', size: 1 }, 'driver03')).state).toBe(
+      'review',
+    );
+  });
+  it('[FR-016] registerDoc: D-30 이내 expiring · 완비율 집계', async () => {
+    const api = bootMock({ capture: true });
+    const d = await api.registerDoc(
+      {
+        kind: 'ndt',
+        subject: 'CPB-001 성적서',
+        subjectId: 'CPB-001',
+        expiresAt: new Date(clock.now().getTime() + 10 * DAY).toISOString(),
+      },
+      'ops01',
+    );
+    expect(d.state).toBe('expiring');
+    const sum = await api.docCompleteness({ role: 'control' });
+    const cpb3 = sum.find((s) => s.subjectId === 'CPB-003');
+    expect(cpb3?.rate).toBe(100);
+    expect(sum.find((s) => s.subjectId === 'CPB-001')?.expiring).toBe(1);
+    const all = await api.docCompleteness({ role: 'control' });
+    const site = all.find((c) => c.kind === 'site');
+    expect(site?.subjectId).toBe('SITE-001');
+    expect(site?.total).toBe(7); // 시드 6 + 등록 1(CPB-001 → SITE-001)
+    expect(all.filter((c) => c.kind === 'site')).toHaveLength(1);
+    const bySite = await api.registerDoc(
+      { kind: 'license', subject: '현장 선임증', subjectId: 'SITE-002', expiresAt: null },
+      'ops01',
+    );
+    expect(bySite.siteId).toBe('SITE-002');
+    expect((await api.docCompleteness({ role: 'control' })).filter((c) => c.kind === 'site')).toHaveLength(2);
+  });
+});
+
+describe('[FR-008] 완료 확인·확인 요청 (W2)', () => {
+  it('completeCase는 조치 내용이 없으면 거부한다', async () => {
+    const api = bootMock({ capture: true });
+    await api.acceptCase('C-105', 'safety01');
+    await expect(api.completeCase('C-105', 'safety01', ' ')).rejects.toThrow('조치 내용');
+    expect((await api.completeCase('C-105', 'safety01', '릴레이 교체')).state).toBe('done');
+  });
+  it('[FR-022] requestConfirm은 상태를 바꾸지 않고 이력·현장 알림만 남긴다', async () => {
+    const api = bootMock({ capture: true });
+    const before = (await api.alerts({ role: 'control' })).length;
+    const c = await api.requestConfirm('C-105', 'hq01', '확인 바랍니다');
+    expect(c.state).toBe('new');
+    expect(c.history.at(-1)?.action).toContain('확인 요청');
+    expect((await api.alerts({ role: 'control' })).length).toBe(before + 1);
   });
 });

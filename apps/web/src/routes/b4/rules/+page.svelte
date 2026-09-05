@@ -16,6 +16,7 @@
     cx,
     fmtDateTime,
     toast,
+    Inspector,
   } from '@boomeyes/ui';
   import { untrack } from 'svelte';
   import { session } from '$lib/session.svelte';
@@ -189,11 +190,8 @@
     {/if}
   </div>
 
-  <aside
-    class="rounded-card border-border bg-surface p-inset-lg gap-stack-md sticky top-0 hidden h-fit flex-col border xl:flex"
-    aria-label="변경 이력"
-  >
+  <Inspector label="변경 이력">
     <h2 class="text-heading-sm">변경 이력</h2>
     <Timeline items={data.rules.history} />
-  </aside>
+  </Inspector>
 </div>

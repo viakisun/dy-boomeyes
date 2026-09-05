@@ -105,6 +105,8 @@ screens:
   states:
   - id: case
     name: case
+  - id: docnew
+    name: 서류 검토 업무 접수 전(C-106 new)
   nav:
   - to: A1-08
     label: 완료 처리

@@ -8,6 +8,8 @@
     BottomSheet,
     Button,
     CASE_KIND_LABEL,
+    DOC_STATE_LABEL,
+    DocumentCard,
     EQUIPMENT_TONE,
     ERROR_CODE_LABEL,
     SEVERITY_LABEL,
@@ -29,7 +31,24 @@
   let busy = $state(false);
   const me = () => session.user?.userId ?? 'safety01';
   const canAccept = $derived(data.task.state === 'new' || data.task.state === 'escalated');
-  const canComplete = $derived(data.task.state === 'in-progress');
+  const canComplete = $derived(data.task.state === 'in-progress' && data.task.kind !== 'doc');
+  // 서류 업무(kind=doc): 승인/반려(사유 필수)가 완료다 — reviewDoc이 서류 상태기계와 업무를 함께 닫는다 (documents AC-3)
+  const canReview = $derived(
+    data.task.kind === 'doc' &&
+      !!data.doc &&
+      (data.doc.state === 'review' || data.doc.state === 'submitted') &&
+      data.task.state !== 'done',
+  );
+  let reason = $state('');
+  const openReview = () => goto(resolve(withSheet(true, 'review') as '/'));
+  async function review(decision: 'approved' | 'rejected') {
+    if (!data.doc) return;
+    await run(decision === 'approved' ? '승인' : '반려', () =>
+      data.api.reviewDoc(data.doc!.id, decision, me(), reason.trim() || undefined),
+    );
+    reason = '';
+    await goto(resolve(withSheet(false) as '/'));
+  }
   async function run(label: string, fn: () => Promise<unknown>) {
     busy = true;
     try {
@@ -44,9 +63,9 @@
   // 완료 처리 시트(A1-08): 조치 내용 필수 → in-progress → done. 시트 열림은 URL(?sheet=complete)이 결정 — 뒤로가기로 닫힌다
   let note = $state('');
   // 시트 열기/닫기는 현재 URL의 다른 쿼리(?state= ?capture= ?scene=)를 유지한다 — mock db 캐시 키가 바뀌면 안 된다(QA §3)
-  const withSheet = (on: boolean) => {
+  const withSheet = (on: boolean, kind: 'complete' | 'review' = 'complete') => {
     const u = new URL(location.href);
-    if (on) u.searchParams.set('sheet', 'complete');
+    if (on) u.searchParams.set('sheet', kind);
     else u.searchParams.delete('sheet');
     return u.pathname + u.search;
   };
@@ -114,6 +133,21 @@
     </section>
   {/if}
 
+  {#if data.doc}
+    <section class="gap-stack-sm flex flex-col" aria-label="서류">
+      <h3 class="text-heading-sm">서류</h3>
+      <DocumentCard
+        doc={data.doc}
+        due={data.doc.expiresAt ? dueLabel(data.doc.expiresAt, data.clock.now()) : undefined}
+      />
+      {#if data.doc.file?.url}<img
+          src={data.doc.file.url}
+          alt="제출된 {data.doc.subject}"
+          class="rounded-card max-h-size-control-lg object-contain"
+        />{/if}
+    </section>
+  {/if}
+
   <section class="gap-stack-sm flex flex-col" aria-label="이력">
     <h3 class="text-heading-sm">이력</h3>
     <Timeline items={data.task.history} />
@@ -127,12 +161,28 @@
       <Button size="lg" block disabled={busy} onclick={() => run('접수', () => data.api.acceptCase(data.task.id, me()))}
         >접수</Button
       >
+    {:else if canReview}
+      <Button size="lg" block disabled={busy} onclick={() => review('approved')}>승인</Button>
+      <Button size="lg" block variant="outline" tone="danger" disabled={busy} onclick={openReview}>반려</Button>
     {:else if canComplete}
       <Button size="lg" block tone="neutral" variant="outline" disabled={busy} onclick={openSheet}>완료 확인</Button>
     {:else}
       <span class="text-body-sm text-fg-muted self-center">{TASK_LABEL[data.task.state]} 상태 — 할 일이 없습니다</span>
     {/if}
   </div>
+
+  <BottomSheet open={data.review} title="반려 사유" onclose={closeSheet}>
+    <div class="gap-stack-sm flex flex-col">
+      <p class="text-body-sm text-fg-muted">{data.doc?.subject} · {data.doc ? DOC_STATE_LABEL[data.doc.state] : ''}</p>
+      <TextField label="반려 사유(필수)" bind:value={reason} placeholder="예: 사본 흐림 — 원본 재촬영" />
+    </div>
+    {#snippet footer()}
+      <Button size="lg" block tone="danger" disabled={busy || !reason.trim()} onclick={() => review('rejected')}
+        >반려</Button
+      >
+      <Button size="lg" block variant="ghost" tone="neutral" onclick={closeSheet}>닫기</Button>
+    {/snippet}
+  </BottomSheet>
 
   <BottomSheet open={data.sheet} title="완료 처리" capture onclose={closeSheet}>
     <div class="gap-stack-sm flex flex-col" data-scr={SCR['A1-08']}>

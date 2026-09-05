@@ -19,6 +19,16 @@ const PAGES: { scr: string; url: string; ready: (page: Page) => Promise<void> }[
     ready: (p) => expect(p.getByText('C-105', { exact: false }).first()).toBeVisible(),
   },
   {
+    scr: SCR['B1-05'],
+    url: '/b1/docs?state=docs&capture=1',
+    ready: (p) => expect(p.locator('table tbody tr')).toHaveCount(6),
+  },
+  {
+    scr: SCR['B4-06'],
+    url: '/b4/docs?state=docs&capture=1',
+    ready: (p) => expect(p.locator('table tbody tr')).toHaveCount(6),
+  },
+  {
     scr: SCR['B4-02'],
     url: '/b4/protocols?state=proto&capture=1',
     ready: (p) => expect(p.getByText('cpb.v0.1').first()).toBeVisible(),

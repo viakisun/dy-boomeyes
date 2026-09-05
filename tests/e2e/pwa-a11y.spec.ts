@@ -12,7 +12,7 @@ const PAGES: { scr: string; url: string; ready: (page: Page) => Promise<void> }[
   {
     scr: SCR['A1-02'],
     url: '/a1/inbox?state=inbox&capture=1',
-    ready: (p) => expect(p.locator('ul[aria-label="업무"] li')).toHaveCount(3),
+    ready: (p) => expect(p.locator('ul[aria-label="업무"] li')).toHaveCount(4),
   },
   {
     scr: SCR['A1-03'],
@@ -32,12 +32,17 @@ const PAGES: { scr: string; url: string; ready: (page: Page) => Promise<void> }[
   {
     scr: SCR['A3-05'],
     url: '/a3/tasks?state=inbox&capture=1',
-    ready: (p) => expect(p.locator('ul[aria-label="업무"] li')).toHaveCount(4),
+    ready: (p) => expect(p.locator('ul[aria-label="업무"] li')).toHaveCount(5),
   },
   {
     scr: SCR['A2-02'],
     url: '/a2/today?state=today&capture=1',
     ready: (p) => expect(p.getByRole('button', { name: '출근 체크인' })).toBeVisible(),
+  },
+  {
+    scr: SCR['A2-05'],
+    url: '/a2/docs?state=docs&capture=1',
+    ready: (p) => expect(p.locator('ul[aria-label="서류"] li')).toHaveCount(4),
   },
   {
     scr: SCR['A2-03'],

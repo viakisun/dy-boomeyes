@@ -3,7 +3,7 @@ id: SPEC-task-escalation
 status: draft
 wave: 1
 screens: [A1-02, A1-03, B1-03, B1-04, A1-08, A3-02, A3-05]
-fr: [FR-008, FR-009, FR-011, FR-006, FR-002, FR-017, FR-018, FR-010, FR-024]
+fr: [FR-008, FR-009, FR-011, FR-006, FR-002, FR-017, FR-018, FR-010, FR-024, FR-022]
 ---
 # task-escalation — 업무함 · 업무 상세 · 운영사 수신함 · 에스컬레이션
 

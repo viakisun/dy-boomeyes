@@ -4979,6 +4979,10 @@
           {
             "id": "case",
             "name": "case"
+          },
+          {
+            "id": "docnew",
+            "name": "서류 검토 업무 접수 전(C-106 new)"
           }
         ],
         "nav": [

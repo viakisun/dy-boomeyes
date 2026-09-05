@@ -63,8 +63,28 @@ export const FIXTURES: Record<string, Fixture> = {
         : c,
     ),
   }),
+  // 서류 검토 업무가 접수 전(new)이면 A1-03은 접수 → 승인/반려 2단계 (documents AC-3)
+  'A1-03:docnew': (db) => ({
+    ...db,
+    cases: db.cases.map((c) =>
+      c.id === 'C-106'
+        ? {
+            ...c,
+            state: 'new' as const,
+
+            createdAt: clock.minus(20 * MIN),
+            history: [{ at: clock.minus(20 * MIN), by: 'ops01', action: '제출' }],
+          }
+        : c,
+    ),
+  }),
   'A3-02:sites': (db) => db,
   'A3-05:inbox': (db) => db,
+  // documents(W2): A2-05 · B1-05 · B4-06 — 시드 그대로(DOC-001 D-27 · DOC-004 검토 중 · DOC-005 반려 · DOC-006 승인). queued는 B12(아웃박스)에서 채움
+  'A2-05:docs': (db) => db,
+  'A2-05:queued': (db) => db,
+  'B1-05:docs': (db) => db,
+  'B4-06:docs': (db) => db,
   'B1-03:inbox': (db) => db,
   // 에스컬레이션 화면: C-105를 65분 전 발행으로 두면 escalations()가 escalated로 전이한다 (AC-7)
   'B1-04:esc': (db) => ({

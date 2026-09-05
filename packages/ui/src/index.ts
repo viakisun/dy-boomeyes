@@ -33,6 +33,7 @@ export { default as Stat } from './primitives/Stat.svelte';
 export { default as DataTable } from './primitives/DataTable.svelte';
 export type { Column } from './lib/table';
 export { default as TaskCard } from './primitives/TaskCard.svelte';
+export { default as DocumentCard } from './primitives/DocumentCard.svelte';
 export { default as Timeline } from './primitives/Timeline.svelte';
 export { default as EscalationTimer } from './primitives/EscalationTimer.svelte';
 export { default as CheckinCard } from './primitives/CheckinCard.svelte';
@@ -49,6 +50,8 @@ export {
   REQUEST_STATE_LABEL,
   REQUEST_TONE,
   ERROR_CODE_LABEL,
+  DOC_STATE_LABEL,
+  DOC_KIND_LABEL,
 } from './lib/labels';
 export { fmtDateTime, fmtTime, dueLabel, elapsedLabel } from './lib/format';
 export { connectivity } from './lib/connectivity.svelte';
@@ -57,6 +60,7 @@ export { default as WebShell } from './shell/WebShell.svelte';
 export { default as PwaShell } from './shell/PwaShell.svelte';
 export { default as Sidebar } from './shell/Sidebar.svelte';
 export { default as Topbar } from './shell/Topbar.svelte';
+export { default as Inspector } from './shell/Inspector.svelte';
 export { default as AppBar } from './shell/AppBar.svelte';
 export { default as BottomNav } from './shell/BottomNav.svelte';
 export { default as DemoBar } from './shell/DemoBar.svelte';

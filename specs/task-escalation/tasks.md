@@ -10,7 +10,7 @@
 | 6 | B1-03 수신함 + 승인/반려 + `?case=` 선택 | AC-6 · `b1-03-inbox.png` | B1-03 FR-017 FR-018 |
 | 7 | B1-04 에스컬레이션 | AC-7 · `b1-04-esc.png` | B1-04 FR-010 |
 | 8 | e2e(접수 흐름 · 스코프 · 승인) · axe · 시각 회귀 기준선 | 게이트 6 녹색 | QA |
+| W2 | A1-08 완료 시트(BottomSheet) · A3-02 · A3-05 · `requestConfirm` · 픽스처 3 · e2e 3 · axe 3 | AC-9~11 | SCR-A1-08 SCR-A3-02 SCR-A3-05 |
 
-순서 1 → 2 → 3·4 → 5 → 6·7 → 8. | W2 | A1-08 완료 시트(BottomSheet) · A3-02 · A3-05 · `requestConfirm` · 픽스처 3 · e2e 3 · axe 3 | AC-9~11 | SCR-A1-08 SCR-A3-02 SCR-A3-05 |
-
+순서 1 → 2 → 3·4 → 5 → 6·7 → 8. 
 커밋 예: `feat(task): A1-02 업무함 · 필터 — Refs: SCR-A1-02 FR-008 FR-009`.

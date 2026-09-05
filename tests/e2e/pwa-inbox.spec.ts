@@ -2,21 +2,21 @@
 import { expect, test } from '@playwright/test';
 import { SCR } from '../../packages/domain/src/generated/ids';
 
-test('[A1-02] safety01 업무 4 중 미처리 3 · 고장·이상 칩 2 · 정렬 최상단 C-105 [FR-008] [FR-009] [FR-024]', async ({
+test('[A1-02] safety01 업무 5 중 미처리 4 · 고장·이상 칩 2 · 정렬 최상단 C-105 [FR-008] [FR-009] [FR-024]', async ({
   page,
 }) => {
   await page.goto('/a1/login');
   await page.getByRole('button', { name: '입장' }).click();
   await expect(page.locator(`[data-scr="${SCR['A1-02']}"]`)).toBeVisible();
   const items = page.locator('ul[aria-label="업무"] li');
-  await expect(items).toHaveCount(3);
+  await expect(items).toHaveCount(4);
   await expect(items.first()).toContainText('C-105');
   await expect(items.first()).toContainText('신규');
   await page.getByRole('tab', { name: /고장·이상/ }).click();
   await expect(page).toHaveURL(/filter=fault/);
   await expect(items).toHaveCount(2);
   await page.getByRole('tab', { name: /전체/ }).click();
-  await expect(items).toHaveCount(4);
+  await expect(items).toHaveCount(5);
   await expect(page.getByText('C-104')).toHaveCount(0); // SITE-002 업무는 안 보인다
 });
 

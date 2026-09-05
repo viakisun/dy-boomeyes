@@ -11,7 +11,12 @@ export const load: PageLoad = async ({ parent, params, url }) => {
   const users = await api.users();
   const me = users.find((u) => u.id === session.user?.userId);
   const scope = { role: (me?.role ?? 'site-safety') as RoleId, siteIds: me?.siteIds };
-  const [cameras, sites, docs] = await Promise.all([api.cameras(device.id), api.sites(scope), api.docs(scope)]);
+  const [cameras, sites, docs, completeness] = await Promise.all([
+    api.cameras(device.id),
+    api.sites(scope),
+    api.docs(scope),
+    api.docCompleteness(scope),
+  ]);
   const site = sites.find((s) => s.id === device.siteId);
   const driver = users.find((u) => u.deviceId === device.id);
   const deviceDocs = docs.filter((d) => d.subjectId === device.id);
@@ -25,6 +30,7 @@ export const load: PageLoad = async ({ parent, params, url }) => {
     driver,
     deviceDocs,
     driverDocs,
+    completeness: completeness.find((c) => c.subjectId === device.id),
     flags,
     source: source && flags.sources.includes(source as 'server') ? source : flags.sources[0]!,
   };
