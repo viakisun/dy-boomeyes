@@ -1,5 +1,5 @@
 // ApiClient 인터페이스 — 구현: @boomeyes/mock(인메모리) · @boomeyes/api-client(http, W3). 화면은 이 인터페이스만 의존 (ADR-002).
-import type { Alert, Camera, Case, Device, Doc, Kpis, Lease, Scope, Site, User } from './types';
+import type { Alert, Camera, Case, Device, Doc, Escalation, Kpis, Lease, Request, Scope, Site, User } from './types';
 
 export interface ApiClient {
   users(): Promise<User[]>;
@@ -13,6 +13,15 @@ export interface ApiClient {
   case(id: string): Promise<Case | undefined>;
   acceptCase(id: string, by: string): Promise<Case>;
   completeCase(id: string, by: string, note: string): Promise<Case>;
+  /** 정비 담당 호출 — 이력 + 정비(maintenance) 통보 (A1-03) */
+  callMaintenance(id: string, by: string): Promise<Case>;
+  /** FR-017 수신함 — 신청·요청 */
+  requests(scope: Scope): Promise<Request[]>;
+  request(id: string): Promise<Request | undefined>;
+  approveRequest(id: string, by: string, note?: string): Promise<Request>;
+  rejectRequest(id: string, by: string, note: string): Promise<Request>;
+  /** FR-010 — 임계(1h) 경과한 new 업무를 escalated로 전이하고 통보 목록을 돌려준다 */
+  escalations(): Promise<Escalation[]>;
   docs(scope: Scope): Promise<Doc[]>;
   leases(scope: Scope): Promise<Lease[]>;
   kpis(scope: Scope): Promise<Kpis>;

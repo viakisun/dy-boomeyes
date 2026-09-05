@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { bootMock, clock, H } from './index';
+import { bootMock, clock, H, MIN } from './index';
 
 describe('[FR-008] MockApi 업무 흐름', () => {
   it('C-105 접수 → 완료 (task 상태기계)', async () => {
@@ -37,5 +37,46 @@ describe('[FR-008] MockApi 업무 흐름', () => {
     const cams = await api.cameras();
     expect(cams.find((c) => c.id === 'CAM-2-2')?.state).toBe('ai-unavailable');
     expect(cams.filter((c) => c.deviceId === 'CPB-004').every((c) => c.state === 'offline')).toBe(true);
+  });
+});
+
+describe('[FR-017] 수신함 신청·요청 (B1-03)', () => {
+  it('승인/반려는 doc 상태기계로 전이하고 이력을 남긴다 · 스코프', async () => {
+    const api = bootMock({ capture: true });
+    expect((await api.requests({ role: 'control' })).map((r) => r.id)).toEqual([
+      'RQ-003',
+      'RQ-001',
+      'RQ-005',
+      'RQ-002',
+      'RQ-004',
+    ]);
+    expect((await api.requests({ role: 'site-safety', siteIds: ['SITE-001'] })).length).toBe(4);
+    const a = await api.approveRequest('RQ-001', 'control01', '2공구 개설 승인');
+    expect(a.state).toBe('approved');
+    expect(a.history.at(-1)).toMatchObject({ by: 'control01', action: '승인', note: '2공구 개설 승인' });
+    const r = await api.rejectRequest('RQ-003', 'control01', '서류 원본 필요');
+    expect(r.state).toBe('rejected');
+    await expect(api.approveRequest('RQ-004', 'control01')).rejects.toThrow(); // approved에서 재승인 불가
+  });
+});
+
+describe('[FR-010] 에스컬레이션 (B1-04)', () => {
+  it('new 업무가 1h를 넘기면 escalated + 본사·관제 통보 · 경과 시간', async () => {
+    const api = bootMock({ capture: true });
+    expect((await api.escalations()).map((e) => e.case.id)).toEqual(['C-104']);
+    clock.jump(61 * MIN);
+    const es = await api.escalations();
+    expect(es.map((e) => e.case.id).sort()).toEqual(['C-104', 'C-105']);
+    const e = es.find((x) => x.case.id === 'C-105');
+    expect(e?.case.state).toBe('escalated');
+    expect(e?.notifyTo).toEqual(['hq-safety', 'control']);
+    expect(e?.elapsedMs).toBeGreaterThanOrEqual(61 * MIN);
+    expect(e?.case.history.at(-1)?.action).toMatch(/^에스컬레이션/);
+    const again = await api.acceptCase('C-105', 'safety01'); // escalated → in-progress
+    expect(again.state).toBe('in-progress');
+  });
+  it('B1-04 esc 픽스처는 C-105를 65분 전 발행으로 둔다', async () => {
+    const api = bootMock({ capture: true, screen: 'B1-04', state: 'esc' });
+    expect((await api.escalations()).map((e) => e.case.id).sort()).toEqual(['C-104', 'C-105']);
   });
 });

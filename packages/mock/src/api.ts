@@ -1,11 +1,15 @@
 // MockApi — 인메모리 ApiClient (ADR-002). 상태기계로만 전이한다.
 import {
+  canTransition,
   transition,
   type Alert,
   type ApiClient,
   type Case,
   type Device,
+  type Escalation,
   type Kpis,
+  type Request,
+  type RequestState,
   type Scope,
 } from '@boomeyes/domain';
 import { clock } from './clock';
@@ -13,6 +17,8 @@ import type { Db } from './seed';
 
 const inScope = (scope: Scope, siteId: string) => !scope.siteIds?.length || scope.siteIds.includes(siteId);
 const delay = (ms = 0) => new Promise<void>((r) => setTimeout(r, ms));
+/** 미접수 에스컬레이션 임계 — entities.rules "임계 1시간(협의)" */
+export const ESCALATE_AFTER_MS = 60 * 60 * 1000;
 
 export function createMockApi(db: Db, opts: { latencyMs?: number } = {}): ApiClient & { db: Db } {
   const wait = () => delay(opts.latencyMs ?? 0);
@@ -75,6 +81,50 @@ export function createMockApi(db: Db, opts: { latencyMs?: number } = {}): ApiCli
       c.history.push({ at: clock.iso(), by, action: '완료 확인', note });
       return c;
     },
+    async callMaintenance(id, by) {
+      await wait();
+      const c = must(db, id);
+      c.history.push({ at: clock.iso(), by, action: '정비 담당 호출', note: 'maint01 통보' });
+      return c;
+    },
+    async requests(scope) {
+      await wait();
+      return db.requests
+        .filter((r) => inScope(scope, r.siteId))
+        .sort((a, b) => (a.requestedAt < b.requestedAt ? 1 : -1));
+    },
+    async request(id) {
+      await wait();
+      return db.requests.find((r) => r.id === id);
+    },
+    async approveRequest(id, by, note) {
+      await wait();
+      return decide(db, id, 'approved', by, '승인', note);
+    },
+    async rejectRequest(id, by, note) {
+      await wait();
+      return decide(db, id, 'rejected', by, '반려', note);
+    },
+    async escalations() {
+      await wait();
+      const now = clock.now().getTime();
+      const out: Escalation[] = [];
+      for (const c of db.cases) {
+        if (c.state === 'new' && now - Date.parse(c.createdAt) >= ESCALATE_AFTER_MS) {
+          c.state = transition('task', 'new', 'escalated');
+          c.history.push({ at: clock.iso(), by: 'system', action: '에스컬레이션 — 1h 미접수, 본사·관제 통보' });
+        }
+        if (c.state !== 'escalated') continue;
+        const notified = [...c.history].reverse().find((h) => h.action.startsWith('에스컬레이션'));
+        out.push({
+          case: c,
+          elapsedMs: now - Date.parse(c.createdAt),
+          notifyTo: ['hq-safety', 'control'],
+          notifiedAt: notified?.at ?? c.createdAt,
+        });
+      }
+      return out.sort((a, b) => b.elapsedMs - a.elapsedMs);
+    },
     async docs(scope) {
       await wait();
       if (!scope.siteIds?.length) return db.docs;
@@ -110,5 +160,14 @@ function must(db: Db, id: string): Case {
   const c = db.cases.find((x) => x.id === id);
   if (!c) throw new Error(`case ${id}`);
   return c;
+}
+/** 승인/반려 — doc 상태기계(submitted → review → approved|rejected). submitted에서 바로 못 가면 review를 거친다 */
+function decide(db: Db, id: string, to: 'approved' | 'rejected', by: string, action: string, note?: string): Request {
+  const r = db.requests.find((x) => x.id === id);
+  if (!r) throw new Error(`request ${id}`);
+  if (!canTransition('doc', r.state, to)) r.state = transition('doc', r.state, 'review') as RequestState;
+  r.state = transition('doc', r.state, to) as RequestState;
+  r.history.push({ at: clock.iso(), by, action, note });
+  return r;
 }
 export const severityOf = (a: Alert) => a.severity;

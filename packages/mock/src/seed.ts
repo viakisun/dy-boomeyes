@@ -1,6 +1,6 @@
 // 시드 — 데모 픽스처(INTENT §7 · docs/DEMO.md): CPB-003 E-021 전압 이상 · CPB-004 통신 두절 · C-105 · D-27 임대 · 교육 이수증
 import ssot from '@boomeyes/domain/generated/ssot.json';
-import type { Alert, Camera, Case, Device, Doc, Lease, Owner, Site, User } from '@boomeyes/domain';
+import type { Alert, Camera, Case, Device, Doc, Lease, Owner, Request, Site, User } from '@boomeyes/domain';
 import { clock, DAY, H, MIN } from './clock';
 
 export interface Db {
@@ -11,6 +11,7 @@ export interface Db {
   cameras: Camera[];
   alerts: Alert[];
   cases: Case[];
+  requests: Request[];
   docs: Doc[];
   leases: Lease[];
 }
@@ -321,5 +322,70 @@ export function seed(): Db {
     { id: 'LS-001', deviceId: 'CPB-001', siteId: 'SITE-001', ownerId: 'OWN-001', from: t(60 * DAY), to: t(-27 * DAY) },
     { id: 'LS-002', deviceId: 'CPB-003', siteId: 'SITE-001', ownerId: 'OWN-001', from: t(30 * DAY), to: t(-150 * DAY) },
   ];
-  return { users, sites, owners, devices, cameras, alerts, cases, docs, leases };
+  // FR-017 신청·요청 5 — 수신함(B1-03) 픽스처
+  const requests: Request[] = [
+    {
+      id: 'RQ-001',
+      kind: 'site-open',
+      title: '한빛 초등학교 2공구 개설 신청',
+      requesterId: 'hq01',
+      siteId: 'SITE-001',
+      state: 'submitted',
+      requestedAt: t(3 * H),
+      note: '10월 타설 시작, CPB 2대 필요',
+      history: [{ at: t(3 * H), by: 'hq01', action: '신청' }],
+    },
+    {
+      id: 'RQ-002',
+      kind: 'device-assign',
+      title: 'CPB-006 배정 요청 — 대전 B 물류센터',
+      requesterId: 'hq01',
+      siteId: 'SITE-002',
+      state: 'review',
+      requestedAt: t(DAY + H),
+      history: [
+        { at: t(DAY + H), by: 'hq01', action: '신청' },
+        { at: t(20 * H), by: 'control01', action: '검토 시작' },
+      ],
+    },
+    {
+      id: 'RQ-003',
+      kind: 'doc',
+      title: '박기사 교육 이수증 갱신 서류 제출',
+      requesterId: 'safety01',
+      siteId: 'SITE-001',
+      state: 'submitted',
+      requestedAt: t(2 * H),
+      note: 'DOC-001 만료 D-27',
+      history: [{ at: t(2 * H), by: 'safety01', action: '신청' }],
+    },
+    {
+      id: 'RQ-004',
+      kind: 'device-assign',
+      title: 'CPB-002 교체 장비 요청',
+      requesterId: 'safety01',
+      siteId: 'SITE-001',
+      state: 'approved',
+      requestedAt: t(2 * DAY),
+      history: [
+        { at: t(2 * DAY), by: 'safety01', action: '신청' },
+        { at: t(DAY + 6 * H), by: 'control01', action: '승인', note: 'CPB-007 9/10 투입' },
+      ],
+    },
+    {
+      id: 'RQ-005',
+      kind: 'doc',
+      title: 'CPB-002 비파괴 검사 성적서 검토 요청',
+      requesterId: 'safety01',
+      siteId: 'SITE-001',
+      state: 'review',
+      requestedAt: t(DAY),
+      note: 'DOC-004',
+      history: [
+        { at: t(DAY), by: 'safety01', action: '신청' },
+        { at: t(18 * H), by: 'control01', action: '검토 시작' },
+      ],
+    },
+  ];
+  return { users, sites, owners, devices, cameras, alerts, cases, requests, docs, leases };
 }

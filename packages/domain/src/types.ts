@@ -120,6 +120,27 @@ export interface Kpis {
   escalated: number;
 }
 
+/** FR-017 신청·요청(현장 개설 · 장비 배정 · 서류) — 운영사 수신함(B1-03)에서 승인/반려. 상태는 doc 상태기계의 부분집합. ENT 등재는 ssot 후속 */
+export type RequestState = 'submitted' | 'review' | 'approved' | 'rejected';
+export interface Request {
+  id: string;
+  kind: 'site-open' | 'device-assign' | 'doc';
+  title: string;
+  requesterId: string;
+  siteId: string;
+  state: RequestState;
+  requestedAt: string;
+  note?: string;
+  history: HistoryItem[];
+}
+/** FR-010 에스컬레이션 — 미접수 임계 경과 업무 + 통보 (entities.rules: 건설사 본사 + 관제) */
+export interface Escalation {
+  case: Case;
+  elapsedMs: number;
+  notifyTo: RoleId[];
+  notifiedAt: string;
+}
+
 export interface Scope {
   role: RoleId;
   siteIds?: string[];
