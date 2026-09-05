@@ -87,6 +87,8 @@ export interface Alert {
   /** AI 카메라 이벤트(IF-015) — 카메라 · 정규화 bbox(0~1) */
   cameraId?: string;
   bbox?: { x: number; y: number; w: number; h: number };
+  /** 이벤트 복기 축(ENT-19) — 있으면 B1-02 피드에 "복기" 링크 */
+  eventId?: string;
 } // ENT-08
 export interface Case {
   id: string;
@@ -351,6 +353,33 @@ export interface Stock {
   group: PartGroup;
   onHand: number;
   safety: number;
+}
+/** ENT-19 이벤트(복기 축) — W2 스텁 EV-001. 이름은 DOM `Event`와 충돌을 피해 ReplayEvent. 채번·공통 시각 원천은 DISC-039, 실 세그먼트 조회는 API-018(2단계) */
+export type ReplaySource = 'general' | 'ai' | 'bodycam' | 'cpb';
+export interface ReplayLane {
+  source: ReplaySource;
+  /** 소스 없음(바디캠 미연동 등) — 화면은 "없음" */
+  available: boolean;
+  cameraId?: string;
+  note?: string;
+  /** 공통 시각축 위의 세그먼트(메타만, 실영상 seek 없음) */
+  segments: { from: string; to: string; label: string }[];
+  /** 공통 시각축 위의 마커(상태 변화 · 알림 · 부품 이력) */
+  markers: { at: string; label: string }[];
+}
+export interface ReplayEvent {
+  id: string;
+  kind: Alert['kind'];
+  deviceId: string;
+  /** t0 = 알림 시각 */
+  at: string;
+  /** 복기 창 ±초 */
+  windowSec: number;
+  alertId: string;
+  caseId: string | null;
+  lanes: Record<ReplaySource, ReplayLane>;
+  /** 긴급 이벤트 원본 보존 잠금(NFR-015) — 삭제·편집 없음 */
+  locked: boolean;
 }
 export interface Scope {
   role: RoleId;
