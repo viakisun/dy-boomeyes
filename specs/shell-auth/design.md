@@ -13,10 +13,10 @@
 ## 라우트
 - 웹: `/login` → 역할 카드 4 → `/b1/dash` `/b2/map` `/b3/console` `/b4/protocols`.
 - PWA: `/a1/login` `/a2/login` `/a3/login` `/a4/login` → `/a1/inbox` `/a2/today` `/a3/sites` `/a4/fleet`.
-- 쿼리: `?state=<id>`(픽스처) · `?capture=1`(시각 고정·애니메이션 off) · `?theme=dark`(캡처용).
+- 쿼리: `?state=<id>`(픽스처) · `?capture=1`(시각 고정·애니메이션 off) · `?theme=dark|light`(캡처·e2e용 — 루트 `data-theme`에 적용만, 저장하지 않음 · `app.html` 선적용도 이 값을 우선).
 
 ## 셸 규약 (DY-design.md §9·§10)
-- 웹 루트 `data-density="compact"` · PWA `comfortable`. 테마는 `data-theme` 또는 prefers-color-scheme.
+- 웹 루트 `data-density="compact"` · PWA `comfortable`. 테마는 문서 루트 `data-theme`(없으면 prefers-color-scheme). **웹**: 기본 light, 탑바 토글(☾/☀)로 사용자가 전체 다크 선택 — `localStorage dy.theme`에 기기 단위로 유지(로그아웃·`resetMock`에도 남음). **PWA**: 시스템 다크를 따르고 토글 없음(DY-design §10). 월보드·쇼케이스는 컴포넌트 내부 강제(§9) — 토글과 무관.
 - 사이드바 항목 = `screens.yaml`에서 역할·표면별 wave ≤ current 화면(생성 nav). 하단 내비 세트: driver(오늘·내 장비·서류·메뉴) · site-safety(업무함·관제·기록·메뉴) · hq-safety(현장·업무·기록) · owner(현황·요청·운전자·계약).
 
 ## 오프라인 · 오류 · 빈 상태
