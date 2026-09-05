@@ -8,6 +8,7 @@ import type {
   RequestState,
   Severity,
   TaskState,
+  LeaseState,
 } from '@boomeyes/domain';
 import type { Tone } from './cx';
 
@@ -67,4 +68,16 @@ export const REQUEST_TONE: Record<RequestState, Tone> = {
   review: 'progress',
   approved: 'success',
   rejected: 'danger',
+};
+export const LEASE_STATE_LABEL: Record<LeaseState, string> = {
+  active: '계약 중',
+  expiring: '만료 임박',
+  relocated: '재배치',
+  ended: '종료',
+};
+export const LEASE_TONE: Record<LeaseState, Tone> = {
+  active: 'success',
+  expiring: 'warning',
+  relocated: 'info',
+  ended: 'neutral',
 };

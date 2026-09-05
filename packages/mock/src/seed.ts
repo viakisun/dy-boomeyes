@@ -399,8 +399,30 @@ export function seed(): Db {
     },
   ];
   const leases: Lease[] = [
-    { id: 'LS-001', deviceId: 'CPB-001', siteId: 'SITE-001', ownerId: 'OWN-001', from: t(60 * DAY), to: t(-27 * DAY) },
-    { id: 'LS-002', deviceId: 'CPB-003', siteId: 'SITE-001', ownerId: 'OWN-001', from: t(30 * DAY), to: t(-150 * DAY) },
+    // lease 상태기계(ENT-10): LS-001 만료 D-27 → expiring(장면 9 · B1-06 최상단) · LS-002 D-150 active
+    {
+      id: 'LS-001',
+      deviceId: 'CPB-001',
+      siteId: 'SITE-001',
+      ownerId: 'OWN-001',
+      from: t(60 * DAY),
+      to: t(-27 * DAY),
+      state: 'expiring',
+      history: [
+        { at: t(60 * DAY), by: 'ops01', action: '계약 등록', note: 'CPB-001 · 한빛 초등학교 · 87일' },
+        { at: t(3 * DAY), by: 'system', action: '만료 임박 D-30' },
+      ],
+    },
+    {
+      id: 'LS-002',
+      deviceId: 'CPB-003',
+      siteId: 'SITE-001',
+      ownerId: 'OWN-001',
+      from: t(30 * DAY),
+      to: t(-150 * DAY),
+      state: 'active',
+      history: [{ at: t(30 * DAY), by: 'ops01', action: '계약 등록', note: 'CPB-003 · 한빛 초등학교 · 180일' }],
+    },
   ];
   // FR-017 신청·요청 5 — 수신함(B1-03) 픽스처
   const requests: Request[] = [

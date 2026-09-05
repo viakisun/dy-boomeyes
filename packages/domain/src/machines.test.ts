@@ -32,3 +32,21 @@ describe('[ENT-16] part 상태기계', () => {
     expect(s).toBe('discarded');
   });
 });
+
+describe('[ENT-10] lease · [ENT-20] request 상태기계', () => {
+  it('lease: active → expiring → relocated | ended · active → ended · relocated는 종단', () => {
+    expect(transition('lease', 'active', 'expiring')).toBe('expiring');
+    expect(transition('lease', 'expiring', 'relocated')).toBe('relocated');
+    expect(transition('lease', 'expiring', 'ended')).toBe('ended');
+    expect(transition('lease', 'active', 'ended')).toBe('ended');
+    expect(canTransition('lease', 'active', 'relocated')).toBe(false);
+    expect(nextStates('lease', 'relocated')).toEqual([]);
+  });
+  it('request: submitted → review → approved | rejected → submitted(재제출)', () => {
+    expect(transition('request', 'submitted', 'review')).toBe('review');
+    expect(transition('request', 'review', 'rejected')).toBe('rejected');
+    expect(transition('request', 'rejected', 'submitted')).toBe('submitted');
+    expect(canTransition('request', 'submitted', 'approved')).toBe(false);
+    expect(() => transition('request', 'approved', 'review')).toThrow('전이 불가');
+  });
+});

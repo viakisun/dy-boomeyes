@@ -58,6 +58,8 @@ export {
   DOC_STATE_LABEL,
   DOC_KIND_LABEL,
   EQUIPMENT_LABEL,
+  LEASE_STATE_LABEL,
+  LEASE_TONE,
 } from './lib/labels';
 export { fmtDateTime, fmtTime, dueLabel, elapsedLabel } from './lib/format';
 export { connectivity } from './lib/connectivity.svelte';

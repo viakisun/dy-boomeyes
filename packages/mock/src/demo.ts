@@ -56,7 +56,7 @@ const called = (db: Db, by: string): Db => ({
       : c,
   ),
 });
-/** 장면 픽스처(순수) — 1: "상황 발생 전"(타임라인이 E-021을 만든다) · 4·5: C-105 진행 · 6: CPB-004 55분 방치(1시간 경과로 에스컬레이션) */
+/** 장면 픽스처(순수) — 1: "상황 발생 전"(타임라인이 E-021을 만든다) · 4·5: C-105 진행 · 6: CPB-004 55분 방치(1시간 경과로 에스컬레이션) · 9: 임대 계약 시드 */
 export const SCENE_FIXTURES: Record<number, Fixture> = {
   1: (db) => ({
     ...db,
@@ -88,6 +88,8 @@ export const SCENE_FIXTURES: Record<number, Fixture> = {
         : c,
     ),
   }),
+  // 9: 사업 가치 — 시드 그대로(LS-001 D-27 expiring이 B1-06 최상단, 재배치는 화면에서)
+  9: (db) => db,
 };
 
 /** 장면 1 타임라인: firstMs 뒤 E-021 발생 — db 변형(CPB-003 fault · 알림 · C-105) 후 alert.raised 1회. 다른 장면은 발행하지 않는다(결정성) */

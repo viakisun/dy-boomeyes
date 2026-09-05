@@ -83,6 +83,9 @@ export interface ApiClient {
   /** 완비율(%)·만료 임박 — 대상(장비·운전자)별 */
   docCompleteness(scope: Scope): Promise<DocSummary[]>;
   leases(scope: Scope): Promise<Lease[]>;
+  lease(id: string): Promise<Lease | undefined>;
+  /** FR-019 재배치 계획(B1-06) — lease 상태기계 expiring → relocated · 대상 현장·메모·이력 */
+  planRelocation(leaseId: string, toSiteId: string, note: string, by: string): Promise<Lease>;
   kpis(scope: Scope): Promise<Kpis>;
   /** FR-018 현장·호기 마스터(B4-03) — 현장 등록·편집(현장명·주소·기간·담당 안전관리자) · 호기(1~120) 등록(중복 오류)·배정 */
   createSite(input: {

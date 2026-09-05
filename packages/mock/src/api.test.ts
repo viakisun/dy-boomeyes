@@ -42,7 +42,7 @@ describe('[FR-008] MockApi 업무 흐름', () => {
 });
 
 describe('[FR-017] 수신함 신청·요청 (B1-03)', () => {
-  it('승인/반려는 doc 상태기계로 전이하고 이력을 남긴다 · 스코프', async () => {
+  it('승인/반려는 request 상태기계(ENT-20)로 전이하고 이력을 남긴다 · 스코프', async () => {
     const api = bootMock({ capture: true });
     expect((await api.requests({ role: 'control' })).map((r) => r.id)).toEqual([
       'RQ-003',
@@ -314,5 +314,26 @@ describe('[FR-021] 사용자·권한', () => {
     expect((await api.setUserSites('maint01', ['SITE-002', 'SITE-999'])).siteIds).toEqual(['SITE-002']);
     expect((await api.setUserStatus('maint01', 'suspended')).status).toBe('suspended');
     await expect(api.setUserRole('nobody', 'control')).rejects.toThrow('user');
+  });
+});
+
+describe('[FR-019] 임대 계약 · 재배치 (lease 상태기계)', () => {
+  it('LS-001 expiring(D-27) → planRelocation → relocated · 대상 현장·이력 · active(LS-002)는 불가 · 같은 현장·없는 현장 오류', async () => {
+    const api = bootMock({ capture: true });
+    const l = await api.lease('LS-001');
+    expect(l?.state).toBe('expiring');
+    expect((await api.leases({ role: 'control' })).map((x) => x.id)).toEqual(['LS-001', 'LS-002']);
+    await expect(api.planRelocation('LS-001', 'SITE-001', '같은 현장', 'control01')).rejects.toThrow('다른 현장');
+    await expect(api.planRelocation('LS-001', 'SITE-999', '없음', 'control01')).rejects.toThrow('site');
+    const r = await api.planRelocation('LS-001', 'SITE-002', '10월 대전 B 이동', 'control01');
+    expect(r.state).toBe('relocated');
+    expect(r.toSiteId).toBe('SITE-002');
+    expect(r.history.at(-1)).toMatchObject({
+      by: 'control01',
+      action: '재배치 계획 — 대전 B 물류센터',
+      note: '10월 대전 B 이동',
+    });
+    await expect(api.planRelocation('LS-002', 'SITE-002', 'x', 'control01')).rejects.toThrow('전이 불가'); // active → relocated 없음
+    await expect(api.planRelocation('LS-001', 'SITE-002', 'x', 'control01')).rejects.toThrow('전이 불가'); // relocated에서 재계획 없음
   });
 });
