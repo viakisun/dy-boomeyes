@@ -18,6 +18,8 @@ export interface Site {
   lng: number;
   videoProfile: VideoProfile;
   safetyUserId: string;
+  /** 현장 기간(B4-03 등록·편집) */
+  period?: { from: string; to: string };
 } // ENT-01
 export interface Owner {
   id: string;
@@ -140,6 +142,8 @@ export interface User {
   /** 운전자 배정 장비 (driver-daily) */
   deviceId?: string;
   phone?: string;
+  /** 계정 상태(B4-04) — 없으면 active */
+  status?: 'active' | 'suspended';
 } // ENT-05
 export interface Kpis {
   total: number;

@@ -55,3 +55,21 @@ export function profileFlags(profile: VideoProfile): ProfileFlags {
 }
 
 export const PROFILE_IDS = PROFILES.map((p) => p.id as VideoProfile);
+
+/** 옵션 8축(ssot options.axes) — id·이름 */
+export const PROFILE_AXES = (ssot as { options: { axes: { id: string; name: string }[] } }).options.axes.map((a) => ({
+  id: a.id,
+  name: a.name,
+}));
+export interface ProfileAxis {
+  id: string;
+  name: string;
+  /** 프리셋의 선택지 — null이면 없음(예: P-LITE 바디캠) */
+  choice: string | null;
+}
+/** 프리셋의 8축 선택지 — B4-03 표시 전용(축 편집은 W4 · FR-029) */
+export function profileAxes(profile: VideoProfile): ProfileAxis[] {
+  const row = PROFILES.find((p) => p.id === profile);
+  if (!row) throw new Error(`알 수 없는 현장 프로파일: ${profile}`);
+  return PROFILE_AXES.map((a) => ({ ...a, choice: row.choices[a.id] ?? null }));
+}

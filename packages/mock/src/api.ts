@@ -27,6 +27,7 @@ import {
   type Scope,
   type Site,
   type User,
+  PROFILE_IDS,
 } from '@boomeyes/domain';
 import { clock, DAY } from './clock';
 import type { Db } from './seed';
@@ -383,6 +384,106 @@ export function createMockApi(db: Db, opts: { latencyMs?: number } = {}): ApiCli
     async leases(scope) {
       await wait();
       return db.leases.filter((l) => inScope(scope, l.siteId));
+    },
+    // sites-assets-leases(W2 B5) 마스터 — db를 직접 변이한다(경계는 복사본을 돌려주므로)
+    async createSite(input) {
+      await wait();
+      if (!input.name.trim()) throw new Error('현장명은 필수입니다');
+      const site: Site = {
+        id: `SITE-${String(db.sites.length + 1).padStart(3, '0')}`,
+        name: input.name.trim(),
+        address: input.address,
+        company: input.company,
+        lat: input.lat ?? 36.35,
+        lng: input.lng ?? 127.38,
+        videoProfile: input.videoProfile ?? 'P-SD',
+        safetyUserId: input.safetyUserId,
+        ...(input.period ? { period: input.period } : {}),
+      };
+      db.sites.push(site);
+      return site;
+    },
+    async updateSite(id, patch) {
+      await wait();
+      const site = db.sites.find((x) => x.id === id);
+      if (!site) throw new Error(`site ${id}`);
+      if (patch.name !== undefined && !patch.name.trim()) throw new Error('현장명은 필수입니다');
+      Object.assign(site, patch);
+      return site;
+    },
+    async registerDevice(input) {
+      await wait();
+      if (!Number.isInteger(input.unitNo) || input.unitNo < 1 || input.unitNo > 120)
+        throw new Error('호기는 1~120 사이의 정수여야 합니다');
+      if (db.devices.some((d) => d.unitNo === input.unitNo))
+        throw new Error(`호기 ${input.unitNo} 중복 — 이미 배정된 호기입니다`);
+      const site = db.sites.find((x) => x.id === input.siteId);
+      if (!site) throw new Error(`site ${input.siteId}`);
+      const d: Device = {
+        id: `CPB-${String(input.unitNo).padStart(3, '0')}`,
+        unitNo: input.unitNo,
+        siteId: site.id,
+        ownerId: input.ownerId ?? 'OWN-001',
+        state: 'offline', // 설치 전 — 첫 텔레메트리까지 두절 (카메라 등록은 W3)
+        lat: site.lat,
+        lng: site.lng,
+        telemetry: {
+          at: clock.iso(),
+          voltage: 0,
+          voltageStatus: 'normal',
+          harness: 'ok',
+          lte: 'lost',
+          gpsFix: false,
+          errorCode: null,
+          pipeRatio: 0,
+          filterRatio: 0,
+          boomAngle: 0,
+        },
+      };
+      db.devices.push(d);
+      return d;
+    },
+    async assignDevice(deviceId, siteId) {
+      await wait();
+      const d = db.devices.find((x) => x.id === deviceId);
+      if (!d) throw new Error(`device ${deviceId}`);
+      const site = db.sites.find((x) => x.id === siteId);
+      if (!site) throw new Error(`site ${siteId}`);
+      d.siteId = site.id;
+      d.lat = site.lat;
+      d.lng = site.lng;
+      return d;
+    },
+    async setSiteProfile(siteId, preset) {
+      await wait();
+      if (!PROFILE_IDS.includes(preset)) throw new Error(`알 수 없는 현장 프로파일: ${preset}`);
+      const site = db.sites.find((x) => x.id === siteId);
+      if (!site) throw new Error(`site ${siteId}`);
+      site.videoProfile = preset;
+      return site;
+    },
+    async setUserRole(userId, role) {
+      await wait();
+      // entities.rules 권한 경계: 운영사는 안전관리자 권한 부여 불가 — 법적 안전관리 책임은 건설사
+      if (role === 'site-safety') throw new Error('운영사는 안전관리자 권한을 부여할 수 없습니다 (entities.rules)');
+      const u = db.users.find((x) => x.id === userId);
+      if (!u) throw new Error(`user ${userId}`);
+      u.role = role;
+      return u;
+    },
+    async setUserSites(userId, siteIds) {
+      await wait();
+      const u = db.users.find((x) => x.id === userId);
+      if (!u) throw new Error(`user ${userId}`);
+      u.siteIds = siteIds.filter((id) => db.sites.some((s) => s.id === id));
+      return u;
+    },
+    async setUserStatus(userId, status) {
+      await wait();
+      const u = db.users.find((x) => x.id === userId);
+      if (!u) throw new Error(`user ${userId}`);
+      u.status = status;
+      return u;
     },
     async kpis(scope): Promise<Kpis> {
       await wait();

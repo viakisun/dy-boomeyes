@@ -29,6 +29,16 @@ const PAGES: { scr: string; url: string; ready: (page: Page) => Promise<void> }[
     ready: (p) => expect(p.locator('table tbody tr')).toHaveCount(6),
   },
   {
+    scr: SCR['B4-03'],
+    url: '/b4/assets?state=assets&capture=1',
+    ready: (p) => expect(p.locator('table tbody tr')).toHaveCount(5),
+  },
+  {
+    scr: SCR['B4-04'],
+    url: '/b4/users?state=users&capture=1',
+    ready: (p) => expect(p.locator('table tbody tr')).toHaveCount(7),
+  },
+  {
     scr: SCR['B4-06'],
     url: '/b4/docs?state=docs&capture=1',
     ready: (p) => expect(p.locator('table tbody tr')).toHaveCount(6),

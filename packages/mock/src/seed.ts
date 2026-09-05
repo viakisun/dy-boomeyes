@@ -71,6 +71,7 @@ export function seed(): Db {
       lng: 127.1128,
       videoProfile: 'P-SD',
       safetyUserId: 'safety01',
+      period: { from: '2026-03-01', to: '2026-12-31' },
     },
     {
       id: 'SITE-002',
@@ -81,6 +82,7 @@ export function seed(): Db {
       lng: 127.3917,
       videoProfile: 'P-LITE',
       safetyUserId: 'safety01',
+      period: { from: '2026-05-01', to: '2027-02-28' },
     },
   ];
   const dev = (
