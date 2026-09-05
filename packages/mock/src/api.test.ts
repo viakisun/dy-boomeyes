@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { INSPECTION_ITEMS } from '@boomeyes/domain';
+import { INSPECTION_ITEMS, canAccess, profileAxes, profileFlags } from '@boomeyes/domain';
 import { bootMock, clock, DAY, H, MIN } from './index';
 
 describe('[FR-008] MockApi 업무 흐름', () => {
@@ -264,5 +264,55 @@ describe('[FR-008] 완료 확인·확인 요청 (W2)', () => {
     expect(c.state).toBe('new');
     expect(c.history.at(-1)?.action).toContain('확인 요청');
     expect((await api.alerts({ role: 'control' })).length).toBe(before + 1);
+  });
+});
+
+describe('[FR-018] 현장·호기·프로파일 마스터', () => {
+  it('createSite → SITE-003 · updateSite 기간 · registerDevice 1~120·중복 오류 · assignDevice 현장 이동', async () => {
+    const api = bootMock({ capture: true });
+    const s = await api.createSite({
+      name: '세종 C 아파트',
+      address: '세종특별자치시 나성동 1',
+      company: 'G/S 건설',
+      safetyUserId: 'safety01',
+      period: { from: '2026-09-01', to: '2027-06-30' },
+    });
+    expect(s.id).toBe('SITE-003');
+    expect(s.videoProfile).toBe('P-SD');
+    const u = await api.updateSite('SITE-003', { period: { from: '2026-10-01', to: '2027-06-30' } });
+    expect(u.period?.from).toBe('2026-10-01');
+    await expect(api.updateSite('SITE-003', { name: ' ' })).rejects.toThrow('현장명');
+    await expect(api.registerDevice({ unitNo: 3, siteId: 'SITE-003' })).rejects.toThrow('중복');
+    await expect(api.registerDevice({ unitNo: 121, siteId: 'SITE-003' })).rejects.toThrow('1~120');
+    const d = await api.registerDevice({ unitNo: 6, siteId: 'SITE-003' });
+    expect(d.id).toBe('CPB-006');
+    expect(d.state).toBe('offline');
+    expect((await api.assignDevice('CPB-005', 'SITE-003')).siteId).toBe('SITE-003');
+    expect((await api.devices({ role: 'ops-admin' })).filter((x) => x.siteId === 'SITE-003')).toHaveLength(2);
+    await expect(api.assignDevice('CPB-001', 'SITE-999')).rejects.toThrow('site');
+  });
+  it('[FR-029] setSiteProfile P-LITE → profileFlags 1채널(카메라 월·타일이 따르는 규칙) · 없는 프리셋 오류', async () => {
+    const api = bootMock({ capture: true });
+    const before = (await api.sites({ role: 'control' })).find((s) => s.id === 'SITE-001')!;
+    expect(profileFlags(before.videoProfile).channels).toBe(2);
+    await api.setSiteProfile('SITE-001', 'P-LITE');
+    const after = (await api.sites({ role: 'control' })).find((s) => s.id === 'SITE-001')!;
+    expect(profileFlags(after.videoProfile).channels).toBe(1);
+    expect(profileAxes('P-LITE').find((a) => a.id === 'AX-1')?.choice).toBe('1채널');
+    await expect(api.setSiteProfile('SITE-001', 'P-XX' as never)).rejects.toThrow('알 수 없는');
+  });
+});
+
+describe('[FR-021] 사용자·권한', () => {
+  it('setUserRole: 운영사는 site-safety 부여 불가 · control 부여 → canAccess 반영 · 현장 범위(없는 현장 제외) · 상태', async () => {
+    const api = bootMock({ capture: true });
+    await expect(api.setUserRole('maint01', 'site-safety')).rejects.toThrow('안전관리자');
+    const u = await api.setUserRole('maint01', 'control');
+    expect(u.role).toBe('control');
+    expect(canAccess(u.role, 'B1-02')).toBe(true);
+    expect(canAccess('maintenance', 'B4-04')).toBe(false);
+    expect((await api.setUserSites('maint01', ['SITE-002', 'SITE-999'])).siteIds).toEqual(['SITE-002']);
+    expect((await api.setUserStatus('maint01', 'suspended')).status).toBe('suspended');
+    await expect(api.setUserRole('nobody', 'control')).rejects.toThrow('user');
   });
 });

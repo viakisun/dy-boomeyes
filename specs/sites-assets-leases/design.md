@@ -21,3 +21,10 @@
 
 ## 열린 질문
 - DISC-015(본사 권한) · DISC-034 · DISC-037 · DISC-026(사업주 대행 입력).
+
+## W2 B5 — B4-03 · B4-04 구현 메모
+- 타입: `Site.period?{from,to}`(기간) · `User.status?('active'|'suspended')` — AC-1·AC-2 문구의 "기간"·"상태". 시드 현장 2에 기간, 계정 상태는 없으면 active.
+- API: `createSite/updateSite`(현장명 필수) · `registerDevice`(호기 1~120 정수 · 중복 오류 · 설치 전 `offline`, 카메라 등록은 W3) · `assignDevice`(현장 좌표로 이동) · `setSiteProfile`(PROFILE_IDS 검증) · `setUserRole`(site-safety 부여 불가) · `setUserSites`(없는 현장 제외) · `setUserStatus`. 도메인 `ROLE_NAME`(roles.yaml name) · `profileAxes(preset)`(8축 선택지).
+- 컴포넌트(카탈로그): PageHeader · Select(네이티브, label 연결, 옵션 disabled) · KeyValueList(dl) · SiteProfileForm(프리셋 Select + 8축 KeyValueList + 축 편집 비활성 버튼 + 표준 패키지 문구).
+- "즉시 반영" 검증: 프리셋 적용 뒤 같은 db를 읽는 카메라 월 미리보기(`CameraWall`, B1-02·A1-04와 같은 `visibleIn`)가 채널 수를 바꾼다 — e2e `[B4-03]` 6 → 3. 계정을 바꿔 B1-02·A1-04에서 다시 보는 흐름은 e2e 한 테스트에 담기지 않는다(QA §3: 전체 로드 = mock db 초기화) → Vitest `[FR-029]`가 `profileFlags` 체인을 검사.
+- B4-04 "가드 즉시 반영": 인스펙터 접근 화면 = `canAccess`(라우트 가드와 같은 함수)로 계산 · 내 계정 역할 변경은 세션(`login`)도 갱신.

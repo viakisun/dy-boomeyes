@@ -43,6 +43,10 @@ export { default as TelemetryGauge } from './primitives/TelemetryGauge.svelte';
 export { default as TelemetryStrip } from './primitives/TelemetryStrip.svelte';
 export { default as FileUpload } from './primitives/FileUpload.svelte';
 export { default as RuleThresholdRow } from './primitives/RuleThresholdRow.svelte';
+export { default as PageHeader } from './primitives/PageHeader.svelte';
+export { default as Select } from './primitives/Select.svelte';
+export { default as KeyValueList } from './primitives/KeyValueList.svelte';
+export { default as SiteProfileForm } from './primitives/SiteProfileForm.svelte';
 export {
   TASK_LABEL,
   CASE_KIND_LABEL,

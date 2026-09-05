@@ -1,4 +1,5 @@
 // ApiClient 인터페이스 — 구현: @boomeyes/mock(인메모리) · @boomeyes/api-client(http, W3). 화면은 이 인터페이스만 의존 (ADR-002).
+import type { RoleId } from './generated/ids';
 import type { Issue, ParseResult } from './protocol';
 import type {
   Alert,
@@ -24,6 +25,7 @@ import type {
   Site,
   Today,
   User,
+  VideoProfile,
 } from './types';
 
 export interface ApiClient {
@@ -82,6 +84,29 @@ export interface ApiClient {
   docCompleteness(scope: Scope): Promise<DocSummary[]>;
   leases(scope: Scope): Promise<Lease[]>;
   kpis(scope: Scope): Promise<Kpis>;
+  /** FR-018 현장·호기 마스터(B4-03) — 현장 등록·편집(현장명·주소·기간·담당 안전관리자) · 호기(1~120) 등록(중복 오류)·배정 */
+  createSite(input: {
+    name: string;
+    address: string;
+    company: string;
+    safetyUserId: string;
+    period?: { from: string; to: string };
+    videoProfile?: VideoProfile;
+    lat?: number;
+    lng?: number;
+  }): Promise<Site>;
+  updateSite(
+    id: string,
+    patch: Partial<Pick<Site, 'name' | 'address' | 'company' | 'safetyUserId' | 'period'>>,
+  ): Promise<Site>;
+  registerDevice(input: { unitNo: number; siteId: string; ownerId?: string }): Promise<Device>;
+  assignDevice(deviceId: string, siteId: string): Promise<Device>;
+  /** FR-029(W2 = 프리셋 전환만) — 현장 프로파일 프리셋(P-LITE/P-SD/P-NVR) → 카메라 월·타일 채널 수가 즉시 따른다 */
+  setSiteProfile(siteId: string, preset: VideoProfile): Promise<Site>;
+  /** FR-021 사용자·권한(B4-04) — 역할(운영사는 site-safety 부여 불가, entities.rules) · 현장 범위 · 계정 상태 */
+  setUserRole(userId: string, role: RoleId): Promise<User>;
+  setUserSites(userId: string, siteIds: string[]): Promise<User>;
+  setUserStatus(userId: string, status: 'active' | 'suspended'): Promise<User>;
 }
 
 /** 시각 원천 — 화면은 new Date() 대신 이것을 쓴다 (capture 모드에서 고정, 데모에서 점프) */
