@@ -1,6 +1,6 @@
 # BoomEyes(가칭) — CPB 관제 (웹 백오피스 + 현장 PWA)
 
-코드 목업 → 프로덕션. 방법론: [METHOD.md](METHOD.md) · 진입: [AGENTS.md](AGENTS.md) · 규칙: [CLAUDE.md](CLAUDE.md) · 의도: [INTENT.md](INTENT.md) · 보관: [archive/](archive/README.md) — 2026-09-05 이전 자료 전부, 로컬 보관(git 제외).
+코드 목업 → 프로덕션. 방법론: [METHOD.md](METHOD.md) · 진입: [AGENTS.md](AGENTS.md) · 규칙: [CLAUDE.md](CLAUDE.md) · 의도: [INTENT.md](INTENT.md) · 보관: `archive/`(로컬 보관 · git 제외) — 2026-09-05 이전 자료 전부, 로컬 보관(git 제외).
 
 | 경로 | 내용 |
 |---|---|
