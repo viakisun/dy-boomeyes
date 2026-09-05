@@ -1,9 +1,20 @@
 <script lang="ts">
   import '../app.css';
-  import { goto } from '$app/navigation';
+  import { goto, invalidateAll } from '$app/navigation';
+  import { env } from '$env/dynamic/public';
   import { resolve } from '$app/paths';
   import { CURRENT_WAVE, HOME_OF, SCREENS, type RoleId } from '@boomeyes/domain';
-  import { Button, EmptyState, IconButton, Toast, WebShell, applyTheme, theme, toggleTheme } from '@boomeyes/ui';
+  import {
+    Button,
+    DemoBar,
+    EmptyState,
+    IconButton,
+    Toast,
+    WebShell,
+    applyTheme,
+    theme,
+    toggleTheme,
+  } from '@boomeyes/ui';
   import { navFor } from '$lib/nav';
   import { logout, session } from '$lib/session.svelte';
   let { data, children } = $props();
@@ -18,6 +29,18 @@
     if (data.theme) applyTheme(data.theme, false);
   });
   const dark = $derived(theme.value ? theme.value === 'dark' : theme.system);
+  // 시연 장면 바(specs/demo-scripts AC-7): 이웃 장면 링크(다른 앱이면 절대 URL — PUBLIC_*_URL, preview 기본 포트) · 장면 6 "1시간 경과"
+  const APP = 'web';
+  const OTHER = (env.PUBLIC_PWA_URL ?? 'http://localhost:4174').replace(/\/$/, '');
+  const sceneHref = (n: number) => {
+    const s = data.scenes.find((x) => x.scene === n);
+    if (!s) return undefined;
+    return s.app === APP ? resolve(s.entry as '/') + `?scene=${n}` : `${OTHER}${s.entry}?scene=${n}`;
+  };
+  const jump = () => {
+    data.jumpHour();
+    invalidateAll();
+  };
 </script>
 
 <svelte:head>
@@ -42,6 +65,18 @@
       >
     {/snippet}
     {#snippet footer()}<span class="text-label-sm text-fg-muted">wave {CURRENT_WAVE} · mock</span>{/snippet}
+    {#snippet bar()}
+      {#if data.scene}
+        <DemoBar
+          scene={data.scene.scene}
+          total={data.scenes.length}
+          title={data.scene.title}
+          prev={sceneHref(data.scene.scene - 1)}
+          next={sceneHref(data.scene.scene + 1)}
+          onjump={data.scene.scene === 6 ? jump : undefined}
+        />
+      {/if}
+    {/snippet}
     {#if data.forbidden}
       <EmptyState
         title="접근 권한이 없습니다"

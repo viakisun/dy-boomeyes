@@ -14,6 +14,7 @@
     search,
     actions,
     inspector,
+    bar,
     children,
   }: {
     groups: NavGroup[];
@@ -24,6 +25,8 @@
     search?: Snippet;
     actions?: Snippet;
     inspector?: Snippet;
+    /** 콘텐츠 아래 고정 바(시연 장면 바) */
+    bar?: Snippet;
     children?: Snippet;
   } = $props();
   let collapsed = $state(false);
@@ -50,5 +53,6 @@
         </aside>
       {/if}
     </div>
+    {#if bar}{@render bar()}{/if}
   </div>
 </div>

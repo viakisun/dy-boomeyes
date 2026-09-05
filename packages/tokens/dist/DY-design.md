@@ -10,7 +10,7 @@
 | ref(원시) | 205 |
 | sys(시맨틱) | 319 |
 | cmp(컴포넌트) | 92 |
-| 컴포넌트 카탈로그 | 78 |
+| 컴포넌트 카탈로그 | 79 |
 | 대비 검사 | 82/82 통과 |
 
 | 산출물 | 용도 |
@@ -763,7 +763,7 @@ cmp 층은 sys만 참조한다(ref 직접 참조 금지 — 검사로 강제). �
 | `cmp.table.row-selected` | #ebf1ff | #ebf1ff | {sys.color.bg.selected} |  |
 | `cmp.table.header-fg` | #616368 | #616368 | {sys.color.fg.muted} |  |
 
-## 8. 컴포넌트 카탈로그 (78)
+## 8. 컴포넌트 카탈로그 (79)
 
 이름 PascalCase · prop 어휘 고정: `variant`(형태) · `tone`(색 의도: accent/neutral/info/success/warning/danger/progress) · `size`(sm/md/lg) · 상태 boolean(`disabled` `loading` `selected` `invalid`). 플랫폼 both = 같은 Svelte 컴포넌트가 밀도 토큰으로 두 플랫폼을 소화.
 
@@ -829,6 +829,7 @@ cmp 층은 sys만 참조한다(ref 직접 참조 금지 — 검사로 강제). �
 | **Pagination** | web | CE 백오피스 | size · pageSize |  |  |
 | **Menu** | both | Linear | items · groups · icons · shortcuts · danger item | open | 드롭다운·컨텍스트 메뉴 공용 |
 | **AppBar** | pwa | CE headerWrap | back · title center/left · actions · logo |  | 56 · 제목 heading-md |
+| **DemoBar** | both | — | scene/total/title · prev/next 링크 · onjump(장면 6 "1시간 경과") | — | 시연 장면 바(?scene=N) — 진행자 전용, 실사용 흐름엔 나타나지 않는다(QA §3). 셸 bar 슬롯 |
 | **BottomNav** | pwa | CE btmNav | items 3~5 · badge | selected | 56 + safe-area · label-sm · 역할별 항목 세트 |
 | **Inspector** | web | Linear 상세 패널 | width · resizable · tabs | open/closed | 우측 360 · 목록 선택 시 상세 |
 
