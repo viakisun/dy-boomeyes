@@ -37,6 +37,7 @@
 - 이름 = `${code.toLowerCase()}-${state}` (`b1-02-dash` `b1-02m-cam`). 상태 목록은 `screens.yaml`에서 생성(매니페스트 손 편집 금지).
 - capture 모드(`?capture=1`)는 로그인 없이 화면 첫 역할의 데모 세션을 합성해 **셸까지** 그린다(가드 우회 — W3 실 인증 전 제거). 브라우저 컨텍스트는 `timezoneId: 'Asia/Seoul'`, 표시 포맷터도 `timeZone: 'Asia/Seoul'` 고정. 지도 `[data-map-ready]` 대기 타임아웃은 FAIL로 센다(빈 지도를 녹색으로 세지 않는다). 셸 렌더 시 스크롤 컨테이너는 `<main>`이라 캡처는 main 내용 높이로 뷰포트를 키운다. 외부 의존: CARTO 스타일·타일(네트워크 필요).
 - 데모 계정: `roles.yaml demo_account`. 픽스처 ID: CPB-003(E-021) · CPB-004(통신 두절) · C-105 · D-27.
+- `?state=` 픽스처는 capture·e2e 재현 전용 — 화면 기본 픽스처(`states[].default`)도 capture 모드에서만 적용하고, 실사용(live) 흐름은 순수 시드에서 시작한다(W1 사고: 기본 픽스처가 live에 적용돼 A2-03이 출근 상태로 열림). 브라우저 mock db는 `bootMock` 키(live / capture|screen|state)별로 세션 동안 유지, 로그아웃에 `resetMock()`.
 
 ## 4. 리뷰 정책
 

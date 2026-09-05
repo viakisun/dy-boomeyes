@@ -448,4 +448,4 @@ export const MACHINES = {
 } as const;
 
 export const FIXED_CLOCK = '2026-07-03T10:42:00+09:00';
-export const CURRENT_WAVE = 0;
+export const CURRENT_WAVE = 1;

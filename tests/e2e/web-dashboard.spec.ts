@@ -1,6 +1,6 @@
 // [B1-02] 관제 대시보드 · [B1-02M] 카메라 모달 골격 (specs/control-dashboard AC-1 · AC-2 · AC-5)
 import { expect, test } from '@playwright/test';
-import { SCR } from '../../packages/domain/src/generated/ids';
+import { CURRENT_WAVE, SCR } from '../../packages/domain/src/generated/ids';
 
 const DASH = '/b1/dash?state=dash&capture=1'; // capture=1: 시각 고정 + 데모 세션 합성(셸 렌더)
 const root = (scr: string) => `[data-scr="${scr}"]`;
@@ -97,7 +97,7 @@ test('[B1-02M] P-LITE 현장의 AI 채널(CAM-5-2)은 딥링크로도 열리지 
   page,
 }) => {
   await page.goto('/b1/dash?state=cam&capture=1&cam=CAM-5-2');
-  await expect(page.locator(`[data-scr="${SCR['B1-02']}"]`)).toBeVisible();
+  await expect(page.locator(root(SCR['B1-02']))).toBeVisible();
   await expect(page.locator('dialog[open]')).toHaveCount(0);
   await page.goto('/b1/dash?state=cam&capture=1&cam=CAM-5-1');
   const dialog = page.locator('dialog[open]');
@@ -105,4 +105,10 @@ test('[B1-02M] P-LITE 현장의 AI 채널(CAM-5-2)은 딥링크로도 열리지 
   await expect(dialog.getByRole('button', { name: /전방|붐 끝/ })).toHaveCount(1);
   await expect(dialog.getByRole('tab', { name: '서버 녹화' })).toBeVisible();
   await expect(dialog.getByRole('tab', { name: 'SD 녹화' })).toHaveCount(0);
+});
+
+test('[B1-02] 셸 푸터가 현재 웨이브(CURRENT_WAVE)를 표시한다 [FR-024]', async ({ page }) => {
+  await page.goto('/b1/dash?state=dash&capture=1');
+  await expect(page.locator(root(SCR['B1-02']))).toBeVisible();
+  await expect(page.getByText(`wave ${CURRENT_WAVE} · mock`, { exact: true })).toBeVisible();
 });

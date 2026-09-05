@@ -36,6 +36,8 @@ node tools/ssot/check.mjs --specs | --docs | --commits <range>
 ```
 `pnpm lint`(eslint·prettier) · `pnpm check`(svelte-check) · `pnpm test`(vitest) · `pnpm tokens:lint` · `pnpm capture`(빌드 후) — 게이트 정의는 `docs/QA.md`.
 
+게이트 → 커밋 체인은 `&&`만: `pnpm build && pnpm e2e && pnpm verify && git add <files> && git commit …` (`;`는 빨간 게이트를 지나 커밋한다). merge는 verify 녹색 + reviewer 판정 "머지 가능" 인용 둘 다 있을 때만(`METHOD.md` §5).
+
 ## 작업 방식
 
 - feature 이상은 플랜 모드 필수(`AGENTS.md` Task Type Matrix). 계획은 `docs/PLAN.md`·`specs/*/tasks.md`에 남긴다.
@@ -54,3 +56,5 @@ node tools/ssot/check.mjs --specs | --docs | --commits <range>
 - **2026-09-05 API 경계 참조 공유(W1)** — mock이 db 객체를 그대로 돌려줘 in-place 전이(승인·접수)가 Svelte 키드 each에 보이지 않음(같은 참조 → 갱신 없음). 절차: API 경계는 `structuredClone` 복사본(실 HTTP와 동일) · 화면은 `invalidateAll()`로 다시 읽는다 · 브라우저 mock db는 세션 동안 유지(`bootMock` 캐시, 픽스처 키별).
 - **2026-09-05 API 경계에 $state 프록시(W1)** — `bind:` 로 받은 `$state` 배열을 mock API에 그대로 넘기자 반환값 `structuredClone`이 DataCloneError로 죽고 화면이 조용히 멈춤(토스트 없음). 절차: API 호출 인자는 `$state.snapshot()`으로 벗겨 넘긴다 · 화면의 async 액션은 실패 시 토스트/다이얼로그로 드러낸다(조용한 실패 금지).
 - **2026-09-05 게이트 우회(1주차)** — `pnpm verify | grep … && git commit`은 grep 종료 코드를 본다. 절차: verify는 단독 실행 후 exit code 확인 · 실패 원인이 미커밋 생성물 diff뿐인지 로그 끝(`diff --git`)으로 확인.
+- **2026-09-05 정규식 치환의 백스페이스(W1)** — Python `re.sub` 치환 문자열의 `\b`가 U+0008로 바뀌어 lint의 팔레트·`<style>` 규칙이 조용히 죽었다(게이트는 녹색). 절차: 정규식 텍스트를 편집할 땐 `str.replace` · 편집 후 `grep -P '\x08'` · lint 규칙마다 생존 프로브(`PROBES`, 죽으면 exit 2).
+- **2026-09-05 기본 픽스처가 live에 적용(W1)** — 화면 기본 `?state=` 픽스처를 live 모드에도 적용해 A2-03이 새로고침마다 출근 상태로 열렸다. 절차: 기본 픽스처는 capture 모드에서만 · live는 순수 시드 · 픽스처는 capture·e2e 전용(QA §3).

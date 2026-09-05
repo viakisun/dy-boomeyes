@@ -2,7 +2,7 @@
   import '../app.css';
   import { goto } from '$app/navigation';
   import { resolve } from '$app/paths';
-  import { HOME_OF, SCREENS, type RoleId } from '@boomeyes/domain';
+  import { CURRENT_WAVE, HOME_OF, SCREENS, type RoleId } from '@boomeyes/domain';
   import { Button, EmptyState, IconButton, Toast, WebShell } from '@boomeyes/ui';
   import { navFor } from '$lib/nav';
   import { logout, session } from '$lib/session.svelte';
@@ -35,7 +35,7 @@
         }}>⏻</IconButton
       >
     {/snippet}
-    {#snippet footer()}<span class="text-label-sm text-fg-muted">wave {SCREENS['B1-02'].wave} · mock</span>{/snippet}
+    {#snippet footer()}<span class="text-label-sm text-fg-muted">wave {CURRENT_WAVE} · mock</span>{/snippet}
     {#if data.forbidden}
       <EmptyState
         title="접근 권한이 없습니다"

@@ -6,7 +6,7 @@
 |---|---|
 | `ssot/` | 단일 원천 yaml 11(화면 53 · FR 36 · DISC 43) — `ssot/README.md` |
 | `tools/ssot/` `tools/hooks/` `tools/capture/` | 게이트·생성 · Claude Code 훅(생성물 편집 차단 · 위험 명령 차단 · 편집 후 게이트) · 캡처 |
-| `docs/` | `PLAN`(웨이브) · `DEMO`(시연) · `QA`(게이트) · `adr/` · `generated/`(SCREENS · DOMAIN · TRACE · DECISIONS · DEMO · SPECS) |
+| `docs/` | `PLAN`(웨이브) · `DEMO`(시연) · `QA`(게이트) · `adr/` · `retro/`(웨이브 회고) · `generated/`(SCREENS · DOMAIN · TRACE · DECISIONS · DEMO · SPECS) |
 | `specs/` | 기능 스펙(spec · design · tasks) |
 | `packages/` | `tokens`(DS 원천 → `dist/DY-design.md`) · `domain`(ids.ts · 상태기계 · 세션) · `ui` · `mock` · `map` · `video` |
 | `apps/web` `apps/pwa` | SvelteKit 정적 SPA — 웹 백오피스 · 현장 PWA |
