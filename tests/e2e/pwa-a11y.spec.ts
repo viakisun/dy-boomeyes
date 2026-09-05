@@ -60,6 +60,11 @@ const PAGES: { scr: string; url: string; ready: (page: Page) => Promise<void> }[
     ready: (p) => expect(p.getByText('AI 판단 불가').first()).toBeVisible(),
   },
   {
+    scr: SCR['A3-04'],
+    url: '/a3/sites/SITE-001/devices?state=dev&capture=1',
+    ready: (p) => expect(p.locator('[data-camera]')).toHaveCount(6),
+  },
+  {
     scr: SCR['A1-05'],
     url: '/a1/monitor/CPB-003?state=dev&capture=1',
     ready: (p) => expect(p.getByText('E-021').first()).toBeVisible(),

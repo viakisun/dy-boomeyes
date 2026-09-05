@@ -10,4 +10,6 @@
 | 6 | realtime camera/AI 이벤트 → 타일 · 알림 | AC-2 · e2e | FR-028 |
 | 7 | e2e(타일 상태 · 모달 소스 탭 · 헬스 "정상" 금지) · axe · 시각 회귀 기준선 3장 | AC-7 · 게이트 6 녹색 | QA |
 
-순서 1 → 2 → 3 → 4 → 5 → 6 → 7. 커밋 예: `feat(video): VideoPlayer · 스냅샷 폴러 — Refs: SCR-B1-02M FR-004`.
+순서 1 → 2 → 3 → 4 → 5 → 6 → 7. | W2 | A3-04 · B2-03 · CameraWall·EquipmentCard 추출 · 픽스처 2 · e2e 3 · axe 2 | AC-8 · AC-9 | SCR-A3-04 SCR-B2-03 |
+
+커밋 예: `feat(video): VideoPlayer · 스냅샷 폴러 — Refs: SCR-B1-02M FR-004`.

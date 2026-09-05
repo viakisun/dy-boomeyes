@@ -80,6 +80,9 @@ export const FIXTURES: Record<string, Fixture> = {
   }),
   'A3-02:sites': (db) => db,
   'A3-05:inbox': (db) => db,
+  // video-basics W2: 본사 열람 — A1-04 monitor와 같은 카메라 변형(오프라인·흐림)
+  'A3-04:dev': (db) => FIXTURES['A1-04:monitor']!(db),
+  'B2-03:site': (db) => db,
   // documents(W2): A2-05 · B1-05 · B4-06 — 시드 그대로(DOC-001 D-27 · DOC-004 검토 중 · DOC-005 반려 · DOC-006 승인). queued는 B12(아웃박스)에서 채움
   'A2-05:docs': (db) => db,
   'A2-05:queued': (db) => db,

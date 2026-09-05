@@ -69,3 +69,17 @@ test('[A1-05] plite 픽스처: CPB-003 채널 1(일반만) · 저장 소스 탭 
   await expect(page.getByRole('tab', { name: 'SD' })).toHaveCount(0);
   await expect(page.getByRole('tab', { name: 'NVR' })).toHaveCount(0);
 });
+
+test('[A3-04] hq01 장비 열람(SITE-001): 타일 6 · 헬스 배지(A1-04와 동일 변형) · 처리 액션 없음 · 열람 전용 [FR-004] [FR-034] [FR-022]', async ({
+  page,
+}) => {
+  await page.goto('/a3/sites/SITE-001/devices?state=dev&capture=1');
+  await expect(page.locator(`[data-scr="${SCR['A3-04']}"]`)).toBeVisible();
+  await expect(page.locator('[data-camera]')).toHaveCount(6);
+  await expect(page.locator('[data-camera="CAM-1-1"] [data-health="lost"]')).toContainText('수신 끊김');
+  await expect(page.locator('[data-camera="CAM-2-2"] [data-faulty="true"]')).toContainText('AI 판단 불가');
+  await expect(page.getByText('프로파일 P-SD')).toBeVisible();
+  await expect(page.getByText('열람 전용')).toBeVisible();
+  await expect(page.getByRole('button', { name: /접수|완료|호출/ })).toHaveCount(0);
+  await expect(page.getByRole('link', { name: /호기 ›/ })).toHaveCount(0); // A3에는 장비 상세 링크 없음
+});

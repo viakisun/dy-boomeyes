@@ -4,10 +4,9 @@
   import { resolve } from '$app/paths';
   import { onMount } from 'svelte';
   import { SCR, type Alert } from '@boomeyes/domain';
-  import { Badge, Banner, EQUIPMENT_TONE, EmptyState, StatusPill, Tabs, fmtTime, toast } from '@boomeyes/ui';
+  import { Badge, Banner, EmptyState, Tabs, fmtTime, toast, EquipmentCard } from '@boomeyes/ui';
   import { BboxOverlay, CameraTile, HealthBadge } from '@boomeyes/video';
   let { data } = $props();
-  const EQUIP_LABEL = { normal: '정상', caution: '주의', fault: '고장', offline: '두절', maintenance: '정비' } as const;
   const tabs = $derived([
     { id: 'cameras', label: '카메라' },
     ...(data.flags.bodycam ? [{ id: 'bodycam', label: '바디캠' }] : []),
@@ -53,13 +52,7 @@
       </Banner>
     {/if}
     {#each data.devices as d (d.id)}
-      <section class="gap-stack-sm flex flex-col" aria-label="{d.id} 카메라">
-        <div class="flex items-center justify-between">
-          <a href={resolve(`/a1/monitor/${d.id}` as '/')} class="text-heading-sm text-accent-fg"
-            >{d.id} · {d.unitNo}호기 ›</a
-          >
-          <StatusPill tone={EQUIPMENT_TONE[d.state]} label={EQUIP_LABEL[d.state]} size="sm" />
-        </div>
+      <EquipmentCard device={d} href={resolve(`/a1/monitor/${d.id}` as '/')}>
         <div class="gap-inline-sm grid grid-cols-2">
           {#each camsOf(d.id) as c (c.id)}
             {@const ev = events[c.id]}
@@ -72,7 +65,7 @@
             </div>
           {/each}
         </div>
-      </section>
+      </EquipmentCard>
     {:else}
       <EmptyState title="현장에 장비가 없습니다" />
     {/each}
