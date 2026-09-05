@@ -19,6 +19,9 @@
 - 웹 루트 `data-density="compact"` · PWA `comfortable`. 테마는 문서 루트 `data-theme`(없으면 prefers-color-scheme). **웹**: 기본 light, 탑바 토글(☾/☀)로 사용자가 전체 다크 선택 — `localStorage dy.theme`에 기기 단위로 유지(로그아웃·`resetMock`에도 남음). **PWA**: 시스템 다크를 따르고 토글 없음(DY-design §10). 월보드·쇼케이스는 컴포넌트 내부 강제(§9) — 토글과 무관.
 - 사이드바 항목 = `screens.yaml`에서 역할·표면별 wave ≤ current 화면(생성 nav). 하단 내비 세트: driver(오늘·내 장비·서류·메뉴) · site-safety(업무함·관제·기록·메뉴) · hq-safety(현장·업무·기록) · owner(현황·요청·운전자·계약).
 
+## 설치(PWA)
+- `static/manifest.webmanifest` + `static/icons/`(ffmpeg 합성 단색 아이콘 — 브랜드 확정 DISC-021 전 자리) · `src/service-worker.ts`(SvelteKit `$service-worker`: `build`·`files`·셸 `/` 프리캐시, 내비게이션 network-first → 오프라인은 캐시된 셸, 외부(CARTO)는 통과). mock 데이터는 캐시하지 않는다(세션 메모리). 개발 서버에서는 등록되지 않고 preview·배포 빌드에서만 등록. PWA는 `paths.relative: false`(절대 `/_app/…`) — 상대 경로 셸을 깊은 경로(`/a2/login`)에서 오프라인으로 열면 자산이 `/a2/_app/…`으로 풀려 부팅 실패(프로브로 확인).
+
 ## 오프라인 · 오류 · 빈 상태
 오프라인 Banner(neutral) · 403 EmptyState(action: 첫 화면) · 로딩 Skeleton(300ms).
 

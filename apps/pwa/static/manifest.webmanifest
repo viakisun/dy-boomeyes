@@ -1,0 +1,17 @@
+{
+  "name": "BoomEyes 현장",
+  "short_name": "BoomEyes",
+  "description": "DY CPB 관제 — 현장 안전관리자 · 운전자 · 본사 · 사업주 앱",
+  "lang": "ko",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f8faff",
+  "theme_color": "#0d2877",
+  "icons": [
+    { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/icon-512-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
