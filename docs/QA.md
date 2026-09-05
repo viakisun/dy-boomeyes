@@ -11,7 +11,7 @@
 | 3 | 생성물 최신성 | `pnpm verify` 끝의 `git diff --exit-code` (docs/generated · domain/generated · tokens/dist) | CI 실패 | 있음 |
 | 4 | 타입·정적 | svelte-check(error 0) · ESLint(경계 규칙 `eslint-plugin-boundaries`) · Prettier | 커밋 차단 | 있음 |
 | 5 | 단위 | Vitest — 업무·서류·장비·카메라·부품 상태기계 · 프로파일→피처플래그 · 프로토콜 파서 · scr 커버리지 | 푸시 차단 | 있음(상태기계·라우트·mock) |
-| 6 | e2e·캡처 | `pnpm e2e`(Playwright, 빌드 후) — 역할 로그인 8(웹 4 · 앱 4)·가드 스모크 · B1-02 마커 5/KPI/표 · B1-02M 열림/Esc · axe serious/critical 0(wcag2a·2aa·best-practice) · `pnpm capture` 라우트 × 상태 전수 | PR 차단(CI `e2e` 잡, shots 아티팩트) | 있음 · 시각 회귀(0.2%)·데모 장면은 W1 |
+| 6 | e2e·캡처 | `pnpm e2e`(Playwright, 빌드 후) — 역할 로그인 8(웹 4 · 앱 4)·가드 스모크 · 화면별 AC · 장면 1~10 · axe serious/critical 0(wave ≤ 2 화면 41 전수, wcag2a·2aa·best-practice) · `pnpm capture --dark --strict` 라우트 × 상태 전수 + 다크 + 자리 화면 0 | PR 차단(CI `e2e` 잡, shots 아티팩트) | 있음 · 시각 회귀 기준선은 ADR-008 결정 대기 |
 | 7 | 추적·문서 | `check --specs`(frontmatter ID·AC ≥3) · `check --docs`(링크·ID) · `check --commits`(Refs 트레일러) | PR 차단 | 있음 |
 
 ## 2. 화면 패리티 체크리스트 (화면당, PR 본문에 체크)
@@ -39,6 +39,7 @@
 - capture 모드(`?capture=1`)는 로그인 없이 화면 첫 역할의 데모 세션을 합성해 **셸까지** 그린다(가드 우회 — W3 실 인증 전 제거). 시연 `?scene=N`은 장면 계정으로 `login()`해 localStorage에 남긴다 — 장면이 `?state=`·새로고침으로 해제돼도 로그아웃 전까지 그 계정이 유지된다(`specs/demo-scripts`, 함께 제거). 브라우저 컨텍스트는 `timezoneId: 'Asia/Seoul'`, 표시 포맷터도 `timeZone: 'Asia/Seoul'` 고정. 지도 `[data-map-ready]` 대기 타임아웃은 FAIL로 센다(빈 지도를 녹색으로 세지 않는다). 셸 렌더 시 스크롤 컨테이너는 `<main>`이라 캡처는 main 내용 높이로 뷰포트를 키운다. 외부 의존: CARTO 스타일·타일(네트워크 필요).
 - PWA 설치: `apps/pwa/static/manifest.webmanifest`·`app.html` `theme-color`는 정적 파일이라 토큰 값(`sys.color.accent.solid` `#0d2877` · `bg.canvas` `#f8faff`)을 고정 기재 — 토큰이 바뀌면 함께 갱신(`tokens:lint` 범위 밖). 서비스 워커는 preview·배포 빌드에서만 등록되며 e2e `pwa-install`이 오프라인 새로고침 셸을 검사한다.
 - 데모 계정: `roles.yaml demo_account`. 픽스처 ID: CPB-003(E-021) · CPB-004(통신 두절) · C-105 · D-27.
+- `--strict`(W2): 캐치올 자리 화면("웨이브 N에서 구현됩니다")을 FAIL로 센다 — `data-scr`는 캐치올도 붙이므로 문구로 판별 · 웨이브 Exit "자리 0" 게이트 · CI는 `--dark --strict`. `ssot:check`는 `screens.yaml`의 route **필드**만 검사하고 실 라우트 파일 유무는 보지 않는다.
 - `?state=` 픽스처는 capture·e2e 재현 전용 — 화면 기본 픽스처(`states[].default`)도 capture 모드에서만 적용하고, 실사용(live) 흐름은 순수 시드에서 시작한다(W1 사고: 기본 픽스처가 live에 적용돼 A2-03이 출근 상태로 열림). 브라우저 mock db는 `bootMock` 키(live / capture|screen|state)별로 세션 동안 유지, 로그아웃에 `resetMock()`.
 - e2e의 `page.goto()`(전체 로드)는 mock db(모듈 상태)를 새로 만들고 `logout()`도 `resetMock()`이라, 계정을 바꿔 이어지는 흐름(운전자 제출 → 안전관리자 승인)은 한 테스트에 담기지 않는다 — 중간 상태는 시드(C-106 `assigned`)나 픽스처(`A1-03:docnew`)로 만들고, 같은 화면 안의 전이만 실제 클릭으로 검증한다. capture 모드 키는 `screenForPath`가 정하므로 시트 쿼리(`?sheet=review`)가 다른 화면으로 잡히면 db가 갈린다(값까지 비교).
 
