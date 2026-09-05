@@ -31,7 +31,7 @@ test('[A3-05] 전 현장 업무 통합 · 에스컬레이션 칩 · 접수/완�
   await page.goto('/a3/tasks');
   await expect(page.locator(`[data-scr="${SCR['A3-05']}"]`)).toBeVisible();
   const items = page.locator('ul[aria-label="업무"] li');
-  await expect(items).toHaveCount(4); // 미처리: C-101 C-103 C-104 C-105
+  await expect(items).toHaveCount(5); // 미처리: C-101 C-103 C-104 C-105 C-106
   await expect(page.getByText('C-104')).toBeVisible(); // SITE-002 업무도 본사는 본다
   await expect(page.getByRole('button', { name: '접수', exact: true })).toHaveCount(0);
   await expect(page.getByRole('button', { name: '완료 확인' })).toHaveCount(0);

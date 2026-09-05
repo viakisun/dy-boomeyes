@@ -16,6 +16,7 @@
     fmtDateTime,
     toast,
     type Column,
+    Inspector,
   } from '@boomeyes/ui';
   import { untrack } from 'svelte';
   import { parse as parseYaml } from 'yaml';
@@ -217,10 +218,7 @@
     </div>
   </div>
 
-  <aside
-    class="rounded-card border-border bg-surface p-inset-lg gap-stack-md sticky top-0 hidden h-fit flex-col border xl:flex"
-    aria-label="버전 상세"
-  >
+  <Inspector label="버전 상세">
     {#if selected}
       <div class="gap-stack-xs flex flex-col">
         <div class="flex items-center justify-between">
@@ -254,5 +252,5 @@
     {:else}
       <EmptyState title="버전을 선택하세요" />
     {/if}
-  </aside>
+  </Inspector>
 </div>

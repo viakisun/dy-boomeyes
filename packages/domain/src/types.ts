@@ -46,6 +46,16 @@ export interface Device {
     boomAngle: number;
   };
 }
+/** 서류 완비율 — 대상(장비·운전자) 단위 (FR-016) */
+export interface DocSummary {
+  subjectId: string;
+  subject: string;
+  kind: 'device' | 'driver';
+  total: number;
+  complete: number;
+  rate: number;
+  expiring: number;
+}
 /** FR-034 카메라 헬스 — 정지화면·흐림·가림·수신 끊김이면 "정상" 표시 금지 */
 export type CameraHealth = 'ok' | 'frozen' | 'blurry' | 'occluded' | 'lost';
 export interface Camera {
@@ -87,6 +97,8 @@ export interface Case {
   dueAt: string;
   createdAt: string;
   history: HistoryItem[];
+  /** kind=doc 업무가 검토하는 서류 */
+  docId?: string;
 } // ENT-06
 export interface HistoryItem {
   at: string;
@@ -94,14 +106,19 @@ export interface HistoryItem {
   action: string;
   note?: string;
 } // ENT-09
+export type DocKind = 'cert' | 'ndt' | 'license' | 'training' | 'contract';
 export interface Doc {
   id: string;
-  kind: 'cert' | 'ndt' | 'license' | 'training' | 'contract';
+  kind: DocKind;
   subject: string;
   subjectId: string;
   state: DocState;
   expiresAt: string | null;
   submittedAt: string | null;
+  /** 제출·검토 이력(ENT-09, append-only) */
+  history: HistoryItem[];
+  /** 제출 파일 메타(mock: objectURL) */
+  file?: { name: string; type: string; size: number; url?: string };
 } // ENT-07
 export interface Lease {
   id: string;

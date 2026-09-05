@@ -17,6 +17,8 @@ import {
   type ApiClient,
   type Case,
   type Device,
+  type Doc,
+  type DocState,
   type Escalation,
   type Kpis,
   type Request,
@@ -25,7 +27,7 @@ import {
   type Site,
   type User,
 } from '@boomeyes/domain';
-import { clock } from './clock';
+import { clock, DAY } from './clock';
 import type { Db } from './seed';
 
 const inScope = (scope: Scope, siteId: string) => !scope.siteIds?.length || scope.siteIds.includes(siteId);
@@ -262,6 +264,89 @@ export function createMockApi(db: Db, opts: { latencyMs?: number } = {}): ApiCli
         ...db.users.filter((u) => u.siteIds.some((s) => scope.siteIds?.includes(s))).map((u) => u.id),
       ]);
       return db.docs.filter((d) => subjects.has(d.subjectId));
+    },
+    async doc(id) {
+      await wait();
+      return db.docs.find((d) => d.id === id);
+    },
+    async submitDoc(id, file, by) {
+      await wait();
+      const d = db.docs.find((x) => x.id === id);
+      if (!d) throw new Error(`doc ${id}`);
+      d.state = transition('doc', d.state, 'submitted') as DocState; // expiring|rejected → submitted
+      d.state = transition('doc', d.state, 'review') as DocState; // 자동
+      d.submittedAt = clock.iso();
+      d.file = file;
+      d.history.push({ at: clock.iso(), by, action: '제출', note: file.name });
+      // 서류 검토 업무 생성(FR-008) — 현장 안전관리자 업무함
+      const owner = db.users.find((u) => u.id === d.subjectId);
+      const device = db.devices.find((x) => x.id === d.subjectId);
+      const siteId = device?.siteId ?? owner?.siteIds?.[0] ?? 'SITE-001';
+      const cid = `C-${String(100 + db.cases.length + 1).padStart(3, '0')}`;
+      db.cases.unshift({
+        id: cid,
+        kind: 'doc',
+        title: `${d.subject} 검토`,
+        deviceId: device?.id ?? null,
+        siteId,
+        state: 'new',
+        severity: 'info',
+        assigneeId: null,
+        dueAt: new Date(clock.now().getTime() + 2 * DAY).toISOString(),
+        createdAt: clock.iso(),
+        history: [{ at: clock.iso(), by, action: '제출' }],
+        docId: d.id,
+      });
+      return d;
+    },
+    async reviewDoc(id, decision, by, note) {
+      await wait();
+      if (decision === 'rejected' && !note?.trim()) throw new Error('반려 사유는 필수입니다');
+      const d = db.docs.find((x) => x.id === id);
+      if (!d) throw new Error(`doc ${id}`);
+      if (d.state === 'submitted') d.state = transition('doc', d.state, 'review') as DocState;
+      d.state = transition('doc', d.state, decision) as DocState;
+      d.history.push({ at: clock.iso(), by, action: decision === 'approved' ? '승인' : '반려', note });
+      const c = db.cases.find((x) => x.docId === id && x.state !== 'done');
+      if (c) {
+        if (c.state === 'new' || c.state === 'assigned' || c.state === 'escalated') c.state = 'in-progress';
+        c.state = transition('task', c.state, 'done');
+        c.history.push({ at: clock.iso(), by, action: decision === 'approved' ? '승인 — 완료' : '반려 — 완료', note });
+      }
+      return d;
+    },
+    async registerDoc(input, by) {
+      await wait();
+      const expiring = !!input.expiresAt && Date.parse(input.expiresAt) - clock.now().getTime() <= 30 * DAY;
+      const d: Doc = {
+        id: `DOC-${String(db.docs.length + 1).padStart(3, '0')}`,
+        ...input,
+        state: expiring ? 'expiring' : 'valid',
+        submittedAt: clock.iso(),
+        history: [{ at: clock.iso(), by, action: '등록' }],
+      };
+      db.docs.push(d);
+      return d;
+    },
+    async docCompleteness(scope) {
+      await wait();
+      const list = await impl.docs(scope);
+      const groups = new Map<string, Doc[]>();
+      for (const d of list) groups.set(d.subjectId, [...(groups.get(d.subjectId) ?? []), d]);
+      const done = (d: Doc) => d.state === 'valid' || d.state === 'approved';
+      return [...groups.entries()].map(([subjectId, ds]) => {
+        const dev = db.devices.find((x) => x.id === subjectId);
+        const user = db.users.find((x) => x.id === subjectId);
+        return {
+          subjectId,
+          subject: dev ? `${dev.id} · ${dev.unitNo}호기` : (user?.display ?? subjectId),
+          kind: dev ? ('device' as const) : ('driver' as const),
+          total: ds.length,
+          complete: ds.filter(done).length,
+          rate: Math.round((ds.filter(done).length / ds.length) * 100),
+          expiring: ds.filter((d) => d.state === 'expiring').length,
+        };
+      });
     },
     async leases(scope) {
       await wait();

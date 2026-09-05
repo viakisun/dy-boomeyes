@@ -65,6 +65,11 @@ export const FIXTURES: Record<string, Fixture> = {
   }),
   'A3-02:sites': (db) => db,
   'A3-05:inbox': (db) => db,
+  // documents(W2): A2-05 · B1-05 · B4-06 — 시드 그대로(DOC-001 D-27 · DOC-004 검토 중 · DOC-005 반려 · DOC-006 승인). queued는 B12(아웃박스)에서 채움
+  'A2-05:docs': (db) => db,
+  'A2-05:queued': (db) => db,
+  'B1-05:docs': (db) => db,
+  'B4-06:docs': (db) => db,
   'B1-03:inbox': (db) => db,
   // 에스컬레이션 화면: C-105를 65분 전 발행으로 두면 escalations()가 escalated로 전이한다 (AC-7)
   'B1-04:esc': (db) => ({

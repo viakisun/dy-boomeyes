@@ -223,6 +223,20 @@ export function seed(): Db {
       createdAt: t(20_000),
       history: [{ at: t(20_000), by: 'system', action: '발행 — E-021 380V 전압 이상' }],
     },
+    {
+      id: 'C-106',
+      kind: 'doc',
+      title: 'CPB-002 비파괴 검사 성적서 검토',
+      deviceId: 'CPB-002',
+      siteId: 'SITE-001',
+      state: 'assigned', // 배정됨 — 1h 에스컬레이션 대상(new) 아님
+      severity: 'info',
+      assigneeId: 'safety01',
+      dueAt: t(-2 * DAY),
+      createdAt: t(DAY),
+      history: [{ at: t(DAY), by: 'ops01', action: '제출' }],
+      docId: 'DOC-004',
+    },
   ];
   const alerts: Alert[] = [
     {
@@ -317,6 +331,7 @@ export function seed(): Db {
       state: 'expiring',
       expiresAt: t(-27 * DAY),
       submittedAt: null,
+      history: [{ at: t(3 * DAY), by: 'system', action: '만료 임박 D-30' }],
     },
     {
       id: 'DOC-002',
@@ -326,6 +341,7 @@ export function seed(): Db {
       state: 'valid',
       expiresAt: t(-400 * DAY),
       submittedAt: t(200 * DAY),
+      history: [],
     },
     {
       id: 'DOC-003',
@@ -335,6 +351,7 @@ export function seed(): Db {
       state: 'valid',
       expiresAt: null,
       submittedAt: t(300 * DAY),
+      history: [],
     },
     {
       id: 'DOC-004',
@@ -344,6 +361,33 @@ export function seed(): Db {
       state: 'review',
       expiresAt: t(-100 * DAY),
       submittedAt: t(DAY),
+      history: [],
+    },
+    {
+      id: 'DOC-005',
+      kind: 'contract',
+      subject: '박기사 근로계약서',
+      subjectId: 'driver03',
+      state: 'rejected',
+      expiresAt: null,
+      submittedAt: t(2 * DAY),
+      history: [
+        { at: t(2 * DAY), by: 'driver03', action: '제출' },
+        { at: t(DAY), by: 'safety01', action: '반려', note: '서명 누락 — 재작성 후 제출' },
+      ],
+    },
+    {
+      id: 'DOC-006',
+      kind: 'license',
+      subject: '이관제 안전관리자 선임증',
+      subjectId: 'safety01',
+      state: 'approved',
+      expiresAt: t(-300 * DAY),
+      submittedAt: t(10 * DAY),
+      history: [
+        { at: t(10 * DAY), by: 'safety01', action: '제출' },
+        { at: t(9 * DAY), by: 'control01', action: '승인' },
+      ],
     },
   ];
   const leases: Lease[] = [

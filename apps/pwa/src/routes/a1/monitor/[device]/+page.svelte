@@ -28,15 +28,7 @@
     approved: '승인',
     rejected: '반려',
   } as const;
-  const complete = $derived(
-    data.deviceDocs.length
-      ? Math.round(
-          (data.deviceDocs.filter((x) => x.state === 'valid' || x.state === 'approved').length /
-            data.deviceDocs.length) *
-            100,
-        )
-      : 0,
-  );
+  const complete = $derived(data.completeness?.rate ?? 0); // FR-016 완비율은 API(docCompleteness)
   const expiring = $derived([...data.deviceDocs, ...data.driverDocs].filter((x) => x.state === 'expiring'));
   const now = $derived(data.clock.now());
   const tabs = $derived(data.flags.sources.map((s) => ({ id: s, label: SOURCE_LABEL[s] })));

@@ -7,9 +7,10 @@ export const load: PageLoad = async ({ parent, params, url }) => {
   const { api } = await parent();
   const c = await api.case(params.case);
   if (!c) error(404, `업무 ${params.case} 없음`);
-  const [device, sites] = await Promise.all([
+  const [device, sites, doc] = await Promise.all([
     c.deviceId ? api.device(c.deviceId) : Promise.resolve(undefined),
     api.sites({ role: session.user?.role ?? ('site-safety' as const) }),
+    c.docId ? api.doc(c.docId) : Promise.resolve(undefined),
   ]);
   // A1-08 완료 처리 시트 — 같은 경로의 모달형 화면(?sheet=complete, screens.yaml)
   return {
@@ -17,5 +18,7 @@ export const load: PageLoad = async ({ parent, params, url }) => {
     device,
     site: sites.find((s) => s.id === c.siteId),
     sheet: url.searchParams.get('sheet') === 'complete',
+    doc,
+    review: url.searchParams.get('sheet') === 'review',
   };
 };

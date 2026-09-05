@@ -6,6 +6,7 @@
     label = '정의 파일 선택 또는 끌어다 놓기',
     hint = 'YAML · JSON',
     disabled = false,
+    mode = 'text',
     onfile,
     class: cls,
   }: {
@@ -13,15 +14,23 @@
     label?: string;
     hint?: string;
     disabled?: boolean;
-    onfile?: (file: { name: string; text: string }) => void;
+    /** mode=text(기본): {name,text} · mode=image: {name,type,size,url}(objectURL 미리보기) */
+    mode?: 'text' | 'image';
+    onfile?: (file: { name: string; text: string; type?: string; size?: number; url?: string }) => void;
     class?: string;
   } = $props();
   let over = $state(false);
   const id = `fu-${Math.random().toString(36).slice(2, 8)}`;
+  let preview = $state<string | null>(null);
+  const acceptAttr = $derived(mode === 'image' ? 'image/*' : accept);
+  const hintText = $derived(mode === 'image' ? '사진 촬영 · 이미지' : hint);
   async function take(files: FileList | null | undefined) {
     const f = files?.[0];
     if (!f || disabled) return;
-    onfile?.({ name: f.name, text: await f.text() });
+    if (mode === 'image') {
+      preview = URL.createObjectURL(f);
+      onfile?.({ name: f.name, text: '', type: f.type, size: f.size, url: preview });
+    } else onfile?.({ name: f.name, text: await f.text() });
   }
 </script>
 
@@ -45,16 +54,22 @@
   }}
 >
   <span class="text-body-md text-fg font-medium">{label}</span>
-  <span class="text-label-sm text-fg-muted">{hint}</span>
+  <span class="text-label-sm text-fg-muted">{hintText}</span>
   <input
     {id}
     type="file"
-    {accept}
+    accept={acceptAttr}
     {disabled}
+    capture={mode === 'image' ? 'environment' : undefined}
     class={cx('sr-only', FOCUS)}
     onchange={(e) => {
       take(e.currentTarget.files);
       e.currentTarget.value = '';
     }}
   />
+  {#if preview}<img
+      src={preview}
+      alt="선택한 서류 미리보기"
+      class="rounded-control mt-stack-xs max-h-size-control-lg object-contain"
+    />{/if}
 </label>

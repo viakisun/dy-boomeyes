@@ -64,11 +64,12 @@ test('[A1-03] 장면 5: 정비 호출 이력이 있는 C-105(진행 중) · 완�
   await expect(page.locator('[data-demo-bar]')).toContainText('장면 5/10');
 });
 
-test('[A2-05] 장면 7: 내 서류는 웨이브 2 자리 화면 · 장면 바 이전(장면 6 웹)/다음(장면 8 웹) [FR-024]', async ({
+test('[A2-05] 장면 7: 내 서류(DOC-001 D-27 촬영·제출 액션) · 장면 바 이전(장면 6 웹)/다음(장면 8 웹) [FR-015] [FR-024]', async ({
   page,
 }) => {
   await page.goto('/a2/docs?scene=7');
-  await expect(page.locator(root(SCR['A2-05']))).toContainText('웨이브 2에서 구현됩니다');
+  await expect(page.locator(root(SCR['A2-05']))).toBeVisible();
+  await expect(page.locator('[data-doc="DOC-001"]').getByRole('button', { name: '촬영·제출' })).toBeVisible();
   const bar = page.locator('[data-demo-bar]');
   await expect(bar.getByRole('link', { name: '← 이전' })).toHaveAttribute('href', /4173\/b1\/escalation\?scene=6$/);
   await expect(bar.getByRole('link', { name: '다음 →' })).toHaveAttribute('href', /4173\/b4\/protocols\?scene=8$/);
