@@ -16,7 +16,7 @@ const RULES = [
   { id: 'hex', re: /#[0-9a-f]{3,8}\b/gi, why: 'hex 색 → sys 색 토큰' },
   {
     id: 'palette',
-    re: new RegExp(`\\b(?:${PREFIX})-(?:${PALETTE})-\\d{2,3}\\b|\\b(?:${PREFIX})-(?:white|black)\\b`, 'g'),
+    re: new RegExp(`\\b(?:${PREFIX})-(?:${PALETTE})-(?:50|[1-9]00|950)\b|\\b(?:${PREFIX})-(?:white|black)\\b`, 'g'),
     why: 'Tailwind 기본 팔레트 → 토큰 유틸리티(bg-canvas · text-fg-muted · bg-danger)',
   },
   {
@@ -36,11 +36,16 @@ const RULES = [
     why: 'rounded-N → rounded-card/control/dialog/pill',
   },
   { id: 'z', re: /(?<![\w-])-?z-\d+(?![\w-])/g, why: 'z-N → z 토큰(z-dropdown 등)' },
+  {
+    id: 'reset',
+    re: /(?<![\w-])(?:rounded(?:-[a-z]{1,2})?-(?:xs|sm|md|lg|xl|[2-4]xl)|text-(?:xs|sm|base|lg|xl|[2-9]xl)|shadow-(?:xs|sm|md|lg|xl|2xl))(?![\w-])/g,
+    why: 'theme.css가 초기화한 Tailwind 기본 스케일 — 클래스가 조용히 무효 → rounded-card/control · text-body-md · shadow-raised',
+  },
 ];
 const PX = {
   id: 'px',
-  re: /(?<![\w.-])(\d*\.?\d+)px\b/g,
-  skip: (m) => m[1] === '0' || m[1] === '1',
+  re: /(?<![\w.])(-?\d*\.?\d+)px\b/g,
+  skip: (m) => ['0', '1', '-1'].includes(m[1]),
   why: 'px 직접값 → var(--sys-…) 토큰(0·1px 허용)',
 };
 
@@ -54,7 +59,14 @@ function* walk(dir) {
 }
 function isComment(line) {
   const t = line.trim();
-  return t.startsWith('//') || t.startsWith('*') || t.startsWith('/*') || t.startsWith('<!--');
+  return (
+    t.startsWith('//') ||
+    t.startsWith('* ') ||
+    t === '*' ||
+    t.startsWith('*/') ||
+    t.startsWith('/*') ||
+    t.startsWith('<!--')
+  );
 }
 const errors = [];
 let files = 0;
@@ -77,13 +89,10 @@ for (const scope of SCOPES) {
         if (isComment(line)) return;
         const report = (rule, m) => errors.push(`${rel}:${i + 1}: [${rule.id}] ${m[0].trim()} — ${rule.why}`);
         for (const rule of RULES) for (const m of line.matchAll(rule.re)) if (!rule.skip?.(m)) report(rule, m);
-        if (ext === '.svelte') {
-          if (/<style\b/.test(line)) inStyle = true;
-          if (inStyle || /\bstyle=/.test(line)) for (const m of line.matchAll(PX.re)) if (!PX.skip(m)) report(PX, m);
-          if (/<\/style>/.test(line)) inStyle = false;
-        } else if (ext === '.css' || /\.style\.|cssText/.test(line)) {
+        if (ext === '.svelte' && /<style/.test(line)) inStyle = true;
+        if (ext === '.css' || inStyle || /style[:=]|\.style\.|cssText/.test(line))
           for (const m of line.matchAll(PX.re)) if (!PX.skip(m)) report(PX, m);
-        }
+        if (ext === '.svelte' && /<\/style>/.test(line)) inStyle = false;
       });
   }
 }

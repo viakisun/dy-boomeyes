@@ -53,8 +53,16 @@ if (!args.includes('--no-serve'))
     );
     await waitHttp(BASE[app]);
   }
+process.on('exit', () => {
+  for (const p of servers) p.kill();
+});
 const browser = await chromium.launch();
-const ctx = await browser.newContext({ deviceScaleFactor: 2, locale: 'ko-KR', reducedMotion: 'reduce' });
+const ctx = await browser.newContext({
+  deviceScaleFactor: 2,
+  locale: 'ko-KR',
+  timezoneId: 'Asia/Seoul',
+  reducedMotion: 'reduce',
+});
 // 시각·난수 고정은 앱의 DemoClock(?capture=1)이 담당한다 — 브라우저 Date 프록시는 MapLibre 로드를 막는다
 let n = 0,
   fail = 0;
@@ -71,7 +79,7 @@ for (const s of screens) {
       await page.goto(url, { waitUntil: 'networkidle' });
       await page.waitForSelector(`[data-scr="${s.id}"]`, { timeout: 10_000 });
       await page.addStyleTag({ content: '*,*::before,*::after{animation:none!important;transition:none!important}' });
-      if (await page.$('.be-map')) await page.waitForSelector('[data-map-ready]', { timeout: 20_000 }).catch(() => {});
+      if (await page.$('.be-map')) await page.waitForSelector('[data-map-ready]', { timeout: 20_000 }); // 타임아웃 = FAIL (빈 지도를 녹색으로 세지 않는다)
       await page.waitForTimeout(300);
       const dialog = await page.$('dialog[open][data-capture-dialog], [data-capture-dialog]:not(dialog)');
       const frame = await page.$('[data-capture-frame]');
@@ -80,7 +88,12 @@ for (const s of screens) {
       else if (phone) await page.screenshot({ path: join(OUT, `${name}.png`) });
       else {
         // fullPage(captureBeyondViewport)는 WebGL 캔버스 서브트리(타일·DOM 마커)를 간헐적으로 비운 채 찍는다 → 뷰포트를 문서 높이로 늘려 일반 촬영
-        const h = await page.evaluate(() => document.documentElement.scrollHeight);
+        // 셸이 있으면 스크롤 컨테이너는 <main>(h-dvh 안) — main 내용 높이 + 상단 오프셋만큼 뷰포트를 키운다
+        const h = await page.evaluate(() => {
+          const m = document.querySelector('main');
+          const doc = document.documentElement.scrollHeight;
+          return m ? Math.max(doc, Math.ceil(m.getBoundingClientRect().top + m.scrollHeight)) : doc;
+        });
         await page.setViewportSize({ width: 1280, height: Math.max(842, h) });
         await page.waitForTimeout(300);
         await page.screenshot({ path: join(OUT, `${name}.png`) });

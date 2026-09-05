@@ -8929,7 +8929,7 @@
     },
     "sys.layout.panel.height": {
       "$type": "dimension",
-      "$description": "대시보드 패널(지도 행·알림 피드) 높이",
+      "$description": "지도 행·알림 피드 패널 기본 높이",
       "$value": "420px",
       "css": "--sys-layout-panel-height",
       "tailwind": "--spacing-layout-panel-height"

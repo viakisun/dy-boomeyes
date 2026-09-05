@@ -30,7 +30,7 @@
 {#if isLogin || !session.user}
   {@render children()}
 {:else}
-  <PwaShell {title} {tabs} scr={data.screen}>
+  <PwaShell {title} {tabs}>
     {#snippet actions()}<IconButton
         label="로그아웃"
         onclick={() => {

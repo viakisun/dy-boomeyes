@@ -596,7 +596,7 @@
 | `sys.layout.breakpoint.xl` | 1280px | 1280px |  |
 | `sys.layout.breakpoint.2xl` | 1536px | 1536px |  |
 | `sys.layout.map.min` | 240px | 240px | 지도 컴포넌트 최소 높이 |
-| `sys.layout.panel.height` | 420px | 420px | 대시보드 패널(지도 행·알림 피드) 높이 |
+| `sys.layout.panel.height` | 420px | 420px | 지도 행·알림 피드 패널 기본 높이 |
 | `sys.layout.menu.min` | 192px | 192px | 드롭다운 메뉴 최소 폭 |
 
 ## 6. 형태 · 깊이 · 모션

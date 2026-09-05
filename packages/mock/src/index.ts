@@ -1,12 +1,13 @@
 // @boomeyes/mock — 앱 조립 지점(+layout.ts)에서만 import (ADR-002). 화면은 ApiClient 인터페이스만 본다.
-import { FIXED_CLOCK, SCREENS, type ScrId } from '@boomeyes/domain';
+import { FIXED_CLOCK, SCREENS, type RoleId, type ScrId, type Session } from '@boomeyes/domain';
 import { createMockApi } from './api';
 import { clock } from './clock';
-import { seed } from './seed';
+import { demoUsers, seed } from './seed';
 import { applyState } from './states';
 
 export { clock, H, MIN, DAY } from './clock';
-export { seed, type Db } from './seed';
+export { seed, demoUsers, type Db } from './seed';
+export { createMockRealtime } from './realtime';
 export { createMockApi } from './api';
 export { FIXTURES, applyState } from './states';
 
@@ -24,6 +25,12 @@ export function bootMock(opts: MockOptions = {}) {
   let db = seed();
   if (opts.screen) db = applyState(db, opts.screen, opts.state ?? SCREENS[opts.screen].default);
   return createMockApi(db, { latencyMs: opts.capture ? 0 : (opts.latencyMs ?? 120) });
+}
+
+/** capture 모드: 로그인 없이 셸까지 그리기 위한 세션 합성 (저장하지 않음 · 가드 우회는 W3 전 제거) */
+export function demoSession(role: RoleId): Session | null {
+  const u = demoUsers().find((x) => x.role === role);
+  return u ? { userId: u.id, role: u.role, display: u.display, org: u.org } : null;
 }
 
 /** URL 쿼리 → MockOptions (`?state=` `?capture=1`) */

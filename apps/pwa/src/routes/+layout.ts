@@ -1,6 +1,6 @@
 import { redirect } from '@sveltejs/kit';
-import { canAccess, screenForPath, type ScrId } from '@boomeyes/domain';
-import { bootMock, clock, optionsFromUrl } from '@boomeyes/mock';
+import { SCREENS, canAccess, screenForPath, type RoleId, type ScrId } from '@boomeyes/domain';
+import { bootMock, clock, demoSession, optionsFromUrl } from '@boomeyes/mock';
 import { session } from '$lib/session.svelte';
 import type { LayoutLoad } from './$types';
 
@@ -12,6 +12,8 @@ export const load: LayoutLoad = ({ url }) => {
   const screen = screenForPath(url.pathname, url.search, 'pwa');
   const opts = optionsFromUrl(url, screen);
   const api = bootMock(opts);
+  if (opts.capture && !session.user && screen && !LOGINS.includes(screen))
+    session.user = demoSession(SCREENS[screen].roles[0] as RoleId);
   const user = session.user;
   const surface = url.pathname.split('/')[1] ?? 'a1';
   if (screen && !LOGINS.includes(screen) && !user && !opts.capture) throw redirect(302, `/${surface}/login`);

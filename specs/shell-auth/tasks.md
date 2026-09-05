@@ -4,7 +4,7 @@
 |---|---|---|---|
 | 1 | 워크스페이스 스캐폴드 — `apps/web` `apps/pwa`(SvelteKit 2 · adapter-static) · `packages/{ui,domain,mock}` · Turbo · ESLint 경계 · svelte-check · Vitest · Playwright | `pnpm verify` + `lint` `typecheck` 녹색 · 빈 앱 2개 빌드 | ADR-001 |
 | 2 | `packages/ui` 프리미티브 14(Button IconButton TextField Checkbox Radio Switch Badge StatusPill Card Tabs Menu Toast Dialog EmptyState) — cmp 토큰만 소비 | 스토리/데모 페이지 렌더 · `tokens:lint` 0건 | ADR-004 |
-| 3 | `WebShell` · `PwaShell` | AC-3 · AC-4 · 다크 렌더(AC-6) | FR-024 |
+| 3 | `WebShell` · `PwaShell` | AC-3 · AC-4 — 다크 렌더(AC-6)는 **W1**(테마 토글 · `?theme=dark` 캡처 변형) · `maintenance` 로그인 경로(B0-01 roles 미포함)는 SSOT 정리 필요 | FR-024 |
 | 4 | `packages/mock` 시드(7계정·현장 2·CPB 5) · `ApiClient` 인터페이스 + mock · `?state=` `?capture=1` 해석 · DemoClock | 단위 테스트 `[FR-001]` | ADR-002 |
 | 5 | B0-01 역할 카드 로그인 + 라우트 가드 + 앱 로그인 4 | AC-1 · AC-2 · AC-5 | B0-01 A1-01 A2-01 A3-01 A4-01 |
 | 6 | `tools/capture` — states 매니페스트 생성 · 뷰포트·고정 시각·클립 | `b0-01-login-b1..b4` `a1-01-login` … PNG · 시각 회귀 기준선 | QA §3 |

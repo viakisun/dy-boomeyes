@@ -1,5 +1,5 @@
 <script lang="ts">
-  // 지도 — 장비 마커(상태 5종 = domain.equipment 토큰) · 선택 시 onselect. 타일은 PUBLIC_TILE_STYLE_URL(기본 CARTO Positron) — 캡처는 타일 로드 대기.
+  // 지도 — 장비 마커(상태 5종 = domain.equipment 토큰) · 선택 시 onselect. 타일은 styleUrl prop(기본 CARTO Positron · 환경변수 배선은 W3, ADR-003) — 캡처는 타일 로드 대기.
   import maplibregl, { type Map as MLMap, type Marker } from 'maplibre-gl';
   import 'maplibre-gl/dist/maplibre-gl.css';
   import { onMount } from 'svelte';
@@ -33,14 +33,24 @@
     const off = fanOffsets(markers.map((m) => ({ id: m.id, ...map!.project([m.lng, m.lat]) })));
     for (const [id, h] of handles) h.setOffset([off.get(id) ?? 0, 0]);
   }
-  function pin(m: MapViewProps['markers'][number]) {
-    const d = document.createElement('button');
-    d.type = 'button';
-    d.className = 'be-marker';
+  type M = MapViewProps['markers'][number];
+  // 생성·갱신 공용 — 색·글리프·라벨·aria-label을 한 번에 (상태 변경 시 글리프가 남는 사고 방지)
+  function paint(d: HTMLElement, m: M) {
     d.setAttribute('aria-label', `${m.label} — ${m.state}`);
     d.dataset.state = m.state;
     d.style.cssText = `--pin:${COLOR[m.state] ?? COLOR.offline}`;
-    d.innerHTML = `<span class="be-marker__dot">${GLYPH[m.state] ?? ''}</span><span class="be-marker__label">${m.label}</span>`;
+    (d.querySelector('.be-marker__dot') as HTMLElement).textContent = GLYPH[m.state] ?? '';
+    (d.querySelector('.be-marker__label') as HTMLElement).textContent = m.label;
+  }
+  function pin(m: M) {
+    const d = document.createElement('button');
+    d.type = 'button';
+    d.className = 'be-marker';
+    d.append(
+      Object.assign(document.createElement('span'), { className: 'be-marker__dot' }),
+      Object.assign(document.createElement('span'), { className: 'be-marker__label' }),
+    );
+    paint(d, m);
     d.addEventListener('click', () => onselect?.(m.id));
     return d;
   }
@@ -76,9 +86,7 @@
         handles.set(m.id, h);
       } else {
         h.setLngLat([m.lng, m.lat]);
-        const e = h.getElement();
-        e.dataset.state = m.state;
-        e.style.cssText = `--pin:${COLOR[m.state]}`;
+        paint(h.getElement(), m);
       }
       h.getElement().classList.toggle('is-selected', !!m.selected);
     }

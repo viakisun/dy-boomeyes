@@ -9,7 +9,6 @@
     groups,
     crumbs = [],
     inspectorOpen = false,
-    scr,
     brand,
     footer,
     search,
@@ -20,7 +19,6 @@
     groups: NavGroup[];
     crumbs?: { label: string; href?: string }[];
     inspectorOpen?: boolean;
-    scr?: string;
     brand?: Snippet;
     footer?: Snippet;
     search?: Snippet;
@@ -31,7 +29,7 @@
   let collapsed = $state(false);
 </script>
 
-<div class="bg-canvas text-fg flex h-dvh overflow-hidden" data-scr={scr}>
+<div class="bg-canvas text-fg flex h-dvh overflow-hidden">
   <Sidebar {groups} bind:collapsed {brand} {footer} />
   <div class="flex min-w-0 flex-1 flex-col">
     <Topbar {crumbs} {search} {actions} />

@@ -1,17 +1,20 @@
-// axe — serious/critical 0 (QA 게이트 6). 대상: 웨이브 0 화면
+// axe — serious/critical 0 (QA 게이트 6). 대상: 웨이브 0 화면. 비동기 콘텐츠(계정 · 마커)가 뜬 뒤 검사한다
 import AxeBuilder from '@axe-core/playwright';
-import { expect, test } from '@playwright/test';
+import { expect, test, type Page } from '@playwright/test';
+import { SCR } from '../../packages/domain/src/generated/ids';
 
-const PAGES: [string, string][] = [
-  ['B0-01', '/login'],
-  ['B1-02', '/b1/dash?state=dash&capture=1'],
-  ['B1-02M', '/b1/dash?state=dash&capture=1&cam=CAM-3-2'],
+const markersReady = async (page: Page) => expect(page.locator('.be-marker')).toHaveCount(5);
+const PAGES: { scr: string; url: string; ready: (page: Page) => Promise<void> }[] = [
+  { scr: SCR['B0-01'], url: '/login', ready: (p) => expect(p.getByText('control01', { exact: true })).toBeVisible() },
+  { scr: SCR['B1-02'], url: '/b1/dash?state=dash&capture=1', ready: markersReady },
+  { scr: SCR['B1-02M'], url: '/b1/dash?state=dash&capture=1&cam=CAM-3-2', ready: markersReady },
 ];
 
-for (const [scr, url] of PAGES) {
+for (const { scr, url, ready } of PAGES) {
   test(`[${scr}] axe serious/critical 0`, async ({ page }) => {
     await page.goto(url);
     await expect(page.locator(`[data-scr="${scr}"]`).first()).toBeVisible(); // 모달은 루트·다이얼로그 둘 다 표시
+    await ready(page);
     const result = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'best-practice']).analyze();
     const bad = result.violations
       .filter((v) => v.impact === 'serious' || v.impact === 'critical')

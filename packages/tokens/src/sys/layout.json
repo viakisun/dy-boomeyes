@@ -105,7 +105,7 @@
       "height": {
         "$type": "dimension",
         "$value": "420px",
-        "$description": "대시보드 패널(지도 행·알림 피드) 높이"
+        "$description": "지도 행·알림 피드 패널 기본 높이"
       }
     },
     "menu": {

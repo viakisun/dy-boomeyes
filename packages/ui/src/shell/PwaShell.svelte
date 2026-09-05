@@ -9,7 +9,6 @@
     back,
     align = 'left',
     tabs = [],
-    scr,
     offline = false,
     banner,
     actions,
@@ -21,7 +20,6 @@
     back?: { href: string; label?: string };
     align?: 'left' | 'center';
     tabs?: NavItem[];
-    scr?: string;
     offline?: boolean;
     banner?: Snippet;
     actions?: Snippet;
@@ -31,11 +29,7 @@
   } = $props();
 </script>
 
-<div
-  class="max-w-layout-frame-mobile bg-canvas text-fg mx-auto flex min-h-dvh w-full flex-col"
-  data-scr={scr}
-  data-capture-frame
->
+<div class="max-w-layout-frame-mobile bg-canvas text-fg mx-auto flex min-h-dvh w-full flex-col" data-capture-frame>
   <AppBar {title} {back} {align} {actions} {logo} />
   {#if offline}<div role="status" class="bg-neutral-bg px-page-gutter py-inset-xs text-body-sm text-neutral-fg">
       오프라인 — 저장한 작업은 연결 후 동기화됩니다

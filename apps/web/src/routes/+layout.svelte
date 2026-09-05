@@ -22,7 +22,7 @@
 {#if data.screen === 'B0-01' || !session.user}
   {@render children()}
 {:else}
-  <WebShell {groups} {crumbs} scr={data.screen}>
+  <WebShell {groups} {crumbs}>
     {#snippet brand()}<a href={resolve('/')} class="text-heading-sm text-accent-fg-strong">BoomEyes</a>{/snippet}
     {#snippet actions()}
       <span class="text-body-sm text-fg-muted">{session.user?.display} · {session.user?.org}</span>

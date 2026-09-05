@@ -2,9 +2,21 @@
   // B1-02 관제 대시보드 (specs/control-dashboard AC-1~5) · B1-02M 카메라 모달(?cam=)
   import { goto } from '$app/navigation';
   import { resolve } from '$app/paths';
-  import type { Device } from '@boomeyes/domain';
+  import type { Alert, Device } from '@boomeyes/domain';
+  import { onMount } from 'svelte';
   import { MapView } from '@boomeyes/map';
-  import { Badge, Button, Dialog, EQUIPMENT_TONE, SEVERITY_TONE, Stat, StatusPill, Tabs, cx } from '@boomeyes/ui';
+  import {
+    Badge,
+    Button,
+    Dialog,
+    EQUIPMENT_TONE,
+    SEVERITY_TONE,
+    Stat,
+    StatusPill,
+    Tabs,
+    cx,
+    toast,
+  } from '@boomeyes/ui';
   import { CameraTile } from '@boomeyes/video';
   let { data } = $props();
   const LABEL = { normal: '정상', caution: '주의', fault: '고장', offline: '두절', maintenance: '정비' } as const;
@@ -29,8 +41,24 @@
   const modalCam = $derived(data.cam ? (data.cameras.find((c) => c.id === data.cam) ?? null) : null);
   const modalDevice = $derived(modalCam ? data.devices.find((d) => d.id === modalCam.deviceId) : null);
   let source = $state('server');
+  // 실시간 알림(mock realtime, AC-3) — 도착분을 피드 상단에 붙이고 토스트
+  let live = $state<Alert[]>([]);
+  const feed = $derived([...live, ...data.alerts]);
+  onMount(() =>
+    data.realtime.subscribe((e) => {
+      if (e.type !== 'alert.raised') return;
+      live = [e.alert, ...live];
+      toast(e.alert.message);
+    }),
+  );
   const fmt = (iso: string) =>
-    new Date(iso).toLocaleString('ko-KR', { month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+    new Date(iso).toLocaleString('ko-KR', {
+      timeZone: 'Asia/Seoul',
+      month: 'numeric',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+    });
   const openCam = (id: string) => goto(resolve(`/b1/dash?cam=${id}` as '/'), { keepFocus: true, noScroll: true });
   const closeCam = () => goto(resolve('/b1/dash' as '/'), { keepFocus: true, noScroll: true });
 </script>
@@ -85,16 +113,16 @@
       </div>
       <div class="gap-stack-sm flex flex-col">
         <h2 class="text-heading-sm">
-          알림 피드 <Badge tone="danger" count={data.alerts.filter((a) => !a.acked).length} />
+          알림 피드 <Badge tone="danger" count={feed.filter((a) => !a.acked).length} />
         </h2>
         <ul
           class="rounded-card border-border bg-surface p-inset-xs max-h-layout-panel-height gap-stack-xs flex flex-col overflow-y-auto border"
           aria-label="알림"
         >
-          {#each data.alerts as a (a.id)}
+          {#each feed as a (a.id)}
             <li>
               <a
-                href={a.caseId ? resolve(`/b1/inbox` as '/') : resolve('/b1/dash' as '/')}
+                href={a.caseId ? resolve(`/b1/inbox?case=${a.caseId}` as '/') : resolve('/b1/dash' as '/')}
                 class={cx(
                   'gap-inline-sm rounded-control px-inset-sm py-inset-xs hover:bg-ui-hover flex items-start',
                   !a.acked && 'bg-surface-sunken',

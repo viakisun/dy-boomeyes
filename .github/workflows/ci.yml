@@ -35,7 +35,7 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm exec playwright install --with-deps chromium
       - run: pnpm build
-      - name: e2e (7역할 로그인 · 대시보드 · axe)
+      - name: e2e (역할 로그인 8 · 대시보드 · axe)
         run: pnpm e2e
       - name: capture (라우트 × 상태 전수)
         run: pnpm capture
@@ -46,4 +46,5 @@ jobs:
           path: |
             shots/
             playwright-report/
+            test-results/
           retention-days: 14

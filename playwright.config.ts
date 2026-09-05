@@ -12,7 +12,7 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 1 : 0,
   reporter: process.env.CI ? [['list'], ['html', { open: 'never' }]] : 'list',
-  use: { locale: 'ko-KR', trace: 'retain-on-failure', screenshot: 'only-on-failure' },
+  use: { locale: 'ko-KR', timezoneId: 'Asia/Seoul', trace: 'retain-on-failure', screenshot: 'only-on-failure' },
   projects: [
     { name: 'web', testMatch: /web-.*\.spec\.ts/, use: { baseURL: WEB, viewport: { width: 1280, height: 842 } } },
     {

@@ -18,7 +18,12 @@
   } = $props();
   const off = $derived(camera.state === 'offline');
   const time = $derived(
-    new Date(camera.snapshotAt).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
+    new Date(camera.snapshotAt).toLocaleTimeString('ko-KR', {
+      timeZone: 'Asia/Seoul',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+    }),
   );
 </script>
 

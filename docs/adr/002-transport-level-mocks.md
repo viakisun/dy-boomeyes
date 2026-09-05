@@ -29,4 +29,4 @@ relates_to: [IF-009, IF-010, IF-006]
 ## Rules
 - [x] 화면은 인터페이스만 의존. `@boomeyes/mock` import는 앱 조립 지점(`+layout.ts`)에서만(ESLint 경계 규칙).
 - [x] `?state=`·`?capture=1`은 mock 구현이 해석(시각 고정 `meta.fixed_clock`). 화면은 `new Date()` 대신 `data.clock`.
-- [ ] 브라우저 `Date`·`Math.random` 프록시(캡처 도구의 init script)는 금지 — MapLibre 로드를 막는다(QA §3).
+- [x] 브라우저 `Date`·`Math.random` 프록시(캡처 도구의 init script)는 금지 — MapLibre 로드를 막는다(QA §3).

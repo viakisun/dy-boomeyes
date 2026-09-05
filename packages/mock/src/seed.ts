@@ -15,10 +15,9 @@ export interface Db {
   leases: Lease[];
 }
 
-export function seed(): Db {
-  const now = clock.now();
-  const t = (ms: number) => new Date(now.getTime() - ms).toISOString();
-  const users: User[] = (
+/** 데모 계정 7 — ssot roles.demo_account (capture 모드 세션 합성에도 쓴다) */
+export function demoUsers(): User[] {
+  return (
     ssot.roles.roles as { id: User['role']; demo_account: { login: string; display: string }; org: string }[]
   ).map((r) => ({
     id: r.demo_account.login,
@@ -28,6 +27,12 @@ export function seed(): Db {
     siteIds:
       r.id === 'site-safety' || r.id === 'driver' ? ['SITE-001'] : r.id === 'hq-safety' ? ['SITE-001', 'SITE-002'] : [],
   }));
+}
+
+export function seed(): Db {
+  const now = clock.now();
+  const t = (ms: number) => new Date(now.getTime() - ms).toISOString();
+  const users: User[] = demoUsers();
   const owners: Owner[] = [{ id: 'OWN-001', name: '차사장 중기', contact: '010-0000-0001' }];
   const sites: Site[] = [
     {
