@@ -4,6 +4,12 @@
     <meta charset="utf-8" />
     <link rel="icon" href="%sveltekit.assets%/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <!-- PWA 설치(specs/shell-auth AC-7): manifest · theme-color는 sys.color.accent.solid 값(정적 메타, 토큰 변경 시 갱신) -->
+    <link rel="manifest" href="%sveltekit.assets%/manifest.webmanifest" />
+    <meta name="theme-color" content="#0d2877" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="BoomEyes" />
+    <link rel="apple-touch-icon" href="%sveltekit.assets%/icons/icon-192.png" />
     %sveltekit.head%
   </head>
   <body data-sveltekit-preload-data="hover">

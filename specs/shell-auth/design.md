@@ -19,6 +19,10 @@
 - 웹 루트 `data-density="compact"` · PWA `comfortable`. 테마는 문서 루트 `data-theme`(없으면 prefers-color-scheme). **웹**: 기본 light, 탑바 토글(☾/☀)로 사용자가 전체 다크 선택 — `localStorage dy.theme`에 기기 단위로 유지(로그아웃·`resetMock`에도 남음). **PWA**: 시스템 다크를 따르고 토글 없음(DY-design §10). 월보드·쇼케이스는 컴포넌트 내부 강제(§9) — 토글과 무관.
 - 사이드바 항목 = `screens.yaml`에서 역할·표면별 wave ≤ current 화면(생성 nav). 하단 내비 세트: driver(오늘·내 장비·서류·메뉴) · site-safety(업무함·관제·기록·메뉴) · hq-safety(현장·업무·기록) · owner(현황·요청·운전자·계약).
 
+## 설치(PWA)
+- `static/manifest.webmanifest` + `static/icons/`(ffmpeg 합성 단색 아이콘 — 브랜드 확정 DISC-021 전 자리) · `src/service-worker.ts`(SvelteKit `$service-worker`: `build`·`files`·셸 `/` 프리캐시, 내비게이션 network-first → 오프라인은 캐시된 셸, 외부(CARTO)는 통과). mock 데이터는 캐시하지 않는다(세션 메모리). 개발 서버에서는 등록되지 않고 preview·배포 빌드에서만 등록. PWA는 `paths.relative: false`. 빌드된 폴백 `index.html`은 원래 절대 경로(`/_app/…`, SvelteKit SPA 폴백 규칙)지만, `vite preview`는 `/` 응답을 상대 경로(`./_app/…`)로 렌더해 SW가 그 응답을 캐시하면 `/a2/login` 오프라인에서 `/a2/_app/…`을 찾아 부팅이 실패했다(프로브 `probe-sw.mjs`로 확인). 설정은 preview와 배포(파일 서빙)를 같은 절대 경로로 맞춰 e2e가 배포 동작을 대표하게 한다.
+- SW 갱신: `skipWaiting`+`clients.claim`으로 새 빌드가 열린 탭을 즉시 장악하고 구 캐시를 지운다 — 개발 중 리빌드 후엔 새로고침 1~2회가 필요하고, 실배포(tasks 7)에서 구 해시 자산을 즉시 지우면 열린 탭의 지연 로딩이 404가 날 수 있어 배포 절차에 기록한다.
+
 ## 오프라인 · 오류 · 빈 상태
 오프라인 Banner(neutral) · 403 EmptyState(action: 첫 화면) · 로딩 Skeleton(300ms).
 

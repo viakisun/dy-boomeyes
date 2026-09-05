@@ -12,6 +12,8 @@ export default defineConfig({
       },
       // 정적 SPA (ADR-007) — 서버 세션 요구(DISC-020) 전까지 adapter-node 전환 없음
       adapter: adapter({ fallback: 'index.html', strict: false }),
+      // 절대 경로(/_app/…): 폴백 파일은 원래 절대지만 vite preview는 /를 상대(./_app)로 렌더 → SW가 캐시한 셸이 /a2/login 오프라인에서 깨졌다. preview·배포를 같은 경로로 (shell-auth design 설치 절)
+      paths: { relative: false },
     }),
   ],
 });
