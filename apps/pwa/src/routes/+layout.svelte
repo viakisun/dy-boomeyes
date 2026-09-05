@@ -33,7 +33,7 @@
   );
   // 배지 탭 → 최신 알림의 업무(A1) 또는 앱 첫 화면. href는 템플릿에서 resolve()로 감싼다(no-navigation-without-resolve)
   const alertPath = $derived.by(() => {
-    const a = live[0];
+    const a = live.find((x) => x.caseId) ?? live[0]; // 업무가 연결된 최신 알림 우선
     if (a?.caseId && data.surface === 'a1') return `/a1/inbox/${a.caseId}`;
     const h = role && APP_HOME_OF[role];
     return h ? SCREENS[h].route : '/';
