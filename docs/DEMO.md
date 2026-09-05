@@ -49,7 +49,7 @@ HLS/WebRTC 중계·RTSP·VPN · MQTT/SSE 서버 · 실인증 · S3 업로드 · 
 | 4 | `web/b1/dash?scene=4` | control01 | C-105 접수됨 상태 · `?case=C-105` 패널 |
 | 5 | `pwa/a1/inbox/C-105?scene=5` | safety01 | 정비 호출 이력 → 완료 확인 시트(조치 내용 필수) → 기록 탭(A1-06) 최상단에 완료 확인 행 |
 | 6 | `web/b1/escalation?scene=6` | control01 | CPB-004 55분 방치 → 장면 바 "1시간 경과" → 본사·관제 통보 |
-| 7 | `pwa/a2/docs?scene=7` | driver03 | A2-05는 W2 자리 |
+| 7 | `pwa/a2/docs?scene=7` | driver03 | DOC-001 만료 임박 D-27 → 촬영·제출 → 검토 중(수신함·현장 업무함에 서류 업무) |
 | 8 | `web/b4/protocols?scene=8` | ops01 | YAML 업로드 · 오류 샘플 · 알림 미리보기 |
 | 9 | `web/b1/leases?scene=9` | control01 | LS-001 D-27 만료 임박 최상단 → 재배치 계획(대상 현장 · 메모) → relocated · 이력 · 안전관리자 홍보 연계 문구 |
 | 10 | `web/b1/showcase?scene=10` | safety01 → control01 대체(B1-07 권한) | 다크 강제 쇼케이스 · 무사고 D+ · 점검·서류 지표 · 카메라 월 · 마스킹(DISC-031) · Esc/클릭 → B1-02 |

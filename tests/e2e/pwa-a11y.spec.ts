@@ -84,6 +84,8 @@ const PAGES: { scr: string; url: string; ready: (page: Page) => Promise<void> }[
     url: '/a3/records?state=rec&capture=1',
     ready: (p) => expect(p.locator('ol[aria-label="기록"] li').first()).toBeVisible(),
   },
+  { scr: SCR['A2-01'], url: '/a2/login', ready: (p) => expect(p.getByRole('button', { name: '입장' })).toBeVisible() },
+  { scr: SCR['A3-01'], url: '/a3/login', ready: (p) => expect(p.getByRole('button', { name: '입장' })).toBeVisible() },
   {
     scr: SCR['A3-04'],
     url: '/a3/sites/SITE-001/devices?state=dev&capture=1',

@@ -1,7 +1,8 @@
 // capture.mjs — ssot 화면 레지스트리 기반 캡처 (QA §3). 빌드된 앱을 vite preview로 띄우고 라우트×상태 전수 촬영.
-//   node tools/capture/capture.mjs [--wave N] [--only B1-02,B0-01] [--dark] [--web http://...] [--pwa http://...] [--no-serve]
+//   node tools/capture/capture.mjs [--wave N] [--only B1-02,B0-01] [--dark] [--strict] [--web http://...] [--pwa http://...] [--no-serve]
 // 출력 shots/<code-lower>-<state>.png · 시각 고정은 앱 DemoClock(?capture=1) · 애니메이션 off
 // --dark: 화면 기본 상태를 ?theme=dark(루트 data-theme)로 한 번 더 찍는다 → <code-lower>-<state>-dark.png (shell-auth AC-6)
+// --strict: 캐치올 자리 화면("웨이브 N에서 구현됩니다")을 FAIL로 센다 — 웨이브 Exit 게이트(자리 0, W2). 없으면 stub로 세기만 한다
 import { readFileSync, mkdirSync, existsSync } from 'node:fs';
 import { join, dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -18,6 +19,7 @@ const opt = (k, d) => {
 const WAVE = Number(opt('--wave', ssot.meta.current_wave));
 const ONLY = opt('--only', '') ? opt('--only').split(',') : null;
 const DARK = args.includes('--dark');
+const STRICT = args.includes('--strict');
 const PORTS = { web: 4173, pwa: 4174 };
 const BASE = { web: opt('--web', `http://localhost:${PORTS.web}`), pwa: opt('--pwa', `http://localhost:${PORTS.pwa}`) };
 const OUT = join(ROOT, 'shots');
@@ -69,7 +71,8 @@ const ctx = await browser.newContext({
 });
 // 시각·난수 고정은 앱의 DemoClock(?capture=1)이 담당한다 — 브라우저 Date 프록시는 MapLibre 로드를 막는다
 let n = 0,
-  fail = 0;
+  fail = 0,
+  stub = 0;
 for (const s of screens) {
   const app = surfaces[s.surface];
   const phone = app === 'pwa';
@@ -85,6 +88,12 @@ for (const s of screens) {
       try {
         await page.goto(url, { waitUntil: 'networkidle' });
         await page.waitForSelector(`[data-scr="${s.id}"]`, { timeout: 10_000 });
+        // 자리 화면(캐치올 EmptyState) — data-scr는 캐치올도 붙이므로 문구로 판별한다
+        if (await page.getByText('에서 구현됩니다').count()) {
+          stub++;
+          if (STRICT) throw new Error('자리 화면 — 실 라우트 없음(웨이브 N에서 구현됩니다)');
+          console.log('stub', name);
+        }
         await page.addStyleTag({ content: '*,*::before,*::after{animation:none!important;transition:none!important}' });
         if (await page.$('.be-map')) await page.waitForSelector('[data-map-ready]', { timeout: 20_000 }); // 타임아웃 = FAIL (빈 지도를 녹색으로 세지 않는다)
         await page.waitForTimeout(300);
@@ -125,5 +134,7 @@ for (const s of screens) {
 }
 await browser.close();
 for (const p of servers) p.kill();
-console.log(`${fail ? '✗' : '✓'} capture: ${n} shots · fail ${fail} → shots/`);
+console.log(
+  `${fail ? '✗' : '✓'} capture: ${n} shots · fail ${fail} · 자리 ${stub}${STRICT ? ' (strict)' : ''} → shots/`,
+);
 process.exit(fail ? 1 : 0);

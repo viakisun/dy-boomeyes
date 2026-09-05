@@ -8,4 +8,6 @@
 | B6-2 | B1-06 · B2-02 · 장면 9 e2e | AC-3·4 · 캡처 2 | SCR-B1-06 SCR-B2-02 |
 | B7-1 | `createRequest` · A1-07(menu·apply) · A2-06 · A3-03(site·normal) · KeyValueList | AC-5~7 e2e · 캡처 5 | SCR-A1-07 SCR-A2-06 SCR-A3-03 |
 
+완료(W2 B5·B6·B7): B4-03 · B4-04 · B1-06 · B2-02 · A1-07(menu·apply) · A2-06 · A3-03(site·normal) 구현 · 마스터 API 8 · lease/request 기계 · createRequest · 장면 9 · e2e 12 · axe 7 · Vitest 6.
+
 커밋 예: `feat(assets): B4-03 마스터·프로파일 프리셋 — Refs: SCR-B4-03 FR-018 FR-029`
