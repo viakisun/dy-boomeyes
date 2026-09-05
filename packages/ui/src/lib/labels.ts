@@ -9,6 +9,7 @@ import type {
   Severity,
   TaskState,
   LeaseState,
+  RecordKind,
 } from '@boomeyes/domain';
 import type { Tone } from './cx';
 
@@ -86,4 +87,13 @@ export const CONSENT_LABEL: Record<'video' | 'audio' | 'location', string> = {
   video: '영상',
   audio: '음성',
   location: '위치',
+};
+/** FR-012 기록 유형 */
+export const RECORD_KIND_LABEL: Record<RecordKind, string> = {
+  task: '업무',
+  inspection: '점검',
+  attendance: '출근',
+  doc: '서류',
+  rule: '규칙',
+  lease: '임대',
 };

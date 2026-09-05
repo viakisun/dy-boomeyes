@@ -358,3 +358,40 @@ describe('[FR-017] 신청(A1-07) → 수신함', () => {
     ).rejects.toThrow('제목');
   });
 });
+
+describe('[FR-012] 기록 병합 · [FR-023] 보고 모드 집계', () => {
+  it('records: 현장 스코프는 업무·점검·출근·서류만 시각 역순 · kind 필터 · days 창 · 전국 스코프는 규칙·임대까지', async () => {
+    const api = bootMock({ capture: true, screen: 'A1-06', state: 'rec' });
+    const scope = { role: 'site-safety' as const, siteIds: ['SITE-001'] };
+    const all = await api.records(scope, { days: 30 });
+    expect(all.length).toBeGreaterThan(10);
+    expect(all.every((r, i) => i === 0 || all[i - 1]!.at >= r.at)).toBe(true);
+    expect(all[0]?.text).toContain('발행 — E-021');
+    expect(new Set(all.map((r) => r.kind))).toEqual(new Set(['task', 'inspection', 'attendance', 'doc']));
+    expect((await api.records(scope, { kind: 'task' })).length).toBe(7);
+    expect((await api.records(scope, { kind: 'attendance' })).length).toBe(1);
+    expect((await api.records(scope, { kind: 'inspection' }))[0]?.text).toContain('일일점검 제출 — CPB-003 (5/5 정상)');
+    expect((await api.records(scope, { days: 1 })).every((r) => Date.parse(r.at) >= clock.now().getTime() - DAY)).toBe(
+      true,
+    );
+    const ctl = await api.records({ role: 'control' });
+    expect(ctl.some((r) => r.kind === 'rule')).toBe(true);
+    expect(ctl.some((r) => r.kind === 'lease')).toBe(true);
+  });
+  it('report: hq 2현장 · 7일 vs 30일(SITE-002 완료 업무 20일 전) · 서류 완비율 · 에스컬레이션 · 전이 부작용 없음', async () => {
+    const api = bootMock({ capture: true, screen: 'B2-04', state: 'report' });
+    const scope = { role: 'hq-safety' as const, siteIds: ['SITE-001', 'SITE-002'] };
+    const r7 = await api.report(scope, 7);
+    const r30 = await api.report(scope, 30);
+    expect(r7.map((s) => s.siteId)).toEqual(['SITE-001', 'SITE-002']);
+    const s2 = (rows: typeof r7) => rows.find((s) => s.siteId === 'SITE-002')!;
+    expect(s2(r7).casesTotal).toBe(1);
+    expect(s2(r30).casesTotal).toBe(2);
+    expect(s2(r30).caseRate).toBe(50);
+    expect(s2(r30).docRate).toBe(100);
+    expect(s2(r30).inspectionRate).toBe(50); // CPB-004만 점검 제출(10일 전) / 2대
+    expect(r7.find((s) => s.siteId === 'SITE-001')?.escalated).toBe(0);
+    expect(s2(r7).escalated).toBe(1);
+    expect((await api.case('C-105'))?.state).toBe('new'); // report는 escalations()와 달리 전이시키지 않는다
+  });
+});

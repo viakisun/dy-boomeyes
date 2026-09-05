@@ -19,6 +19,11 @@ const PAGES: { scr: string; url: string; ready: (page: Page) => Promise<void> }[
     ready: (p) => expect(p.getByText('C-105', { exact: false }).first()).toBeVisible(),
   },
   {
+    scr: SCR['B2-04'],
+    url: '/b2/report?state=report&capture=1',
+    ready: (p) => expect(p.locator('[data-site]')).toHaveCount(2),
+  },
+  {
     scr: SCR['B2-03'],
     url: '/b2/sites/SITE-001?state=site&capture=1',
     ready: (p) => expect(p.locator('[data-wall] button[aria-label*="카메라"]')).toHaveCount(6),

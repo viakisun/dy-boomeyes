@@ -25,6 +25,9 @@ import type {
   Site,
   Today,
   User,
+  RecordItem,
+  RecordKind,
+  SiteReport,
   VideoProfile,
 } from './types';
 
@@ -118,6 +121,10 @@ export interface ApiClient {
   setUserRole(userId: string, role: RoleId): Promise<User>;
   setUserSites(userId: string, siteIds: string[]): Promise<User>;
   setUserStatus(userId: string, status: 'active' | 'suspended'): Promise<User>;
+  /** FR-012 기록 — 이력 병합(시각 역순) · days 창(기본 30) · kind 필터. 현장 스코프는 업무·점검·출근·서류, 전국 스코프는 규칙·임대까지 */
+  records(scope: Scope, opts?: { days?: number; kind?: RecordKind }): Promise<RecordItem[]>;
+  /** FR-023 보고 모드 — 현장별 기간 요약(7 | 30일). 상태 전이 부작용 없음 */
+  report(scope: Scope, days: number): Promise<SiteReport[]>;
 }
 
 /** 시각 원천 — 화면은 new Date() 대신 이것을 쓴다 (capture 모드에서 고정, 데모에서 점프) */

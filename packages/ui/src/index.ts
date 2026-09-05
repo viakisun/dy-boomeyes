@@ -47,6 +47,7 @@ export { default as PageHeader } from './primitives/PageHeader.svelte';
 export { default as Select } from './primitives/Select.svelte';
 export { default as KeyValueList } from './primitives/KeyValueList.svelte';
 export { default as SiteProfileForm } from './primitives/SiteProfileForm.svelte';
+export { default as Chip } from './primitives/Chip.svelte';
 export {
   TASK_LABEL,
   CASE_KIND_LABEL,
@@ -61,6 +62,7 @@ export {
   LEASE_STATE_LABEL,
   LEASE_TONE,
   CONSENT_LABEL,
+  RECORD_KIND_LABEL,
 } from './lib/labels';
 export { fmtDateTime, fmtTime, dueLabel, elapsedLabel } from './lib/format';
 export { connectivity } from './lib/connectivity.svelte';

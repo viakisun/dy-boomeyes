@@ -152,6 +152,36 @@ export interface User {
   /** 계정 상태(B4-04) — 없으면 active */
   status?: 'active' | 'suspended';
 } // ENT-05
+/** FR-012 기록(ENT-09 병합) — 업무·점검·출근·서류(현장) + 규칙·임대(전국) 이력을 한 타임라인으로, append-only(NFR-012) */
+export type RecordKind = 'task' | 'inspection' | 'attendance' | 'doc' | 'rule' | 'lease';
+export interface RecordItem {
+  at: string;
+  kind: RecordKind;
+  actor: string;
+  subjectId: string;
+  siteId: string;
+  text: string;
+  note?: string;
+}
+/** FR-023 보고 모드(B2-04) — 현장별 기간 요약(mock 계산, 열람 전용) */
+export interface SiteReport {
+  siteId: string;
+  site: string;
+  days: number;
+  devices: number;
+  abnormal: number;
+  casesTotal: number;
+  casesDone: number;
+  /** 업무 처리율 % (기간 내 발행 업무 중 done) */
+  caseRate: number;
+  inspections: number;
+  /** 점검 제출률 % (기간 내 점검이 1건 이상 제출된 호기 비율) */
+  inspectionRate: number;
+  docRate: number;
+  docTotal: number;
+  escalated: number;
+  alerts: number;
+}
 export interface Kpis {
   total: number;
   normal: number;

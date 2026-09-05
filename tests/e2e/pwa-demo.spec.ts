@@ -49,7 +49,7 @@ test('[A1-02] 장면 3: safety01 세션 · C-105 접수 → 진행 중 · 정비
   );
 });
 
-test('[A1-03] 장면 5: 정비 호출 이력이 있는 C-105(진행 중) · 완료 확인 → A1-08 시트 · 기록(A1-06)은 자리 화면(B8까지) [FR-008] [FR-024]', async ({
+test('[A1-03] 장면 5: 정비 호출 이력이 있는 C-105(진행 중) · 완료 확인 → A1-08 시트 · 완료 확인 → 기록(A1-06) 최상단에 조치 행 [FR-008] [FR-024]', async ({
   page,
 }) => {
   await page.goto('/a1/inbox/C-105?scene=5');
@@ -59,8 +59,15 @@ test('[A1-03] 장면 5: 정비 호출 이력이 있는 C-105(진행 중) · 완�
   await page.goto(`${SCREENS['A1-08'].route.replace('[case]', 'C-105')}&scene=5`); // /a1/inbox/C-105?sheet=complete — A1-03 위 시트
   await expect(page.locator(root(SCR['A1-08'])).first()).toBeVisible();
   await expect(page.locator('dialog[open][data-bottom-sheet]')).toContainText('완료 처리');
-  await page.goto(`${SCREENS['A1-06'].route}?scene=5`);
-  await expect(page.locator(root(SCR['A1-06']))).toContainText('웨이브 2에서 구현됩니다');
+  // 완료 처리(조치 내용 필수) → 앱 내 이동으로 기록 탭 — 장면 db가 유지되어 완료 확인 행이 최상단(AC-2)
+  await page.getByLabel('조치 내용(필수)').fill('전압 릴레이 교체');
+  await page.locator('dialog[open]').getByRole('button', { name: '완료 확인' }).click(); // 하단 바에도 같은 이름의 버튼
+  await expect(page.getByText('완료 상태 — 할 일이 없습니다')).toBeVisible();
+  await page.getByRole('navigation', { name: '하단 내비게이션' }).getByRole('link', { name: '기록' }).click();
+  await expect(page.locator(root(SCR['A1-06']))).toBeVisible();
+  const rows = page.locator('ol[aria-label="기록"] li');
+  await expect(rows.first()).toContainText('완료 확인');
+  await expect(rows.first()).toContainText('전압 릴레이 교체');
   await expect(page.locator('[data-demo-bar]')).toContainText('장면 5/10');
 });
 
