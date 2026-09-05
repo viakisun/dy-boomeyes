@@ -8,7 +8,7 @@ W0는 9/5에 선행 완료(회고 `docs/retro/W0.md` · 방법론 v1.1). `curren
 
 | 산출 | 상태 (2026-09-05) |
 |---|---|
-| 기능 4 구현·merge — task-escalation · driver-daily · admin-protocol-rules · video-basics(specs `draft` → 구현됨, 잔여 AC는 각 `tasks.md`) | 완료 — main 33 커밋 · e2e 55 · axe 15 · 캡처 19장(`--wave 1`) |
+| 기능 4 구현·merge — task-escalation · driver-daily · admin-protocol-rules · video-basics(specs `draft` → 구현됨, 잔여 AC는 각 `tasks.md`) | 완료 — main 33 커밋 · e2e 55 · axe 15 · 캡처 22장(`--wave 1`) |
 | 다크 렌더(shell-auth AC-6 · 테마 토글/`?theme=dark`) · 시각 회귀 기준선(0.2%) · demo-scripts 장면 1~8 · PWA manifest/SW · `maintenance` 로그인 경로 · tokens:lint 잔여(border-N · ring-N · duration-N · max-w-*) · 카탈로그 밖 컴포넌트 검사 · PWA 측 AX-1 픽스처 | 진행 예정 |
 | 사용자 입력 | 리모트 리포 → CI 1회 녹색 · AWS 계정(DISC-006) → 프리뷰 → ADR-007 · DISC-033/036/038/040/042/043 |
 
@@ -23,7 +23,7 @@ W0는 9/5에 선행 완료(회고 `docs/retro/W0.md` · 방법론 v1.1). `curren
 | 게이트: `pnpm verify`(ssot·tokens·tokens:lint·lint·check·test·생성물 diff 0) · `pnpm e2e` 19(로그인·가드·대시보드·realtime·모달·axe) · CI `e2e` 잡(capture 아티팩트) | 완료 — `✓ DY: lint files 56 · errors 0` · `19 passed` |
 | ADR-002(트랜스포트 목) · ADR-003(MapLibre) Accepted | 완료 — ADR-007은 프리뷰 구성 후 |
 | 리뷰어 판정(머지 불가 4건) 반영 — capture 모드 셸 렌더 · 시간대 고정 · 지도 대기 FAIL · mock realtime(AC-3) · 마커 갱신 · lint 규칙 보강 | 완료 — 다크 렌더(shell-auth AC-6)는 W1로 이동 |
-| W1 선행(9/5): 기능 4 구현 — task-escalation(A1-02 · A1-03 · B1-03 · B1-04) · driver-daily(A2-02~04) · admin-protocol-rules(B4-02 · B4-05) · video-basics(A1-04 · A1-05 · B1-02M 완성) + ui 12 · mock(요청·에스컬레이션·출근·점검·프로토콜·규칙·미디어) · domain(profile · protocol · rules) · e2e 53 · axe 15 · 캡처 `--wave 1` 14장 | 완료 — 리뷰 8회(첫 판정 머지 가능 1/8) · 결함 17 반영 |
+| W1 선행(9/5): 기능 4 구현 — task-escalation(A1-02 · A1-03 · B1-03 · B1-04) · driver-daily(A2-02~04) · admin-protocol-rules(B4-02 · B4-05) · video-basics(A1-04 · A1-05 · B1-02M 완성) + ui 12 · mock(요청·에스컬레이션·출근·점검·프로토콜·규칙·미디어) · domain(profile · protocol · rules) · e2e 53 · axe 15 · 캡처 `--wave 1` 14장 | 완료 — ff-merge 브랜치 16 · 첫 판정 머지 가능 2 · 결함 17 반영(세션 기록) |
 | 남은 것 | S3+CloudFront 프리뷰(AWS 계정 DISC-006 — 사용자) · 리모트 리포 생성 → CI 1회 녹색 · `?capture=1` 가드 우회 제거(W3 실 인증 전) — W1 표로 이관 |
 
 ## 웨이브 표 (제안)
