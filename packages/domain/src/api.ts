@@ -38,6 +38,8 @@ export interface ApiClient {
   completeCase(id: string, by: string, note: string): Promise<Case>;
   /** 정비 담당 호출 — 이력 + 정비(maintenance) 통보 (A1-03) */
   callMaintenance(id: string, by: string): Promise<Case>;
+  /** 본사 확인 요청(DISC-015 권한 경계) — 이력 + 현장 알림, 상태 전이 없음 */
+  requestConfirm(id: string, by: string, note?: string): Promise<Case>;
   /** FR-017 수신함 — 신청·요청 */
   requests(scope: Scope): Promise<Request[]>;
   request(id: string): Promise<Request | undefined>;

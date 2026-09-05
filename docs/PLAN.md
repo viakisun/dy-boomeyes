@@ -4,13 +4,14 @@
 
 ## 현재 웨이브 — W2 1단계 잔여 (선행 착수 9/5 · 계획 10/6~10/17)
 
-W1은 9/5에 선행 완료(사용자 결정 항목만 잔여). 계획 `~/.claude/plans/form-tingly-gray.md` → 브랜치 B0~B15. `current_wave`는 B2(A1-08 실화면)에서 2로 올린다 — 모달형 A1-08은 자리 화면이 없어 캡처가 실패하므로 spec만 먼저 두고 첫 실화면과 함께 승격.
+W1은 9/5에 선행 완료(사용자 결정 항목만 잔여). 계획 `~/.claude/plans/form-tingly-gray.md` → 브랜치 B0~B15. `current_wave: 2`(B2에서 승격) — wave ≤ 2 화면 41 전부 route(check) · spec(TRACE "spec 없는 화면 0") · 자리 화면은 B3~B11에서 실화면으로.
 
 | 산출 | 상태 (2026-09-05) |
 |---|---|
 | B0 SSOT 정합(nav 5 · states 3 · ENT-19/20 · request/lease 기계 · FR-037/NFR-016 · DISC-044~046 · ADR-009/010/011 Proposed) | 완료 — PR #2 |
 | B1 spec 신규 7(documents · sites-assets-leases · records-reports · equipment-parts · event-replay · owner-showcase · notifications) + 확장 4 | 완료 — `--specs 14` · wave 2 화면 25 spec 커버 |
-| B2(A1-08 · A3-02 · A3-05 + `current_wave: 2` → 캡처 93장) · B3~B11 화면 실화면(자리+ 포함) · B12 오프라인 큐 · B13 로컬 알림 · B14 문서 생성기(설계서) · B15 마감 | 진행 예정 — 순서·의존은 계획 파일 |
+| B2 A1-08 완료 시트 · A3-02 · A3-05 + `current_wave: 2`(nav 활성 · 캡처 93장, 자리 24) | 완료 |
+| B3~B11 화면 실화면(자리+ 포함) · B12 오프라인 큐 · B13 로컬 알림 · B14 문서 생성기(설계서) · B15 마감 | 진행 예정 — 순서·의존은 계획 파일 |
 | 사용자 결정 | ADR-009/010/011 승인 · ADR-008 기준선 · DISC-036/038/043/015/044~046 · AWS(DISC-006) · v0.4 발행 |
 
 ### W1 시연 경로 — 완료(9/5)

@@ -45,6 +45,26 @@ export const FIXTURES: Record<string, Fixture> = {
     sites: db.sites.map((s) => (s.id === 'SITE-001' ? { ...s, videoProfile: 'P-LITE' as const } : s)),
   }),
   'A1-02:filter': (db) => db, // 필터 칩은 URL이 결정 — 시드 동일
+  // task-escalation W2: A1-08 완료 시트(C-105 접수됨·정비 호출 후) · A3 본사(hq01 2현장)
+  'A1-08:sheet': (db) => ({
+    ...db,
+    cases: db.cases.map((c) =>
+      c.id === 'C-105'
+        ? {
+            ...c,
+            state: 'in-progress' as const,
+            assigneeId: 'safety01',
+            history: [
+              ...c.history,
+              { at: clock.minus(5 * MIN), by: 'safety01', action: '접수' },
+              { at: clock.minus(2 * MIN), by: 'safety01', action: '정비 담당 호출', note: 'maint01 통보' },
+            ],
+          }
+        : c,
+    ),
+  }),
+  'A3-02:sites': (db) => db,
+  'A3-05:inbox': (db) => db,
   'B1-03:inbox': (db) => db,
   // 에스컬레이션 화면: C-105를 65분 전 발행으로 두면 escalations()가 escalated로 전이한다 (AC-7)
   'B1-04:esc': (db) => ({
