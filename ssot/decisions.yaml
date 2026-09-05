@@ -389,7 +389,7 @@ disc:
   - A1-02
   - A2-02
   scope_note: null
-  baseline: 과업지시서 검토 요청 미결 — 현행 Web Push(IF-014) 가정 · 시나리오별 등급은 FR-036
+  baseline: 과업지시서 검토 요청 미결 — 현행 Web Push(IF-014) 가정 · 시나리오별 등급은 FR-036 · 목업은 로컬 알림(ADR-009), 서버 발송은 W3
   ask: 알림 수신자·방식(푸시·문자·전화) 확정
   track: A
   status: open
@@ -471,3 +471,41 @@ disc:
   track: B
   status: open
   source: video-parts-review-v2.0
+- id: DISC-044
+  title: 부품·이벤트 복기 화면 5의 단계 귀속 (구조 vs 실동작)
+  scope:
+  - A1-11
+  - A2-09
+  - B4-07
+  - B4-08
+  - B1-08
+  scope_note: 근거 FR-032/033/035 · IF-018/019 · OUT-012/014는 2단계
+  baseline: 화면은 1단계(구조) — W2는 라우트·시드·상태기계 소비까지(자리+), 스캔·발주·실영상 동기는 2단계
+  ask: 5화면의 1단계 산출 포함 여부와 수준(구조만 vs 실동작) 확정
+  track: C
+  status: open
+  source: w2-plan-2026-09-05
+- id: DISC-045
+  title: 오프라인 제출 정책 (기록 시각 · 보존 · 재시도)
+  scope:
+  - A2-02
+  - A2-03
+  - A2-05
+  scope_note: null
+  baseline: 발생 시각 = 단말 탭 시각(at) · 사용자별 순서 재전송 · 백오프 5회 후 사용자 재시도 · 거부는 항목 단위 표시(ADR-010 제안)
+  ask: 체크인 기록 시각 기준(단말 vs 서버 수신) · 큐 보존 기간 · 재시도 상한 · 거부 시 처리 확정
+  track: B
+  status: open
+  source: w2-plan-2026-09-05
+- id: DISC-046
+  title: 서류 업로드 정책 (형식 · 용량 · 원본 보존 · 서명 URL)
+  scope:
+  - A2-05
+  - B3-04
+  - B4-06
+  scope_note: null
+  baseline: IF-011 HTTPS 멀티파트 · 파일은 S3(ENT-07) · W2 mock = objectURL 미리보기, 전송 방식은 W3 ADR
+  ask: 허용 형식(사진·PDF) · 용량 상한 · 촬영 원본 보존 · 서명 URL 사용 여부 확정
+  track: B
+  status: open
+  source: w2-plan-2026-09-05

@@ -256,6 +256,40 @@ ent:
   - 1─N 부품
   store: RDS — 2단계 제안
   phase: 2
+- id: ENT-19
+  name: 이벤트 (Event)
+  fields:
+  - event_id
+  - 발생 시각(t0)·복기 창(±초)
+  - 종류(알림 유형)
+  - 장비
+  - 소스 4 참조(일반 CCTV·AI CCTV·바디캠·CPB 상태/부품 이력) 세그먼트 메타
+  - 연결(알림·업무·부품 이력)
+  - 원본 보존 잠금
+  relations:
+  - N─1 장비
+  - 1─1 알림
+  - 0─1 업무
+  - 1─N 부품 이력
+  store: RDS · 세그먼트 메타는 S3(NFR-015 잠금) — 2단계 제안 (DISC-039)
+  phase: 2
+  note: B1-08 이벤트 복기의 축 — W2는 스텁(EV-001)으로 구조만
+- id: ENT-20
+  name: 신청·요청 (Request)
+  fields:
+  - request_id
+  - 유형(현장 개설/장비 배정/서류)
+  - 요청자
+  - 대상(현장·장비·서류)
+  - 상태
+  - 사유·회신
+  relations:
+  - N─1 사용자
+  - N─1 현장
+  - 0─1 서류
+  store: RDS
+  phase: 1
+  note: B1-03 수신함·A1-07 신청 폼(FR-017) — 상태기계 request
 machines:
   task:
     entity: ENT-06
@@ -382,6 +416,46 @@ machines:
     - from: replaced
       to: discarded
       by: 폐기(사유·증빙)
+  request:
+    entity: ENT-20
+    states:
+    - submitted
+    - review
+    - approved
+    - rejected
+    transitions:
+    - from: submitted
+      to: review
+      by: 자동(수신함 등록)
+    - from: review
+      to: approved
+      by: 승인(B1-03)
+    - from: review
+      to: rejected
+      by: 반려·사유(B1-03)
+    - from: rejected
+      to: submitted
+      by: 재제출(A1-07·A2-05)
+  lease:
+    entity: ENT-10
+    states:
+    - active
+    - expiring
+    - relocated
+    - ended
+    transitions:
+    - from: active
+      to: expiring
+      by: 만료 D-30 스케줄러
+    - from: expiring
+      to: relocated
+      by: 재배치 계획(B1-06) — 제안, DISC-037 정합 후
+    - from: expiring
+      to: ended
+      by: 만료
+    - from: active
+      to: ended
+      by: 조기 종료
 rules:
 - group: 업무(케이스) 상태 모델
   items:

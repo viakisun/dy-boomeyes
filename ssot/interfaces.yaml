@@ -136,7 +136,7 @@ if:
     sections:
     - 4.3.5
   screens: []
-  note: 전 화면
+  note: 전 화면 · 쓰기 요청은 클라이언트 생성 Idempotency-Key(ULID)·발생 시각 at을 실어 재전송에 안전(FR-037 · NFR-016)
 - id: IF-010
   segment: 실시간 GW(SVC-04) → APP/WEB
   protocol: WebSocket 또는 SSE (Polling 폴백) — 권한 스코프별 팬아웃
@@ -166,6 +166,7 @@ if:
   screens:
   - A2-05
   - B3-04
+  note: 오프라인 시 앱이 파일을 보관 후 전송(FR-037) · 형식·용량·서명 URL 정책은 DISC-046 · W2 mock = objectURL 미리보기
 - id: IF-012
   segment: 관리자 WEB → AWS 서버
   protocol: HTTPS 업로드 / YAML·JSON
@@ -210,6 +211,7 @@ if:
   - A1-02
   - A2-02
   - A3-02
+  note: W2 = 로컬 알림 스텁(realtime → SW showNotification, ADR-009) · 서버 발송·구독은 W3+, DISC-036이 푸시를 채택할 때
 - id: IF-015
   segment: AI 카메라 → 미들웨어 (이벤트)
   protocol: E1 HTTP POST(EventNotificationAlert XML + 스냅샷, VPN 불요) · E2 alertStream · E3 ONVIF 이벤트 · E4 ISUP · E5 MQTT(AXIS)

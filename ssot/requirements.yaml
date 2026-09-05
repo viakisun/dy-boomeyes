@@ -607,7 +607,7 @@ fr:
   phase: 2
   kind: option
   status: option
-  note: 2단계
+  note: 2단계 — W2 B4-03은 프리셋(P-LITE/P-SD/P-NVR) 전환·8축 표시만, 축 편집은 W4
 - id: FR-030
   title: 바디캠 영상 관리 — 세션·업로드·재생·태그·보존 홀드·열람 로그
   source:
@@ -646,7 +646,7 @@ fr:
   phase: 1
   kind: option
   status: option
-  note: 표준 패키지(DY 제공)
+  note: 표준 패키지(DY 제공) · W2 B4-03은 표준 패키지 표시만
 - id: FR-032
   title: 마모·교체 부품 생애주기 — 등록·장착·누적·점검·교체·폐기·재고·발주
   source:
@@ -757,6 +757,27 @@ fr:
   kind: proposed
   status: phase2
   note: 전도·무동작은 현장 검증 후 적용(DISC-042)
+- id: FR-037
+  title: 오프라인 제출 큐 — 체크인·체크아웃·일일점검·서류를 저장 후 연결 시 순서대로 동기
+  source:
+    text: INTENT §4-4·§6 / 과업 4.3.1 / DISC-045
+    rfp: []
+    sections:
+    - 4.3.1
+    disc:
+    - DISC-045
+  screens:
+  - A2-02
+  - A2-03
+  - A2-05
+  if:
+  - IF-009
+  - IF-011
+  acc: []
+  phase: 1
+  kind: core
+  status: development
+  note: W2 — IndexedDB 아웃박스 + ApiClient 데코레이터(ADR-010) · 서버 멱등은 W3
 nfr:
 - id: NFR-001
   title: 영상 화질
@@ -833,3 +854,8 @@ nfr:
   criterion: 긴급(배관·호스 이상, 전도) 이벤트 전후 원본 영상 보존·잠금(Object Lock) · 복기 완료 전 삭제 금지
   source: v2.0 §7·12
   verify: S3 잠금 정책 · 복기 절차
+- id: NFR-016
+  title: 오프라인 입력 보류·재전송 (PWA)
+  criterion: 생성 순서 전송(사용자별 FIFO) · 클라이언트 id 멱등 · 전송 실패 백오프 5회 후 사용자 재시도 · 앱 재시작 후 보존 · 업무 거부(반경 밖 등)는 항목 단위 표시
+  source: INTENT §6 / FR-037 / DISC-045
+  verify: e2e 오프라인 시나리오(setOffline → 제출 → 복구 → 전송·이력)
