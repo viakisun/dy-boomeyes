@@ -102,7 +102,7 @@ boomeyes/                 git 루트 = Claude 세션 진입점(메모리 키) �
 | 타입·정적 | svelte-check(error 0) · ESLint(경계 규칙) · Prettier | 커밋 차단 |
 | 토큰 | `tokens:check`(문법·계층·대비 82쌍) · `tokens:lint`(hex · 기본 팔레트 · 임의값 · 숫자 스케일 · rounded-N · z-N · 초기화된 기본 스케일 · style px — 규칙 생존 프로브 포함) | 커밋 차단 |
 | 단위 | 상태기계 · 프로파일→플래그 · 프로토콜 검증·파서 · 요청/에스컬레이션/출근/점검/규칙 mock | 푸시 차단 |
-| e2e | 역할 로그인 8 · 가드/403 · 화면별 AC 스모크 · realtime · 오프라인 · axe serious/critical 0(W1 착수 시점 55건) | PR 차단 |
+| e2e | 역할 로그인 8 · 가드/403 · 화면별 AC 스모크 · realtime · 오프라인 · axe serious/critical 0(W1 착수 시점 56건) | PR 차단 |
 | 캡처 | 라우트 × 상태 전수(웨이브 이하) · 셸 포함 · TZ 고정 · 지도 idle 실패 집계 · 시각 회귀 기준선(0.2%)은 W1 항목 | PR 차단 |
 | 커버리지 | SCR 레지스트리 = 라우트 = 캡처(`current_wave` 이하 route·spec 필수) · FR→테스트 ID 매핑 | PR 차단 |
 | 문서 정합 | `ssot` 스키마 · 생성 문서 최신 · `--specs/--docs/--commits` · 계약 문서 세트 `check_set`(v0.4 이식 후) | 커밋·PR·발행 차단 |
