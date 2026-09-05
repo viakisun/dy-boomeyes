@@ -8,7 +8,7 @@ export interface ProfileFlags {
   profile: VideoProfile;
   /** AX-1 카메라 채널 수 */
   channels: 1 | 2;
-  /** AX-4 저장 소스 탭 순서 — 서버는 항상 첫 번째 */
+  /** AX-4 저장 소스 탭 — 선택지 문구 그대로(서버 서브스트림 → server · SD 병행 → sd · 소형 NVR → nvr) */
   sources: StorageSource[];
   /** SD 병행 프로파일만 구간 회수 버튼 */
   sdRecall: boolean;
@@ -35,9 +35,11 @@ export function profileFlags(profile: VideoProfile): ProfileFlags {
   const row = PROFILES.find((p) => p.id === profile);
   if (!row) throw new Error(`알 수 없는 현장 프로파일: ${profile}`);
   const storage = row.choices['AX-4'] ?? '';
-  const sources: StorageSource[] = ['server'];
+  const sources: StorageSource[] = [];
+  if (storage.includes('서버')) sources.push('server');
   if (storage.includes('SD')) sources.push('sd');
   if (storage.includes('NVR')) sources.push('nvr');
+  if (!sources.length) throw new Error(`AX-4 저장 선택지 해석 불가: ${storage}`);
   return {
     profile,
     channels: (row.choices['AX-1'] ?? '').startsWith('1') ? 1 : 2,

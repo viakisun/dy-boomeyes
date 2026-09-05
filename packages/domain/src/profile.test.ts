@@ -21,14 +21,14 @@ describe('[FR-005] 현장 프로파일 → 저장 소스·피처 플래그 (opti
     expect(f.sdRecall).toBe(true);
     expect(f.bodycam).toBe('A');
   });
-  it('P-NVR: 서버 + NVR 탭 · 타임라인 · E5/L3/T2', () => {
+  it('P-NVR: NVR 탭만(소형 NVR) · 타임라인 · E5/L3/T2', () => {
     const f = profileFlags('P-NVR');
-    expect(f.sources).toEqual(['server', 'nvr']);
+    expect(f.sources).toEqual(['nvr']);
     expect(f.nvrTimeline).toBe(true);
     expect([f.eventRoute, f.liveRoute, f.telemetry]).toEqual(['E5', 'L3', 'T2']);
   });
-  it('서버 탭은 항상 첫 번째 · 알 수 없는 프로파일은 Error', () => {
-    for (const id of PROFILE_IDS) expect(profileFlags(id).sources[0]).toBe('server');
+  it('저장 소스는 AX-4 선택지에서만 나온다(비어 있지 않음) · 알 수 없는 프로파일은 Error', () => {
+    for (const id of PROFILE_IDS) expect(profileFlags(id).sources.length).toBeGreaterThan(0);
     expect(() => profileFlags('P-X' as never)).toThrow();
   });
 });
