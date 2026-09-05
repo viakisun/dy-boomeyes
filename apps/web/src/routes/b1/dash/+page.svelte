@@ -1,6 +1,6 @@
 <script lang="ts">
   // B1-02 관제 대시보드 (specs/control-dashboard AC-1~5) · B1-02M 카메라 모달(?cam=)
-  import { goto } from '$app/navigation';
+  import { goto, invalidateAll } from '$app/navigation';
   import { resolve } from '$app/paths';
   import { profileFlags, type Alert, type Camera, type Device, type StorageSource } from '@boomeyes/domain';
   import { onMount } from 'svelte';
@@ -56,7 +56,8 @@
   );
   // 실시간 알림(mock realtime, AC-3) — 도착분을 피드 상단에 붙이고 토스트
   let live = $state<Alert[]>([]);
-  const feed = $derived([...live, ...data.alerts]);
+  // 실시간 도착분이 다시 읽은 목록에도 있으면(장면 1: db에 기록된 알림) 한 번만 — 키드 each 중복 방지
+  const feed = $derived([...live.filter((a) => !data.alerts.some((x) => x.id === a.id)), ...data.alerts]);
   const modalBoxes = $derived(
     modalCam
       ? feed
@@ -70,6 +71,7 @@
       if (e.type !== 'alert.raised') return;
       live = [e.alert, ...live];
       toast(e.alert.message);
+      if (e.alert.severity === 'critical') invalidateAll(); // 장비 상태·업무가 바뀌는 알림 — 마커·표·KPI 다시 읽기(장면 1)
     }),
   );
   const fmt = (iso: string) =>

@@ -9129,6 +9129,7 @@
           "DISC-036"
         ],
         "specs": [
+          "demo-scripts",
           "task-escalation"
         ]
       },
@@ -9147,6 +9148,7 @@
           "DISC-035"
         ],
         "specs": [
+          "demo-scripts",
           "task-escalation"
         ]
       },
@@ -9176,6 +9178,7 @@
           "DISC-042"
         ],
         "specs": [
+          "demo-scripts",
           "video-basics"
         ]
       },
@@ -9202,6 +9205,7 @@
           "DISC-011"
         ],
         "specs": [
+          "demo-scripts",
           "video-basics"
         ]
       },
@@ -9288,6 +9292,7 @@
           "DISC-036"
         ],
         "specs": [
+          "demo-scripts",
           "driver-daily"
         ]
       },
@@ -9302,6 +9307,7 @@
           "DISC-033"
         ],
         "specs": [
+          "demo-scripts",
           "driver-daily"
         ]
       },
@@ -9539,7 +9545,8 @@
           "DISC-037"
         ],
         "specs": [
-          "control-dashboard"
+          "control-dashboard",
+          "demo-scripts"
         ]
       },
       "B1-02M": {
@@ -9586,6 +9593,7 @@
         ],
         "disc_all": [],
         "specs": [
+          "demo-scripts",
           "task-escalation"
         ]
       },
@@ -9604,6 +9612,7 @@
           "DISC-035"
         ],
         "specs": [
+          "demo-scripts",
           "task-escalation"
         ]
       },
@@ -9810,7 +9819,8 @@
           "DISC-009"
         ],
         "specs": [
-          "admin-protocol-rules"
+          "admin-protocol-rules",
+          "demo-scripts"
         ]
       },
       "B4-03": {

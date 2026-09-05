@@ -1,6 +1,6 @@
 <script lang="ts">
   // A2-02 오늘 (specs/driver-daily AC-1 · AC-2 · AC-4 · AC-6)
-  import { invalidateAll } from '$app/navigation';
+  import { goto, invalidateAll } from '$app/navigation';
   import { resolve } from '$app/paths';
   import { SCR, type Alert } from '@boomeyes/domain';
   import {
@@ -74,7 +74,7 @@
           variant="outline"
           tone="neutral"
           disabled={!t.attendance.checkinAt}
-          onclick={() => (location.href = resolve('/a2/today/inspect' as '/'))}>점검하기</Button
+          onclick={() => goto(resolve('/a2/today/inspect' as '/'))}>점검하기</Button
         >{/snippet}
     </Banner>
   {/if}

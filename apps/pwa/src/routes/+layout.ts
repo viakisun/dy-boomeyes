@@ -5,11 +5,17 @@ import {
   clock,
   createMockMedia,
   createMockRealtime,
+  createSceneRealtime,
   demoSession,
+  demoSessionFor,
+  H,
   optionsFromUrl,
   resetMock,
+  SCENES,
+  activeScene,
+  sceneOf,
 } from '@boomeyes/mock';
-import { session } from '$lib/session.svelte';
+import { login, session } from '$lib/session.svelte';
 import type { LayoutLoad } from './$types';
 
 export const ssr = false;
@@ -20,6 +26,19 @@ export const load: LayoutLoad = ({ url }) => {
   const screen = screenForPath(url.pathname, url.search, 'pwa');
   const opts = optionsFromUrl(url, screen);
   const api = bootMock(opts);
+  // 시연 장면(?scene=N, 앱 내 이동에서는 활성 장면 유지): 장면 계정으로 로그인 — 그 계정이 이 화면 권한이 없으면 화면 첫 역할의 데모 계정.
+  // ?capture=1과 같은 가드 우회, W3 실 인증 전 제거 (specs/demo-scripts AC-7)
+  const scene = sceneOf(opts.scene ?? activeScene());
+  if (scene) {
+    const acct = demoSessionFor(scene.account);
+    const u =
+      acct && (!screen || canAccess(acct.role, screen))
+        ? acct
+        : screen
+          ? demoSession(SCREENS[screen].roles[0] as RoleId)
+          : acct;
+    if (u && session.user?.userId !== u.userId) login(u);
+  }
   if (opts.capture && !session.user && screen && !LOGINS.includes(screen))
     session.user = demoSession(SCREENS[screen].roles[0] as RoleId);
   const user = session.user;
@@ -28,7 +47,21 @@ export const load: LayoutLoad = ({ url }) => {
   const forbidden = !!(user && screen && !canAccess(user.role, screen));
   const t = url.searchParams.get('theme');
   const theme: 'dark' | 'light' | null = t === 'dark' || t === 'light' ? t : null; // 캡처·e2e용 루트 테마(저장 안 함)
-  const realtime = createMockRealtime({ enabled: !opts.capture });
+  const realtime = scene ? createSceneRealtime(scene.scene, api) : createMockRealtime({ enabled: !opts.capture });
   const media = createMockMedia(api.db);
-  return { api, clock, realtime, media, resetMock, screen, capture: !!opts.capture, forbidden, surface, theme };
+  return {
+    api,
+    clock,
+    realtime,
+    media,
+    resetMock,
+    screen,
+    capture: !!opts.capture,
+    forbidden,
+    surface,
+    theme,
+    scene,
+    scenes: SCENES,
+    jumpHour: () => clock.jump(H),
+  };
 };

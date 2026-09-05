@@ -57,4 +57,5 @@ export { default as Sidebar } from './shell/Sidebar.svelte';
 export { default as Topbar } from './shell/Topbar.svelte';
 export { default as AppBar } from './shell/AppBar.svelte';
 export { default as BottomNav } from './shell/BottomNav.svelte';
+export { default as DemoBar } from './shell/DemoBar.svelte';
 export type { NavItem, NavGroup } from './shell/nav';

@@ -17,17 +17,17 @@
 | 코드 | 이름 | 표면 | 라우트 | 역할 | 단계 | 웨이브 | 상태 픽스처 | FR | spec |
 |---|---|---|---|---|---|---|---|---|---|
 | `A1-01` | 로그인 | A1 | `/a1/login` | site-safety | 1 | 1 | 1 (login) | FR-001 | shell-auth |
-| `A1-02` | 업무함 | A1 | `/a1/inbox` | site-safety | 1 | 1 | 2 (inbox filter) | FR-008 FR-009 FR-011 FR-015 | task-escalation |
-| `A1-03` | 업무 상세 | A1 | `/a1/inbox/[case]` | site-safety | 1 | 1 | 1 (case) | FR-006 FR-008 | task-escalation |
-| `A1-04` | 관제(장비·영상) | A1 | `/a1/monitor` | site-safety | 1 | 1 | 1 (monitor) | FR-004 FR-028 FR-030 FR-034 | video-basics |
-| `A1-05` | 장비 상세 | A1 | `/a1/monitor/[device]` | site-safety | 1 | 1 | 1 (dev) | FR-002 FR-005 FR-007 FR-016 FR-036 | video-basics |
+| `A1-02` | 업무함 | A1 | `/a1/inbox` | site-safety | 1 | 1 | 2 (inbox filter) | FR-008 FR-009 FR-011 FR-015 | demo-scripts task-escalation |
+| `A1-03` | 업무 상세 | A1 | `/a1/inbox/[case]` | site-safety | 1 | 1 | 1 (case) | FR-006 FR-008 | demo-scripts task-escalation |
+| `A1-04` | 관제(장비·영상) | A1 | `/a1/monitor` | site-safety | 1 | 1 | 1 (monitor) | FR-004 FR-028 FR-030 FR-034 | demo-scripts video-basics |
+| `A1-05` | 장비 상세 | A1 | `/a1/monitor/[device]` | site-safety | 1 | 1 | 1 (dev) | FR-002 FR-005 FR-007 FR-016 FR-036 | demo-scripts video-basics |
 | `A1-06` | 기록 | A1 | `/a1/records` | site-safety | 1 | 2 | 1 (rec) | FR-012 | — |
 | `A1-07` | 메뉴·현장 정보 | A1 | `/a1/menu` | site-safety | 1 | 2 | 2 (menu apply) | FR-017 FR-018 FR-026 | — |
 | `A1-08` | 완료 처리 시트 | A1 | `/a1/inbox/[case]?sheet=complete` | site-safety | 1 | 2 | 1 (sheet) | FR-008 | — |
 | `A1-11` | 부품 점검 입력 | A1 | `/a1/parts/inspect` | site-safety | 1 | 2 | 1 (default) | FR-032 FR-035 | — |
 | `A2-01` | 로그인 | A2 | `/a2/login` | driver | 1 | 1 | 1 (login) | FR-001 | shell-auth |
-| `A2-02` | 오늘(출근·알림) | A2 | `/a2/today` | driver | 1 | 1 | 2 (today checked) | FR-011 FR-013 FR-031 | driver-daily |
-| `A2-03` | 일일점검 | A2 | `/a2/today/inspect` | driver | 1 | 1 | 2 (inspect inspected) | FR-014 | driver-daily |
+| `A2-02` | 오늘(출근·알림) | A2 | `/a2/today` | driver | 1 | 1 | 2 (today checked) | FR-011 FR-013 FR-031 | demo-scripts driver-daily |
+| `A2-03` | 일일점검 | A2 | `/a2/today/inspect` | driver | 1 | 1 | 2 (inspect inspected) | FR-014 | demo-scripts driver-daily |
 | `A2-04` | 내 장비 | A2 | `/a2/device` | driver | 1 | 1 | 1 (mydev) | FR-002 FR-007 | driver-daily |
 | `A2-05` | 내 서류 | A2 | `/a2/docs` | driver | 1 | 2 | 1 (docs) | FR-015 | — |
 | `A2-06` | 메뉴·현장 정보 | A2 | `/a2/menu` | driver | 1 | 2 | 1 (menu) | FR-018 | — |
@@ -45,10 +45,10 @@
 | `A4-05` | 임대 계약 | A4 | `/a4/leases` | owner | 2 | 4 | 1 (lease) | FR-025 | — |
 | `A4-06` | 운전자 서류 | A4 | `/a4/drivers/docs` | owner | 2 | 4 | 1 (docs) | FR-027 | — |
 | `B0-01` | 웹 공통 로그인 | B0 | `/login` | control hq-safety site-safety ops-admin | 1 | 0 | 4 (login-b1 login-b2 login-b3 login-b4) | FR-001 FR-031 | shell-auth |
-| `B1-02` | 관제 대시보드 | B1 | `/b1/dash` | control maintenance | 1 | 0 | 1 (dash) | FR-002 FR-003 FR-006 FR-024 FR-034 FR-036 | control-dashboard |
+| `B1-02` | 관제 대시보드 | B1 | `/b1/dash` | control maintenance | 1 | 0 | 1 (dash) | FR-002 FR-003 FR-006 FR-024 FR-034 FR-036 | control-dashboard demo-scripts |
 | `B1-02M` | 카메라 영상 모달 | B1 | `/b1/dash?cam=[camera]` | control maintenance | 1 | 1 | 1 (cam) | FR-004 FR-005 FR-024 FR-028 FR-029 FR-034 | control-dashboard video-basics |
-| `B1-03` | 수신함 | B1 | `/b1/inbox` | control maintenance | 1 | 1 | 1 (inbox) | FR-017 FR-018 FR-024 | task-escalation |
-| `B1-04` | 에스컬레이션 | B1 | `/b1/escalation` | control maintenance | 1 | 1 | 1 (esc) | FR-010 FR-024 | task-escalation |
+| `B1-03` | 수신함 | B1 | `/b1/inbox` | control maintenance | 1 | 1 | 1 (inbox) | FR-017 FR-018 FR-024 | demo-scripts task-escalation |
+| `B1-04` | 에스컬레이션 | B1 | `/b1/escalation` | control maintenance | 1 | 1 | 1 (esc) | FR-010 FR-024 | demo-scripts task-escalation |
 | `B1-05` | 서류 현황 | B1 | `/b1/docs` | control maintenance | 1 | 2 | 1 (docs) | FR-016 FR-024 | — |
 | `B1-06` | 임대 계약 | B1 | `/b1/leases` | control maintenance | 1 | 2 | 1 (lease) | FR-019 FR-024 | — |
 | `B1-07` | 쇼케이스 | B1 | `/b1/showcase` | control maintenance | 2 | 2 | 1 (show) | FR-023 FR-024 | — |
@@ -62,7 +62,7 @@
 | `B3-05` | 기록 | B3 | `/b3/records` | site-safety | 2 | 4 | 1 (rec) | FR-012 FR-024 | — |
 | `B3-06` | 쇼케이스 | B3 | `/b3/showcase` | site-safety | 2 | 4 | 1 (show) | FR-023 FR-024 | — |
 | `B3-07` | 현장 부품 현황 | B3 | `/b3/parts` | site-safety | 2 | 4 | 1 (default) | FR-024 FR-032 | — |
-| `B4-02` | 프로토콜 관리 | B4 | `/b4/protocols` | ops-admin | 1 | 1 | 1 (proto) | FR-020 | admin-protocol-rules |
+| `B4-02` | 프로토콜 관리 | B4 | `/b4/protocols` | ops-admin | 1 | 1 | 1 (proto) | FR-020 | admin-protocol-rules demo-scripts |
 | `B4-03` | 장비·현장·프로파일 | B4 | `/b4/assets` | ops-admin | 1 | 2 | 1 (assets) | FR-018 FR-026 FR-029 FR-031 | — |
 | `B4-04` | 사용자·권한 | B4 | `/b4/users` | ops-admin | 1 | 2 | 1 (users) | FR-021 | — |
 | `B4-05` | 알림 기준 | B4 | `/b4/rules` | ops-admin | 1 | 1 | 1 (rules) | FR-006 FR-007 FR-011 FR-036 | admin-protocol-rules |

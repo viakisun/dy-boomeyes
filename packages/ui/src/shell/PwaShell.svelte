@@ -14,6 +14,7 @@
     actions,
     logo,
     sheet,
+    bar,
     children,
   }: {
     title?: string;
@@ -25,6 +26,8 @@
     actions?: Snippet;
     logo?: Snippet;
     sheet?: Snippet;
+    /** 하단 내비 위 고정 바(시연 장면 바) */
+    bar?: Snippet;
     children?: Snippet;
   } = $props();
 </script>
@@ -36,6 +39,7 @@
     </div>{/if}
   {#if banner}<div class="px-page-gutter pt-stack-sm">{@render banner()}</div>{/if}
   <main class="px-page-gutter py-stack-md flex-1">{@render children?.()}</main>
+  {#if bar}{@render bar()}{/if}
   {#if tabs.length}<BottomNav items={tabs} />{/if}
   {#if sheet}{@render sheet()}{/if}
 </div>

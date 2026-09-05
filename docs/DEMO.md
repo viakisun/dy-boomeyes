@@ -37,9 +37,23 @@
 
 HLS/WebRTC 중계·RTSP·VPN · MQTT/SSE 서버 · 실인증 · S3 업로드 · 바디캠 실연동 · Mapbox 토큰 → 대신 루프 MP4 2클립 + 스냅샷 모드 + bbox SVG · DemoClock 타임라인 재생 · 역할 카드 로그인 + 데모 계정 · objectURL 미리보기 · 세션 카드·동의 배지·CSS 블러 · MapLibre+CARTO. **진짜로 만드는 것**: YAML/JSON 파싱·오류 판정 · 업무 상태기계 · 프로파일→피처플래그 · 스코프별 라우트 가드.
 
-## 5. 리플레이 에이전트 (W1)
+## 5. 리플레이 에이전트 (W1 · specs/demo-scripts)
 
-`packages/mock`의 `demo-scripts`가 장면별 타임라인(텔레메트리 → 알림 → 업무 → 에스컬레이션)을 재생한다. 실 인입(W3)이 붙어도 폴백으로 유지. 장면 6은 DemoClock으로 1h를 점프한다.
+`?scene=N`으로 장면에 진입하면 장면 계정 세션·장면 픽스처(`packages/mock/src/demo.ts`)·타임라인이 적용되고, 셸 하단 장면 바에서 이전/다음 장면으로 이동한다(앱이 바뀌면 절대 URL — `PUBLIC_WEB_URL`/`PUBLIC_PWA_URL`, 기본 preview 4173/4174). 실 인입(W3)이 붙어도 폴백으로 유지.
+
+| 장면 | 진입 URL(preview) | 계정 | 재생 |
+|---|---|---|---|
+| 1 | `web/b1/dash?scene=1` | control01 | 진입 시 CPB-003 정상 → 3초 뒤 E-021 긴급 알림 · fault 전환 · C-105 발행 |
+| 2 | `pwa/a2/today?scene=2` | driver03 | 알림 → 체크인 → 점검 제출(같은 장면 안에서 db 유지) |
+| 3 | `pwa/a1/inbox?scene=3` | safety01 | C-105 접수 → 영상(A1-04/05) → 정비 호출 |
+| 4 | `web/b1/dash?scene=4` | control01 | C-105 접수됨 상태 · `?case=C-105` 패널 |
+| 5 | `pwa/a1/inbox/C-105?scene=5` | safety01 | 정비 호출 이력 · A1-08/A1-06은 W2 자리 |
+| 6 | `web/b1/escalation?scene=6` | control01 | CPB-004 55분 방치 → 장면 바 "1시간 경과" → 본사·관제 통보 |
+| 7 | `pwa/a2/docs?scene=7` | driver03 | A2-05는 W2 자리 |
+| 8 | `web/b4/protocols?scene=8` | ops01 | YAML 업로드 · 오류 샘플 · 알림 미리보기 |
+| 9 · 10 | `web/b1/leases?scene=9` · `web/b3/showcase?scene=10` | control01 · safety01 | W2·W4 자리 |
+
+리셋 = 같은 `?scene=N`으로 새로고침(장면 db는 세션 캐시 키 `scene|N`).
 
 ## 6. 확정 필요 (DISC-017)
 

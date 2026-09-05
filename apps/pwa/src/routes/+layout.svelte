@@ -1,12 +1,14 @@
 <script lang="ts">
   import '../app.css';
-  import { goto } from '$app/navigation';
+  import { goto, invalidateAll } from '$app/navigation';
+  import { env } from '$env/dynamic/public';
   import { resolve } from '$app/paths';
   import { onMount } from 'svelte';
   import { APP_HOME_OF, SCREENS, type Alert, type RoleId } from '@boomeyes/domain';
   import {
     Badge,
     Button,
+    DemoBar,
     EmptyState,
     IconButton,
     PwaShell,
@@ -28,6 +30,18 @@
   );
   const isLogin = $derived(data.screen?.endsWith('-01') && data.screen.startsWith('A'));
   const title = $derived(data.screen ? SCREENS[data.screen].name : 'BoomEyes');
+  // 시연 장면 바(specs/demo-scripts AC-7): 이웃 장면 링크(다른 앱이면 절대 URL — PUBLIC_*_URL, preview 기본 포트) · 장면 6 "1시간 경과"
+  const APP = 'pwa';
+  const OTHER = (env.PUBLIC_WEB_URL ?? 'http://localhost:4173').replace(/\/$/, '');
+  const sceneHref = (n: number) => {
+    const s = data.scenes.find((x) => x.scene === n);
+    if (!s) return undefined;
+    return s.app === APP ? resolve(s.entry as '/') + `?scene=${n}` : `${OTHER}${s.entry}?scene=${n}`;
+  };
+  const jump = () => {
+    data.jumpHour();
+    invalidateAll();
+  };
   // 테마: PWA는 시스템 다크를 따르고 강제하지 않는다(DY-design §10) — ?theme=은 캡처·e2e용 루트 적용만
   $effect(() => {
     if (data.theme) applyTheme(data.theme, false);
@@ -62,6 +76,18 @@
   {@render children()}
 {:else}
   <PwaShell {title} {tabs} offline={!connectivity.online}>
+    {#snippet bar()}
+      {#if data.scene}
+        <DemoBar
+          scene={data.scene.scene}
+          total={data.scenes.length}
+          title={data.scene.title}
+          prev={sceneHref(data.scene.scene - 1)}
+          next={sceneHref(data.scene.scene + 1)}
+          onjump={data.scene.scene === 6 ? jump : undefined}
+        />
+      {/if}
+    {/snippet}
     {#snippet actions()}
       {#if live.length}<a
           href={resolve(alertPath as '/')}

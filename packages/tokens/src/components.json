@@ -387,6 +387,15 @@
     "note": "56 · 제목 heading-md"
   },
   {
+    "name": "DemoBar",
+    "family": "Navigation",
+    "platform": "both",
+    "ref": "—",
+    "variants": "scene/total/title · prev/next 링크 · onjump(장면 6 \"1시간 경과\")",
+    "states": "—",
+    "note": "시연 장면 바(?scene=N) — 진행자 전용, 실사용 흐름엔 나타나지 않는다(QA §3). 셸 bar 슬롯"
+  },
+  {
     "name": "BottomNav",
     "family": "Navigation",
     "platform": "pwa",
