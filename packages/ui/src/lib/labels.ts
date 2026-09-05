@@ -27,6 +27,10 @@ export const REQUEST_STATE_LABEL: Record<RequestState, string> = {
   approved: '승인',
   rejected: '반려',
 };
+/** 고장코드 설명 — B4-05 고장코드 표(admin-protocol-rules)로 옮길 임시 원천 */
+export const ERROR_CODE_LABEL: Record<string, string> = {
+  'E-021': '380V 전압 이상 — 상 전압 342V, 릴레이·입력 전원 점검',
+};
 export const REQUEST_TONE: Record<RequestState, Tone> = {
   submitted: 'info',
   review: 'progress',

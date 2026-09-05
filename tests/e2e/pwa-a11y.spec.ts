@@ -19,6 +19,21 @@ const PAGES: { scr: string; url: string; ready: (page: Page) => Promise<void> }[
     url: '/a1/inbox/C-105?state=case&capture=1',
     ready: (p) => expect(p.getByRole('button', { name: '접수', exact: true })).toBeVisible(),
   },
+  {
+    scr: SCR['A2-02'],
+    url: '/a2/today?state=today&capture=1',
+    ready: (p) => expect(p.getByRole('button', { name: '출근 체크인' })).toBeVisible(),
+  },
+  {
+    scr: SCR['A2-03'],
+    url: '/a2/today/inspect?state=inspect&capture=1',
+    ready: (p) => expect(p.getByRole('checkbox')).toHaveCount(5),
+  },
+  {
+    scr: SCR['A2-04'],
+    url: '/a2/device?state=mydev&capture=1',
+    ready: (p) => expect(p.getByRole('meter', { name: '필터 도달률' })).toBeVisible(),
+  },
 ];
 
 for (const { scr, url, ready } of PAGES) {

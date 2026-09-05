@@ -33,6 +33,10 @@ export type { Column } from './lib/table';
 export { default as TaskCard } from './primitives/TaskCard.svelte';
 export { default as Timeline } from './primitives/Timeline.svelte';
 export { default as EscalationTimer } from './primitives/EscalationTimer.svelte';
+export { default as CheckinCard } from './primitives/CheckinCard.svelte';
+export { default as ChecklistForm } from './primitives/ChecklistForm.svelte';
+export { default as TelemetryGauge } from './primitives/TelemetryGauge.svelte';
+export { default as TelemetryStrip } from './primitives/TelemetryStrip.svelte';
 export {
   TASK_LABEL,
   CASE_KIND_LABEL,
@@ -40,6 +44,7 @@ export {
   REQUEST_KIND_LABEL,
   REQUEST_STATE_LABEL,
   REQUEST_TONE,
+  ERROR_CODE_LABEL,
 } from './lib/labels';
 export { fmtDateTime, fmtTime, dueLabel, elapsedLabel } from './lib/format';
 export { default as WebShell } from './shell/WebShell.svelte';

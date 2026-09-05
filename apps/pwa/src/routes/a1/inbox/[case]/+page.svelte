@@ -8,6 +8,7 @@
     Button,
     CASE_KIND_LABEL,
     EQUIPMENT_TONE,
+    ERROR_CODE_LABEL,
     SEVERITY_LABEL,
     SEVERITY_TONE,
     StatusDot,
@@ -22,8 +23,6 @@
   } from '@boomeyes/ui';
   import { session } from '$lib/session.svelte';
   let { data } = $props();
-  // 고장코드 설명 — B4-05 고장코드 표(W1 admin-protocol-rules)로 옮긴다
-  const ERROR_LABEL: Record<string, string> = { 'E-021': '380V 전압 이상 — 상 전압 342V, 릴레이·입력 전원 점검' };
   const EQUIP_LABEL = { normal: '정상', caution: '주의', fault: '고장', offline: '두절', maintenance: '정비' } as const;
   let busy = $state(false);
   const me = () => session.user?.userId ?? 'safety01';
@@ -82,7 +81,7 @@
         <dt class="text-fg-muted">고장코드</dt>
         <dd>
           {#if d.telemetry.errorCode}<span class="text-code-md text-danger-fg">{d.telemetry.errorCode}</span>
-            <span class="text-fg-muted"> — {ERROR_LABEL[d.telemetry.errorCode] ?? '설명 없음'}</span>{:else}—{/if}
+            <span class="text-fg-muted"> — {ERROR_CODE_LABEL[d.telemetry.errorCode] ?? '설명 없음'}</span>{:else}—{/if}
         </dd>
         <dt class="text-fg-muted">마지막 수신</dt>
         <dd class="tabular-nums">{fmtDateTime(d.telemetry.at)}</dd>
