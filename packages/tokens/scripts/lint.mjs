@@ -1,5 +1,6 @@
 // lint.mjs — 화면·컴포넌트 코드의 토큰 규칙 검사(DY-design.md §1 · CLAUDE.md 금지). `node packages/tokens/scripts/lint.mjs`
 //   hex 색 · Tailwind 기본 팔레트 · 임의 길이값([420px]) · 숫자 스케일 유틸리티(p-4 = 4px, gap-1 = 1px) · rounded-N · z-N · <style>/style= 안의 px
+//   카피(copy-*, DY-design §12 · W2.5 D7): apps 마크업에 SSOT 식별자 · 웨이브 · 구현 용어 · 표면 코드가 보이면 error(data-ref/ref 속성 · script · 주석 · style 제외)
 import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { join, relative, resolve, dirname, extname } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -71,6 +72,28 @@ const PX = {
   why: 'px 직접값 → var(--sys-…) 토큰(0·1px 허용)',
 };
 
+// 카피 규칙 — JS의 \b는 한글 뒤에서 매치되지 않으므로 (?<![\w가-힣]) … (?![\w가-힣]) 경계를 쓴다(tools/design/copy-audit.mjs와 동일)
+const KB = '(?<![\\w가-힣])';
+const KE = '(?![\\w가-힣])';
+const COPY = [
+  {
+    id: 'copy-id',
+    re: new RegExp(`${KB}(?:DISC|FR|NFR|IF|API|ENT|EXT|ADR|OUT|ACC|WP|SVC)-[0-9A-Z]{1,3}${KE}`, 'g'),
+    why: 'SSOT 식별자는 화면 밖 — data-ref/ref 속성 + 시연 바 근거 토글(§12.1-2)',
+  },
+  {
+    id: 'copy-wave',
+    re: new RegExp(`${KB}(?:W[0-9]|wave \\d|웨이브 \\d|2단계|1단계|CURRENT_WAVE)${KE}`, 'g'),
+    why: '웨이브·단계는 사용자에게 뜻이 없다 → "준비 중"(§12.1-4)',
+  },
+  {
+    id: 'copy-term',
+    re: new RegExp(`상태기계|append-only|${KB}mock${KE}|structuredClone|canAccess|entities\\.rules|objectURL`, 'g'),
+    why: '구현 용어 → 사용자 언어(§12.2 표현 사전)',
+  },
+  { id: 'copy-surface', re: />\s*[AB][0-9]\s*</g, why: '표면 코드 → 표면 이름(SURFACE_NAME, §12.1-7)' },
+];
+
 // 규칙 생존 프로브 — 정규식 오타(예: 템플릿 리터럴의 \b → 백스페이스)로 규칙이 조용히 죽는 사고 방지
 const PROBES = {
   hex: '#0d2877',
@@ -85,8 +108,12 @@ const PROBES = {
   ring: 'ring-2',
   maxw: 'max-w-sm',
   px: 'width: 4px',
+  'copy-id': '<p>기준은 DISC-015 확정 후</p>',
+  'copy-wave': '<p>발주는 2단계 · 실연동 W4</p>',
+  'copy-term': '<p>실시간(mock) · 상태기계</p>',
+  'copy-surface': '<span>B1</span>',
 };
-for (const r of [...RULES, PX]) {
+for (const r of [...RULES, PX, ...COPY]) {
   const probe = PROBES[r.id];
   const m = [...probe.matchAll(r.re)];
   if (!m.length || r.skip?.(m[0])) {
@@ -140,6 +167,24 @@ for (const scope of SCOPES) {
           for (const m of line.matchAll(PX.re)) if (!PX.skip(m)) report(PX, m);
         if (ext === '.svelte' && /<\/style>/.test(line)) inStyle = false;
       });
+  }
+}
+// 카피 검사 — apps의 .svelte 마크업만. 제외 블록은 같은 줄 수의 빈 줄로 바꿔 행 번호를 보존한다
+const blank = (m) => m.replace(/[^\n]/g, '');
+for (const scope of ['apps/web/src', 'apps/pwa/src']) {
+  for (const file of walk(join(REPO, scope))) {
+    if (extname(file) !== '.svelte') continue;
+    const rel = relative(REPO, file);
+    const src = readFileSync(file, 'utf8')
+      .replace(/<script[\s\S]*?<\/script>/g, blank)
+      .replace(/<!--[\s\S]*?-->/g, blank)
+      .replace(/<style[\s\S]*?<\/style>/g, blank)
+      .replace(/\s(?:data-)?ref="[^"]*"/g, blank);
+    for (const rule of COPY)
+      for (const m of src.matchAll(rule.re)) {
+        const line = src.slice(0, m.index).split('\n').length;
+        errors.push(`${rel}:${line}: [${rule.id}] ${m[0].trim()} — ${rule.why}`);
+      }
   }
 }
 for (const e of errors) console.log(e);
