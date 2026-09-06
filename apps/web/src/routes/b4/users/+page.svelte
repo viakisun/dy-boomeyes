@@ -83,7 +83,9 @@
         {:else if key === 'display'}{row.display}
         {:else if key === 'role'}{ROLE_NAME[row.role]}
         {:else if key === 'org'}{row.org}
-        {:else if key === 'sites'}{row.siteIds.length ? row.siteIds.join(' · ') : '전체'}
+        {:else if key === 'sites'}{@const sites = row.siteIds.length ? row.siteIds.join(' · ') : '전체'}<span
+            title={sites}>{sites}</span
+          >
         {:else if key === 'status'}<StatusPill
             tone={statusOf(row) === 'active' ? 'success' : 'danger'}
             label={STATUS_LABEL[statusOf(row)]}

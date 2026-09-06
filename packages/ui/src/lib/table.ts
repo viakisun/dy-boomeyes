@@ -3,7 +3,7 @@ export type ColumnKind = 'id' | 'text' | 'num' | 'date' | 'status';
 export interface Column {
   key: string;
   label: string;
-  /** id → code-md · nowrap · 내용 폭 | num → 우측 · tabular · nowrap | date → tabular · nowrap | status → nowrap | text(기본) → 1줄 truncate */
+  /** id → code-md · nowrap · 내용 폭 | num → 우측 · tabular · nowrap | date → tabular · nowrap | status → nowrap | text(기본) → 1줄 truncate — 잘릴 수 있는 셀은 스니펫에서 `<span title>`을 붙인다(§11.2) */
   kind?: ColumnKind;
   /** text 열을 줄바꿈·잘림 없이(짧은 이름·복합 셀) */
   nowrap?: boolean;
