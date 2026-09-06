@@ -1,0 +1,9 @@
+{
+  "preset": "baseline",
+  "platform": "linux",
+  "playwright": "1.62.1",
+  "chromium": "151.0.7922.34",
+  "dpr": 1,
+  "wave": 2,
+  "shots": 41
+}

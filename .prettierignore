@@ -11,3 +11,6 @@ packages/tokens/dist
 ssot/*.yaml
 *.yml
 archive
+
+# 캡처 산출물(기준선 사이드카 JSON은 도구가 쓴다 — ADR-008)
+shots/
