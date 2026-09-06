@@ -124,5 +124,8 @@ export const load: LayoutLoad = async ({ url }) => {
     jumpHour: () => clock.jump(H),
     outbox: box,
     net,
+    // 알림 권한 시트(?state=push, A1-02 픽스처 — 레이아웃이 연다). capture 픽스처는 '권한 default' 문구를 보인다(headless는 항상 denied)
+    pushSheet: url.searchParams.get('state') === 'push',
+    pushDemo: !!opts.capture && url.searchParams.get('state') === 'push',
   };
 };

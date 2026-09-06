@@ -72,6 +72,10 @@ export {
 } from './lib/labels';
 export { fmtDateTime, fmtTime, dueLabel, elapsedLabel } from './lib/format';
 export { connectivity } from './lib/connectivity.svelte';
+// 아이콘(@lucide/svelte) — 앱은 ui를 통해서만 쓴다
+export { default as IconBell } from '@lucide/svelte/icons/bell';
+export { default as IconBellRing } from '@lucide/svelte/icons/bell-ring';
+export { default as IconBellOff } from '@lucide/svelte/icons/bell-off';
 export { theme, applyTheme, toggleTheme, isDark, THEME_KEY, type Theme } from './lib/theme.svelte';
 export { default as WebShell } from './shell/WebShell.svelte';
 export { default as PwaShell } from './shell/PwaShell.svelte';

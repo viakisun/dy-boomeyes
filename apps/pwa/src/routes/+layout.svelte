@@ -4,13 +4,15 @@
   import { env } from '$env/dynamic/public';
   import { resolve } from '$app/paths';
   import { onMount } from 'svelte';
-  import { APP_HOME_OF, SCREENS, type Alert, type RoleId } from '@boomeyes/domain';
+  import { APP_HOME_OF, SCREENS, toPushPayload, type Alert, type PushSurface, type RoleId } from '@boomeyes/domain';
   import type { OutboxState } from '@boomeyes/offline';
   import {
     Badge,
+    BottomSheet,
     Button,
     DemoBar,
     EmptyState,
+    IconBell,
     IconButton,
     PwaShell,
     Toast,
@@ -18,9 +20,22 @@
     connectivity,
     toast,
   } from '@boomeyes/ui';
+  import { notify, push, requestPush } from '$lib/push.svelte';
   import { navFor } from '$lib/nav';
   import { logout, session } from '$lib/session.svelte';
   let { data, children } = $props();
+  // 알림 권한 시트(specs/notifications AC-1) — 종 아이콘으로 열고, ?state=push(A1-02 픽스처)면 레이아웃이 연다
+  let sheet = $state(false);
+  let touched = $state(false); // 이 세션에서 권한을 요청했으면 실 권한을 보인다
+  const perm = $derived(data.pushDemo && !touched ? 'default' : push.permission);
+  $effect(() => {
+    if (data.pushSheet) sheet = true;
+  });
+  const enablePush = async () => {
+    touched = true;
+    const r = await requestPush();
+    toast(r === 'granted' ? '알림 켜짐' : '알림이 허용되지 않았습니다 — 브라우저 설정에서 허용하세요');
+  };
   const role = $derived(session.user?.role as RoleId | undefined);
   const tabs = $derived(
     role
@@ -70,6 +85,7 @@
       if (e.type !== 'alert.raised' || !session.user) return;
       live = [e.alert, ...live];
       toast(e.alert.message);
+      void notify(toPushPayload(e.alert, data.surface as PushSurface)); // 권한 granted일 때만 기기 알림(ADR-009)
     }),
   );
   // 배지 탭 → 최신 알림의 업무(A1) 또는 앱 첫 화면. href는 템플릿에서 resolve()로 감싼다(no-navigation-without-resolve)
@@ -116,6 +132,12 @@
           class="size-size-control-md rounded-control inline-flex items-center justify-center"
           onclick={() => (live = [])}><Badge tone="danger" count={live.length} /></a
         >{/if}
+      <IconButton label={perm === 'granted' ? '알림 켜짐' : '알림 설정'} class="relative" onclick={() => (sheet = true)}
+        ><IconBell class="size-size-icon-md" aria-hidden="true" />{#if perm === 'default'}<span
+            class="bg-accent rounded-pill size-size-indicator top-inset-xs right-inset-xs absolute"
+            aria-hidden="true"
+          ></span>{/if}</IconButton
+      >
       <IconButton
         label="로그아웃"
         onclick={() => {
@@ -137,5 +159,27 @@
       {@render children()}
     {/if}
   </PwaShell>
+  <BottomSheet bind:open={sheet} title="알림" capture>
+    <div class="gap-stack-sm flex flex-col" data-push={perm}>
+      {#if perm === 'granted'}
+        <p class="text-body-md">알림이 켜져 있습니다 — 고장·에스컬레이션·서류 알림이 오면 기기 알림으로 보입니다.</p>
+      {:else if perm === 'denied'}
+        <p class="text-body-md">
+          알림이 차단되어 있습니다. 브라우저 설정에서 이 사이트의 알림을 허용한 뒤 다시 여세요.
+        </p>
+      {:else if perm === 'unsupported'}
+        <p class="text-body-md">이 환경은 기기 알림을 지원하지 않습니다 — iOS는 홈 화면에 추가한 앱에서만 됩니다.</p>
+      {:else}
+        <p class="text-body-md">
+          고장·에스컬레이션·서류 알림을 기기 알림으로 받으려면 권한이 필요합니다. 인앱 배지·토스트는 그대로 동작합니다.
+        </p>
+      {/if}
+      <p class="text-label-sm text-fg-muted">서버 발송·알림 채널(문자·전화)은 DISC-036 확정 뒤(W3).</p>
+    </div>
+    {#snippet footer()}
+      {#if perm === 'default'}<Button size="lg" block onclick={enablePush}>알림 켜기</Button>{/if}
+      <Button size="lg" block variant="ghost" tone="neutral" onclick={() => (sheet = false)}>닫기</Button>
+    {/snippet}
+  </BottomSheet>
 {/if}
 <Toast position="bottom" />

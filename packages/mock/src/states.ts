@@ -34,6 +34,7 @@ export const FIXTURES: Record<string, Fixture> = {
     sites: db.sites.map((s) => (s.id === 'SITE-001' ? { ...s, videoProfile: 'P-LITE' as const } : s)),
   }),
   'A1-02:filter': (db) => db, // 필터 칩은 URL이 결정 — 시드 동일
+  'A1-02:push': (db) => db, // 알림 권한 시트 — 레이아웃이 ?state=push로 연다(ADR-009), 시드 동일
   // task-escalation W2: A1-08 완료 시트(C-105 접수됨·정비 호출 후) · A3 본사(hq01 2현장)
   'A1-08:sheet': (db) => ({
     ...db,
