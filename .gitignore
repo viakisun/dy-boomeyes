@@ -12,7 +12,8 @@ __pycache__/
 .turbo/
 .svelte-kit/
 apps/*/build/
-shots/
+shots/*
+!shots/baseline/
 test-results/
 playwright-report/
 archive/

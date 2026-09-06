@@ -20,6 +20,8 @@
     "format": "prettier --write .",
     "test": "turbo run test",
     "capture": "node tools/capture/capture.mjs",
+    "capture:accept": "node tools/capture/capture.mjs --baseline",
+    "capture:compare": "node tools/capture/capture.mjs --current && node tools/capture/diff.mjs",
     "e2e": "playwright test"
   },
   "devDependencies": {
@@ -31,7 +33,9 @@
     "eslint-plugin-boundaries": "^5.0.0",
     "eslint-plugin-svelte": "^3.0.0",
     "globals": "^16.0.0",
+    "pixelmatch": "^7.2.0",
     "playwright": "1.62.1",
+    "pngjs": "^7.0.0",
     "prettier": "^3.5.0",
     "prettier-plugin-svelte": "^4.1.1",
     "prettier-plugin-tailwindcss": "^0.8.1",
