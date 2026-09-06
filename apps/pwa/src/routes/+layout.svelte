@@ -14,14 +14,15 @@
     EmptyState,
     IconBell,
     IconButton,
+    IconLogOut,
     PwaShell,
     Toast,
     applyTheme,
     connectivity,
+    navFor,
     toast,
   } from '@boomeyes/ui';
   import { notify, push, requestPush } from '$lib/push.svelte';
-  import { navFor } from '$lib/nav';
   import { logout, session } from '$lib/session.svelte';
   let { data, children } = $props();
   // 알림 권한 시트(specs/notifications AC-1) — 종 아이콘으로 열고, ?state=push(A1-02 픽스처)면 레이아웃이 연다
@@ -144,7 +145,7 @@
           logout();
           data.resetMock();
           goto(resolve(`/${data.surface}/login` as '/'));
-        }}>⏻</IconButton
+        }}><IconLogOut class="size-size-icon-md" aria-hidden="true" /></IconButton
       >
     {/snippet}
     {#if data.forbidden}

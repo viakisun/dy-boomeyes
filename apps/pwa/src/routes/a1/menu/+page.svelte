@@ -1,7 +1,8 @@
 <script lang="ts">
   // A1-07 메뉴·현장 정보 — 현장 기본정보(현장명·주소·기간·프로파일·담당) · 장비 요약 · 내 신청 · "현장 개설 신청" 시트 → createRequest(submitted → review) → B1-03 수신함 · 앱 정보 (specs/sites-assets-leases AC-5 · FR-017 · DISC-034)
+  import { version } from '$app/environment';
   import { invalidateAll } from '$app/navigation';
-  import { CURRENT_WAVE, ROLE_NAME, SCR, profileFlags, type Request } from '@boomeyes/domain';
+  import { ROLE_NAME, SCR, profileFlags, type Request } from '@boomeyes/domain';
   import {
     Badge,
     BottomSheet,
@@ -130,7 +131,7 @@
       items={[
         { label: '계정', value: data.me ? `${data.me.display} (${data.me.id})` : '—' },
         { label: '역할', value: data.me ? ROLE_NAME[data.me.role] : '—' },
-        { label: '앱', value: `BoomEyes 현장 앱 · wave ${CURRENT_WAVE} · mock` },
+        { label: '앱', value: `BoomEyes 현장 앱 v${version}` },
       ]}
     />
   </section>

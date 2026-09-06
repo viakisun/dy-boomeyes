@@ -1,6 +1,7 @@
 <script lang="ts">
   // A2-06 메뉴·현장 정보(운전자) — 배정 현장 기본정보 · 배정 장비 · 동의 요약(FR-031 표준 패키지) · 정비 연락처 · 앱 정보 — 편집 액션 없음 (specs/sites-assets-leases AC-6)
-  import { CURRENT_WAVE, ROLE_NAME, SCR, profileFlags } from '@boomeyes/domain';
+  import { version } from '$app/environment';
+  import { ROLE_NAME, SCR, profileFlags } from '@boomeyes/domain';
   import { Badge, CONSENT_LABEL, EmptyState, EquipmentCard, KeyValueList } from '@boomeyes/ui';
   let { data } = $props();
   const t = $derived(data.today);
@@ -59,7 +60,7 @@
       items={[
         { label: '계정', value: `${t.user.display} (${t.user.id})` },
         { label: '역할', value: ROLE_NAME[t.user.role] },
-        { label: '앱', value: `BoomEyes 운전자 앱 · wave ${CURRENT_WAVE} · mock` },
+        { label: '앱', value: `BoomEyes 운전자 앱 v${version}` },
       ]}
     />
   </section>
