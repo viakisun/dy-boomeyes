@@ -10,3 +10,4 @@ export * from './protocol';
 export * from './rules';
 export * from './roles';
 export * from './mask';
+export * from './notify';
