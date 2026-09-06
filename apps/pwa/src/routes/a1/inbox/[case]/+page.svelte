@@ -14,7 +14,6 @@
     ERROR_CODE_LABEL,
     SEVERITY_LABEL,
     SEVERITY_TONE,
-    StatusDot,
     StatusPill,
     TASK_LABEL,
     TASK_TONE,
@@ -89,7 +88,11 @@
     <h2 class="text-heading-lg">{data.task.title}</h2>
     <div class="gap-inline-md text-body-sm text-fg-muted flex flex-wrap">
       <span class="gap-inline-xs inline-flex items-center"
-        ><StatusDot tone={SEVERITY_TONE[data.task.severity]} />{SEVERITY_LABEL[data.task.severity]}</span
+        ><StatusPill
+          tone={SEVERITY_TONE[data.task.severity]}
+          label={SEVERITY_LABEL[data.task.severity]}
+          size="sm"
+        /></span
       >
       <span class={cx('tabular-nums', due.overdue && 'text-danger-fg font-semibold')}>기한 {due.label}</span>
       <span>{data.site?.name ?? data.task.siteId}</span>
