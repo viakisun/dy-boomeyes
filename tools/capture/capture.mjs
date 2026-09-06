@@ -64,22 +64,26 @@ const stopServers = () => {
     }
   }
 };
+const isUp = async (url) => {
+  try {
+    await fetch(url);
+    return true;
+  } catch {
+    return false;
+  }
+};
 async function waitDown(url, ms = 10_000) {
   const t0 = Date.now();
-  while (Date.now() - t0 < ms) {
-    try {
-      await fetch(url);
-    } catch {
-      return true;
-    }
+  do {
+    if (!(await isUp(url))) return true;
     await new Promise((r) => setTimeout(r, 200));
-  }
+  } while (Date.now() - t0 < ms);
   return false;
 }
 if (!args.includes('--no-serve'))
   for (const app of ['web', 'pwa']) {
     if (!existsSync(join(ROOT, 'apps', app, 'build'))) throw new Error(`apps/${app}/build 없음 — 먼저 pnpm build`);
-    if (!(await waitDown(BASE[app], 0)))
+    if (await isUp(BASE[app]))
       throw new Error(
         `${BASE[app]} 에 이미 리스너가 있다 — 고아 preview 서버를 먼저 정리(lsof -nP -iTCP:${PORTS[app]} -sTCP:LISTEN)`,
       );
