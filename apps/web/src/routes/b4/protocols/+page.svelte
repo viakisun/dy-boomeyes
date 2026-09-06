@@ -232,23 +232,37 @@
         {#if selected.note}<p class="text-body-sm text-fg-muted">{selected.note}</p>{/if}
         <p class="text-label-sm text-fg-muted">그룹 {selected.def.groups.length} · 필드 {fieldCount(selected)}</p>
       </div>
-      <ul class="gap-stack-sm flex flex-col" aria-label="필드 정의">
-        {#each selected.def.groups as g (g.group)}
-          <li class="gap-stack-xs flex flex-col">
-            <span class="text-label-md text-fg">
+      <section class="gap-stack-sm flex flex-col" aria-label="필드 정의">
+        {#each selected.def.groups as g, i (g.group)}
+          <details class="rounded-card border-border border" open={i === 0}>
+            <summary class="px-inset-md py-inset-xs text-label-md text-fg cursor-pointer">
               {g.group}
-              <span class="text-fg-muted">· {g.key ?? '(root)'}{g.list ? '[]' : ''}{g.required ? '' : ' · 선택'}</span>
-            </span>
-            <div class="gap-inline-xs flex flex-wrap">
-              {#each g.fields as f (f.name)}
-                <Badge tone={f.required ? 'accent' : 'neutral'} variant="outline"
-                  >{f.alias ?? f.name}:{f.type}{f.unit ? ` (${f.unit})` : ''}</Badge
-                >
-              {/each}
-            </div>
-          </li>
+              <span class="text-fg-muted"
+                >· {g.key ?? '(root)'}{g.list ? '[]' : ''}{g.required ? '' : ' · 선택'} · 필드 {g.fields.length}</span
+              >
+            </summary>
+            <table class="text-body-sm w-full">
+              <thead class="text-label-sm text-fg-muted">
+                <tr class="border-border-subtle border-t border-b">
+                  {#each ['필드', '타입', '단위', '필수'] as h (h)}
+                    <th scope="col" class="px-inset-md py-inset-xs text-left font-medium">{h}</th>
+                  {/each}
+                </tr>
+              </thead>
+              <tbody>
+                {#each g.fields as f (f.name)}
+                  <tr class="border-border-subtle border-b last:border-b-0">
+                    <td class="px-inset-md py-inset-xs text-code-sm whitespace-nowrap">{f.alias ?? f.name}</td>
+                    <td class="px-inset-md py-inset-xs">{f.type}</td>
+                    <td class="px-inset-md py-inset-xs">{f.unit ?? '—'}</td>
+                    <td class="px-inset-md py-inset-xs">{f.required ? '필수' : '—'}</td>
+                  </tr>
+                {/each}
+              </tbody>
+            </table>
+          </details>
         {/each}
-      </ul>
+      </section>
     {:else}
       <EmptyState title="버전을 선택하세요" />
     {/if}

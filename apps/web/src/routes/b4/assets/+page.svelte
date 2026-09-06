@@ -161,7 +161,7 @@
         <h2 class="text-heading-sm">호기 등록</h2>
         <TextField label="호기(1~120)" type="number" min="1" max="120" bind:value={newUnit} required />
         <Select label="현장" bind:value={newSite} options={siteOptions} placeholder="선택" required />
-        <Button type="submit" disabled={busy}>등록</Button>
+        <div class="flex justify-end"><Button type="submit" disabled={busy}>등록</Button></div>
       </form>
     {:else if data.tab === 'sites'}
       <DataTable
@@ -216,7 +216,7 @@
           <TextField label="기간 시작" type="date" bind:value={create.from} />
           <TextField label="기간 종료" type="date" bind:value={create.to} />
         </div>
-        <Button type="submit" disabled={busy}>등록</Button>
+        <div class="flex justify-end"><Button type="submit" disabled={busy}>등록</Button></div>
       </form>
     {:else if profileSite}
       <div class="gap-stack-md flex flex-col">
@@ -246,7 +246,19 @@
   </div>
 
   {#if data.tab === 'devices'}
-    <Inspector label="장비 상세">
+    {#snippet assignRow()}
+      {#if device}
+        <Button
+          variant="outline"
+          tone="neutral"
+          disabled={busy || !assignTo || assignTo === device.siteId}
+          onclick={() =>
+            run(`배정 — ${device.id} → ${siteName(assignTo)}`, () => data.api.assignDevice(device.id, assignTo))}
+          >배정</Button
+        >
+      {/if}
+    {/snippet}
+    <Inspector label="장비 상세" footer={device ? assignRow : undefined}>
       {#if device}
         <h2 class="text-heading-sm">{device.id} · {device.unitNo}호기</h2>
         <KeyValueList
@@ -259,14 +271,6 @@
           ]}
         />
         <Select label="배정 현장" bind:value={assignTo} options={siteOptions} placeholder="현장 선택" />
-        <Button
-          variant="outline"
-          tone="neutral"
-          disabled={busy || !assignTo || assignTo === device.siteId}
-          onclick={() =>
-            run(`배정 — ${device.id} → ${siteName(assignTo)}`, () => data.api.assignDevice(device.id, assignTo))}
-          >배정</Button
-        >
       {:else}
         <EmptyState title="호기를 선택하세요" />
       {/if}
@@ -300,7 +304,7 @@
           <Select label="담당 안전관리자" bind:value={form.safetyUserId} options={safetyOptions} />
           <TextField label="기간 시작" type="date" bind:value={form.from} />
           <TextField label="기간 종료" type="date" bind:value={form.to} />
-          <Button type="submit" disabled={busy || !dirty}>저장</Button>
+          <div class="flex justify-end"><Button type="submit" disabled={busy || !dirty}>저장</Button></div>
         </form>
       {:else}
         <EmptyState title="현장을 선택하세요" />

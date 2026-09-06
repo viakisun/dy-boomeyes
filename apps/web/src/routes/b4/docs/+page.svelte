@@ -19,6 +19,7 @@
     toast,
     type Column,
     PageHeader,
+    Select,
   } from '@boomeyes/ui';
   import { session } from '$lib/session.svelte';
   let { data } = $props();
@@ -91,29 +92,22 @@
         aria-label="서류 등록"
         onsubmit={(e) => (e.preventDefault(), register())}
       >
-        <label class="gap-stack-xs text-label-md text-fg-muted flex flex-col"
-          >유형
-          <select
-            bind:value={kind}
-            class="rounded-control border-border bg-surface p-inset-sm text-body-md text-fg h-size-control-md border"
-          >
-            {#each KINDS as k (k)}<option value={k}>{DOC_KIND_LABEL[k]}</option>{/each}
-          </select>
-        </label>
-        <label class="gap-stack-xs text-label-md text-fg-muted flex flex-col"
-          >대상
-          <select
-            bind:value={subjectId}
-            class="rounded-control border-border bg-surface p-inset-sm text-body-md text-fg h-size-control-md border"
-            required
-          >
-            <option value="">선택</option>
-            {#each subjects as s (s.id)}<option value={s.id}>{s.label}</option>{/each}
-          </select>
-        </label>
+        <Select
+          label="유형"
+          value={kind}
+          options={KINDS.map((k) => ({ value: k, label: DOC_KIND_LABEL[k] }))}
+          onchange={(e) => (kind = e.currentTarget.value as DocKind)}
+        />
+        <Select
+          label="대상"
+          bind:value={subjectId}
+          options={subjects.map((s) => ({ value: s.id, label: s.label }))}
+          placeholder="선택"
+          required
+        />
         <TextField label="서류명" bind:value={subject} placeholder="예: CPB-001 제작증" required />
         <TextField label="유효기간(만료일)" type="date" bind:value={expiresAt} />
-        <Button type="submit" disabled={busy}>등록</Button>
+        <div class="flex justify-end"><Button type="submit" disabled={busy}>등록</Button></div>
       </form>
     {:else if data.docs.length}
       <DataTable

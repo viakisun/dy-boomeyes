@@ -3,9 +3,17 @@
   let {
     checked = $bindable(false),
     label,
+    hideLabel = false,
     disabled = false,
     onchange,
-  }: { checked?: boolean; label?: string; disabled?: boolean; onchange?: (v: boolean) => void } = $props();
+  }: {
+    checked?: boolean;
+    label?: string;
+    /** 라벨을 sr-only로(표 셀처럼 헤더가 뜻을 주는 자리) */
+    hideLabel?: boolean;
+    disabled?: boolean;
+    onchange?: (v: boolean) => void;
+  } = $props();
 </script>
 
 <label
@@ -37,5 +45,5 @@
       )}
     ></span>
   </button>
-  {#if label}<span>{label}</span>{/if}
+  {#if label}<span class={hideLabel ? 'sr-only' : undefined}>{label}</span>{/if}
 </label>

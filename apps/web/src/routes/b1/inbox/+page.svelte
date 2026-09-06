@@ -130,7 +130,11 @@
     {/if}
   </div>
 
-  <Inspector label="신청 상세">
+  {#snippet decideRow()}
+    <Button variant="outline" tone="danger" disabled={busy} onclick={() => decide('reject')}>반려</Button>
+    <Button disabled={busy} onclick={() => decide('approve')}>승인</Button>
+  {/snippet}
+  <Inspector label="신청 상세" footer={pending ? decideRow : undefined}>
     {#if selected}
       <div class="gap-stack-xs flex flex-col">
         <div class="flex items-center justify-between">
@@ -151,10 +155,6 @@
             rows="3"
             bind:value={note}></textarea>
         </label>
-        <div class="gap-inline-sm flex">
-          <Button block disabled={busy} onclick={() => decide('approve')}>승인</Button>
-          <Button block variant="outline" tone="danger" disabled={busy} onclick={() => decide('reject')}>반려</Button>
-        </div>
       {/if}
       <Timeline items={selected.history} />
     {:else}

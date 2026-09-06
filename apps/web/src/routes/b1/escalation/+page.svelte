@@ -81,7 +81,10 @@
     {/if}
   </div>
 
-  <Inspector label="업무 상세">
+  {#snippet acceptRow()}
+    <Button onclick={accept}>관제에서 접수</Button>
+  {/snippet}
+  <Inspector label="업무 상세" footer={selected ? acceptRow : undefined}>
     {#if selected}
       <div class="gap-stack-xs flex flex-col">
         <div class="flex items-center justify-between">
@@ -94,7 +97,6 @@
         </p>
         <EscalationTimer elapsedMs={selected.elapsedMs} />
       </div>
-      <Button onclick={accept}>관제에서 접수</Button>
       <Timeline items={selected.case.history} />
     {:else}
       <EmptyState title="업무를 선택하세요" />
