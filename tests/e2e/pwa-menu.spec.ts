@@ -11,7 +11,7 @@ test('[A1-07] 현장 기본정보 · 내 신청 3 · 현장 개설 신청 시트
   await expect(info).toContainText('전라북도 전주시');
   await expect(info).toContainText('2026-03-01 ~ 2026-12-31');
   await expect(info).toContainText('김현장');
-  await expect(page.getByText('프로파일 P-SD')).toBeVisible();
+  await expect(page.locator('[data-profile="P-SD"]')).toHaveText('2채널');
   const mine = page.locator('ul[aria-label="내 신청"] li');
   await expect(mine).toHaveCount(3); // safety01: RQ-003 · RQ-004 · RQ-005
   await page.getByRole('button', { name: '현장 개설 신청' }).click();

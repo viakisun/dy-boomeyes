@@ -44,13 +44,13 @@
 
     <section
       class="rounded-card border-border bg-surface p-inset-md gap-stack-md flex flex-col border"
-      aria-label="소모품"
+      aria-label="마모·교체 부품"
     >
-      <h3 class="text-heading-sm">소모품 도달률</h3>
+      <h3 class="text-heading-sm">마모·교체 부품 도달률</h3>
       <TelemetryGauge label="수송관" value={d.telemetry.pipeRatio} />
       <TelemetryGauge label="필터" value={d.telemetry.filterRatio} />
-      <span class="text-body-sm text-fg-muted"
-        >임계 접근 시 현장 안전관리자에게 점검 알림이 갑니다 (기준은 DISC-013·014 확정 전 90% · 100%)</span
+      <span class="text-body-sm text-fg-muted" data-ref="DISC-013 DISC-014"
+        >임계에 가까워지면 현장 안전관리자에게 점검 알림이 갑니다</span
       >
     </section>
 

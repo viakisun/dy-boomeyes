@@ -80,13 +80,17 @@
 
 <div class="gap-stack-md pb-layout-bottomnav-height flex flex-col" data-scr={SCR['A1-11']}>
   <a href={resolve('/a1/monitor/CPB-003' as '/')} class="text-label-md text-accent-fg">‹ 장비 상세</a>
-  <p class="text-body-sm text-fg-muted">
-    마모·교체 부품 점검 — W2는 구조(DISC-044) · 합불 기준은 OEM 미확정(DISC-038, 입력자 판정)
-  </p>
+  <p class="text-body-sm text-fg-muted" data-ref="DISC-044 DISC-038">부품별 실측 · 외관 · 체결 · 합불을 입력합니다</p>
   <div class="gap-stack-sm flex flex-col">
     <Select label="부품" value={partId} {options} placeholder="선택" onchange={(e) => pick(e.currentTarget.value)} />
-    <Button variant="outline" tone="neutral" size="sm" block disabled title="태그 스캔은 DISC-043(QR/RFID) 확정 후"
-      >태그 스캔 — DISC-043 확정 후</Button
+    <Button
+      variant="outline"
+      tone="neutral"
+      size="sm"
+      block
+      disabled
+      title="태그 방식이 정해지면 지원합니다"
+      data-ref="DISC-043">태그 스캔 — 준비 중</Button
     >
   </div>
   {#if part}
@@ -127,7 +131,7 @@
           { value: 'pass', label: '합 — 계속 사용' },
           { value: 'fail', label: '불 — 교체 대상' },
         ]}
-        help="OEM 기준 미확정(DISC-038) — 입력자 판정"
+        help="합불은 입력자 판정 — OEM 기준은 준비 중"
       />
       <FileUpload
         mode="image"

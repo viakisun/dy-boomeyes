@@ -2,7 +2,7 @@
   // A3-03 현장 상세(본사) — 현장 요약 Stat 4(장비·이상·미처리 업무·서류 완비율) · 기본정보 · 미처리 업무 "확인 요청"만(처리 버튼 없음, DISC-015) · 장비 열람(A3-04) 링크 — A1과 공통 컴포넌트 + 역할별 액션 슬롯 교체 (specs/sites-assets-leases AC-7)
   import { invalidateAll } from '$app/navigation';
   import { resolve } from '$app/paths';
-  import { SCR, type Case } from '@boomeyes/domain';
+  import { SCR, profileFlags, type Case } from '@boomeyes/domain';
   import {
     Badge,
     Button,
@@ -41,10 +41,12 @@
   <div class="gap-stack-xs flex flex-col">
     <div class="flex items-center justify-between">
       <h2 class="text-heading-md">{data.site.name}</h2>
-      <Badge tone="neutral" variant="outline">프로파일 {data.site.videoProfile}</Badge>
+      <Badge tone="neutral" variant="outline"
+        ><span data-profile={data.site.videoProfile}>{profileFlags(data.site.videoProfile).channels}채널</span></Badge
+      >
     </div>
-    <span class="text-body-sm text-fg-muted"
-      >{data.site.id} · {data.site.company} · 열람 + 확인 요청(직접 처리 불가)</span
+    <span class="text-body-sm text-fg-muted" data-ref="DISC-015"
+      >{data.site.id} · {data.site.company} · 열람 전용(확인 요청만)</span
     >
   </div>
   <div class="gap-inline-sm grid grid-cols-2" aria-label="현장 요약">

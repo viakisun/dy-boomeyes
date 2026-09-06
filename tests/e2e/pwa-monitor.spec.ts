@@ -13,7 +13,7 @@ test('[A1-04] 장비 3 × 2채널 · 오프라인/AI 판단 불가/흐림은 "�
   await expect(page.locator('[data-camera="CAM-2-1"] [data-faulty="true"]')).toContainText('흐림');
   await expect(page.locator('[data-faulty="true"]').filter({ hasText: /^정상$/ })).toHaveCount(0);
   await expect(page.locator('[data-camera="CAM-3-1"] [data-faulty="false"]')).toContainText('LIVE');
-  await expect(page.getByText('프로파일 P-SD')).toBeVisible();
+  await expect(page.locator('[data-profile="P-SD"]')).toHaveText('2채널'); // 프로파일 코드 대신 채널 수(§12)
 });
 
 test('[A1-04] AI 이벤트 도착 → 배너 · CAM-3-2 타일 bbox [FR-028] [FR-004]', async ({ page }) => {
@@ -29,7 +29,7 @@ test('[A1-04] AI 이벤트 도착 → 배너 · CAM-3-2 타일 bbox [FR-028] [FR
 test('[A1-04] 바디캠 탭 자리(P-SD 옵션 A) [FR-030]', async ({ page }) => {
   await page.goto('/a1/monitor?state=monitor&capture=1');
   await page.getByRole('tab', { name: '바디캠' }).click();
-  await expect(page.getByText('W4 실연동')).toBeVisible();
+  await expect(page.getByText('바디캠 영상은 준비 중입니다')).toBeVisible();
 });
 
 test('[A1-05] CPB-003 상세: 342V · E-021 · 도달률 · 서류 완비율 · D-27 · 저장 영상 서버/SD [FR-002] [FR-007] [FR-016] [FR-005]', async ({
@@ -58,7 +58,7 @@ test('[A1-04] plite 픽스처(SITE-001 P-LITE): 장비 3 × 1채널 — AI 채�
   await expect(page.locator(`[data-scr="${SCR['A1-04']}"]`)).toBeVisible();
   await expect(page.locator('[data-camera]')).toHaveCount(3);
   await expect(page.locator('[data-camera="CAM-3-2"]')).toHaveCount(0);
-  await expect(page.getByText('프로파일 P-LITE')).toBeVisible();
+  await expect(page.locator('[data-profile="P-LITE"]')).toHaveText('1채널');
 });
 
 test('[A1-05] plite 픽스처: CPB-003 채널 1(일반만) · 저장 소스 탭 서버만(SD·NVR 없음) [FR-005]', async ({ page }) => {
@@ -78,7 +78,7 @@ test('[A3-04] hq01 장비 열람(SITE-001): 타일 6 · 헬스 배지(A1-04와 �
   await expect(page.locator('[data-camera]')).toHaveCount(6);
   await expect(page.locator('[data-camera="CAM-1-1"] [data-health="lost"]')).toContainText('수신 끊김');
   await expect(page.locator('[data-camera="CAM-2-2"] [data-faulty="true"]')).toContainText('AI 판단 불가');
-  await expect(page.getByText('프로파일 P-SD')).toBeVisible();
+  await expect(page.locator('[data-profile="P-SD"]')).toHaveText('2채널');
   await expect(page.getByText('열람 전용')).toBeVisible();
   await expect(page.getByRole('button', { name: /접수|완료|호출/ })).toHaveCount(0);
   await expect(page.getByRole('link', { name: /호기 ›/ })).toHaveCount(0); // A3에는 장비 상세 링크 없음

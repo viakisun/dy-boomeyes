@@ -13,7 +13,9 @@
     <section class="gap-stack-sm flex flex-col" aria-label="현장 기본정보">
       <div class="flex items-center justify-between">
         <h2 class="text-heading-md">{t.site.name}</h2>
-        <Badge tone="neutral" variant="outline">프로파일 {t.site.videoProfile}</Badge>
+        <Badge tone="neutral" variant="outline"
+          ><span data-profile={t.site.videoProfile}>{flags?.channels}채널</span></Badge
+        >
       </div>
       <KeyValueList
         label="현장 기본정보"
@@ -50,9 +52,7 @@
         >
       {/each}
     </div>
-    <p class="text-label-sm text-fg-muted">
-      표준 패키지(DY 제공, FR-031) — 변경은 현장 안전관리자에게 요청 · 보존/홀드·열람 로그는 W4
-    </p>
+    <p class="text-label-sm text-fg-muted" data-ref="FR-031">표준 패키지 — 변경은 현장 안전관리자에게 요청하세요</p>
   </section>
   <section class="gap-stack-sm flex flex-col" aria-label="앱 정보">
     <h2 class="text-heading-md">앱 정보</h2>

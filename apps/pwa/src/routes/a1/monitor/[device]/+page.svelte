@@ -64,9 +64,9 @@
 
   <section
     class="rounded-card border-border bg-surface p-inset-md gap-stack-md flex flex-col border"
-    aria-label="소모품"
+    aria-label="마모·교체 부품"
   >
-    <h3 class="text-heading-sm">소모품 도달률</h3>
+    <h3 class="text-heading-sm">마모·교체 부품 도달률</h3>
     <TelemetryGauge label="수송관" value={d.telemetry.pipeRatio} />
     <TelemetryGauge label="필터" value={d.telemetry.filterRatio} />
   </section>
@@ -100,9 +100,7 @@
   </section>
 
   <section class="gap-stack-sm flex flex-col" aria-label="저장 영상">
-    <h3 class="text-heading-sm">
-      저장 영상 <span class="text-body-sm text-fg-muted">프로파일 {data.flags.profile}</span>
-    </h3>
+    <h3 class="text-heading-sm">저장 영상</h3>
     <Tabs
       variant="pill"
       size="sm"
@@ -137,7 +135,7 @@
           <EmptyState title="저장 영상이 없습니다" />
         {/if}
       {/await}
-      {#if data.flags.nvrTimeline}<span class="text-label-sm text-fg-muted">NVR 타임라인 — W4</span>{/if}
+      {#if data.flags.nvrTimeline}<span class="text-label-sm text-fg-muted">NVR 타임라인 — 준비 중</span>{/if}
     {/if}
   </section>
 

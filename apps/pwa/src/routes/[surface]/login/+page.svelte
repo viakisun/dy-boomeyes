@@ -11,7 +11,7 @@
     a1: { role: 'site-safety', title: '현장 안전관리자', desc: '업무함 · 관제 · 기록' },
     a2: { role: 'driver', title: '운전자', desc: '출근 · 일일점검 · 내 장비 · 서류' },
     a3: { role: 'hq-safety', title: '본사 안전관리자', desc: '자사 전 현장 열람 · 확인 요청' },
-    a4: { role: 'owner', title: '사업주', desc: '보유·가용 · 투입 요청 · 운전자 배치 (2단계)' },
+    a4: { role: 'owner', title: '사업주', desc: '보유·가용 · 투입 요청 · 운전자 배치' },
   };
   const meta = $derived(ROLE_OF[page.params.surface ?? 'a1']);
   let users = $state<User[]>([]);
@@ -46,5 +46,5 @@
     >
     <Button size="lg" block onclick={enter} disabled={!demo}>입장</Button>
   </Card>
-  <p class="text-body-sm text-fg-muted text-center">실인증·가입은 DISC-020 · DISC-023 확정 후</p>
+  <p class="text-body-sm text-fg-muted text-center" data-ref="DISC-020 DISC-023">데모 계정으로 들어갑니다</p>
 </main>
