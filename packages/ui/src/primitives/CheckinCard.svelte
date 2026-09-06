@@ -1,5 +1,5 @@
 <script lang="ts">
-  // 출근 카드 — 미체크인 → 큰 체크인 버튼(48px) · 근무 중 → 시각 + 체크아웃 · 퇴근 후 요약 (FR-013)
+  // 출근 카드 — 미체크인 → 큰 체크인 버튼(48px) · 근무 중 → 시각 + 체크아웃 · 퇴근 후 요약 (FR-013) · pending이면 "동기 대기"(ADR-010)
   import type { Attendance } from '@boomeyes/domain';
   import { fmtTime } from '../lib/format';
   import Button from './Button.svelte';
@@ -29,11 +29,15 @@
     <span class="text-heading-sm">출근</span>
     {#if phase === 'none'}<StatusPill tone="neutral" label="미체크인" size="sm" />
     {:else if phase === 'in'}<StatusPill
-        tone="success"
-        label="근무 중 · {fmtTime(attendance.checkinAt ?? '')}"
+        tone={attendance.pending ? 'warning' : 'success'}
+        label="{attendance.pending ? '동기 대기' : '근무 중'} · {fmtTime(attendance.checkinAt ?? '')}"
         size="sm"
       />
-    {:else}<StatusPill tone="neutral" label="퇴근 {fmtTime(attendance.checkoutAt ?? '')}" size="sm" />{/if}
+    {:else}<StatusPill
+        tone={attendance.pending ? 'warning' : 'neutral'}
+        label="퇴근 {fmtTime(attendance.checkoutAt ?? '')}{attendance.pending ? ' · 동기 대기' : ''}"
+        size="sm"
+      />{/if}
   </div>
   {#if siteName}<span class="text-body-sm text-fg-muted">{siteName} · 현장 반경 안에서만 체크인됩니다</span>{/if}
   {#if phase === 'none'}

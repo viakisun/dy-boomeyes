@@ -72,7 +72,7 @@ export const FIXTURES: Record<string, Fixture> = {
   // video-basics W2: 본사 열람 — A1-04 monitor와 같은 카메라 변형(오프라인·흐림)
   'A3-04:dev': (db) => FIXTURES['A1-04:monitor']!(db),
   'B2-03:site': (db) => db,
-  // documents(W2): A2-05 · B1-05 · B4-06 — 시드 그대로(DOC-001 D-27 · DOC-004 검토 중 · DOC-005 반려 · DOC-006 승인). queued는 B12(아웃박스)에서 채움
+  // documents(W2): A2-05 · B1-05 · B4-06 — 시드 그대로(DOC-001 D-27 · DOC-004 검토 중 · DOC-005 반려 · DOC-006 승인). queued는 아웃박스 시드(+layout.ts QUEUED · ADR-010)
   'A2-05:docs': (db) => db,
   'A2-05:queued': (db) => db,
   'B1-05:docs': (db) => db,
@@ -93,6 +93,7 @@ export const FIXTURES: Record<string, Fixture> = {
   }),
   // driver-daily(A2) — 출근 2h 전 · 점검 제출은 inspected만 · mydev는 필터 도달률 92%(임계 접근)
   'A2-02:checked': (db) => ({ ...db, attendance: [checkedIn(db)] }),
+  'A2-02:queued': (db) => db, // 큐 항목은 db가 아니라 아웃박스에 시드 — apps/pwa +layout.ts QUEUED(ADR-010)
   'A2-03:inspect': (db) => ({ ...db, attendance: [checkedIn(db)] }),
   'A2-03:inspected': (db) => ({
     ...db,

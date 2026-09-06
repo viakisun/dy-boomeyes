@@ -74,25 +74,63 @@ test('[A2-04] 내 장비: 342V 이상 · E-021 · 수송관 62% 정상 · 필터
   await expect(page.getByText('AI 판단 불가')).toHaveCount(0); // CPB-003 채널은 라이브·스냅샷
 });
 
-test('[A2-02] 오프라인 → 셸 배너 · 체크인 보류(비활성) · 복구 → 활성 [FR-013]', async ({ page }) => {
+// 오프라인 제출 큐(specs/driver-daily AC-6 · ADR-010) — 셸 배너 문구는 QA §2의 셋(오프라인 · 동기 대기 n건 · 전송 실패 n건)
+const card = (page: import('@playwright/test').Page) => page.locator('section[aria-label="출근"]');
+
+test('[A2-02] 오프라인 체크인 → 카드 "동기 대기" · 배너 "동기 대기 1건" → 복구 → 전송 · 근무 중 [FR-037] [FR-013]', async ({
+  page,
+}) => {
   await login(page);
-  const checkin = page.getByRole('button', { name: '출근 체크인' });
-  await expect(checkin).toBeEnabled();
   await page.context().setOffline(true);
   await expect(page.getByRole('status').filter({ hasText: '오프라인' })).toBeVisible();
-  await expect(checkin).toBeDisabled();
+  await page.getByRole('button', { name: '출근 체크인' }).click();
+  await expect(card(page)).toContainText('동기 대기');
+  await expect(page.getByRole('status').filter({ hasText: '동기 대기 1건' })).toBeVisible();
   await page.context().setOffline(false);
-  await expect(page.getByRole('status').filter({ hasText: '오프라인' })).toHaveCount(0);
-  await expect(checkin).toBeEnabled();
+  await expect(card(page)).toContainText('근무 중', { timeout: 10_000 });
+  await expect(page.getByRole('status').filter({ hasText: '동기 대기' })).toHaveCount(0);
 });
 
-test('[A2-03] 오프라인 → 점검 제출 보류(비활성) · 복구 → 활성 [FR-014]', async ({ page }) => {
-  await page.goto('/a2/today/inspect?state=inspect&capture=1'); // 체크인 후 픽스처
-  const submit = page.getByRole('button', { name: '점검 제출' });
-  await expect(submit).toBeEnabled();
+test('[A2-02] ?net=off 체크인 → 새로고침 후에도 큐 유지(IndexedDB) → net 정상 진입 시 자동 전송 [FR-037] [NFR-016]', async ({
+  page,
+}) => {
+  await login(page);
+  await page.goto('/a2/today?net=off');
+  await page.getByRole('button', { name: '출근 체크인' }).click();
+  await expect(page.getByRole('status').filter({ hasText: '동기 대기 1건' })).toBeVisible();
+  await page.reload();
+  await expect(page.getByRole('status').filter({ hasText: '동기 대기 1건' })).toBeVisible();
+  await expect(card(page)).toContainText('동기 대기');
+  await page.goto('/a2/today');
+  await expect(card(page)).toContainText('근무 중', { timeout: 10_000 });
+});
+
+test('[A2-02] ?net=fail 체크인 → 백오프 5회 → "전송 실패 1건" · 재시도 → 근무 중 [NFR-016]', async ({ page }) => {
+  await login(page);
+  await page.goto('/a2/today?net=fail');
+  await page.getByRole('button', { name: '출근 체크인' }).click();
+  await expect(page.locator('[data-outbox="failed"]')).toContainText('전송 실패 1건', { timeout: 20_000 }); // 토스트도 role=status → 배너로 범위
+  await page.goto('/a2/today'); // 새 db · net 정상 — failed는 자동 재전송 대상이 아니다
+  await expect(page.locator('[data-outbox="failed"]')).toContainText('전송 실패 1건');
+  await page.getByRole('button', { name: '재시도' }).click();
+  await expect(card(page)).toContainText('근무 중', { timeout: 10_000 });
+});
+
+test('[A2-03] 체크인 뒤 오프라인 점검 제출 → "제출 — 동기 대기" · 배너 → 복구 → 제출 완료 [FR-037] [FR-014]', async ({
+  page,
+}) => {
+  await login(page);
+  await page.getByRole('button', { name: '출근 체크인' }).click();
+  await expect(card(page)).toContainText('근무 중');
+  await page.getByRole('button', { name: '점검하기' }).click(); // 앱 내 이동 — mock db 유지
+  await expect(page.locator(`[data-scr="${SCR['A2-03']}"]`)).toBeVisible();
   await page.context().setOffline(true);
-  await expect(page.getByRole('status').filter({ hasText: '오프라인' })).toBeVisible();
-  await expect(submit).toBeDisabled();
+  const boxes = page.getByRole('checkbox');
+  for (let i = 0; i < 5; i++) await boxes.nth(i).check();
+  await page.getByRole('button', { name: '점검 제출' }).click();
+  await expect(page.getByText('제출 — 동기 대기')).toBeVisible();
+  await expect(page.getByRole('status').filter({ hasText: '동기 대기 1건' })).toBeVisible();
   await page.context().setOffline(false);
-  await expect(submit).toBeEnabled();
+  await expect(page.getByText('제출 완료', { exact: true })).toBeVisible({ timeout: 10_000 });
+  await expect(page.getByRole('status').filter({ hasText: '동기 대기' })).toHaveCount(0);
 });

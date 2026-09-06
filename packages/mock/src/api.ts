@@ -20,6 +20,7 @@ import {
   type Doc,
   type DocState,
   type DocSummary,
+  type WriteMeta,
   type Escalation,
   type Kpis,
   type Part,
@@ -43,6 +44,14 @@ const delay = (ms = 0) => new Promise<void>((r) => setTimeout(r, ms));
 
 export function createMockApi(db: Db, opts: { latencyMs?: number } = {}): ApiClient & { db: Db } {
   const wait = () => delay(opts.latencyMs ?? 0);
+  // 멱등(IF-009 Idempotency-Key · NFR-016) — 같은 clientId 재전송은 같은 결과, 기록 시각은 단말 발생 시각(DISC-045)
+  const seen = new Map<string, unknown>();
+  const once = async <T>(meta: WriteMeta | undefined, fn: (at: string) => T): Promise<T> => {
+    if (meta && seen.has(meta.clientId)) return seen.get(meta.clientId) as T;
+    const r = fn(meta?.at ?? clock.iso());
+    if (meta) seen.set(meta.clientId, r);
+    return r;
+  };
   const devScope = (scope: Scope) =>
     db.devices.filter((d) => inScope(scope, d.siteId) && (!scope.ownerId || d.ownerId === scope.ownerId));
   const impl: ApiClient & { db: Db } = {
@@ -202,38 +211,44 @@ export function createMockApi(db: Db, opts: { latencyMs?: number } = {}): ApiCli
       const maintenance = db.users.find((u) => u.role === 'maintenance');
       return { user, device, site, attendance, inspection, alerts, consent, filming, maintenance };
     },
-    async checkin(userId, pos) {
+    async checkin(userId, pos, meta) {
       await wait();
-      const user = db.users.find((u) => u.id === userId);
-      if (!user) throw new Error(`user ${userId}`);
-      const device = db.devices.find((d) => d.id === user.deviceId);
-      const site = db.sites.find((s) => s.id === device?.siteId);
-      if (!site) throw new Error('배정 현장 없음');
-      const dist = distanceM(pos, site);
-      if (dist > CHECKIN_RADIUS_M) throw new Error(`현장 반경 밖 — ${Math.round(dist)}m (기준 ${CHECKIN_RADIUS_M}m)`);
-      const a = attendanceOf(db, user, device, site);
-      a.checkinAt = clock.iso();
-      a.checkoutAt = null;
-      a.lat = pos.lat;
-      a.lng = pos.lng;
-      return a;
+      return once(meta, (at) => {
+        const user = db.users.find((u) => u.id === userId);
+        if (!user) throw new Error(`user ${userId}`);
+        const device = db.devices.find((d) => d.id === user.deviceId);
+        const site = db.sites.find((s) => s.id === device?.siteId);
+        if (!site) throw new Error('배정 현장 없음');
+        const dist = distanceM(pos, site);
+        if (dist > CHECKIN_RADIUS_M) throw new Error(`현장 반경 밖 — ${Math.round(dist)}m (기준 ${CHECKIN_RADIUS_M}m)`);
+        const a = attendanceOf(db, user, device, site);
+        a.checkinAt = at;
+        a.checkoutAt = null;
+        a.lat = pos.lat;
+        a.lng = pos.lng;
+        return a;
+      });
     },
-    async checkout(userId) {
+    async checkout(userId, meta) {
       await wait();
-      const a = db.attendance.find((x) => x.userId === userId);
-      if (!a?.checkinAt) throw new Error('체크인 전');
-      a.checkoutAt = clock.iso();
-      return a;
+      return once(meta, (at) => {
+        const a = db.attendance.find((x) => x.userId === userId);
+        if (!a?.checkinAt) throw new Error('체크인 전');
+        a.checkoutAt = at;
+        return a;
+      });
     },
-    async submitInspection(userId, items) {
+    async submitInspection(userId, items, meta) {
       await wait();
-      const user = db.users.find((u) => u.id === userId);
-      if (!user) throw new Error(`user ${userId}`);
-      const device = db.devices.find((d) => d.id === user.deviceId);
-      const i = inspectionOf(db, user, device);
-      i.items = items;
-      i.submittedAt = clock.iso();
-      return i;
+      return once(meta, (at) => {
+        const user = db.users.find((u) => u.id === userId);
+        if (!user) throw new Error(`user ${userId}`);
+        const device = db.devices.find((d) => d.id === user.deviceId);
+        const i = inspectionOf(db, user, device);
+        i.items = items;
+        i.submittedAt = at;
+        return i;
+      });
     },
     async protocols() {
       await wait();
@@ -300,35 +315,37 @@ export function createMockApi(db: Db, opts: { latencyMs?: number } = {}): ApiCli
       await wait();
       return db.docs.find((d) => d.id === id);
     },
-    async submitDoc(id, file, by) {
+    async submitDoc(id, file, by, meta) {
       await wait();
-      const d = db.docs.find((x) => x.id === id);
-      if (!d) throw new Error(`doc ${id}`);
-      d.state = transition('doc', d.state, 'submitted') as DocState; // expiring|rejected → submitted
-      d.state = transition('doc', d.state, 'review') as DocState; // 자동
-      d.submittedAt = clock.iso();
-      d.file = file;
-      d.history.push({ at: clock.iso(), by, action: '제출', note: file.name });
-      // 서류 검토 업무 생성(FR-008) — 현장 안전관리자 업무함
-      const owner = db.users.find((u) => u.id === d.subjectId);
-      const device = db.devices.find((x) => x.id === d.subjectId);
-      const siteId = device?.siteId ?? owner?.siteIds?.[0] ?? 'SITE-001';
-      const cid = `C-${String(100 + db.cases.length + 1).padStart(3, '0')}`;
-      db.cases.unshift({
-        id: cid,
-        kind: 'doc',
-        title: `${d.subject} 검토`,
-        deviceId: device?.id ?? null,
-        siteId,
-        state: 'new',
-        severity: 'info',
-        assigneeId: null,
-        dueAt: new Date(clock.now().getTime() + 2 * DAY).toISOString(),
-        createdAt: clock.iso(),
-        history: [{ at: clock.iso(), by, action: '제출' }],
-        docId: d.id,
+      return once(meta, (at) => {
+        const d = db.docs.find((x) => x.id === id);
+        if (!d) throw new Error(`doc ${id}`);
+        d.state = transition('doc', d.state, 'submitted') as DocState; // expiring|rejected → submitted
+        d.state = transition('doc', d.state, 'review') as DocState; // 자동
+        d.submittedAt = at;
+        d.file = file;
+        d.history.push({ at, by, action: '제출', note: file.name });
+        // 서류 검토 업무 생성(FR-008) — 현장 안전관리자 업무함
+        const owner = db.users.find((u) => u.id === d.subjectId);
+        const device = db.devices.find((x) => x.id === d.subjectId);
+        const siteId = device?.siteId ?? owner?.siteIds?.[0] ?? 'SITE-001';
+        const cid = `C-${String(100 + db.cases.length + 1).padStart(3, '0')}`;
+        db.cases.unshift({
+          id: cid,
+          kind: 'doc',
+          title: `${d.subject} 검토`,
+          deviceId: device?.id ?? null,
+          siteId,
+          state: 'new',
+          severity: 'info',
+          assigneeId: null,
+          dueAt: new Date(clock.now().getTime() + 2 * DAY).toISOString(),
+          createdAt: at,
+          history: [{ at, by, action: '제출' }],
+          docId: d.id,
+        });
+        return d;
       });
-      return d;
     },
     async reviewDoc(id, decision, by, note) {
       await wait();

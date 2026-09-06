@@ -29,14 +29,18 @@
   )}
   data-doc={doc.id}
   data-state={doc.state}
-  aria-label="{doc.subject} · {DOC_STATE_LABEL[doc.state]}"
+  aria-label="{doc.subject} · {doc.pending ? '동기 대기' : DOC_STATE_LABEL[doc.state]}"
 >
   <div class="gap-inline-sm flex flex-wrap items-center">
     <Badge tone="neutral" variant="outline">{DOC_KIND_LABEL[doc.kind]}</Badge>
     <span class="text-heading-sm">{doc.subject}</span>
   </div>
   <div class="gap-inline-sm text-body-sm text-fg-muted flex flex-wrap items-center">
-    <StatusPill tone={DOC_TONE[doc.state]} label={DOC_STATE_LABEL[doc.state]} size="sm" />
+    <StatusPill
+      tone={doc.pending ? 'warning' : DOC_TONE[doc.state]}
+      label={doc.pending ? '동기 대기' : DOC_STATE_LABEL[doc.state]}
+      size="sm"
+    />
     {#if due}<span class={cx('tabular-nums', due.overdue && 'text-danger-fg font-semibold')}>만료 {due.label}</span
       >{/if}
     <span class="text-label-sm ml-auto">{doc.id}</span>

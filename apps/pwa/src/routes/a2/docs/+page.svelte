@@ -14,13 +14,13 @@
     if (!target || !picked) return;
     busy = true;
     try {
-      await data.api.submitDoc(
+      const d = await data.api.submitDoc(
         target.id,
         { name: picked.name, type: picked.type ?? 'image/*', size: picked.size ?? 0, url: picked.url },
         session.user?.userId ?? 'driver03',
       );
       await invalidateAll();
-      toast(`제출 — ${target.subject} (검토 대기)`);
+      toast(d.pending ? `저장됨 — ${target.subject} 연결되면 전송` : `제출 — ${target.subject} (검토 대기)`);
       target = null;
       picked = null;
     } catch (e) {

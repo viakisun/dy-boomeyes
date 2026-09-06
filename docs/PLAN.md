@@ -13,7 +13,8 @@ W1은 9/5에 선행 완료(사용자 결정 항목만 잔여). 계획 `~/.claude
 | B2 A1-08 완료 시트 · A3-02 · A3-05 + `current_wave: 2`(nav 활성 · 캡처 93장 → B11 후 97장, 자리 0) | 완료 |
 | B3 documents 완료 · B4 hq-video(B2-03 · A3-04 · CameraWall·EquipmentCard) 완료 · B5 admin-masters(B4-03 · B4-04 · PageHeader·Select·KeyValueList·SiteProfileForm) 완료 · B6 leases-hqmap(B1-06 · B2-02 · 장면 9 · lease/request 기계) 완료 · B7 menus-siteinfo(A1-07 · A2-06 · A3-03 · createRequest) 완료 · B8 records-report(A1-06 · A3-06 · B2-04 · records/report · Chip) 완료 · B9 parts-stub(B4-07 · B4-08 · A1-11 · A2-09 · part 기계 · ProgressBar) 완료 · B10 event-replay-stub(B1-08 · EV-001 · 4레인 커서 · 피드 복기 링크) 완료 · B11 showcase(B1-07 · ShowcaseOverlay · mask · 장면 10) 완료 · B15 마감(capture --strict · axe 41 · 회고 · SOP · 방법론 v1.2) 완료 | 완료 — PR #2~#14(리뷰어 "머지 가능" 인용 · CI 녹색) |
 | 리뷰 backlog 정리(chore/w2-backlog) · 시각 회귀 기준선(ADR-008 A) · 결정 반영(ADR-009/010/011 Accepted · DISC 7건 decided) | 완료 — PR #15 · #16 · #17 |
-| B12 오프라인 큐(ADR-010) · B13 로컬 알림(ADR-009) · B14 문서 생성기(ADR-011) | 승인 2026-09-06 — B12 → B13 → B14 순서로 착수(W3 실 인입은 보류) |
+| B12 오프라인 큐(ADR-010) | 완료 — PR #18 (`packages/offline` IndexedDB 아웃박스 · `withOutbox(api)` · `?net=` · 셸 배너 · 카드 pill · 픽스처 `A2-02:queued` `A2-05:queued` · e2e 5 · Vitest 8) |
+| B13 로컬 알림(ADR-009) · B14 문서 생성기(ADR-011) | 승인 2026-09-06 — B13 → B14 순서로 착수(W3 실 인입은 보류) |
 | W2 Exit 대비 | ① `current_wave: 2` · TRACE "spec 없는 화면 0" ✓ ② `capture --dark --strict` 97장 fail 0 · 자리 0 ✓ ③ e2e 녹색 · axe wave ≤ 2 화면 41 전수 0 ✓ ④ 장면 1~10 e2e ✓ ⑤ 픽스처 신규 27(17 → 44) ✓ ⑥ 문서 세트 v0.4 초안은 ADR-011 승인 뒤(B14) ⑦ 회고 `docs/retro/W2.md` · SOP 5 ✓ |
 | 사용자 결정 | 2026-09-06 확정: ADR-008 A(리포) · ADR-009/010/011 승인 · DISC-015/036/038/043/044~046 기준안 채택(decided · DY 이견 시 재개) — 남은 것: AWS(DISC-006, 보류) · v0.4 발행 |
 

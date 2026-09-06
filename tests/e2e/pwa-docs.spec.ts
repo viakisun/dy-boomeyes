@@ -86,3 +86,19 @@ test('[A1-03] 접수 전(new) 서류 업무(docnew): 승인/반려 대신 접수
   await expect(page.locator('[data-doc="DOC-004"]')).toContainText('반려 사유: 원본 대조 필요');
   await expect(page.getByText('완료 상태 — 할 일이 없습니다')).toBeVisible();
 });
+
+test('[A2-05] ?net=off 서류 제출 → 카드 "동기 대기" · 배너 → net 정상 → "지금 동기" → 검토 중 [FR-037] [FR-015]', async ({
+  page,
+}) => {
+  await page.goto('/a2/docs?state=docs&capture=1&net=off');
+  await page.locator('[data-doc="DOC-001"]').getByRole('button', { name: '촬영·제출' }).click();
+  await page.locator('[data-doc="DOC-001"]').locator('input[type="file"]').setInputFiles(PNG);
+  await page.locator('[data-doc="DOC-001"]').getByRole('button', { name: '제출', exact: true }).click();
+  await expect(page.locator('[data-doc="DOC-001"]')).toContainText('동기 대기');
+  await expect(page.getByRole('status').filter({ hasText: '동기 대기 1건' })).toBeVisible();
+  await page.goto('/a2/docs?state=docs&capture=1'); // 같은 픽스처 키 → 같은 IndexedDB · capture는 자동 재전송 없음
+  await expect(page.locator('[data-doc="DOC-001"]')).toContainText('동기 대기');
+  await page.getByRole('button', { name: '지금 동기' }).click();
+  await expect(page.locator('[data-doc="DOC-001"]')).toContainText('검토 중', { timeout: 10_000 });
+  await expect(page.getByRole('status').filter({ hasText: '동기 대기' })).toHaveCount(0);
+});
