@@ -14,7 +14,11 @@
       by: r.actor,
       action: r.text,
       ...(r.note ? { note: r.note } : {}),
-      tag: `${RECORD_KIND_LABEL[r.kind]} · ${siteName(r.siteId)}`,
+      // 태그는 활성 필터 차원을 생략한다(현장을 골랐으면 현장명 없이 유형만)
+      tag:
+        [data.kind === 'all' ? RECORD_KIND_LABEL[r.kind] : '', data.site === 'all' ? siteName(r.siteId) : '']
+          .filter(Boolean)
+          .join(' · ') || RECORD_KIND_LABEL[r.kind],
     })),
   );
   // 칩 전환은 다른 쿼리(?state= ?capture=)를 유지한다 — mock db 캐시 키가 바뀌면 안 된다(QA §3)
@@ -30,20 +34,27 @@
 
 <div class="gap-stack-md pb-layout-bottomnav-height flex flex-col" data-scr={SCR['A3-06']}>
   <p class="text-body-sm text-fg-muted">자사 현장 {data.sites.length} · 최근 30일 · 열람 전용</p>
-  <div class="gap-inline-sm flex flex-wrap" role="group" aria-label="현장">
-    <Chip selected={data.site === 'all'} count={data.records.length} onclick={() => go('all', data.kind)}>전체</Chip>
+  <div class="gap-inline-sm -mx-page-gutter px-page-gutter flex overflow-x-auto" role="group" aria-label="현장">
+    <Chip
+      class="shrink-0"
+      selected={data.site === 'all'}
+      count={data.records.length}
+      onclick={() => go('all', data.kind)}>전체</Chip
+    >
     {#each data.sites as s (s.id)}
       <Chip
+        class="shrink-0"
         selected={data.site === s.id}
         count={data.records.filter((r) => r.siteId === s.id).length}
         onclick={() => go(s.id, data.kind)}>{s.name}</Chip
       >
     {/each}
   </div>
-  <div class="gap-inline-sm flex flex-wrap" role="group" aria-label="유형">
-    <Chip selected={data.kind === 'all'} onclick={() => go(data.site, 'all')}>전체</Chip>
+  <div class="gap-inline-sm -mx-page-gutter px-page-gutter flex overflow-x-auto" role="group" aria-label="유형">
+    <Chip class="shrink-0" selected={data.kind === 'all'} onclick={() => go(data.site, 'all')}>전체</Chip>
     {#each data.kinds as k (k)}
       <Chip
+        class="shrink-0"
         selected={data.kind === k}
         count={bySite.filter((r) => r.kind === k).length}
         onclick={() => go(data.site, k)}>{RECORD_KIND_LABEL[k]}</Chip

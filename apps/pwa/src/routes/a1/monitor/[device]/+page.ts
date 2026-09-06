@@ -23,7 +23,9 @@ export const load: PageLoad = async ({ parent, params, url }) => {
   const driverDocs = driver ? docs.filter((d) => d.subjectId === driver.id) : [];
   const flags = profileFlags(site?.videoProfile ?? 'P-SD');
   const source = url.searchParams.get('source');
+  const tab = url.searchParams.get('tab');
   return {
+    tab: (['status', 'docs', 'video', 'parts'] as const).find((t) => t === tab) ?? 'status',
     device,
     cameras: cameras.filter((c) => flags.channels === 2 || c.kind === 'general'), // AX-1 1채널이면 AI 채널 숨김
     site,

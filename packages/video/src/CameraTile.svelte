@@ -8,12 +8,15 @@
     deviceLabel,
     selected = false,
     compact = false,
+    status = true,
     onclick,
   }: {
     camera: Camera;
     deviceLabel?: string;
     selected?: boolean;
     compact?: boolean;
+    /** 타일 안 상태 pill — PWA는 타일 아래 HealthBadge가 같은 정보를 더 자세히 보여 끈다(중복 제거) */
+    status?: boolean;
     onclick?: (id: string) => void;
   } = $props();
   const off = $derived(camera.state === 'offline');
@@ -56,7 +59,7 @@
     <span class="rounded-pill bg-media-scrim px-inset-xs text-label-sm text-media-fg"
       >{camera.kind === 'ai' ? 'AI · 붐 끝' : '일반 · 전방'}</span
     >
-    <StatusPill tone={CAMERA_TONE[camera.state]} label={CAMERA_LABEL[camera.state]} size="sm" solid />
+    {#if status}<StatusPill tone={CAMERA_TONE[camera.state]} label={CAMERA_LABEL[camera.state]} size="sm" solid />{/if}
   </div>
   {#if !compact}<div
       class="p-inset-xs text-label-sm text-fg-on-inverse absolute inset-x-0 bottom-0 flex items-center justify-between"

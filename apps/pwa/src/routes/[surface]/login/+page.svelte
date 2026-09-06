@@ -29,7 +29,7 @@
 </script>
 
 <main
-  class="max-w-layout-frame-mobile gap-stack-xl bg-canvas px-page-gutter py-stack-xl mx-auto flex min-h-dvh w-full flex-col justify-center"
+  class="max-w-layout-frame-mobile gap-stack-xl bg-canvas px-page-gutter py-stack-xl mx-auto flex min-h-dvh w-full flex-col justify-start"
   data-scr={data.screen}
   data-capture-frame
 >

@@ -54,15 +54,16 @@
     <ul class="gap-stack-sm flex flex-col" aria-label="업무">
       {#each visible as c (c.id)}
         <li class="gap-stack-xs flex flex-col">
-          <TaskCard task={c} href={resolve(`/a3/sites/${c.siteId}` as '/')} due={dueLabel(c.dueAt, now)} />
-          <div class="gap-inline-sm flex items-center justify-between">
-            <span class="text-label-sm text-fg-muted">{siteName(c.siteId)}</span>
-            {#if open(c)}
-              <Button size="sm" variant="outline" tone="neutral" disabled={busy === c.id} onclick={() => confirm(c)}
-                >확인 요청</Button
-              >
-            {/if}
-          </div>
+          <TaskCard task={c} href={resolve(`/a3/sites/${c.siteId}` as '/')} due={dueLabel(c.dueAt, now)}>
+            {#snippet footer()}
+              <span class="text-label-sm text-fg-muted">{siteName(c.siteId)}</span>
+              {#if open(c)}
+                <Button size="sm" variant="outline" tone="neutral" disabled={busy === c.id} onclick={() => confirm(c)}
+                  >확인 요청</Button
+                >
+              {/if}
+            {/snippet}
+          </TaskCard>
         </li>
       {/each}
     </ul>

@@ -39,9 +39,13 @@ test('[A1-05] CPB-003 상세: 342V · E-021 · 도달률 · 서류 완비율 · 
   await expect(page.locator(`[data-scr="${SCR['A1-05']}"]`)).toBeVisible();
   await expect(page.getByText('342V · 이상')).toBeVisible();
   await expect(page.getByText('E-021', { exact: false }).first()).toBeVisible();
+  await page.getByRole('tab', { name: '부품' }).click(); // 상단 탭 4(상태 · 서류 · 영상 · 부품) — 기본은 상태
   await expect(page.getByRole('meter', { name: '수송관 도달률' })).toHaveAttribute('aria-valuetext', '62% 정상');
+  await page.getByRole('tab', { name: '서류' }).click();
   await expect(page.getByText(/완비율 \d+%/)).toBeVisible();
   await expect(page.getByText(/박기사 교육 이수증 · 만료 임박 · D-27/)).toBeVisible();
+  await page.getByRole('tab', { name: '영상' }).click();
+  await expect(page).toHaveURL(/tab=video/);
   await expect(page.getByRole('tab', { name: '서버' })).toBeVisible();
   await expect(page.getByRole('tab', { name: 'SD' })).toBeVisible();
   await expect(page.getByRole('tab', { name: 'NVR' })).toHaveCount(0);
@@ -64,6 +68,7 @@ test('[A1-04] plite 픽스처(SITE-001 P-LITE): 장비 3 × 1채널 — AI 채�
 test('[A1-05] plite 픽스처: CPB-003 채널 1(일반만) · 저장 소스 탭 서버만(SD·NVR 없음) [FR-005]', async ({ page }) => {
   await page.goto('/a1/monitor/CPB-003?state=plite&capture=1');
   await expect(page.locator(`[data-scr="${SCR['A1-05']}"]`)).toBeVisible();
+  await page.getByRole('tab', { name: '영상' }).click();
   await expect(page.locator('[data-camera]')).toHaveCount(1);
   await expect(page.getByRole('tab', { name: '서버' })).toBeVisible();
   await expect(page.getByRole('tab', { name: 'SD' })).toHaveCount(0);
