@@ -84,7 +84,8 @@
   <div class="gap-stack-lg flex min-w-0 flex-col">
     <PageHeader
       title="임대 계약"
-      description="만료 임박(D-30) 계약이 최상단 · 재배치 계획은 lease 상태기계(expiring → relocated) · 관제 기술 홍보로 추가 일거리 확보(EXT-4) · 장비 대수 정합은 DISC-037"
+      description="만료 임박 계약이 위에 옵니다 · 재배치 계획은 상세에서"
+      ref="EXT-4 DISC-037"
     />
     <div class="gap-inline-md grid grid-cols-2 md:grid-cols-4" aria-label="계약 요약">
       <Stat

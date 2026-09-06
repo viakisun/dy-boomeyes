@@ -61,23 +61,21 @@
 
 <div class="gap-stack-lg flex min-w-0 flex-col" data-scr={SCR['B1-08']} data-cursor={cursor}>
   {#if !ev}
-    <EmptyState
-      title="이벤트 {data.id} 없음"
-      description="등록된 event_id가 아닙니다 — 채번·공통 시각 원천은 DISC-039."
-      tone="danger"
-    />
-    <a href={resolve('/b1/dash' as '/')} class="text-body-md text-accent-fg">‹ 관제 대시보드</a>
+    <EmptyState title="이벤트 {data.id} 없음" description="등록된 이벤트가 아닙니다" tone="danger" ref="DISC-039">
+      {#snippet action()}
+        <a href={resolve('/b1/dash' as '/')} class="text-body-md text-accent-fg">관제 대시보드로</a>
+      {/snippet}
+    </EmptyState>
   {:else}
     <PageHeader
       title="이벤트 복기 — {ev.id}"
-      description="event_id · 공통 시각(t0 = 알림 시각) 기준 4소스 동기 재생 구조 — W2는 메타·커서만(실영상 seek · 채번 · ±1초 동기 검증은 2단계, DISC-039 · NFR-014)"
+      description="알림 시각 기준 ±60초 · 4소스 동기 재생"
+      ref="DISC-039 NFR-014"
     >
       {#snippet actions()}
-        {#if ev.locked}<Badge tone="danger" variant="solid">원본 보존 잠금 · NFR-015</Badge>{/if}
-        <Badge tone="neutral" variant="outline">목업 · 루프 클립(seek 없음)</Badge>
+        {#if ev.locked}<Badge tone="danger" variant="solid" ref="NFR-015">원본 보존</Badge>{/if}
       {/snippet}
     </PageHeader>
-    <a href={resolve('/b1/dash' as '/')} class="text-label-md text-accent-fg">‹ 관제 대시보드</a>
     <div class="gap-inline-lg grid md:grid-cols-2">
       <KeyValueList
         label="이벤트"
@@ -101,8 +99,8 @@
               ? `${data.task.id} — ${data.task.title} (${TASK_LABEL[data.task.state]})`
               : (ev.caseId ?? '없음'),
           },
-          { label: '보존', value: ev.locked ? '원본 보존 잠금 — 복기 완료 전 삭제 금지(NFR-015)' : '잠금 없음' },
-          { label: '동기', value: '공통 시각 오차 ±1초 목표(NFR-014) — 검증은 2단계', muted: true },
+          { label: '보존', value: ev.locked ? '원본 보존 — 복기 완료 전에는 삭제되지 않습니다' : '잠금 없음' },
+          { label: '동기', value: '공통 시각 오차 ±1초 목표 — 검증 준비 중', muted: true },
         ]}
       />
     </div>
@@ -195,8 +193,8 @@
           {/if}
         </div>
       {/each}
-      <p class="text-label-sm text-fg-muted">
-        {ev.lanes.cpb.note ?? ''} · 마커는 세그먼트 메타(2단계 API-018) · 레인 클릭으로 커서 이동
+      <p class="text-label-sm text-fg-muted" data-ref="API-018">
+        {ev.lanes.cpb.note ?? ''} · 레인 클릭으로 커서 이동
       </p>
     </section>
 
@@ -208,9 +206,7 @@
             <span class="text-label-md"
               >{l.source === 'ai' ? 'AI CCTV · 붐 끝' : '일반 CCTV · 전방'} {cam ? `· ${cam.id}` : ''}</span
             >
-            <span class="text-label-sm text-fg-muted tabular-nums"
-              >표시 시각 {fmtTime(cursorAt)} · 목업(루프 클립, seek 없음)</span
-            >
+            <span class="text-label-sm text-fg-muted tabular-nums">표시 시각 {fmtTime(cursorAt)}</span>
           </div>
           {#if cam}
             <VideoPlayer

@@ -627,7 +627,7 @@ export function seed(): Db {
         code: 'E-041',
         name: '수송관 도달률 임계 초과',
         severity: 'warning',
-        guide: '두께 실측 후 교체 부품 발주(OEM 기준 DISC-038)',
+        guide: '두께 실측 후 교체 부품 발주(OEM 기준 준비 중)',
       },
     ],
     scenarios: [
@@ -641,8 +641,8 @@ export function seed(): Db {
       },
       { id: 'SC-3', title: '배관·호스 이상', severity: 'critical', locked: false, note: '긴급' },
       { id: 'SC-4', title: '영상 장애', severity: 'warning', locked: false, note: 'AI 판단 불가 표시 + 알림' },
-      { id: 'SC-5', title: '전도', severity: 'critical', locked: true, note: '현장 검증 후 적용 (DISC-042)' },
-      { id: 'SC-6', title: '무동작', severity: 'warning', locked: true, note: '현장 검증 후 적용 (DISC-042)' },
+      { id: 'SC-5', title: '전도', severity: 'critical', locked: true, note: '현장 검증 후 적용' },
+      { id: 'SC-6', title: '무동작', severity: 'warning', locked: true, note: '현장 검증 후 적용' },
     ],
     updatedAt: t(5 * DAY),
     updatedBy: 'ops01',
@@ -795,7 +795,7 @@ export function seed(): Db {
         bodycam: {
           source: 'bodycam',
           available: false,
-          note: '현장 프로파일 P-SD 바디캠 A — 세션 연동은 W4(IF-017 · DISC-030)',
+          note: '바디캠 A — 세션 연동 준비 중',
           segments: [],
           markers: [],
         },

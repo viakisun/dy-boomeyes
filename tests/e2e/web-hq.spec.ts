@@ -23,7 +23,7 @@ test('[B2-03] SITE-001 장비 3 · 카메라 월 6채널(P-SD 2채널) · 접수
 test('[B2-03] P-LITE 현장(SITE-002)은 1채널 월 · 없는 현장은 404 [FR-005] [FR-022]', async ({ page }) => {
   await page.goto('/b2/sites/SITE-002?state=site&capture=1');
   await expect(page.locator(`[data-scr="${SCR['B2-03']}"]`)).toBeVisible();
-  await expect(page.getByText('프로파일 P-LITE')).toBeVisible();
+  await expect(page.locator('[data-profile="P-LITE"]')).toHaveText('1채널'); // 프로파일 코드 대신 채널 수
   await expect(page.locator('[data-wall] button[aria-label*="카메라"]')).toHaveCount(2); // CPB-004 · CPB-005 일반 채널만
   await page.goto('/b2/sites/SITE-999?state=site&capture=1');
   await expect(page.getByText('현장 SITE-999 없음')).toBeVisible();

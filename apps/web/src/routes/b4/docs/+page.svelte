@@ -18,6 +18,7 @@
     dueLabel,
     toast,
     type Column,
+    PageHeader,
   } from '@boomeyes/ui';
   import { session } from '$lib/session.svelte';
   let { data } = $props();
@@ -81,13 +82,9 @@
   data-scr={SCR['B4-06']}
 >
   <div class="gap-stack-lg flex min-w-0 flex-col">
-    <header class="gap-stack-xs flex flex-col">
-      <h1 class="text-heading-xl">서류 관리</h1>
-      <p class="text-body-sm text-fg-muted">
-        5유형(제작증 · 비파괴 검사 성적서 · 면허·선임증 · 교육 이수증 · 계약서, DISC-016) · 만료 D-30 이내는 만료 임박
-      </p>
-    </header>
-    <Tabs {tabs} value={data.tab} onchange={select} />
+    <PageHeader title="서류 관리" description="서류 5유형 등록·검토 · 만료 30일 전부터 만료 임박" ref="DISC-016">
+      <Tabs {tabs} value={data.tab} onchange={select} />
+    </PageHeader>
     {#if data.tab === 'register'}
       <form
         class="gap-stack-md rounded-card border-border bg-surface p-inset-lg max-w-layout-form-max flex flex-col border"

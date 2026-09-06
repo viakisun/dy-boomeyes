@@ -24,7 +24,7 @@
   let { data, children } = $props();
   const role = $derived(session.user?.role as RoleId | undefined);
   const groups = $derived(role ? navFor(role, 'web', data.screen, (p) => resolve(p as '/')) : []);
-  const crumbs = $derived(data.screen ? crumbsFor(data.screen) : []);
+  const crumbs = $derived(data.screen ? crumbsFor(data.screen, (p) => resolve(p as '/')) : []);
   const home = () => role && goto(resolve(SCREENS[HOME_OF[role]].route as '/'));
   // 테마(shell-auth AC-6): ?theme=은 루트 data-theme에 적용만(저장 안 함) · 탑바 토글은 localStorage에 유지
   $effect(() => {

@@ -941,7 +941,7 @@ PageHeader  제목 heading-xl · 부제 1줄(body-sm muted, ≤ 60자) · 메타
 인스펙터    360 · 헤더(식별자 label-md muted · 제목 heading-md · 상태 pill) · KeyValueList · 액션 행(하단, 주 1 · 보조 1) · 이력 Timeline
 ```
 
-- 뒤로 가기는 브레드크럼이 담당한다. 본문 안 `‹ 상위 화면` 링크는 상세 화면(`[id]` 라우트)에만, PageHeader 위 한 곳에.
+- 뒤로 가기는 브레드크럼이 담당한다 — 상세 화면(`[id]` 라우트)은 가운데 조각이 부모 화면 링크(`crumbsFor`의 `PARENT`). 본문 안 `‹ 상위 화면` 링크는 두지 않는다.
 - 부제에는 화면이 "무엇을 보여주는가"만. 규칙·근거·한계는 §12(카피)의 자리로.
 - 섹션 사이 `stack.lg`, 카드 안 `inset.lg`. 콘텐츠가 뷰포트 절반 미만이면 요약을 접거나 표 밀도를 올린다 — 빈 아래쪽을 여백으로 두지 않는다.
 
@@ -1006,7 +1006,7 @@ PageHeader  제목 heading-xl · 부제 1줄(body-sm muted, ≤ 60자) · 메타
 ### 12.1 규칙
 
 1. **부제 1줄, 60자.** 화면이 무엇을 보여주는지만. 규칙 설명·근거·한계는 여기 두지 않는다. 예: "만료 임박 계약이 위에 옵니다" (○) / "만료 임박(D-30) 계약이 최상단 · 재배치 계획은 lease 상태기계(expiring → relocated) · … DISC-037" (✗).
-2. **식별자는 UI 밖.** `DISC-` `FR-` `NFR-` `ENT-` `IF-` `API-` `EXT-` `ADR-` `OUT-` `ACC-` `WP-`, 웨이브(`W2` `wave 2` `2단계`), 구현 용어(상태기계 · append-only · mock · canAccess)는 화면 문자열에 쓰지 않는다. 근거가 필요하면 요소에 `data-ref="DISC-015"`를 붙이고, 시연 모드의 `DemoBar`가 툴팁으로 보여준다. `pnpm design:audit`가 센다(목표 0 · D7에서 lint error).
+2. **식별자는 UI 밖.** `DISC-` `FR-` `NFR-` `ENT-` `IF-` `API-` `EXT-` `ADR-` `OUT-` `ACC-` `WP-`, 웨이브(`W2` `wave 2` `2단계`), 구현 용어(상태기계 · append-only · mock · canAccess)는 화면 문자열에 쓰지 않는다. 근거가 필요하면 요소에 `data-ref="DISC-015"`(공백 구분 복수 가능 · `PageHeader` `Banner` `EmptyState` `Badge` `ShowcaseOverlay`는 `ref` prop)를 붙이고, 시연 모드 `DemoBar`의 "근거" 토글이 칩으로 보여준다. 보이는 텍스트 · `title` · `aria-label`에는 ID를 쓰지 않는다("다음 단계에서 지원합니다"). `pnpm design:audit`가 센다(목표 0 · D7에서 lint error).
 3. **도메인 식별자는 사용자 언어다.** `CPB-003` `3호기` `C-105` `DOC-001` `E-021` `RQ-003` `P-004` `LS-001` `SITE-001`은 화면에 그대로 쓴다(`code-md`).
 4. **미확정·미구현은 "준비 중".** 버튼: "태그 스캔 — 준비 중"(disabled + 툴팁 이유). 값: "준비 중". 배너 문장으로 결정 번호를 설명하지 않는다.
 5. **버튼은 동사, 상태는 명사.** "접수" "승인" "재시도" / "접수 대기" "검토 중". 같은 뜻은 같은 낱말 — 라벨 원천은 `packages/ui/src/lib/labels.ts`.

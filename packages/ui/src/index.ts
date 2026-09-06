@@ -73,6 +73,7 @@ export {
 } from './lib/labels';
 export { fmtDateTime, fmtTime, dueLabel, elapsedLabel } from './lib/format';
 export { connectivity } from './lib/connectivity.svelte';
+export { demoRefs, applyDemoRefs } from './lib/demo-refs.svelte';
 // 아이콘(@lucide/svelte) — 앱은 ui를 통해서만 쓴다
 export { default as IconBell } from '@lucide/svelte/icons/bell';
 export { default as IconSun } from '@lucide/svelte/icons/sun';

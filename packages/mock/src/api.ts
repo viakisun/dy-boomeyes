@@ -719,7 +719,7 @@ export function createMockApi(db: Db, opts: { latencyMs?: number } = {}): ApiCli
       const p = partOf(db, id);
       if (!input.reason.trim()) throw new Error('사유는 필수입니다');
       const st = db.stock.find((s) => s.partNo === p.partNo);
-      if (!st || st.onHand < 1) throw new Error(`재고 없음 — ${p.partNo} (발주는 2단계)`);
+      if (!st || st.onHand < 1) throw new Error(`재고 없음 — ${p.partNo} (발주는 준비 중)`);
       p.state = transition('part', p.state, 'replaced'); // due에서만
       st.onHand -= 1;
       db.partEvents.push({

@@ -17,6 +17,7 @@
     toast,
     type Column,
     Inspector,
+    PageHeader,
   } from '@boomeyes/ui';
   import { untrack } from 'svelte';
   import { parse as parseYaml } from 'yaml';
@@ -108,14 +109,13 @@
   data-scr={SCR['B4-02']}
 >
   <div class="gap-stack-lg flex min-w-0 flex-col">
-    <header>
-      <h1 class="text-heading-xl">프로토콜 관리</h1>
-      <p class="text-body-sm text-fg-muted">
-        운영 {data.protocols.filter((p) => p.kind === 'production').length} · 테스트 {data.protocols.filter(
-          (p) => p.kind === 'test',
-        ).length} — 장비·데이터가 늘어도 정의 파일로 대응 (FR-020)
-      </p>
-    </header>
+    <PageHeader
+      title="프로토콜 관리"
+      description="운영 {data.protocols.filter((p) => p.kind === 'production').length} · 테스트 {data.protocols.filter(
+        (p) => p.kind === 'test',
+      ).length} — 정의 파일로 장비·데이터를 늘립니다"
+      ref="FR-020"
+    />
 
     <DataTable
       columns={COLUMNS}

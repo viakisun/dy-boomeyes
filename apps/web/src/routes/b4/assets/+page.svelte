@@ -117,7 +117,8 @@
   <div class="gap-stack-lg flex min-w-0 flex-col">
     <PageHeader
       title="장비·현장·프로파일"
-      description="현장 등록·편집(현장명 · 주소 · 기간 · 담당 안전관리자) · 호기 1~120 등록·배정 · 현장 프로파일 프리셋(P-LITE · P-SD · P-NVR, DISC-028) — 8축 개별 편집·보존/홀드·열람 로그는 W4(FR-029/031)"
+      description="현장 · 호기 · 프로파일 프리셋을 등록하고 배정합니다"
+      ref="DISC-028 FR-029 FR-031"
     >
       <Tabs tabs={TABS} value={data.tab} onchange={(id) => go(`tab=${id}`)} />
     </PageHeader>
@@ -236,7 +237,7 @@
           cameras={data.cameras.filter((c) => profileDevices.some((d) => d.id === c.deviceId))}
           devices={profileDevices}
           sites={data.sites}
-          title="카메라 월 미리보기 — {profileSite.name} (B1-02 · A1-04와 같은 채널 규칙)"
+          title="카메라 월 미리보기 — {profileSite.name}"
         />
       </div>
     {:else}

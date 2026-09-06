@@ -67,8 +67,21 @@ export function navFor(
   return [...bySurface.entries()].map(([surface, items]) => ({ label: SURFACE_NAME[surface], items }));
 }
 
-/** 브레드크럼 — 표면 이름 / 화면 이름 (표면 코드는 화면에 내지 않는다) */
-export function crumbsFor(screen: ScrId): Crumb[] {
+/** 상세 화면의 부모 — 브레드크럼 가운데 조각(링크). 뒤로 가기는 브레드크럼이 담당하고 본문에는 뒤로 링크를 두지 않는다(§11.1) */
+const PARENT: Partial<Record<ScrId, ScrId>> = {
+  'B1-08': 'B1-02',
+  'B2-03': 'B2-02',
+  'B4-08': 'B4-07',
+  'B1-02M': 'B1-02',
+};
+
+/** 브레드크럼 — 표면 이름 / (부모 화면) / 화면 이름 (표면 코드는 화면에 내지 않는다) */
+export function crumbsFor(screen: ScrId, resolve: (path: string) => string): Crumb[] {
   const s = SCREENS[screen];
-  return [{ label: SURFACE_NAME[s.surface] }, { label: s.name }];
+  const parent = PARENT[screen];
+  return [
+    { label: SURFACE_NAME[s.surface] },
+    ...(parent ? [{ label: SCREENS[parent].name, href: resolve(SCREENS[parent].route) }] : []),
+    { label: s.name },
+  ];
 }

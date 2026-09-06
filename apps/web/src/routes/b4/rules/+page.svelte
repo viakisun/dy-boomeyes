@@ -17,6 +17,7 @@
     fmtDateTime,
     toast,
     Inspector,
+    PageHeader,
   } from '@boomeyes/ui';
   import { untrack } from 'svelte';
   import { session } from '$lib/session.svelte';
@@ -76,14 +77,13 @@
   data-scr={SCR['B4-05']}
 >
   <div class="gap-stack-lg flex min-w-0 flex-col">
-    <header class="gap-stack-xs flex flex-col">
-      <h1 class="text-heading-xl">알림 기준</h1>
-      <p class="text-body-sm text-fg-muted">
-        알림 8종의 등급·수신 역할·임계와 고장코드 표 — 마지막 갱신 {fmtDateTime(data.rules.updatedAt)} · {data.rules
-          .updatedBy}
-      </p>
-    </header>
-    <Tabs tabs={TABS} value={data.tab} onchange={selectTab} />
+    <PageHeader
+      title="알림 기준"
+      description="알림 8종의 등급 · 수신 역할 · 임계 — 마지막 갱신 {fmtDateTime(data.rules.updatedAt)} · {data.rules
+        .updatedBy}"
+    >
+      <Tabs tabs={TABS} value={data.tab} onchange={selectTab} />
+    </PageHeader>
 
     {#if data.tab === 'alerts'}
       <section class="gap-stack-sm flex flex-col" aria-label="알림 기준 목록">
@@ -157,8 +157,8 @@
         </table>
       </section>
     {:else}
-      <Banner tone="neutral"
-        >시나리오별 등급은 2단계(2026-10 ~) 적용 항목 — 전도·무동작은 현장 검증 후 잠금을 풉니다 (FR-036 · DISC-042)</Banner
+      <Banner tone="neutral" ref="FR-036 DISC-042"
+        >전도·무동작 등급은 현장 검증 후 잠금을 풉니다 — 시나리오별 등급은 준비 중</Banner
       >
       <section
         class="rounded-card border-border bg-surface divide-border-subtle divide-y border"

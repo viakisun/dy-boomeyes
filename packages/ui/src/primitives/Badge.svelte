@@ -7,6 +7,7 @@
     dot = false,
     count,
     max = 99,
+    ref,
     class: cls,
     children,
   }: {
@@ -15,6 +16,8 @@
     dot?: boolean;
     count?: number;
     max?: number;
+    /** 근거 SSOT ID(data-ref) — 시연 모드 근거 토글에서만 보인다 */
+    ref?: string;
     class?: string;
     children?: Snippet;
   } = $props();
@@ -31,6 +34,7 @@
       TONE[tone][variant],
       cls,
     )}
+    data-ref={ref}
   >
     {#if dot}<span
         class={cx('size-size-indicator rounded-pill', variant === 'solid' ? 'bg-current' : TONE[tone].dot)}
