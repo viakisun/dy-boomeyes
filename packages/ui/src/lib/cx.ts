@@ -60,7 +60,7 @@ export const EQUIPMENT_TONE = {
   normal: 'success',
   caution: 'warning',
   fault: 'danger',
-  offline: 'neutral',
+  offline: 'warning', // 두절은 주의 상태 — 텍스트로 강등되지 않게(FR-034 · §0-4)
   maintenance: 'progress',
 } as const;
 export const TASK_TONE = {
@@ -82,7 +82,7 @@ export const CAMERA_TONE = {
   live: 'danger',
   snapshot: 'neutral',
   recording: 'danger',
-  offline: 'neutral',
+  offline: 'warning', // 수신 끊김을 정상처럼 보이지 않게(FR-034)
   'ai-unavailable': 'warning',
 } as const;
 export const SEVERITY_TONE = { critical: 'danger', warning: 'warning', info: 'info' } as const;

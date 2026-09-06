@@ -24,7 +24,7 @@
   {#each ordered as h, i (h.at + h.action + i)}
     <li class="gap-inline-sm flex items-start">
       <span class="pt-stack-xs flex flex-col items-center self-stretch" aria-hidden="true">
-        <span class={cx('size-size-indicator rounded-pill', i === 0 ? 'bg-accent' : 'bg-border-strong')}></span>
+        <span class="size-size-indicator rounded-mark bg-border-strong"></span>
         {#if i < ordered.length - 1}<span class="bg-border-subtle mt-stack-xs w-px flex-1"></span>{/if}
       </span>
       <div class="gap-stack-xs flex min-w-0 flex-1 flex-col">

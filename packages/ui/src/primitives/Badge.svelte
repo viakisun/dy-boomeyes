@@ -22,6 +22,10 @@
     children?: Snippet;
   } = $props();
   const shown = $derived(count === undefined ? null : count > max ? `${max}+` : String(count));
+  // 색 예산(§0-4): subtle 배지의 success·info·progress는 중립 배경으로 — 색은 warning·danger·count(danger)에만
+  const t = $derived(
+    variant === 'subtle' && (tone === 'success' || tone === 'info' || tone === 'progress') ? 'neutral' : tone,
+  );
 </script>
 
 {#if variant === 'dot'}
@@ -31,7 +35,7 @@
     class={cx(
       'h-size-badge gap-inline-xs rounded-pill px-inset-xs text-label-md inline-flex items-center font-medium whitespace-nowrap',
       variant === 'outline' && 'border',
-      TONE[tone][variant],
+      TONE[t][variant],
       cls,
     )}
     data-ref={ref}

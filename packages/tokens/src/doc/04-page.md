@@ -22,7 +22,7 @@ PageHeader  제목 heading-xl · 부제 1줄(body-sm muted, ≤ 60자) · 메타
 | 식별자 셀 | `code-md` · `whitespace-nowrap` · 최소 폭 = 가장 긴 ID |
 | 텍스트 셀 | 1줄 · 넘치면 `truncate` + `title` |
 | 수치 셀 | 우측 정렬 · `tabular-nums` · 단위는 헤더에 |
-| 상태 셀 | StatusPill sm 하나(점은 장비·카메라 상태 `signal`에만) · 셀 텍스트 채색은 danger 1종만(예: 전압 이상) |
+| 상태 셀 | StatusPill sm 하나 — warning·danger만 pill, 나머지는 텍스트(§0-4 색 예산) · 셀 텍스트 채색은 danger 1종만(예: 전압 이상) |
 | 첫 열 | 고정 폭 · 식별자 또는 이름 |
 | 선택 | 행 `bg.selected` · 포커스 링 · Enter 열기 |
 | 열 수 | 7 이하 — 넘치면 인스펙터로 |

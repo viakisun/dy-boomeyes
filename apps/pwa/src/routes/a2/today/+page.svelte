@@ -86,7 +86,7 @@
     >
       <div class="flex items-center justify-between">
         <span class="text-heading-sm">{d.id} · {d.unitNo}호기</span>
-        <StatusPill tone={EQUIPMENT_TONE[d.state]} label={EQUIP_LABEL[d.state]} size="sm" signal />
+        <StatusPill tone={EQUIPMENT_TONE[d.state]} label={EQUIP_LABEL[d.state]} size="sm" />
       </div>
       <span class="text-body-sm text-fg-muted">{t.site?.name ?? d.siteId}</span>
       {#if d.telemetry.errorCode}<span class="text-body-sm text-danger-fg"

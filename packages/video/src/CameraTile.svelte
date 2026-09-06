@@ -64,7 +64,7 @@
         label={CAMERA_LABEL[camera.state]}
         size="sm"
         solid
-        signal
+        signal={camera.state === 'live' || camera.state === 'recording'}
       />{/if}
   </div>
   {#if !compact}<div

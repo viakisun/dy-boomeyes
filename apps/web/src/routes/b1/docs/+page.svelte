@@ -89,7 +89,7 @@
             <span
               class={cx(
                 'shrink-0 font-medium tabular-nums',
-                c.rate === 100 ? 'text-success-fg' : c.expiring ? 'text-danger-fg' : 'text-warning-fg',
+                c.rate === 100 ? 'text-fg' : c.expiring ? 'text-danger-fg' : 'text-warning-fg',
               )}>{c.rate}% ({c.complete}/{c.total})</span
             >
           </li>

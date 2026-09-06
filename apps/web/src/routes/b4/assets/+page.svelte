@@ -140,7 +140,6 @@
               tone={EQUIPMENT_TONE[row.state]}
               label={EQUIPMENT_LABEL[row.state]}
               size="sm"
-              signal
             />
           {:else if key === 'owner'}{row.ownerId}
           {:else if key === 'at'}{fmtDateTime(row.telemetry.at)}
