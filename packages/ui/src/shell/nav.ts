@@ -57,7 +57,7 @@ export function navFor(
     bySurface.set(s.surface, items);
     items.push({
       id,
-      label: app === 'pwa' ? (NAV_SHORT_LABEL[id] ?? s.name) : s.name, // 하단 내비 라벨은 2~3자(§10-9) · 앱바 제목은 화면 이름
+      label: app === 'pwa' ? (NAV_SHORT_LABEL[id] ?? s.name) : s.name, // 하단 내비 라벨은 ≤ 4자(§10-2) · 앱바 제목은 화면 이름
       href: resolve(s.route),
       icon: NAV_ICON[id],
       active: id === currentScr,
