@@ -60,9 +60,17 @@
       "$type": "dimension",
       "$value": "72px"
     },
+    "88": {
+      "$type": "dimension",
+      "$value": "88px"
+    },
     "96": {
       "$type": "dimension",
       "$value": "96px"
+    },
+    "112": {
+      "$type": "dimension",
+      "$value": "112px"
     }
   }
 }

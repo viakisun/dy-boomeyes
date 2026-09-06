@@ -14,6 +14,7 @@
     TASK_TONE,
     dueLabel,
     toast,
+    StatGroup,
   } from '@boomeyes/ui';
   import { session } from '$lib/session.svelte';
   let { data } = $props();
@@ -49,30 +50,30 @@
       >{data.site.id} · {data.site.company} · 열람 전용(확인 요청만)</span
     >
   </div>
-  <div class="gap-inline-sm grid grid-cols-2" aria-label="현장 요약">
-    <Stat label="장비" value={data.devices.length} unit="대" tone="neutral" />
+  <StatGroup label="현장 요약">
+    <Stat label="장비" value={data.devices.length} unit="대" />
     <Stat
       label="이상"
       value={abnormal}
       unit="대"
-      tone={abnormal ? 'danger' : 'success'}
+      tone={abnormal ? 'danger' : 'neutral'}
       hint={abnormal ? '주의·고장·두절·정비' : '전 호기 정상'}
     />
     <Stat
       label="미처리 업무"
       value={open.length}
       unit="건"
-      tone={open.some((c) => c.state === 'escalated') ? 'danger' : open.length ? 'warning' : 'success'}
+      tone={open.some((c) => c.state === 'escalated') ? 'danger' : open.length ? 'warning' : 'neutral'}
       hint="에스컬레이션 {open.filter((c) => c.state === 'escalated').length}"
     />
     <Stat
       label="서류 완비율"
       value={data.docs?.rate ?? 0}
       unit="%"
-      tone={(data.docs?.rate ?? 0) === 100 ? 'success' : 'warning'}
+      tone={(data.docs?.rate ?? 0) === 100 ? 'neutral' : 'warning'}
       hint={data.docs ? `${data.docs.complete}/${data.docs.total}` : '서류 없음'}
     />
-  </div>
+  </StatGroup>
   <KeyValueList
     label="현장 기본정보"
     items={[

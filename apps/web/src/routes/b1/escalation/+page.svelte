@@ -23,11 +23,11 @@
   import { session } from '$lib/session.svelte';
   let { data } = $props();
   const COLUMNS: Column[] = [
-    { key: 'case', label: '업무' },
-    { key: 'site', label: '현장' },
-    { key: 'elapsed', label: '경과' },
-    { key: 'notify', label: '통보 대상' },
-    { key: 'notifiedAt', label: '통보 시각' },
+    { key: 'case', label: '업무', nowrap: true },
+    { key: 'site', label: '현장', nowrap: true },
+    { key: 'elapsed', label: '경과', kind: 'status' },
+    { key: 'notify', label: '통보 대상', nowrap: true },
+    { key: 'notifiedAt', label: '통보 시각', kind: 'date' },
   ];
   const ROLE_LABEL: Record<string, string> = { 'hq-safety': '건설사 본사', control: '관제' };
   const siteName = (id: string) => data.sites.find((s) => s.id === id)?.name ?? id;
@@ -81,7 +81,10 @@
     {/if}
   </div>
 
-  <Inspector label="업무 상세">
+  {#snippet acceptRow()}
+    <Button onclick={accept}>관제에서 접수</Button>
+  {/snippet}
+  <Inspector label="업무 상세" footer={selected ? acceptRow : undefined}>
     {#if selected}
       <div class="gap-stack-xs flex flex-col">
         <div class="flex items-center justify-between">
@@ -94,7 +97,6 @@
         </p>
         <EscalationTimer elapsedMs={selected.elapsedMs} />
       </div>
-      <Button onclick={accept}>관제에서 접수</Button>
       <Timeline items={selected.case.history} />
     {:else}
       <EmptyState title="업무를 선택하세요" />

@@ -4,7 +4,7 @@
   import { resolve } from '$app/paths';
   import { SCR, profileFlags, type Device } from '@boomeyes/domain';
   import { MapView } from '@boomeyes/map';
-  import { Badge, EQUIPMENT_LABEL, EQUIPMENT_TONE, PageHeader, Stat, StatusPill } from '@boomeyes/ui';
+  import { Badge, EQUIPMENT_LABEL, EQUIPMENT_TONE, PageHeader, Stat, StatGroup, StatusPill } from '@boomeyes/ui';
   let { data } = $props();
   const markers = $derived(
     data.devices.map((d) => ({ id: d.id, lat: d.lat, lng: d.lng, state: d.state, label: `${d.unitNo}호기` })),
@@ -33,24 +33,24 @@
       >
     {/snippet}
   </PageHeader>
-  <div class="gap-inline-md grid grid-cols-2 md:grid-cols-4" aria-label="장비 요약">
-    <Stat label="전체" value={data.kpis.total} unit="대" tone="neutral" hint="현장 {data.sites.length}" />
-    <Stat label="정상" value={data.kpis.normal} unit="대" tone="success" />
+  <StatGroup label="장비 요약">
+    <Stat label="전체" value={data.kpis.total} unit="대" hint="현장 {data.sites.length}" />
+    <Stat label="정상" value={data.kpis.normal} unit="대" />
     <Stat
       label="이상"
       value={data.kpis.caution + data.kpis.fault + data.kpis.offline}
       unit="대"
-      tone={data.kpis.fault || data.kpis.offline ? 'danger' : 'warning'}
+      tone={data.kpis.fault || data.kpis.offline ? 'danger' : data.kpis.caution ? 'warning' : 'neutral'}
       hint="주의 · 고장 · 두절"
     />
     <Stat
       label="미처리 업무"
       value={data.kpis.openCases}
       unit="건"
-      tone={data.kpis.escalated ? 'danger' : 'info'}
+      tone={data.kpis.escalated ? 'danger' : 'neutral'}
       hint="에스컬레이션 {data.kpis.escalated}"
     />
-  </div>
+  </StatGroup>
   <section class="gap-inline-lg grid grid-cols-1 lg:grid-cols-[3fr_2fr]" aria-label="위치 · 현장">
     <div class="gap-stack-sm min-h-layout-panel-height flex flex-col">
       <h2 class="text-heading-sm">위치 · 상태</h2>

@@ -16,7 +16,6 @@
     cx,
     fmtDateTime,
     toast,
-    Inspector,
     PageHeader,
   } from '@boomeyes/ui';
   import { untrack } from 'svelte';
@@ -72,10 +71,7 @@
     goto(resolve(`/b4/rules?tab=${id}` as '/'), { keepFocus: true, noScroll: true, replaceState: true });
 </script>
 
-<div
-  class="gap-inline-lg grid xl:grid-cols-[minmax(0,1fr)_var(--spacing-layout-inspector-width)]"
-  data-scr={SCR['B4-05']}
->
+<div class="gap-stack-lg flex min-w-0 flex-col" data-scr={SCR['B4-05']}>
   <div class="gap-stack-lg flex min-w-0 flex-col">
     <PageHeader
       title="알림 기준"
@@ -86,18 +82,29 @@
     </PageHeader>
 
     {#if data.tab === 'alerts'}
-      <section class="gap-stack-sm flex flex-col" aria-label="알림 기준 목록">
-        {#each alerts as rule, i (rule.kind)}
-          <RuleThresholdRow
-            {rule}
-            roles={ROLES}
-            disabled={busy}
-            onchange={(r) => {
-              alerts[i] = r;
-              dirtyAlerts = true;
-            }}
-          />
-        {/each}
+      <section class="rounded-card border-border bg-surface overflow-x-auto border" aria-label="알림 기준 목록">
+        <table class="text-body-md w-full">
+          <thead class="text-label-md text-fg-muted">
+            <tr class="border-border-subtle border-b">
+              {#each ['종류', '등급', '수신 역할', '임계 접근 / 초과', '사용'] as h (h)}
+                <th scope="col" class="h-size-row-default px-inset-md text-left font-medium whitespace-nowrap">{h}</th>
+              {/each}
+            </tr>
+          </thead>
+          <tbody>
+            {#each alerts as rule, i (rule.kind)}
+              <RuleThresholdRow
+                {rule}
+                roles={ROLES}
+                disabled={busy}
+                onchange={(r) => {
+                  alerts[i] = r;
+                  dirtyAlerts = true;
+                }}
+              />
+            {/each}
+          </tbody>
+        </table>
       </section>
     {:else if data.tab === 'codes'}
       <section class="rounded-card border-border bg-surface overflow-x-auto border" aria-label="고장코드 표">
@@ -177,7 +184,10 @@
     {/if}
 
     {#if data.tab !== 'scenarios'}
-      <div class="gap-inline-sm flex items-center">
+      <div
+        class="bg-surface border-border-subtle gap-inline-sm py-inset-sm sticky bottom-0 flex items-center border-t"
+        style="z-index: var(--sys-z-sticky)"
+      >
         <Button onclick={save} disabled={busy || !dirty}>저장</Button>
         <span class="text-body-sm text-fg-muted"
           >{dirty ? '저장되지 않은 변경이 있습니다' : '변경 없음'}{data.tab === 'alerts' && dirtyCodes
@@ -190,8 +200,11 @@
     {/if}
   </div>
 
-  <Inspector label="변경 이력">
+  <aside
+    class="rounded-card border-border bg-surface p-inset-lg gap-stack-md flex flex-col border"
+    aria-label="변경 이력"
+  >
     <h2 class="text-heading-sm">변경 이력</h2>
     <Timeline items={data.rules.history} />
-  </Inspector>
+  </aside>
 </div>

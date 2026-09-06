@@ -25,12 +25,12 @@
   import { session } from '$lib/session.svelte';
   let { data } = $props();
   const COLUMNS: Column[] = [
-    { key: 'kind', label: '유형' },
+    { key: 'kind', label: '유형', nowrap: true },
     { key: 'title', label: '내용' },
-    { key: 'requester', label: '신청자' },
-    { key: 'site', label: '현장' },
-    { key: 'requestedAt', label: '요청 시각' },
-    { key: 'state', label: '상태' },
+    { key: 'requester', label: '신청자', nowrap: true },
+    { key: 'site', label: '현장', nowrap: true },
+    { key: 'requestedAt', label: '요청 시각', kind: 'date' },
+    { key: 'state', label: '상태', kind: 'status' },
   ];
   const siteName = (id: string) => data.sites.find((s) => s.id === id)?.name ?? id;
   const userName = (id: string) => data.users.find((u) => u.id === id)?.display ?? id;
@@ -118,7 +118,7 @@
       >
         {#snippet cell(r: Request, col: Column)}
           {#if col.key === 'kind'}<span class="whitespace-nowrap">{REQUEST_KIND_LABEL[r.kind]}</span>
-          {:else if col.key === 'title'}<span class="font-medium">{r.title}</span>
+          {:else if col.key === 'title'}<span class="font-medium" title={r.title}>{r.title}</span>
           {:else if col.key === 'requester'}<span class="whitespace-nowrap">{userName(r.requesterId)}</span>
           {:else if col.key === 'site'}{siteName(r.siteId)}
           {:else if col.key === 'requestedAt'}<span class="tabular-nums">{fmtDateTime(r.requestedAt)}</span>
@@ -130,7 +130,11 @@
     {/if}
   </div>
 
-  <Inspector label="신청 상세">
+  {#snippet decideRow()}
+    <Button variant="outline" tone="danger" disabled={busy} onclick={() => decide('reject')}>반려</Button>
+    <Button disabled={busy} onclick={() => decide('approve')}>승인</Button>
+  {/snippet}
+  <Inspector label="신청 상세" footer={pending ? decideRow : undefined}>
     {#if selected}
       <div class="gap-stack-xs flex flex-col">
         <div class="flex items-center justify-between">
@@ -151,10 +155,6 @@
             rows="3"
             bind:value={note}></textarea>
         </label>
-        <div class="gap-inline-sm flex">
-          <Button block disabled={busy} onclick={() => decide('approve')}>승인</Button>
-          <Button block variant="outline" tone="danger" disabled={busy} onclick={() => decide('reject')}>반려</Button>
-        </div>
       {/if}
       <Timeline items={selected.history} />
     {:else}

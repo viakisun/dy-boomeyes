@@ -125,7 +125,7 @@ export const PART_GROUP_LABEL: Record<PartGroup, string> = {
   gasket: '가스켓·안전핀',
   endhose: '엔드호스·피팅',
 };
-/** PWA 하단 내비 라벨(2~3자, DY-design §10-9) — 앱바 제목은 SCREENS[id].name 그대로 */
+/** PWA 하단 내비 라벨(≤ 4자, DY-design §10-2 · 승인 세트 3: design-uplift §4 결정 2) — 앱바 제목은 SCREENS[id].name 그대로 · A4는 화면이 생길 때 추가 */
 export const NAV_SHORT_LABEL: Partial<Record<ScrId, string>> = {
   'A1-02': '업무',
   'A1-04': '관제',
@@ -138,11 +138,6 @@ export const NAV_SHORT_LABEL: Partial<Record<ScrId, string>> = {
   'A3-02': '현장',
   'A3-05': '업무',
   'A3-06': '기록',
-  'A4-02': '현황',
-  'A4-03': '요청',
-  'A4-04': '운전자',
-  'A4-05': '계약',
-  'A4-06': '서류',
 };
 export const PART_EVENT_LABEL: Record<PartEvent['kind'], string> = {
   register: '등록',

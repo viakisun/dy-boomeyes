@@ -24,8 +24,10 @@ export const load: PageLoad = async ({ parent, params, url }) => {
   const flags = profileFlags(site?.videoProfile ?? 'P-SD');
   const source = url.searchParams.get('source');
   const tab = url.searchParams.get('tab');
+  // 기본 탭은 상태. plite 픽스처(캡처·e2e 전용 ?state=)는 1채널·서버 소스가 영상 탭에만 보이므로 영상 탭으로 연다 — dev/plite 캡처가 같은 화면이 되지 않게
+  const fallback = url.searchParams.get('state') === 'plite' ? 'video' : 'status';
   return {
-    tab: (['status', 'docs', 'video', 'parts'] as const).find((t) => t === tab) ?? 'status',
+    tab: (['status', 'docs', 'video', 'parts'] as const).find((t) => t === tab) ?? fallback,
     device,
     cameras: cameras.filter((c) => flags.channels === 2 || c.kind === 'general'), // AX-1 1채널이면 AI 채널 숨김
     site,

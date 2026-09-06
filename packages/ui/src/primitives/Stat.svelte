@@ -1,5 +1,7 @@
 <script lang="ts">
-  import { cx, TONE, type Tone } from '../lib/cx';
+  // 요약 지표(카탈로그 Stat, DY-design §11.4) — 값은 fg.default(danger만 채색) · 톤은 라벨 옆 점 · 폭 ≤ layout.stat.width · 높이 size.stat.height · 힌트 1줄
+  import { cx, type Tone } from '../lib/cx';
+  import StatusDot from './StatusDot.svelte';
   let {
     label,
     value,
@@ -10,10 +12,17 @@
   }: { label: string; value: string | number; unit?: string; tone?: Tone; hint?: string; class?: string } = $props();
 </script>
 
-<div class={cx('gap-stack-xs rounded-card border-border bg-surface p-inset-md flex flex-col border', cls)}>
-  <span class="text-label-md text-fg-muted">{label}</span>
-  <span class={cx('text-display-md font-semibold tabular-nums', tone === 'neutral' ? 'text-fg' : TONE[tone].fg)}
+<div
+  class={cx(
+    'gap-stack-xs rounded-card border-border bg-surface px-inset-md py-inset-sm min-h-size-stat-height max-w-layout-stat-width flex w-full flex-col justify-between border',
+    cls,
+  )}
+>
+  <span class="gap-inline-xs text-label-md text-fg-muted flex items-center"
+    >{#if tone !== 'neutral'}<StatusDot {tone} />{/if}{label}</span
+  >
+  <span class={cx('text-display-md font-semibold tabular-nums', tone === 'danger' ? 'text-danger-fg' : 'text-fg')}
     >{value}{#if unit}<span class="text-body-sm text-fg-muted ml-inline-xs font-normal">{unit}</span>{/if}</span
   >
-  {#if hint}<span class="text-body-sm text-fg-muted">{hint}</span>{/if}
+  {#if hint}<span class="text-body-sm text-fg-muted truncate" title={hint}>{hint}</span>{/if}
 </div>
