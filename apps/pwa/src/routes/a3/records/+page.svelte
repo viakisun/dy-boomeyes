@@ -18,7 +18,7 @@
       tag:
         [data.kind === 'all' ? RECORD_KIND_LABEL[r.kind] : '', data.site === 'all' ? siteName(r.siteId) : '']
           .filter(Boolean)
-          .join(' · ') || RECORD_KIND_LABEL[r.kind],
+          .join(' · ') || undefined,
     })),
   );
   // 칩 전환은 다른 쿼리(?state= ?capture=)를 유지한다 — mock db 캐시 키가 바뀌면 안 된다(QA §3)
