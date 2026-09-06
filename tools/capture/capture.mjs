@@ -1,15 +1,18 @@
 // capture.mjs — ssot 화면 레지스트리 기반 캡처 (QA §3). 빌드된 앱을 vite preview로 띄우고 라우트×상태 전수 촬영.
 //   node tools/capture/capture.mjs [--wave N] [--only B1-02,B0-01] [--dark] [--strict] [--web http://...] [--pwa http://...] [--no-serve]
+//   --baseline | --current: 시각 회귀(ADR-008 A) 프리셋 — DPR 1 · 기본 상태만 · 라이트 · shots/baseline | shots/current + MANIFEST.json(렌더 환경) + <name>.json(지도·비디오 마스크)
 // 출력 shots/<code-lower>-<state>.png · 시각 고정은 앱 DemoClock(?capture=1) · 애니메이션 off
 // --dark: 화면 기본 상태를 ?theme=dark(루트 data-theme)로 한 번 더 찍는다 → <code-lower>-<state>-dark.png (shell-auth AC-6)
 // --strict: 캐치올 자리 화면("웨이브 N에서 구현됩니다")을 FAIL로 센다 — 웨이브 Exit 게이트(자리 0, W2). 없으면 stub로 세기만 한다
-import { readFileSync, mkdirSync, existsSync } from 'node:fs';
+import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
+import { createRequire } from 'node:module';
 import { join, dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawn } from 'node:child_process';
 import { chromium } from 'playwright';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..');
+const pwVersion = createRequire(import.meta.url)('playwright/package.json').version;
 const ssot = JSON.parse(readFileSync(join(ROOT, 'packages/domain/src/generated/ssot.json'), 'utf8'));
 const args = process.argv.slice(2);
 const opt = (k, d) => {
@@ -18,12 +21,15 @@ const opt = (k, d) => {
 };
 const WAVE = Number(opt('--wave', ssot.meta.current_wave));
 const ONLY = opt('--only', '') ? opt('--only').split(',') : null;
-const DARK = args.includes('--dark');
+const PRESET = args.includes('--baseline') ? 'baseline' : args.includes('--current') ? 'current' : null;
+const DARK = !PRESET && args.includes('--dark');
 const STRICT = args.includes('--strict');
+const DPR = PRESET ? 1 : Number(opt('--dpr', 2));
 const PORTS = { web: 4173, pwa: 4174 };
 const BASE = { web: opt('--web', `http://localhost:${PORTS.web}`), pwa: opt('--pwa', `http://localhost:${PORTS.pwa}`) };
-const OUT = join(ROOT, 'shots');
+const OUT = PRESET ? join(ROOT, 'shots', PRESET) : join(ROOT, 'shots');
 mkdirSync(OUT, { recursive: true });
+const MASK_SELECTORS = ['.be-map', 'video']; // 타일·재생 프레임은 결정적이지 않다 → 비교에서 제외
 const PARAMS = {
   '[case]': 'C-105',
   '[device]': 'CPB-003',
@@ -64,7 +70,7 @@ process.on('exit', () => {
 });
 const browser = await chromium.launch();
 const ctx = await browser.newContext({
-  deviceScaleFactor: 2,
+  deviceScaleFactor: DPR,
   locale: 'ko-KR',
   timezoneId: 'Asia/Seoul',
   reducedMotion: 'reduce',
@@ -73,10 +79,23 @@ const ctx = await browser.newContext({
 let n = 0,
   fail = 0,
   stub = 0;
+/** 마스크 사이드카 — 스크린샷 원점(origin) 기준 CSS px × DPR 사각형 */
+async function writeMasks(page, name, origin) {
+  const rects = await page.$$eval(MASK_SELECTORS.join(','), (els) =>
+    els.map((el) => {
+      const r = el.getBoundingClientRect();
+      return { x: r.x, y: r.y, w: r.width, h: r.height };
+    }),
+  );
+  const masks = rects
+    .filter((r) => r.w > 0 && r.h > 0)
+    .map((r) => ({ x: (r.x - origin.x) * DPR, y: (r.y - origin.y) * DPR, w: r.w * DPR, h: r.h * DPR }));
+  if (masks.length) writeFileSync(join(OUT, `${name}.json`), JSON.stringify({ masks }));
+}
 for (const s of screens) {
   const app = surfaces[s.surface];
   const phone = app === 'pwa';
-  for (const st of s.states) {
+  for (const st of PRESET ? s.states.filter((x) => x.id === s.default) : s.states) {
     const route = s.route.replace(/\[[a-z]+\]/g, (m) => STATE_PARAMS[`${s.id}:${st.id}`]?.[m] ?? PARAMS[m] ?? 'X');
     const base = `${BASE[app]}${route}${route.includes('?') ? '&' : '?'}state=${st.id}&capture=1`;
     const name0 = `${s.id.toLowerCase()}-${st.id}`;
@@ -108,9 +127,13 @@ for (const s of screens) {
             await page.waitForTimeout(200);
           }
         }
-        if (target) await target.screenshot({ path: join(OUT, `${name}.png`) });
-        else if (phone) await page.screenshot({ path: join(OUT, `${name}.png`) });
-        else {
+        if (target) {
+          if (PRESET) await writeMasks(page, name, (await target.boundingBox()) ?? { x: 0, y: 0 });
+          await target.screenshot({ path: join(OUT, `${name}.png`) });
+        } else if (phone) {
+          if (PRESET) await writeMasks(page, name, { x: 0, y: 0 });
+          await page.screenshot({ path: join(OUT, `${name}.png`) });
+        } else {
           // fullPage(captureBeyondViewport)는 WebGL 캔버스 서브트리(타일·DOM 마커)를 간헐적으로 비운 채 찍는다 → 뷰포트를 문서 높이로 늘려 일반 촬영
           // 셸이 있으면 스크롤 컨테이너는 <main>(h-dvh 안) — main 내용 높이 + 상단 오프셋만큼 뷰포트를 키운다
           const h = await page.evaluate(() => {
@@ -120,6 +143,7 @@ for (const s of screens) {
           });
           await page.setViewportSize({ width: 1280, height: Math.max(842, h) });
           await page.waitForTimeout(300);
+          if (PRESET) await writeMasks(page, name, { x: 0, y: 0 });
           await page.screenshot({ path: join(OUT, `${name}.png`) });
         }
         n++;
@@ -132,9 +156,26 @@ for (const s of screens) {
     }
   }
 }
+if (PRESET)
+  writeFileSync(
+    join(OUT, 'MANIFEST.json'),
+    JSON.stringify(
+      {
+        preset: PRESET,
+        platform: process.platform,
+        playwright: pwVersion,
+        chromium: browser.version(),
+        dpr: DPR,
+        wave: WAVE,
+        shots: n,
+      },
+      null,
+      2,
+    ) + '\n',
+  );
 await browser.close();
 for (const p of servers) p.kill();
 console.log(
-  `${fail ? '✗' : '✓'} capture: ${n} shots · fail ${fail} · 자리 ${stub}${STRICT ? ' (strict)' : ''} → shots/`,
+  `${fail ? '✗' : '✓'} capture: ${n} shots · fail ${fail} · 자리 ${stub}${STRICT ? ' (strict)' : ''} → shots/${PRESET ? PRESET + '/' : ''}`,
 );
 process.exit(fail ? 1 : 0);

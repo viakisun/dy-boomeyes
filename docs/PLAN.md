@@ -14,7 +14,7 @@ W1은 9/5에 선행 완료(사용자 결정 항목만 잔여). 계획 `~/.claude
 | B3 documents 완료 · B4 hq-video(B2-03 · A3-04 · CameraWall·EquipmentCard) 완료 · B5 admin-masters(B4-03 · B4-04 · PageHeader·Select·KeyValueList·SiteProfileForm) 완료 · B6 leases-hqmap(B1-06 · B2-02 · 장면 9 · lease/request 기계) 완료 · B7 menus-siteinfo(A1-07 · A2-06 · A3-03 · createRequest) 완료 · B8 records-report(A1-06 · A3-06 · B2-04 · records/report · Chip) 완료 · B9 parts-stub(B4-07 · B4-08 · A1-11 · A2-09 · part 기계 · ProgressBar) 완료 · B10 event-replay-stub(B1-08 · EV-001 · 4레인 커서 · 피드 복기 링크) 완료 · B11 showcase(B1-07 · ShowcaseOverlay · mask · 장면 10) 완료 · B15 마감(capture --strict · axe 41 · 회고 · SOP · 방법론 v1.2) 완료 | 완료 — PR #2~#14(리뷰어 "머지 가능" 인용 · CI 녹색) |
 | B12 오프라인 큐(ADR-010) · B13 로컬 알림(ADR-009) · B14 문서 생성기(ADR-011) | 사용자 승인 대기 — 승인 시 W3 첫 브랜치 |
 | W2 Exit 대비 | ① `current_wave: 2` · TRACE "spec 없는 화면 0" ✓ ② `capture --dark --strict` 97장 fail 0 · 자리 0 ✓ ③ e2e 녹색 · axe wave ≤ 2 화면 41 전수 0 ✓ ④ 장면 1~10 e2e ✓ ⑤ 픽스처 신규 27(17 → 44) ✓ ⑥ 문서 세트 v0.4 초안은 ADR-011 승인 뒤(B14) ⑦ 회고 `docs/retro/W2.md` · SOP 5 ✓ |
-| 사용자 결정 | ADR-009/010/011 승인 · ADR-008 기준선 · DISC-036/038/043/015/044~046 · AWS(DISC-006) · v0.4 발행 |
+| 사용자 결정 | ADR-009/010/011 승인 · DISC-036/038/043/015/044~046 · AWS(DISC-006) · v0.4 발행 — ADR-008은 2026-09-06 A(리포) 확정 |
 
 ### W1 시연 경로 — 완료(9/5)
 
@@ -23,8 +23,8 @@ W0는 9/5에 선행 완료(회고 `docs/retro/W0.md` · 방법론 v1.1).
 | 산출 | 상태 (2026-09-05) |
 |---|---|
 | 기능 4 구현·merge — task-escalation · driver-daily · admin-protocol-rules · video-basics(specs `draft` → 구현됨, 잔여 AC는 각 `tasks.md`) | 완료 — e2e 78 · axe 15 · 캡처 25장 + 다크 16장(`pnpm capture --dark`) |
-| 다크 렌더(shell-auth AC-6) — 완료(`?theme=` · 웹 토글 · `capture --dark` · e2e 6) · 시각 회귀 기준선(0.2%) — **ADR-008 Proposed, 사용자 결정 대기**(저장 위치 A 리포/B CI/C S3 · 범위) · demo-scripts 장면 1~8 — 완료(`?scene=N` · DemoBar · 장면 1 타임라인 · 장면 6 1시간 경과 · e2e 10 · W2 화면은 자리) · PWA manifest/SW — 완료(AC-7 · e2e 2) · `maintenance` 로그인 경로 — 완료(B0-01 카드 5 · e2e) · tokens:lint 잔여 — 완료(duration-N · border-N · ring-N · max-w-sm… 규칙 + duration-*/border-strong/border-radio 유틸리티) · 카탈로그 검사 — 완료(`tokens:check`에 catalog) · PWA 측 AX-1 픽스처 — 완료(`A1-04:plite` `A1-05:plite` · e2e 2) | 진행 예정 |
-| 사용자 입력 | 리모트 리포 → CI 1회 녹색 · AWS 계정(DISC-006) → 프리뷰 → ADR-007 · ADR-008(시각 회귀 기준선) · DISC-033/036/038/040/042/043 |
+| 다크 렌더(shell-auth AC-6) — 완료(`?theme=` · 웹 토글 · `capture --dark` · e2e 6) · 시각 회귀 기준선(0.2%) — 완료(ADR-008 Accepted 2026-09-06 · A 리포 기준선 · CI `baseline` 워크플로가 등록 · `capture:compare` PR 차단) · demo-scripts 장면 1~8 — 완료(`?scene=N` · DemoBar · 장면 1 타임라인 · 장면 6 1시간 경과 · e2e 10 · W2 화면은 자리) · PWA manifest/SW — 완료(AC-7 · e2e 2) · `maintenance` 로그인 경로 — 완료(B0-01 카드 5 · e2e) · tokens:lint 잔여 — 완료(duration-N · border-N · ring-N · max-w-sm… 규칙 + duration-*/border-strong/border-radio 유틸리티) · 카탈로그 검사 — 완료(`tokens:check`에 catalog) · PWA 측 AX-1 픽스처 — 완료(`A1-04:plite` `A1-05:plite` · e2e 2) | 진행 예정 |
+| 사용자 입력 | 리모트 리포 → CI 1회 녹색 · AWS 계정(DISC-006) → 프리뷰 → ADR-007 · DISC-033/036/038/040/042/043 |
 | W1 Exit 대비 | 장면 1~8 mock 재생 ✓(`?scene=N`, W2 화면은 자리) · states 전수 캡처 ✓(41장 fail 0) · axe critical 0 ✓ — 프리뷰 URL·시각 회귀 기준선만 사용자 입력 대기 · 회고는 웨이브 종료(10/3) 또는 사용자 지시 시 |
 
 ### W0 스캐폴드 — 완료(9/5)

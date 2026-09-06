@@ -32,6 +32,7 @@ jobs:
       - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v4
         with: { node-version: 22, cache: pnpm }
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq fonts-noto-cjk
       - run: pnpm install --frozen-lockfile
       - run: pnpm exec playwright install --with-deps chromium
       - run: pnpm build
@@ -39,6 +40,8 @@ jobs:
         run: pnpm e2e
       - name: capture (라우트 × 상태 전수 · 기본 상태 다크 변형 · 자리 화면 0)
         run: pnpm capture --dark --strict
+      - name: visual regression (ADR-008 · shots/baseline 대비 픽셀 차 0.2% · 지도·비디오 마스크)
+        run: pnpm capture:compare
       - uses: actions/upload-artifact@v4
         if: always()
         with:

@@ -11,7 +11,7 @@
 | 3 | 생성물 최신성 | `pnpm verify` 끝의 `git diff --exit-code` (docs/generated · domain/generated · tokens/dist) | CI 실패 | 있음 |
 | 4 | 타입·정적 | svelte-check(error 0) · ESLint(경계 규칙 `eslint-plugin-boundaries`) · Prettier | 커밋 차단 | 있음 |
 | 5 | 단위 | Vitest — 업무·서류·장비·카메라·부품 상태기계 · 프로파일→피처플래그 · 프로토콜 파서 · scr 커버리지 | 푸시 차단 | 있음(상태기계·라우트·mock) |
-| 6 | e2e·캡처 | `pnpm e2e`(Playwright, 빌드 후) — 역할 로그인 8(웹 4 · 앱 4)·가드 스모크 · 화면별 AC · 장면 1~10 · axe serious/critical 0(wave ≤ 2 화면 41 전수, wcag2a·2aa·best-practice) · `pnpm capture --dark --strict` 라우트 × 상태 전수 + 다크 + 자리 화면 0 | PR 차단(CI `e2e` 잡, shots 아티팩트) | 있음 · 시각 회귀 기준선은 ADR-008 결정 대기 |
+| 6 | e2e·캡처 | `pnpm e2e`(Playwright, 빌드 후) — 역할 로그인 8(웹 4 · 앱 4)·가드 스모크 · 화면별 AC · 장면 1~10 · axe serious/critical 0(wave ≤ 2 화면 41 전수, wcag2a·2aa·best-practice) · `pnpm capture --dark --strict` 라우트 × 상태 전수 + 다크 + 자리 화면 0 · `pnpm capture:compare` 기준선 대비 픽셀 차 0.2%(ADR-008 A) | PR 차단(CI `e2e` 잡, shots 아티팩트) | 있음 |
 | 7 | 추적·문서 | `check --specs`(frontmatter ID·AC ≥3) · `check --docs`(링크·ID) · `check --commits`(Refs 트레일러) | PR 차단 | 있음 |
 
 ## 2. 화면 패리티 체크리스트 (화면당, PR 본문에 체크)
@@ -35,6 +35,7 @@
 - axe `video-caption`은 `incomplete`(수동 검토)로 분류되며 게이트는 `violations`만 본다 — 라이브 대체 영상은 무음 합성 루프(자막 대상 음성 없음)라 면제. 실스트림(W3)에서 음성이 생기면 자막·설명 정책을 정한다(DISC-031 개인정보 음성 항목과 함께).
 - PWA 긴 화면은 뷰포트를 문서 높이로 늘린 뒤 `[data-capture-frame]`을 찍는다(sticky 하단 내비가 문서 중간에 찍히는 것 방지). 스냅샷 mock의 시각도 Asia/Seoul.
 - 이름 = `${code.toLowerCase()}-${state}` (`b1-02-dash` `b1-02m-cam`). 상태 목록은 `screens.yaml`에서 생성(매니페스트 손 편집 금지).
+- 시각 회귀(ADR-008 A): 기준선 `shots/baseline/<code>-<state>.png`(웨이브 이하 화면 기본 상태 · DPR 1 · 라이트)와 `MANIFEST.json`(platform · playwright · dpr · shots)은 **CI `baseline` 워크플로**(workflow_dispatch → `pnpm capture:accept` → 커밋·푸시)로만 갱신한다 — 로컬(macOS) 캡처는 글꼴 래스터가 달라 기준선이 될 수 없다(`diff.mjs`가 환경 불일치를 exit 2로 거부) — 로컬 자기 비교(accept → compare)는 도구 점검용. 기준선이 아직 없으면 비교를 생략하고 경고만 낸다(첫 등록 전). PR CI는 `pnpm capture:compare`(= `--current` 캡처 → `tools/capture/diff.mjs`)로 픽셀 차 비율 0.2% 초과 · 크기 변화 · 기준선/현재 누락을 FAIL로 세고 차이 이미지를 `shots/diff/`(아티팩트)에 남긴다. 지도(`.be-map`)·`<video>` 영역은 사이드카 `<name>.json` 마스크로 제외. 의도한 화면 변경은 같은 PR에서 `baseline` 워크플로를 다시 실행해 기준선을 갱신한다(리뷰어는 기준선 diff를 본다).
 - 다크: `?theme=dark|light`는 문서 루트 `data-theme`에만 적용(저장 안 함, 캡처·e2e용). `pnpm capture --dark`는 화면 기본 상태를 한 번 더 찍는다(`<name>-dark.png`, CI 포함). 웹 탑바 토글은 `localStorage dy.theme`에 기기 단위로 유지 — 로그아웃·`resetMock`에도 남는다(`app.html`이 첫 페인트 전에 적용, `?theme=`가 있으면 그 값이 우선) · PWA는 시스템 다크를 따르고 토글이 없다(DY-design §10). 대비는 `tokens:check`가 light·dark 82쌍 모두 검사.
 - capture 모드(`?capture=1`)는 로그인 없이 화면 첫 역할의 데모 세션을 합성해 **셸까지** 그린다(가드 우회 — W3 실 인증 전 제거). 시연 `?scene=N`은 장면 계정으로 `login()`해 localStorage에 남긴다 — 장면이 `?state=`·새로고침으로 해제돼도 로그아웃 전까지 그 계정이 유지된다(`specs/demo-scripts`, 함께 제거). 브라우저 컨텍스트는 `timezoneId: 'Asia/Seoul'`, 표시 포맷터도 `timeZone: 'Asia/Seoul'` 고정. 지도 `[data-map-ready]` 대기 타임아웃은 FAIL로 센다(빈 지도를 녹색으로 세지 않는다). 셸 렌더 시 스크롤 컨테이너는 `<main>`이라 캡처는 main 내용 높이로 뷰포트를 키운다. 외부 의존: CARTO 스타일·타일(네트워크 필요).
 - PWA 설치: `apps/pwa/static/manifest.webmanifest`·`app.html` `theme-color`는 정적 파일이라 토큰 값(`sys.color.accent.solid` `#0d2877` · `bg.canvas` `#f8faff`)을 고정 기재 — 토큰이 바뀌면 함께 갱신(`tokens:lint` 범위 밖). 서비스 워커는 preview·배포 빌드에서만 등록되며 e2e `pwa-install`이 오프라인 새로고침 셸을 검사한다.
