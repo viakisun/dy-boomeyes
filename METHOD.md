@@ -109,7 +109,7 @@ boomeyes/                 git 루트 = Claude 세션 진입점(메모리 키) �
 | e2e | 역할 로그인 8 · 가드/403 · 화면별 AC 스모크 · realtime · 오프라인 · axe serious/critical 0(W1 착수 시점 56건) | PR 차단 |
 | 캡처 | 라우트 × 상태 전수(웨이브 이하) · 셸 포함 · TZ 고정 · 지도 idle 실패 집계 · `--strict` 자리 화면 = FAIL(W2) · 시각 회귀 `capture:compare` 기준선 대비 0.2%(ADR-008 A · CI 기준선) | PR 차단 |
 | 커버리지 | SCR 레지스트리 = 라우트 = 캡처(`current_wave` 이하 route·spec 필수) · FR→테스트 ID 매핑 | PR 차단 |
-| 문서 정합 | `ssot` 스키마 · 생성 문서 최신 · `--specs/--docs/--commits` · 계약 문서 세트 `check_set`(v0.4 이식 후) | 커밋·PR·발행 차단 |
+| 문서 정합 | `ssot` 스키마 · 생성 문서 최신 · `--specs/--docs/--commits` · 계약 문서 세트 `pnpm docs:check`(check_set, W2 B14) | 커밋·PR·발행 차단 |
 
 ## 7. 리듬과 측정
 

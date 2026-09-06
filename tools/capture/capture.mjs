@@ -4,6 +4,7 @@
 // 출력 shots/<code-lower>-<state>.png · 시각 고정은 앱 DemoClock(?capture=1) · 애니메이션 off
 // --dark: 화면 기본 상태를 ?theme=dark(루트 data-theme)로 한 번 더 찍는다 → <code-lower>-<state>-dark.png (shell-auth AC-6)
 // --strict: 캐치올 자리 화면("웨이브 N에서 구현됩니다")을 FAIL로 센다 — 웨이브 Exit 게이트(자리 0, W2). 없으면 stub로 세기만 한다
+// 출력 디렉터리에 manifest.json(장별 code · state · file · app · dark · default · dpr · width · height · ok)을 남긴다 — tools/docs-gen(ADR-011)이 읽는다
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import { join, dirname, resolve } from 'node:path';
@@ -108,6 +109,11 @@ const ctx = await browser.newContext({
 let n = 0,
   fail = 0,
   stub = 0;
+const manifest = []; // shots/manifest.json — 문서 생성기(tools/docs-gen)가 소비하는 캡처 계약(ADR-011)
+const pngSize = (p) => {
+  const b = readFileSync(p);
+  return { width: b.readUInt32BE(16), height: b.readUInt32BE(20) };
+};
 /** 마스크 사이드카 — 스크린샷 원점(origin) 기준 CSS px × DPR 사각형 */
 async function writeMasks(page, name, origin) {
   const rects = await page.$$eval(MASK_SELECTORS.join(','), (els) =>
@@ -177,14 +183,40 @@ for (const s of screens) {
         }
         n++;
         console.log('ok', name);
+        manifest.push({
+          code: s.id,
+          state: st.id,
+          file: `${name}.png`,
+          app,
+          dark: name.endsWith('-dark'),
+          default: st.id === s.default,
+          dpr: DPR,
+          ok: true,
+          ...pngSize(join(OUT, `${name}.png`)),
+        });
       } catch (e) {
         fail++;
         console.log('FAIL', name, String(e.message).split('\n')[0]);
+        manifest.push({
+          code: s.id,
+          state: st.id,
+          file: `${name}.png`,
+          app,
+          dark: name.endsWith('-dark'),
+          default: st.id === s.default,
+          dpr: DPR,
+          ok: false,
+          error: String(e.message).split('\n')[0],
+        });
       }
       await page.close();
     }
   }
 }
+writeFileSync(
+  join(OUT, 'manifest.json'),
+  JSON.stringify({ wave: WAVE, dpr: DPR, dark: DARK, strict: STRICT, shots: manifest }, null, 2) + '\n',
+);
 if (PRESET)
   writeFileSync(
     join(OUT, 'MANIFEST.json'),

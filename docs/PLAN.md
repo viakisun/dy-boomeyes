@@ -15,8 +15,8 @@ W1은 9/5에 선행 완료(사용자 결정 항목만 잔여). 계획 `~/.claude
 | 리뷰 backlog 정리(chore/w2-backlog) · 시각 회귀 기준선(ADR-008 A) · 결정 반영(ADR-009/010/011 Accepted · DISC 7건 decided) | 완료 — PR #15 · #16 · #17 |
 | B12 오프라인 큐(ADR-010) | 완료 — PR #18 (`packages/offline` IndexedDB 아웃박스 · `withOutbox(api)` · `?net=` · 셸 배너 · 카드 pill · 픽스처 `A2-02:queued` `A2-05:queued` · e2e 5 · Vitest 8) |
 | B13 로컬 알림(ADR-009) | 완료 — PR #19 (`notify.ts` `toPushPayload` · SW push/notificationclick · `push.svelte.ts` · 앱바 종 + 권한 시트 · `A1-02:push` · e2e 2 · Vitest 2) |
-| B14 문서 생성기(ADR-011) | 승인 2026-09-06 — 착수 예정(W3 실 인입은 보류) |
-| W2 Exit 대비 | ① `current_wave: 2` · TRACE "spec 없는 화면 0" ✓ ② `capture --dark --strict` 97장 fail 0 · 자리 0 ✓ ③ e2e 녹색 · axe wave ≤ 2 화면 41 전수 0 ✓ ④ 장면 1~10 e2e ✓ ⑤ 픽스처 신규 27(17 → 44) ✓ ⑥ 문서 세트 v0.4 초안은 ADR-011 승인 뒤(B14) ⑦ 회고 `docs/retro/W2.md` · SOP 5 ✓ |
+| B14 문서 생성기(ADR-011) | 완료 — PR #20 (`tools/docs-gen` 설계서 HTML/PDF · `docs/set/v0.4-draft/{DELTA,MANIFEST}.md` · `shots/manifest.json` · `docs:set`/`docs:check` · QA 게이트 8) — 정식 발행은 사용자 승인 |
+| W2 Exit 대비 | ① `current_wave: 2` · TRACE "spec 없는 화면 0" ✓ ② `capture --dark --strict` 97장 fail 0 · 자리 0 ✓ ③ e2e 녹색 · axe wave ≤ 2 화면 41 전수 0 ✓ ④ 장면 1~10 e2e ✓ ⑤ 픽스처 신규 27(17 → 44) ✓ ⑥ 문서 세트 v0.4 초안 `docs/set/v0.4-draft/` ✓(B14) ⑦ 회고 `docs/retro/W2.md` · SOP 5 ✓ |
 | 사용자 결정 | 2026-09-06 확정: ADR-008 A(리포) · ADR-009/010/011 승인 · DISC-015/036/038/043/044~046 기준안 채택(decided · DY 이견 시 재개) — 남은 것: AWS(DISC-006, 보류) · v0.4 발행 |
 
 ### W1 시연 경로 — 완료(9/5)

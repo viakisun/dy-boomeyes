@@ -28,10 +28,12 @@ relates_to: [ADR-006, ADR-008, DISC-021]
 - 되돌리려면: `tools/docs-gen` 삭제, 아카이브 파이프라인으로 복귀.
 
 ## Rules
-- [ ] 생성기는 `ssot/*.yaml`·`docs/generated`·`shots/manifest.json`만 읽는다 — 파이썬 SSOT 복제 금지.
-- [ ] 산출물(PDF 등)은 git에 넣지 않는다 — 매니페스트(해시·페이지 수·check_set 출력)만.
-- [ ] 발행(`set_version` 승격·`history` 추가)과 DY 전달은 사용자 승인 후.
+- [x] 생성기는 `ssot/*.yaml`·`docs/generated`·`shots/manifest.json`만 읽는다 — 파이썬 SSOT 복제 금지.
+- [x] 산출물(PDF 등)은 git에 넣지 않는다 — 매니페스트(해시·페이지 수·check_set 출력)만.
+- [x] 발행(`set_version` 승격·`history` 추가)과 DY 전달은 사용자 승인 후.
 
 사용자 결정 필요: 파이썬 유지 승인 · wave 4 화면 12의 설계서 처리(프로토타입 v0.3 캡처 재사용 vs 자리) · 브리핑·발표자료 폐기.
 
-결정(2026-09-06, 사용자): 승인 — 파이썬 유지 · 델타표 + 설계서 생성기만 이식(2026-09-05 결정). wave 4 화면 12의 설계서 처리(v0.3 캡처 재사용 vs 자리)와 브리핑·발표자료 폐기는 B14 착수 시 확인. 정식 발행은 사람 게이트.
+결정(2026-09-06, 사용자): 승인 — 파이썬 유지 · 델타표 + 설계서 생성기만 이식(2026-09-05 결정). 정식 발행은 사람 게이트.
+
+구현(W2 B14, 2026-09-06): `tools/docs-gen/{ssot_loader,assemble,delta,check_set,build,snapshot_baseline}.py` · `pnpm docs:set`/`docs:check` · `tools/capture`가 `shots/manifest.json`을 남긴다 · 기준선 `baseline/v0.3.json`. wave 4 화면 12는 설계서에 메타·추적만 싣고 캡처 없음(자리 — v0.3 캡처 재사용 안 함, 구 목업이라 현 DS와 다르다). 브리핑·발표자료·목업 html은 폐기(생성기 이식 대상에서 제외). 첫 산출 `docs/set/v0.4-draft/`(설계서 75쪽 · check_set errors 0).

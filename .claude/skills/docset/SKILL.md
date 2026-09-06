@@ -11,13 +11,11 @@ user-invocable: true
 # docset — 계약 문서 세트
 
 ## 현재 상태
-- 발행본 v0.3과 생성 파이프라인은 `archive/2026-09-05_docset-v0.3/` (읽기 전용). 원천은 이제 `ssot/*.yaml`.
-- 생성기 이식(v0.4)은 별도 작업: `tools/docs-gen/`이 `ssot/*.yaml`을 읽어 docx·xlsx·pdf를 만든다(아카이브 `gen_*.py` 참조).
+- 발행본 v0.3과 구 파이프라인은 `archive/2026-09-05_docset-v0.3/`(읽기 전용). 원천은 `ssot/*.yaml`.
+- 생성기 `tools/docs-gen/`(ADR-011, W2 B14): 설계서(HTML → WeasyPrint PDF) · 델타표 `DELTA.md` · `MANIFEST.md`. 과업지시서·관리대장·시나리오 생성기는 W3(같은 로더). 브리핑·발표자료·목업 html은 폐기 후보.
 
-## 이식 전 절차
-1. `docs/generated/DECISIONS.md`·`TRACE.md`·`SCREENS.md`로 v0.3 대비 델타를 표로 정리(신규 ENT/FR/IF/API/DISC/화면·용어·기종).
-2. 급한 DY 문서는 아카이브 파이프라인 사용: `archive/README.md` 재현 절차(`.venv` · WeasyPrint · 폰트). 델타를 파이썬 SSOT에 임시 반영하지 말고, 사용자 승인 후 v0.4 이식에서 처리.
-3. 클라이언트 전달은 사용자 승인 필수(CLAUDE.md 금지 항목).
-
-## 이식 후 절차
-`pnpm docs:set` → `check_set` 정합 → `docs/set/<version>/` 산출 → 세트 규칙(하나 바뀌면 전부 재발행).
+## 절차
+1. `pnpm build && pnpm capture --dark --strict` → `shots/manifest.json`.
+2. `pnpm docs:set [--pdf]` → `docs/set/<next_set_version>/{DELTA.md, MANIFEST.md}`(커밋) + `build/BoomEyes_시스템화면설계서_<ver>.html|.pdf`(git 밖, 릴리스 아티팩트). PDF는 WeasyPrint 파이썬(`DOCS_GEN_PDF_PYTHON`, 없으면 아카이브 `.venv` · `DYLD_FALLBACK_LIBRARY_PATH=/opt/homebrew/lib`).
+3. `pnpm docs:check`(check_set errors 0)를 PR에 인용. 델타 기준선은 `tools/docs-gen/baseline/<발행판>.json`(`snapshot_baseline.py`로 발행 시 갱신).
+4. 정식 발행 = `ssot/meta.yaml set_version` 승격 + `history` 추가 + 태그 `docset-<ver>` + DY 전달 — 전부 사용자 승인 후(CLAUDE.md 금지 항목). 세트 규칙: 하나가 바뀌면 전부 재발행.
