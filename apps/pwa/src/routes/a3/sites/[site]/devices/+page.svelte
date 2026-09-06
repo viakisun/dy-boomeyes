@@ -23,7 +23,7 @@
         <div class="gap-inline-sm grid grid-cols-2">
           {#each camsOf(d.id) as c (c.id)}
             <div class="gap-stack-xs flex flex-col" data-camera={c.id}>
-              <CameraTile camera={c} deviceLabel="{d.unitNo}호기" compact />
+              <CameraTile camera={c} deviceLabel="{d.unitNo}호기" compact status={false} />
               <HealthBadge camera={c} />
             </div>
           {/each}
