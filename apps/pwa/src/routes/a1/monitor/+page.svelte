@@ -29,7 +29,9 @@
 <div class="gap-stack-md flex flex-col" data-scr={SCR['A1-04']}>
   <div class="flex items-center justify-between">
     <span class="text-body-sm text-fg-muted">{data.site?.name ?? ''} · 장비 {data.devices.length}대</span>
-    <Badge tone="neutral" variant="outline">프로파일 {data.flags.profile}</Badge>
+    <Badge tone="neutral" variant="outline"
+      ><span data-profile={data.flags.profile}>{data.flags.channels}채널</span></Badge
+    >
   </div>
   <Tabs
     variant="pill"
@@ -41,10 +43,7 @@
   />
 
   {#if data.tab === 'bodycam'}
-    <EmptyState
-      title="바디캠 세션"
-      description="현장 프로파일 옵션 {data.flags.bodycam} — 세션 목록·재생은 W4 실연동 (FR-030 · DISC-030)"
-    />
+    <EmptyState title="바디캠 세션" description="바디캠 영상은 준비 중입니다" ref="FR-030 DISC-030" />
   {:else}
     {#if latest}
       <Banner tone="danger">

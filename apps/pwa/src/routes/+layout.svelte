@@ -175,7 +175,7 @@
           고장·에스컬레이션·서류 알림을 기기 알림으로 받으려면 권한이 필요합니다. 인앱 배지·토스트는 그대로 동작합니다.
         </p>
       {/if}
-      <p class="text-label-sm text-fg-muted">서버 발송·알림 채널(문자·전화)은 DISC-036 확정 뒤(W3).</p>
+      <p class="text-label-sm text-fg-muted" data-ref="DISC-036">문자·전화 알림은 준비 중입니다</p>
     </div>
     {#snippet footer()}
       {#if perm === 'default'}<Button size="lg" block onclick={enablePush}>알림 켜기</Button>{/if}

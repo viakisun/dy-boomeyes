@@ -26,8 +26,8 @@
 </script>
 
 <div class="gap-stack-md pb-layout-bottomnav-height flex flex-col" data-scr={SCR['A1-06']}>
-  <p class="text-body-sm text-fg-muted">
-    {data.sites[0]?.name ?? '내 현장'} · 최근 30일 · 이력은 추가만 되고 수정·삭제되지 않습니다(증빙)
+  <p class="text-body-sm text-fg-muted" data-ref="FR-012">
+    {data.sites[0]?.name ?? '내 현장'} · 최근 30일 · 이력은 추가만 됩니다
   </p>
   <div class="gap-inline-sm flex flex-wrap" role="group" aria-label="유형">
     <Chip selected={data.kind === 'all'} count={data.records.length} onclick={() => select('all')}>전체</Chip>

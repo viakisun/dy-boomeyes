@@ -76,7 +76,9 @@
     <section class="gap-stack-sm flex flex-col" aria-label="현장 기본정보">
       <div class="flex items-center justify-between">
         <h2 class="text-heading-md">{data.site.name}</h2>
-        <Badge tone="neutral" variant="outline">프로파일 {data.site.videoProfile}</Badge>
+        <Badge tone="neutral" variant="outline"
+          ><span data-profile={data.site.videoProfile}>{flags?.channels}채널</span></Badge
+        >
       </div>
       <KeyValueList
         label="현장 기본정보"
@@ -87,7 +89,7 @@
           { label: '담당 안전관리자', value: safety },
           { label: '영상 채널', value: flags ? `${flags.channels}채널 · 저장 ${flags.sources.join('·')}` : '—' },
           { label: '장비', value: `${data.devices.length}대 · 이상 ${abnormal}` },
-          { label: '타설 일정', value: '입력 주체 미확정 (DISC-034)', muted: true },
+          { label: '타설 일정', value: '준비 중', muted: true },
         ]}
       />
     </section>
@@ -116,10 +118,7 @@
           {/each}
         </ul>
       {:else}
-        <EmptyState
-          title="신청이 없습니다"
-          description="현장 개설·장비 배정 신청은 운영사 수신함(B1-03)에서 검토됩니다."
-        />
+        <EmptyState title="신청이 없습니다" description="현장 개설·장비 배정 신청은 운영사 수신함에서 검토됩니다." />
       {/if}
     </section>
   {:else}
@@ -139,7 +138,7 @@
   <BottomSheet bind:open title="현장 개설 신청" capture onclose={() => (open = false)}>
     <div class="gap-stack-sm flex flex-col">
       <p class="text-body-sm text-fg-muted">
-        신청은 운영사 수신함(B1-03)에 검토 중으로 등록됩니다 — 현장 개설(현장명·주소·기간) · 장비 배정(필요 대수·기간)
+        신청은 운영사 수신함에 검토 중으로 등록됩니다 — 현장 개설(현장명·주소·기간) · 장비 배정(필요 대수·기간)
       </p>
       <Select label="신청 종류" bind:value={kind} options={KINDS} />
       {#if kind === 'site-open'}

@@ -17,7 +17,7 @@
 </script>
 
 <div class="gap-stack-md flex flex-col" data-scr={SCR['A3-02']}>
-  <p class="text-body-sm text-fg-muted">자사 현장 {data.sites.length} · 열람 + 확인 요청만(직접 처리 불가)</p>
+  <p class="text-body-sm text-fg-muted" data-ref="DISC-015">자사 현장 {data.sites.length} · 열람 전용(확인 요청만)</p>
   {#if data.sites.length}
     <ul class="gap-stack-sm flex flex-col" aria-label="현장">
       {#each data.sites as site (site.id)}

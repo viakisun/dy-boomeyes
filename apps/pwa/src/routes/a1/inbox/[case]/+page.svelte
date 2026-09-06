@@ -188,8 +188,8 @@
     <div class="gap-stack-sm flex flex-col" data-scr={SCR['A1-08']}>
       <p class="text-body-sm text-fg-muted">{data.task.id} · {data.task.title}</p>
       <TextField label="조치 내용(필수)" bind:value={note} placeholder="예: 전압 릴레이 교체 · 입력 전원 점검" />
-      <p class="text-label-sm text-fg-muted">
-        완료 확인은 현장 안전관리자가 한다 — 이력에 행위자·조치 내용이 남는다(DISC-015).
+      <p class="text-label-sm text-fg-muted" data-ref="DISC-015">
+        완료 확인은 현장 안전관리자가 합니다 · 조치 내용은 이력에 남습니다
       </p>
     </div>
     {#snippet footer()}

@@ -80,13 +80,19 @@
 
 <div class="gap-stack-md pb-layout-bottomnav-height flex flex-col" data-scr={SCR['A2-09']}>
   <a href={resolve('/a2/device' as '/')} class="text-label-md text-accent-fg">‹ 내 장비</a>
-  <p class="text-body-sm text-fg-muted">
-    마모·교체 부품 교체·폐기 — W2는 구조(DISC-044) · 교체는 재고 −1 · 발주는 2단계
+  <p class="text-body-sm text-fg-muted" data-ref="DISC-044">
+    교체는 재고에서 1개를 빼고 이력에 남깁니다 · 발주는 준비 중
   </p>
   <div class="gap-stack-sm flex flex-col">
     <Select label="부품" value={partId} {options} placeholder="선택" onchange={(e) => pick(e.currentTarget.value)} />
-    <Button variant="outline" tone="neutral" size="sm" block disabled title="태그 스캔은 DISC-043(QR/RFID) 확정 후"
-      >태그 스캔 — DISC-043 확정 후</Button
+    <Button
+      variant="outline"
+      tone="neutral"
+      size="sm"
+      block
+      disabled
+      title="태그 방식이 정해지면 지원합니다"
+      data-ref="DISC-043">태그 스캔 — 준비 중</Button
     >
   </div>
   {#if part}
@@ -121,7 +127,7 @@
         >
       </form>
     {:else}
-      <p class="text-body-sm text-fg-muted">교체 대상(due)·교체됨(replaced) 부품만 처리할 수 있습니다.</p>
+      <p class="text-body-sm text-fg-muted">교체 대상·교체됨 부품만 처리할 수 있습니다</p>
     {/if}
     <section class="gap-stack-sm flex flex-col" aria-label="이력">
       <h2 class="text-heading-sm">이력 {history.length}</h2>
@@ -144,7 +150,7 @@
         ? ` · 재고 ${stock.onHand} → ${stock.onHand - 1}`
         : ''}
     </p>
-    <p class="text-label-sm text-fg-muted">이력에 사유·작업자·증빙이 남습니다(append-only).</p>
+    <p class="text-label-sm text-fg-muted">이력에 사유·작업자·증빙이 남습니다</p>
     {#snippet footer()}
       <Button tone={mode === 'discard' ? 'danger' : 'accent'} disabled={busy} onclick={run}
         >{mode === 'replace' ? '교체' : '폐기'} 확정</Button

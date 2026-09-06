@@ -13,7 +13,9 @@
   <a href={resolve(`/a3/sites/${data.site.id}` as '/')} class="text-label-md text-accent-fg">‹ 현장 상세</a>
   <div class="flex items-center justify-between">
     <span class="text-body-sm text-fg-muted">{data.site.name} · 장비 {data.devices.length}대 · 열람 전용</span>
-    <Badge tone="neutral" variant="outline">프로파일 {data.flags.profile}</Badge>
+    <Badge tone="neutral" variant="outline"
+      ><span data-profile={data.flags.profile}>{data.flags.channels}채널</span></Badge
+    >
   </div>
   {#if data.devices.length}
     {#each data.devices as d (d.id)}
