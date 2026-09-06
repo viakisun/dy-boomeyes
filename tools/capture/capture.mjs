@@ -53,21 +53,46 @@ async function waitHttp(url, ms = 30_000) {
   }
   throw new Error(`서버 응답 없음 ${url}`);
 }
+// preview 서버는 pnpm → vite 두 프로세스 — pnpm만 죽이면 vite가 고아로 남아 다음 캡처가 옛 서버를 잡는다(SOP 고아 preview). detached 그룹으로 띄우고 그룹째 죽인다
 const servers = [];
+const stopServers = () => {
+  for (const p of servers) {
+    try {
+      process.kill(-p.pid, 'SIGTERM');
+    } catch {
+      p.kill();
+    }
+  }
+};
+async function waitDown(url, ms = 10_000) {
+  const t0 = Date.now();
+  while (Date.now() - t0 < ms) {
+    try {
+      await fetch(url);
+    } catch {
+      return true;
+    }
+    await new Promise((r) => setTimeout(r, 200));
+  }
+  return false;
+}
 if (!args.includes('--no-serve'))
   for (const app of ['web', 'pwa']) {
     if (!existsSync(join(ROOT, 'apps', app, 'build'))) throw new Error(`apps/${app}/build 없음 — 먼저 pnpm build`);
+    if (!(await waitDown(BASE[app], 0)))
+      throw new Error(
+        `${BASE[app]} 에 이미 리스너가 있다 — 고아 preview 서버를 먼저 정리(lsof -nP -iTCP:${PORTS[app]} -sTCP:LISTEN)`,
+      );
     servers.push(
       spawn('pnpm', ['--filter', `@boomeyes/${app}`, 'preview', '--port', String(PORTS[app]), '--strictPort'], {
         cwd: ROOT,
         stdio: 'ignore',
+        detached: true,
       }),
     );
     await waitHttp(BASE[app]);
   }
-process.on('exit', () => {
-  for (const p of servers) p.kill();
-});
+process.on('exit', stopServers);
 const browser = await chromium.launch();
 const ctx = await browser.newContext({
   deviceScaleFactor: DPR,
@@ -174,7 +199,10 @@ if (PRESET)
     ) + '\n',
   );
 await browser.close();
-for (const p of servers) p.kill();
+stopServers();
+if (servers.length)
+  for (const app of ['web', 'pwa'])
+    if (!(await waitDown(BASE[app]))) console.log(`△ ${BASE[app]} 서버가 아직 살아 있다`);
 console.log(
   `${fail ? '✗' : '✓'} capture: ${n} shots · fail ${fail} · 자리 ${stub}${STRICT ? ' (strict)' : ''} → shots/${PRESET ? PRESET + '/' : ''}`,
 );
