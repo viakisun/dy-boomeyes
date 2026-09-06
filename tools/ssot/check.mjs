@@ -70,7 +70,7 @@ export function indexIds(d) {
     ADR: new Set(
       readdirSync(join(ROOT, 'docs', 'adr'))
         .map((f) => f.match(/^(\d{3})-.*\.md$/)?.[1])
-        .filter(Boolean)
+        .filter((n) => n && n !== '000') // 000 = 템플릿
         .map((n) => `ADR-${n}`),
     ),
   };

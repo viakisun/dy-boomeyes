@@ -498,3 +498,12 @@ describe('[FR-023] 쇼케이스 — 마스킹 · 읽기 전용 집계', () => {
     expect(hq.devices).toBe(2);
   });
 });
+
+describe('[A2-03] ?state= 픽스처는 capture 모드에서만 (QA §3)', () => {
+  it('live(capture:false)는 명시 state도 화면 기본 픽스처도 적용하지 않는다 — 순수 시드', async () => {
+    const live = bootMock({ capture: false, screen: 'A2-03', state: 'inspect' });
+    expect((await live.today('driver03')).attendance.checkinAt).toBeNull();
+    const cap = bootMock({ capture: true, screen: 'A2-03', state: 'inspect' });
+    expect((await cap.today('driver03')).attendance.checkinAt).not.toBeNull();
+  });
+});
