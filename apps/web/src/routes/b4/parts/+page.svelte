@@ -50,7 +50,6 @@
     { key: 'group', label: '부품군', nowrap: true },
     { key: 'partNo', label: '품번', kind: 'id' },
     { key: 'position', label: '장착 위치' },
-    { key: 'installedAt', label: '설치일', kind: 'date' },
     { key: 'state', label: '상태', kind: 'status' },
     { key: 'poured', label: '누적 타설(m³, 보조)', kind: 'num' },
   ];
@@ -94,8 +93,7 @@
         {#if key === 'id'}{row.id}
         {:else if key === 'group'}{PART_GROUP_LABEL[row.group]}
         {:else if key === 'partNo'}{row.partNo}
-        {:else if key === 'position'}{unitOf(row.deviceId)} · {row.position}
-        {:else if key === 'installedAt'}{row.installedAt.slice(0, 10)}
+        {:else if key === 'position'}<span title="{unitOf(row.deviceId)} · {row.position}">{row.position}</span>
         {:else if key === 'state'}<StatusPill
             tone={PART_TONE[row.state]}
             label={PART_STATE_LABEL[row.state]}

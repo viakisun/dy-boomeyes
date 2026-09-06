@@ -118,7 +118,7 @@
       >
         {#snippet cell(r: Request, col: Column)}
           {#if col.key === 'kind'}<span class="whitespace-nowrap">{REQUEST_KIND_LABEL[r.kind]}</span>
-          {:else if col.key === 'title'}<span class="font-medium">{r.title}</span>
+          {:else if col.key === 'title'}<span class="font-medium" title={r.title}>{r.title}</span>
           {:else if col.key === 'requester'}<span class="whitespace-nowrap">{userName(r.requesterId)}</span>
           {:else if col.key === 'site'}{siteName(r.siteId)}
           {:else if col.key === 'requestedAt'}<span class="tabular-nums">{fmtDateTime(r.requestedAt)}</span>

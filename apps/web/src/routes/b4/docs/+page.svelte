@@ -73,7 +73,7 @@
     { key: 'kind', label: '유형', nowrap: true },
     { key: 'subject', label: '대상' },
     { key: 'state', label: '상태', kind: 'status' },
-    { key: 'expires', label: '만료', kind: 'status' },
+    { key: 'expires', label: '만료', kind: 'date' },
   ];
 </script>
 
@@ -128,7 +128,7 @@
           {@const key = col.key}
           {#if key === 'id'}{row.id}
           {:else if key === 'kind'}{DOC_KIND_LABEL[row.kind]}
-          {:else if key === 'subject'}{row.subject}
+          {:else if key === 'subject'}<span title={row.subject}>{row.subject}</span>
           {:else if key === 'state'}<StatusPill
               tone={DOC_TONE[row.state]}
               label={DOC_STATE_LABEL[row.state]}

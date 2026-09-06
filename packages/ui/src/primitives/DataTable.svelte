@@ -34,7 +34,7 @@
   const kindOf = (c: Column): ColumnKind => c.kind ?? (c.align === 'right' ? 'num' : 'text');
   const thClass = (c: Column) => cx(KIND[kindOf(c)].th, kindOf(c) === 'text' && c.nowrap && 'w-px');
   const tdClass = (c: Column) =>
-    cx(KIND[kindOf(c)].td, kindOf(c) === 'text' && (c.nowrap ? 'whitespace-nowrap' : 'max-w-0 truncate'));
+    cx(KIND[kindOf(c)].td, kindOf(c) === 'text' && (c.nowrap ? 'whitespace-nowrap' : 'w-full max-w-0 truncate')); // w-full + max-w-0: 남는 폭은 텍스트 열이 받고, 넘치면 1줄로 자른다
   const pick = (row: T) => onselect?.(row);
   const onkey = (e: KeyboardEvent, row: T) => {
     if (e.key === 'Enter' || e.key === ' ') {
