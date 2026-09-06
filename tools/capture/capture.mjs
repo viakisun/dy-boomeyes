@@ -213,10 +213,12 @@ for (const s of screens) {
     }
   }
 }
-writeFileSync(
-  join(OUT, 'manifest.json'),
-  JSON.stringify({ wave: WAVE, dpr: DPR, dark: DARK, strict: STRICT, shots: manifest }, null, 2) + '\n',
-);
+// 프리셋(baseline/current) 디렉터리에는 쓰지 않는다 — MANIFEST.json(렌더 환경)과 macOS 대소문자 충돌로 항상 수정 상태가 됐다 · 문서 생성기는 shots/manifest.json만 읽는다
+if (!PRESET)
+  writeFileSync(
+    join(OUT, 'manifest.json'),
+    JSON.stringify({ wave: WAVE, dpr: DPR, dark: DARK, strict: STRICT, shots: manifest }, null, 2) + '\n',
+  );
 if (PRESET)
   writeFileSync(
     join(OUT, 'MANIFEST.json'),

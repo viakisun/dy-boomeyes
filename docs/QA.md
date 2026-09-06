@@ -7,7 +7,7 @@
 | # | 게이트 | 명령 | 실패 시 | 상태 |
 |---|---|---|---|---|
 | 1 | SSOT | `pnpm ssot:check` — 스키마·ID 문법·유일성·참조 무결성·어휘·화면 규칙(route·states·default)·DISC 생애주기 | 커밋 차단(hook) · CI 실패 | 있음 |
-| 2 | 토큰 | `pnpm tokens:check` — 문법·계층·모드 차원·대비 76쌍 · `tokens:lint`(hex · 기본 팔레트 · 임의값 · 숫자 스케일 · rounded-N · z-N · duration-N · border-N · ring-N · max-w-sm… · 초기화된 기본 스케일 · style px — 규칙 생존 프로브) · `catalog`(컴포넌트 파일 ⊆ components.json) | 커밋 차단 | 있음 |
+| 2 | 토큰 | `pnpm tokens:check` — 문법·계층·모드 차원·대비 76쌍 · `tokens:lint`(hex · 기본 팔레트 · 임의값 · 숫자 스케일 · rounded-N · z-N · duration-N · border-N · ring-N · max-w-sm… · 초기화된 기본 스케일 · style px · 카피 `copy-*`(apps 마크업의 SSOT 식별자 · 웨이브 · 구현 용어 · 표면 코드, `data-ref`/`ref` 속성 제외) — 규칙 생존 프로브) · `catalog`(컴포넌트 파일 ⊆ components.json) | 커밋 차단 | 있음 |
 | 3 | 생성물 최신성 | `pnpm verify` 끝의 `git diff --exit-code` (docs/generated · domain/generated · tokens/dist) | CI 실패 | 있음 |
 | 4 | 타입·정적 | svelte-check(error 0) · ESLint(경계 규칙 `eslint-plugin-boundaries`) · Prettier | 커밋 차단 | 있음 |
 | 5 | 단위 | Vitest — 업무·서류·장비·카메라·부품 상태기계 · 프로파일→피처플래그 · 프로토콜 파서 · scr 커버리지 | 푸시 차단 | 있음(상태기계·라우트·mock) |
@@ -27,7 +27,7 @@
 - [ ] 캡처 파일 `shots/<code>-<state>.png` 갱신 · 시각 회귀 통과
 - [ ] 테스트 제목 `[FR-nnn]`/`[코드]` · 커밋 `Refs:`
 - [ ] 골격(DY-design §11): 웹은 PageHeader 첫 요소 · 부제 1줄(≤ 60자) · 우측 액션 ≤ 2 · Stat 값 중립색 · 표 식별자 셀 nowrap·텍스트 1줄 · 폼 폭 640 · 내비 아이콘 실물(자리 사각형 0)
-- [ ] 카피(DY-design §12): `pnpm design:audit` 이 화면 0건(SSOT 식별자·웨이브·구현 용어 노출 없음) · 미구현은 "준비 중" · 라벨은 labels.ts
+- [ ] 카피(DY-design §12): `pnpm tokens:lint` `copy-*` 0건(SSOT 식별자·웨이브·구현 용어·표면 코드 노출 없음 — `pnpm design:audit`는 보고용) · 근거는 `data-ref`/`ref` · 미구현은 "준비 중" · 라벨은 labels.ts
 
 ## 3. 캡처 규약 (`tools/capture`, W0)
 
