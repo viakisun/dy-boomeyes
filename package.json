@@ -22,6 +22,8 @@
     "capture": "node tools/capture/capture.mjs",
     "capture:accept": "node tools/capture/capture.mjs --baseline",
     "capture:compare": "node tools/capture/capture.mjs --current && node tools/capture/diff.mjs",
+    "docs:set": "python3 tools/docs-gen/build.py",
+    "docs:check": "python3 tools/docs-gen/check_set.py",
     "e2e": "playwright test"
   },
   "devDependencies": {
