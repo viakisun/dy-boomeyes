@@ -11,7 +11,7 @@
 | sys(시맨틱) | 324 |
 | cmp(컴포넌트) | 92 |
 | 컴포넌트 카탈로그 | 80 |
-| 대비 검사 | 82/82 통과 |
+| 대비 검사 | 94/94 통과 |
 
 | 산출물 | 용도 |
 |---|---|
@@ -405,26 +405,32 @@
 | light | `border.emphasis` | `bg.canvas` | 3.49:1 | ≥3 | ✓ |
 | light | `focus.ring` | `bg.canvas` | 12.67:1 | ≥3 | ✓ |
 | light | `status.info.fg` | `bg.canvas` | 8.63:1 | ≥4.5 | ✓ |
+| light | `status.info.fg` | `bg.surface` | 8.87:1 | ≥4.5 | ✓ |
 | light | `status.info.fg` | `status.info.bg` | 7.95:1 | ≥4.5 | ✓ |
 | light | `status.info.on-solid` | `status.info.solid` | 6.43:1 | ≥4.5 | ✓ |
 | light | `status.info.solid` | `bg.canvas` | 6.16:1 | ≥3 | ✓ |
 | light | `status.success.fg` | `bg.canvas` | 7.65:1 | ≥4.5 | ✓ |
+| light | `status.success.fg` | `bg.surface` | 7.87:1 | ≥4.5 | ✓ |
 | light | `status.success.fg` | `status.success.bg` | 7.12:1 | ≥4.5 | ✓ |
 | light | `status.success.on-solid` | `status.success.solid` | 5.62:1 | ≥4.5 | ✓ |
 | light | `status.success.solid` | `bg.canvas` | 5.38:1 | ≥3 | ✓ |
 | light | `status.warning.fg` | `bg.canvas` | 8.24:1 | ≥4.5 | ✓ |
+| light | `status.warning.fg` | `bg.surface` | 8.47:1 | ≥4.5 | ✓ |
 | light | `status.warning.fg` | `status.warning.bg` | 7.6:1 | ≥4.5 | ✓ |
 | light | `status.warning.on-solid` | `status.warning.solid` | 9.65:1 | ≥4.5 | ✓ |
 | light | `status.warning.border-strong` | `bg.canvas` | 3.84:1 | ≥3 | ✓ |
 | light | `status.danger.fg` | `bg.canvas` | 8.87:1 | ≥4.5 | ✓ |
+| light | `status.danger.fg` | `bg.surface` | 9.12:1 | ≥4.5 | ✓ |
 | light | `status.danger.fg` | `status.danger.bg` | 8.14:1 | ≥4.5 | ✓ |
 | light | `status.danger.on-solid` | `status.danger.solid` | 6.67:1 | ≥4.5 | ✓ |
 | light | `status.danger.solid` | `bg.canvas` | 6.38:1 | ≥3 | ✓ |
 | light | `status.progress.fg` | `bg.canvas` | 7.78:1 | ≥4.5 | ✓ |
+| light | `status.progress.fg` | `bg.surface` | 8:1 | ≥4.5 | ✓ |
 | light | `status.progress.fg` | `status.progress.bg` | 7.26:1 | ≥4.5 | ✓ |
 | light | `status.progress.on-solid` | `status.progress.solid` | 5.74:1 | ≥4.5 | ✓ |
 | light | `status.progress.solid` | `bg.canvas` | 5.5:1 | ≥3 | ✓ |
 | light | `status.neutral.fg` | `bg.canvas` | 5.76:1 | ≥4.5 | ✓ |
+| light | `status.neutral.fg` | `bg.surface` | 5.92:1 | ≥4.5 | ✓ |
 | light | `status.neutral.fg` | `status.neutral.bg` | 5.42:1 | ≥4.5 | ✓ |
 | light | `status.neutral.on-solid` | `status.neutral.solid` | 6.01:1 | ≥4.5 | ✓ |
 | light | `status.neutral.solid` | `bg.canvas` | 5.76:1 | ≥3 | ✓ |
@@ -446,26 +452,32 @@
 | dark | `border.emphasis` | `bg.canvas` | 4.52:1 | ≥3 | ✓ |
 | dark | `focus.ring` | `bg.canvas` | 3.45:1 | ≥3 | ✓ |
 | dark | `status.info.fg` | `bg.canvas` | 10.36:1 | ≥4.5 | ✓ |
+| dark | `status.info.fg` | `bg.surface` | 9.84:1 | ≥4.5 | ✓ |
 | dark | `status.info.fg` | `status.info.bg` | 8.83:1 | ≥4.5 | ✓ |
 | dark | `status.info.on-solid` | `status.info.solid` | 5.87:1 | ≥4.5 | ✓ |
 | dark | `status.info.solid` | `bg.canvas` | 3.31:1 | ≥3 | ✓ |
 | dark | `status.success.fg` | `bg.canvas` | 10.83:1 | ≥4.5 | ✓ |
+| dark | `status.success.fg` | `bg.surface` | 10.29:1 | ≥4.5 | ✓ |
 | dark | `status.success.fg` | `status.success.bg` | 9.03:1 | ≥4.5 | ✓ |
 | dark | `status.success.on-solid` | `status.success.solid` | 5.16:1 | ≥4.5 | ✓ |
 | dark | `status.success.solid` | `bg.canvas` | 3.76:1 | ≥3 | ✓ |
 | dark | `status.warning.fg` | `bg.canvas` | 10.25:1 | ≥4.5 | ✓ |
+| dark | `status.warning.fg` | `bg.surface` | 9.73:1 | ≥4.5 | ✓ |
 | dark | `status.warning.fg` | `status.warning.bg` | 8.73:1 | ≥4.5 | ✓ |
 | dark | `status.warning.on-solid` | `status.warning.solid` | 9.65:1 | ≥4.5 | ✓ |
 | dark | `status.warning.border-strong` | `bg.canvas` | 4.83:1 | ≥3 | ✓ |
 | dark | `status.danger.fg` | `bg.canvas` | 9.91:1 | ≥4.5 | ✓ |
+| dark | `status.danger.fg` | `bg.surface` | 9.42:1 | ≥4.5 | ✓ |
 | dark | `status.danger.fg` | `status.danger.bg` | 8.59:1 | ≥4.5 | ✓ |
 | dark | `status.danger.on-solid` | `status.danger.solid` | 6.15:1 | ≥4.5 | ✓ |
 | dark | `status.danger.solid` | `bg.canvas` | 3.16:1 | ≥3 | ✓ |
 | dark | `status.progress.fg` | `bg.canvas` | 10.76:1 | ≥4.5 | ✓ |
+| dark | `status.progress.fg` | `bg.surface` | 10.22:1 | ≥4.5 | ✓ |
 | dark | `status.progress.fg` | `status.progress.bg` | 9.03:1 | ≥4.5 | ✓ |
 | dark | `status.progress.on-solid` | `status.progress.solid` | 5.23:1 | ≥4.5 | ✓ |
 | dark | `status.progress.solid` | `bg.canvas` | 3.71:1 | ≥3 | ✓ |
 | dark | `status.neutral.fg` | `bg.canvas` | 10.42:1 | ≥4.5 | ✓ |
+| dark | `status.neutral.fg` | `bg.surface` | 9.9:1 | ≥4.5 | ✓ |
 | dark | `status.neutral.fg` | `status.neutral.bg` | 9.15:1 | ≥4.5 | ✓ |
 | dark | `status.neutral.on-solid` | `status.neutral.solid` | 9.26:1 | ≥4.5 | ✓ |
 | dark | `status.neutral.border-strong` | `bg.canvas` | 3.23:1 | ≥3 | ✓ |

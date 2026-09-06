@@ -64,6 +64,7 @@ export function runChecks(flat, modes) {
   for (const tone of TONES)
     PAIRS.push(
       [`sys.color.status.${tone}.fg`, 'sys.color.bg.canvas', 4.5],
+      [`sys.color.status.${tone}.fg`, 'sys.color.bg.surface', 4.5], // Stat 라벨 톤 색 · 카드 표면 위 pill 텍스트 (W2.5 D8)
       [`sys.color.status.${tone}.fg`, `sys.color.status.${tone}.bg`, 4.5],
       [`sys.color.status.${tone}.on-solid`, `sys.color.status.${tone}.solid`, 4.5],
       [`sys.color.status.${tone}.solid`, 'sys.color.bg.canvas', 3, `sys.color.status.${tone}.border-strong`],
