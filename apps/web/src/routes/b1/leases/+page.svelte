@@ -71,8 +71,7 @@
     { key: 'id', label: '계약', kind: 'id' },
     { key: 'device', label: '호기', nowrap: true },
     { key: 'site', label: '현장', nowrap: true },
-    { key: 'owner', label: '임대인', nowrap: true },
-    { key: 'period', label: '기간', kind: 'date' },
+    { key: 'to', label: '만료', kind: 'date' },
     { key: 'due', label: '잔여', kind: 'status' },
     { key: 'state', label: '상태', kind: 'status' },
   ];
@@ -122,10 +121,7 @@
           {:else if key === 'site'}{siteName(row.siteId)}{#if row.toSiteId}<span class="text-label-sm text-fg-muted">
                 → {siteName(row.toSiteId)}</span
               >{/if}
-          {:else if key === 'owner'}{row.ownerId}
-          {:else if key === 'period'}<span class="whitespace-nowrap"
-              >{row.from.slice(0, 10)} ~ {row.to.slice(0, 10)}</span
-            >
+          {:else if key === 'to'}{row.to.slice(0, 10)}
           {:else if key === 'due'}{@const d = dueLabel(row.to, now)}<span
               class={d.overdue ? 'text-danger-fg font-semibold' : ''}>{d.label}</span
             >
@@ -155,6 +151,8 @@
       </div>
       <KeyValueList
         items={[
+          { label: '임대인', value: selected.ownerId },
+          { label: '기간', value: `${selected.from.slice(0, 10)} ~ ${selected.to.slice(0, 10)}` },
           { label: '현장', value: siteName(selected.siteId) },
           { label: '현장 안전관리자', value: safetyOf(selected.siteId) },
           ...(selected.toSiteId ? [{ label: '재배치 대상', value: siteName(selected.toSiteId) }] : []),

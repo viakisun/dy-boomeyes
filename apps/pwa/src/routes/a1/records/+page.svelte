@@ -29,10 +29,14 @@
   <p class="text-body-sm text-fg-muted" data-ref="FR-012">
     {data.sites[0]?.name ?? '내 현장'} · 최근 30일 · 이력은 추가만 됩니다
   </p>
-  <div class="gap-inline-sm flex flex-wrap" role="group" aria-label="유형">
-    <Chip selected={data.kind === 'all'} count={data.records.length} onclick={() => select('all')}>전체</Chip>
+  <div class="gap-inline-sm -mx-page-gutter px-page-gutter flex overflow-x-auto" role="group" aria-label="유형">
+    <Chip class="shrink-0" selected={data.kind === 'all'} count={data.records.length} onclick={() => select('all')}
+      >전체</Chip
+    >
     {#each data.kinds as k (k)}
-      <Chip selected={data.kind === k} count={count(k)} onclick={() => select(k)}>{RECORD_KIND_LABEL[k]}</Chip>
+      <Chip class="shrink-0" selected={data.kind === k} count={count(k)} onclick={() => select(k)}
+        >{RECORD_KIND_LABEL[k]}</Chip
+      >
     {/each}
   </div>
   {#if items.length}

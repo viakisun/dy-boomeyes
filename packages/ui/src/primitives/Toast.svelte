@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { cx, TONE } from '../lib/cx';
+  import { cx } from '../lib/cx';
   import { dismiss, toasts } from './toast-store.svelte';
   let { position = 'bottom-end' }: { position?: 'bottom' | 'bottom-end' } = $props();
 </script>
@@ -17,7 +17,6 @@
       class="gap-inline-md rounded-card bg-inverse px-inset-md py-inset-sm text-body-md text-fg-on-inverse shadow-popover max-w-layout-toast-width pointer-events-auto flex w-full items-center"
       role="status"
     >
-      <span class={cx('size-size-indicator rounded-pill shrink-0', TONE[t.tone].dot)} aria-hidden="true"></span>
       <span class="flex-1">{t.message}</span>
       {#if t.action}<button
           type="button"

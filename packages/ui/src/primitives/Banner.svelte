@@ -33,10 +33,7 @@
       cls,
     )}
   >
-    {#if icon}<span class="shrink-0">{@render icon()}</span>{:else}<span
-        class={cx('size-size-indicator rounded-pill shrink-0', TONE[tone].dot)}
-        aria-hidden="true"
-      ></span>{/if}
+    {#if icon}<span class="shrink-0">{@render icon()}</span>{/if}
     <div class="flex-1">{@render children?.()}</div>
     {#if action}{@render action()}{/if}
     {#if dismissible}<button

@@ -23,11 +23,12 @@
   import { session } from '$lib/session.svelte';
   let { data } = $props();
   const COLUMNS: Column[] = [
-    { key: 'case', label: '업무', nowrap: true },
+    { key: 'case', label: '업무', kind: 'id' },
+    { key: 'title', label: '제목' },
+    { key: 'severity', label: '등급', kind: 'status' },
     { key: 'site', label: '현장', nowrap: true },
     { key: 'elapsed', label: '경과', kind: 'status' },
     { key: 'notify', label: '통보 대상', nowrap: true },
-    { key: 'notifiedAt', label: '통보 시각', kind: 'date' },
   ];
   const ROLE_LABEL: Record<string, string> = { 'hq-safety': '건설사 본사', control: '관제' };
   const siteName = (id: string) => data.sites.find((s) => s.id === id)?.name ?? id;
@@ -64,16 +65,16 @@
         caption="에스컬레이션 목록"
       >
         {#snippet cell(e: Escalation, col: Column)}
-          {#if col.key === 'case'}
-            <span class="gap-inline-sm flex items-center">
-              <span class="text-code-md whitespace-nowrap">{e.case.id}</span>
-              <span class="font-medium">{e.case.title}</span>
-              <StatusPill tone={SEVERITY_TONE[e.case.severity]} label={SEVERITY_LABEL[e.case.severity]} size="sm" />
-            </span>
+          {#if col.key === 'case'}{e.case.id}
+          {:else if col.key === 'title'}<span class="font-medium" title={e.case.title}>{e.case.title}</span>
+          {:else if col.key === 'severity'}<StatusPill
+              tone={SEVERITY_TONE[e.case.severity]}
+              label={SEVERITY_LABEL[e.case.severity]}
+              size="sm"
+            />
           {:else if col.key === 'site'}{siteName(e.case.siteId)}
           {:else if col.key === 'elapsed'}<EscalationTimer elapsedMs={e.elapsedMs} />
-          {:else if col.key === 'notify'}{e.notifyTo.map((r) => ROLE_LABEL[r] ?? r).join(' · ')}
-          {:else}<span class="tabular-nums">{fmtDateTime(e.notifiedAt)}</span>{/if}
+          {:else}{e.notifyTo.map((r) => ROLE_LABEL[r] ?? r).join(' · ')}{/if}
         {/snippet}
       </DataTable>
     {:else}
@@ -93,7 +94,9 @@
         </div>
         <h2 class="text-heading-md">{selected.case.title}</h2>
         <p class="text-body-sm text-fg-muted">
-          {siteName(selected.case.siteId)} · 발행 {fmtDateTime(selected.case.createdAt)}
+          {siteName(selected.case.siteId)} · 발행 {fmtDateTime(selected.case.createdAt)} · 통보 {fmtDateTime(
+            selected.notifiedAt,
+          )}
         </p>
         <EscalationTimer elapsedMs={selected.elapsedMs} />
       </div>

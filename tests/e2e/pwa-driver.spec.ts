@@ -15,8 +15,8 @@ test('[A2-02] driver03 오늘: 배정 CPB-003 · 미체크인 · E-021 알림 ·
   await expect(page.getByRole('link', { name: /배정 장비 CPB-003/ })).toBeVisible();
   await expect(page.getByRole('button', { name: '출근 체크인' })).toBeVisible();
   await expect(page.getByText('● 촬영 중')).toBeVisible();
-  await expect(page.getByText('영상 동의 ✓')).toBeVisible();
-  await expect(page.getByText('음성 동의 ✗')).toBeVisible();
+  await expect(page.getByText(/동의 · 영상 ✓ · 음성 ✗ · 위치 ✓/)).toBeVisible(); // 동의 요약 한 줄
+  await expect(page.getByText(/음성 ✗/)).toBeVisible();
   await expect(page.getByRole('button', { name: /E-021/ }).first()).toBeVisible();
 });
 

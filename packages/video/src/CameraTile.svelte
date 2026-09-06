@@ -59,7 +59,13 @@
     <span class="rounded-pill bg-media-scrim px-inset-xs text-label-sm text-media-fg"
       >{camera.kind === 'ai' ? 'AI · 붐 끝' : '일반 · 전방'}</span
     >
-    {#if status}<StatusPill tone={CAMERA_TONE[camera.state]} label={CAMERA_LABEL[camera.state]} size="sm" solid />{/if}
+    {#if status}<StatusPill
+        tone={CAMERA_TONE[camera.state]}
+        label={CAMERA_LABEL[camera.state]}
+        size="sm"
+        solid
+        signal
+      />{/if}
   </div>
   {#if !compact}<div
       class="p-inset-xs text-label-sm text-fg-on-inverse absolute inset-x-0 bottom-0 flex items-center justify-between"

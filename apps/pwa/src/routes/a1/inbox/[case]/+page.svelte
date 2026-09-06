@@ -104,7 +104,7 @@
     >
       <div class="flex items-center justify-between">
         <span class="text-heading-sm">{d.id} · {d.unitNo}호기</span>
-        <StatusPill tone={EQUIPMENT_TONE[d.state]} label={EQUIP_LABEL[d.state]} size="sm" />
+        <StatusPill tone={EQUIPMENT_TONE[d.state]} label={EQUIP_LABEL[d.state]} size="sm" signal />
       </div>
       <dl class="gap-x-inline-md gap-y-stack-xs text-body-sm grid grid-cols-[auto_1fr]">
         <dt class="text-fg-muted">전압</dt>

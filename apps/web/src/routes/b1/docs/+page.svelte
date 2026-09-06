@@ -18,6 +18,7 @@
     type Column,
     PageHeader,
     StatGroup,
+    cx,
   } from '@boomeyes/ui';
   let { data } = $props();
   const now = $derived(data.clock.now());
@@ -78,14 +79,19 @@
     </StatGroup>
     <section class="gap-stack-sm flex flex-col" aria-label="대상별 완비율">
       <h2 class="text-heading-md">완비율 — 현장 · 장비 · 운전자</h2>
-      <ul class="gap-inline-sm flex flex-wrap" aria-label="대상별 완비율">
+      <ul
+        class="rounded-card border-border bg-surface divide-border-subtle text-body-sm grid divide-y border md:grid-cols-2 md:divide-y-0"
+        aria-label="대상별 완비율"
+      >
         {#each data.completeness as c (c.subjectId)}
-          <li data-kind={c.kind}>
-            <StatusPill
-              tone={c.rate === 100 ? 'success' : c.expiring ? 'danger' : 'warning'}
-              label="{c.kind === 'site' ? '현장 ' : ''}{c.subject} {c.rate}% ({c.complete}/{c.total})"
-              size="sm"
-            />
+          <li class="px-inset-md py-inset-xs gap-inline-md flex items-center justify-between" data-kind={c.kind}>
+            <span class="min-w-0 truncate" title={c.subject}>{c.kind === 'site' ? '현장 ' : ''}{c.subject}</span>
+            <span
+              class={cx(
+                'shrink-0 font-medium tabular-nums',
+                c.rate === 100 ? 'text-success-fg' : c.expiring ? 'text-danger-fg' : 'text-warning-fg',
+              )}>{c.rate}% ({c.complete}/{c.total})</span
+            >
           </li>
         {/each}
       </ul>

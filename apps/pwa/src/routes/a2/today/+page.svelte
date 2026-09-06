@@ -86,19 +86,17 @@
     >
       <div class="flex items-center justify-between">
         <span class="text-heading-sm">{d.id} · {d.unitNo}호기</span>
-        <StatusPill tone={EQUIPMENT_TONE[d.state]} label={EQUIP_LABEL[d.state]} size="sm" />
+        <StatusPill tone={EQUIPMENT_TONE[d.state]} label={EQUIP_LABEL[d.state]} size="sm" signal />
       </div>
       <span class="text-body-sm text-fg-muted">{t.site?.name ?? d.siteId}</span>
       {#if d.telemetry.errorCode}<span class="text-body-sm text-danger-fg"
           >고장코드 {d.telemetry.errorCode} — {ERROR_CODE_LABEL[d.telemetry.errorCode] ?? ''}</span
         >{/if}
-      <div class="gap-inline-sm flex flex-wrap">
+      <div class="gap-inline-sm flex items-center">
         {#if t.filming}<Badge tone="danger" variant="solid">● 촬영 중</Badge>{/if}
-        {#each t.consent.items as c (c.kind)}
-          <Badge tone={c.agreed ? 'success' : 'neutral'} variant="outline"
-            >{CONSENT_LABEL[c.kind]} 동의 {c.agreed ? '✓' : '✗'}</Badge
-          >
-        {/each}
+        <span class="text-label-sm text-fg-muted min-w-0 truncate"
+          >동의 · {t.consent.items.map((c) => `${CONSENT_LABEL[c.kind]} ${c.agreed ? '✓' : '✗'}`).join(' · ')}</span
+        >
       </div>
     </a>
   {:else}

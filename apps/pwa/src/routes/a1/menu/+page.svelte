@@ -3,6 +3,7 @@
   import { version } from '$app/environment';
   import { invalidateAll } from '$app/navigation';
   import { ROLE_NAME, SCR, profileFlags, type Request } from '@boomeyes/domain';
+  import { SOURCE_LABEL } from '@boomeyes/video';
   import {
     Badge,
     BottomSheet,
@@ -87,7 +88,12 @@
           { label: '주소', value: data.site.address },
           { label: '기간', value: data.site.period ? `${data.site.period.from} ~ ${data.site.period.to}` : '미정' },
           { label: '담당 안전관리자', value: safety },
-          { label: '영상 채널', value: flags ? `${flags.channels}채널 · 저장 ${flags.sources.join('·')}` : '—' },
+          {
+            label: '영상 채널',
+            value: flags
+              ? `${flags.channels}채널 · 저장 ${flags.sources.map((s) => SOURCE_LABEL[s]).join(' · ')}`
+              : '—',
+          },
           { label: '장비', value: `${data.devices.length}대 · 이상 ${abnormal}` },
           { label: '타설 일정', value: '준비 중', muted: true },
         ]}
