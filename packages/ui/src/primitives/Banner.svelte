@@ -4,6 +4,7 @@
   let {
     tone = 'neutral',
     dismissible = false,
+    ref,
     class: cls,
     children,
     action,
@@ -11,6 +12,8 @@
   }: {
     tone?: Tone;
     dismissible?: boolean;
+    /** 근거 SSOT ID(data-ref) — 시연 모드 근거 토글에서만 보인다 */
+    ref?: string;
     class?: string;
     children?: Snippet;
     action?: Snippet;
@@ -22,6 +25,7 @@
 {#if shown}
   <div
     role="status"
+    data-ref={ref}
     class={cx(
       'gap-inline-md rounded-card px-inset-md py-inset-sm text-body-md flex items-center border',
       TONE[tone].subtle,

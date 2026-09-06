@@ -19,7 +19,8 @@ test('[B1-07] 화면 루트 다크 강제(문서 루트 아님) · 지표 4 · �
   await expect(box).toContainText('김*장');
   await expect(box).not.toContainText('김현장');
   await expect(box).toContainText('010-****-0001');
-  await expect(box).toContainText('DISC-031');
+  await expect(box).not.toContainText('DISC-'); // 정책 근거는 화면 밖(data-ref)
+  await expect(box.locator('[data-watermark]')).toHaveAttribute('data-ref', /DISC-031/);
   await expect(box.locator('button:not([aria-label*="카메라"])')).toHaveCount(0); // 처리·편집 액션 없음(타일만)
   await expect(box.locator('a')).toHaveCount(0);
 });

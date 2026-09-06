@@ -31,12 +31,11 @@
 >
   <PageHeader
     title="보고 모드"
-    description="경영 보고용 열람 전용 요약 — 자사 현장 {data.report
-      .length} · CPB {total}대 · 기간은 DemoClock 기준 · ESC 또는 바깥 클릭으로 본사 지도로 돌아갑니다"
+    description="자사 현장 {data.report.length} · CPB {total}대 · 열람 전용 — ESC 또는 바깥 클릭으로 닫습니다"
   >
     {#snippet actions()}
-      <Button variant="outline" tone="neutral" disabled title="PDF 내보내기는 API-014 2단계"
-        >PDF 내보내기 — 2단계</Button
+      <Button variant="outline" tone="neutral" disabled title="다음 단계에서 지원합니다" data-ref="API-014"
+        >PDF 내보내기 — 준비 중</Button
       >
       <Button variant="ghost" tone="neutral" onclick={back}>닫기 (Esc)</Button>
     {/snippet}
@@ -80,5 +79,4 @@
       </div>
     </section>
   {/each}
-  <p class="text-label-sm text-fg-muted">처리 액션 없음 · 실 집계 서버·PDF·기간 지정 저장은 2단계(API-014)</p>
 </div>

@@ -2,7 +2,7 @@
   // B2-02 본사 지도 — 자사 현장 2의 장비 마커(상태색) + 현장 카드 · 마커/카드 선택 → B2-03 현장 상세 · "보고 모드" → B2-04 · 처리 액션 없음(본사 = 열람 + 확인 요청, DISC-015) (specs/sites-assets-leases AC-4 · FR-003)
   import { goto } from '$app/navigation';
   import { resolve } from '$app/paths';
-  import { SCR, type Device } from '@boomeyes/domain';
+  import { SCR, profileFlags, type Device } from '@boomeyes/domain';
   import { MapView } from '@boomeyes/map';
   import { Badge, EQUIPMENT_LABEL, EQUIPMENT_TONE, PageHeader, Stat, StatusPill } from '@boomeyes/ui';
   let { data } = $props();
@@ -22,8 +22,8 @@
 <div class="gap-stack-lg flex min-w-0 flex-col" data-scr={SCR['B2-02']}>
   <PageHeader
     title="본사 지도"
-    description="자사 현장 {data.sites.length} · CPB {data.kpis
-      .total}대 — 열람 + 확인 요청(현장 상세) · 직접 처리 불가(DISC-015)"
+    description="자사 현장 {data.sites.length} · CPB {data.kpis.total}대 · 열람 전용(확인 요청은 현장 상세에서)"
+    ref="DISC-015"
   >
     {#snippet actions()}
       <a
@@ -77,7 +77,8 @@
                 >
               </div>
               <span class="text-body-sm text-fg-muted"
-                >{s.id} · {s.company} · 장비 {devicesOf(s.id).length}대 · 프로파일 {s.videoProfile}</span
+                >{s.id} · {s.company} · 장비 {devicesOf(s.id).length}대 · {profileFlags(s.videoProfile)
+                  .channels}채널</span
               >
               <div class="gap-inline-sm flex flex-wrap">
                 {#each devicesOf(s.id) as d (d.id)}<StatusPill

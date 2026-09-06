@@ -7,7 +7,8 @@ test('[B4-07] 부품 5 · 상태 pill(P-004 교체 대상) · 인스펙터 이�
 }) => {
   await page.goto('/b4/parts?state=default&capture=1');
   await expect(page.locator(`[data-scr="${SCR['B4-07']}"]`)).toBeVisible();
-  await expect(page.locator('[data-banner="threshold"]')).toContainText('OEM 기준 미확정(DISC-038)');
+  await expect(page.locator('[data-banner="threshold"]')).toContainText('OEM 기준 준비 중');
+  await expect(page.locator('[data-banner="threshold"]')).toHaveAttribute('data-ref', 'DISC-038'); // 근거는 data-ref로만(§12.1-2)
   const rows = page.locator('table').first().locator('tbody tr');
   await expect(rows).toHaveCount(5);
   await expect(rows.filter({ hasText: 'P-004' })).toContainText('교체 대상');
@@ -19,8 +20,8 @@ test('[B4-07] 부품 5 · 상태 pill(P-004 교체 대상) · 인스펙터 이�
   await expect(page).toHaveURL(/part=P-001/);
   await expect(aside).toContainText('직관·이송배관');
   await expect(aside.locator('ol[aria-label="이력"] li').first()).toContainText('장착');
-  await expect(page.getByRole('button', { name: /발주 — 2단계/ })).toBeDisabled();
-  await expect(page.getByRole('button', { name: /재고 편집 — 2단계/ })).toBeDisabled();
+  await expect(page.getByRole('button', { name: /발주 — 준비 중/ })).toBeDisabled();
+  await expect(page.getByRole('button', { name: /재고 편집 — 준비 중/ })).toBeDisabled();
   await expect(page.locator('table').nth(1).locator('tbody tr')).toHaveCount(5);
   await expect(page.locator('table').nth(1)).toContainText('안전재고 이하'); // DY-EH-125 1/1
   await expect(page.getByRole('progressbar').first()).toHaveAttribute('aria-valuetext', /m³/);

@@ -69,17 +69,18 @@
   data-scr={SCR['B4-07']}
 >
   <div class="gap-stack-lg flex min-w-0 flex-col">
-    <PageHeader
-      title="부품 대장"
-      description="마모·교체 부품 5군(직관·이송배관 / 엘보·리듀서 / 플랜지·클램프 / 가스켓·안전핀 / 엔드호스·피팅) — 부품 ID 중심 · W2는 구조(자리+, DISC-044): 상태기계·이력·재고까지, 스캔·발주는 2단계"
-    >
+    <PageHeader title="부품 대장" description="부품 ID 기준 상태 · 이력 · 재고" ref="DISC-044">
       {#snippet actions()}
         <a href={resolve('/b4/parts/history' as '/')} class="text-body-md text-accent-fg">점검·교체 이력 ›</a>
       {/snippet}
     </PageHeader>
-    <div class="rounded-card bg-warning-bg text-warning-fg p-inset-md text-body-sm" role="note" data-banner="threshold">
-      임계·점검 주기 — OEM 기준 미확정(DISC-038): 합불은 입력자 판정, 누적 타설량·운전시간은 보조지표(단독 폐기 기준
-      아님)
+    <div
+      class="rounded-card bg-warning-bg text-warning-fg p-inset-md text-body-sm"
+      role="note"
+      data-banner="threshold"
+      data-ref="DISC-038"
+    >
+      임계·점검 주기는 OEM 기준 준비 중 — 합불은 입력자 판정 · 누적 타설량·운전시간은 보조지표
     </div>
     <DataTable
       columns={COLS}
@@ -114,9 +115,11 @@
       <div class="flex items-center justify-between">
         <h2 class="text-heading-md">재고 {data.stock.length}</h2>
         <div class="gap-inline-sm flex">
-          <Button size="sm" variant="outline" tone="neutral" disabled title="발주는 FR-032 2단계">발주 — 2단계</Button>
-          <Button size="sm" variant="outline" tone="neutral" disabled title="재고 편집은 FR-032 2단계"
-            >재고 편집 — 2단계</Button
+          <Button size="sm" variant="outline" tone="neutral" disabled title="다음 단계에서 지원합니다" data-ref="FR-032"
+            >발주 — 준비 중</Button
+          >
+          <Button size="sm" variant="outline" tone="neutral" disabled title="다음 단계에서 지원합니다" data-ref="FR-032"
+            >재고 편집 — 준비 중</Button
           >
         </div>
       </div>

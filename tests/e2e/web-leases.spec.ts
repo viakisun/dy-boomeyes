@@ -52,5 +52,5 @@ test('[B2-02] hq01 로그인 → 본사 지도: 마커 5 · 현장 카드 2 · �
   await page.locator('[data-site="SITE-002"]').click();
   await expect(page).toHaveURL(/\/b2\/sites\/SITE-002$/);
   await expect(page.locator(`[data-scr="${SCR['B2-03']}"]`)).toBeVisible();
-  await expect(page.getByText('프로파일 P-LITE')).toBeVisible();
+  await expect(page.locator('[data-profile="P-LITE"]')).toHaveText('1채널');
 });

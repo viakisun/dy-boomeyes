@@ -3,7 +3,7 @@
 ### 12.1 규칙
 
 1. **부제 1줄, 60자.** 화면이 무엇을 보여주는지만. 규칙 설명·근거·한계는 여기 두지 않는다. 예: "만료 임박 계약이 위에 옵니다" (○) / "만료 임박(D-30) 계약이 최상단 · 재배치 계획은 lease 상태기계(expiring → relocated) · … DISC-037" (✗).
-2. **식별자는 UI 밖.** `DISC-` `FR-` `NFR-` `ENT-` `IF-` `API-` `EXT-` `ADR-` `OUT-` `ACC-` `WP-`, 웨이브(`W2` `wave 2` `2단계`), 구현 용어(상태기계 · append-only · mock · canAccess)는 화면 문자열에 쓰지 않는다. 근거가 필요하면 요소에 `data-ref="DISC-015"`를 붙이고, 시연 모드의 `DemoBar`가 툴팁으로 보여준다. `pnpm design:audit`가 센다(목표 0 · D7에서 lint error).
+2. **식별자는 UI 밖.** `DISC-` `FR-` `NFR-` `ENT-` `IF-` `API-` `EXT-` `ADR-` `OUT-` `ACC-` `WP-`, 웨이브(`W2` `wave 2` `2단계`), 구현 용어(상태기계 · append-only · mock · canAccess)는 화면 문자열에 쓰지 않는다. 근거가 필요하면 요소에 `data-ref="DISC-015"`(공백 구분 복수 가능 · `PageHeader` `Banner` `EmptyState` `Badge` `ShowcaseOverlay`는 `ref` prop)를 붙이고, 시연 모드 `DemoBar`의 "근거" 토글이 칩으로 보여준다. 보이는 텍스트 · `title` · `aria-label`에는 ID를 쓰지 않는다("다음 단계에서 지원합니다"). `pnpm design:audit`가 센다(목표 0 · D7에서 lint error).
 3. **도메인 식별자는 사용자 언어다.** `CPB-003` `3호기` `C-105` `DOC-001` `E-021` `RQ-003` `P-004` `LS-001` `SITE-001`은 화면에 그대로 쓴다(`code-md`).
 4. **미확정·미구현은 "준비 중".** 버튼: "태그 스캔 — 준비 중"(disabled + 툴팁 이유). 값: "준비 중". 배너 문장으로 결정 번호를 설명하지 않는다.
 5. **버튼은 동사, 상태는 명사.** "접수" "승인" "재시도" / "접수 대기" "검토 중". 같은 뜻은 같은 낱말 — 라벨 원천은 `packages/ui/src/lib/labels.ts`.

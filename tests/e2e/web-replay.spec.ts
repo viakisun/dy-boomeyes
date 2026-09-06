@@ -16,14 +16,15 @@ test('[B1-08] EV-001: 헤더(event_id·종류·장비·t0·AL-001·C-105) · 4�
   const link = page.locator('dl[aria-label="연결"]');
   await expect(link).toContainText('AL-001');
   await expect(link).toContainText('C-105');
-  await expect(page.getByText('원본 보존 잠금 · NFR-015')).toBeVisible();
+  await expect(page.getByText('원본 보존', { exact: true })).toBeVisible();
+  await expect(page.getByText('원본 보존', { exact: true })).toHaveAttribute('data-ref', 'NFR-015');
   const lanes = page.locator('section[aria-label="복기 타임라인"] ol');
   await expect(lanes).toHaveCount(4);
   await expect(page.locator('[data-lane="bodycam"]')).toContainText('없음');
   await expect(page.locator('[data-lane="cpb"]')).toContainText('전압 342V · E-021 발생');
   await expect(page.locator('[data-video-lane] [data-camera]')).toHaveCount(2); // 일반 = 라이브(video) · AI = 스냅샷(img)
   await expect(page.locator('video')).toHaveCount(1);
-  await expect(page.getByText('목업 · 루프 클립(seek 없음)')).toBeVisible();
+  await expect(page.getByText('목업')).toHaveCount(0); // 구현 상태는 화면에 내지 않는다(§12.2)
   await expect(page.getByRole('button', { name: /삭제|편집|수정/ })).toHaveCount(0);
 });
 

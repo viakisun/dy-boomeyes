@@ -18,6 +18,7 @@
     toast,
     type Column,
     Inspector,
+    PageHeader,
   } from '@boomeyes/ui';
   import { session } from '$lib/session.svelte';
   let { data } = $props();
@@ -45,12 +46,10 @@
   data-scr={SCR['B1-04']}
 >
   <div class="gap-stack-lg flex min-w-0 flex-col">
-    <header>
-      <h1 class="text-heading-xl">에스컬레이션</h1>
-      <p class="text-body-sm text-fg-muted">
-        미접수 임계 초과 {data.escalations.length}건 · 기준 시각 {fmtDateTime(data.clock.iso())}
-      </p>
-    </header>
+    <PageHeader
+      title="에스컬레이션"
+      description="미접수 임계 초과 {data.escalations.length}건 · 기준 시각 {fmtDateTime(data.clock.iso())}"
+    />
     <Banner tone="warning"
       >중대 업무가 1시간(협의) 동안 접수되지 않으면 건설사 본사 안전관리자와 관제에 자동 통보됩니다.</Banner
     >

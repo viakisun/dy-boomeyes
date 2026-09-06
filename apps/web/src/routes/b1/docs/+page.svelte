@@ -17,6 +17,7 @@
     dueLabel,
     fmtDateTime,
     type Column,
+    PageHeader,
   } from '@boomeyes/ui';
   let { data } = $props();
   const now = $derived(data.clock.now());
@@ -51,10 +52,7 @@
   data-scr={SCR['B1-05']}
 >
   <div class="gap-stack-lg flex min-w-0 flex-col">
-    <header class="gap-stack-xs flex flex-col">
-      <h1 class="text-heading-xl">서류 현황</h1>
-      <p class="text-body-sm text-fg-muted">등록·승인은 현장 · 운영사는 완비율 모니터링과 요청 회신 · 만료 D-30 알림</p>
-    </header>
+    <PageHeader title="서류 현황" description="대상별 완비율 · 만료 30일 이내 서류 · 등록·승인은 현장에서 합니다" />
     <div class="gap-inline-md grid grid-cols-2 md:grid-cols-4" aria-label="완비율 요약">
       <Stat
         label="평균 완비율"

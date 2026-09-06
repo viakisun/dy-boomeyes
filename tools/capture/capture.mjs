@@ -3,7 +3,7 @@
 //   --baseline | --current: 시각 회귀(ADR-008 A) 프리셋 — DPR 1 · 기본 상태만 · 라이트 · shots/baseline | shots/current + MANIFEST.json(렌더 환경) + <name>.json(지도·비디오 마스크)
 // 출력 shots/<code-lower>-<state>.png · 시각 고정은 앱 DemoClock(?capture=1) · 애니메이션 off
 // --dark: 화면 기본 상태를 ?theme=dark(루트 data-theme)로 한 번 더 찍는다 → <code-lower>-<state>-dark.png (shell-auth AC-6)
-// --strict: 캐치올 자리 화면("웨이브 N에서 구현됩니다")을 FAIL로 센다 — 웨이브 Exit 게이트(자리 0, W2). 없으면 stub로 세기만 한다
+// --strict: 캐치올 자리 화면(루트 [data-stub] · "준비 중인 화면입니다")을 FAIL로 센다 — 웨이브 Exit 게이트(자리 0, W2). 없으면 stub로 세기만 한다
 // 출력 디렉터리에 manifest.json(장별 code · state · file · app · dark · default · dpr · width · height · ok)을 남긴다 — tools/docs-gen(ADR-011)이 읽는다
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
 import { createRequire } from 'node:module';
@@ -142,10 +142,10 @@ for (const s of screens) {
       try {
         await page.goto(url, { waitUntil: 'networkidle' });
         await page.waitForSelector(`[data-scr="${s.id}"]`, { timeout: 10_000 });
-        // 자리 화면(캐치올 EmptyState) — data-scr는 캐치올도 붙이므로 문구로 판별한다
-        if (await page.getByText('에서 구현됩니다').count()) {
+        // 자리 화면(캐치올 EmptyState) — data-scr는 캐치올도 붙이므로 루트 data-stub로 판별한다
+        if (await page.locator('[data-stub]').count()) {
           stub++;
-          if (STRICT) throw new Error('자리 화면 — 실 라우트 없음(웨이브 N에서 구현됩니다)');
+          if (STRICT) throw new Error('자리 화면 — 실 라우트 없음([data-stub] 캐치올)');
           console.log('stub', name);
         }
         await page.addStyleTag({ content: '*,*::before,*::after{animation:none!important;transition:none!important}' });

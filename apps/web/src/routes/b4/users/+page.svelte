@@ -68,10 +68,7 @@
   data-scr={SCR['B4-04']}
 >
   <div class="gap-stack-lg flex min-w-0 flex-col">
-    <PageHeader
-      title="사용자·권한"
-      description="7역할 × 데모 계정 7 — 역할 · 현장 범위 · 상태. 접근 화면은 라우트 가드와 같은 canAccess로 계산한다 · 운영사는 안전관리자(site-safety) 권한을 부여할 수 없다(entities.rules) · 계정 발급·인증키 정책은 DISC-020"
-    />
+    <PageHeader title="사용자·권한" description="역할 · 현장 범위 · 상태 — 변경은 바로 저장됩니다" ref="DISC-020" />
     <DataTable
       columns={COLS}
       rows={data.users}

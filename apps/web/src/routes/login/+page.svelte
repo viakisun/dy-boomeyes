@@ -62,8 +62,8 @@
   <header class="text-center">
     <p class="text-label-lg text-accent-fg">DY · BoomEyes(가칭)</p>
     <h1 class="text-display-md">CPB 관제 로그인</h1>
-    <p class="mt-stack-xs text-body-sm text-fg-muted">
-      역할 카드를 선택하면 데모 계정으로 들어갑니다 — 실인증은 DISC-020 확정 후
+    <p class="mt-stack-xs text-body-sm text-fg-muted" data-ref="DISC-020">
+      역할 카드를 선택하면 데모 계정으로 들어갑니다
     </p>
   </header>
   <div class="max-w-layout-content-max gap-inline-lg grid w-full grid-cols-1 md:grid-cols-2">

@@ -20,6 +20,7 @@
     toast,
     type Column,
     Inspector,
+    PageHeader,
   } from '@boomeyes/ui';
   import { session } from '$lib/session.svelte';
   let { data } = $props();
@@ -76,14 +77,12 @@
   data-scr={SCR['B1-03']}
 >
   <div class="gap-stack-lg flex min-w-0 flex-col">
-    <header>
-      <h1 class="text-heading-xl">수신함</h1>
-      <p class="text-body-sm text-fg-muted">
-        신청·요청 {data.requests.length}건 · 대기 {data.requests.filter(
-          (r) => r.state === 'submitted' || r.state === 'review',
-        ).length}건
-      </p>
-    </header>
+    <PageHeader
+      title="수신함"
+      description="신청·요청 {data.requests.length}건 · 대기 {data.requests.filter(
+        (r) => r.state === 'submitted' || r.state === 'review',
+      ).length}건"
+    />
 
     {#if data.focus}
       {@const c = data.focus}

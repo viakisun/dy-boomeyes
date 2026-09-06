@@ -1,7 +1,6 @@
 <script lang="ts">
   // B2-03 현장 상세(본사 웹) — 장비 카드 · 2채널 카메라 월(프로파일) · 미처리 업무에 "확인 요청"만(처리 버튼 없음, DISC-015) (specs/video-basics AC-8)
   import { invalidateAll } from '$app/navigation';
-  import { resolve } from '$app/paths';
   import { SCR, type Case } from '@boomeyes/domain';
   import {
     Badge,
@@ -15,6 +14,7 @@
     Timeline,
     dueLabel,
     toast,
+    PageHeader,
   } from '@boomeyes/ui';
   import { CameraWall } from '@boomeyes/video';
   import { session } from '$lib/session.svelte';
@@ -43,16 +43,17 @@
   data-scr={SCR['B2-03']}
 >
   <div class="gap-stack-lg flex min-w-0 flex-col">
-    <header class="gap-stack-xs flex flex-col">
-      <a href={resolve('/b2/map' as '/')} class="text-label-md text-accent-fg">‹ 본사 지도</a>
-      <h1 class="text-heading-xl">{data.site.name}</h1>
-      <div class="gap-inline-sm flex flex-wrap items-center">
-        <span class="text-body-sm text-fg-muted"
-          >{data.site.id} · {data.site.company} · 장비 {data.devices.length}대 · 열람 + 확인 요청(직접 처리 불가)</span
+    <PageHeader
+      title={data.site.name}
+      description="{data.site.id} · {data.site.company} · 장비 {data.devices.length}대 · 열람 전용(확인 요청만)"
+      ref="DISC-015"
+    >
+      {#snippet meta()}
+        <Badge tone="neutral" variant="outline"
+          ><span data-profile={data.flags.profile}>{data.flags.channels}채널</span></Badge
         >
-        <Badge tone="neutral" variant="outline">프로파일 {data.flags.profile}</Badge>
-      </div>
-    </header>
+      {/snippet}
+    </PageHeader>
     <section class="gap-stack-sm flex flex-col" aria-label="장비">
       <h2 class="text-heading-md">장비</h2>
       <div class="gap-inline-md grid md:grid-cols-2 xl:grid-cols-3">

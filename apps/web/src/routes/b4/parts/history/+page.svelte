@@ -47,13 +47,7 @@
   data-scr={SCR['B4-08']}
 >
   <div class="gap-stack-lg flex min-w-0 flex-col">
-    <PageHeader
-      title="점검·교체 이력"
-      description="부품 이력(ENT-17, append-only) — 점검 실측두께·외관·체결·OEM 합불 · 교체·폐기 사유·작업자·증빙 · 누적 타설량·운전시간은 보조지표"
-    >
-      {#snippet actions()}
-        <a href={resolve('/b4/parts' as '/')} class="text-body-md text-accent-fg">‹ 부품 대장</a>
-      {/snippet}
+    <PageHeader title="점검·교체 이력" description="점검 · 교체 · 폐기 이력 — 추가만 됩니다" ref="ENT-17">
       <div class="gap-inline-sm flex flex-wrap" role="group" aria-label="구분">
         <Chip selected={data.kind === 'all'} count={data.events.length} onclick={() => go('all')}>전체</Chip>
         {#each data.kinds as k (k)}
@@ -135,7 +129,7 @@
             ? [
                 {
                   label: 'OEM 합불',
-                  value: selected.pass ? '합 (입력자 판정 · OEM 기준 미확정 DISC-038)' : '불 → 교체 대상',
+                  value: selected.pass ? '합 (입력자 판정)' : '불 → 교체 대상',
                 },
               ]
             : []),

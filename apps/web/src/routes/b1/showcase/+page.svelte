@@ -16,7 +16,8 @@
   <ShowcaseOverlay
     label="관제 쇼케이스"
     watermark="읽기 전용 · 개인정보 마스킹 · 처리 액션 없음"
-    note="마스킹 정책 미확정(DISC-031) · ESC 또는 화면 클릭으로 관제 대시보드로"
+    note="ESC 또는 화면 클릭으로 관제 대시보드로"
+    ref="DISC-031"
   >
     <div class="gap-inline-md flex flex-wrap items-end justify-between">
       <div class="gap-stack-xs flex flex-col">

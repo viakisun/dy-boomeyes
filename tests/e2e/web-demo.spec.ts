@@ -42,6 +42,23 @@ test('[B1-04] 장면 6: 55분 방치 → 에스컬레이션 없음 → "1시간 
   await expect(rows.first()).toContainText('건설사 본사 · 관제');
 });
 
+test('[B4-02] 장면 바 "근거" 토글: 부제 data-ref(FR-020)가 칩으로 보인다 · 화면 문자열에는 ID 없음 [FR-024]', async ({
+  page,
+}) => {
+  await page.goto('/b4/protocols?scene=8');
+  await expect(page.locator(root(SCR['B4-02']))).toBeVisible();
+  const sub = page.locator('[data-ref="FR-020"]');
+  await expect(sub).toBeVisible();
+  await expect(sub).not.toContainText('FR-020');
+  const chip = () => sub.evaluate((el) => getComputedStyle(el, '::after').content);
+  expect(await chip()).toBe('none');
+  await page.locator('[data-demo-bar]').getByRole('button', { name: '근거' }).click();
+  await expect(page.locator('html')).toHaveAttribute('data-demo-refs', '');
+  expect(await chip()).toContain('FR-020');
+  await page.locator('[data-demo-bar]').getByRole('button', { name: '근거' }).click();
+  expect(await chip()).toBe('none');
+});
+
 test('[B4-02] 장면 8: ops01 세션으로 프로토콜 화면 진입 · 장면 바 이전(장면 7 A2 앱)/다음(장면 9) [FR-020] [FR-024]', async ({
   page,
 }) => {

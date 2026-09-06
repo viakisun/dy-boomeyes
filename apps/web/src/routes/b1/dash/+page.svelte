@@ -16,6 +16,7 @@
     Tabs,
     cx,
     toast,
+    PageHeader,
   } from '@boomeyes/ui';
   import { CameraWall, SOURCE_LABEL, VideoPlayer, visibleIn } from '@boomeyes/video';
   let { data } = $props();
@@ -86,17 +87,13 @@
   data-scr={modalCam ? 'B1-02M' : 'B1-02'}
 >
   <div class="gap-stack-lg flex min-w-0 flex-col">
-    <header class="gap-inline-md flex items-end justify-between">
-      <div>
-        <h1 class="text-heading-xl">관제 대시보드</h1>
-        <p class="text-body-sm text-fg-muted">
-          전국 CPB {data.kpis.total}대 · 실시간(mock) · {fmt(data.clock.iso())}
-        </p>
-      </div>
-      <Button variant="outline" tone="neutral" size="sm" onclick={() => goto(resolve('/b1/showcase' as '/'))}
-        >쇼케이스</Button
-      >
-    </header>
+    <PageHeader title="관제 대시보드" description="전국 CPB {data.kpis.total}대 · {fmt(data.clock.iso())} 기준">
+      {#snippet actions()}
+        <Button variant="outline" tone="neutral" size="sm" onclick={() => goto(resolve('/b1/showcase' as '/'))}
+          >쇼케이스</Button
+        >
+      {/snippet}
+    </PageHeader>
 
     <section class="gap-inline-md grid grid-cols-2 md:grid-cols-4" aria-label="KPI">
       <Stat label="가동" value={data.kpis.normal} unit="대" tone="success" hint="정상 텔레메트리 수신" />
@@ -329,7 +326,7 @@
       {#if modalFlags.sdRecall && modalSource === 'sd'}
         <Button size="sm" variant="outline" tone="neutral">SD 구간 회수 요청</Button>
       {/if}
-      {#if modalFlags.nvrTimeline}<span class="text-label-sm text-fg-muted">NVR 타임라인 — W4</span>{/if}
+      {#if modalFlags.nvrTimeline}<span class="text-label-sm text-fg-muted">NVR 타임라인 — 준비 중</span>{/if}
     </div>
   {/if}
   {#snippet footer()}<Button variant="ghost" tone="neutral" onclick={closeCam}>닫기 (Esc)</Button>{/snippet}
