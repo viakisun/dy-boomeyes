@@ -538,5 +538,5 @@ disc:
   resolved:
     date: '2026-09-06'
     by: 사용자(VIA) — DY 확인 전 기준안 채택
-    summary: 허용 형식 사진(JPEG·PNG)·PDF · 용량 상한 10MB · 촬영 원본 보존(앱 큐 → 서버 저장) · 전송은 HTTPS 멀티파트(IF-011) · 서명 URL은 W3 ADR — 기준안
+    summary: 기준안 그대로 — 전송은 HTTPS 멀티파트(IF-011) · 파일은 S3(ENT-07) · 촬영 원본은 앱 큐(ADR-010)에 보관 후 서버 저장 · 허용 형식·용량 상한·서명 URL은 W3 전송 ADR에서 DY 값으로 확정(신규 수치 없음)
   source: w2-plan-2026-09-05
