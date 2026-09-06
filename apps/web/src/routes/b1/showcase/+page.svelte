@@ -23,8 +23,7 @@
       <div class="gap-stack-xs flex flex-col">
         <span class="text-label-md text-fg-muted">BoomEyes · CPB 안전관제 쇼케이스</span>
         <h1 class="text-heading-xl">현장 {s.sites.length} · CPB {s.devices}대 가동 {s.normal}대</h1>
-        <span class="text-body-sm text-fg-muted">{fmtDateTime(data.clock.iso())} · 목업 · 실시간(라이브 대체 루프)</span
-        >
+        <span class="text-body-sm text-fg-muted">{fmtDateTime(data.clock.iso())} · 실시간 · 시연용 대체 영상</span>
       </div>
       <Badge tone="success" variant="solid">안전관리 중</Badge>
     </div>

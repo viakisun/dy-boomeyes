@@ -5,7 +5,6 @@
   import { cx, FOCUS, SEVERITY_TONE, TASK_TONE } from '../lib/cx';
   import { CASE_KIND_LABEL, SEVERITY_LABEL, TASK_LABEL } from '../lib/labels';
   import Badge from './Badge.svelte';
-  import StatusDot from './StatusDot.svelte';
   import StatusPill from './StatusPill.svelte';
   let {
     task,
@@ -43,9 +42,7 @@
     </div>
     <div class="gap-inline-sm text-label-md flex flex-wrap items-center">
       <StatusPill tone={TASK_TONE[task.state]} label={TASK_LABEL[task.state]} size="sm" />
-      <span class="gap-inline-xs inline-flex items-center">
-        <StatusDot tone={SEVERITY_TONE[task.severity]} />{SEVERITY_LABEL[task.severity]}
-      </span>
+      <StatusPill tone={SEVERITY_TONE[task.severity]} label={SEVERITY_LABEL[task.severity]} size="sm" />
       {#if due}<span class={cx('tabular-nums', due.overdue ? 'text-danger-fg font-semibold' : 'text-fg-muted')}
           >기한 {due.label}</span
         >{/if}

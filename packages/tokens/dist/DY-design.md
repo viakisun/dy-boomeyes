@@ -11,7 +11,7 @@
 | sys(시맨틱) | 324 |
 | cmp(컴포넌트) | 92 |
 | 컴포넌트 카탈로그 | 80 |
-| 대비 검사 | 82/82 통과 |
+| 대비 검사 | 94/94 통과 |
 
 | 산출물 | 용도 |
 |---|---|
@@ -25,7 +25,7 @@
 1. **하나의 시스템, 두 밀도.** 웹 백오피스(compact)와 현장 PWA(comfortable)는 같은 토큰·같은 컴포넌트를 쓰고 밀도 토큰만 다르다. 화면별 예외값을 만들지 않는다.
 2. **시맨틱 우선.** 화면 코드는 `sys`·`cmp` 토큰만 호출한다. `ref` 램프 직접 참조는 램프를 정의하는 곳(sys)과 차트·지도 계열에서만 허용한다.
 3. **모드는 값의 차이, 구조는 하나.** light/dark, compact/comfortable, 브랜드는 같은 토큰 경로에 다른 값을 넣는다. 다크 전용 토큰·브랜드 전용 토큰은 없다.
-4. **상태는 색으로만 말하지 않는다.** 장비·업무·서류 상태는 색 + 아이콘/점 + 텍스트를 함께 쓴다. 도메인 토큰이 색을 정하고, StatusPill·StatusDot이 형태를 정한다.
+4. **상태는 색으로만 말하지 않는다 — 두 번째 단서는 텍스트다.** 상태 pill은 톤 배경 + 텍스트 라벨(StatusPill). 점(StatusDot)은 스스로 변하는 신호에만 붙인다 — 장비 상태 · 카메라 LIVE/REC/오프라인 · 텔레메트리 타일 · 지도 마커와 범례(`StatusPill signal`). 사람이 정한 업무·요청·서류 상태, 심각도, Stat 라벨, 배너·토스트에는 점을 붙이지 않는다. 화면에 남은 점은 전부 "지금 살아 있는 신호"라는 한 뜻만 갖는다.
 5. **접근성은 게이트.** 본문 7:1, 보조 텍스트 4.5:1, 비텍스트 UI 3:1을 빌드가 검사한다. 통과하지 못한 토큰은 배포되지 않는다.
 6. **밀도는 역할에서 온다.** 관제·백오피스는 한 화면에 많은 행을 담고(Linear 밀도: 행 36 · 본문 13px), 현장 앱은 장갑 낀 손과 햇빛을 전제로 한다(터치 48 · 본문 16px).
 7. **코드가 원천.** Figma 파일은 참조였고 동기 대상이 아니다. 토큰·문서·CSS는 `packages/tokens/src`에서 생성되며, 디자인 변경은 소스 변경으로 기록된다.
@@ -405,26 +405,32 @@
 | light | `border.emphasis` | `bg.canvas` | 3.49:1 | ≥3 | ✓ |
 | light | `focus.ring` | `bg.canvas` | 12.67:1 | ≥3 | ✓ |
 | light | `status.info.fg` | `bg.canvas` | 8.63:1 | ≥4.5 | ✓ |
+| light | `status.info.fg` | `bg.surface` | 8.87:1 | ≥4.5 | ✓ |
 | light | `status.info.fg` | `status.info.bg` | 7.95:1 | ≥4.5 | ✓ |
 | light | `status.info.on-solid` | `status.info.solid` | 6.43:1 | ≥4.5 | ✓ |
 | light | `status.info.solid` | `bg.canvas` | 6.16:1 | ≥3 | ✓ |
 | light | `status.success.fg` | `bg.canvas` | 7.65:1 | ≥4.5 | ✓ |
+| light | `status.success.fg` | `bg.surface` | 7.87:1 | ≥4.5 | ✓ |
 | light | `status.success.fg` | `status.success.bg` | 7.12:1 | ≥4.5 | ✓ |
 | light | `status.success.on-solid` | `status.success.solid` | 5.62:1 | ≥4.5 | ✓ |
 | light | `status.success.solid` | `bg.canvas` | 5.38:1 | ≥3 | ✓ |
 | light | `status.warning.fg` | `bg.canvas` | 8.24:1 | ≥4.5 | ✓ |
+| light | `status.warning.fg` | `bg.surface` | 8.47:1 | ≥4.5 | ✓ |
 | light | `status.warning.fg` | `status.warning.bg` | 7.6:1 | ≥4.5 | ✓ |
 | light | `status.warning.on-solid` | `status.warning.solid` | 9.65:1 | ≥4.5 | ✓ |
 | light | `status.warning.border-strong` | `bg.canvas` | 3.84:1 | ≥3 | ✓ |
 | light | `status.danger.fg` | `bg.canvas` | 8.87:1 | ≥4.5 | ✓ |
+| light | `status.danger.fg` | `bg.surface` | 9.12:1 | ≥4.5 | ✓ |
 | light | `status.danger.fg` | `status.danger.bg` | 8.14:1 | ≥4.5 | ✓ |
 | light | `status.danger.on-solid` | `status.danger.solid` | 6.67:1 | ≥4.5 | ✓ |
 | light | `status.danger.solid` | `bg.canvas` | 6.38:1 | ≥3 | ✓ |
 | light | `status.progress.fg` | `bg.canvas` | 7.78:1 | ≥4.5 | ✓ |
+| light | `status.progress.fg` | `bg.surface` | 8:1 | ≥4.5 | ✓ |
 | light | `status.progress.fg` | `status.progress.bg` | 7.26:1 | ≥4.5 | ✓ |
 | light | `status.progress.on-solid` | `status.progress.solid` | 5.74:1 | ≥4.5 | ✓ |
 | light | `status.progress.solid` | `bg.canvas` | 5.5:1 | ≥3 | ✓ |
 | light | `status.neutral.fg` | `bg.canvas` | 5.76:1 | ≥4.5 | ✓ |
+| light | `status.neutral.fg` | `bg.surface` | 5.92:1 | ≥4.5 | ✓ |
 | light | `status.neutral.fg` | `status.neutral.bg` | 5.42:1 | ≥4.5 | ✓ |
 | light | `status.neutral.on-solid` | `status.neutral.solid` | 6.01:1 | ≥4.5 | ✓ |
 | light | `status.neutral.solid` | `bg.canvas` | 5.76:1 | ≥3 | ✓ |
@@ -446,26 +452,32 @@
 | dark | `border.emphasis` | `bg.canvas` | 4.52:1 | ≥3 | ✓ |
 | dark | `focus.ring` | `bg.canvas` | 3.45:1 | ≥3 | ✓ |
 | dark | `status.info.fg` | `bg.canvas` | 10.36:1 | ≥4.5 | ✓ |
+| dark | `status.info.fg` | `bg.surface` | 9.84:1 | ≥4.5 | ✓ |
 | dark | `status.info.fg` | `status.info.bg` | 8.83:1 | ≥4.5 | ✓ |
 | dark | `status.info.on-solid` | `status.info.solid` | 5.87:1 | ≥4.5 | ✓ |
 | dark | `status.info.solid` | `bg.canvas` | 3.31:1 | ≥3 | ✓ |
 | dark | `status.success.fg` | `bg.canvas` | 10.83:1 | ≥4.5 | ✓ |
+| dark | `status.success.fg` | `bg.surface` | 10.29:1 | ≥4.5 | ✓ |
 | dark | `status.success.fg` | `status.success.bg` | 9.03:1 | ≥4.5 | ✓ |
 | dark | `status.success.on-solid` | `status.success.solid` | 5.16:1 | ≥4.5 | ✓ |
 | dark | `status.success.solid` | `bg.canvas` | 3.76:1 | ≥3 | ✓ |
 | dark | `status.warning.fg` | `bg.canvas` | 10.25:1 | ≥4.5 | ✓ |
+| dark | `status.warning.fg` | `bg.surface` | 9.73:1 | ≥4.5 | ✓ |
 | dark | `status.warning.fg` | `status.warning.bg` | 8.73:1 | ≥4.5 | ✓ |
 | dark | `status.warning.on-solid` | `status.warning.solid` | 9.65:1 | ≥4.5 | ✓ |
 | dark | `status.warning.border-strong` | `bg.canvas` | 4.83:1 | ≥3 | ✓ |
 | dark | `status.danger.fg` | `bg.canvas` | 9.91:1 | ≥4.5 | ✓ |
+| dark | `status.danger.fg` | `bg.surface` | 9.42:1 | ≥4.5 | ✓ |
 | dark | `status.danger.fg` | `status.danger.bg` | 8.59:1 | ≥4.5 | ✓ |
 | dark | `status.danger.on-solid` | `status.danger.solid` | 6.15:1 | ≥4.5 | ✓ |
 | dark | `status.danger.solid` | `bg.canvas` | 3.16:1 | ≥3 | ✓ |
 | dark | `status.progress.fg` | `bg.canvas` | 10.76:1 | ≥4.5 | ✓ |
+| dark | `status.progress.fg` | `bg.surface` | 10.22:1 | ≥4.5 | ✓ |
 | dark | `status.progress.fg` | `status.progress.bg` | 9.03:1 | ≥4.5 | ✓ |
 | dark | `status.progress.on-solid` | `status.progress.solid` | 5.23:1 | ≥4.5 | ✓ |
 | dark | `status.progress.solid` | `bg.canvas` | 3.71:1 | ≥3 | ✓ |
 | dark | `status.neutral.fg` | `bg.canvas` | 10.42:1 | ≥4.5 | ✓ |
+| dark | `status.neutral.fg` | `bg.surface` | 9.9:1 | ≥4.5 | ✓ |
 | dark | `status.neutral.fg` | `status.neutral.bg` | 9.15:1 | ≥4.5 | ✓ |
 | dark | `status.neutral.on-solid` | `status.neutral.solid` | 9.26:1 | ≥4.5 | ✓ |
 | dark | `status.neutral.border-strong` | `bg.canvas` | 3.23:1 | ≥3 | ✓ |
@@ -939,7 +951,7 @@ W2 리뷰(`docs/design/REVIEW-2026-09-06.md`)에서 간결함을 깨는 원인�
 ```
 Topbar(브레드크럼 = 표면 이름 / 화면 이름)
 PageHeader  제목 heading-xl · 부제 1줄(body-sm muted, ≤ 60자) · 메타 칩(현장 · 기간 · 건수) · 우측 액션 ≤ 2(주 solid 1 · 보조 outline 1) · 탭 슬롯
-요약        Stat 행 — 최대 4, 각 폭 ≤ 240, 높이 88(compact) · 값 fg.default · 톤은 값 옆 점 또는 pill · 힌트 1줄
+요약        Stat 행 — 최대 4, 각 폭 ≤ 240, 높이 88(compact) · 값 fg.default · 톤은 라벨 색(점 없음) · 힌트 1줄
 본문        DataTable(목록) 또는 Card 그리드(대시보드·지도) → 보조 섹션(heading-md + 건수)
 인스펙터    360 · 헤더(식별자 label-md muted · 제목 heading-md · 상태 pill) · KeyValueList · 액션 행(하단, 주 1 · 보조 1) · 이력 Timeline
 ```
@@ -956,7 +968,7 @@ PageHeader  제목 heading-xl · 부제 1줄(body-sm muted, ≤ 60자) · 메타
 | 식별자 셀 | `code-md` · `whitespace-nowrap` · 최소 폭 = 가장 긴 ID |
 | 텍스트 셀 | 1줄 · 넘치면 `truncate` + `title` |
 | 수치 셀 | 우측 정렬 · `tabular-nums` · 단위는 헤더에 |
-| 상태 셀 | StatusPill sm 하나 · 셀 텍스트 채색은 danger 1종만(예: 전압 이상) |
+| 상태 셀 | StatusPill sm 하나(점은 장비·카메라 상태 `signal`에만) · 셀 텍스트 채색은 danger 1종만(예: 전압 이상) |
 | 첫 열 | 고정 폭 · 식별자 또는 이름 |
 | 선택 | 행 `bg.selected` · 포커스 링 · Enter 열기 |
 | 열 수 | 7 이하 — 넘치면 인스펙터로 |
@@ -969,7 +981,7 @@ PageHeader  제목 heading-xl · 부제 1줄(body-sm muted, ≤ 60자) · 메타
 
 ### 11.4 요약 지표(Stat)
 
-- 값은 `fg.default`(display-md). 색으로 말하지 않는다 — 톤은 값 옆 점/pill, danger일 때만 값을 `danger.fg`.
+- 값은 `fg.default`(display-md). 톤은 라벨 색(warning · danger)으로만, 점은 쓰지 않는다(§0-4 점은 신호에만) — danger일 때만 값을 `danger.fg`.
 - 라벨 label-md muted 위, 값, 힌트 1줄(body-sm muted). 힌트는 분모·기간·범위만.
 - 4개 이하, 폭을 늘려 채우지 않는다 — `StatGroup`(열 폭 `sys.layout.stat.width` 240 · 좌측 정렬 · 보고 화면만 6열) 안에 `Stat`(최소 높이 `sys.size.stat.height` 88). 모바일은 2×2.
 

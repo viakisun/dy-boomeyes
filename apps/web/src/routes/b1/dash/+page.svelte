@@ -142,6 +142,7 @@
               tone={EQUIPMENT_TONE[st as Device['state']]}
               label={lb}
               size="sm"
+              signal
             />{/each}
         </div>
       </div>
@@ -199,7 +200,12 @@
         {#snippet cell(d: Device, col: Column)}
           {@const key = col.key}
           {#if key === 'id'}{d.id}
-          {:else if key === 'state'}<StatusPill tone={EQUIPMENT_TONE[d.state]} label={LABEL[d.state]} size="sm" />
+          {:else if key === 'state'}<StatusPill
+              tone={EQUIPMENT_TONE[d.state]}
+              label={LABEL[d.state]}
+              size="sm"
+              signal
+            />
           {:else if key === 'site'}{site(d)?.name}
           {:else if key === 'voltage'}<span
               class={d.telemetry.voltageStatus === 'abnormal' ? 'text-danger-fg font-semibold' : ''}
@@ -230,7 +236,7 @@
     >
       <div class="flex items-center justify-between">
         <h3 class="text-heading-md">{selected.id} · {selected.unitNo}호기</h3>
-        <StatusPill tone={EQUIPMENT_TONE[selected.state]} label={LABEL[selected.state]} />
+        <StatusPill tone={EQUIPMENT_TONE[selected.state]} label={LABEL[selected.state]} signal />
       </div>
       <dl class="gap-stack-xs text-body-sm grid grid-cols-2">
         <dt class="text-fg-muted">현장</dt>
@@ -285,11 +291,11 @@
           >
         {/each}
         <span class="gap-inline-xs ml-auto flex flex-wrap">
-          <Badge tone="info">라이브 {modalCam.live}</Badge>
+          <Badge tone="info">라이브</Badge>
           <Badge tone="danger" variant={modalCam.state === 'recording' ? 'solid' : 'subtle'}
-            >● REC {SOURCE_LABEL[modalCam.recording === 'edge' ? 'server' : modalCam.recording]} · {modalCam.retentionDays}일</Badge
+            >● 녹화 {SOURCE_LABEL[modalCam.recording === 'edge' ? 'server' : modalCam.recording]} · {modalCam.retentionDays}일</Badge
           >
-          <Badge tone="neutral">이벤트 {modalCam.ingest}</Badge>
+          <Badge tone="neutral">이벤트 수신</Badge>
         </span>
       </div>
       <VideoPlayer

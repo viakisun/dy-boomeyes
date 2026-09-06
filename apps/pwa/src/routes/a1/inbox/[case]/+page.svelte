@@ -14,7 +14,6 @@
     ERROR_CODE_LABEL,
     SEVERITY_LABEL,
     SEVERITY_TONE,
-    StatusDot,
     StatusPill,
     TASK_LABEL,
     TASK_TONE,
@@ -89,7 +88,11 @@
     <h2 class="text-heading-lg">{data.task.title}</h2>
     <div class="gap-inline-md text-body-sm text-fg-muted flex flex-wrap">
       <span class="gap-inline-xs inline-flex items-center"
-        ><StatusDot tone={SEVERITY_TONE[data.task.severity]} />{SEVERITY_LABEL[data.task.severity]}</span
+        ><StatusPill
+          tone={SEVERITY_TONE[data.task.severity]}
+          label={SEVERITY_LABEL[data.task.severity]}
+          size="sm"
+        /></span
       >
       <span class={cx('tabular-nums', due.overdue && 'text-danger-fg font-semibold')}>기한 {due.label}</span>
       <span>{data.site?.name ?? data.task.siteId}</span>
@@ -104,7 +107,7 @@
     >
       <div class="flex items-center justify-between">
         <span class="text-heading-sm">{d.id} · {d.unitNo}호기</span>
-        <StatusPill tone={EQUIPMENT_TONE[d.state]} label={EQUIP_LABEL[d.state]} size="sm" />
+        <StatusPill tone={EQUIPMENT_TONE[d.state]} label={EQUIP_LABEL[d.state]} size="sm" signal />
       </div>
       <dl class="gap-x-inline-md gap-y-stack-xs text-body-sm grid grid-cols-[auto_1fr]">
         <dt class="text-fg-muted">전압</dt>

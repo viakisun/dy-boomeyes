@@ -56,7 +56,12 @@
       <h2 class="text-heading-sm">위치 · 상태</h2>
       <div class="min-h-layout-map-min flex-1"><MapView {markers} onselect={open} /></div>
       <div class="gap-inline-sm text-label-sm text-fg-muted flex flex-wrap">
-        {#each STATES as st (st)}<StatusPill tone={EQUIPMENT_TONE[st]} label={EQUIPMENT_LABEL[st]} size="sm" />{/each}
+        {#each STATES as st (st)}<StatusPill
+            tone={EQUIPMENT_TONE[st]}
+            label={EQUIPMENT_LABEL[st]}
+            size="sm"
+            signal
+          />{/each}
       </div>
     </div>
     <div class="gap-stack-sm flex flex-col">
@@ -85,6 +90,7 @@
                     tone={EQUIPMENT_TONE[d.state]}
                     label="{d.unitNo}호기 {EQUIPMENT_LABEL[d.state]}"
                     size="sm"
+                    signal
                   />{/each}
               </div>
             </a>
