@@ -60,7 +60,12 @@
         {#each data.cameras as c (c.id)}
           <li class="px-inset-md py-inset-xs flex items-center justify-between">
             <span class="text-body-md">{c.kind === 'ai' ? 'AI · 붐 끝' : '일반 · 전방'}</span>
-            <StatusPill tone={CAMERA_TONE[c.state]} label={CAM_LABEL[c.state]} size="sm" signal />
+            <StatusPill
+              tone={CAMERA_TONE[c.state]}
+              label={CAM_LABEL[c.state]}
+              size="sm"
+              signal={c.state === 'live' || c.state === 'recording'}
+            />
           </li>
         {/each}
       </ul>

@@ -1,5 +1,5 @@
 // color-audit.mjs — 화면별 점·색 사용량을 DOM에서 센다 (DY-design §0-4 색 예산 · W2.5 D9). 빌드 뒤 실행: node tools/design/color-audit.mjs [--json] [--no-serve]
-//   dots = size-size-indicator(상태 점) · glyph = "●" 텍스트 · markers = 지도 마커 · bg = 톤 배경 요소(pill·배너·타일) · fg = 톤 텍스트만인 요소 · hues = 사용된 색상 계열(neutral 제외)
+//   dots = size-size-indicator(상태 점 — StatusDot·StatusPill·Badge, Timeline 눈금 rounded-mark 제외) · glyph = "●" 텍스트 · markers = 지도 마커 · bg = 톤 배경 요소(pill·배너·타일) · fg = 톤 텍스트만인 요소 · hues = 사용된 색상 계열(neutral 제외)
 //   예산: 화면당 hues ≤ 3(accent · warning · danger) · dots는 LIVE·REC·촬영 중만 — 초과는 △로 표시(보고용, exit 0)
 import { chromium } from '@playwright/test';
 import { spawn } from 'node:child_process';
@@ -56,7 +56,7 @@ for (const s of screens) {
       const TONES = ['accent', 'info', 'success', 'warning', 'danger', 'progress', 'neutral'];
       const all = [...document.querySelectorAll('body *')].filter(vis);
       const dots = all.filter(
-        (el) => el.classList.contains('size-size-indicator') && el.classList.contains('rounded-pill'),
+        (el) => el.classList.contains('size-size-indicator') && !el.classList.contains('rounded-mark'),
       ).length;
       const glyph = all.filter((el) => el.children.length === 0 && /●/.test(el.textContent || '')).length;
       const markers = document.querySelectorAll('.be-marker').length;

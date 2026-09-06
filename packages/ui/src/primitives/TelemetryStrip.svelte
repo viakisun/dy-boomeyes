@@ -1,8 +1,7 @@
 <script lang="ts">
-  // 텔레메트리 요약 스트립 — 통신 · 전압 · 단선 · 고장코드 (색 + 텍스트, FR-002)
+  // 텔레메트리 요약 스트립 — 통신 · 전압 · 단선 · 고장코드 (텍스트 + warning·danger만 색, §0-4 — 점은 LIVE·REC만)
   import type { Device } from '@boomeyes/domain';
   import { cx, type Tone } from '../lib/cx';
-  import StatusDot from './StatusDot.svelte';
   let { telemetry, class: cls }: { telemetry: Device['telemetry']; class?: string } = $props();
   const LTE: Record<Device['telemetry']['lte'], { tone: Tone; text: string }> = {
     connected: { tone: 'success', text: '연결' },
@@ -33,8 +32,13 @@
   {#each cells as c (c.label)}
     <div class="rounded-control bg-surface-sunken p-inset-sm gap-stack-xs flex flex-col">
       <dt class="text-label-sm text-fg-muted">{c.label}</dt>
-      <dd class="gap-inline-xs text-body-md flex items-center font-medium">
-        <StatusDot tone={c.tone} />{c.text}
+      <dd
+        class={cx(
+          'text-body-md font-medium',
+          c.tone === 'danger' ? 'text-danger-fg' : c.tone === 'warning' ? 'text-warning-fg' : 'text-fg',
+        )}
+      >
+        {c.text}
       </dd>
     </div>
   {/each}

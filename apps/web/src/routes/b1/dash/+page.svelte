@@ -128,7 +128,7 @@
         label="통신 두절"
         value={data.kpis.offline}
         unit="대"
-        tone={data.kpis.offline ? 'danger' : 'neutral'}
+        tone={data.kpis.offline ? 'warning' : 'neutral'}
         hint="에스컬레이션 {data.kpis.escalated}건"
       />
     </StatGroup>

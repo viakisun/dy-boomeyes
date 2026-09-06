@@ -16,7 +16,7 @@
         ? HEALTH_LABEL.lost
         : CAMERA_LABEL[camera.state],
   );
-  const tone = $derived(faulty ? (camera.state === 'offline' ? 'neutral' : 'warning') : CAMERA_TONE[camera.state]);
+  const tone = $derived(faulty ? 'warning' : CAMERA_TONE[camera.state]); // 장애(수신 끊김 포함)는 warning pill — FR-034
 </script>
 
 <span class="gap-inline-xs inline-flex flex-wrap items-center" data-health={camera.health ?? 'ok'} data-faulty={faulty}>
