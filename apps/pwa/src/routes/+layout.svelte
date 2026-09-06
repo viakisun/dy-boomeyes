@@ -5,6 +5,7 @@
   import { resolve } from '$app/paths';
   import { onMount } from 'svelte';
   import { APP_HOME_OF, SCREENS, type Alert, type RoleId } from '@boomeyes/domain';
+  import type { OutboxState } from '@boomeyes/offline';
   import {
     Badge,
     Button,
@@ -50,6 +51,18 @@
     const h = role && APP_HOME_OF[role];
     if (h) goto(resolve(SCREENS[h].route as '/'));
   };
+  // 오프라인 제출 큐(ADR-010) — 배너 상태 · 전송 성공/거부 뒤 다시 읽기 · 실패·거부 토스트
+  let box = $state<OutboxState>(data.outbox.state());
+  $effect(() => {
+    const ob = data.outbox;
+    box = ob.state();
+    return ob.subscribe((s, e, detail) => {
+      box = s;
+      if (e === 'sent' || e === 'rejected') void invalidateAll();
+      if (e === 'failed') toast(`전송 실패 ${s.failed}건 — 배너에서 재시도`, { tone: 'danger' });
+      if (e === 'rejected') toast(`거부됨 — ${detail ?? ''}`, { tone: 'danger' });
+    });
+  });
   // 실시간 알림(mock realtime, task-escalation AC-5) — 앱바 배지 + 토스트, 배지 탭 → 최신 알림의 업무
   let live = $state<Alert[]>([]);
   onMount(() =>
@@ -75,7 +88,15 @@
 {#if isLogin || !session.user}
   {@render children()}
 {:else}
-  <PwaShell {title} {tabs} offline={!connectivity.online}>
+  <PwaShell
+    {title}
+    {tabs}
+    offline={!connectivity.online || data.net === 'off'}
+    queued={box.queued}
+    failed={box.failed}
+    syncing={box.syncing}
+    onsync={() => void (box.failed ? data.outbox.retry() : data.outbox.sync())}
+  >
     {#snippet bar()}
       {#if data.scene}
         <DemoBar

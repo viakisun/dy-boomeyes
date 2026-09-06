@@ -126,6 +126,8 @@ export interface Doc {
   history: HistoryItem[];
   /** 제출 파일 메타(mock: objectURL) */
   file?: { name: string; type: string; size: number; url?: string };
+  /** 아웃박스 대기(ADR-010 읽기 오버레이) — 제출이 아직 서버에 닿지 않음 */
+  pending?: boolean;
 } // ENT-07
 export type LeaseState = 'active' | 'expiring' | 'relocated' | 'ended';
 export interface Lease {
@@ -216,6 +218,11 @@ export interface Escalation {
   notifiedAt: string;
 }
 
+/** 쓰기 요청 메타(FR-037 · IF-009) — 클라이언트 멱등 키(ULID 대용) · 단말 발생 시각(DISC-045). 같은 clientId 재전송은 같은 결과 */
+export interface WriteMeta {
+  clientId: string;
+  at: string;
+}
 /** FR-013 출근 체크인·퇴근 체크아웃 — 현장 반경 판정은 rules.ts CHECKIN_RADIUS_M */
 export interface Attendance {
   userId: string;
@@ -225,6 +232,8 @@ export interface Attendance {
   checkoutAt: string | null;
   lat?: number;
   lng?: number;
+  /** 아웃박스 대기(ADR-010 읽기 오버레이) — 서버 미반영 */
+  pending?: boolean;
 }
 /** FR-014 작업 전 일일점검 — 항목은 rules.ts INSPECTION_ITEMS(DISC-033 확정 전 임시) */
 export interface InspectionItem {
@@ -240,6 +249,8 @@ export interface Inspection {
   date: string;
   items: InspectionItem[];
   submittedAt: string | null;
+  /** 아웃박스 대기(ADR-010 읽기 오버레이) */
+  pending?: boolean;
 }
 /** ENT-15 개인정보 동의 — FR-031 표준 패키지(영상 · 음성 · 위치) */
 export interface Consent {

@@ -3,20 +3,19 @@
   import { invalidateAll } from '$app/navigation';
   import { resolve } from '$app/paths';
   import { SCR, type InspectionItem } from '@boomeyes/domain';
-  import { Banner, ChecklistForm, StatusPill, connectivity, fmtDateTime, toast } from '@boomeyes/ui';
+  import { Banner, ChecklistForm, StatusPill, fmtDateTime, toast } from '@boomeyes/ui';
   let { data } = $props();
   const t = $derived(data.today);
   let items = $state<InspectionItem[]>(structuredClone(data.today.inspection.items));
   let busy = $state(false);
-  const online = $derived(connectivity.online);
   const abnormal = $derived(t.inspection.items.filter((i) => !i.ok).length);
   async function submit(list: InspectionItem[]) {
     busy = true;
     try {
       // $state 프록시는 API 경계(structuredClone)를 못 넘는다 → 스냅샷으로 전달
-      await data.api.submitInspection(data.userId, $state.snapshot(list));
+      const r = await data.api.submitInspection(data.userId, $state.snapshot(list));
       await invalidateAll();
-      toast('일일점검 제출 완료');
+      toast(r.pending ? '저장됨 — 연결되면 전송' : '일일점검 제출 완료');
     } finally {
       busy = false;
     }
@@ -38,7 +37,7 @@
       aria-label="제출 결과"
     >
       <div class="flex items-center justify-between">
-        <span class="text-heading-sm">제출 완료</span>
+        <span class="text-heading-sm">{t.inspection.pending ? '제출 — 동기 대기' : '제출 완료'}</span>
         <StatusPill
           tone={abnormal ? 'warning' : 'success'}
           label={abnormal ? `이상 ${abnormal}건` : '전 항목 정상'}
@@ -60,6 +59,6 @@
     <Banner tone="warning">출근 체크인 후에 점검을 제출할 수 있습니다</Banner>
     <ChecklistForm bind:items disabled />
   {:else}
-    <ChecklistForm bind:items disabled={busy || !online} onsubmit={submit} />
+    <ChecklistForm bind:items disabled={busy} onsubmit={submit} />
   {/if}
 </div>

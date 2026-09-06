@@ -15,6 +15,7 @@ import type {
   Doc,
   DocKind,
   DocSummary,
+  WriteMeta,
   Escalation,
   Inspection,
   InspectionItem,
@@ -70,10 +71,11 @@ export interface ApiClient {
   /** driver-daily — 오늘(배정 장비 · 출근 · 점검 · 알림 · 동의) */
   today(userId: string): Promise<Today>;
   /** FR-013 — 현장 반경 밖이면 Error(거리 포함) */
-  checkin(userId: string, pos: { lat: number; lng: number }): Promise<Attendance>;
-  checkout(userId: string): Promise<Attendance>;
+  /** 쓰기 4종(체크인·체크아웃·점검·서류 제출)은 meta{clientId, at}를 받아 멱등 — 아웃박스 재전송(FR-037 · NFR-016 · ADR-010) */
+  checkin(userId: string, pos: { lat: number; lng: number }, meta?: WriteMeta): Promise<Attendance>;
+  checkout(userId: string, meta?: WriteMeta): Promise<Attendance>;
   /** FR-014 — 5항목 제출 */
-  submitInspection(userId: string, items: InspectionItem[]): Promise<Inspection>;
+  submitInspection(userId: string, items: InspectionItem[], meta?: WriteMeta): Promise<Inspection>;
   /** FR-020 프로토콜 — 목록 · 업로드(객체로 파싱된 정의; YAML 파싱은 앱) · 샘플 테스트 */
   protocols(): Promise<ProtocolVersion[]>;
   uploadProtocol(
@@ -88,7 +90,12 @@ export interface ApiClient {
   docs(scope: Scope): Promise<Doc[]>;
   doc(id: string): Promise<Doc | undefined>;
   /** 촬영 제출(IF-011) — expiring|rejected → submitted → review(자동) + 서류 검토 업무 생성 */
-  submitDoc(id: string, file: { name: string; type: string; size: number; url?: string }, by: string): Promise<Doc>;
+  submitDoc(
+    id: string,
+    file: { name: string; type: string; size: number; url?: string },
+    by: string,
+    meta?: WriteMeta,
+  ): Promise<Doc>;
   /** 현장 검토 — review → approved|rejected(사유 필수) · 연결 업무 done */
   reviewDoc(id: string, decision: 'approved' | 'rejected', by: string, note?: string): Promise<Doc>;
   /** 관리자 등록(B4-06) — 만료 D-30 이내면 expiring */

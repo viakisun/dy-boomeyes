@@ -507,3 +507,37 @@ describe('[A2-03] ?state= 픽스처는 capture 모드에서만 (QA §3)', () => 
     expect((await cap.today('driver03')).attendance.checkinAt).not.toBeNull();
   });
 });
+
+describe('[FR-037] 쓰기 멱등 — 같은 clientId 재전송은 같은 결과 · 기록 시각은 단말 발생 시각(meta.at)', () => {
+  it('checkin meta 재전송 · checkout · submitInspection · submitDoc', async () => {
+    const api = bootMock({ capture: true });
+    const site = (await api.sites({ role: 'driver' })).find((s) => s.id === 'SITE-001')!;
+    const meta = { clientId: '01-checkin', at: '2026-07-03T00:30:00.000Z' };
+    const a1 = await api.checkin('driver03', { lat: site.lat, lng: site.lng }, meta);
+    const a2 = await api.checkin('driver03', { lat: site.lat, lng: site.lng }, meta);
+    expect(a1.checkinAt).toBe(meta.at);
+    expect(a2).toEqual(a1);
+    const out = await api.checkout('driver03', { clientId: '02-checkout', at: '2026-07-03T09:00:00.000Z' });
+    expect(out.checkoutAt).toBe('2026-07-03T09:00:00.000Z');
+    const ins = await api.submitInspection(
+      'driver03',
+      INSPECTION_ITEMS.map((x) => ({ ...x, ok: true })),
+      {
+        clientId: '03-ins',
+        at: '2026-07-03T00:40:00.000Z',
+      },
+    );
+    expect(ins.submittedAt).toBe('2026-07-03T00:40:00.000Z');
+    const d1 = await api.submitDoc('DOC-001', { name: 'c.jpg', type: 'image/jpeg', size: 1 }, 'driver03', {
+      clientId: '04-doc',
+      at: '2026-07-03T00:50:00.000Z',
+    });
+    const d2 = await api.submitDoc('DOC-001', { name: 'c.jpg', type: 'image/jpeg', size: 1 }, 'driver03', {
+      clientId: '04-doc',
+      at: '2026-07-03T00:50:00.000Z',
+    });
+    expect(d1.submittedAt).toBe('2026-07-03T00:50:00.000Z');
+    expect(d2.state).toBe(d1.state);
+    expect((await api.cases({ role: 'site-safety' })).filter((c) => c.docId === 'DOC-001')).toHaveLength(1); // 두 번째는 업무를 다시 만들지 않는다
+  });
+});

@@ -25,6 +25,7 @@
   "dependencies": {
     "@boomeyes/domain": "workspace:*",
     "@boomeyes/mock": "workspace:*",
+    "@boomeyes/offline": "workspace:*",
     "@boomeyes/tokens": "workspace:*",
     "@boomeyes/ui": "workspace:*",
     "@boomeyes/map": "workspace:*",

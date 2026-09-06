@@ -17,7 +17,7 @@
 `/a2/today?state=today|checked` · `/a2/today/inspect?state=inspect|inspected` · `/a2/device?state=mydev` · `?gps=out`(반경 밖 재현).
 
 ## 오프라인 · 오류 · 빈 상태
-`navigator.onLine` false → Banner("오프라인 — 제출은 연결 후") + 제출 버튼 비활성(전송 큐 W2) · 반경 밖 → `Dialog`(거리 · 현장 주소) · 배정 장비 없음 → EmptyState.
+`navigator.onLine` false 또는 `?net=off` → 셸 배너 "오프라인 — 동기 대기 n건" · 체크인·체크아웃·점검 제출은 아웃박스(`packages/offline` `withOutbox(api)`, ADR-010)에 적재되고 카드에 "동기 대기" pill(읽기 오버레이 `pending`) · 연결(online 이벤트 · 앱 시작 · 배너 "지금 동기")되면 사용자별 FIFO로 `meta{clientId, at}`와 함께 전송 · `?net=fail`은 백오프 5회 뒤 "전송 실패 n건 · 재시도" · 업무 거부(반경 밖)는 항목 단위 토스트 · 반경 밖 → `Dialog`(거리 · 현장 주소) · 배정 장비 없음 → EmptyState.
 
 ## 접근성
 체크리스트 `fieldset/legend` · 게이지 `aria-valuenow/min/max` + 텍스트 % · 큰 버튼 48px · 색 + 텍스트 · 알림 Dialog 포커스 트랩.

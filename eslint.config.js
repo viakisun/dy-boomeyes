@@ -40,7 +40,13 @@ export default ts.config(
         { type: 'ui', pattern: 'packages/ui/**' },
         {
           type: 'infra',
-          pattern: ['packages/api-client/**', 'packages/realtime/**', 'packages/video/**', 'packages/map/**'],
+          pattern: [
+            'packages/api-client/**',
+            'packages/realtime/**',
+            'packages/offline/**',
+            'packages/video/**',
+            'packages/map/**',
+          ],
         },
         { type: 'mock', pattern: 'packages/mock/**' },
         { type: 'app-web', pattern: 'apps/web/**' },

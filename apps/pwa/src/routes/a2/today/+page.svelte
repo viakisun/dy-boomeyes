@@ -1,5 +1,5 @@
 <script lang="ts">
-  // A2-02 오늘 (specs/driver-daily AC-1 · AC-2 · AC-4 · AC-6)
+  // A2-02 오늘 (specs/driver-daily AC-1 · AC-2 · AC-4 · AC-6) — 오프라인 체크인은 아웃박스(ADR-010)가 받는다, 버튼은 막지 않는다
   import { goto, invalidateAll } from '$app/navigation';
   import { resolve } from '$app/paths';
   import { SCR, type Alert } from '@boomeyes/domain';
@@ -15,7 +15,6 @@
     SEVERITY_LABEL,
     SEVERITY_TONE,
     StatusPill,
-    connectivity,
     cx,
     fmtDateTime,
     toast,
@@ -26,7 +25,6 @@
   let busy = $state(false);
   let denied = $state<string | null>(null);
   let opened = $state<Alert | null>(null);
-  const online = $derived(connectivity.online); // 오프라인이면 체크인·제출 보류(셸 배너가 안내)
   const t = $derived(data.today);
   // mock GPS — 현장 좌표(반경 안) · ?gps=out 이면 약 5km 밖
   const pos = () => {
@@ -37,9 +35,9 @@
   async function run(fn: () => Promise<unknown>, done: string) {
     busy = true;
     try {
-      await fn();
+      const r = (await fn()) as { pending?: boolean } | undefined; // 아웃박스에 들어갔으면 완료가 아니다
       await invalidateAll();
-      toast(done);
+      toast(r?.pending ? '저장됨 — 연결되면 전송' : done);
     } catch (e) {
       denied = e instanceof Error ? e.message : String(e);
     } finally {
@@ -59,7 +57,7 @@
   <CheckinCard
     attendance={t.attendance}
     siteName={t.site?.name}
-    busy={busy || !online}
+    {busy}
     oncheckin={() => run(() => data.api.checkin(data.userId, pos()), '출근 체크인 완료')}
     oncheckout={() => run(() => data.api.checkout(data.userId), '퇴근 체크아웃 완료')}
   />
