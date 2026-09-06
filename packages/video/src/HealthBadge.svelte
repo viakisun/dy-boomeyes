@@ -20,7 +20,7 @@
 </script>
 
 <span class="gap-inline-xs inline-flex flex-wrap items-center" data-health={camera.health ?? 'ok'} data-faulty={faulty}>
-  <StatusPill {tone} {label} {size} solid={!faulty} signal />
+  <StatusPill {tone} {label} {size} solid={!faulty} signal={camera.state === 'live' || camera.state === 'recording'} />
   {#if showTime && faulty}<span class="text-label-sm text-fg-muted tabular-nums"
       >마지막 {fmtTime(camera.snapshotAt)}</span
     >{/if}

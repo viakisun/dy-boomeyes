@@ -25,6 +25,7 @@
     "docs:set": "python3 tools/docs-gen/build.py",
     "docs:check": "python3 tools/docs-gen/check_set.py",
     "design:audit": "node tools/design/copy-audit.mjs",
+    "design:audit:color": "node tools/design/color-audit.mjs",
     "e2e": "playwright test"
   },
   "devDependencies": {

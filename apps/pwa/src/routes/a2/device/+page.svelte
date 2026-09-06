@@ -30,7 +30,7 @@
     <header class="gap-stack-xs flex flex-col">
       <div class="flex items-center justify-between">
         <h2 class="text-heading-lg">{d.id} · {d.unitNo}호기</h2>
-        <StatusPill tone={EQUIPMENT_TONE[d.state]} label={EQUIP_LABEL[d.state]} signal />
+        <StatusPill tone={EQUIPMENT_TONE[d.state]} label={EQUIP_LABEL[d.state]} />
       </div>
       <span class="text-body-sm text-fg-muted"
         >{data.today.site?.name ?? d.siteId} · 마지막 수신 {fmtDateTime(d.telemetry.at)}</span

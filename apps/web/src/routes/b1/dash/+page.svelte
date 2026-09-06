@@ -137,14 +137,6 @@
       <div class="gap-stack-sm min-h-layout-panel-height flex flex-col">
         <h2 class="text-heading-sm">위치 · 상태</h2>
         <div class="min-h-layout-map-min flex-1"><MapView {markers} onselect={(id) => (selectedId = id)} /></div>
-        <div class="gap-inline-sm text-label-sm text-fg-muted flex flex-wrap">
-          {#each Object.entries(LABEL) as [st, lb] (st)}<StatusPill
-              tone={EQUIPMENT_TONE[st as Device['state']]}
-              label={lb}
-              size="sm"
-              signal
-            />{/each}
-        </div>
       </div>
       <div class="gap-stack-sm flex flex-col">
         <h2 class="text-heading-sm">
@@ -200,12 +192,7 @@
         {#snippet cell(d: Device, col: Column)}
           {@const key = col.key}
           {#if key === 'id'}{d.id}
-          {:else if key === 'state'}<StatusPill
-              tone={EQUIPMENT_TONE[d.state]}
-              label={LABEL[d.state]}
-              size="sm"
-              signal
-            />
+          {:else if key === 'state'}<StatusPill tone={EQUIPMENT_TONE[d.state]} label={LABEL[d.state]} size="sm" />
           {:else if key === 'site'}{site(d)?.name}
           {:else if key === 'voltage'}<span
               class={d.telemetry.voltageStatus === 'abnormal' ? 'text-danger-fg font-semibold' : ''}
@@ -236,7 +223,7 @@
     >
       <div class="flex items-center justify-between">
         <h3 class="text-heading-md">{selected.id} · {selected.unitNo}호기</h3>
-        <StatusPill tone={EQUIPMENT_TONE[selected.state]} label={LABEL[selected.state]} signal />
+        <StatusPill tone={EQUIPMENT_TONE[selected.state]} label={LABEL[selected.state]} />
       </div>
       <dl class="gap-stack-xs text-body-sm grid grid-cols-2">
         <dt class="text-fg-muted">현장</dt>

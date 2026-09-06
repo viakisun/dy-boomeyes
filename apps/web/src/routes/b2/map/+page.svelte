@@ -2,7 +2,7 @@
   // B2-02 본사 지도 — 자사 현장 2의 장비 마커(상태색) + 현장 카드 · 마커/카드 선택 → B2-03 현장 상세 · "보고 모드" → B2-04 · 처리 액션 없음(본사 = 열람 + 확인 요청, DISC-015) (specs/sites-assets-leases AC-4 · FR-003)
   import { goto } from '$app/navigation';
   import { resolve } from '$app/paths';
-  import { SCR, profileFlags, type Device } from '@boomeyes/domain';
+  import { SCR, profileFlags } from '@boomeyes/domain';
   import { MapView } from '@boomeyes/map';
   import { Badge, EQUIPMENT_LABEL, EQUIPMENT_TONE, PageHeader, Stat, StatGroup, StatusPill } from '@boomeyes/ui';
   let { data } = $props();
@@ -11,7 +11,6 @@
   );
   const devicesOf = (siteId: string) => data.devices.filter((d) => d.siteId === siteId);
   const abnormalOf = (siteId: string) => devicesOf(siteId).filter((d) => d.state !== 'normal');
-  const STATES: Device['state'][] = ['normal', 'caution', 'fault', 'offline', 'maintenance'];
   // 마커 선택 → 그 호기의 현장 상세(B2-03)
   const open = (deviceId: string) => {
     const d = data.devices.find((x) => x.id === deviceId);
@@ -55,14 +54,6 @@
     <div class="gap-stack-sm min-h-layout-panel-height flex flex-col">
       <h2 class="text-heading-sm">위치 · 상태</h2>
       <div class="min-h-layout-map-min flex-1"><MapView {markers} onselect={open} /></div>
-      <div class="gap-inline-sm text-label-sm text-fg-muted flex flex-wrap">
-        {#each STATES as st (st)}<StatusPill
-            tone={EQUIPMENT_TONE[st]}
-            label={EQUIPMENT_LABEL[st]}
-            size="sm"
-            signal
-          />{/each}
-      </div>
     </div>
     <div class="gap-stack-sm flex flex-col">
       <h2 class="text-heading-sm">현장 {data.sites.length}</h2>
@@ -90,7 +81,6 @@
                     tone={EQUIPMENT_TONE[d.state]}
                     label="{d.unitNo}호기 {EQUIPMENT_LABEL[d.state]}"
                     size="sm"
-                    signal
                   />{/each}
               </div>
             </a>

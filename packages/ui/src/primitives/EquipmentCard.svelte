@@ -38,7 +38,7 @@
     {#if href}<a {href} class={cx(size === 'md' ? 'text-heading-md' : 'text-heading-sm', 'text-accent-fg')}>{title} ›</a
       >
     {:else}<h2 class={size === 'md' ? 'text-heading-md' : 'text-heading-sm'}>{title}</h2>{/if}
-    <StatusPill tone={EQUIPMENT_TONE[device.state]} label={EQUIPMENT_LABEL[device.state]} {size} signal />
+    <StatusPill tone={EQUIPMENT_TONE[device.state]} label={EQUIPMENT_LABEL[device.state]} {size} />
   </div>
   {#if summary}
     <p class="text-body-sm text-fg-muted">
