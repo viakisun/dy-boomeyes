@@ -54,12 +54,12 @@
       if (session.user?.userId === u.id) login({ ...session.user, role: saved.role });
     });
   const COLS: Column[] = [
-    { key: 'id', label: '계정' },
-    { key: 'display', label: '이름' },
-    { key: 'role', label: '역할' },
-    { key: 'org', label: '소속' },
+    { key: 'id', label: '계정', kind: 'id' },
+    { key: 'display', label: '이름', nowrap: true },
+    { key: 'role', label: '역할', nowrap: true },
+    { key: 'org', label: '소속', nowrap: true },
     { key: 'sites', label: '현장 범위' },
-    { key: 'status', label: '상태' },
+    { key: 'status', label: '상태', kind: 'status' },
   ];
 </script>
 
@@ -79,11 +79,13 @@
     >
       {#snippet cell(row: User, col: Column)}
         {@const key = col.key}
-        {#if key === 'id'}<span class="text-code-md">{row.id}</span>
+        {#if key === 'id'}{row.id}
         {:else if key === 'display'}{row.display}
         {:else if key === 'role'}{ROLE_NAME[row.role]}
         {:else if key === 'org'}{row.org}
-        {:else if key === 'sites'}{row.siteIds.length ? row.siteIds.join(' · ') : '전체'}
+        {:else if key === 'sites'}{@const sites = row.siteIds.length ? row.siteIds.join(' · ') : '전체'}<span
+            title={sites}>{sites}</span
+          >
         {:else if key === 'status'}<StatusPill
             tone={statusOf(row) === 'active' ? 'success' : 'danger'}
             label={STATUS_LABEL[statusOf(row)]}

@@ -37,7 +37,7 @@ PageHeader  제목 heading-xl · 부제 1줄(body-sm muted, ≤ 60자) · 메타
 
 - 값은 `fg.default`(display-md). 색으로 말하지 않는다 — 톤은 값 옆 점/pill, danger일 때만 값을 `danger.fg`.
 - 라벨 label-md muted 위, 값, 힌트 1줄(body-sm muted). 힌트는 분모·기간·범위만.
-- 4개 이하, 폭을 늘려 채우지 않는다(`max-w` 240 · 높이 88 — `sys.layout.stat.width`·`sys.size.stat.height` 토큰을 D4에서 추가). 모바일은 2×2.
+- 4개 이하, 폭을 늘려 채우지 않는다 — `StatGroup`(열 폭 `sys.layout.stat.width` 240 · 좌측 정렬 · 보고 화면만 6열) 안에 `Stat`(최소 높이 `sys.size.stat.height` 88). 모바일은 2×2.
 
 ### 11.5 아이콘
 

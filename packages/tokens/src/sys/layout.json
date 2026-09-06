@@ -135,6 +135,13 @@
         "$value": "96px",
         "$description": "짧은 입력(숫자·등급 select) 폭"
       }
+    },
+    "stat": {
+      "width": {
+        "$type": "dimension",
+        "$value": "240px",
+        "$description": "요약 지표(Stat) 열 폭 — 늘려 채우지 않는다(§11.4)"
+      }
     }
   }
 }

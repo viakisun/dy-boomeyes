@@ -6,11 +6,11 @@
 
 | 구성 | 수 |
 |---|---|
-| 토큰 전체 | 620 |
-| ref(원시) | 206 |
-| sys(시맨틱) | 322 |
+| 토큰 전체 | 624 |
+| ref(원시) | 208 |
+| sys(시맨틱) | 324 |
 | cmp(컴포넌트) | 92 |
-| 컴포넌트 카탈로그 | 79 |
+| 컴포넌트 카탈로그 | 80 |
 | 대비 검사 | 82/82 통과 |
 
 | 산출물 | 용도 |
@@ -570,6 +570,7 @@
 | `sys.size.icon.xl` | 32px | 24px | comfortable: {ref.size.32} · compact: {ref.size.24} | 빈 상태·강조 |
 | `sys.size.row.default` | 56px | 36px | comfortable: {ref.size.56} · compact: {ref.size.36} | 리스트·표 행(웹 36 Linear 밀도) |
 | `sys.size.row.dense` | 48px | 32px | comfortable: {ref.size.48} · compact: {ref.size.32} | 조밀 행 |
+| `sys.size.stat.height` | 112px | 88px | comfortable: {ref.size.112} · compact: {ref.size.88} | 요약 지표(Stat) 최소 높이 — §11.4 |
 | `sys.size.avatar.sm` | 32px | 24px | comfortable: {ref.size.32} · compact: {ref.size.24} |  |
 | `sys.size.avatar.md` | 40px | 32px | comfortable: {ref.size.40} · compact: {ref.size.32} |  |
 | `sys.size.avatar.lg` | 48px | 40px | comfortable: {ref.size.48} · compact: {ref.size.40} |  |
@@ -603,6 +604,7 @@
 | `sys.layout.panel.height` | 420px | 420px | 지도 행·알림 피드 패널 기본 높이 |
 | `sys.layout.menu.min` | 192px | 192px | 드롭다운 메뉴 최소 폭 |
 | `sys.layout.field.short` | 96px | 96px | 짧은 입력(숫자·등급 select) 폭 |
+| `sys.layout.stat.width` | 240px | 240px | 요약 지표(Stat) 열 폭 — 늘려 채우지 않는다(§11.4) |
 
 ## 6. 형태 · 깊이 · 모션
 
@@ -768,7 +770,7 @@ cmp 층은 sys만 참조한다(ref 직접 참조 금지 — 검사로 강제). �
 | `cmp.table.row-selected` | #ebf1ff | #ebf1ff | {sys.color.bg.selected} |  |
 | `cmp.table.header-fg` | #616368 | #616368 | {sys.color.fg.muted} |  |
 
-## 8. 컴포넌트 카탈로그 (79)
+## 8. 컴포넌트 카탈로그 (80)
 
 이름 PascalCase · prop 어휘 고정: `variant`(형태) · `tone`(색 의도: accent/neutral/info/success/warning/danger/progress) · `size`(sm/md/lg) · 상태 boolean(`disabled` `loading` `selected` `invalid`). 플랫폼 both = 같은 Svelte 컴포넌트가 밀도 토큰으로 두 플랫폼을 소화.
 
@@ -810,7 +812,8 @@ cmp 층은 sys만 참조한다(ref 직접 참조 금지 — 검사로 강제). �
 | **Tag** | web | Linear | tone · removable |  | 분류 라벨(현장·장비 모델) |
 | **Avatar** | both | Linear | size sm/md/lg · fallback initials · status |  |  |
 | **KeyValueList** | both | CE 카드 키-값 규칙 | columns 1/2 · align |  | 라벨 muted · 값 default · 행 간 stack.xs |
-| **Stat** | both | new · CE 지표 3열 | size · trend · tone | loading | 큰 수치 + 단위 + 변화 |
+| **Stat** | both | new · CE 지표 3열 | tone(라벨 옆 점 · danger만 값 채색) | — | 라벨 · 값(display-md, fg.default) · 단위 · 힌트 1줄. 높이 size.stat.height · 폭 ≤ layout.stat.width (§11.4) |
+| **StatGroup** | both | new · §11.4 | cols 4/6 | — | Stat 묶음 — 열 폭 layout.stat.width로 좌측 정렬, 늘려 채우지 않는다 · 모바일 2열 |
 | **Card** | both | CE Card layout · Linear | variant default/interactive/selected/brand · padding | hover/selected | PWA 카드 5유형(CTA·정보+버튼·배지+제목·지표·키-값) 프리셋 |
 | **DataTable** | web | Linear 리스트 | density · sortable · sticky header · selectable · rowActions · groupBy | loading/empty/error | 행 36 · 셀 좌측 정렬 · 수치 우측 · 가상 스크롤 |
 | **List** | both | Linear · CE | variant plain/card · leading/trailing · divider |  | PWA 기본 목록 |
@@ -968,7 +971,7 @@ PageHeader  제목 heading-xl · 부제 1줄(body-sm muted, ≤ 60자) · 메타
 
 - 값은 `fg.default`(display-md). 색으로 말하지 않는다 — 톤은 값 옆 점/pill, danger일 때만 값을 `danger.fg`.
 - 라벨 label-md muted 위, 값, 힌트 1줄(body-sm muted). 힌트는 분모·기간·범위만.
-- 4개 이하, 폭을 늘려 채우지 않는다(`max-w` 240 · 높이 88 — `sys.layout.stat.width`·`sys.size.stat.height` 토큰을 D4에서 추가). 모바일은 2×2.
+- 4개 이하, 폭을 늘려 채우지 않는다 — `StatGroup`(열 폭 `sys.layout.stat.width` 240 · 좌측 정렬 · 보고 화면만 6열) 안에 `Stat`(최소 높이 `sys.size.stat.height` 88). 모바일은 2×2.
 
 ### 11.5 아이콘
 

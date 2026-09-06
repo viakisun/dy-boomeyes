@@ -86,6 +86,16 @@
         "$description": "조밀 행"
       }
     },
+    "stat": {
+      "height": {
+        "$type": "dimension",
+        "$value": {
+          "comfortable": "{ref.size.112}",
+          "compact": "{ref.size.88}"
+        },
+        "$description": "요약 지표(Stat) 최소 높이 — §11.4"
+      }
+    },
     "avatar": {
       "sm": {
         "$type": "dimension",

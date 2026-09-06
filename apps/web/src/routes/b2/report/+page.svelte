@@ -3,7 +3,7 @@
   import { goto } from '$app/navigation';
   import { resolve } from '$app/paths';
   import { SCR } from '@boomeyes/domain';
-  import { Badge, Button, PageHeader, Stat, Tabs } from '@boomeyes/ui';
+  import { Badge, Button, PageHeader, Stat, StatGroup, Tabs } from '@boomeyes/ui';
   let { data } = $props();
   const TABS = [
     { id: '7', label: '7일' },
@@ -51,32 +51,32 @@
         <h2 class="text-heading-md">{s.site}</h2>
         <Badge tone={s.abnormal ? 'danger' : 'success'}>{s.abnormal ? `이상 ${s.abnormal}` : '전 호기 정상'}</Badge>
       </div>
-      <div class="gap-inline-md grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6">
-        <Stat label="장비" value={s.devices} unit="대" tone="neutral" hint="이상 {s.abnormal}" />
+      <StatGroup cols={6}>
+        <Stat label="장비" value={s.devices} unit="대" hint="이상 {s.abnormal}" />
         <Stat
           label="업무 처리율"
           value={s.caseRate}
           unit="%"
-          tone={s.caseRate === 100 ? 'success' : 'warning'}
+          tone={s.caseRate === 100 ? 'neutral' : 'warning'}
           hint="{s.casesDone}/{s.casesTotal}건"
         />
         <Stat
           label="점검 제출률"
           value={s.inspectionRate}
           unit="%"
-          tone={s.inspectionRate === 100 ? 'success' : 'warning'}
+          tone={s.inspectionRate === 100 ? 'neutral' : 'warning'}
           hint="제출 {s.inspections}건"
         />
         <Stat
           label="서류 완비율"
           value={s.docRate}
           unit="%"
-          tone={s.docRate === 100 ? 'success' : 'warning'}
+          tone={s.docRate === 100 ? 'neutral' : 'warning'}
           hint="서류 {s.docTotal}건 · 현재 기준"
         />
-        <Stat label="에스컬레이션" value={s.escalated} unit="건" tone={s.escalated ? 'danger' : 'success'} />
-        <Stat label="알림" value={s.alerts} unit="건" tone="info" hint="{s.days}일" />
-      </div>
+        <Stat label="에스컬레이션" value={s.escalated} unit="건" tone={s.escalated ? 'danger' : 'neutral'} />
+        <Stat label="알림" value={s.alerts} unit="건" hint="{s.days}일" />
+      </StatGroup>
     </section>
   {/each}
 </div>
