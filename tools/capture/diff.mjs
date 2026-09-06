@@ -22,19 +22,25 @@ const masksOf = (dir, name) => {
   const p = join(dir, name.replace(/\.png$/, '.json'));
   return existsSync(p) ? (JSON.parse(readFileSync(p, 'utf8')).masks ?? []) : [];
 };
-/** 사각형을 검게 칠하고 칠한 픽셀 수를 돌려준다 (이미지 경계로 클립) */
-function paint(png, m) {
+/** 사각형을 검게 칠하고 새로 가린 픽셀 수를 돌려준다 (이미지 경계로 클립 · seen이 있으면 합집합으로 한 번만 센다) */
+function paint(png, m, seen) {
   const x0 = Math.max(0, Math.floor(m.x)),
     y0 = Math.max(0, Math.floor(m.y));
   const x1 = Math.min(png.width, Math.ceil(m.x + m.w)),
     y1 = Math.min(png.height, Math.ceil(m.y + m.h));
+  let n = 0;
   for (let y = y0; y < y1; y++)
     for (let x = x0; x < x1; x++) {
-      const i = (y * png.width + x) * 4;
+      const p = y * png.width + x;
+      const i = p * 4;
       png.data[i] = png.data[i + 1] = png.data[i + 2] = 0;
       png.data[i + 3] = 255;
+      if (seen) {
+        if (!seen[p]) n++;
+        seen[p] = 1;
+      }
     }
-  return Math.max(0, x1 - x0) * Math.max(0, y1 - y0);
+  return n;
 }
 
 const b = manifest(BASE);
@@ -76,9 +82,11 @@ for (const f of names) {
     console.log('FAIL', f, `크기 ${a.width}×${a.height} → ${x.width}×${x.height}`);
     continue;
   }
+  // 마스크는 기준선·현재 사이드카의 합집합 — 같은 사각형이 양쪽에 있어도 분모에서 한 번만 뺀다
+  const seen = new Uint8Array(a.width * a.height);
   let masked = 0;
   for (const m of [...masksOf(BASE, f), ...masksOf(CUR, f)]) {
-    masked += paint(a, m);
+    masked += paint(a, m, seen);
     paint(x, m);
   }
   const d = new PNG({ width: a.width, height: a.height });
