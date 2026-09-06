@@ -1,6 +1,6 @@
 // demo-scripts 장면 재생(웹): 장면 1 타임라인 · 장면 4 진행 · 장면 6 1시간 경과 · 장면 8 진입 · 장면 바 (specs/demo-scripts AC-1 AC-4 AC-5 AC-6 AC-7)
 import { expect, test } from '@playwright/test';
-import { SCR } from '../../packages/domain/src/generated/ids';
+import { CURRENT_WAVE, SCR } from '../../packages/domain/src/generated/ids';
 
 const root = (scr: string) => `[data-scr="${scr}"]`;
 
@@ -16,6 +16,7 @@ test('[B1-02] 장면 1: 진입 시 CPB-003 정상 → 타임라인 E-021 긴급 
   await expect(page.locator('.be-marker[data-state="fault"]')).toHaveCount(1, { timeout: 10_000 });
   await expect(page.locator('table tbody tr').first()).toContainText('CPB-003');
   await expect(page.locator('[data-demo-bar]')).toContainText('장면 1/10');
+  await expect(page.locator('[data-demo-bar]')).toContainText(`wave ${CURRENT_WAVE} · mock`); // 웨이브·mock 표기는 장면 바에서만
 });
 
 test('[B1-03] 장면 4: C-105 접수됨으로 진입 · ?case=C-105 패널 진행 중 [FR-017] [FR-006]', async ({ page }) => {

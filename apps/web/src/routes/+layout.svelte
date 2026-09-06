@@ -3,26 +3,28 @@
   import { goto, invalidateAll } from '$app/navigation';
   import { env } from '$env/dynamic/public';
   import { resolve } from '$app/paths';
-  import { CURRENT_WAVE, HOME_OF, SCREENS, type RoleId } from '@boomeyes/domain';
+  import { HOME_OF, SCREENS, type RoleId } from '@boomeyes/domain';
   import {
     Button,
     DemoBar,
     EmptyState,
     IconButton,
+    IconLogOut,
+    IconMoon,
+    IconSun,
     Toast,
     WebShell,
     applyTheme,
+    crumbsFor,
+    navFor,
     theme,
     toggleTheme,
   } from '@boomeyes/ui';
-  import { navFor } from '$lib/nav';
   import { logout, session } from '$lib/session.svelte';
   let { data, children } = $props();
   const role = $derived(session.user?.role as RoleId | undefined);
   const groups = $derived(role ? navFor(role, 'web', data.screen, (p) => resolve(p as '/')) : []);
-  const crumbs = $derived(
-    data.screen ? [{ label: SCREENS[data.screen].surface }, { label: SCREENS[data.screen].name }] : [],
-  );
+  const crumbs = $derived(data.screen ? crumbsFor(data.screen) : []);
   const home = () => role && goto(resolve(SCREENS[HOME_OF[role]].route as '/'));
   // 테마(shell-auth AC-6): ?theme=은 루트 data-theme에 적용만(저장 안 함) · 탑바 토글은 localStorage에 유지
   $effect(() => {
@@ -54,17 +56,21 @@
     {#snippet brand()}<a href={resolve('/')} class="text-heading-sm text-accent-fg-strong">BoomEyes</a>{/snippet}
     {#snippet actions()}
       <span class="text-body-sm text-fg-muted">{session.user?.display} · {session.user?.org}</span>
-      <IconButton label={dark ? '라이트 모드' : '다크 모드'} onclick={toggleTheme}>{dark ? '☀' : '☾'}</IconButton>
+      <IconButton label={dark ? '라이트 모드' : '다크 모드'} onclick={toggleTheme}>
+        {#if dark}<IconSun class="size-size-icon-md" aria-hidden="true" />{:else}<IconMoon
+            class="size-size-icon-md"
+            aria-hidden="true"
+          />{/if}
+      </IconButton>
       <IconButton
         label="로그아웃"
         onclick={() => {
           logout();
           data.resetMock(); // 다음 로그인은 새 시드로
           goto(resolve('/login'));
-        }}>⏻</IconButton
+        }}><IconLogOut class="size-size-icon-md" aria-hidden="true" /></IconButton
       >
     {/snippet}
-    {#snippet footer()}<span class="text-label-sm text-fg-muted">wave {CURRENT_WAVE} · mock</span>{/snippet}
     {#snippet bar()}
       {#if data.scene}
         <DemoBar

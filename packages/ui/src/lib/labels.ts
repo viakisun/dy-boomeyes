@@ -13,6 +13,7 @@ import type {
   PartEvent,
   PartGroup,
   PartState,
+  ScrId,
 } from '@boomeyes/domain';
 import type { Tone } from './cx';
 
@@ -123,6 +124,20 @@ export const PART_GROUP_LABEL: Record<PartGroup, string> = {
   flange: '플랜지·클램프',
   gasket: '가스켓·안전핀',
   endhose: '엔드호스·피팅',
+};
+/** PWA 하단 내비 라벨(≤ 4자, DY-design §10-2 · 승인 세트 3: design-uplift §4 결정 2) — 앱바 제목은 SCREENS[id].name 그대로 · A4는 화면이 생길 때 추가 */
+export const NAV_SHORT_LABEL: Partial<Record<ScrId, string>> = {
+  'A1-02': '업무',
+  'A1-04': '관제',
+  'A1-06': '기록',
+  'A1-07': '메뉴',
+  'A2-02': '오늘',
+  'A2-04': '장비',
+  'A2-05': '서류',
+  'A2-06': '메뉴',
+  'A3-02': '현장',
+  'A3-05': '업무',
+  'A3-06': '기록',
 };
 export const PART_EVENT_LABEL: Record<PartEvent['kind'], string> = {
   register: '등록',

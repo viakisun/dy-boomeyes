@@ -57,6 +57,7 @@ test('[A2-06] driver03 배정 현장 기본정보 · 배정 장비 CPB-003 · �
   await expect(consent).toContainText('영상 동의 ✓');
   await expect(consent).toContainText('음성 동의 ✗');
   await expect(consent).toContainText('위치 동의 ✓');
-  await expect(page.getByText('wave 2 · mock')).toBeVisible();
+  await expect(page.getByText(/BoomEyes 운전자 앱 v\d+\.\d+\.\d+/)).toBeVisible(); // 앱 정보 = 계정 · 역할 · 버전
+  await expect(page.getByText(/wave \d+ · mock/)).toHaveCount(0);
   await expect(page.getByRole('main').getByRole('button')).toHaveCount(0); // 편집·제출 액션 없음
 });

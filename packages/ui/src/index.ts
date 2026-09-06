@@ -69,11 +69,15 @@ export {
   PART_TONE,
   PART_GROUP_LABEL,
   PART_EVENT_LABEL,
+  NAV_SHORT_LABEL,
 } from './lib/labels';
 export { fmtDateTime, fmtTime, dueLabel, elapsedLabel } from './lib/format';
 export { connectivity } from './lib/connectivity.svelte';
 // 아이콘(@lucide/svelte) — 앱은 ui를 통해서만 쓴다
 export { default as IconBell } from '@lucide/svelte/icons/bell';
+export { default as IconSun } from '@lucide/svelte/icons/sun';
+export { default as IconMoon } from '@lucide/svelte/icons/moon';
+export { default as IconLogOut } from '@lucide/svelte/icons/log-out';
 export { theme, applyTheme, toggleTheme, isDark, THEME_KEY, type Theme } from './lib/theme.svelte';
 export { default as WebShell } from './shell/WebShell.svelte';
 export { default as PwaShell } from './shell/PwaShell.svelte';
@@ -83,4 +87,5 @@ export { default as Inspector } from './shell/Inspector.svelte';
 export { default as AppBar } from './shell/AppBar.svelte';
 export { default as BottomNav } from './shell/BottomNav.svelte';
 export { default as DemoBar } from './shell/DemoBar.svelte';
-export type { NavItem, NavGroup } from './shell/nav';
+export { navFor, crumbsFor, type NavItem, type NavGroup, type Crumb } from './shell/nav';
+export { NAV_ICON } from './shell/nav-icons';

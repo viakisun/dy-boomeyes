@@ -52,10 +52,7 @@
               collapsed && 'justify-center px-0',
             )}
           >
-            {#if it.icon}<it.icon size={16} aria-hidden="true" />{:else}<span
-                class="size-size-icon-sm rounded-mark bg-current opacity-40"
-                aria-hidden="true"
-              ></span>{/if}
+            <it.icon class="size-size-icon-md shrink-0" aria-hidden="true" />
             {#if !collapsed}<span class="flex-1 truncate">{it.label}</span>{#if it.badge}<span
                   class="rounded-pill bg-danger text-label-sm text-danger-on-solid px-inline-xs">{it.badge}</span
                 >{/if}{/if}

@@ -23,10 +23,7 @@
         it.disabled && 'pointer-events-none opacity-40',
       )}
     >
-      {#if it.icon}<it.icon size={24} aria-hidden="true" />{:else}<span
-          class="size-size-icon-lg rounded-mark bg-current opacity-30"
-          aria-hidden="true"
-        ></span>{/if}
+      <it.icon class="size-size-icon-md shrink-0" aria-hidden="true" />
       <span>{it.label}</span>
       {#if it.badge}<span
           class="rounded-pill bg-danger text-label-sm text-danger-on-solid top-stack-xs px-inline-xs absolute right-[calc(50%-var(--spacing-size-icon-lg))]"

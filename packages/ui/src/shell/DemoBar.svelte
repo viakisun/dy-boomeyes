@@ -1,5 +1,7 @@
 <script lang="ts">
   // 시연 장면 바(specs/demo-scripts AC-7) — ?scene=N 진행자 전용. 링크 href는 앱이 resolve()해서 넘긴다
+  // 웨이브·mock 표기는 여기(시연 모드)에서만 — 셸 푸터·앱 정보에는 내지 않는다(DY-design §12.1-7)
+  import { CURRENT_WAVE } from '@boomeyes/domain';
   import Button from '../primitives/Button.svelte';
   let {
     scene,
@@ -30,4 +32,5 @@
   {#if onjump}<Button variant="outline" size="sm" onclick={onjump}>1시간 경과</Button>{/if}
   {#if prev}<a href={prev} class="text-accent-fg hover:underline">← 이전</a>{/if}
   {#if next}<a href={next} class="text-accent-fg hover:underline">다음 →</a>{/if}
+  <span class="text-label-sm">wave {CURRENT_WAVE} · mock</span>
 </div>

@@ -3,11 +3,11 @@
   import { goto } from '$app/navigation';
   import { page } from '$app/state';
   import { resolve } from '$app/paths';
-  import { HOME_OF, SCREENS, type RoleId, type User } from '@boomeyes/domain';
+  import { HOME_OF, SCREENS, SURFACE_NAME, type RoleId, type SurfaceId, type User } from '@boomeyes/domain';
   import { Card } from '@boomeyes/ui';
   import { login } from '$lib/session.svelte';
   let { data } = $props();
-  const CARDS: { role: RoleId; surface: string; title: string; desc: string; state: string }[] = [
+  const CARDS: { role: RoleId; surface: SurfaceId; title: string; desc: string; state: string }[] = [
     {
       role: 'control',
       surface: 'B1',
@@ -38,7 +38,7 @@
     },
     {
       role: 'maintenance',
-      surface: 'B1 연계',
+      surface: 'B1',
       title: '정비 담당',
       desc: '고장 출동 · 조치 보고 — 대시보드·수신함·에스컬레이션 열람',
       state: 'login-maint',
@@ -75,7 +75,7 @@
         onclick={() => enter(c.role)}
         aria-label="{c.title}로 로그인"
       >
-        {#snippet header()}<span class="text-label-md text-fg-muted">{c.surface}</span>{/snippet}
+        {#snippet header()}<span class="text-label-md text-fg-muted">{SURFACE_NAME[c.surface]}</span>{/snippet}
         <h2 class="text-heading-md">{c.title}</h2>
         <p class="text-body-sm text-fg-muted">{c.desc}</p>
         {#snippet footer()}<span class="text-label-md text-accent-fg"

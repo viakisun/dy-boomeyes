@@ -9,5 +9,6 @@ export * from './profile';
 export * from './protocol';
 export * from './rules';
 export * from './roles';
+export * from './surfaces';
 export * from './mask';
 export * from './notify';
