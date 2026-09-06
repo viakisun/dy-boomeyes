@@ -1,13 +1,13 @@
 ---
 id: ADR-010
 title: 오프라인 제출 큐 — IndexedDB 아웃박스 · ApiClient 데코레이터 · 읽기 오버레이
-status: Proposed
+status: Accepted
 date: 2026-09-05
 supersedes: —
 relates_to: [FR-037, NFR-016, IF-009, IF-011, DISC-045, DISC-046]
 ---
 
-# ADR-010 — 오프라인 제출 큐 (Proposed — 사용자 승인 후 B12 착수)
+# ADR-010 — 오프라인 제출 큐 (Accepted 2026-09-06 — B12)
 
 ## 맥락
 INTENT는 체크인·일일점검·서류 업로드를 "큐에 저장 후 동기"로 규정하고 PwaShell 배너도 그렇게 약속하지만, W1 구현은 오프라인이면 버튼을 비활성화할 뿐 큐가 없다(driver-daily AC-6 "전송 큐는 W2"). 서류 사진(Blob)까지 담아야 하고 앱 재시작·오프라인 새로고침(SW 셸)에도 남아야 한다.
@@ -34,3 +34,5 @@ INTENT는 체크인·일일점검·서류 업로드를 "큐에 저장 후 동기
 - [ ] 큐 상태 문구는 QA §2의 세 가지(오프라인 · 동기 대기 n건 · 전송 실패 n건)만 쓴다.
 
 사용자 결정 필요: 저장소·데코레이터 방식 승인 · 기록 시각 기준(DISC-045)은 DY.
+
+결정(2026-09-06, 사용자): 승인 — IndexedDB 아웃박스 + `withOutbox(api)` 데코레이터. 기록 시각 기준은 DISC-045 기준안(단말 탭 시각) 채택. B12 착수.
