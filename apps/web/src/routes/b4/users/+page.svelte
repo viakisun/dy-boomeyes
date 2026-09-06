@@ -93,7 +93,20 @@
       {/snippet}
     </DataTable>
   </div>
-  <Inspector label="사용자 상세">
+  {#snippet sitesRow()}
+    {#if selected}
+      <Button
+        variant="outline"
+        tone="neutral"
+        size="sm"
+        disabled={busy || !sitesDirty}
+        onclick={() =>
+          run(`현장 범위 — ${selected.display}`, () => data.api.setUserSites(selected.id, $state.snapshot(siteSel)))}
+        >현장 범위 저장</Button
+      >
+    {/if}
+  {/snippet}
+  <Inspector label="사용자 상세" footer={selected ? sitesRow : undefined}>
     {#if selected}
       {@const screens = screensOf(selected.role)}
       <h2 class="text-heading-sm">{selected.display} <span class="text-label-md text-fg-muted">{selected.id}</span></h2>
@@ -125,15 +138,6 @@
             onchange={() => (siteSel = siteSel.includes(s.id) ? siteSel.filter((x) => x !== s.id) : [...siteSel, s.id])}
           />
         {/each}
-        <Button
-          variant="outline"
-          tone="neutral"
-          size="sm"
-          disabled={busy || !sitesDirty}
-          onclick={() =>
-            run(`현장 범위 — ${selected.display}`, () => data.api.setUserSites(selected.id, $state.snapshot(siteSel)))}
-          >현장 범위 저장</Button
-        >
       </fieldset>
       <Select
         label="상태"

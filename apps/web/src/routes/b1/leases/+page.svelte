@@ -169,7 +169,7 @@
         >
           <Select label="재배치 대상 현장" bind:value={toSiteId} options={targets} placeholder="현장 선택" required />
           <TextField label="메모" bind:value={note} placeholder="예: 10월 타설 시작 현장으로 이동" />
-          <Button type="submit" disabled={busy || !toSiteId}>재배치 계획</Button>
+          <div class="flex justify-end"><Button type="submit" disabled={busy || !toSiteId}>재배치 계획</Button></div>
         </form>
       {:else if selected.state === 'relocated'}
         <Badge tone="info">재배치 계획 확정 — {siteName(selected.toSiteId ?? '')}</Badge>
