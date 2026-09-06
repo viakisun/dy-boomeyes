@@ -4,7 +4,7 @@
 
 ```
 pnpm build && pnpm capture --dark --strict     # shots/manifest.json
-pnpm docs:set [-- --pdf]                        # docs/set/<next_set_version>/{DELTA.md, MANIFEST.md} + build/설계서.html(.pdf)
+pnpm docs:set [--pdf]                           # docs/set/<next_set_version>/{DELTA.md, MANIFEST.md} + build/설계서.html(.pdf)
 pnpm docs:check                                 # check_set — ① 캡처 매니페스트 ② 설계서 화면 전수·문서 번호 ③ DELTA 신규 ID 전수 ④ MANIFEST 해시
 ```
 

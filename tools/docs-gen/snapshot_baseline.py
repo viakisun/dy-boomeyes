@@ -7,6 +7,8 @@ archive/README.md "상태 요약"의 범위(DISC-001~032 · ENT-01~15 · FR-001~
 
   python3 tools/docs-gen/snapshot_baseline.py v0.3 archive/2026-09-05_docset-v0.3/docs/ssot/BoomEyes_SSOT_v0.3.md
 """
+from __future__ import annotations
+
 import json
 import re
 import sys

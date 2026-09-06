@@ -65,6 +65,8 @@ def main() -> None:
     if a.pdf:
         pdf_note = render_pdf(html_path, pdf_path)
         print("  ", pdf_note)
+    elif pdf_path.exists():
+        pdf_path.unlink()  # 이전 실행의 PDF가 표에 남아 문구와 어긋나지 않게 — --pdf 없이는 PDF를 산출하지 않는다
     # MANIFEST.md — 입력·출력 해시 · 캡처 요약 · check_set 결과(발행 승인의 근거)
     inputs = [f"| `ssot/{f}.yaml` | `{sha256(ROOT / 'ssot' / f'{f}.yaml')}` |" for f in ["meta", "roles", "contract", "requirements", "interfaces", "entities", "screens", "decisions", "options", "glossary", "scenarios"]]
     outputs = []

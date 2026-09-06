@@ -11,8 +11,6 @@ import html
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
-from ssot_loader import ROOT
-
 CSS = """
 @page { size: 297mm 210mm; margin: 0; }
 :root { --ink:#16232a; --sub:#5c6b6e; --faint:#8fa0a4; --line:#dde3e4; --bg:#f8faff; --card:#fff; --navy:#0d2877; --navy-bg:#e8ecf7; --danger:#b42318; --danger-bg:#fdecea; --ok:#1e7e4a; --warn:#8a5a00; --warn-bg:#fff4d6; }
