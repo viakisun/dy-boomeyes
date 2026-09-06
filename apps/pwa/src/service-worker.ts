@@ -4,6 +4,7 @@
 /// <reference lib="webworker" />
 // PWA 서비스 워커(specs/shell-auth AC-7) — 오프라인에서도 앱 셸이 뜬다. 데이터(mock)는 세션 메모리라 캐시하지 않는다.
 // 알림(ADR-009 · IF-014): 표시는 showNotification 한 경로 — W2는 페이지가 registration.showNotification을 호출, push 이벤트는 W3 서버 발송용으로 휴면
+import type { PushPayload } from '@boomeyes/domain';
 import { build, files, version } from '$service-worker';
 
 const sw = self as unknown as ServiceWorkerGlobalScope;
@@ -54,7 +55,7 @@ sw.addEventListener('fetch', (event) => {
 
 sw.addEventListener('push', (event) => {
   // W3: 서버 Web Push 페이로드 = PushPayload(packages/domain/src/notify.ts)
-  const p = event.data?.json() as { title: string; body: string; url: string; tag: string } | undefined;
+  const p = event.data?.json() as PushPayload | undefined;
   if (!p) return;
   event.waitUntil(sw.registration.showNotification(p.title, { body: p.body, tag: p.tag, data: { url: p.url } }));
 });
