@@ -402,6 +402,7 @@
   --spacing-layout-panel-height: var(--sys-layout-panel-height);
   --spacing-layout-menu-min: var(--sys-layout-menu-min);
   --spacing-layout-field-short: var(--sys-layout-field-short);
+  --spacing-layout-stat-width: var(--sys-layout-stat-width);
   --radius-control: var(--sys-radius-control);
   --radius-card: var(--sys-radius-card);
   --radius-dialog: var(--sys-radius-dialog);
@@ -424,6 +425,7 @@
   --spacing-size-icon-xl: var(--sys-size-icon-xl);
   --spacing-size-row-default: var(--sys-size-row-default);
   --spacing-size-row-dense: var(--sys-size-row-dense);
+  --spacing-size-stat-height: var(--sys-size-stat-height);
   --spacing-size-avatar-sm: var(--sys-size-avatar-sm);
   --spacing-size-avatar-md: var(--sys-size-avatar-md);
   --spacing-size-avatar-lg: var(--sys-size-avatar-lg);

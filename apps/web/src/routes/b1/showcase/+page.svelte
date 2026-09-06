@@ -3,7 +3,7 @@
   import { goto } from '$app/navigation';
   import { resolve } from '$app/paths';
   import { SCR } from '@boomeyes/domain';
-  import { Badge, ShowcaseOverlay, Stat, fmtDateTime } from '@boomeyes/ui';
+  import { Badge, ShowcaseOverlay, Stat, fmtDateTime, StatGroup } from '@boomeyes/ui';
   import { CameraWall } from '@boomeyes/video';
   let { data } = $props();
   const s = $derived(data.showcase);
@@ -28,24 +28,24 @@
       </div>
       <Badge tone="success" variant="solid">안전관리 중</Badge>
     </div>
-    <section class="gap-inline-md grid grid-cols-2 md:grid-cols-4" aria-label="지표">
-      <Stat label="무사고" value="D+{s.daysWithoutAccident}" tone="success" hint="현장 개설일 기준 · 사고 기록 없음" />
+    <StatGroup label="지표">
+      <Stat label="무사고" value="D+{s.daysWithoutAccident}" hint="현장 개설일 기준 · 사고 기록 없음" />
       <Stat
         label="점검 제출률"
         value={s.inspectionRate}
         unit="%"
-        tone={s.inspectionRate === 100 ? 'success' : 'warning'}
+        tone={s.inspectionRate === 100 ? 'neutral' : 'warning'}
         hint="오늘 · 호기 기준"
       />
       <Stat
         label="서류 완비율"
         value={s.docRate}
         unit="%"
-        tone={s.docRate === 100 ? 'success' : 'warning'}
+        tone={s.docRate === 100 ? 'neutral' : 'warning'}
         hint="유효·승인 / 전체"
       />
-      <Stat label="24시간 알림" value={s.alerts24h} unit="건" tone="info" hint="긴급·경고·정보" />
-    </section>
+      <Stat label="24시간 알림" value={s.alerts24h} unit="건" hint="긴급·경고·정보" />
+    </StatGroup>
     <CameraWall cameras={data.cameras} devices={data.devices} sites={data.sites} title="카메라 월 라이브" />
     <section class="gap-inline-md grid md:grid-cols-2" aria-label="현장">
       {#each s.sites as site (site.id)}

@@ -1,8 +1,8 @@
 <script lang="ts" generics="T">
-  // 데이터 표 — 행 밀도(default 48 / dense 36) · 행 포커스 + Enter/Space 선택 · aria-selected (cmp.table)
+  // 데이터 표(DY-design §11.2) — 행 밀도(compact: default 36 / dense 32) · 열 kind별 서식(식별자 code-md·nowrap · 수치 우측 tabular · 텍스트 1줄 truncate) · 행 포커스 + Enter/Space 선택 · aria-selected (cmp.table)
   import type { Snippet } from 'svelte';
   import { cx, FOCUS } from '../lib/cx';
-  import type { Column } from '../lib/table';
+  import type { Column, ColumnKind } from '../lib/table';
   let {
     columns,
     rows,
@@ -24,6 +24,17 @@
     caption?: string;
     class?: string;
   } = $props();
+  const KIND: Record<ColumnKind, { th: string; td: string }> = {
+    id: { th: 'w-px', td: 'text-code-md whitespace-nowrap' },
+    num: { th: 'w-px text-right', td: 'text-right tabular-nums whitespace-nowrap' },
+    date: { th: 'w-px', td: 'tabular-nums whitespace-nowrap' },
+    status: { th: 'w-px', td: 'whitespace-nowrap' },
+    text: { th: '', td: '' },
+  };
+  const kindOf = (c: Column): ColumnKind => c.kind ?? (c.align === 'right' ? 'num' : 'text');
+  const thClass = (c: Column) => cx(KIND[kindOf(c)].th, kindOf(c) === 'text' && c.nowrap && 'w-px');
+  const tdClass = (c: Column) =>
+    cx(KIND[kindOf(c)].td, kindOf(c) === 'text' && (c.nowrap ? 'whitespace-nowrap' : 'max-w-0 truncate'));
   const pick = (row: T) => onselect?.(row);
   const onkey = (e: KeyboardEvent, row: T) => {
     if (e.key === 'Enter' || e.key === ' ') {
@@ -42,9 +53,9 @@
           <th
             scope="col"
             class={cx(
-              'px-inset-md font-medium whitespace-nowrap',
+              'px-inset-md text-left font-medium whitespace-nowrap',
               dense ? 'h-size-row-dense' : 'h-size-row-default',
-              c.align === 'right' ? 'text-right' : 'text-left',
+              thClass(c),
             )}>{c.label}</th
           >
         {/each}
@@ -65,9 +76,7 @@
           onkeydown={(e) => onkey(e, row)}
         >
           {#each columns as c (c.key)}
-            <td class={cx('px-inset-md', c.align === 'right' ? 'text-right tabular-nums' : 'text-left')}
-              >{@render cell(row, c)}</td
-            >
+            <td class={cx('px-inset-md text-left', tdClass(c))}>{@render cell(row, c)}</td>
           {/each}
         </tr>
       {/each}

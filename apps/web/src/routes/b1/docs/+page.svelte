@@ -4,7 +4,6 @@
   import { resolve } from '$app/paths';
   import { SCR, type Doc } from '@boomeyes/domain';
   import {
-    Badge,
     DOC_KIND_LABEL,
     DOC_STATE_LABEL,
     DOC_TONE,
@@ -18,6 +17,7 @@
     fmtDateTime,
     type Column,
     PageHeader,
+    StatGroup,
   } from '@boomeyes/ui';
   let { data } = $props();
   const now = $derived(data.clock.now());
@@ -32,12 +32,12 @@
     selected ? data.requests.find((r) => r.kind === 'doc' && r.note?.includes(selected.id)) : undefined,
   );
   const COLS: Column[] = [
-    { key: 'id', label: '서류' },
-    { key: 'kind', label: '유형' },
+    { key: 'id', label: '서류', kind: 'id' },
+    { key: 'kind', label: '유형', nowrap: true },
     { key: 'subject', label: '대상' },
-    { key: 'site', label: '현장' },
-    { key: 'state', label: '상태' },
-    { key: 'expires', label: '만료' },
+    { key: 'site', label: '현장', nowrap: true },
+    { key: 'state', label: '상태', kind: 'status' },
+    { key: 'expires', label: '만료', kind: 'status' },
   ];
   const siteName = (id: string) => data.sites.find((s) => s.id === id)?.name ?? id;
   const rate = $derived(
@@ -53,40 +53,39 @@
 >
   <div class="gap-stack-lg flex min-w-0 flex-col">
     <PageHeader title="서류 현황" description="대상별 완비율 · 만료 30일 이내 서류 · 등록·승인은 현장에서 합니다" />
-    <div class="gap-inline-md grid grid-cols-2 md:grid-cols-4" aria-label="완비율 요약">
+    <StatGroup label="완비율 요약">
       <Stat
         label="평균 완비율"
         value={rate}
         unit="%"
-        tone={rate === 100 ? 'success' : 'warning'}
+        tone={rate === 100 ? 'neutral' : 'warning'}
         hint="대상 {data.completeness.length}"
       />
       <Stat
         label="만료 임박·반려"
         value={expiring.length}
         unit="건"
-        tone={expiring.length ? 'danger' : 'success'}
+        tone={expiring.length ? 'danger' : 'neutral'}
         hint="D-30 이내 · 반려"
       />
       <Stat
         label="검토 중"
         value={data.docs.filter((d) => d.state === 'review' || d.state === 'submitted').length}
         unit="건"
-        tone="info"
         hint="현장 승인 대기"
       />
-      <Stat label="전체" value={data.docs.length} unit="건" tone="neutral" hint="5유형" />
-    </div>
+      <Stat label="전체" value={data.docs.length} unit="건" hint="5유형" />
+    </StatGroup>
     <section class="gap-stack-sm flex flex-col" aria-label="대상별 완비율">
       <h2 class="text-heading-md">완비율 — 현장 · 장비 · 운전자</h2>
       <ul class="gap-inline-sm flex flex-wrap" aria-label="대상별 완비율">
         {#each data.completeness as c (c.subjectId)}
           <li data-kind={c.kind}>
-            <Badge
+            <StatusPill
               tone={c.rate === 100 ? 'success' : c.expiring ? 'danger' : 'warning'}
-              variant={c.kind === 'site' ? 'solid' : 'subtle'}
-              >{c.kind === 'site' ? '현장 ' : ''}{c.subject} {c.rate}% ({c.complete}/{c.total})</Badge
-            >
+              label="{c.kind === 'site' ? '현장 ' : ''}{c.subject} {c.rate}% ({c.complete}/{c.total})"
+              size="sm"
+            />
           </li>
         {/each}
       </ul>
@@ -104,7 +103,7 @@
     >
       {#snippet cell(row: Doc, col: Column)}
         {@const key = col.key}
-        {#if key === 'id'}<span class="text-code-md">{row.id}</span>
+        {#if key === 'id'}{row.id}
         {:else if key === 'kind'}{DOC_KIND_LABEL[row.kind]}
         {:else if key === 'subject'}{row.subject}
         {:else if key === 'site'}<span class="text-body-sm text-fg-muted">{siteName(row.siteId)}</span>

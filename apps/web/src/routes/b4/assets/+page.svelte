@@ -57,11 +57,11 @@
   let newUnit = $state('');
   let newSite = $state('');
   const DEVICE_COLS: Column[] = [
-    { key: 'id', label: '호기' },
-    { key: 'site', label: '현장' },
-    { key: 'state', label: '상태' },
-    { key: 'owner', label: '소유주' },
-    { key: 'at', label: '마지막 수신' },
+    { key: 'id', label: '호기', nowrap: true },
+    { key: 'site', label: '현장', nowrap: true },
+    { key: 'state', label: '상태', kind: 'status' },
+    { key: 'owner', label: '소유주', nowrap: true },
+    { key: 'at', label: '마지막 수신', kind: 'date' },
   ];
 
   // 현장 탭 — 편집 사본은 선택 현장이 바뀔 때(저장 뒤 다시 읽기 포함) 다시 채운다
@@ -91,12 +91,12 @@
   let create = $state({ name: '', address: '', company: 'G/S 건설', safetyUserId: '', from: '', to: '' });
   const period = (f: { from: string; to: string }) => (f.from && f.to ? { from: f.from, to: f.to } : undefined);
   const SITE_COLS: Column[] = [
-    { key: 'id', label: '현장' },
-    { key: 'company', label: '건설사' },
-    { key: 'period', label: '기간' },
-    { key: 'safety', label: '안전관리자' },
-    { key: 'profile', label: '프로파일' },
-    { key: 'devices', label: '장비', align: 'right' },
+    { key: 'id', label: '현장', nowrap: true },
+    { key: 'company', label: '건설사', nowrap: true },
+    { key: 'period', label: '기간', kind: 'date' },
+    { key: 'safety', label: '안전관리자', nowrap: true },
+    { key: 'profile', label: '프로파일', kind: 'status' },
+    { key: 'devices', label: '장비', kind: 'num' },
   ];
   const devicesOf = (siteId: string) => data.devices.filter((d) => d.siteId === siteId);
 

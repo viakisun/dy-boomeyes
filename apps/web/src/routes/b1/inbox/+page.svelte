@@ -25,12 +25,12 @@
   import { session } from '$lib/session.svelte';
   let { data } = $props();
   const COLUMNS: Column[] = [
-    { key: 'kind', label: '유형' },
+    { key: 'kind', label: '유형', nowrap: true },
     { key: 'title', label: '내용' },
-    { key: 'requester', label: '신청자' },
-    { key: 'site', label: '현장' },
-    { key: 'requestedAt', label: '요청 시각' },
-    { key: 'state', label: '상태' },
+    { key: 'requester', label: '신청자', nowrap: true },
+    { key: 'site', label: '현장', nowrap: true },
+    { key: 'requestedAt', label: '요청 시각', kind: 'date' },
+    { key: 'state', label: '상태', kind: 'status' },
   ];
   const siteName = (id: string) => data.sites.find((s) => s.id === id)?.name ?? id;
   const userName = (id: string) => data.users.find((u) => u.id === id)?.display ?? id;

@@ -24,11 +24,11 @@
   import { session } from '$lib/session.svelte';
   let { data } = $props();
   const COLUMNS: Column[] = [
-    { key: 'version', label: '버전' },
-    { key: 'kind', label: '구분' },
-    { key: 'fields', label: '필드 수', align: 'right' },
-    { key: 'lastReceivedAt', label: '마지막 수신' },
-    { key: 'uploaded', label: '등록' },
+    { key: 'version', label: '버전', kind: 'id' },
+    { key: 'kind', label: '구분', kind: 'status' },
+    { key: 'fields', label: '필드 수', kind: 'num' },
+    { key: 'lastReceivedAt', label: '마지막 수신', kind: 'date' },
+    { key: 'uploaded', label: '등록', kind: 'date' },
   ];
   const fieldCount = (v: ProtocolVersion) => v.def.groups.reduce((n, g) => n + g.fields.length, 0);
   let picked = $state<string | null>(null);
@@ -127,7 +127,7 @@
       caption="프로토콜 버전"
     >
       {#snippet cell(p: ProtocolVersion, col: Column)}
-        {#if col.key === 'version'}<span class="text-code-md">{p.version}</span>
+        {#if col.key === 'version'}{p.version}
         {:else if col.key === 'kind'}<StatusPill
             tone={p.kind === 'production' ? 'success' : 'progress'}
             label={p.kind === 'production' ? '운영' : '테스트'}

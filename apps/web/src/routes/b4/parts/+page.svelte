@@ -4,7 +4,6 @@
   import { resolve } from '$app/paths';
   import { SCR, type Part, type PartEvent, type Stock } from '@boomeyes/domain';
   import {
-    Badge,
     Button,
     DataTable,
     EmptyState,
@@ -47,20 +46,20 @@
       .map((e) => ({ at: e.at, by: e.worker ?? e.by, action: eventText(e), ...(e.note ? { note: e.note } : {}) })),
   );
   const COLS: Column[] = [
-    { key: 'id', label: '부품' },
-    { key: 'group', label: '부품군' },
-    { key: 'partNo', label: '품번' },
+    { key: 'id', label: '부품', kind: 'id' },
+    { key: 'group', label: '부품군', nowrap: true },
+    { key: 'partNo', label: '품번', kind: 'id' },
     { key: 'position', label: '장착 위치' },
-    { key: 'installedAt', label: '설치일' },
-    { key: 'state', label: '상태' },
-    { key: 'poured', label: '누적 타설(보조)' },
+    { key: 'installedAt', label: '설치일', kind: 'date' },
+    { key: 'state', label: '상태', kind: 'status' },
+    { key: 'poured', label: '누적 타설(m³, 보조)', kind: 'num' },
   ];
   const STOCK_COLS: Column[] = [
-    { key: 'partNo', label: '품번' },
-    { key: 'group', label: '부품군' },
-    { key: 'onHand', label: '현재고', align: 'right' },
-    { key: 'safety', label: '안전재고', align: 'right' },
-    { key: 'status', label: '상태' },
+    { key: 'partNo', label: '품번', kind: 'id' },
+    { key: 'group', label: '부품군', nowrap: true },
+    { key: 'onHand', label: '현재고', kind: 'num' },
+    { key: 'safety', label: '안전재고', kind: 'num' },
+    { key: 'status', label: '상태', kind: 'status' },
   ];
 </script>
 
@@ -92,9 +91,9 @@
     >
       {#snippet cell(row: Part, col: Column)}
         {@const key = col.key}
-        {#if key === 'id'}<span class="text-code-md">{row.id}</span>
+        {#if key === 'id'}{row.id}
         {:else if key === 'group'}{PART_GROUP_LABEL[row.group]}
-        {:else if key === 'partNo'}<span class="text-code-md">{row.partNo}</span>
+        {:else if key === 'partNo'}{row.partNo}
         {:else if key === 'position'}{unitOf(row.deviceId)} · {row.position}
         {:else if key === 'installedAt'}{row.installedAt.slice(0, 10)}
         {:else if key === 'state'}<StatusPill
@@ -102,12 +101,7 @@
             label={PART_STATE_LABEL[row.state]}
             size="sm"
           />
-        {:else if key === 'poured'}<ProgressBar
-            value={(row.pouredM3 / maxPoured) * 100}
-            label="타설"
-            hint="{row.pouredM3} m³"
-            tone="neutral"
-          />
+        {:else if key === 'poured'}{row.pouredM3}
         {/if}
       {/snippet}
     </DataTable>
@@ -126,13 +120,15 @@
       <DataTable columns={STOCK_COLS} rows={data.stock} rowKey={(s: Stock) => s.id} caption="재고 — 품번별" dense>
         {#snippet cell(row: Stock, col: Column)}
           {@const key = col.key}
-          {#if key === 'partNo'}<span class="text-code-md">{row.partNo}</span>
+          {#if key === 'partNo'}{row.partNo}
           {:else if key === 'group'}{PART_GROUP_LABEL[row.group]}
           {:else if key === 'onHand'}{row.onHand}
           {:else if key === 'safety'}{row.safety}
-          {:else if key === 'status'}<Badge tone={row.onHand <= row.safety ? 'warning' : 'success'}
-              >{row.onHand <= row.safety ? '안전재고 이하' : '충분'}</Badge
-            >
+          {:else if key === 'status'}<StatusPill
+              tone={row.onHand <= row.safety ? 'warning' : 'success'}
+              label={row.onHand <= row.safety ? '안전재고 이하' : '충분'}
+              size="sm"
+            />
           {/if}
         {/snippet}
       </DataTable>
@@ -157,6 +153,12 @@
             muted: true,
           },
         ]}
+      />
+      <ProgressBar
+        value={(selected.pouredM3 / maxPoured) * 100}
+        label="누적 타설"
+        hint="{selected.pouredM3} m³"
+        tone="neutral"
       />
       {#if timeline.length}
         <Timeline items={timeline} newestFirst={false} />

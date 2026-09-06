@@ -69,11 +69,11 @@
     }
   }
   const COLS: Column[] = [
-    { key: 'id', label: '서류' },
-    { key: 'kind', label: '유형' },
+    { key: 'id', label: '서류', kind: 'id' },
+    { key: 'kind', label: '유형', nowrap: true },
     { key: 'subject', label: '대상' },
-    { key: 'state', label: '상태' },
-    { key: 'expires', label: '만료' },
+    { key: 'state', label: '상태', kind: 'status' },
+    { key: 'expires', label: '만료', kind: 'status' },
   ];
 </script>
 
@@ -126,7 +126,7 @@
       >
         {#snippet cell(row: Doc, col: Column)}
           {@const key = col.key}
-          {#if key === 'id'}<span class="text-code-md">{row.id}</span>
+          {#if key === 'id'}{row.id}
           {:else if key === 'kind'}{DOC_KIND_LABEL[row.kind]}
           {:else if key === 'subject'}{row.subject}
           {:else if key === 'state'}<StatusPill

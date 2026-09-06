@@ -169,7 +169,9 @@
       "ref.size.56": "56px",
       "ref.size.64": "64px",
       "ref.size.72": "72px",
+      "ref.size.88": "88px",
       "ref.size.96": "96px",
+      "ref.size.112": "112px",
       "ref.space.0": "0px",
       "ref.space.1": "1px",
       "ref.space.2": "2px",
@@ -550,6 +552,7 @@
       "sys.layout.panel.height": "420px",
       "sys.layout.menu.min": "192px",
       "sys.layout.field.short": "96px",
+      "sys.layout.stat.width": "240px",
       "sys.motion.duration.fast": "100ms",
       "sys.motion.duration.base": "150ms",
       "sys.motion.duration.moderate": "200ms",
@@ -664,6 +667,7 @@
       "sys.size.icon.xl": "32px",
       "sys.size.row.default": "56px",
       "sys.size.row.dense": "48px",
+      "sys.size.stat.height": "112px",
       "sys.size.avatar.sm": "32px",
       "sys.size.avatar.md": "40px",
       "sys.size.avatar.lg": "48px",
@@ -1486,7 +1490,9 @@
       "ref.size.56": "56px",
       "ref.size.64": "64px",
       "ref.size.72": "72px",
+      "ref.size.88": "88px",
       "ref.size.96": "96px",
+      "ref.size.112": "112px",
       "ref.space.0": "0px",
       "ref.space.1": "1px",
       "ref.space.2": "2px",
@@ -1867,6 +1873,7 @@
       "sys.layout.panel.height": "420px",
       "sys.layout.menu.min": "192px",
       "sys.layout.field.short": "96px",
+      "sys.layout.stat.width": "240px",
       "sys.motion.duration.fast": "100ms",
       "sys.motion.duration.base": "150ms",
       "sys.motion.duration.moderate": "200ms",
@@ -1981,6 +1988,7 @@
       "sys.size.icon.xl": "24px",
       "sys.size.row.default": "36px",
       "sys.size.row.dense": "32px",
+      "sys.size.stat.height": "88px",
       "sys.size.avatar.sm": "24px",
       "sys.size.avatar.md": "32px",
       "sys.size.avatar.lg": "40px",
@@ -2817,7 +2825,9 @@
       "ref.size.56": "56px",
       "ref.size.64": "64px",
       "ref.size.72": "72px",
+      "ref.size.88": "88px",
       "ref.size.96": "96px",
+      "ref.size.112": "112px",
       "ref.space.0": "0px",
       "ref.space.1": "1px",
       "ref.space.2": "2px",
@@ -3198,6 +3208,7 @@
       "sys.layout.panel.height": "420px",
       "sys.layout.menu.min": "192px",
       "sys.layout.field.short": "96px",
+      "sys.layout.stat.width": "240px",
       "sys.motion.duration.fast": "100ms",
       "sys.motion.duration.base": "150ms",
       "sys.motion.duration.moderate": "200ms",
@@ -3326,6 +3337,7 @@
       "sys.size.icon.xl": "32px",
       "sys.size.row.default": "56px",
       "sys.size.row.dense": "48px",
+      "sys.size.stat.height": "112px",
       "sys.size.avatar.sm": "32px",
       "sys.size.avatar.md": "40px",
       "sys.size.avatar.lg": "48px",
@@ -4176,7 +4188,9 @@
       "ref.size.56": "56px",
       "ref.size.64": "64px",
       "ref.size.72": "72px",
+      "ref.size.88": "88px",
       "ref.size.96": "96px",
+      "ref.size.112": "112px",
       "ref.space.0": "0px",
       "ref.space.1": "1px",
       "ref.space.2": "2px",
@@ -4557,6 +4571,7 @@
       "sys.layout.panel.height": "420px",
       "sys.layout.menu.min": "192px",
       "sys.layout.field.short": "96px",
+      "sys.layout.stat.width": "240px",
       "sys.motion.duration.fast": "100ms",
       "sys.motion.duration.base": "150ms",
       "sys.motion.duration.moderate": "200ms",
@@ -4685,6 +4700,7 @@
       "sys.size.icon.xl": "24px",
       "sys.size.row.default": "36px",
       "sys.size.row.dense": "32px",
+      "sys.size.stat.height": "88px",
       "sys.size.avatar.sm": "24px",
       "sys.size.avatar.md": "32px",
       "sys.size.avatar.lg": "40px",
@@ -6026,11 +6042,25 @@
       "css": "--ref-size-72",
       "tailwind": null
     },
+    "ref.size.88": {
+      "$type": "dimension",
+      "$description": null,
+      "$value": "88px",
+      "css": "--ref-size-88",
+      "tailwind": null
+    },
     "ref.size.96": {
       "$type": "dimension",
       "$description": null,
       "$value": "96px",
       "css": "--ref-size-96",
+      "tailwind": null
+    },
+    "ref.size.112": {
+      "$type": "dimension",
+      "$description": null,
+      "$value": "112px",
+      "css": "--ref-size-112",
       "tailwind": null
     },
     "ref.space.0": {
@@ -8996,6 +9026,13 @@
       "css": "--sys-layout-field-short",
       "tailwind": "--spacing-layout-field-short"
     },
+    "sys.layout.stat.width": {
+      "$type": "dimension",
+      "$description": "요약 지표(Stat) 열 폭 — 늘려 채우지 않는다(§11.4)",
+      "$value": "240px",
+      "css": "--sys-layout-stat-width",
+      "tailwind": "--spacing-layout-stat-width"
+    },
     "sys.motion.duration.fast": {
       "$type": "duration",
       "$description": "hover·포커스 전환",
@@ -9268,6 +9305,16 @@
       },
       "css": "--sys-size-row-dense",
       "tailwind": "--spacing-size-row-dense"
+    },
+    "sys.size.stat.height": {
+      "$type": "dimension",
+      "$description": "요약 지표(Stat) 최소 높이 — §11.4",
+      "$value": {
+        "comfortable": "{ref.size.112}",
+        "compact": "{ref.size.88}"
+      },
+      "css": "--sys-size-stat-height",
+      "tailwind": "--spacing-size-stat-height"
     },
     "sys.size.avatar.sm": {
       "$type": "dimension",
