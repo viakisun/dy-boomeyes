@@ -160,7 +160,11 @@ disc:
   baseline: 정비 보고→현장 확인 2단계 · 본사=열람·확인 요청
   ask: 완료 확인 주체·본사 권한 범위 확정
   track: B
-  status: open
+  status: decided
+  resolved:
+    date: '2026-09-06'
+    by: 사용자(VIA) — DY 확인 전 기준안 채택
+    summary: 완료 확인 주체 = 현장 안전관리자(정비 보고 → 현장 확인 2단계) · 본사 = 열람 + 확인 요청(직접 처리 불가). 기준안 채택 — DY 이견 시 재개
   source: docset-v0.3
 - id: DISC-016
   title: 서류 유형
@@ -395,7 +399,11 @@ disc:
   baseline: 과업지시서 검토 요청 미결 — 현행 Web Push(IF-014) 가정 · 시나리오별 등급은 FR-036 · 목업은 로컬 알림(ADR-009), 서버 발송은 W3
   ask: 알림 수신자·방식(푸시·문자·전화) 확정
   track: A
-  status: open
+  status: decided
+  resolved:
+    date: '2026-09-06'
+    by: 사용자(VIA) — DY 확인 전 기준안 채택
+    summary: Web Push(IF-014) 채널 가정 유지 · 목업은 로컬 알림(ADR-009) · 시나리오별 등급은 FR-036 · 서버 발송·문자·전화 채널은 W3 이후 DY 확정 시 추가
   source: sow-review-open
 - id: DISC-037
   title: 장비 대수 정합 (지도 180대 vs 호기 120대)
@@ -418,7 +426,11 @@ disc:
   baseline: 영상·소모품 운영 검토 v2.0 §9~10 — 공통 임계·주기 미제시, 누적 타설량은 보조지표
   ask: 부품군별 기준두께·임계·점검 주기를 DY CPB 모델별 OEM 기준으로 제공
   track: B
-  status: open
+  status: decided
+  resolved:
+    date: '2026-09-06'
+    by: 사용자(VIA) — DY 확인 전 기준안 채택
+    summary: 시드 임계·주기(부품군별 기준두께 · 경고/교체 임계 · 점검 주기)로 진행 · DY CPB 모델별 OEM 기준 제공 시 규칙(B4-05)으로 교체 · 누적 타설량은 보조지표
   source: video-parts-review-v2.0
 - id: DISC-039
   title: event_id·공통 시각 체계 (4소스 동기 복기)
@@ -472,7 +484,11 @@ disc:
   baseline: v2.0 §12 — PWA 스캔 UI 결정 필요
   ask: 태그 방식·부착 위치·내구 조건 확정
   track: B
-  status: open
+  status: decided
+  resolved:
+    date: '2026-09-06'
+    by: 사용자(VIA) — DY 확인 전 기준안 채택
+    summary: QR 라벨 기준(스캔 UI는 자리 · 2단계 실동작) · RFID는 옵션 축으로 보류 · 부착 위치·내구 조건은 DY 제공
   source: video-parts-review-v2.0
 - id: DISC-044
   title: 부품·이벤트 복기 화면 5의 단계 귀속 (구조 vs 실동작)
@@ -486,7 +502,11 @@ disc:
   baseline: 화면은 1단계(구조) — W2는 라우트·시드·상태기계 소비까지(자리+), 스캔·발주·실영상 동기는 2단계
   ask: 5화면의 1단계 산출 포함 여부와 수준(구조만 vs 실동작) 확정
   track: C
-  status: open
+  status: decided
+  resolved:
+    date: '2026-09-06'
+    by: 사용자(VIA) — DY 확인 전 기준안 채택
+    summary: 부품·이벤트 복기 5화면 = 1단계 구조(라우트 · 시드 · 상태기계 소비 · 자리+) · 스캔 · 발주 · 실영상 동기는 2단계 — W2 구현 범위 확정
   source: w2-plan-2026-09-05
 - id: DISC-045
   title: 오프라인 제출 정책 (기록 시각 · 보존 · 재시도)
@@ -498,7 +518,11 @@ disc:
   baseline: 발생 시각 = 단말 탭 시각(at) · 사용자별 순서 재전송 · 백오프 5회 후 사용자 재시도 · 거부는 항목 단위 표시(ADR-010 제안)
   ask: 체크인 기록 시각 기준(단말 vs 서버 수신) · 큐 보존 기간 · 재시도 상한 · 거부 시 처리 확정
   track: B
-  status: open
+  status: decided
+  resolved:
+    date: '2026-09-06'
+    by: 사용자(VIA) — DY 확인 전 기준안 채택
+    summary: 발생 시각 = 단말 탭 시각(at) · 사용자별 FIFO 재전송 · 백오프 5회 후 사용자 재시도 · 보존 = 전송 성공까지(기간 상한 없음) · 거부는 항목 단위 표시(ADR-010)
   source: w2-plan-2026-09-05
 - id: DISC-046
   title: 서류 업로드 정책 (형식 · 용량 · 원본 보존 · 서명 URL)
@@ -510,5 +534,9 @@ disc:
   baseline: IF-011 HTTPS 멀티파트 · 파일은 S3(ENT-07) · W2 mock = objectURL 미리보기, 전송 방식은 W3 ADR
   ask: 허용 형식(사진·PDF) · 용량 상한 · 촬영 원본 보존 · 서명 URL 사용 여부 확정
   track: B
-  status: open
+  status: decided
+  resolved:
+    date: '2026-09-06'
+    by: 사용자(VIA) — DY 확인 전 기준안 채택
+    summary: 기준안 그대로 — 전송은 HTTPS 멀티파트(IF-011) · 파일은 S3(ENT-07) · 촬영 원본은 앱 큐(ADR-010)에 보관 후 서버 저장 · 허용 형식·용량 상한·서명 URL은 W3 전송 ADR에서 DY 값으로 확정(신규 수치 없음)
   source: w2-plan-2026-09-05

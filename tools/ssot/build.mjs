@@ -310,13 +310,16 @@ md +=
   ) + '\n\n';
 md +=
   tbl(
-    ['ID', '항목', '트랙', '상태', '확정할 것', '관련 화면', '출처'],
+    ['ID', '항목', '트랙', '상태', '확정할 것 · 결정', '관련 화면', '출처'],
     discs.map((x) => [
       `\`${x.id}\``,
       x.title,
       x.track,
       L.disc[x.status],
-      x.ask,
+      // 확정(decided)이면 결정 내용(resolved.summary · 일자 · 주체)을 보인다 — 고객 원장은 무엇을 확정했는지가 핵심
+      x.status === 'decided' && x.resolved
+        ? `**결정(${x.resolved.date}, ${x.resolved.by})**: ${x.resolved.summary}`
+        : x.ask,
       x.scope.join(' ') || (x.scope_note ?? '—'),
       x.source,
     ]),
