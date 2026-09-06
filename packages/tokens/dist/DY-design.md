@@ -894,7 +894,7 @@ cmp 층은 sys만 참조한다(ref 직접 참조 금지 — 검사로 강제). �
 
 1. **셸.** `WebShell` = Sidebar(접힘 56) + Topbar 48 + Content(최대 1400, 좌우 24) + Inspector 360(선택 시). 사이드바 그룹 라벨과 브레드크럼은 표면 이름(운영사 관제 · 관리자 백오피스), 항목마다 아이콘 1(§11.5).
 2. **PageHeader는 필수.** 모든 웹 페이지의 첫 요소. 제목 · 부제 1줄 · 메타 칩 · 우측 액션 ≤ 2 · 탭 슬롯(§11.1). 페이지 제목은 Topbar가 아니라 본문.
-3. **목록이 기본 화면.** 관제·업무·서류·장비·부품은 `DataTable`(행 36 · 식별자 nowrap · 텍스트 1줄 truncate · 수치 우측 · 첫 열 고정, §11.2)이 기본. 카드 그리드는 대시보드(B1-02)와 지도 병렬 뷰에만.
+3. **목록이 기본 화면.** 관제·업무·서류·장비·부품은 `DataTable`(행 `row.default` 36 · 식별자 nowrap · 텍스트 1줄 truncate · 수치 우측 · 첫 열 고정, §11.2)이 기본. 카드 그리드는 대시보드(B1-02)와 지도 병렬 뷰에만.
 4. **상세는 옆에서.** 행 선택 → Inspector에 상세(헤더 · KeyValueList · 하단 액션 행 · 이력). 전체 페이지 이동은 편집·생성만. 뒤로가기로 목록 상태 복원.
 5. **색은 세 층.** 바탕 `bg.canvas`, 면 `bg.surface`, 컨트롤 `bg.ui`. 액센트는 주 버튼·선택 표시·링크에만. 상태색은 점·필·배너로, 행 전체·숫자·셀 채색은 danger 1종만(§11.4).
 6. **텍스트 위계.** heading-xl(24) 페이지 · heading-md(16) 패널 · body-md(13) 본문 · label-md(12) 메타 · code-md 식별자(CPB-004, E-021)는 모노.
@@ -949,7 +949,7 @@ PageHeader  제목 heading-xl · 부제 1줄(body-sm muted, ≤ 60자) · 메타
 
 | 규칙 | 값 |
 |---|---|
-| 행 높이 | `row.dense` 36(compact) 기본 · 두 줄 셀은 만들지 않는다 |
+| 행 높이 | `row.default`(compact 36) 기본 · 조밀 표만 `row.dense`(32) · 두 줄 셀은 만들지 않는다 |
 | 식별자 셀 | `code-md` · `whitespace-nowrap` · 최소 폭 = 가장 긴 ID |
 | 텍스트 셀 | 1줄 · 넘치면 `truncate` + `title` |
 | 수치 셀 | 우측 정렬 · `tabular-nums` · 단위는 헤더에 |
@@ -968,24 +968,24 @@ PageHeader  제목 heading-xl · 부제 1줄(body-sm muted, ≤ 60자) · 메타
 
 - 값은 `fg.default`(display-md). 색으로 말하지 않는다 — 톤은 값 옆 점/pill, danger일 때만 값을 `danger.fg`.
 - 라벨 label-md muted 위, 값, 힌트 1줄(body-sm muted). 힌트는 분모·기간·범위만.
-- 4개 이하, 폭을 늘려 채우지 않는다(`max-w` 240). 모바일은 2×2.
+- 4개 이하, 폭을 늘려 채우지 않는다(`max-w` 240 · 높이 88 — `sys.layout.stat.width`·`sys.size.stat.height` 토큰을 D4에서 추가). 모바일은 2×2.
 
 ### 11.5 아이콘
 
 - 세트 `@lucide/svelte`(ui가 `Icon*`으로 재노출) · 크기 `size.icon.md`(웹 16 · PWA 20) · 굵기 기본 · 색 currentColor.
 - 내비 항목 1개 = 아이콘 1개 + 라벨. 자리(placeholder) 사각형을 배포하지 않는다.
 
-| 화면·항목 | 아이콘 |
+| 화면·항목 | 아이콘(lucide 정식 이름) |
 |---|---|
 | 대시보드 · 관제 | layout-dashboard · monitor |
 | 수신함 · 업무함 · 업무 | inbox · clipboard-list |
 | 에스컬레이션 | siren |
 | 서류 | file-text |
-| 임대 계약 | file-signature |
+| 임대 계약 | file-pen-line |
 | 쇼케이스 · 보고 모드 | presentation |
-| 이벤트 복기 | history |
+| 이벤트 복기 | rotate-ccw-clock |
 | 지도 · 현장 | map · map-pin |
-| 프로토콜 | file-code-2 |
+| 프로토콜 | file-code-corner |
 | 장비 · 호기 | truck |
 | 사용자·권한 | users |
 | 알림 기준 · 알림 | bell |

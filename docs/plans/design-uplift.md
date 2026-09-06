@@ -12,12 +12,12 @@
 | D1 | `feat/ds-shell` | Sidebar · BottomNav · AppBar 아이콘(lucide 매핑 §11.5) · 그룹 라벨/브레드크럼/로그인 eyebrow = 표면 이름 · 푸터 "wave · mock" → DemoBar · PWA 탭 라벨 단축 | F-03 F-04 F-12 | 캡처 전량 변경 → 기준선 갱신 · e2e nav 라벨 수정 · axe | M |
 | D2 | `feat/ds-web-header-copy` | 웹 20화면 PageHeader 통일(제목 · 부제 1줄 · 메타 칩 · 액션 ≤ 2 · 뒤로 = 브레드크럼) · 카피 정리(식별자 → `data-ref`, "준비 중" 패턴) · DemoBar 툴팁(`data-ref` 표시) | F-01 F-02 F-05 | `design:audit` 웹 0 · 캡처 웹 20 · e2e 문구 단언 수정 | L |
 | D3 | `feat/ds-pwa-copy` | PWA 21화면 카피 정리(부제 1줄 · 식별자 제거 · "준비 중") · 프로파일 코드 → 뜻("2채널") · 용어 사전(소모품 → 마모·교체 부품) | F-01 F-02 | `design:audit` 0(전체) · 캡처 PWA 21 | M |
-| D4 | `feat/ds-stat-table` | Stat 재설계(값 중립 · 점/pill · 폭 ≤ 240 · 높이 88 · 2×2 모바일) · DataTable 규칙(행 36 · 식별자 nowrap · 1줄 truncate+title · 수치 우측 · 열 폭) · 알림 피드 항목 정리 · 완비율 solid 칩 → pill | F-06 F-07 F-08 F-11 | 웹 표 화면 10 · Stat 화면 7 캡처 · 기준선 갱신 | L |
+| D4 | `feat/ds-stat-table` | 토큰 선추가(`sys.layout.stat.width` 240 · `sys.size.stat.height` 88 — `tokens:check`) · Stat 재설계(값 중립 · 점/pill · 2×2 모바일) · DataTable 규칙(행 `row.default` 36 · 식별자 nowrap · 1줄 truncate+title · 수치 우측 · 열 폭 — `Column`에 `width`·`nowrap`) · 알림 피드 항목 정리 · 완비율 solid 칩 → pill | F-06 F-07 F-08 F-11 | 웹 표 화면 10 · Stat 화면 7 캡처 · 기준선 갱신 | L |
 | D5 | `feat/ds-web-forms` | 웹 폼 폭 640 · 버튼 내용 폭 우측 · 인스펙터 액션 행(승인 solid · 반려 outline danger) · B4-05 표형 + 하단 저장 바 · B4-02 필드 칩 폭포 → 그룹 표/접기 | F-09 F-10 | B1-03 · B1-06 · B4-02~06 캡처 · e2e 폼 흐름 | M |
 | D6 | `feat/ds-pwa-screens` | A2-03 체크리스트 상태색(미입력 중립) · A1-04/A3-04 타일 상태 중복 제거 · A2-04 카드 두 종류 · A1-05 섹션 접기/탭 · A3-05 카드 푸터 · A1-01~A3-01 로그인 상단 정렬 · A3-06 필터 1행 | F-13 F-14 | PWA 캡처 · e2e(체크리스트 · 로그인) | L |
-| D7 | `chore/ds-lint-ids` | `design:audit` 규칙을 `tokens:lint`로 승격(error) · QA §2 확정 · 기준선 최종 갱신 · 회고 `docs/retro/W2.5.md` | 재발 방지 | verify(lint 0) · CI | S |
+| D7 | `chore/ds-lint-ids` | `design:audit` 규칙을 `tokens:lint`로 승격(error) — 사각지대 보완: `<script>` 값이 `{expr}`로 보간되는 표면 코드·wave 숫자(로그인 eyebrow · 브레드크럼 · 푸터)는 D1에서 코드가 제거되므로 그 뒤 검출 대상에 표면 코드 상수 사용도 포함 · QA §2 확정 · 기준선 최종 갱신 · 회고 `docs/retro/W2.5.md` | 재발 방지 | verify(lint 0) · CI | S |
 
-의존: D0 → D1 → D2 → D3(D2의 DemoBar 툴팁 재사용) · D4·D5·D6은 D1 뒤 병렬 가능(파일 교집합: D4는 `Stat`·`DataTable`·표 화면, D5는 폼 화면, D6은 PWA 화면 — D2/D3의 카피 변경과 같은 파일을 만지므로 D2·D3 머지 뒤 시작). 총 8 PR, 각 리뷰 판정 인용.
+의존: D0 → D1 → D2 → D3(D2의 DemoBar 툴팁 재사용) → D4 ∥ D5 ∥ D6(서로 파일 교집합 없음: D4 = `Stat`·`DataTable`·표 화면, D5 = 폼 화면, D6 = PWA 화면 — 셋 다 D2·D3의 카피 변경과 같은 파일을 만지므로 D3 머지 뒤 시작) → D7. 총 8 PR, 각 리뷰 판정 인용.
 
 ## 2. 화면별 변경
 
@@ -73,8 +73,8 @@
 
 | 지표 | 지금 | 목표 | 확인 |
 |---|---|---|---|
-| UI 문자열 내부 식별자 노출 | 64건 · 25파일 | 0 | `pnpm design:audit` → D7에서 lint error |
-| 웹 PageHeader 사용 | 6/20 | 20/20 | reviewer · QA §2 |
+| UI 문자열 내부 식별자 노출 | 64건 · 25파일(마크업 리터럴 기준 — `{expr}` 보간 표면 코드는 D1에서 제거) | 0 | `pnpm design:audit` → D7에서 lint error |
+| 웹 PageHeader 사용 | 8/20 | 20/20 | reviewer · QA §2 |
 | 아이콘 자리 사각형 | 웹 사이드바 전부 · PWA 하단 내비 전부 | 0 | 캡처 육안 |
 | 표 식별자 셀 줄바꿈 | 4화면 이상 | 0 | 캡처 육안 |
 | 부제 ≤ 1줄(60자) | 웹 8화면 초과 | 41/41 | reviewer · QA §2 |
