@@ -281,7 +281,8 @@ export function checkDocs(d) {
     }
   };
   walk(ROOT);
-  const skip = /(^|\/)(docs\/generated|packages\/tokens\/dist|packages\/tokens\/src\/doc)\//;
+  const skip =
+    /(^|\/)(docs\/generated|packages\/tokens\/dist|packages\/tokens\/src\/doc)\/|docs\/adr\/000-template\.md$/; // 템플릿(ADR-000)은 검사 대상이 아니다
   for (const f of files) {
     const rel = f.slice(ROOT.length + 1);
     if (skip.test(rel)) continue;
