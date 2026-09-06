@@ -52,7 +52,7 @@ export interface Device {
 export interface DocSummary {
   subjectId: string;
   subject: string;
-  kind: 'site' | 'device' | 'driver';
+  kind: 'site' | 'device' | 'driver' | 'person';
   siteId: string;
   total: number;
   complete: number;

@@ -18,7 +18,7 @@ const kst = (iso: string) =>
 function snapshotSvg(c: Camera, at: string): string {
   const t = kst(at); // 화면 포맷터와 같은 시간대(Asia/Seoul)
   const hue = c.kind === 'ai' ? 160 : 210;
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 90"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="hsl(${hue} 20% 22%)"/><stop offset="1" stop-color="hsl(${hue} 35% 40%)"/></linearGradient></defs><rect width="160" height="90" fill="url(#g)"/><text x="6" y="14" font-size="7" fill="#fff" font-family="sans-serif">${c.id} · ${c.kind === 'ai' ? 'AI 붐 끝' : '전방'}</text><text x="6" y="84" font-size="7" fill="#fff" font-family="monospace">${t}</text></svg>`;
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 90"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="hsl(${hue} 20% 22%)"/><stop offset="1" stop-color="hsl(${hue} 35% 40%)"/></linearGradient></defs><rect width="160" height="90" fill="url(#g)"/><text x="6" y="14" font-size="7" fill="#fff" font-family="sans-serif">${c.id} · ${c.kind === 'ai' ? 'AI 붐 끝' : '전방'}</text><text x="6" y="24" font-size="7" fill="#fff" font-family="monospace">${t}</text></svg>`;
   return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
 }
 

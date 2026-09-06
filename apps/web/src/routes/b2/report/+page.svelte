@@ -73,7 +73,7 @@
           value={s.docRate}
           unit="%"
           tone={s.docRate === 100 ? 'success' : 'warning'}
-          hint="서류 {s.docTotal}건"
+          hint="서류 {s.docTotal}건 · 현재 기준"
         />
         <Stat label="에스컬레이션" value={s.escalated} unit="건" tone={s.escalated ? 'danger' : 'success'} />
         <Stat label="알림" value={s.alerts} unit="건" tone="info" hint="{s.days}일" />

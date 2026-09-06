@@ -40,7 +40,7 @@
 - PWA 설치: `apps/pwa/static/manifest.webmanifest`·`app.html` `theme-color`는 정적 파일이라 토큰 값(`sys.color.accent.solid` `#0d2877` · `bg.canvas` `#f8faff`)을 고정 기재 — 토큰이 바뀌면 함께 갱신(`tokens:lint` 범위 밖). 서비스 워커는 preview·배포 빌드에서만 등록되며 e2e `pwa-install`이 오프라인 새로고침 셸을 검사한다.
 - 데모 계정: `roles.yaml demo_account`. 픽스처 ID: CPB-003(E-021) · CPB-004(통신 두절) · C-105 · D-27.
 - `--strict`(W2): 캐치올 자리 화면("웨이브 N에서 구현됩니다")을 FAIL로 센다 — `data-scr`는 캐치올도 붙이므로 문구로 판별 · 웨이브 Exit "자리 0" 게이트 · CI는 `--dark --strict`. `ssot:check`는 `screens.yaml`의 route **필드**만 검사하고 실 라우트 파일 유무는 보지 않는다.
-- `?state=` 픽스처는 capture·e2e 재현 전용 — 화면 기본 픽스처(`states[].default`)도 capture 모드에서만 적용하고, 실사용(live) 흐름은 순수 시드에서 시작한다(W1 사고: 기본 픽스처가 live에 적용돼 A2-03이 출근 상태로 열림). 브라우저 mock db는 `bootMock` 키(live / capture|screen|state)별로 세션 동안 유지, 로그아웃에 `resetMock()`.
+- `?state=` 픽스처는 capture·e2e 재현 전용 — 명시 `?state=`도, 화면 기본 픽스처(`states[].default`)도 `?capture=1`일 때만 적용하고(live의 `?state=`는 무시 · `bootMock` 키 `live`), 실사용(live) 흐름은 순수 시드에서 시작한다(W1 사고: 기본 픽스처가 live에 적용돼 A2-03이 출근 상태로 열림). 브라우저 mock db는 `bootMock` 키(live / capture|screen|state)별로 세션 동안 유지, 로그아웃에 `resetMock()`.
 - e2e의 `page.goto()`(전체 로드)는 mock db(모듈 상태)를 새로 만들고 `logout()`도 `resetMock()`이라, 계정을 바꿔 이어지는 흐름(운전자 제출 → 안전관리자 승인)은 한 테스트에 담기지 않는다 — 중간 상태는 시드(C-106 `assigned`)나 픽스처(`A1-03:docnew`)로 만들고, 같은 화면 안의 전이만 실제 클릭으로 검증한다. capture 모드 키는 `screenForPath`가 정하므로 시트 쿼리(`?sheet=review`)가 다른 화면으로 잡히면 db가 갈린다(값까지 비교).
 
 ## 4. 리뷰 정책

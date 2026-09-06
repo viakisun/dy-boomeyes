@@ -1,5 +1,5 @@
 <script lang="ts">
-  // CPB 호기 카드(카탈로그 EquipmentCard) — 헤더(호기 · 상태 pill) · 선택적 요약줄(현장 · 마지막 수신 · 고장코드) · 자식(타일 등) · 액션 슬롯
+  // CPB 호기 카드(카탈로그 EquipmentCard) — 헤더(호기 · 상태 pill) · 선택적 요약줄(마지막 수신 · 고장코드) · 자식(타일 등) · 액션 슬롯
   import type { Device } from '@boomeyes/domain';
   import type { Snippet } from 'svelte';
   import { EQUIPMENT_TONE, cx } from '../lib/cx';
@@ -9,7 +9,6 @@
   let {
     device,
     href,
-    site,
     summary = false,
     size = 'sm',
     class: cls,
@@ -19,7 +18,6 @@
     device: Device;
     /** 있으면 헤더가 링크(상세로) */
     href?: string;
-    site?: string;
     /** 현장 · 마지막 수신 · 고장코드 요약줄 */
     summary?: boolean;
     size?: 'sm' | 'md';
@@ -44,8 +42,7 @@
   </div>
   {#if summary}
     <p class="text-body-sm text-fg-muted">
-      {#if site}{site} ·
-      {/if}마지막 수신 {fmtDateTime(device.telemetry.at)}
+      마지막 수신 {fmtDateTime(device.telemetry.at)}
       {#if device.telemetry.errorCode}<span class="text-danger-fg">
           · {device.telemetry.errorCode} — {ERROR_CODE_LABEL[device.telemetry.errorCode] ?? '설명 없음'}</span
         >{/if}

@@ -33,6 +33,7 @@ export const ID = {
   API: /^API-\d{3}$/,
   ENT: /^ENT-\d{2}$/,
   DISC: /^DISC-\d{3}$/,
+  ADR: /^ADR-\d{3}$/,
   ACC: /^ACC-\d{3}$/,
   OUT: /^OUT-\d{3}$/,
   WP: /^WP-[ABC]\d$/,
@@ -42,7 +43,7 @@ export const ID = {
   STATE: /^[a-z0-9][a-z0-9-]*$/,
   ROUTE: /^\/[a-z0-9/\[\]?=.-]*$/,
 };
-export const ANY_ID = /\b(FR|NFR|IF|API|DISC|ACC|OUT)-\d{3}\b|\bENT-\d{2}\b|\bWP-[ABC]\d\b|\b[AB]\d-\d{2}M?\b/g;
+export const ANY_ID = /\b(FR|NFR|IF|API|DISC|ACC|OUT|ADR)-\d{3}\b|\bENT-\d{2}\b|\bWP-[ABC]\d\b|\b[AB]\d-\d{2}M?\b/g;
 
 export function loadSSOT() {
   const data = {};
@@ -65,6 +66,13 @@ export function indexIds(d) {
     SEC: new Set(d.contract.sections.map((x) => x.id)),
     ROLE: new Set(d.roles.roles.map((x) => x.id)),
     SURFACE: new Set(d.screens.surfaces.map((x) => x.id)),
+    // ADR는 docs/adr/<nnn>-*.md 파일명이 원천 — Refs: · 문서 · spec의 ADR-nnn 참조도 실존 검사
+    ADR: new Set(
+      readdirSync(join(ROOT, 'docs', 'adr'))
+        .map((f) => f.match(/^(\d{3})-.*\.md$/)?.[1])
+        .filter((n) => n && n !== '000') // 000 = 템플릿
+        .map((n) => `ADR-${n}`),
+    ),
   };
   ids.LEGACY = new Set(d.screens.screens.flatMap((s) => s.legacy_codes ?? []));
   return ids;
@@ -273,7 +281,8 @@ export function checkDocs(d) {
     }
   };
   walk(ROOT);
-  const skip = /(^|\/)(docs\/generated|packages\/tokens\/dist|packages\/tokens\/src\/doc)\//;
+  const skip =
+    /(^|\/)(docs\/generated|packages\/tokens\/dist|packages\/tokens\/src\/doc)\/|docs\/adr\/000-template\.md$/; // 템플릿(ADR-000)은 검사 대상이 아니다
   for (const f of files) {
     const rel = f.slice(ROOT.length + 1);
     if (skip.test(rel)) continue;
