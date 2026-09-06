@@ -26,6 +26,8 @@
 - [ ] 키보드(웹): 포커스 링 · Esc 닫기 · 목록 행 포커스
 - [ ] 캡처 파일 `shots/<code>-<state>.png` 갱신 · 시각 회귀 통과
 - [ ] 테스트 제목 `[FR-nnn]`/`[코드]` · 커밋 `Refs:`
+- [ ] 골격(DY-design §11): 웹은 PageHeader 첫 요소 · 부제 1줄(≤ 60자) · 우측 액션 ≤ 2 · Stat 값 중립색 · 표 식별자 셀 nowrap·텍스트 1줄 · 폼 폭 640 · 내비 아이콘 실물(자리 사각형 0)
+- [ ] 카피(DY-design §12): `pnpm design:audit` 이 화면 0건(SSOT 식별자·웨이브·구현 용어 노출 없음) · 미구현은 "준비 중" · 라벨은 labels.ts
 
 ## 3. 캡처 규약 (`tools/capture`, W0)
 
