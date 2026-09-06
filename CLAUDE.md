@@ -72,3 +72,4 @@ node tools/ssot/check.mjs --specs | --docs | --commits <range>
 - **2026-09-06 shots/baseline manifest 대소문자 충돌(W2.5)** — `manifest.json`(캡처 목록)과 `MANIFEST.json`(렌더 환경)이 같은 디렉터리에 커밋돼 macOS에서 항상 수정 상태로 보였다. 절차: 프리셋 디렉터리에는 소문자 manifest를 쓰지 않는다(capture.mjs) · `git add` 목록에서 `^shots/`를 제외한다(기준선은 CI만 커밋).
 - **2026-09-06 편집 스크립트 뒤 `;` 재발(W2.5 D6)** — 히어독 python이 assert로 죽었는데 뒤따른 verify가 부분 편집 상태로 돌아 녹색이 됐다. 절차: `PYEOF` 다음 토큰은 `&&`뿐 · 여러 파일을 고치는 스크립트가 죽으면 `git status --short`로 이미 써진 파일을 확인한 뒤 나머지만 재적용.
 - **2026-09-06 리뷰어의 stale ref 비교(W2.5 D2)** — 앞 PR 머지로 base 브랜치가 지워져 `git diff <branch>..HEAD`가 옛 스냅샷과 비교됐다. 절차: 리뷰 지시의 base는 커밋 해시로 준다.
+- **2026-09-06 기준선 봇 커밋의 CI가 승인 대기(W2.5 D2)** — `baseline` 워크플로가 github-actions[bot]으로 푸시한 커밋은 PR CI가 `action_required`(승인 대기)로 멈춰 `gh pr checks`에 아무것도 안 보였다. 절차: 기준선 뒤 `gh run list --branch <b> --json headSha,conclusion`로 PR head 커밋의 run을 찾고 `action_required`면 `gh api -X POST repos/<o>/<r>/actions/runs/<id>/approve` · 승인 뒤 녹색을 확인하고 머지.
