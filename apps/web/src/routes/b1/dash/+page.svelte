@@ -17,6 +17,9 @@
     cx,
     toast,
     PageHeader,
+    DataTable,
+    StatGroup,
+    type Column,
   } from '@boomeyes/ui';
   import { CameraWall, SOURCE_LABEL, VideoPlayer, visibleIn } from '@boomeyes/video';
   let { data } = $props();
@@ -28,6 +31,16 @@
   const abnormal = $derived(
     [...data.devices].filter((d) => d.state !== 'normal').sort((a, b) => ORDER[a.state] - ORDER[b.state]),
   );
+  // 이상 장비 표(§11.2 7열) — LTE·GPS는 인스펙터에서
+  const ABNORMAL_COLS: Column[] = [
+    { key: 'id', label: '호기', kind: 'id' },
+    { key: 'state', label: '상태', kind: 'status' },
+    { key: 'site', label: '현장', nowrap: true },
+    { key: 'voltage', label: '전압', kind: 'num' },
+    { key: 'errorCode', label: '고장코드', kind: 'id' },
+    { key: 'pipe', label: '수송관', kind: 'num' },
+    { key: 'at', label: '마지막 수신', kind: 'date' },
+  ];
   const markers = $derived(
     data.devices.map((d) => ({
       id: d.id,
@@ -95,24 +108,30 @@
       {/snippet}
     </PageHeader>
 
-    <section class="gap-inline-md grid grid-cols-2 md:grid-cols-4" aria-label="KPI">
-      <Stat label="가동" value={data.kpis.normal} unit="대" tone="success" hint="정상 텔레메트리 수신" />
-      <Stat label="주의" value={data.kpis.caution} unit="대" tone="warning" hint="임계 접근(수송관·필터·전압)" />
+    <StatGroup label="KPI">
+      <Stat label="가동" value={data.kpis.normal} unit="대" hint="정상 텔레메트리 수신" />
+      <Stat
+        label="주의"
+        value={data.kpis.caution}
+        unit="대"
+        tone={data.kpis.caution ? 'warning' : 'neutral'}
+        hint="임계 접근(수송관·필터·전압)"
+      />
       <Stat
         label="고장·E-코드"
         value={data.kpis.fault}
         unit="대"
-        tone="danger"
+        tone={data.kpis.fault ? 'danger' : 'neutral'}
         hint="업무 {data.kpis.openCases}건 미완료"
       />
       <Stat
         label="통신 두절"
         value={data.kpis.offline}
         unit="대"
-        tone="neutral"
+        tone={data.kpis.offline ? 'danger' : 'neutral'}
         hint="에스컬레이션 {data.kpis.escalated}건"
       />
-    </section>
+    </StatGroup>
 
     <section class="gap-inline-lg grid grid-cols-1 lg:grid-cols-[3fr_2fr]">
       <div class="gap-stack-sm min-h-layout-panel-height flex flex-col">
@@ -139,17 +158,19 @@
               <a
                 href={a.caseId ? resolve(`/b1/inbox?case=${a.caseId}` as '/') : resolve('/b1/dash' as '/')}
                 class={cx(
-                  'gap-inline-sm rounded-control px-inset-sm py-inset-xs hover:bg-ui-hover flex min-w-0 items-start',
+                  'gap-stack-xs rounded-control px-inset-sm py-inset-xs hover:bg-ui-hover flex min-w-0 flex-col',
                   !a.acked && 'bg-surface-sunken',
                 )}
               >
-                <StatusPill
-                  tone={SEVERITY_TONE[a.severity]}
-                  label={a.severity === 'critical' ? '긴급' : a.severity === 'warning' ? '경고' : '정보'}
-                  size="sm"
-                />
-                <span class="text-body-sm text-fg flex-1">{a.message}</span>
-                <span class="text-label-sm text-fg-muted tabular-nums">{fmt(a.at)}</span>
+                <span class="gap-inline-sm flex items-center justify-between">
+                  <StatusPill
+                    tone={SEVERITY_TONE[a.severity]}
+                    label={a.severity === 'critical' ? '긴급' : a.severity === 'warning' ? '경고' : '정보'}
+                    size="sm"
+                  />
+                  <span class="text-label-sm text-fg-muted tabular-nums">{fmt(a.at)}</span>
+                </span>
+                <span class="text-body-sm text-fg">{a.message}</span>
               </a>
               {#if a.eventId}
                 <a
@@ -166,51 +187,31 @@
 
     <section class="gap-stack-sm flex flex-col">
       <h2 class="text-heading-sm">이상 장비 <span class="text-body-sm text-fg-muted">{abnormal.length}대</span></h2>
-      <div class="rounded-card border-border bg-surface overflow-x-auto border">
-        <table class="text-body-md w-full">
-          <thead class="text-label-md text-fg-muted"
-            ><tr class="border-border-subtle border-b"
-              >{#each ['호기', '상태', '현장', '전압', 'LTE', '고장코드', '수송관', '마지막 수신'] as h (h)}<th
-                  class="h-size-row-dense px-inset-md text-left font-medium">{h}</th
-                >{/each}</tr
-            ></thead
-          >
-          <tbody>
-            {#each abnormal as d (d.id)}
-              <tr
-                class={cx(
-                  'h-size-row-default border-border-subtle hover:bg-ui cursor-pointer border-b',
-                  d.id === selectedId && 'bg-selected',
-                )}
-                onclick={() => (selectedId = d.id)}
-                tabindex="0"
-                onkeydown={(e) => e.key === 'Enter' && (selectedId = d.id)}
-              >
-                <td class="px-inset-md font-mono">{d.id}</td>
-                <td class="px-inset-md"
-                  ><StatusPill tone={EQUIPMENT_TONE[d.state]} label={LABEL[d.state]} size="sm" /></td
-                >
-                <td class="px-inset-md">{site(d)?.name}</td>
-                <td
-                  class={cx(
-                    'px-inset-md text-right tabular-nums',
-                    d.telemetry.voltageStatus === 'abnormal' && 'text-danger-fg font-semibold',
-                  )}>{d.telemetry.voltage}V</td
-                >
-                <td class="px-inset-md">{d.telemetry.lte}</td>
-                <td class="px-inset-md text-danger-fg font-mono">{d.telemetry.errorCode ?? '—'}</td>
-                <td
-                  class={cx(
-                    'px-inset-md text-right tabular-nums',
-                    d.telemetry.pipeRatio >= 0.95 && 'text-warning-fg font-semibold',
-                  )}>{Math.round(d.telemetry.pipeRatio * 100)}%</td
-                >
-                <td class="px-inset-md text-fg-muted tabular-nums">{fmt(d.telemetry.at)}</td>
-              </tr>
-            {/each}
-          </tbody>
-        </table>
-      </div>
+      <DataTable
+        columns={ABNORMAL_COLS}
+        rows={abnormal}
+        rowKey={(d: Device) => d.id}
+        selectedKey={selectedId}
+        onselect={(d: Device) => (selectedId = d.id)}
+        dense
+        caption="이상 장비 — 상태 우선순위 순"
+      >
+        {#snippet cell(d: Device, col: Column)}
+          {@const key = col.key}
+          {#if key === 'id'}{d.id}
+          {:else if key === 'state'}<StatusPill tone={EQUIPMENT_TONE[d.state]} label={LABEL[d.state]} size="sm" />
+          {:else if key === 'site'}{site(d)?.name}
+          {:else if key === 'voltage'}<span
+              class={d.telemetry.voltageStatus === 'abnormal' ? 'text-danger-fg font-semibold' : ''}
+              >{d.telemetry.voltage}V</span
+            >
+          {:else if key === 'errorCode'}<span class={d.telemetry.errorCode ? 'text-danger-fg' : ''}
+              >{d.telemetry.errorCode ?? '—'}</span
+            >
+          {:else if key === 'pipe'}{Math.round(d.telemetry.pipeRatio * 100)}%
+          {:else}<span class="text-fg-muted">{fmt(d.telemetry.at)}</span>{/if}
+        {/snippet}
+      </DataTable>
     </section>
 
     <CameraWall

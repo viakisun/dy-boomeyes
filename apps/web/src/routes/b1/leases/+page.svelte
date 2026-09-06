@@ -21,6 +21,7 @@
     dueLabel,
     toast,
     type Column,
+    StatGroup,
   } from '@boomeyes/ui';
   import { session } from '$lib/session.svelte';
   let { data } = $props();
@@ -67,13 +68,13 @@
     }
   }
   const COLS: Column[] = [
-    { key: 'id', label: '계약' },
-    { key: 'device', label: '호기' },
-    { key: 'site', label: '현장' },
-    { key: 'owner', label: '임대인' },
-    { key: 'period', label: '기간' },
-    { key: 'due', label: '잔여' },
-    { key: 'state', label: '상태' },
+    { key: 'id', label: '계약', kind: 'id' },
+    { key: 'device', label: '호기', nowrap: true },
+    { key: 'site', label: '현장', nowrap: true },
+    { key: 'owner', label: '임대인', nowrap: true },
+    { key: 'period', label: '기간', kind: 'date' },
+    { key: 'due', label: '잔여', kind: 'status' },
+    { key: 'state', label: '상태', kind: 'status' },
   ];
 </script>
 
@@ -87,16 +88,16 @@
       description="만료 임박 계약이 위에 옵니다 · 재배치 계획은 상세에서"
       ref="EXT-4 DISC-037"
     />
-    <div class="gap-inline-md grid grid-cols-2 md:grid-cols-4" aria-label="계약 요약">
+    <StatGroup label="계약 요약">
       <Stat
         label="만료 임박"
         value={count('expiring')}
         unit="건"
-        tone={count('expiring') ? 'warning' : 'success'}
+        tone={count('expiring') ? 'warning' : 'neutral'}
         hint="D-30 이내"
       />
-      <Stat label="재배치 계획" value={count('relocated')} unit="건" tone="info" hint="대상 현장 확정" />
-      <Stat label="계약 중" value={count('active')} unit="건" tone="success" />
+      <Stat label="재배치 계획" value={count('relocated')} unit="건" hint="대상 현장 확정" />
+      <Stat label="계약 중" value={count('active')} unit="건" />
       <Stat
         label="전체"
         value={data.leases.length}
@@ -104,7 +105,7 @@
         tone="neutral"
         hint="임대인 {new Set(data.leases.map((l) => l.ownerId)).size}"
       />
-    </div>
+    </StatGroup>
     {#if sorted.length}
       <DataTable
         columns={COLS}
@@ -116,7 +117,7 @@
       >
         {#snippet cell(row: Lease, col: Column)}
           {@const key = col.key}
-          {#if key === 'id'}<span class="text-code-md">{row.id}</span>
+          {#if key === 'id'}{row.id}
           {:else if key === 'device'}{unitOf(row.deviceId)}
           {:else if key === 'site'}{siteName(row.siteId)}{#if row.toSiteId}<span class="text-label-sm text-fg-muted">
                 → {siteName(row.toSiteId)}</span
@@ -126,11 +127,7 @@
               >{row.from.slice(0, 10)} ~ {row.to.slice(0, 10)}</span
             >
           {:else if key === 'due'}{@const d = dueLabel(row.to, now)}<span
-              class={d.overdue
-                ? 'text-danger-fg font-semibold'
-                : row.state === 'expiring'
-                  ? 'text-warning-fg font-semibold'
-                  : ''}>{d.label}</span
+              class={d.overdue ? 'text-danger-fg font-semibold' : ''}>{d.label}</span
             >
           {:else if key === 'state'}<StatusPill
               tone={LEASE_TONE[row.state]}
@@ -172,7 +169,7 @@
         >
           <Select label="재배치 대상 현장" bind:value={toSiteId} options={targets} placeholder="현장 선택" required />
           <TextField label="메모" bind:value={note} placeholder="예: 10월 타설 시작 현장으로 이동" />
-          <Button type="submit" disabled={busy || !toSiteId}>재배치 계획</Button>
+          <div class="flex justify-end"><Button type="submit" disabled={busy || !toSiteId}>재배치 계획</Button></div>
         </form>
       {:else if selected.state === 'relocated'}
         <Badge tone="info">재배치 계획 확정 — {siteName(selected.toSiteId ?? '')}</Badge>

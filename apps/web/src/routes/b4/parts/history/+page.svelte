@@ -30,15 +30,13 @@
   const VISUAL = { ok: '양호', wear: '마모', crack: '균열' } as const;
   const FASTEN = { ok: '양호', loose: '풀림' } as const;
   const COLS: Column[] = [
-    { key: 'at', label: '시각' },
-    { key: 'part', label: '부품' },
-    { key: 'kind', label: '구분' },
-    { key: 'thickness', label: '실측(mm)', align: 'right' },
-    { key: 'visual', label: '외관' },
-    { key: 'fastening', label: '체결' },
-    { key: 'pass', label: '합불' },
-    { key: 'by', label: '작업자' },
-    { key: 'reason', label: '사유' },
+    { key: 'at', label: '시각', kind: 'date' },
+    { key: 'part', label: '부품', kind: 'id' },
+    { key: 'kind', label: '구분', kind: 'status' },
+    { key: 'thickness', label: '실측(mm)', kind: 'num' },
+    { key: 'check', label: '외관 · 체결', nowrap: true },
+    { key: 'pass', label: '합불', kind: 'status' },
+    { key: 'by', label: '작업자', nowrap: true },
   ];
 </script>
 
@@ -69,8 +67,8 @@
       >
         {#snippet cell(row: PartEvent, col: Column)}
           {@const key = col.key}
-          {#if key === 'at'}<span class="whitespace-nowrap tabular-nums">{fmtDateTime(row.at)}</span>
-          {:else if key === 'part'}<span class="text-code-md whitespace-nowrap">{row.partId}</span>
+          {#if key === 'at'}{fmtDateTime(row.at)}
+          {:else if key === 'part'}{row.partId}
           {:else if key === 'kind'}<StatusPill
               tone={row.kind === 'inspect'
                 ? 'info'
@@ -83,15 +81,13 @@
               size="sm"
             />
           {:else if key === 'thickness'}{row.thicknessMm ?? '—'}
-          {:else if key === 'visual'}<span class="whitespace-nowrap">{row.visual ? VISUAL[row.visual] : '—'}</span>
-          {:else if key === 'fastening'}<span class="whitespace-nowrap"
-              >{row.fastening ? FASTEN[row.fastening] : '—'}</span
-            >
+          {:else if key === 'check'}{row.visual ? VISUAL[row.visual] : '—'} · {row.fastening
+              ? FASTEN[row.fastening]
+              : '—'}
           {:else if key === 'pass'}{#if row.pass === undefined}—{:else}<span
-                class={row.pass ? 'text-success-fg' : 'text-danger-fg font-semibold'}>{row.pass ? '합' : '불'}</span
+                class={row.pass ? '' : 'text-danger-fg font-semibold'}>{row.pass ? '합' : '불'}</span
               >{/if}
           {:else if key === 'by'}{row.worker ?? row.by}
-          {:else if key === 'reason'}{row.reason ?? row.note ?? '—'}
           {/if}
         {/snippet}
       </DataTable>

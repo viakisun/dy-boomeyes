@@ -57,11 +57,11 @@
   let newUnit = $state('');
   let newSite = $state('');
   const DEVICE_COLS: Column[] = [
-    { key: 'id', label: '호기' },
-    { key: 'site', label: '현장' },
-    { key: 'state', label: '상태' },
-    { key: 'owner', label: '소유주' },
-    { key: 'at', label: '마지막 수신' },
+    { key: 'id', label: '호기', nowrap: true },
+    { key: 'site', label: '현장', nowrap: true },
+    { key: 'state', label: '상태', kind: 'status' },
+    { key: 'owner', label: '소유주', nowrap: true },
+    { key: 'at', label: '마지막 수신', kind: 'date' },
   ];
 
   // 현장 탭 — 편집 사본은 선택 현장이 바뀔 때(저장 뒤 다시 읽기 포함) 다시 채운다
@@ -91,12 +91,12 @@
   let create = $state({ name: '', address: '', company: 'G/S 건설', safetyUserId: '', from: '', to: '' });
   const period = (f: { from: string; to: string }) => (f.from && f.to ? { from: f.from, to: f.to } : undefined);
   const SITE_COLS: Column[] = [
-    { key: 'id', label: '현장' },
-    { key: 'company', label: '건설사' },
-    { key: 'period', label: '기간' },
-    { key: 'safety', label: '안전관리자' },
-    { key: 'profile', label: '프로파일' },
-    { key: 'devices', label: '장비', align: 'right' },
+    { key: 'id', label: '현장', nowrap: true },
+    { key: 'company', label: '건설사', nowrap: true },
+    { key: 'period', label: '기간', kind: 'date' },
+    { key: 'safety', label: '안전관리자', nowrap: true },
+    { key: 'profile', label: '프로파일', kind: 'status' },
+    { key: 'devices', label: '장비', kind: 'num' },
   ];
   const devicesOf = (siteId: string) => data.devices.filter((d) => d.siteId === siteId);
 
@@ -161,7 +161,7 @@
         <h2 class="text-heading-sm">호기 등록</h2>
         <TextField label="호기(1~120)" type="number" min="1" max="120" bind:value={newUnit} required />
         <Select label="현장" bind:value={newSite} options={siteOptions} placeholder="선택" required />
-        <Button type="submit" disabled={busy}>등록</Button>
+        <div class="flex justify-end"><Button type="submit" disabled={busy}>등록</Button></div>
       </form>
     {:else if data.tab === 'sites'}
       <DataTable
@@ -216,7 +216,7 @@
           <TextField label="기간 시작" type="date" bind:value={create.from} />
           <TextField label="기간 종료" type="date" bind:value={create.to} />
         </div>
-        <Button type="submit" disabled={busy}>등록</Button>
+        <div class="flex justify-end"><Button type="submit" disabled={busy}>등록</Button></div>
       </form>
     {:else if profileSite}
       <div class="gap-stack-md flex flex-col">
@@ -246,7 +246,19 @@
   </div>
 
   {#if data.tab === 'devices'}
-    <Inspector label="장비 상세">
+    {#snippet assignRow()}
+      {#if device}
+        <Button
+          variant="outline"
+          tone="neutral"
+          disabled={busy || !assignTo || assignTo === device.siteId}
+          onclick={() =>
+            run(`배정 — ${device.id} → ${siteName(assignTo)}`, () => data.api.assignDevice(device.id, assignTo))}
+          >배정</Button
+        >
+      {/if}
+    {/snippet}
+    <Inspector label="장비 상세" footer={device ? assignRow : undefined}>
       {#if device}
         <h2 class="text-heading-sm">{device.id} · {device.unitNo}호기</h2>
         <KeyValueList
@@ -259,14 +271,6 @@
           ]}
         />
         <Select label="배정 현장" bind:value={assignTo} options={siteOptions} placeholder="현장 선택" />
-        <Button
-          variant="outline"
-          tone="neutral"
-          disabled={busy || !assignTo || assignTo === device.siteId}
-          onclick={() =>
-            run(`배정 — ${device.id} → ${siteName(assignTo)}`, () => data.api.assignDevice(device.id, assignTo))}
-          >배정</Button
-        >
       {:else}
         <EmptyState title="호기를 선택하세요" />
       {/if}
@@ -300,7 +304,7 @@
           <Select label="담당 안전관리자" bind:value={form.safetyUserId} options={safetyOptions} />
           <TextField label="기간 시작" type="date" bind:value={form.from} />
           <TextField label="기간 종료" type="date" bind:value={form.to} />
-          <Button type="submit" disabled={busy || !dirty}>저장</Button>
+          <div class="flex justify-end"><Button type="submit" disabled={busy || !dirty}>저장</Button></div>
         </form>
       {:else}
         <EmptyState title="현장을 선택하세요" />

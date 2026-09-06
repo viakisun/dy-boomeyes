@@ -13,7 +13,7 @@ test('[B4-02] 버전 2 · 샘플 테스트: 필드 누락 → 경로 · 정상 �
 }) => {
   await login(page);
   await expect(page.locator(`[data-scr="${SCR['B4-02']}"]`)).toBeVisible();
-  const rows = page.locator('table tbody tr');
+  const rows = page.locator('table').first().locator('tbody tr');
   await expect(rows).toHaveCount(2);
   await expect(rows.first()).toContainText('cpb.v0.1');
   await page.getByRole('tab', { name: '필드 누락' }).click();
@@ -54,7 +54,7 @@ test('[B4-02] 업로드: 깨진 YAML → 오류 목록 · 정상 YAML → 테스
     'version: cpb.v0.9\ngroups:\n  - group: g\n    key: g\n    required: true\n    fields:\n      - { name: x, type: number }\n';
   await input.setInputFiles({ name: 'nounit.yaml', mimeType: 'text/yaml', buffer: Buffer.from(noUnit) });
   await expect(errors).toContainText('숫자 필드는 단위(unit) 필요'); // AC-2 단위 검증
-  await expect(page.locator('table tbody tr')).toHaveCount(2);
+  await expect(page.locator('table').first().locator('tbody tr')).toHaveCount(2);
   const good = [
     'version: cpb.v0.3',
     'groups:',
@@ -69,9 +69,11 @@ test('[B4-02] 업로드: 깨진 YAML → 오류 목록 · 정상 YAML → 테스
   ].join('\n');
   await input.setInputFiles({ name: 'cpb-v0.3.yaml', mimeType: 'text/yaml', buffer: Buffer.from(good) });
   await expect(page.getByRole('status').filter({ hasText: '테스트 버전 등록 — cpb.v0.3' })).toBeVisible();
-  await expect(page.locator('table tbody tr')).toHaveCount(3);
+  await expect(page.locator('table').first().locator('tbody tr')).toHaveCount(3);
   await expect(page.getByRole('complementary', { name: '버전 상세' })).toContainText('cpb.v0.3');
-  await expect(page.getByRole('complementary', { name: '버전 상세' })).toContainText('sequence:number (count)'); // 단위 표시
+  const seq = page.getByRole('complementary', { name: '버전 상세' }).locator('tr', { hasText: 'sequence' }); // 필드 정의 표(그룹별 details)
+  await expect(seq).toContainText('number');
+  await expect(seq).toContainText('count'); // 단위 표시
 });
 
 test('[B4-05] 알림 8종 · 임계 편집 → 저장 → 이력 · 고장코드 E-021 · 시나리오 잠금 2 [FR-011] [FR-006] [FR-036]', async ({
