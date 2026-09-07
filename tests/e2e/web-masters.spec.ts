@@ -30,7 +30,7 @@ test('[B4-03] 장비 탭: 호기 5 · CPB-005 → SITE-001 배정 · 호기 3 �
   await expect(rows.filter({ hasText: 'CPB-006' })).toContainText('두절');
 });
 
-test('[B4-03] 현장 탭: 기간·안전관리자 편집 저장 · 현장 등록 → SITE-003 · 프로파일 탭: P-LITE 적용 → 미리보기 월 1채널(AX-1) · 축 편집 비활성 [FR-018] [FR-029]', async ({
+test('[B4-03] 현장 탭: 기간·안전관리자 편집 저장 · 현장 등록 → SITE-003 · 프로파일 탭 전환은 state·capture 유지(새로고침에도 유지) → P-LITE 적용 → 미리보기 월 1채널(AX-1) · 축 편집 비활성 [FR-018] [FR-029]', async ({
   page,
 }) => {
   await page.goto('/b4/assets?tab=sites&state=assets&capture=1');
@@ -54,6 +54,11 @@ test('[B4-03] 현장 탭: 기간·안전관리자 편집 저장 · 현장 등록
 
   await page.getByRole('tab', { name: '프로파일' }).click();
   await expect(page).toHaveURL(/tab=profiles/);
+  // 탭 전환이 기존 쿼리(state·capture)를 지우지 않는지(화면 검수 F-16) — 지우면 새로고침 시 로그인으로 튕긴다
+  await expect(page).toHaveURL(/state=assets/);
+  await expect(page).toHaveURL(/capture=1/);
+  await page.reload();
+  await expect(page.locator(`[data-scr="${SCR['B4-03']}"]`)).toBeVisible();
   await expect(page.locator('figure img[alt*="설치 구성도"]')).toHaveCount(1); // 장착 위치(ENT-04) · 설치 구성도(참고자료 v5.0 §8)
   await expect(page.getByRole('complementary', { name: '프로파일 요약' })).toContainText('본체·1번 관절 인근');
   await expect(page.getByLabel('현장')).toHaveValue('SITE-001');

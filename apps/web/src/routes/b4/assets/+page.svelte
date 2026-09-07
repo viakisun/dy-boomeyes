@@ -30,8 +30,13 @@
     { id: 'sites', label: '현장' },
     { id: 'profiles', label: '프로파일' },
   ];
-  const go = (q: string) =>
-    goto(resolve(`/b4/assets?${q}` as '/'), { keepFocus: true, noScroll: true, replaceState: true });
+  const go = (params: Record<string, string>) => {
+    const u = new URL(location.href); // 다른 쿼리(?state= ?capture=) 유지 — mock db 캐시 키(QA §3)
+    u.searchParams.delete('tab');
+    u.searchParams.delete('site');
+    for (const [k, v] of Object.entries(params)) u.searchParams.set(k, v);
+    goto(resolve((u.pathname + u.search) as '/'), { keepFocus: true, noScroll: true, replaceState: true });
+  };
   const siteName = (id: string) => data.sites.find((s) => s.id === id)?.name ?? id;
   const siteOptions = $derived(data.sites.map((s) => ({ value: s.id, label: `${s.name} (${s.id})` })));
   const safetyOptions = $derived(
@@ -121,7 +126,7 @@
       description="현장 · 호기 · 프로파일 프리셋을 등록하고 배정합니다"
       ref="DISC-028 FR-029 FR-031"
     >
-      <Tabs tabs={TABS} value={data.tab} onchange={(id) => go(`tab=${id}`)} />
+      <Tabs tabs={TABS} value={data.tab} onchange={(id) => go({ tab: id })} />
     </PageHeader>
 
     {#if data.tab === 'devices'}
@@ -170,7 +175,7 @@
         rows={data.sites}
         rowKey={(s: Site) => s.id}
         selectedKey={site?.id ?? null}
-        onselect={(row: Site) => ((pickedSite = row.id), go(`tab=sites&site=${row.id}`))}
+        onselect={(row: Site) => ((pickedSite = row.id), go({ tab: 'sites', site: row.id }))}
         caption="현장 목록"
       >
         {#snippet cell(row: Site, col: Column)}
@@ -225,7 +230,10 @@
           label="현장"
           value={profileSite.id}
           options={siteOptions}
-          onchange={(e) => ((profileSiteId = e.currentTarget.value), go(`tab=profiles&site=${e.currentTarget.value}`))}
+          onchange={(e) => (
+            (profileSiteId = e.currentTarget.value),
+            go({ tab: 'profiles', site: e.currentTarget.value })
+          )}
         />
         <SiteProfileForm
           site={profileSite}
