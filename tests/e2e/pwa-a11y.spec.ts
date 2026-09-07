@@ -42,7 +42,7 @@ const PAGES: { scr: string; url: string; ready: (page: Page) => Promise<void> }[
   {
     scr: SCR['A2-05'],
     url: '/a2/docs?state=docs&capture=1',
-    ready: (p) => expect(p.locator('ul[aria-label="서류"] li')).toHaveCount(4),
+    ready: (p) => expect(p.locator('ul[aria-label="개인 서류"] li, ul[aria-label="배정 장비 서류"] li')).toHaveCount(4),
   },
   {
     scr: SCR['A2-03'],

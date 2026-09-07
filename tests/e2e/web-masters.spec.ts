@@ -92,7 +92,7 @@ test('[B4-04] 계정 7 · 역할 변경(site-safety 비활성) → 접근 화면
   await role.selectOption('hq-safety');
   await expect(page.getByRole('status').filter({ hasText: '역할 — 정정비 → 본사 안전관리자' })).toBeVisible();
   await expect(rows.filter({ hasText: 'maint01' })).toContainText('본사 안전관리자');
-  await expect(access).toContainText('10개 — A3-01 · A3-02'); // 본사 안전관리자 화면(canAccess) 즉시 반영
+  await expect(access).toContainText('10개 — 로그인(A3-01) · 현장 목록(본사)(A3-02)'); // 본사 안전관리자 화면(canAccess) 즉시 반영
   await aside.getByLabel('대전 B 물류센터').check();
   await aside.getByRole('button', { name: '현장 범위 저장' }).click();
   await expect(page.getByRole('status').filter({ hasText: '현장 범위 — 정정비' })).toBeVisible();
