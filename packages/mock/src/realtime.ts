@@ -1,5 +1,6 @@
 // mock RealtimeClient — 알림을 대본대로 재생한다 (demo-scripts 장면 1 · specs/control-dashboard AC-3). capture 모드에서는 발행하지 않는다(결정성).
 import type { Alert, RealtimeClient, RealtimeEvent } from '@boomeyes/domain';
+import { STILL_BBOX } from '@boomeyes/video/assets';
 import { clock } from './clock';
 
 const SCRIPT: Omit<Alert, 'id' | 'at' | 'acked'>[] = [
@@ -10,7 +11,7 @@ const SCRIPT: Omit<Alert, 'id' | 'at' | 'acked'>[] = [
     message: 'CPB-003 호스 주변 인원 접근 (AI 판단)',
     caseId: 'C-105',
     cameraId: 'CAM-3-2',
-    bbox: { x: 0.58, y: 0.4, w: 0.2, h: 0.5 },
+    bbox: STILL_BBOX['boom-person'], // 삽화의 빨간 상자와 같은 자리 — A1-04 타일 스틸이 'boom-person'으로 바뀐다
   },
   {
     deviceId: 'CPB-002',

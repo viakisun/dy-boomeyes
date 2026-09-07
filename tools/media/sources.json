@@ -1,0 +1,87 @@
+{
+  "$comment": "참고자료 v5.0(BoomEyes_CPB_통합관제_참고자료_v5.0.pptx — 저장소 밖, --deck) 삽화 → 목업 카메라 스틸·루프 원천 표. 제조사 제품 사진(image7~13)은 넣지 않는다(권리). 제목 띠(슬라이드 8 y<258 · 12·13·14 y<266)는 크롭에서 뺀다. idle 스틸에는 알람 그래픽이 없어야 한다. bbox_px는 원본 좌표(빨간 상자 선) — 크롭 안에서 정규화해 STILL_BBOX로 쓴다.",
+  "deck": "BoomEyes_CPB_통합관제_참고자료_v5.0.pptx",
+  "out": "packages/video/src/assets",
+  "sources": [
+    {
+      "id": "front",
+      "slide": 11,
+      "file": "ppt/media/image2.png",
+      "title": "붐 전개·이동",
+      "crop": [0, 0, 1672, 941],
+      "size": [960, 540],
+      "quality": 75,
+      "loop": true,
+      "emit": true,
+      "role": "일반 카메라 · 전방 조망 평시"
+    },
+    {
+      "id": "boom",
+      "slide": 11,
+      "file": "ppt/media/image2.png",
+      "title": "붐 전개·이동(붐 끝 크롭)",
+      "crop": [600, 300, 1672, 903],
+      "size": [960, 540],
+      "quality": 75,
+      "loop": true,
+      "emit": true,
+      "role": "AI 카메라 · 붐 끝 하향 평시"
+    },
+    {
+      "id": "boom-person",
+      "slide": 12,
+      "file": "ppt/media/image3.png",
+      "title": "작업구역 인원 접근",
+      "crop": [532, 300, 1672, 941],
+      "size": [960, 540],
+      "quality": 75,
+      "bbox_px": [1199, 604, 1342, 875],
+      "emit": true,
+      "role": "AI 카메라 · 인원 접근 알림(bbox 정렬)"
+    },
+    {
+      "id": "install",
+      "slide": 8,
+      "file": "ppt/media/image.png",
+      "title": "현장 설치 구성",
+      "crop": [0, 270, 1672, 941],
+      "size": [1200, 483],
+      "quality": 80,
+      "emit": false,
+      "role": "미발행 — 제목 띠(y<258)가 붐과 겹쳐 잘라내면 붐이 사라진다. 설치 구성도는 front(슬라이드 11, 카메라 시야 원뿔 2개)를 재사용"
+    },
+    {
+      "id": "boom-fallen",
+      "slide": 13,
+      "file": "ppt/media/image4.png",
+      "title": "작업자 상태 이상",
+      "crop": [532, 300, 1672, 941],
+      "size": [960, 540],
+      "quality": 75,
+      "emit": false,
+      "role": "미발행 — 전도·무동작은 DISC-042 검증 전(보여줄 상태 없음)"
+    },
+    {
+      "id": "front-hose",
+      "slide": 14,
+      "file": "ppt/media/image5.png",
+      "title": "호스·배관 이상 징후",
+      "crop": [532, 300, 1672, 941],
+      "size": [960, 540],
+      "quality": 75,
+      "emit": false,
+      "role": "미발행 — 배관·호스 이상 알림은 2단계(FR-036)"
+    },
+    {
+      "id": "parts",
+      "slide": 16,
+      "file": "ppt/media/image6.png",
+      "title": "마모·교체 부품 관리",
+      "crop": [0, 0, 1672, 941],
+      "size": [960, 540],
+      "quality": 75,
+      "emit": false,
+      "role": "미발행 — 증빙 사진 자리는 W4"
+    }
+  ]
+}
