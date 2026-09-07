@@ -40,7 +40,7 @@
         >{/if}
     </header>
 
-    <TelemetryStrip telemetry={d.telemetry} />
+    <TelemetryStrip telemetry={d.telemetry} now={data.clock.now()} />
 
     <section
       class="rounded-card border-border bg-surface p-inset-md gap-stack-md flex flex-col border"

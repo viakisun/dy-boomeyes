@@ -26,6 +26,8 @@ export interface Owner {
   name: string;
   contact: string;
 } // ENT-13
+/** 연동되지 않은 계측 항목 — 화면은 '미연동'으로 표기(FR-034 · 참고자료 v5.0 §10) */
+export type TelemetryField = 'lte' | 'voltage' | 'harness' | 'errorCode' | 'gps';
 export interface Device {
   // ENT-02 (+ENT-12 최신 상태)
   id: string;
@@ -46,6 +48,7 @@ export interface Device {
     pipeRatio: number;
     filterRatio: number;
     boomAngle: number;
+    unlinked?: TelemetryField[];
   };
 }
 /** 서류 완비율 — 대상(장비·운전자) 단위 (FR-016) */

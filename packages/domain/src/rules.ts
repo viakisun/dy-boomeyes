@@ -1,4 +1,5 @@
 // 운영 규칙 상수 — 원천 ssot entities.rules ("에스컬레이션 · 알림")
+import type { Device } from './types';
 /** 중대 업무 미접수 에스컬레이션 임계 — "임계 1시간(협의)" (DISC-036 확정 전 기본값) */
 export const ESCALATE_AFTER_MS = 60 * 60 * 1000;
 
@@ -22,4 +23,13 @@ export function distanceM(a: { lat: number; lng: number }, b: { lat: number; lng
   const dLng = toRad(b.lng - a.lng);
   const h = Math.sin(dLat / 2) ** 2 + Math.cos(toRad(a.lat)) * Math.cos(toRad(b.lat)) * Math.sin(dLng / 2) ** 2;
   return 2 * R * Math.asin(Math.sqrt(h));
+}
+
+/** 텔레메트리 수신 임계 — NFR-009 "기준값 협의" 전 목업 기준안 10분 (참고자료 v5.0 §10) */
+export const TELEMETRY_STALE_MS = 10 * 60 * 1000;
+export type TelemetryStatus = 'ok' | 'stale' | 'offline';
+/** 수신 상태 — LTE 두절이면 offline, 마지막 수신이 임계를 넘으면 stale (FR-034: 옛 값을 정상처럼 두지 않는다) */
+export function telemetryStatus(t: Pick<Device['telemetry'], 'at' | 'lte'>, now: Date): TelemetryStatus {
+  if (t.lte === 'lost') return 'offline';
+  return now.getTime() - Date.parse(t.at) > TELEMETRY_STALE_MS ? 'stale' : 'ok';
 }

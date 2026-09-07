@@ -94,3 +94,15 @@ test('[A3-04] hq01 장비 열람(SITE-001): 타일 6 · 헬스 배지(A1-04와 �
   await expect(page.getByRole('button', { name: /접수|완료|호출/ })).toHaveCount(0);
   await expect(page.getByRole('link', { name: /호기 ›/ })).toHaveCount(0); // A3에는 장비 상세 링크 없음
 });
+
+test('[A1-05] stale 픽스처: 수신 임계 초과 → "미수신 · 마지막" warning 텍스트 · 단선 "미연동" · 정상 표시 없음 [FR-034] [FR-002]', async ({
+  page,
+}) => {
+  await page.goto('/a1/monitor/CPB-003?state=stale&capture=1');
+  await expect(page.locator(`[data-scr="${SCR['A1-05']}"]`)).toBeVisible();
+  await expect(page.locator('[data-telemetry-status="stale"]')).toContainText('미수신 · 마지막');
+  const strip = page.locator('dl[aria-label="텔레메트리"]');
+  await expect(strip.locator('[data-unlinked]')).toHaveText('미연동');
+  await expect(strip.getByText('정상', { exact: true })).toHaveCount(0);
+  await expect(page.getByText('342V · 이상')).toBeVisible(); // 마지막 값은 남긴다
+});

@@ -16,6 +16,7 @@ test('[B1-02] 지도 마커 5 · 상태 5종 · 클릭 → 인스펙터 [FR-003]
   await expect(page.locator('.be-marker[data-state="offline"]')).toHaveAttribute('aria-label', '4호기 — offline');
   await page.locator('.be-marker[data-state="offline"]').click();
   await expect(page.getByText('CPB-004 · 4호기')).toBeVisible();
+  await expect(page.locator('[data-telemetry-status="offline"]')).toContainText('두절 · 마지막'); // 두절 장비는 마지막 값 + 시각(FR-034)
 });
 
 test('[B1-02] KPI 4 · 이상 장비 표 최상단 E-021(CPB-003) [FR-002] [FR-006]', async ({ page }) => {

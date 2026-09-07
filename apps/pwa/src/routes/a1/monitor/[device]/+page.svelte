@@ -68,7 +68,7 @@
   <Tabs tabs={TOP_TABS} value={data.tab} onchange={(id) => go('tab', id)} />
 
   {#if data.tab === 'status'}
-    <TelemetryStrip telemetry={d.telemetry} />
+    <TelemetryStrip telemetry={d.telemetry} {now} />
     <dl class="gap-x-inline-md gap-y-stack-xs text-body-sm grid grid-cols-[auto_1fr]" aria-label="CAN · IO">
       <dt class="text-fg-muted">CAN</dt>
       <dd>pump_status {d.state === 'fault' ? 'abnormal' : 'normal'} · 붐 각도 {d.telemetry.boomAngle}°</dd>

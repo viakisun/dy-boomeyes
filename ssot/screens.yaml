@@ -164,6 +164,8 @@ screens:
     name: dev
   - id: plite
     name: P-LITE 현장(1채널 · 저장 소스 서버만)
+  - id: stale
+    name: 수신 임계 초과 · 단선 미연동
   nav:
   - to: A1-11
     label: 부품 점검

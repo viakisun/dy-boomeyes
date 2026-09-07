@@ -20,7 +20,7 @@
 | `A1-02` | 업무함 | A1 | `/a1/inbox` | site-safety | 1 | 1 | 3 (inbox filter push) | FR-008 FR-009 FR-011 FR-015 | demo-scripts documents notifications task-escalation |
 | `A1-03` | 업무 상세 | A1 | `/a1/inbox/[case]` | site-safety | 1 | 1 | 2 (case docnew) | FR-006 FR-008 FR-033 | demo-scripts documents task-escalation |
 | `A1-04` | 관제(장비·영상) | A1 | `/a1/monitor` | site-safety | 1 | 1 | 2 (monitor plite) | FR-004 FR-028 FR-030 FR-034 | demo-scripts video-basics |
-| `A1-05` | 장비 상세 | A1 | `/a1/monitor/[device]` | site-safety | 1 | 1 | 2 (dev plite) | FR-002 FR-005 FR-007 FR-016 FR-036 | demo-scripts video-basics |
+| `A1-05` | 장비 상세 | A1 | `/a1/monitor/[device]` | site-safety | 1 | 1 | 3 (dev plite stale) | FR-002 FR-005 FR-007 FR-016 FR-034 FR-036 | demo-scripts video-basics |
 | `A1-06` | 기록 | A1 | `/a1/records` | site-safety | 1 | 2 | 1 (rec) | FR-012 | records-reports |
 | `A1-07` | 메뉴·현장 정보 | A1 | `/a1/menu` | site-safety | 1 | 2 | 2 (menu apply) | FR-017 FR-018 FR-026 | sites-assets-leases |
 | `A1-08` | 완료 처리 시트 | A1 | `/a1/inbox/[case]?sheet=complete` | site-safety | 1 | 2 | 1 (sheet) | FR-008 | task-escalation |
@@ -28,7 +28,7 @@
 | `A2-01` | 로그인 | A2 | `/a2/login` | driver | 1 | 1 | 1 (login) | FR-001 | shell-auth |
 | `A2-02` | 오늘(출근·알림) | A2 | `/a2/today` | driver | 1 | 1 | 3 (today checked queued) | FR-011 FR-013 FR-031 FR-037 | demo-scripts driver-daily notifications |
 | `A2-03` | 일일점검 | A2 | `/a2/today/inspect` | driver | 1 | 1 | 2 (inspect inspected) | FR-014 FR-037 | demo-scripts driver-daily |
-| `A2-04` | 내 장비 | A2 | `/a2/device` | driver | 1 | 1 | 1 (mydev) | FR-002 FR-007 | driver-daily |
+| `A2-04` | 내 장비 | A2 | `/a2/device` | driver | 1 | 1 | 1 (mydev) | FR-002 FR-007 FR-034 | driver-daily |
 | `A2-05` | 내 서류 | A2 | `/a2/docs` | driver | 1 | 2 | 2 (docs queued) | FR-015 FR-037 | documents |
 | `A2-06` | 메뉴·현장 정보 | A2 | `/a2/menu` | driver | 1 | 2 | 1 (menu) | FR-018 | driver-daily sites-assets-leases |
 | `A2-09` | 교체·폐기 처리 | A2 | `/a2/parts/replace` | driver | 1 | 2 | 1 (default) | FR-032 FR-035 | equipment-parts |
