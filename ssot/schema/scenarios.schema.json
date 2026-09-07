@@ -173,8 +173,127 @@
         "required": ["scene", "title", "screens", "steps", "track"],
         "additionalProperties": false
       }
+    },
+    "workflows": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^WF-\\d{2}$"
+          },
+          "title": {
+            "type": "string"
+          },
+          "group": {
+            "enum": ["장비 이상", "영상·AI", "사람·현장", "부품", "서류", "운영·계약"]
+          },
+          "trigger": {
+            "type": "object",
+            "properties": {
+              "by": {
+                "enum": ["텔레메트리", "일반 CCTV", "AI 카메라", "바디캠", "사람", "일정", "재고"]
+              },
+              "what": {
+                "type": "string"
+              }
+            },
+            "required": ["by", "what"],
+            "additionalProperties": false
+          },
+          "notify": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "steps": {
+            "type": "array",
+            "minItems": 3,
+            "items": {
+              "type": "object",
+              "properties": {
+                "actor": {
+                  "enum": [
+                    "—(시스템)",
+                    "건설사(본사)",
+                    "건설사(현장)",
+                    "건설사(운전자)",
+                    "DY(관제)",
+                    "DY(운영)",
+                    "DY(정비)",
+                    "사업주"
+                  ]
+                },
+                "auto": {
+                  "type": "boolean"
+                },
+                "do": {
+                  "type": "string"
+                },
+                "screens": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "pattern": "^[AB]\\d-\\d{2}M?$"
+                  }
+                }
+              },
+              "required": ["actor", "auto", "do", "screens"],
+              "additionalProperties": false
+            }
+          },
+          "today": {
+            "type": ["string", "null"]
+          },
+          "gain": {
+            "type": "string"
+          },
+          "status": {
+            "enum": ["demo-ready", "fixture-needed", "proposed"]
+          },
+          "phase": {
+            "enum": [1, 2]
+          },
+          "screens": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[AB]\\d-\\d{2}M?$"
+            }
+          },
+          "refs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "scene": {
+            "type": "integer"
+          },
+          "note": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "group",
+          "trigger",
+          "notify",
+          "steps",
+          "today",
+          "gain",
+          "status",
+          "phase",
+          "screens",
+          "refs"
+        ],
+        "additionalProperties": false
+      }
     }
   },
-  "required": ["personas", "scenarios", "ops", "narrative", "demo"],
+  "required": ["personas", "scenarios", "ops", "narrative", "demo", "workflows"],
   "additionalProperties": false
 }

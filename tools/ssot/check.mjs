@@ -37,6 +37,7 @@ export const ID = {
   ACC: /^ACC-\d{3}$/,
   OUT: /^OUT-\d{3}$/,
   WP: /^WP-[ABC]\d$/,
+  WF: /^WF-\d{2}$/,
   RFP: /^(RFP-\d{3}|EXT-\d)$/,
   SEC: /^[45]\.3\.\d{1,2}$/,
   ROLE: /^[a-z][a-z-]*$/,
@@ -66,6 +67,7 @@ export function indexIds(d) {
     SEC: new Set(d.contract.sections.map((x) => x.id)),
     ROLE: new Set(d.roles.roles.map((x) => x.id)),
     SURFACE: new Set(d.screens.surfaces.map((x) => x.id)),
+    WF: new Set((d.scenarios.workflows ?? []).map((x) => x.id)),
     // ADR는 docs/adr/<nnn>-*.md 파일명이 원천 — Refs: · 문서 · spec의 ADR-nnn 참조도 실존 검사
     ADR: new Set(
       readdirSync(join(ROOT, 'docs', 'adr'))
@@ -77,6 +79,14 @@ export function indexIds(d) {
   ids.LEGACY = new Set(d.screens.screens.flatMap((s) => s.legacy_codes ?? []));
   return ids;
 }
+// workflows 본문(고객 언어) 금지어 — 정명은 ssot/glossary.yaml
+const BANNED = [
+  ['사건', '업무·알림'],
+  ['조치 요청', '확인 요청'],
+  ['소모품', '마모·교체 부품'],
+  ['픽스처', '(구현 용어 — 쓰지 않는다)'],
+  ['웨이브', '(구현 용어 — 쓰지 않는다)'],
+];
 const kindOf = (id) =>
   /^[AB]\d-\d{2}M?$/.test(id)
     ? 'SCR'
@@ -210,6 +220,26 @@ export function runChecks(d) {
     nrefs += refs(o.screens, `ops.${o.when}.screens`) + refs(o.refs, `ops.${o.when}.refs`);
   for (const dm of d.scenarios.demo ?? [])
     nrefs += refs(dm.screens, `demo.${dm.scene}.screens`) + refs(dm.acc, `demo.${dm.scene}.acc`);
+  for (const wf of d.scenarios.workflows ?? []) {
+    const w = `workflows.${wf.id}`;
+    nrefs += refs(wf.screens, `${w}.screens`) + refs(wf.refs, `${w}.refs`);
+    for (const r of wf.notify ?? []) if (!ids.ROLE.has(r)) errors.push(`${w}: notify 역할 ${r}`);
+    (wf.steps ?? []).forEach((st, i) => {
+      nrefs += refs(st.screens, `${w}.steps[${i}].screens`);
+    });
+    const inSteps = new Set((wf.steps ?? []).flatMap((st) => st.screens ?? []));
+    for (const s of wf.screens ?? []) if (!inSteps.has(s)) errors.push(`${w}: screens ${s} ∉ steps`);
+    for (const s of inSteps) if (!(wf.screens ?? []).includes(s)) errors.push(`${w}: steps 화면 ${s} ∉ screens`);
+    if (wf.scene != null && !(d.scenarios.demo ?? []).some((x) => x.scene === wf.scene))
+      errors.push(`${w}: 없는 장면 ${wf.scene}`);
+    // 고객 언어 — 본문 필드에 내부 식별자·금지어 금지(정명은 glossary)
+    const text = [wf.title, wf.trigger?.what, wf.today, wf.gain, ...(wf.steps ?? []).map((s) => s.do)]
+      .filter(Boolean)
+      .join(' · ');
+    for (const m of text.matchAll(/[AB]\d-\d{2}M?|(?:FR|NFR|IF|API|DISC|ADR|ACC|OUT)-\d{3}|ENT-\d{2}|WF-\d{2}/g))
+      errors.push(`${w}: 본문에 내부 식별자 ${m[0]}`);
+    for (const [bad, good] of BANNED) if (text.includes(bad)) errors.push(`${w}: 금지어 '${bad}' → '${good}'`);
+  }
   for (const [name, m] of Object.entries(d.entities.machines ?? {})) {
     ref(m.entity, `machines.${name}.entity`);
     for (const t of m.transitions) {
