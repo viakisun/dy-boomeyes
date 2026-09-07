@@ -13,7 +13,7 @@
 
 <div
   class={cx(
-    'gap-stack-xs rounded-card border-border bg-surface px-inset-md py-inset-sm min-h-size-stat-height max-w-layout-stat-width flex w-full flex-col justify-between border',
+    'gap-stack-xs rounded-card border-border bg-surface px-inset-md py-inset-sm min-h-size-stat-height max-w-layout-stat-width flex w-full flex-col border',
     cls,
   )}
 >
