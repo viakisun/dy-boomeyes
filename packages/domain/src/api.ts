@@ -181,7 +181,8 @@ export interface RealtimeClient {
 }
 /** 영상 소스 — 라이브 대체(루프 MP4) · 스냅샷 · 저장 영상 메타. mock 구현은 W1 video-basics, 실 스트림은 W3 (ADR-002) */
 export interface MediaSource {
-  live(cameraId: string): Promise<{ kind: 'mp4' | 'hls'; url: string } | null>;
+  /** poster = 첫 프레임 스틸(선택) — 실스트림(W3)에서는 서버 스냅샷 URL */
+  live(cameraId: string): Promise<{ kind: 'mp4' | 'hls'; url: string; poster?: string } | null>;
   snapshot(cameraId: string): Promise<{ url: string; at: string } | null>;
   recordings(
     cameraId: string,

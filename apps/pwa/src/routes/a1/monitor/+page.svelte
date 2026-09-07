@@ -57,7 +57,13 @@
             {@const ev = events[c.id]}
             <div class="gap-stack-xs flex flex-col" data-camera={c.id}>
               <div class="relative">
-                <CameraTile camera={c} deviceLabel="{d.unitNo}호기" compact status={false} />
+                <CameraTile
+                  camera={c}
+                  deviceLabel="{d.unitNo}호기"
+                  compact
+                  status={false}
+                  still={ev?.bbox ? 'boom-person' : undefined}
+                />
                 {#if ev?.bbox}<BboxOverlay boxes={[{ ...ev.bbox, label: '사람', score: 0.91 }]} tone="danger" />{/if}
               </div>
               <HealthBadge camera={c} />

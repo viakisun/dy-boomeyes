@@ -1,6 +1,7 @@
 // 시드 — 데모 픽스처(INTENT §7 · docs/DEMO.md): CPB-003 E-021 전압 이상 · CPB-004 통신 두절 · C-105 · D-27 임대 · 교육 이수증
 import ssot from '@boomeyes/domain/generated/ssot.json';
 import { CPB_V0_1 } from '@boomeyes/domain';
+import { STILL_BBOX } from '@boomeyes/video/assets';
 import type {
   Alert,
   Attendance,
@@ -284,8 +285,6 @@ export function seed(): Db {
       at: t(6 * H),
       acked: true,
       caseId: 'C-103',
-      cameraId: 'CAM-3-2',
-      bbox: { x: 0.58, y: 0.4, w: 0.2, h: 0.5 },
     },
     {
       id: 'AL-004',
@@ -336,6 +335,8 @@ export function seed(): Db {
       at: t(50 * MIN),
       acked: true,
       caseId: null,
+      cameraId: 'CAM-3-2', // B1-02M 모달 bbox · EV-001 AI 레인 마커 · 스냅샷 스틸(boom-person)의 원천
+      bbox: STILL_BBOX['boom-person'],
     },
   ];
   const docs: Doc[] = [
@@ -792,7 +793,7 @@ export function seed(): Db {
           cameraId: 'CAM-3-2',
           segments: [{ from: off(-60), to: off(60), label: 'SD 병행 세그먼트 · 라이브 대체 루프(목업)' }],
           markers: [
-            { at: off(-12), label: 'AI 사람 접근 후보(bbox)' },
+            { at: off(-12), label: 'AI 사람 접근 후보 — AL-008 bbox' },
             { at: off(0), label: 't0 — 붐 끝 하향' },
           ],
         },

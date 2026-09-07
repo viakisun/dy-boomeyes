@@ -14,6 +14,10 @@ test('[A1-04] 장비 3 × 2채널 · 오프라인/AI 판단 불가/흐림은 "�
   await expect(page.locator('[data-faulty="true"]').filter({ hasText: /^정상$/ })).toHaveCount(0);
   await expect(page.locator('[data-camera="CAM-3-1"] [data-faulty="false"]')).toContainText('LIVE');
   await expect(page.locator('[data-profile="P-SD"]')).toHaveText('2채널'); // 프로파일 코드 대신 채널 수(§12)
+  // 타일 배경은 삽화 스틸(평시 — 알람 그래픽 없음) · 수신 없음 타일은 스틸 없음
+  await expect(page.locator('[data-camera="CAM-3-1"] img[data-still="front"]')).toHaveCount(1);
+  await expect(page.locator('[data-camera="CAM-3-2"] img[data-still="boom"]')).toHaveCount(1);
+  await expect(page.locator('[data-camera="CAM-1-1"] img[data-still]')).toHaveCount(0);
 });
 
 test('[A1-04] AI 이벤트 도착 → 배너 · CAM-3-2 타일 bbox [FR-028] [FR-004]', async ({ page }) => {
@@ -23,6 +27,7 @@ test('[A1-04] AI 이벤트 도착 → 배너 · CAM-3-2 타일 bbox [FR-028] [FR
   await expect(page.locator(`[data-scr="${SCR['A1-04']}"]`)).toBeVisible();
   await expect(page.getByText(/AI 이벤트 · CPB-003 호스 주변 인원 접근/)).toBeVisible({ timeout: 10_000 });
   await expect(page.locator('[data-camera="CAM-3-2"] svg[data-bbox] rect')).toHaveCount(1);
+  await expect(page.locator('[data-camera="CAM-3-2"] img[data-still="boom-person"]')).toHaveCount(1); // bbox와 같은 장면
   await expect(page.locator('[data-camera="CAM-3-1"] svg[data-bbox]')).toHaveCount(0);
 });
 

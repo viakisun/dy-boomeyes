@@ -1,0 +1,54 @@
+{
+  "$comment": "tools/media/build.py 산출 — 원천은 참고자료 v5.0(저장소 밖)",
+  "deck": "BoomEyes_CPB_통합관제_참고자료_v5.0.pptx",
+  "assets": {
+    "front": {
+      "slide": 11,
+      "source": "ppt/media/image2.png",
+      "sha256": "03999e32d13add36",
+      "source_size": [1672, 941],
+      "crop": [0, 0, 1672, 941],
+      "size": [960, 540],
+      "role": "일반 카메라 · 전방 조망 평시",
+      "webp": 40366,
+      "mp4": {
+        "bytes": 136607,
+        "codec": "h264",
+        "frames": 90,
+        "duration": 6.0
+      }
+    },
+    "boom": {
+      "slide": 11,
+      "source": "ppt/media/image2.png",
+      "sha256": "03999e32d13add36",
+      "source_size": [1672, 941],
+      "crop": [600, 300, 1672, 903],
+      "size": [960, 540],
+      "role": "AI 카메라 · 붐 끝 하향 평시",
+      "webp": 43482,
+      "mp4": {
+        "bytes": 153054,
+        "codec": "h264",
+        "frames": 90,
+        "duration": 6.0
+      }
+    },
+    "boom-person": {
+      "slide": 12,
+      "source": "ppt/media/image3.png",
+      "sha256": "700fc1234105bd3a",
+      "source_size": [1672, 941],
+      "crop": [532, 300, 1672, 941],
+      "size": [960, 540],
+      "role": "AI 카메라 · 인원 접근 알림(bbox 정렬)",
+      "bbox": {
+        "x": 0.585,
+        "y": 0.474,
+        "w": 0.125,
+        "h": 0.423
+      },
+      "webp": 55048
+    }
+  }
+}

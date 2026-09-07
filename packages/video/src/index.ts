@@ -6,4 +6,4 @@ export { default as VideoPlayer } from './VideoPlayer.svelte';
 export { default as BboxOverlay } from './BboxOverlay.svelte';
 export { default as HealthBadge } from './HealthBadge.svelte';
 export { CAMERA_LABEL, HEALTH_LABEL, MOUNT_LABEL, SOURCE_LABEL } from './labels';
-export { LOOP_MP4 } from './assets';
+export { LOOP_MP4, STILL, STILL_BBOX, type StillId } from './assets';

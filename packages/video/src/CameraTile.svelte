@@ -1,7 +1,8 @@
 <script lang="ts">
-  // 카메라 타일 16:9 — 채널 칩(일반/AI) · 상태 배지(domain.video · camera 상태기계) · 스냅샷 시각. 실스트림 대신 그라디언트 자리 + 시각.
+  // 카메라 타일 16:9 — 채널 칩(일반/AI) · 상태 배지(domain.video · camera 상태기계) · 스냅샷 시각. 실스트림 대신 삽화 스틸(STILL) + 시각.
   import type { Camera } from '@boomeyes/domain';
   import { CAMERA_TONE, StatusPill, cx } from '@boomeyes/ui';
+  import { STILL, type StillId } from './assets';
   import { CAMERA_LABEL } from './labels';
   let {
     camera,
@@ -9,6 +10,7 @@
     selected = false,
     compact = false,
     status = true,
+    still,
     onclick,
   }: {
     camera: Camera;
@@ -17,9 +19,12 @@
     compact?: boolean;
     /** 타일 안 상태 pill — PWA는 타일 아래 HealthBadge가 같은 정보를 더 자세히 보여 끈다(중복 제거) */
     status?: boolean;
+    /** 상황 스틸(예: 인원 접근 이벤트 = 'boom-person') — 없으면 채널 평시 스틸 */
+    still?: StillId;
     onclick?: (id: string) => void;
   } = $props();
   const off = $derived(camera.state === 'offline');
+  const stillId = $derived<StillId>(still ?? (camera.kind === 'ai' ? 'boom' : 'front'));
   const time = $derived(
     new Date(camera.snapshotAt).toLocaleTimeString('ko-KR', {
       timeZone: 'Asia/Seoul',
@@ -42,11 +47,13 @@
     off ? 'bg-surface-sunken' : 'bg-media-bg',
   )}
 >
-  {#if !off}<div
-      class="absolute inset-0 opacity-70"
-      style="background: linear-gradient(135deg, var(--ref-color-neutral-11), var(--ref-color-neutral-9) 60%, var(--ref-color-teal-9))"
-      aria-hidden="true"
-    ></div>{/if}
+  {#if !off}<img
+      src={STILL[stillId]}
+      alt=""
+      data-still={stillId}
+      loading="eager"
+      class="absolute inset-0 h-full w-full object-cover"
+    />{/if}
   {#if camera.state === 'ai-unavailable'}<div
       class="bg-overlay text-heading-sm text-fg-on-inverse absolute inset-0 flex items-center justify-center"
     >
