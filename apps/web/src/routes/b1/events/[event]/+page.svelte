@@ -144,65 +144,67 @@
           <span class="text-label-sm text-fg-muted">←/→ 1초 · 레인 클릭</span>
         </div>
       </div>
-      {#each LANES as lane (lane.key)}
-        {@const l = ev.lanes[lane.key]}
-        <div class="gap-inline-md grid grid-cols-[auto_minmax(0,1fr)] items-center" data-lane={lane.key}>
-          <div class="gap-stack-xs flex flex-col">
-            <span class="text-label-md whitespace-nowrap">{lane.label}</span>
-            <span class="text-label-sm text-fg-muted tabular-nums" data-lane-time
-              >{l.available ? fmtTime(cursorAt) : '없음'}</span
-            >
-          </div>
-          <div
-            class="rounded-control bg-surface-sunken h-size-control-lg relative w-full cursor-crosshair overflow-hidden"
-            onclick={seekLane}
-            role="presentation"
-          >
-            {#if l.available}
-              {#each l.segments as seg (seg.from)}
-                <div
-                  class="bg-accent-bg-subtle border-accent-border-strong absolute inset-y-0 border-x"
-                  style="left: {pct(seg.from)}%; width: {pct(seg.to) - pct(seg.from)}%"
-                  title={seg.label}
-                ></div>
-              {/each}
-              <ol class="absolute inset-0" aria-label="{lane.label} 레인">
-                {#each l.markers as m (m.at + m.label)}
-                  <li
-                    class="absolute top-0 flex h-full items-center"
-                    style="left: {pct(m.at)}%"
-                    title="{fmtTime(m.at)} {m.label}"
-                  >
-                    <span class="bg-accent size-size-indicator rounded-pill" aria-hidden="true"></span>
-                    <span class="sr-only">{fmtTime(m.at)} {m.label}</span>
-                  </li>
-                {/each}
-              </ol>
-            {:else}
-              <ol class="absolute inset-0" aria-label="{lane.label} 레인">
-                <li class="text-body-sm text-fg-muted px-inset-sm flex h-full items-center">
-                  없음 — {l.note ?? '소스 미연동'}
-                </li>
-              </ol>
-            {/if}
+      <div class="gap-x-inline-md gap-y-stack-sm grid grid-cols-[auto_minmax(0,1fr)] items-center">
+        {#each LANES as lane (lane.key)}
+          {@const l = ev.lanes[lane.key]}
+          <div class="contents" data-lane={lane.key}>
+            <div class="gap-stack-xs flex flex-col">
+              <span class="text-label-md whitespace-nowrap">{lane.label}</span>
+              <span class="text-label-sm text-fg-muted tabular-nums" data-lane-time
+                >{l.available ? fmtTime(cursorAt) : '없음'}</span
+              >
+            </div>
             <div
-              class="bg-danger absolute inset-y-0 w-px"
-              style="left: {((cursor + win) / (2 * win)) * 100}%"
-              aria-hidden="true"
-            ></div>
+              class="rounded-control bg-surface-sunken h-size-control-lg relative w-full cursor-crosshair overflow-hidden"
+              onclick={seekLane}
+              role="presentation"
+            >
+              {#if l.available}
+                {#each l.segments as seg (seg.from)}
+                  <div
+                    class="bg-accent-bg-subtle border-accent-border-strong absolute inset-y-0 border-x"
+                    style="left: {pct(seg.from)}%; width: {pct(seg.to) - pct(seg.from)}%"
+                    title={seg.label}
+                  ></div>
+                {/each}
+                <ol class="absolute inset-0" aria-label="{lane.label} 레인">
+                  {#each l.markers as m (m.at + m.label)}
+                    <li
+                      class="absolute top-0 flex h-full items-center"
+                      style="left: {pct(m.at)}%"
+                      title="{fmtTime(m.at)} {m.label}"
+                    >
+                      <span class="bg-accent size-size-indicator rounded-pill" aria-hidden="true"></span>
+                      <span class="sr-only">{fmtTime(m.at)} {m.label}</span>
+                    </li>
+                  {/each}
+                </ol>
+              {:else}
+                <ol class="absolute inset-0" aria-label="{lane.label} 레인">
+                  <li class="text-body-sm text-fg-muted px-inset-sm flex h-full items-center">
+                    없음 — {l.note ?? '소스 미연동'}
+                  </li>
+                </ol>
+              {/if}
+              <div
+                class="bg-danger absolute inset-y-0 w-px"
+                style="left: {((cursor + win) / (2 * win)) * 100}%"
+                aria-hidden="true"
+              ></div>
+            </div>
+            {#if l.available && l.markers.length}
+              <p class="text-label-sm text-fg-muted col-start-2" data-lane-markers>
+                {#each l.markers as m, i (m.at + m.label)}{i ? ' · ' : ''}<span class="tabular-nums"
+                    >t0{Math.round((Date.parse(m.at) - t0) / 1000) >= 0 ? '+' : ''}{Math.round(
+                      (Date.parse(m.at) - t0) / 1000,
+                    )}s</span
+                  >
+                  {m.label}{/each}
+              </p>
+            {/if}
           </div>
-          {#if l.available && l.markers.length}
-            <p class="text-label-sm text-fg-muted col-start-2" data-lane-markers>
-              {#each l.markers as m, i (m.at + m.label)}{i ? ' · ' : ''}<span class="tabular-nums"
-                  >t0{Math.round((Date.parse(m.at) - t0) / 1000) >= 0 ? '+' : ''}{Math.round(
-                    (Date.parse(m.at) - t0) / 1000,
-                  )}s</span
-                >
-                {m.label}{/each}
-            </p>
-          {/if}
-        </div>
-      {/each}
+        {/each}
+      </div>
       <p class="text-label-sm text-fg-muted" data-ref="API-018">
         {ev.lanes.cpb.note ?? ''} · 레인 클릭으로 커서 이동
       </p>
