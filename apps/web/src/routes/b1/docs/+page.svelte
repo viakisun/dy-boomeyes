@@ -10,6 +10,7 @@
     DataTable,
     EmptyState,
     Inspector,
+    REQUEST_STATE_LABEL,
     Stat,
     StatusPill,
     Timeline,
@@ -136,7 +137,7 @@
       </div>
       {#if request}
         <a href={resolve(`/b1/inbox?req=${request.id}` as '/')} class="text-body-sm text-accent-fg"
-          >요청 회신 — {request.id} ({request.state})</a
+          >요청 회신 — {request.id} ({REQUEST_STATE_LABEL[request.state]})</a
         >
       {:else}
         <span class="text-body-sm text-fg-muted">연결된 요청 없음 — 등록·승인은 현장 앱에서</span>

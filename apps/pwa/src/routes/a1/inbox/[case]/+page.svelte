@@ -31,6 +31,7 @@
   import { session } from '$lib/session.svelte';
   let { data } = $props();
   const EQUIP_LABEL = { normal: '정상', caution: '주의', fault: '고장', offline: '두절', maintenance: '정비' } as const;
+  const LTE_LABEL = { connected: '연결', weak: '약함', lost: '두절' } as const;
   let busy = $state(false);
   const me = () => session.user?.userId ?? 'safety01';
   const canAccept = $derived(data.task.state === 'new' || data.task.state === 'escalated');
@@ -126,7 +127,7 @@
           {d.telemetry.voltage}V · {d.telemetry.voltageStatus === 'normal' ? '정상' : '이상'}
         </dd>
         <dt class="text-fg-muted">통신 · GPS</dt>
-        <dd>{d.telemetry.lte} · {d.telemetry.gpsFix ? 'fix' : 'no-fix'}</dd>
+        <dd>{LTE_LABEL[d.telemetry.lte]} · {d.telemetry.gpsFix ? '정상' : '이상'}</dd>
         <dt class="text-fg-muted">단선</dt>
         <dd>{d.telemetry.harness === 'ok' ? '정상' : '단선'}</dd>
         <dt class="text-fg-muted">고장코드</dt>

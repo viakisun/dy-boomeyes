@@ -109,7 +109,7 @@
       {/snippet}
     </PageHeader>
 
-    <StatGroup label="KPI">
+    <StatGroup label="KPI" cols={6}>
       <Stat label="가동" value={data.kpis.normal} unit="대" hint="정상 텔레메트리 수신" />
       <Stat
         label="주의"
@@ -132,6 +132,7 @@
         tone={data.kpis.offline ? 'warning' : 'neutral'}
         hint="에스컬레이션 {data.kpis.escalated}건"
       />
+      <Stat label="정비" value={data.kpis.maintenance} unit="대" hint="점검·정비 중" />
     </StatGroup>
 
     <section class="gap-inline-lg grid grid-cols-1 lg:grid-cols-[3fr_2fr]">
@@ -230,7 +231,7 @@
         <dt class="text-fg-muted">현장</dt>
         <dd>{site(selected)?.name}</dd>
         <dt class="text-fg-muted">GPS</dt>
-        <dd>{selected.telemetry.gpsFix ? 'fix' : 'no fix'}</dd>
+        <dd>{selected.telemetry.gpsFix ? '정상' : '이상'}</dd>
         <dt class="text-fg-muted">수송관 · 필터</dt>
         <dd class="tabular-nums">
           {Math.round(selected.telemetry.pipeRatio * 100)}% · {Math.round(selected.telemetry.filterRatio * 100)}%

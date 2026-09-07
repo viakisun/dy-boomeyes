@@ -99,11 +99,14 @@
               <StatusPill tone={TASK_TONE[c.state]} label={TASK_LABEL[c.state]} size="sm" />
             </div>
             <span class="text-body-md">{c.title}</span>
-            <div class="flex justify-end">
-              <Button size="sm" variant="outline" tone="neutral" disabled={busy === c.id} onclick={() => confirm(c)}
-                >확인 요청</Button
-              >
-            </div>
+            <Button
+              class="self-start"
+              size="sm"
+              variant="outline"
+              tone="neutral"
+              disabled={busy === c.id}
+              onclick={() => confirm(c)}>확인 요청</Button
+            >
           </li>
         {/each}
       </ul>

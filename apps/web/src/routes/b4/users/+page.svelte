@@ -118,7 +118,10 @@
           { label: '역할', value: ROLE_NAME[selected.role] },
           {
             label: '접근 화면',
-            value: `${screens.length}개 — ${screens.slice(0, 4).join(' · ')}${screens.length > 4 ? ' …' : ''}`,
+            value: `${screens.length}개 — ${screens
+              .slice(0, 4)
+              .map((id) => `${SCREENS[id].name}(${id})`)
+              .join(' · ')}${screens.length > 4 ? ' …' : ''}`,
           },
         ]}
       />

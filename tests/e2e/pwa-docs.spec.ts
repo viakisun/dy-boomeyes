@@ -11,13 +11,13 @@ const PNG = {
   ),
 };
 
-test('[A2-05] driver03 서류 4 · 상태 pill · expiring/rejected에만 제출 액션 · DOC-001 D-27 · DOC-005 반려 사유·재제출 [FR-015] [FR-016]', async ({
+test('[A2-05] driver03 서류 4(개인 3 · 배정 장비 1) · 상태 pill · expiring/rejected에만 제출 액션 · DOC-001 D-27 · DOC-005 반려 사유·재제출 [FR-015] [FR-016]', async ({
   page,
 }) => {
   await page.goto('/a2/docs?state=docs&capture=1');
   await expect(page.locator(`[data-scr="${SCR['A2-05']}"]`)).toBeVisible();
-  const cards = page.locator('ul[aria-label="서류"] li');
-  await expect(cards).toHaveCount(4); // DOC-001 · DOC-002 · DOC-003(CPB-003) · DOC-005
+  await expect(page.locator('ul[aria-label="개인 서류"] li')).toHaveCount(3); // DOC-001 · DOC-002 · DOC-005
+  await expect(page.locator('ul[aria-label="배정 장비 서류"] li')).toHaveCount(1); // DOC-003(CPB-003)
   await expect(page.locator('[data-doc="DOC-001"]')).toContainText('만료 임박');
   await expect(page.locator('[data-doc="DOC-001"]')).toContainText('D-27');
   await expect(page.locator('[data-doc="DOC-001"]').getByRole('button', { name: '촬영·제출' })).toBeVisible();
