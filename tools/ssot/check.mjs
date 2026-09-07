@@ -44,7 +44,8 @@ export const ID = {
   STATE: /^[a-z0-9][a-z0-9-]*$/,
   ROUTE: /^\/[a-z0-9/\[\]?=.-]*$/,
 };
-export const ANY_ID = /\b(FR|NFR|IF|API|DISC|ACC|OUT|ADR)-\d{3}\b|\bENT-\d{2}\b|\bWP-[ABC]\d\b|\b[AB]\d-\d{2}M?\b/g;
+export const ANY_ID =
+  /\b(FR|NFR|IF|API|DISC|ACC|OUT|ADR)-\d{3}\b|\bENT-\d{2}\b|\bWP-[ABC]\d\b|\bWF-\d{2}\b|\b[AB]\d-\d{2}M?\b/g;
 
 export function loadSSOT() {
   const data = {};
@@ -86,6 +87,7 @@ const BANNED = [
   ['소모품', '마모·교체 부품'],
   ['픽스처', '(구현 용어 — 쓰지 않는다)'],
   ['웨이브', '(구현 용어 — 쓰지 않는다)'],
+  ['mock', '(구현 용어 — 쓰지 않는다)'],
 ];
 const kindOf = (id) =>
   /^[AB]\d-\d{2}M?$/.test(id)
