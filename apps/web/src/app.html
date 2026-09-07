@@ -2,7 +2,9 @@
 <html lang="ko" data-density="compact">
   <head>
     <meta charset="utf-8" />
-    <link rel="icon" href="%sveltekit.assets%/favicon.svg" />
+    <!-- 브랜드 마크(DY-design §13) — static/favicon.* 은 pnpm brand:build 산출물 -->
+    <link rel="icon" href="%sveltekit.assets%/favicon.svg" type="image/svg+xml" />
+    <link rel="alternate icon" href="%sveltekit.assets%/favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <script>
       // 첫 페인트 전에 루트 테마 적용 — ?theme=(캡처·e2e)이 우선, 없으면 저장값(dy.theme · packages/ui lib/theme.svelte.ts와 키 공유). 깜빡임 방지

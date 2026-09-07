@@ -3,7 +3,7 @@
   import { goto } from '$app/navigation';
   import { resolve } from '$app/paths';
   import { SCR } from '@boomeyes/domain';
-  import { Badge, Button, PageHeader, Stat, StatGroup, Tabs } from '@boomeyes/ui';
+  import { Badge, Button, Logo, PageHeader, Stat, StatGroup, Tabs } from '@boomeyes/ui';
   let { data } = $props();
   const TABS = [
     { id: '7', label: '7일' },
@@ -29,6 +29,10 @@
   data-days={data.days}
   onclick={(e) => e.target === e.currentTarget && back()}
 >
+  <!-- 인쇄 머리글(단색 lockup) — 화면·캡처에는 보이지 않는다(§13 셸은 단색) -->
+  <div class="gap-inline-sm hidden items-center print:flex">
+    <Logo variant="lockup" class="h-size-icon-lg w-auto" /><span class="text-label-md text-fg-muted">보고 모드</span>
+  </div>
   <PageHeader
     title="보고 모드"
     description="자사 현장 {data.report.length} · CPB {total}대 · 열람 전용 — ESC 또는 바깥 클릭으로 닫습니다"

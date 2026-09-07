@@ -49,7 +49,8 @@ code, .id { font-family:"JetBrains Mono","SF Mono",Menlo,monospace; font-size:8.
 .thumb .cap { font-size:7.6px; color:var(--sub); text-align:center; margin-top:1px; }
 .empty { border:1px dashed var(--line); border-radius:4px; color:var(--faint); padding:12mm; text-align:center; font-size:9px; width:100%; }
 .cover { background:var(--navy); color:#fff; }
-.cover .brand { font-size:11px; letter-spacing:.2em; text-transform:uppercase; opacity:.8; margin-top:28mm; }
+.cover .logo { margin-top:24mm; } .cover .logo svg { height:12mm; display:block; }
+.cover .brand { font-size:11px; letter-spacing:.2em; text-transform:uppercase; opacity:.8; margin-top:4mm; }
 .cover h1 { font-size:34px; font-weight:800; letter-spacing:-.02em; margin:6mm 0 3mm; line-height:1.15; }
 .cover .ver { font-size:14px; opacity:.9; }
 .cover .meta { position:absolute; bottom:18mm; left:14mm; right:14mm; display:flex; gap:12mm; font-size:9.5px; opacity:.85; }
@@ -137,9 +138,13 @@ def build(d: Dict[str, Any], specs: List[Dict[str, Any]], manifest: Optional[Dic
     foot = f"{prog['name']} · {docno} · {ver} · {prog['vendor']} → {prog['owner']}"
     pages: List[str] = []
 
-    # 표지
+    # 표지 — 브랜드 lockup(docs/brand/lockup-on-navy.svg · pnpm brand:build 산출 · DY-design §13), 없으면 텍스트만
+    import os
+    _logo = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "docs", "brand", "lockup-on-navy.svg")
+    logo_svg = open(_logo, encoding="utf-8").read().strip() if os.path.exists(_logo) else ""
     pages.append(page(
-        f'<div class="brand">{esc(prog["vendor"])} · {esc(prog["owner"])}</div><h1>{esc(prog["name"])}<br>CPB 관제 시스템<br>시스템·화면 설계서</h1>'
+        (f'<div class="logo">{logo_svg}</div>' if logo_svg else "")
+        + f'<div class="brand">{esc(prog["vendor"])} · {esc(prog["owner"])}</div><h1>{esc(prog["name"])}<br>CPB 관제 시스템<br>시스템·화면 설계서</h1>'
         f'<div class="ver">{esc(docno)} · 세트 {esc(ver)} · 현재 웨이브 {wave}</div>'
         f'<div class="meta"><div><b>문서 번호</b>{esc(docno)}</div><div><b>세트 버전</b>{esc(ver)}(초안 · 발행 전)</div><div><b>기준 시각</b>{esc(meta["fixed_clock"])} (DemoClock)</div><div><b>생성</b>tools/docs-gen · ssot/*.yaml · shots/manifest.json</div></div>',
         "", "", cls="cover", anchor="cover", foot=foot))
