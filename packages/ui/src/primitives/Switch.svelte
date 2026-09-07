@@ -41,7 +41,7 @@
       class={cx(
         'size-size-icon-sm rounded-pill bg-surface shadow-raised ease-standard top-stack-xs left-inline-xs duration-base absolute transition-transform',
         checked &&
-          'translate-x-[calc(var(--spacing-size-control-xs)-var(--spacing-size-icon-sm)-2*var(--spacing-inline-xs))]',
+          'translate-x-[calc(var(--spacing-size-control-xs)_-_var(--spacing-size-icon-sm)_-_2*var(--spacing-inline-xs))]',
       )}
     ></span>
   </button>
