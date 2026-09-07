@@ -14,7 +14,7 @@ fr: [FR-004, FR-005, FR-034, FR-028, FR-030, FR-002, FR-007, FR-016, FR-022]
 | 코드 | 이름 | 라우트 | 상태 픽스처 |
 |---|---|---|---|
 | A1-04 | 현장 모니터 | `/a1/monitor` | `monitor` |
-| A1-05 | 장비 상세 | `/a1/monitor/[device]` | `dev` |
+| A1-05 | 장비 상세 | `/a1/monitor/[device]` | `dev` · `plite` · `stale` |
 | B1-02M | 카메라 영상 모달 | `/b1/dash?cam=[camera]` | `cam` |
 | A3-04 | 장비 열람(본사) | `/a3/sites/[site]/devices` | `dev` |
 | B2-03 | 현장 상세(본사 웹) | `/b2/sites/[site]` | `site` |
@@ -34,7 +34,7 @@ fr: [FR-004, FR-005, FR-034, FR-028, FR-030, FR-002, FR-007, FR-016, FR-022]
 - **AC-11** Given `?state=stale`(CPB-003 마지막 수신 25분 전 · 단선 센서 미연동) When A1-05 상태 탭 Then 수신 상태 줄에 "미수신 · 마지막 HH:MM"(warning)이 보이고 단선 칸은 "미연동"이며 정상 표시가 없다; 두절 장비(CPB-004)는 B1-02 인스펙터에 마지막 값과 "두절 · 마지막 HH:MM"을 남긴다 [FR-034, FR-002]
 
 ## 상태 픽스처
-`screens.yaml` A1-04 `monitor` `plite` · A1-05 `dev`(상태 탭) `plite`(영상 탭) · B1-02M `cam` · A3-04 `dev` · B2-03 `site`. 픽스처 ID: CPB-003 · CAM-3-1(일반) · CAM-3-2(AI) · CAM-2-2(AI 판단 불가) · DOC-001(D-27). `monitor`는 CAM-1-1을 offline, CAM-2-2를 ai-unavailable로 변형한다.
+`screens.yaml` A1-04 `monitor` `plite` · A1-05 `dev`(상태 탭) `plite`(영상 탭) `stale`(상태 탭 — CPB-003 25분 전 수신 · 단선 미연동) · B1-02M `cam` · A3-04 `dev` · B2-03 `site`. 픽스처 ID: CPB-003 · CAM-3-1(일반) · CAM-3-2(AI) · CAM-2-2(AI 판단 불가) · DOC-001(D-27). `monitor`는 CAM-1-1을 offline, CAM-2-2를 ai-unavailable로 변형한다.
 
 ## 비범위
 HLS/WebRTC 실스트림(IF-006 L1~L3, W3) · 저장 영상 실재생(목록·타임라인 자리만, W4) · 바디캠 실연동(W4) · 본사·건설사 영상 실스트림(W3).
