@@ -41,3 +41,15 @@ test('[B1-04] esc 픽스처: 1h 초과 2건 · 통보 대상 본사·관제 · �
   await page.getByRole('button', { name: '관제에서 접수' }).click();
   await expect(rows).toHaveCount(1);
 });
+
+test('[B1-03] report 픽스처: 현장 신고 업무 C-107(작업자 상태 이상 · CAM-3-2 · 영상 시점) → 접수 [FR-038] [FR-017]', async ({
+  page,
+}) => {
+  await page.goto('/b1/inbox?state=report&capture=1');
+  const panel = page.getByRole('region', { name: '알림에서 열린 업무' });
+  await expect(panel).toContainText('C-107');
+  await expect(panel).toContainText('현장 신고 — 작업자 상태 이상 · CPB-003');
+  await expect(panel.locator('[data-report-type="worker"]')).toContainText('작업자 상태 이상 · CAM-3-2 · 영상 시점');
+  await panel.getByRole('button', { name: '접수' }).click();
+  await expect(panel).toContainText('진행 중');
+});

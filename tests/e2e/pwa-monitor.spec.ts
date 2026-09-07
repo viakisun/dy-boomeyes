@@ -11,6 +11,8 @@ test('[A1-04] 장비 3 × 2채널 · 오프라인/AI 판단 불가/흐림은 "�
   await expect(page.locator('[data-camera="CAM-1-1"] [data-health="lost"]')).toContainText('수신 끊김');
   await expect(page.locator('[data-camera="CAM-2-2"] [data-faulty="true"]')).toContainText('AI 판단 불가');
   await expect(page.locator('[data-camera="CAM-2-1"] [data-faulty="true"]')).toContainText('흐림');
+  await expect(page.locator('[data-camera="CAM-3-2"] [data-health="view-changed"]')).toContainText('판단 유보'); // 시야 변경 ≠ 장애(FR-034)
+  await expect(page.locator('[data-camera="CAM-3-2"]').getByText('판단 유보', { exact: true })).toBeVisible();
   await expect(page.locator('[data-faulty="true"]').filter({ hasText: /^정상$/ })).toHaveCount(0);
   await expect(page.locator('[data-camera="CAM-3-1"] [data-faulty="false"]')).toContainText('LIVE');
   await expect(page.locator('[data-profile="P-SD"]')).toHaveText('2채널'); // 프로파일 코드 대신 채널 수(§12)
@@ -105,4 +107,32 @@ test('[A1-05] stale 픽스처: 수신 임계 초과 → "미수신 · 마지막"
   await expect(strip.locator('[data-unlinked]')).toHaveText('미연동');
   await expect(strip.getByText('정상', { exact: true })).toHaveCount(0);
   await expect(page.getByText('342V · 이상')).toBeVisible(); // 마지막 값은 남긴다
+});
+
+test('[A1-04] 현장 신고: 신고 → 시트(유형·내용·카메라·영상 시점) → 업무 C-107 + 알림 → A1-02 업무함에 현장 신고 [FR-038] [FR-008]', async ({
+  page,
+}) => {
+  await page.goto('/a1/login');
+  await page.getByRole('button', { name: '입장' }).click();
+  await page.goto('/a1/monitor');
+  await expect(page.locator(`[data-scr="${SCR['A1-04']}"]`)).toBeVisible();
+  await page.getByRole('button', { name: '신고', exact: true }).click();
+  const sheet = page.locator('dialog[open][data-bottom-sheet]');
+  await expect(sheet).toContainText('현장 신고');
+  await sheet.getByLabel('장비').selectOption('CPB-003');
+  await sheet.getByLabel('유형').selectOption('worker');
+  await sheet.getByLabel('카메라').selectOption('CAM-3-2');
+  await sheet.getByLabel('내용').fill('호스 옆 작업자 쓰러짐 — 영상 확인 요청');
+  await sheet.getByRole('button', { name: '신고', exact: true }).click();
+  await expect(page.getByRole('status').filter({ hasText: /신고 — C-\d+ · 업무함에 등록/ })).toBeVisible();
+  await expect(sheet).toHaveCount(0);
+  // 전체 로드(page.goto)는 mock db를 새로 만든다(QA §3) — 앱 내 링크로 이동
+  await page.getByRole('navigation', { name: '하단 내비게이션' }).getByRole('link', { name: '업무' }).click();
+  await expect(page.locator(`[data-scr="${SCR['A1-02']}"]`)).toBeVisible();
+  const item = page.locator('ul[aria-label="업무"] li').filter({ hasText: '현장 신고 — 작업자 상태 이상' });
+  await expect(item.first()).toBeVisible();
+  await item.first().getByRole('link').first().click();
+  await expect(page.locator(`[data-scr="${SCR['A1-03']}"]`)).toBeVisible();
+  await expect(page.getByRole('region', { name: '신고' })).toContainText('작업자 상태 이상 · CAM-3-2 · 영상 시점');
+  await expect(page.getByRole('region', { name: '이력' })).toContainText('신고');
 });

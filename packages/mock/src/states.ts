@@ -20,7 +20,9 @@ export const FIXTURES: Record<string, Fixture> = {
         ? { ...c, state: 'offline' as const, health: 'lost' as const }
         : c.id === 'CAM-2-1'
           ? { ...c, health: 'blurry' as const }
-          : c,
+          : c.id === 'CAM-3-2'
+            ? { ...c, health: 'view-changed' as const } // 시야 변경 → 판단 유보(FR-034 · v5.0 §11)
+            : c,
     ),
   }),
   'A1-05:dev': (db) => db,
@@ -41,6 +43,44 @@ export const FIXTURES: Record<string, Fixture> = {
   'A1-05:plite': (db) => ({
     ...db,
     sites: db.sites.map((s) => (s.id === 'SITE-001' ? { ...s, videoProfile: 'P-LITE' as const } : s)),
+  }),
+  // 현장 신고(FR-038 제안) — A1-04 시트는 URL이 연다(?state=report → +page.ts) · B1-03은 C-107 시드
+  'A1-04:report': (db) => db,
+  'B1-03:report': (db) => ({
+    ...db,
+    cases: [
+      {
+        id: 'C-107',
+        kind: 'report' as const,
+        title: '현장 신고 — 작업자 상태 이상 · CPB-003',
+        deviceId: 'CPB-003',
+        siteId: 'SITE-001',
+        state: 'new' as const,
+        severity: 'critical' as const,
+        assigneeId: null,
+        dueAt: clock.minus(-2 * H),
+        createdAt: clock.minus(3 * MIN),
+        history: [
+          { at: clock.minus(3 * MIN), by: 'safety01', action: '신고', note: '호스 옆 작업자 쓰러짐 — 영상 확인 요청' },
+        ],
+        report: { type: 'worker' as const, cameraId: 'CAM-3-2', videoAt: clock.minus(3 * MIN) },
+      },
+      ...db.cases,
+    ],
+    alerts: [
+      {
+        id: 'AL-F01',
+        deviceId: 'CPB-003',
+        kind: 'report' as const,
+        severity: 'critical' as const,
+        message: 'CPB-003 현장 신고 — 작업자 상태 이상 (safety01)',
+        at: clock.minus(3 * MIN),
+        acked: false,
+        caseId: 'C-107',
+        cameraId: 'CAM-3-2',
+      },
+      ...db.alerts,
+    ],
   }),
   'A1-02:filter': (db) => db, // 필터 칩은 URL이 결정 — 시드 동일
   'A1-02:push': (db) => db, // 알림 권한 시트 — 레이아웃이 ?state=push로 연다(ADR-009), 시드 동일

@@ -9,6 +9,7 @@
     EVIDENCE_LABEL,
     EVIDENCE_TONE,
     EmptyState,
+    REPORT_TYPE_LABEL,
     REQUEST_KIND_LABEL,
     REQUEST_STATE_LABEL,
     REQUEST_TONE,
@@ -19,6 +20,7 @@
     TASK_TONE,
     Timeline,
     fmtDateTime,
+    fmtTime,
     toast,
     type Column,
     Inspector,
@@ -105,6 +107,11 @@
             >{/if}
         </div>
         <span class="text-heading-sm">{c.title}</span>
+        {#if c.report}<span class="text-body-sm text-fg-muted" data-report-type={c.report.type}
+            >{REPORT_TYPE_LABEL[c.report.type]}{c.report.cameraId ? ` · ${c.report.cameraId}` : ''}{c.report.videoAt
+              ? ` · 영상 시점 ${fmtTime(c.report.videoAt)}`
+              : ''}</span
+          >{/if}
         <div class="gap-inline-sm flex flex-wrap">
           {#if c.state === 'new' || c.state === 'escalated'}<Button size="sm" onclick={accept}>접수</Button>{/if}
           {#if c.state === 'escalated'}<a

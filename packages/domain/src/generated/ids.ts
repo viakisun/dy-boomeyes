@@ -95,6 +95,7 @@ export const FR = {
   'FR-035': 'FR-035',
   'FR-036': 'FR-036',
   'FR-037': 'FR-037',
+  'FR-038': 'FR-038',
 } as const;
 export type FrId = keyof typeof FR;
 
@@ -240,7 +241,7 @@ export const SCREENS = {
   'A1-01': { name: "로그인", surface: 'A1', app: 'pwa', route: "/a1/login", roles: ["site-safety"], phase: 1, wave: 1, default: 'login', states: ["login"] },
   'A1-02': { name: "업무함", surface: 'A1', app: 'pwa', route: "/a1/inbox", roles: ["site-safety"], phase: 1, wave: 1, default: 'inbox', states: ["inbox","filter","push"] },
   'A1-03': { name: "업무 상세", surface: 'A1', app: 'pwa', route: "/a1/inbox/[case]", roles: ["site-safety"], phase: 1, wave: 1, default: 'case', states: ["case","docnew"] },
-  'A1-04': { name: "관제(장비·영상)", surface: 'A1', app: 'pwa', route: "/a1/monitor", roles: ["site-safety"], phase: 1, wave: 1, default: 'monitor', states: ["monitor","plite"] },
+  'A1-04': { name: "관제(장비·영상)", surface: 'A1', app: 'pwa', route: "/a1/monitor", roles: ["site-safety"], phase: 1, wave: 1, default: 'monitor', states: ["monitor","plite","report"] },
   'A1-05': { name: "장비 상세", surface: 'A1', app: 'pwa', route: "/a1/monitor/[device]", roles: ["site-safety"], phase: 1, wave: 1, default: 'dev', states: ["dev","plite","stale"] },
   'A1-06': { name: "기록", surface: 'A1', app: 'pwa', route: "/a1/records", roles: ["site-safety"], phase: 1, wave: 2, default: 'rec', states: ["rec"] },
   'A1-07': { name: "메뉴·현장 정보", surface: 'A1', app: 'pwa', route: "/a1/menu", roles: ["site-safety"], phase: 1, wave: 2, default: 'menu', states: ["menu","apply"] },
@@ -268,7 +269,7 @@ export const SCREENS = {
   'B0-01': { name: "웹 공통 로그인", surface: 'B0', app: 'web', route: "/login", roles: ["control","hq-safety","site-safety","ops-admin","maintenance"], phase: 1, wave: 0, default: 'login-b1', states: ["login-b1","login-b2","login-b3","login-b4","login-maint"] },
   'B1-02': { name: "관제 대시보드", surface: 'B1', app: 'web', route: "/b1/dash", roles: ["control","maintenance"], phase: 1, wave: 0, default: 'dash', states: ["dash"] },
   'B1-02M': { name: "카메라 영상 모달", surface: 'B1', app: 'web', route: "/b1/dash?cam=[camera]", roles: ["control","maintenance"], phase: 1, wave: 1, default: 'cam', states: ["cam"] },
-  'B1-03': { name: "수신함", surface: 'B1', app: 'web', route: "/b1/inbox", roles: ["control","maintenance"], phase: 1, wave: 1, default: 'inbox', states: ["inbox"] },
+  'B1-03': { name: "수신함", surface: 'B1', app: 'web', route: "/b1/inbox", roles: ["control","maintenance"], phase: 1, wave: 1, default: 'inbox', states: ["inbox","report"] },
   'B1-04': { name: "에스컬레이션", surface: 'B1', app: 'web', route: "/b1/escalation", roles: ["control","maintenance"], phase: 1, wave: 1, default: 'esc', states: ["esc"] },
   'B1-05': { name: "서류 현황", surface: 'B1', app: 'web', route: "/b1/docs", roles: ["control","maintenance"], phase: 1, wave: 2, default: 'docs', states: ["docs"] },
   'B1-06': { name: "임대 계약", surface: 'B1', app: 'web', route: "/b1/leases", roles: ["control","maintenance"], phase: 1, wave: 2, default: 'lease', states: ["lease"] },

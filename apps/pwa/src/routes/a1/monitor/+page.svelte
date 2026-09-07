@@ -4,7 +4,9 @@
   import { resolve } from '$app/paths';
   import { onMount } from 'svelte';
   import { SCR, type Alert } from '@boomeyes/domain';
-  import { Badge, Banner, EmptyState, Tabs, fmtTime, toast, EquipmentCard } from '@boomeyes/ui';
+  import { Badge, Banner, Button, EmptyState, Tabs, fmtTime, toast, EquipmentCard } from '@boomeyes/ui';
+  import ReportSheet from '$lib/ReportSheet.svelte';
+  import { session } from '$lib/session.svelte';
   import { BboxOverlay, CameraTile, HealthBadge } from '@boomeyes/video';
   let { data } = $props();
   const tabs = $derived([
@@ -24,15 +26,31 @@
     }),
   );
   const latest = $derived(Object.values(events).sort((a, b) => (a.at < b.at ? 1 : -1))[0]);
+  // 현장 신고 시트(FR-038) — URL(?sheet=report · 캡처 ?state=report)이 열고, 버튼은 상태만 켠다
+  let report = $state(false);
+  $effect(() => {
+    if (data.reportSheet) report = true;
+  });
 </script>
 
 <div class="gap-stack-md flex flex-col" data-scr={SCR['A1-04']}>
   <div class="flex items-center justify-between">
     <span class="text-body-sm text-fg-muted">{data.site?.name ?? ''} · 장비 {data.devices.length}대</span>
-    <Badge tone="neutral" variant="outline"
-      ><span data-profile={data.flags.profile}>{data.flags.channels}채널</span></Badge
-    >
+    <span class="gap-inline-sm flex items-center">
+      <Badge tone="neutral" variant="outline"
+        ><span data-profile={data.flags.profile}>{data.flags.channels}채널</span></Badge
+      >
+      <Button size="sm" variant="outline" tone="neutral" onclick={() => (report = true)}>신고</Button>
+    </span>
   </div>
+  <ReportSheet
+    bind:open={report}
+    devices={data.devices}
+    cameras={data.cameras}
+    api={data.api}
+    clock={data.clock}
+    by={session.user?.userId ?? 'safety01'}
+  />
   <Tabs
     variant="pill"
     size="sm"

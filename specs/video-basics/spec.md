@@ -3,7 +3,7 @@ id: SPEC-video-basics
 status: draft
 wave: 1
 screens: [A1-04, A1-05, B1-02M, A3-04, B2-03]
-fr: [FR-004, FR-005, FR-034, FR-028, FR-030, FR-002, FR-007, FR-016, FR-022]
+fr: [FR-004, FR-005, FR-034, FR-028, FR-030, FR-002, FR-007, FR-016, FR-022, FR-038]
 ---
 # video-basics — 현장 모니터 · 장비 상세 · 카메라 모달 완성
 
@@ -32,6 +32,8 @@ fr: [FR-004, FR-005, FR-034, FR-028, FR-030, FR-002, FR-007, FR-016, FR-022]
 - **AC-9** Given `hq01` When 장비 열람(A3-04, `/a3/sites/SITE-001/devices`) Then A1-04와 같은 타일·헬스 배지가 열람 전용으로 보이고 AI 채널 표시는 현장 프로파일을 따른다 [FR-004, FR-034, FR-022]
 - **AC-10** Given A1-05 영상 탭 When 카메라 목록 Then 채널마다 장착 위치(일반 본체·1번 관절 인근 · AI 마지막 강체·경사 시야)가 헬스 배지 아래에 보인다 [FR-004]
 - **AC-11** Given `?state=stale`(CPB-003 마지막 수신 25분 전 · 단선 센서 미연동) When A1-05 상태 탭 Then 수신 상태 줄에 "미수신 · 마지막 HH:MM"(warning)이 보이고 단선 칸은 "미연동"이며 정상 표시가 없다; 두절 장비(CPB-004)는 B1-02 인스펙터에 마지막 값과 "두절 · 마지막 HH:MM"을 남긴다 [FR-034, FR-002]
+- **AC-12** Given monitor 픽스처의 CAM-3-2(health view-changed) When A1-04·A3-04 Then 헬스 배지가 "시야 변경 · 판단 유보"(warning)이고 AI 타일에 "판단 유보" 오버레이가 있으며 "정상"은 없다 — 'AI 판단 불가'(장애)와 구분 [FR-034]
+- **AC-13** Given 현장 안전관리자 When A1-04(또는 A1-05)의 "신고" → 시트(유형 · 설명 필수 · 카메라 · 영상 시점 저장) → 신고 Then 업무(현장 신고 · new)와 알림이 생겨 A1-02 업무함에 보이고 업무 이력에 '신고'가 남는다 [FR-038, FR-008]
 
 ## 상태 픽스처
 `screens.yaml` A1-04 `monitor` `plite` · A1-05 `dev`(상태 탭) `plite`(영상 탭) · B1-02M `cam` · A3-04 `dev` · B2-03 `site`. 픽스처 ID: CPB-003 · CAM-3-1(일반) · CAM-3-2(AI) · CAM-2-2(AI 판단 불가) · DOC-001(D-27). `monitor`는 CAM-1-1을 offline, CAM-2-2를 ai-unavailable로 변형한다.

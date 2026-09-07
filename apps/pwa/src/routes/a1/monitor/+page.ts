@@ -11,5 +11,16 @@ export const load: PageLoad = async ({ parent, url }) => {
   const [devices, cameras, sites] = await Promise.all([api.devices(scope), api.cameras(), api.sites(scope)]);
   const site = sites[0];
   const flags = profileFlags(site?.videoProfile ?? 'P-SD');
-  return { devices, cameras, site, flags, tab: url.searchParams.get('tab') === 'bodycam' ? 'bodycam' : 'cameras' };
+  // 현장 신고 시트(FR-038) — ?sheet=report · capture 픽스처 ?state=report
+  const reportSheet =
+    url.searchParams.get('sheet') === 'report' ||
+    (url.searchParams.get('capture') === '1' && url.searchParams.get('state') === 'report');
+  return {
+    devices,
+    cameras,
+    site,
+    flags,
+    tab: url.searchParams.get('tab') === 'bodycam' ? 'bodycam' : 'cameras',
+    reportSheet,
+  };
 };

@@ -5,17 +5,13 @@ import type {
   Alert,
   AlertRule,
   Attendance,
-  ErrorCode,
-  ProtocolVersion,
-  RuleSet,
-  SampleTest,
   Camera,
   Case,
   Device,
   Doc,
   DocKind,
   DocSummary,
-  WriteMeta,
+  ErrorCode,
   Escalation,
   Inspection,
   InspectionItem,
@@ -23,18 +19,23 @@ import type {
   Lease,
   Part,
   PartEvent,
-  Request,
-  Stock,
-  Scope,
-  Site,
-  Today,
-  User,
+  ProtocolVersion,
   RecordItem,
   RecordKind,
   ReplayEvent,
+  ReportType,
+  Request,
+  RuleSet,
+  SampleTest,
+  Scope,
   Showcase,
+  Site,
   SiteReport,
+  Stock,
+  Today,
+  User,
   VideoProfile,
+  WriteMeta,
 } from './types';
 
 export interface ApiClient {
@@ -66,6 +67,11 @@ export interface ApiClient {
     requesterId: string;
     note?: string;
   }): Promise<Request>;
+  /** FR-038(제안) — 현장 신고: 안전관리자가 영상 화면에서 상황을 신고 → 업무(kind report) + 알림. meta로 멱등(ADR-010) */
+  createReport(
+    input: { deviceId: string; type: ReportType; note: string; cameraId?: string; videoAt?: string; by: string },
+    meta?: WriteMeta,
+  ): Promise<Case>;
   /** FR-010 — 임계(1h) 경과한 new 업무를 escalated로 전이하고 통보 목록을 돌려준다 */
   escalations(): Promise<Escalation[]>;
   /** driver-daily — 오늘(배정 장비 · 출근 · 점검 · 알림 · 동의) */

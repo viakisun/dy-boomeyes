@@ -46,6 +46,7 @@
     e.preventDefault();
   };
   const KIND_LABEL: Record<string, string> = {
+    report: '현장 신고',
     voltage: '전압 이상',
     comm: '통신 두절',
     pipe: '수송관',

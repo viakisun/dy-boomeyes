@@ -6,7 +6,7 @@
   import { EmptyState, StatusPill, TASK_LABEL, TASK_TONE, Tabs, TaskCard, dueLabel } from '@boomeyes/ui';
   let { data } = $props();
   const SEV = { critical: 0, warning: 1, info: 2 } as const;
-  const isFault = (c: Case) => c.kind === 'fault' || c.kind === 'comm';
+  const isFault = (c: Case) => c.kind === 'fault' || c.kind === 'comm' || c.kind === 'report'; // 현장 신고도 고장·이상 칩(FR-038)
   const open = (c: Case) => c.state !== 'done';
   const match = (c: Case, chip: string) => (chip === 'all' ? true : chip === 'fault' ? isFault(c) && open(c) : open(c));
   const CHIPS = [
