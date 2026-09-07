@@ -363,6 +363,53 @@ md +=
   ) + '\n';
 writeFileSync(join(GEN_DOC, 'DEMO.md'), md);
 
+// ---- WORKFLOWS.md
+const WF_STATUS = { 'demo-ready': '화면으로 재현', 'fixture-needed': '상태 데이터 필요', proposed: '제안' };
+const wfs = d.scenarios.workflows ?? [];
+const chain = (w) =>
+  w.steps.map((s) => `${s.actor.replace('—(시스템)', '시스템')}${s.auto ? '(자동)' : ''}`).join(' → ');
+md = HEAD('워크플로우 카탈로그 (WORKFLOWS)', 'scenarios.yaml workflows[]');
+md +=
+  tbl(
+    ['ID', '제목', '묶음', '트리거', '사슬', '지금', '연계', '상태'],
+    wfs.map((w) => [
+      w.id,
+      w.title,
+      w.group,
+      `${w.trigger.by} — ${w.trigger.what}`,
+      chain(w),
+      w.today ?? '—',
+      w.gain,
+      `${WF_STATUS[w.status]}${w.phase === 2 ? ' · 2단계' : ''}`,
+    ]),
+  ) + '\n\n';
+md +=
+  tbl(
+    ['ID', '알림 수신 역할', '단계', '화면', '참조', '장면', '비고'],
+    wfs.map((w) => [
+      w.id,
+      w.notify.length ? w.notify.join(' ') : '**미정**',
+      w.steps.map((s, i) => `${i + 1}. ${s.do}`).join(' · '),
+      w.screens.join(' '),
+      w.refs.join(' '),
+      w.scene ?? '—',
+      w.note ?? '—',
+    ]),
+  ) + '\n\n';
+const wfGroups = {};
+for (const w of wfs) (wfGroups[w.group] ??= []).push(w);
+md +=
+  tbl(
+    ['묶음', '건수', 'ID', '화면으로 재현'],
+    Object.keys(wfGroups).map((g) => [
+      g,
+      wfGroups[g].length,
+      wfGroups[g].map((w) => w.id).join(' '),
+      wfGroups[g].filter((w) => w.status === 'demo-ready').length,
+    ]),
+  ) + '\n';
+writeFileSync(join(GEN_DOC, 'WORKFLOWS.md'), md);
+
 // ---- SPECS.md
 md = HEAD('기능 스펙 인덱스 (SPECS)', 'specs/*/spec.md frontmatter');
 md +=
@@ -381,7 +428,7 @@ md +=
 writeFileSync(join(GEN_DOC, 'SPECS.md'), md);
 
 console.log(
-  `✓ ssot:build → ssot.json · ids.ts · SCREENS.md(${screens.length}) · DOMAIN.md(${d.entities.ent.length}) · TRACE.md(fr ${frs.length}, 고아 ${orphans.length}) · DECISIONS.md(미결 ${open.length}) · DEMO.md(${(d.scenarios.demo ?? []).length}) · SPECS.md(${specs.length})`,
+  `✓ ssot:build → ssot.json · ids.ts · SCREENS.md(${screens.length}) · DOMAIN.md(${d.entities.ent.length}) · TRACE.md(fr ${frs.length}, 고아 ${orphans.length}) · DECISIONS.md(미결 ${open.length}) · DEMO.md(${(d.scenarios.demo ?? []).length}) · WORKFLOWS.md(${wfs.length}) · SPECS.md(${specs.length})`,
 );
 if (check.errors.length) {
   console.error(`✗ check errors ${check.errors.length} — build 출력은 생성됐으나 게이트 실패`);
