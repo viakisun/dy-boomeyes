@@ -3,7 +3,7 @@
   import { goto } from '$app/navigation';
   import { resolve } from '$app/paths';
   import { SCR } from '@boomeyes/domain';
-  import { Badge, ShowcaseOverlay, Stat, fmtDateTime, StatGroup } from '@boomeyes/ui';
+  import { Badge, Logo, ShowcaseOverlay, Stat, fmtDateTime, StatGroup } from '@boomeyes/ui';
   import { CameraWall } from '@boomeyes/video';
   let { data } = $props();
   const s = $derived(data.showcase);
@@ -21,7 +21,9 @@
   >
     <div class="gap-inline-md flex flex-wrap items-end justify-between">
       <div class="gap-stack-xs flex flex-col">
-        <span class="text-label-md text-fg-muted">BoomEyes · CPB 안전관제 쇼케이스</span>
+        <span class="gap-inline-xs text-label-md text-fg-muted flex items-center"
+          ><Logo variant="glyph" class="size-size-icon-md" />BoomEyes · CPB 안전관제 쇼케이스</span
+        >
         <h1 class="text-heading-xl">현장 {s.sites.length} · CPB {s.devices}대 가동 {s.normal}대</h1>
         <span class="text-body-sm text-fg-muted">{fmtDateTime(data.clock.iso())} · 실시간 · 시연용 대체 영상</span>
       </div>

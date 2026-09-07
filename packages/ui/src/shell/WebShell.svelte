@@ -20,7 +20,8 @@
     groups: NavGroup[];
     crumbs?: { label: string; href?: string }[];
     inspectorOpen?: boolean;
-    brand?: Snippet;
+    /** 사이드바 브랜드 — 접힘 여부를 받는다(접힘 = 글리프만) */
+    brand?: Snippet<[collapsed: boolean]>;
     footer?: Snippet;
     search?: Snippet;
     actions?: Snippet;

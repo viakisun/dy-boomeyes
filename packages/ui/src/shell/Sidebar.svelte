@@ -3,12 +3,13 @@
   import { cx, FOCUS } from '../lib/cx';
   import type { NavGroup } from './nav';
   // 웹 사이드바 — 240 / 접힘 56 · 항목 32(compact) · 선택 = bg-selected (DY-design §9 · cmp.nav.sidebar)
+  // brand 스니펫은 접힘 여부를 받는다(접힘 = 글리프만, §13) · 접힘 헤더는 세로 적층(글리프 / 토글 — 56px에 한 줄로 안 들어간다)
   let {
     groups,
     collapsed = $bindable(false),
     brand,
     footer,
-  }: { groups: NavGroup[]; collapsed?: boolean; brand?: Snippet; footer?: Snippet } = $props();
+  }: { groups: NavGroup[]; collapsed?: boolean; brand?: Snippet<[collapsed: boolean]>; footer?: Snippet } = $props();
 </script>
 
 <aside
@@ -19,12 +20,20 @@
   style="z-index: var(--sys-z-nav)"
   aria-label="주 내비게이션"
 >
-  <div class="h-layout-topbar-height gap-inline-sm px-inset-sm flex items-center">
-    {#if brand}{@render brand()}{/if}
+  <div
+    class={cx(
+      'px-inset-sm flex',
+      collapsed
+        ? 'gap-stack-xs py-inset-xs flex-col items-center'
+        : 'h-layout-topbar-height gap-inline-sm items-center',
+    )}
+  >
+    {#if brand}{@render brand(collapsed)}{/if}
     <button
       type="button"
       class={cx(
-        'size-size-control-sm rounded-control text-fg-muted hover:bg-ui-hover ml-auto inline-flex items-center justify-center',
+        'size-size-control-sm rounded-control text-fg-muted hover:bg-ui-hover inline-flex items-center justify-center',
+        !collapsed && 'ml-auto',
         FOCUS,
       )}
       aria-label={collapsed ? '사이드바 펼치기' : '사이드바 접기'}
