@@ -175,6 +175,49 @@ export function createMockApi(db: Db, opts: { latencyMs?: number } = {}): ApiCli
       db.requests.push(r);
       return r;
     },
+    /** FR-038(제안) — 현장 신고 → 업무(kind report) + 알림(kind report). meta로 멱등(아웃박스 재전송) */
+    async createReport(input, meta) {
+      await wait();
+      if (!input.note.trim()) throw new Error('신고 내용은 필수입니다');
+      const device = db.devices.find((d) => d.id === input.deviceId);
+      if (!device) throw new Error(`device ${input.deviceId}`);
+      const TYPE = { worker: '작업자 상태 이상', hose: '호스·배관 이상', other: '기타' } as const;
+      return once(meta, (at) => {
+        const n = db.cases.reduce((m, c) => Math.max(m, Number(c.id.slice(2)) || 0), 0) + 1;
+        const c: Case = {
+          id: `C-${n}`,
+          kind: 'report',
+          title: `현장 신고 — ${TYPE[input.type]} · ${device.id}`,
+          deviceId: device.id,
+          siteId: device.siteId,
+          state: 'new',
+          severity: input.type === 'other' ? 'warning' : 'critical',
+          assigneeId: null,
+          dueAt: new Date(Date.parse(at) + 2 * 60 * 60 * 1000).toISOString(),
+          createdAt: at,
+          history: [{ at, by: input.by, action: '신고', note: input.note.trim() }],
+          report: {
+            type: input.type,
+            ...(input.cameraId ? { cameraId: input.cameraId } : {}),
+            ...(input.videoAt ? { videoAt: input.videoAt } : {}),
+          },
+        };
+        db.cases.push(c);
+        const k = db.alerts.filter((a) => a.id.startsWith('AL-F')).length + 1;
+        db.alerts.unshift({
+          id: `AL-F${String(k).padStart(2, '0')}`,
+          deviceId: device.id,
+          kind: 'report',
+          severity: c.severity,
+          message: `${device.id} 현장 신고 — ${TYPE[input.type]} (${input.by})`,
+          at,
+          acked: false,
+          caseId: c.id,
+          ...(input.cameraId ? { cameraId: input.cameraId } : {}),
+        });
+        return c;
+      });
+    },
     async escalations() {
       await wait();
       const now = clock.now().getTime();

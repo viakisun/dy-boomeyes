@@ -59,6 +59,11 @@
     >
       AI 판단 불가
     </div>{/if}
+  {#if camera.kind === 'ai' && camera.health === 'view-changed' && camera.state !== 'ai-unavailable' && !off}<div
+      class="bg-overlay text-heading-sm text-fg-on-inverse absolute inset-0 flex items-center justify-center"
+    >
+      판단 유보
+    </div>{/if}
   {#if off}<div class="text-body-sm text-fg-muted absolute inset-0 flex items-center justify-center">
       수신 없음
     </div>{/if}

@@ -15,8 +15,11 @@
     TelemetryStrip,
     dueLabel,
     fmtDateTime,
+    Button,
   } from '@boomeyes/ui';
   import { CameraTile, HealthBadge, MOUNT_LABEL, SOURCE_LABEL } from '@boomeyes/video';
+  import ReportSheet from '$lib/ReportSheet.svelte';
+  import { session } from '$lib/session.svelte';
   let { data } = $props();
   const d = $derived(data.device);
   const EQUIP_LABEL = { normal: '정상', caution: '주의', fault: '고장', offline: '두절', maintenance: '정비' } as const;
@@ -42,6 +45,7 @@
     { id: 'parts', label: '부품' },
   ];
   // 탭·소스 전환은 다른 쿼리(?state= ?capture=)를 유지한다 — mock db 캐시 키(QA §3)
+  let report = $state(false); // 현장 신고 시트(FR-038)
   const go = (key: string, value: string) => {
     const u = new URL(location.href);
     u.searchParams.set(key, value);
@@ -54,8 +58,20 @@
   <header class="gap-stack-xs flex flex-col">
     <div class="flex items-center justify-between">
       <h2 class="text-heading-lg">{d.id} · {d.unitNo}호기</h2>
-      <StatusPill tone={EQUIPMENT_TONE[d.state]} label={EQUIP_LABEL[d.state]} />
+      <span class="gap-inline-sm flex items-center">
+        <StatusPill tone={EQUIPMENT_TONE[d.state]} label={EQUIP_LABEL[d.state]} />
+        <Button size="sm" variant="outline" tone="neutral" onclick={() => (report = true)}>신고</Button>
+      </span>
     </div>
+    <ReportSheet
+      bind:open={report}
+      devices={[d]}
+      deviceId={d.id}
+      cameras={data.cameras}
+      api={data.api}
+      clock={data.clock}
+      by={session.user?.userId ?? 'safety01'}
+    />
     <span class="text-body-sm text-fg-muted"
       >{data.site?.name ?? d.siteId} · 마지막 수신 {fmtDateTime(d.telemetry.at)}{data.driver
         ? ` · 운전자 ${data.driver.display}`

@@ -136,6 +136,8 @@ screens:
     name: monitor
   - id: plite
     name: P-LITE 현장(1채널 · AI 채널 숨김)
+  - id: report
+    name: 현장 신고 시트
   nav:
   - to: A1-05
     label: 타일 탭
@@ -920,6 +922,8 @@ screens:
   states:
   - id: inbox
     name: inbox
+  - id: report
+    name: 현장 신고 업무(C-107)
   nav: []
   trace:
     task:

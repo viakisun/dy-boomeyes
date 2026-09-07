@@ -9,7 +9,7 @@
 | `ENT-01` | 현장 (Site) | 1 | site_id · 현장명 · 주소 · 건설사 · 담당 안전관리자 · video_profile(옵션 조합 · DISC-028) | 1─N 장비 · 1─N 사용자(현장) · 1─N 업무 · 1─N 바디캠 | RDS |
 | `ENT-02` | 장비 (Device/CPB) | 1 | device_id · 호기(1~120) · 상태 · 설치일 · 완료예정일 | N─1 현장 · N─1 사업주(보유) · 1─1 제어기 · 1─N 카메라 · 1─N 알림 | RDS · 최신 상태는 Redis |
 | `ENT-03` | 제어기 (Controller) | 1 | controller_id · 프로토콜 버전 · 인증키 · 마지막 수신 | 1─1 장비 · N─1 프로토콜 버전 | RDS |
-| `ENT-04` | 카메라 (Camera) | 1 | camera_id · 유형(general/ai) · ingest_type(E1~E5) · recording_mode · stream_url · 보존(현장별) · 장착 위치(body-joint1\|last-rigid — 본체·1번 관절 인근 / 마지막 강체·경사 시야, 참고자료 v5.0 §8) | N─1 장비 (기본 2대) | RDS · 영상은 S3/SD/현장 녹화기 (프로파일) |
+| `ENT-04` | 카메라 (Camera) | 1 | camera_id · 유형(general/ai) · ingest_type(E1~E5) · recording_mode · stream_url · 보존(현장별) · 헬스(ok\|frozen\|blurry\|occluded\|lost\|view-changed — 시야 변경은 '판단 유보', 장애 'AI 판단 불가'와 구분 · FR-034) · 장착 위치(body-joint1\|last-rigid — 본체·1번 관절 인근 / 마지막 강체·경사 시야, 참고자료 v5.0 §8) | N─1 장비 (기본 2대) | RDS · 영상은 S3/SD/현장 녹화기 (프로파일) |
 | `ENT-05` | 사용자 (User) | 1 | user_id · 역할(7종) · 소속(운영사/건설사/사업주) · 연락처 | N─M 현장 · 1─N 업무(담당) | RDS · 세션은 Redis |
 | `ENT-06` | 업무 (Case) | 1 | case_id(C-xxx) · 유형(고장/서류/점검/통신) · 상태 · 기한 · 심각도 · 연결 이벤트(event_id · 0..1) | N─1 장비/현장 · 1─N 이력 | RDS |
 | `ENT-07` | 서류 (Document) | 1 | doc_id · 유형(5종) · 대상(장비/운전자/현장) · 유효기간 · 상태 | N─1 장비 · 사용자 · 현장 | RDS · 파일은 S3 |

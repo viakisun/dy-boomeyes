@@ -572,3 +572,38 @@ describe('[FR-034] 텔레메트리 수신 상태(NFR-009 기준안 10분)', () =
     expect((await api.device('CPB-005'))?.telemetry.unlinked).toEqual(['harness']);
   });
 });
+
+describe('[FR-038] 현장 신고(제안)', () => {
+  it('createReport → 업무(kind report · new · critical) + 알림(kind report · caseId) · 이력 신고 · 같은 meta는 멱등', async () => {
+    const api = bootMock({ capture: true });
+    const meta = { clientId: 'rep-1', at: '2026-07-03T01:40:00.000Z' };
+    const c = await api.createReport(
+      {
+        deviceId: 'CPB-003',
+        type: 'worker',
+        note: '작업자 쓰러짐',
+        cameraId: 'CAM-3-2',
+        videoAt: meta.at,
+        by: 'safety01',
+      },
+      meta,
+    );
+    expect(c.kind).toBe('report');
+    expect(c.state).toBe('new');
+    expect(c.severity).toBe('critical');
+    expect(c.report).toEqual({ type: 'worker', cameraId: 'CAM-3-2', videoAt: meta.at });
+    expect(c.history[0]?.action).toBe('신고');
+    const again = await api.createReport(
+      { deviceId: 'CPB-003', type: 'worker', note: '작업자 쓰러짐', by: 'safety01' },
+      meta,
+    );
+    expect(again.id).toBe(c.id); // 멱등
+    const alerts = await api.alerts({ role: 'control' });
+    const al = alerts.find((a) => a.kind === 'report');
+    expect(al?.caseId).toBe(c.id);
+    expect(al?.cameraId).toBe('CAM-3-2');
+    await expect(
+      api.createReport({ deviceId: 'CPB-003', type: 'other', note: '   ', by: 'safety01' }),
+    ).rejects.toThrow();
+  });
+});

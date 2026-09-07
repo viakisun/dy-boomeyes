@@ -75,6 +75,7 @@ export {
   NAV_SHORT_LABEL,
   EVIDENCE_LABEL,
   EVIDENCE_TONE,
+  REPORT_TYPE_LABEL,
 } from './lib/labels';
 export { fmtDateTime, fmtTime, dueLabel, elapsedLabel } from './lib/format';
 export { connectivity } from './lib/connectivity.svelte';

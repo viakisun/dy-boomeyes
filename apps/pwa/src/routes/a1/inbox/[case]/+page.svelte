@@ -14,6 +14,7 @@
     ERROR_CODE_LABEL,
     EVIDENCE_LABEL,
     EVIDENCE_TONE,
+    REPORT_TYPE_LABEL,
     SEVERITY_LABEL,
     SEVERITY_TONE,
     StatusPill,
@@ -24,6 +25,7 @@
     cx,
     dueLabel,
     fmtDateTime,
+    fmtTime,
     toast,
   } from '@boomeyes/ui';
   import { session } from '$lib/session.svelte';
@@ -142,6 +144,24 @@
         disabled={busy}
         onclick={() => run('정비 담당 호출', () => data.api.callMaintenance(data.task.id, me()))}>정비 담당 호출</Button
       >
+    </section>
+  {/if}
+
+  {#if data.task.report}
+    <section
+      class="rounded-card border-border bg-surface p-inset-md gap-stack-xs flex flex-col border"
+      aria-label="신고"
+    >
+      <span class="text-heading-sm">신고 내용</span>
+      <span class="text-body-sm" data-report-type={data.task.report.type}
+        >{REPORT_TYPE_LABEL[data.task.report.type]}{data.task.report.cameraId
+          ? ` · ${data.task.report.cameraId}`
+          : ''}{data.task.report.videoAt ? ` · 영상 시점 ${fmtTime(data.task.report.videoAt)}` : ''}</span
+      >
+      {#if data.device && data.task.report.videoAt}<a
+          href={resolve(`/a1/monitor/${data.device.id}?tab=video` as '/')}
+          class="text-label-md text-accent-fg">영상 탭에서 보기 →</a
+        >{/if}
     </section>
   {/if}
 

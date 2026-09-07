@@ -14,6 +14,7 @@ export const HEALTH_LABEL: Record<CameraHealth, string> = {
   blurry: '흐림',
   occluded: '가림',
   lost: '수신 끊김',
+  'view-changed': '시야 변경 · 판단 유보',
 };
 export const SOURCE_LABEL = { server: '서버', sd: 'SD', nvr: 'NVR' } as const;
 /** 장착 위치(ENT-04) — B4-03 설치 구성도 · A1-05 영상 탭 */

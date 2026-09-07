@@ -55,6 +55,7 @@ ent:
   - recording_mode
   - stream_url
   - 보존(현장별)
+  - 헬스(ok|frozen|blurry|occluded|lost|view-changed — 시야 변경은 '판단 유보', 장애 'AI 판단 불가'와 구분 · FR-034)
   - 장착 위치(body-joint1|last-rigid — 본체·1번 관절 인근 / 마지막 강체·경사 시야, 참고자료 v5.0 §8)
   relations:
   - N─1 장비 (기본 2대)

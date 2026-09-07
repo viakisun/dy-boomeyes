@@ -63,7 +63,7 @@ export interface DocSummary {
   expiring: number;
 }
 /** FR-034 카메라 헬스 — 정지화면·흐림·가림·수신 끊김이면 "정상" 표시 금지 */
-export type CameraHealth = 'ok' | 'frozen' | 'blurry' | 'occluded' | 'lost';
+export type CameraHealth = 'ok' | 'frozen' | 'blurry' | 'occluded' | 'lost' | 'view-changed';
 /** 장착 위치(ENT-04) — 본체·1번 관절 인근 / 마지막 강체·경사 시야 (참고자료 v5.0 §8) */
 export type CameraMount = 'body-joint1' | 'last-rigid';
 export interface Camera {
@@ -84,7 +84,18 @@ export interface Camera {
 export interface Alert {
   id: string;
   deviceId: string;
-  kind: 'comm' | 'gps' | 'voltage' | 'harness' | 'error' | 'doc' | 'pipe' | 'filter' | 'ai-person' | 'camera-health';
+  kind:
+    | 'comm'
+    | 'gps'
+    | 'voltage'
+    | 'harness'
+    | 'error'
+    | 'doc'
+    | 'pipe'
+    | 'filter'
+    | 'ai-person'
+    | 'camera-health'
+    | 'report';
   severity: Severity;
   message: string;
   at: string;
@@ -96,9 +107,11 @@ export interface Alert {
   /** 이벤트 복기 축(ENT-19) — 있으면 B1-02 피드에 "복기" 링크 */
   eventId?: string;
 } // ENT-08
+/** 현장 신고 유형(FR-038 제안) — 작업자 상태 이상 · 호스·배관 이상 · 기타 */
+export type ReportType = 'worker' | 'hose' | 'other';
 export interface Case {
   id: string;
-  kind: 'fault' | 'doc' | 'inspection' | 'comm';
+  kind: 'fault' | 'doc' | 'inspection' | 'comm' | 'report';
   title: string;
   deviceId: string | null;
   siteId: string;
@@ -112,6 +125,8 @@ export interface Case {
   docId?: string;
   /** 연결 이벤트(ENT-19 · 0..1) — 이벤트 복기 B1-08 · 영상 확보 상태 표시 */
   eventId?: string;
+  /** kind=report — 신고 유형 · 카메라 · 저장한 영상 시점(FR-038) */
+  report?: { type: ReportType; cameraId?: string; videoAt?: string };
 } // ENT-06
 export interface HistoryItem {
   at: string;

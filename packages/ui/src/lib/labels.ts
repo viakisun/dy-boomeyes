@@ -11,6 +11,7 @@ import type {
   TaskState,
   LeaseState,
   RecordKind,
+  ReportType,
   PartEvent,
   PartGroup,
   PartState,
@@ -30,6 +31,13 @@ export const CASE_KIND_LABEL: Record<Case['kind'], string> = {
   doc: '서류',
   inspection: '점검',
   comm: '통신',
+  report: '현장 신고',
+};
+/** 현장 신고 유형(FR-038) */
+export const REPORT_TYPE_LABEL: Record<ReportType, string> = {
+  worker: '작업자 상태 이상',
+  hose: '호스·배관 이상',
+  other: '기타',
 };
 export const SEVERITY_LABEL: Record<Severity, string> = { critical: '긴급', warning: '경고', info: '정보' };
 /** 영상 확보 상태(ENT-19) — 사건(업무) 상태와 별개(참고자료 v5.0 §15). 색은 확보 불가만 warning, 나머지는 텍스트(§0-4) */
