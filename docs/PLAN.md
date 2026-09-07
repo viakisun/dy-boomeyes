@@ -1,6 +1,6 @@
 # PLAN — 웨이브 계획 (살아있는 문서, 매주 갱신)
 
-기준일 2026-09-05. 웨이브 = 2주. 전략 근거: `METHOD.md` · 범위 원천: `ssot/`(화면 53 · FR 37 · DISC 46 미결). 계약 기준선(9/10 동결 · 9/30 시연 · 12/31)은 `ssot/meta.yaml`에 그대로 두고, 여기서 재기준선을 관리한다 — DY 합의 전까지 "제안".
+기준일 2026-09-05. 웨이브 = 2주. 전략 근거: `METHOD.md` · 범위 원천: `ssot/`(화면 53 · FR 37 · DISC 54 — 미결 47). 계약 기준선(9/10 동결 · 9/30 시연 · 12/31)은 `ssot/meta.yaml`에 그대로 두고, 여기서 재기준선을 관리한다 — DY 합의 전까지 "제안".
 
 ## 현재 웨이브 — W2 1단계 잔여 (선행 착수 9/5 · 계획 10/6~10/17)
 
@@ -18,8 +18,9 @@ W1은 9/5에 선행 완료(사용자 결정 항목만 잔여). 계획 `~/.claude
 | B14 문서 생성기(ADR-011) | 완료 — PR #20 (`tools/docs-gen` 설계서 HTML/PDF · `docs/set/v0.4-draft/{DELTA,MANIFEST}.md` · `shots/manifest.json` · `docs:set`/`docs:check` · QA 게이트 8) — 정식 발행은 사용자 승인 |
 | 시각 회귀 기준선 첫 등록 | PR #21 — `baseline` 워크플로(ubuntu) 41장 · 이후 화면 변경 PR은 `capture:compare` |
 | **디자인 개선 W2.5**(사용자 요청 2026-09-06) | 완료(2026-09-06) — D0 #22 리뷰·가이드·플랜 · D1 #23 셸(아이콘 · 표면 이름) · D2 #24 PageHeader·카피·근거(data-ref) · D3 #25 PWA 카피(audit 0) · D4 #26 Stat·표 규칙 · D5 #28 폼·B4-05 표형 · D6 #27 PWA 골격 · D7 #29 lint `copy-*` 승격·회고 `docs/retro/W2.5.md` — 측정 `docs/plans/design-uplift.md` §3 · 기준선은 브랜치마다 CI 재등록 |
+| **W2.6 브랜드·삽화·격차 보강**(사용자 요청 2026-09-07 · 계획 `~/.claude/plans/form-tingly-gray.md`) | 진행 — D `docs/deck-disc`(DISC-047~054 · DISC-005/007/008/009/039/040 갱신 · 용어 3) → L `feat/brand-logo`(Logo mark/glyph/lockup · 사이드바 접힘 글리프 · 로그인 두 톤 · favicon·PWA 아이콘 빌드 · DY-design §13) → M `feat/media-illustrations`(참고자료 v5.0 삽화 → 타일 스틸·루프 MP4 · bbox 정정 · SW 선캐시 mp4 제외) → G1 영상 확보 상태·카메라 장착 위치·설치 구성도 → G2 미연동·미수신 표기 규칙 → G3 AI 판단 유보·현장 신고(FR 신규 제안 · kind proposed). 덱 22토픽 판정: 채택 4 · DISC 8 등록 · 기각 2(카메라 후보 그대로 · 3.6GB/일 수치) · 제조사 사진 제외(저작권) |
 | W2 Exit 대비 | ① `current_wave: 2` · TRACE "spec 없는 화면 0" ✓ ② `capture --dark --strict` 97장 fail 0 · 자리 0 ✓ ③ e2e 녹색 · axe wave ≤ 2 화면 41 전수 0 ✓ ④ 장면 1~10 e2e ✓ ⑤ 픽스처 신규 27(17 → 44) ✓ ⑥ 문서 세트 v0.4 초안 `docs/set/v0.4-draft/` ✓(B14) ⑦ 회고 `docs/retro/W2.md` · SOP 5 ✓ |
-| 사용자 결정 | 2026-09-06 확정: ADR-008 A(리포) · ADR-009/010/011 승인 · DISC-015/036/038/043/044~046 기준안 채택(decided · DY 이견 시 재개) — 남은 것: AWS(DISC-006, 보류) · v0.4 발행 |
+| 사용자 결정 | 2026-09-06 확정: ADR-008 A(리포) · ADR-009/010/011 승인 · DISC-015/036/038/043/044~046 기준안 채택(decided · DY 이견 시 재개) — 남은 것: AWS(DISC-006, 보류) · v0.4 발행 · 2026-09-07: 로고는 DS 색으로 재구성 · 삽화 6장만(제조사 사진 제외) · 격차 소폭 4건 + DISC 등록 |
 
 ### W1 시연 경로 — 완료(9/5)
 
