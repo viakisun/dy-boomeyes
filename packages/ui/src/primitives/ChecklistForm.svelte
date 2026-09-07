@@ -1,5 +1,5 @@
 <script lang="ts">
-  // 일일점검 체크리스트(FR-014 · DY-design F-13) — 행 3상태: 미입력(중립) · 정상(체크) · 이상(체크 해제 또는 "이상" 버튼). 제출값은 ok뿐이라 미입력은 이상으로 기록된다(요약에 "미입력 n 포함")
+  // 일일점검 체크리스트(FR-014 · DY-design F-13) — 행 3상태: 미입력(중립) · 정상(체크) · 이상(체크 해제 또는 "이상" 버튼). 제출값은 ok뿐이라 미입력·이상을 구분해 저장할 수 없으므로, 전 항목을 만질 때까지 제출을 막는다(화면 검수 F-19)
   import type { InspectionItem } from '@boomeyes/domain';
   import { SvelteSet } from 'svelte/reactivity';
   import { cx, FOCUS, TONE } from '../lib/cx';
@@ -72,6 +72,6 @@
   </fieldset>
   <div class="flex items-center justify-between">
     <span class="text-body-sm text-fg-muted">이상 {abnormal}건{untouched ? ` (미입력 ${untouched} 포함)` : ''}</span>
-    <Button size="lg" {disabled} onclick={() => onsubmit?.(items)}>{submitLabel}</Button>
+    <Button size="lg" disabled={disabled || untouched > 0} onclick={() => onsubmit?.(items)}>{submitLabel}</Button>
   </div>
 </form>
