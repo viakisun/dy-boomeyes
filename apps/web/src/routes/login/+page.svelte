@@ -4,7 +4,7 @@
   import { page } from '$app/state';
   import { resolve } from '$app/paths';
   import { HOME_OF, SCREENS, SURFACE_NAME, type RoleId, type SurfaceId, type User } from '@boomeyes/domain';
-  import { Card } from '@boomeyes/ui';
+  import { Card, Logo } from '@boomeyes/ui';
   import { login } from '$lib/session.svelte';
   let { data } = $props();
   const CARDS: { role: RoleId; surface: SurfaceId; title: string; desc: string; state: string }[] = [
@@ -59,12 +59,10 @@
 </script>
 
 <main class="gap-stack-xl bg-canvas p-page-gutter flex min-h-dvh flex-col items-center justify-center" data-scr="B0-01">
-  <header class="text-center">
-    <p class="text-label-lg text-accent-fg">DY · BoomEyes(가칭)</p>
+  <header class="gap-stack-sm flex flex-col items-center text-center">
+    <div data-ref="DISC-021"><Logo variant="lockup" color label="BoomEyes" class="h-size-avatar-lg w-auto" /></div>
     <h1 class="text-display-md">CPB 관제 로그인</h1>
-    <p class="mt-stack-xs text-body-sm text-fg-muted" data-ref="DISC-020">
-      역할 카드를 선택하면 데모 계정으로 들어갑니다
-    </p>
+    <p class="text-body-sm text-fg-muted" data-ref="DISC-020">역할 카드를 선택하면 데모 계정으로 들어갑니다</p>
   </header>
   <div class="max-w-layout-content-max gap-inline-lg grid w-full grid-cols-1 md:grid-cols-2">
     {#each CARDS as c (c.role)}

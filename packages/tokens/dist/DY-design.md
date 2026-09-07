@@ -10,7 +10,7 @@
 | ref(원시) | 208 |
 | sys(시맨틱) | 324 |
 | cmp(컴포넌트) | 92 |
-| 컴포넌트 카탈로그 | 81 |
+| 컴포넌트 카탈로그 | 82 |
 | 대비 검사 | 94/94 통과 |
 
 | 산출물 | 용도 |
@@ -25,7 +25,7 @@
 1. **하나의 시스템, 두 밀도.** 웹 백오피스(compact)와 현장 PWA(comfortable)는 같은 토큰·같은 컴포넌트를 쓰고 밀도 토큰만 다르다. 화면별 예외값을 만들지 않는다.
 2. **시맨틱 우선.** 화면 코드는 `sys`·`cmp` 토큰만 호출한다. `ref` 램프 직접 참조는 램프를 정의하는 곳(sys)과 차트·지도 계열에서만 허용한다.
 3. **모드는 값의 차이, 구조는 하나.** light/dark, compact/comfortable, 브랜드는 같은 토큰 경로에 다른 값을 넣는다. 다크 전용 토큰·브랜드 전용 토큰은 없다.
-4. **색 예산 — 화면당 accent · warning · danger.** 상태의 두 번째 단서는 텍스트다. 색 배경 pill은 주의가 필요한 warning·danger에만, success·info·progress·neutral 상태(정상 · 유효 · 검토 중 · 승인 · 활성)는 텍스트 라벨로(StatusPill quiet · Badge subtle은 중립). accent는 링크·탭·선택 같은 상호작용에만. 점(StatusDot)은 LIVE · REC · 촬영 중처럼 살아 움직이는 신호에만 — 장비 상태·텔레메트리 타일은 텍스트(warning·danger 값만 채색), 지도 범례 행은 두지 않는다(마커 글리프 ✓ ! ✕가 범례). 두절·수신 끊김은 warning으로 분류한다 — 관측 불능 상태를 정상처럼 보이게 하지 않는다(FR-034). Timeline 불릿은 회색 눈금(상태 점과 다른 모양). `pnpm design:audit:color`가 화면당 색상 계열을 센다(≤ 3).
+4. **색 예산 — 화면당 accent · warning · danger.** 상태의 두 번째 단서는 텍스트다. 색 배경 pill은 주의가 필요한 warning·danger에만, success·info·progress·neutral 상태(정상 · 유효 · 검토 중 · 승인 · 활성)는 텍스트 라벨로(StatusPill quiet · Badge subtle은 중립). accent는 링크·탭·선택 같은 상호작용에만. 점(StatusDot)은 LIVE · REC · 촬영 중처럼 살아 움직이는 신호에만 — 장비 상태·텔레메트리 타일은 텍스트(warning·danger 값만 채색), 지도 범례 행은 두지 않는다(마커 글리프 ✓ ! ✕가 범례). 두절·수신 끊김은 warning으로 분류한다 — 관측 불능 상태를 정상처럼 보이게 하지 않는다(FR-034). Timeline 불릿은 회색 눈금(상태 점과 다른 모양). `pnpm design:audit:color`가 화면당 색상 계열을 센다(≤ 3). 브랜드 마크는 색 예산 밖이다 — 셸(사이드바·앱바·인쇄)은 단색(currentColor), 두 톤(accent.fg)은 로그인·앱 아이콘·문서 표지에만(§13).
 5. **접근성은 게이트.** 본문 7:1, 보조 텍스트 4.5:1, 비텍스트 UI 3:1을 빌드가 검사한다. 통과하지 못한 토큰은 배포되지 않는다.
 6. **밀도는 역할에서 온다.** 관제·백오피스는 한 화면에 많은 행을 담고(Linear 밀도: 행 36 · 본문 13px), 현장 앱은 장갑 낀 손과 햇빛을 전제로 한다(터치 48 · 본문 16px).
 7. **코드가 원천.** Figma 파일은 참조였고 동기 대상이 아니다. 토큰·문서·CSS는 `packages/tokens/src`에서 생성되며, 디자인 변경은 소스 변경으로 기록된다.
@@ -782,7 +782,7 @@ cmp 층은 sys만 참조한다(ref 직접 참조 금지 — 검사로 강제). �
 | `cmp.table.row-selected` | #ebf1ff | #ebf1ff | {sys.color.bg.selected} |  |
 | `cmp.table.header-fg` | #616368 | #616368 | {sys.color.fg.muted} |  |
 
-## 8. 컴포넌트 카탈로그 (81)
+## 8. 컴포넌트 카탈로그 (82)
 
 이름 PascalCase · prop 어휘 고정: `variant`(형태) · `tone`(색 의도: accent/neutral/info/success/warning/danger/progress) · `size`(sm/md/lg) · 상태 boolean(`disabled` `loading` `selected` `invalid`). 플랫폼 both = 같은 Svelte 컴포넌트가 밀도 토큰으로 두 플랫폼을 소화.
 
@@ -819,6 +819,7 @@ cmp 층은 sys만 참조한다(ref 직접 참조 금지 — 검사로 강제). �
 |---|---|---|---|---|---|
 | **Badge** | both | CE Badge · Label/status | variant dot/count/pill · tone 6 · size sm/md |  | 숫자 99+ 처리 |
 | **Figure** | both | 신규 · 설치 구성도·증빙 사진 | aspect video/auto · caption · ref(data-ref) |  | alt 필수 · 캡션 1줄 · 식별자 없음 · 자산 URL은 prop(ui는 자산을 import하지 않는다) |
+| **Logo** | both | 신규 · 브랜드 마크(§13) | variant mark/glyph/lockup · color(두 톤 = accent.fg) · label(role=img, 없으면 aria-hidden) |  | 셸은 단색(currentColor) · 두 톤은 로그인·아이콘·문서 표지만 · 최소 mark 32 · glyph 16 · 여백 = 마크 높이 1/4 · 원천 logo.json(tools/brand) |
 | **StatusPill** | both | CE Label/status · Label/Map | tone(domain 매핑) · icon · size |  | 색+아이콘+텍스트 병행 |
 | **StatusDot** | both | CE Label/connect | tone · pulse(live) |  | 연결·라이브 표시 |
 | **Chip** | both | CE Chip | variant filter/keyword/status/removable/dropdown · count | selected/disabled |  |
@@ -1042,7 +1043,49 @@ PageHeader  제목 heading-xl · 부제 1줄(body-sm muted, ≤ 60자) · 메타
 | append-only · 수정·삭제되지 않습니다(증빙) | 추가만 됩니다 |
 | mock · 목업 | (표시하지 않음 — DemoBar) |
 
-## 13. 참조 시스템 대비 변경점
+## 13. 브랜드 마크
+
+브랜드 마크는 코드가 원천이다 — 패스는 `packages/tokens/src/logo.json`, 컴포넌트는 `Logo`(packages/ui), 정적 자산은 `pnpm brand:build`가 만든다. 서비스명은 확정 전(DISC-021, "BoomEyes"는 가칭)이라 워드마크는 스크립트로 재생성한다.
+
+### 13.1 구조 · 변형
+
+- **마크** = 정육각 조리개(꼭짓점 위 · 6엽 · 20° 비틀림 · 중앙 육각 구멍) = Eyes, 그 위를 지나는 **붐**(링크 2 · 관절 2 · 수직 링크 · 호스 팁) = Boom. 64×64 박스 안에 들어가고, 붐은 상단 좌측 변에 평행하게 띄워 올라가 우측으로 내려온다. 모든 형태는 채움 패스(스트로크 없음) — 크기에 따라 선 굵기가 변하지 않는다.
+- `mark`(≥ 32px · 6엽) · `glyph`(≤ 24px · 육각 링 + 중앙 원 + 붐, 엽 없음 — 사이드바 접힘·PWA 앱바·favicon) · `lockup`(마크 + 여백 16 + 워드마크, 317.67×64).
+- **워드마크**: DS 서체 Pretendard Bold(OFL) 아웃라인 · 대문자 높이 34/64 · GPOS kern 적용 · "Boom"은 ink, "Eyes"는 accent. 라이브 텍스트로 쓰지 않는다(Pretendard는 웹폰트로 로드되지 않아 기기마다 다르게 그려진다).
+
+### 13.2 색
+
+- **단색(셸)**: 사이드바 · PWA 앱바 · 쇼케이스 머리글 · 인쇄 머리글 — `currentColor`(`text-fg`). 브랜드 마크는 색 예산(§0-4) 밖이지만, 상태색과 나란히 놓이는 셸에서는 색을 쓰지 않는다.
+- **두 톤(브랜드 면)**: 로그인(B0-01 · A*-01) · 앱 아이콘 · favicon · README · 문서 표지 — ink `sys.color.fg.default` + 붐·"Eyes" `sys.color.accent.fg`(라이트 #0d32a1 · 다크 #9ebdff, 캔버스 대비 ≥ 10:1). `accent.solid`는 라이트에서 ink와 1.3:1이라 마크에는 쓰지 않는다.
+- **아이콘**(PWA 192/512/maskable · apple-touch): 바탕 `sys.color.accent.solid`(= manifest `theme_color`) · 마크 `sys.color.accent.on-solid` · 붐 `ref.color.accent.7`(바탕 대비 6.8:1). maskable은 마크 박스가 변의 56% 이하(안전 원 반지름 40% 안).
+- 새 토큰·램프는 없다 — "브랜드 전용 토큰은 없다"(§0)는 그대로 참이다. `pnpm design:audit:color`는 `fill-*`을 세지 않는다.
+
+### 13.3 크기 · 여백
+
+| 자리 | 변형 | 크기 유틸리티 |
+|---|---|---|
+| 웹 사이드바(펼침) | lockup 단색 | `h-size-avatar-md w-auto` (compact 32) |
+| 웹 사이드바(접힘 56) | glyph 단색 — 토글과 세로 적층 | `size-size-icon-xl` (compact 24) |
+| PWA 앱바 | glyph 단색(장식, 제목 h1 옆) | `size-size-icon-lg` (24) |
+| 웹 로그인 | lockup 두 톤 | `h-size-avatar-lg w-auto` (compact 40) |
+| PWA 로그인 | lockup 두 톤 | `h-size-avatar-md w-auto` (40) |
+| 인쇄 머리글(B2-04) | lockup 단색 · `print:` 전용 | `h-size-icon-lg w-auto` |
+
+최소 크기 mark 32 · glyph 16 · lockup 높이 24. 여백(clear space)은 마크 높이의 1/4 — lockup의 마크·워드마크 사이 간격과 같다.
+
+### 13.4 접근성
+
+`label`이 있으면 `role="img" aria-label`(로그인), 없으면 `aria-hidden`(인접 텍스트·링크가 이름을 갖는다). 사이드바 마크는 링크 `aria-label="BoomEyes 홈"` 안에 들어간다. e2e 훅은 `data-logo`(변형) · `data-color`(두 톤).
+
+### 13.5 금지
+
+색 변경(상태색·임의 색) · 회전 · 붐 분리 · 엽 수 변경 · 라이브 텍스트 워드마크 · 그림자·외곽선 추가 · 마크를 아이콘 버튼으로 쓰기.
+
+### 13.6 재생성
+
+`pnpm brand:generate`(`tools/brand/wordmark.py` Pretendard Bold → `tools/brand/mark.mjs`) → `pnpm tokens:build`(이 문서) → `pnpm brand:build`(`tools/brand/build.mjs`, 저장소의 Chromium): `apps/{web,pwa}/static/favicon.{svg,png}` · `apps/pwa/static/icons/{icon-192,icon-512,icon-512-maskable,apple-touch-icon}.png` · `docs/brand/lockup{,-dark,-on-navy}.svg`. 색은 `dist/DY.tokens.css`에서 읽으므로 accent 토큰이 바뀌면 다시 실행한다. PNG는 verify의 생성물 diff 게이트 밖(래스터 환경 차이). 서비스명이 확정되면 `--text`만 바꿔 재생성한다.
+
+## 14. 참조 시스템 대비 변경점
 
 | 축 | Figma [DY] Crane Eyes(참조) | CraneEyes 백오피스 코드(참조) | 이 시스템 |
 |---|---|---|---|
@@ -1063,7 +1106,7 @@ PageHeader  제목 heading-xl · 부제 1줄(body-sm muted, ≤ 60자) · 메타
 
 Linear에서 취한 것: 밀도(행 36 · 13px), 중립 우선 팔레트와 절제된 액센트, 3열 셸과 인스펙터, 커맨드 메뉴, 반투명 분리선, 빠른 모션, 키보드 우선. 취하지 않은 것: 다크 기본(관제는 light 기본), 보라 액센트, 글꼴(Inter → Pretendard).
 
-## 14. 거버넌스
+## 15. 거버넌스
 
 | 항목 | 규칙 |
 |---|---|

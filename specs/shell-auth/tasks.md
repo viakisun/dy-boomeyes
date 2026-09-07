@@ -10,5 +10,6 @@
 | 6 | `tools/capture` — states 매니페스트 생성 · 뷰포트·고정 시각·클립 | `b0-01-login-b1..b4` `a1-01-login` … PNG · 시각 회귀 기준선 | QA §3 |
 | 6b | PWA 설치 — manifest · 아이콘 · service worker · app.html 메타 (W1) | AC-7 · e2e `pwa-install`(manifest 응답·아이콘·SW 등록·오프라인 새로고침 셸) | A1-01 A2-01 FR-001 |
 | 7 | 프리뷰 배포(S3+CloudFront, PR 경로) · CI에 capture·e2e 추가 | 프리뷰 URL에서 AC-1 재현 — CI `e2e` 잡(e2e 19 · capture · 아티팩트) 추가됨, 프리뷰는 AWS 계정(DISC-006) 후 | ADR-007 |
+| 8 | 브랜드 마크(W2.6 L) — `Logo` mark/glyph/lockup · 사이드바 접힘 글리프 · 로그인 두 톤 · favicon·PWA 아이콘 `brand:build` · DY-design §13 | AC-8 — e2e `web-brand`·`pwa-brand`·`pwa-install`(favicon·아이콘 200) · 기준선 41장 재등록 | DISC-021 |
 
 커밋 예: `feat(shell): WebShell·PwaShell 골격 — Refs: SCR-B0-01 FR-024`

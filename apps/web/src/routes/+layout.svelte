@@ -12,6 +12,7 @@
     IconLogOut,
     IconMoon,
     IconSun,
+    Logo,
     Toast,
     WebShell,
     applyTheme,
@@ -53,7 +54,12 @@
   {@render children()}
 {:else}
   <WebShell {groups} {crumbs}>
-    {#snippet brand()}<a href={resolve('/')} class="text-heading-sm text-accent-fg-strong">BoomEyes</a>{/snippet}
+    {#snippet brand(collapsed)}<a href={resolve('/')} aria-label="BoomEyes 홈" class="text-fg inline-flex items-center"
+        ><Logo
+          variant={collapsed ? 'glyph' : 'lockup'}
+          class={collapsed ? 'size-size-icon-xl' : 'h-size-avatar-md w-auto'}
+        /></a
+      >{/snippet}
     {#snippet actions()}
       <span class="text-body-sm text-fg-muted">{session.user?.display} · {session.user?.org}</span>
       <IconButton label={dark ? '라이트 모드' : '다크 모드'} onclick={toggleTheme}>

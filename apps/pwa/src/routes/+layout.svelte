@@ -15,6 +15,7 @@
     IconBell,
     IconButton,
     IconLogOut,
+    Logo,
     PwaShell,
     Toast,
     applyTheme,
@@ -114,6 +115,7 @@
     syncing={box.syncing}
     onsync={() => void (box.failed ? data.outbox.retry() : data.outbox.sync())}
   >
+    {#snippet logo()}<Logo variant="glyph" class="size-size-icon-lg" />{/snippet}
     {#snippet bar()}
       {#if data.scene}
         <DemoBar

@@ -26,6 +26,7 @@ fr: [FR-001, FR-024]
 - **AC-5** Given `?state=<id>` 또는 `?capture=1` When 로드 Then `screens.yaml` states의 픽스처가 적용되고 시각은 `meta.fixed_clock`으로 고정되며 라우트 루트에 `data-scr`가 있다 [FR-001]
 - **AC-6** Given `data-theme="dark"` When 렌더 Then 두 셸이 다크 토큰으로 렌더된다(대비 게이트 통과) [FR-024]
 - **AC-7** Given PWA 빌드 When 브라우저가 로드하면 Then `manifest.webmanifest`(name · icons 192/512/maskable · display standalone · theme_color = 액센트 토큰 값)가 링크되고 서비스 워커가 등록되어, 오프라인 새로고침에도 앱 셸(로그인 화면)이 렌더된다 [FR-001, FR-024]
+- **AC-8** Given 두 셸과 로그인 화면 When 렌더 Then 셸의 브랜드는 단색 `Logo`(웹 사이드바 펼침 = lockup, 접힘 = glyph, 링크 이름 "BoomEyes 홈" · PWA 앱바 = glyph 장식)이고, 로그인은 두 톤 lockup(접근 가능한 이름 "BoomEyes")이며, `favicon.svg`·PWA 아이콘 3·apple-touch-icon이 200으로 응답한다 [FR-001, FR-024]
 
 ## 상태 픽스처
 B0-01: `login-b1..b4` · `login-maint`(역할 카드 5) · 앱 로그인: `login`. 로그인 오류 상태는 목업 범위 밖(실인증 없음, DISC-020·023).

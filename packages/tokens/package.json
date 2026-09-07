@@ -7,7 +7,8 @@
   "exports": {
     "./css": "./dist/DY.tokens.css",
     "./theme": "./dist/DY.theme.css",
-    "./json": "./dist/DY.tokens.json"
+    "./json": "./dist/DY.tokens.json",
+    "./logo": "./src/logo.json"
   },
   "scripts": {
     "build": "node scripts/build.mjs",

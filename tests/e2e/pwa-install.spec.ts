@@ -17,6 +17,8 @@ test('[A1-01] manifest 링크·필드(name · icons 3 · standalone · theme_col
   expect(m.theme_color).toBe('#0d2877');
   expect(m.icons).toHaveLength(3);
   for (const icon of m.icons) expect((await request.get(icon.src)).ok()).toBe(true);
+  for (const href of ['/favicon.svg', '/favicon.png', '/icons/apple-touch-icon.png'])
+    expect((await request.get(href)).ok()).toBe(true); // brand:build 산출물(§13) — SW addAll 은 하나라도 404면 설치 실패
   await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute('content', '#0d2877');
 });
 
