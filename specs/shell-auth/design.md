@@ -20,7 +20,7 @@
 - 사이드바 항목 = `screens.yaml`에서 역할·표면별 wave ≤ current 화면(생성 nav). 하단 내비 세트: driver(오늘·내 장비·서류·메뉴) · site-safety(업무함·관제·기록·메뉴) · hq-safety(현장·업무·기록) · owner(현황·요청·운전자·계약).
 
 ## 설치(PWA)
-- `static/manifest.webmanifest` + `static/icons/`(ffmpeg 합성 단색 아이콘 — 브랜드 확정 DISC-021 전 자리) · `src/service-worker.ts`(SvelteKit `$service-worker`: `build`·`files`·셸 `/` 프리캐시, 내비게이션 network-first → 오프라인은 캐시된 셸, 외부(CARTO)는 통과). mock 데이터는 캐시하지 않는다(세션 메모리). 개발 서버에서는 등록되지 않고 preview·배포 빌드에서만 등록. PWA는 `paths.relative: false`. 빌드된 폴백 `index.html`은 원래 절대 경로(`/_app/…`, SvelteKit SPA 폴백 규칙)지만, `vite preview`는 `/` 응답을 상대 경로(`./_app/…`)로 렌더해 SW가 그 응답을 캐시하면 `/a2/login` 오프라인에서 `/a2/_app/…`을 찾아 부팅이 실패했다(프로브 `probe-sw.mjs`로 확인). 설정은 preview와 배포(파일 서빙)를 같은 절대 경로로 맞춰 e2e가 배포 동작을 대표하게 한다.
+- `static/manifest.webmanifest` + `static/icons/`(`pnpm brand:build` 산출 — 마크 원천 `packages/tokens/src/logo.json` · 바탕 accent.solid · DY-design §13; 서비스명 확정 DISC-021 시 워드마크만 재생성) · `src/service-worker.ts`(SvelteKit `$service-worker`: `build`·`files`·셸 `/` 프리캐시, 내비게이션 network-first → 오프라인은 캐시된 셸, 외부(CARTO)는 통과). mock 데이터는 캐시하지 않는다(세션 메모리). 개발 서버에서는 등록되지 않고 preview·배포 빌드에서만 등록. PWA는 `paths.relative: false`. 빌드된 폴백 `index.html`은 원래 절대 경로(`/_app/…`, SvelteKit SPA 폴백 규칙)지만, `vite preview`는 `/` 응답을 상대 경로(`./_app/…`)로 렌더해 SW가 그 응답을 캐시하면 `/a2/login` 오프라인에서 `/a2/_app/…`을 찾아 부팅이 실패했다(프로브 `probe-sw.mjs`로 확인). 설정은 preview와 배포(파일 서빙)를 같은 절대 경로로 맞춰 e2e가 배포 동작을 대표하게 한다.
 - SW 갱신: `skipWaiting`+`clients.claim`으로 새 빌드가 열린 탭을 즉시 장악하고 구 캐시를 지운다 — 개발 중 리빌드 후엔 새로고침 1~2회가 필요하고, 실배포(tasks 7)에서 구 해시 자산을 즉시 지우면 열린 탭의 지연 로딩이 404가 날 수 있어 배포 절차에 기록한다.
 
 ## 오프라인 · 오류 · 빈 상태

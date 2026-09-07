@@ -162,6 +162,15 @@
     "note": "숫자 99+ 처리"
   },
   {
+    "name": "Logo",
+    "family": "Display",
+    "platform": "both",
+    "ref": "신규 · 브랜드 마크(§13)",
+    "variants": "variant mark/glyph/lockup · color(두 톤 = accent.fg) · label(role=img, 없으면 aria-hidden)",
+    "states": "",
+    "note": "셸은 단색(currentColor) · 두 톤은 로그인·아이콘·문서 표지만 · 최소 mark 32 · glyph 16 · 여백 = 마크 높이 1/4 · 원천 logo.json(tools/brand)"
+  },
+  {
     "name": "StatusPill",
     "family": "Display",
     "platform": "both",

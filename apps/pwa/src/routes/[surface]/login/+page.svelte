@@ -4,7 +4,7 @@
   import { page } from '$app/state';
   import { resolve } from '$app/paths';
   import { APP_HOME_OF, SCREENS, type RoleId, type User } from '@boomeyes/domain';
-  import { Button, Card } from '@boomeyes/ui';
+  import { Button, Card, Logo } from '@boomeyes/ui';
   import { login } from '$lib/session.svelte';
   let { data } = $props();
   const ROLE_OF: Record<string, { role: RoleId; title: string; desc: string }> = {
@@ -34,7 +34,9 @@
   data-capture-frame
 >
   <div class="gap-stack-xs flex flex-col">
-    <p class="text-label-lg text-accent-fg">DY · BoomEyes(가칭)</p>
+    <div class="mb-stack-xs" data-ref="DISC-021">
+      <Logo variant="lockup" color label="BoomEyes" class="h-size-avatar-md w-auto" />
+    </div>
     <h1 class="text-display-md">{meta?.title ?? '앱'} 로그인</h1>
     <p class="text-body-md text-fg-muted">{meta?.desc}</p>
   </div>
