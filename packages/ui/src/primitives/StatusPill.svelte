@@ -26,7 +26,7 @@
 
 <span
   class={cx(
-    'gap-inline-xs inline-flex items-center font-medium whitespace-nowrap',
+    'gap-inline-xs inline-flex items-center self-start font-medium whitespace-nowrap',
     quiet
       ? cx(size === 'sm' ? 'text-label-sm' : 'text-label-md', 'text-fg')
       : cx(

@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { HTMLInputAttributes } from 'svelte/elements';
+  import Check from '@lucide/svelte/icons/check';
   import { cx, FOCUS } from '../lib/cx';
   let {
     checked = $bindable(false),
@@ -17,15 +18,22 @@
     cls,
   )}
 >
-  <input
-    type="checkbox"
-    bind:checked
-    {indeterminate}
-    class={cx(
-      'size-size-icon-lg rounded-mark border-border-emphasis bg-surface accent-accent checked:border-accent checked:bg-accent shrink-0 cursor-pointer appearance-none border',
-      FOCUS,
-    )}
-    {...rest}
-  />
+  <span class="size-size-icon-lg relative inline-flex shrink-0">
+    <input
+      type="checkbox"
+      bind:checked
+      {indeterminate}
+      class={cx(
+        'peer rounded-mark border-border-emphasis bg-surface accent-accent checked:border-accent checked:bg-accent size-full cursor-pointer appearance-none border',
+        FOCUS,
+      )}
+      {...rest}
+    />
+    <Check
+      class="text-accent-on-solid pointer-events-none absolute inset-0 hidden size-full peer-checked:block"
+      strokeWidth={3}
+      aria-hidden="true"
+    />
+  </span>
   {#if label}<span>{label}</span>{/if}
 </label>
