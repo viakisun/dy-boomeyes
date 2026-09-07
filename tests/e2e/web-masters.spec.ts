@@ -54,6 +54,8 @@ test('[B4-03] 현장 탭: 기간·안전관리자 편집 저장 · 현장 등록
 
   await page.getByRole('tab', { name: '프로파일' }).click();
   await expect(page).toHaveURL(/tab=profiles/);
+  await expect(page.locator('figure img[alt*="설치 구성도"]')).toHaveCount(1); // 장착 위치(ENT-04) · 설치 구성도(참고자료 v5.0 §8)
+  await expect(page.getByRole('complementary', { name: '프로파일 요약' })).toContainText('본체·1번 관절 인근');
   await expect(page.getByLabel('현장')).toHaveValue('SITE-001');
   const wall = page.locator('[data-wall] button[aria-label*="카메라"]');
   await expect(wall).toHaveCount(6); // P-SD 2채널 × 3대

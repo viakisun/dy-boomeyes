@@ -12,9 +12,11 @@ export const load: PageLoad = async ({ parent, params, url }) => {
     api.sites({ role: session.user?.role ?? ('site-safety' as const) }),
     c.docId ? api.doc(c.docId) : Promise.resolve(undefined),
   ]);
+  const event = c.eventId ? await api.event(c.eventId) : undefined; // 영상 확보 상태(ENT-19) — 업무 상태와 별개
   // A1-08 완료 처리 시트 — 같은 경로의 모달형 화면(?sheet=complete, screens.yaml)
   return {
     task: c,
+    event,
     device,
     site: sites.find((s) => s.id === c.siteId),
     sheet: url.searchParams.get('sheet') === 'complete',

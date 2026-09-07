@@ -203,6 +203,11 @@ export const FIXTURES: Record<string, Fixture> = {
   'A2-09:default': (db) => db,
   // event-replay(W2 B10): EV-001 시드 그대로
   'B1-08:default': (db) => db,
+  // 영상 확보 상태(ENT-19) — 업로드 대기(사건 상태는 그대로)
+  'B1-08:pending': (db) => ({
+    ...db,
+    events: db.events.map((e) => (e.id === 'EV-001' ? { ...e, evidence: 'pending' as const } : e)),
+  }),
   // owner-showcase(W2 B11): 시드 집계 그대로(무사고 D+ = 현장 개설일 기준)
   'B1-07:show': (db) => db,
 };

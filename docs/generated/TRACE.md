@@ -9,7 +9,7 @@
 | FR 0건 화면(고아) | 0 |
 | 화면 0건 FR | 0 |
 | 현재 웨이브(2) 이하 spec 없는 화면 | 0 |
-| 참조 수 | 1355 |
+| 참조 수 | 1357 |
 | 검사 오류 | 0 |
 
 ## FR → 화면 · IF · ACC · spec
@@ -48,7 +48,7 @@
 | `FR-030` | 바디캠 영상 관리 — 세션·업로드·재생·태그·보존 홀드·열람 로그 | 1 | 옵션 | 옵션 | B3-02 A1-04 | IF-016 IF-017 | — | demo-scripts video-basics |
 | `FR-031` | 개인정보 절차 기능 — 동의 상태·촬영 표시·보존/홀드·열람 로그·마스킹 | 1 | 옵션 | 옵션 | A2-02 B4-03 B0-01 | IF-009 | — | demo-scripts driver-daily notifications sites-assets-leases shell-auth |
 | `FR-032` | 마모·교체 부품 생애주기 — 등록·장착·누적·점검·교체·폐기·재고·발주 | 2 | 제안 | 2단계 | B4-07 B4-08 A1-11 A2-09 B3-07 | IF-009 IF-019 | — | equipment-parts |
-| `FR-033` | 이벤트 복기 — event_id·공통 시각 기준 4소스 동기 재생(일반 CCTV·AI CCTV·바디캠·CPB 상태/부품 이력) | 2 | 제안 | 2단계 | B1-08 | IF-008 IF-017 IF-018 | — | event-replay |
+| `FR-033` | 이벤트 복기 — event_id·공통 시각 기준 4소스 동기 재생(일반 CCTV·AI CCTV·바디캠·CPB 상태/부품 이력) | 2 | 제안 | 2단계 | B1-08 A1-03 B1-03 | IF-008 IF-017 IF-018 | — | event-replay demo-scripts documents task-escalation |
 | `FR-034` | 카메라 헬스·AI 판단 불가 표시 — 정지화면·흐림·가림·수신 끊김 시 정상 표시 금지, 복구 후 누락분 재전송 표시 | 1 | 기본 | 반영 | B1-02 B1-02M A1-04 | IF-006 IF-010 IF-018 | — | control-dashboard demo-scripts video-basics |
 | `FR-035` | 부품 태그 스캔 — QR/RFID로 부품 ID 식별 후 점검·교체 입력 | 2 | 제안 | 2단계 | A1-11 A2-09 | IF-019 | — | equipment-parts |
 | `FR-036` | 시나리오별 알림 등급 — 정상 타설 무알림 · 호스 주변 인원 접근 즉시 · 전도/무동작 고우선 · 배관·호스 이상 긴급 · 영상 장애 알림 | 2 | 제안 | 2단계 | B4-05 B1-02 A1-05 | IF-010 IF-014 IF-015 | — | admin-protocol-rules control-dashboard demo-scripts video-basics |

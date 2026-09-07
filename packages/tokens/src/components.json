@@ -162,6 +162,15 @@
     "note": "숫자 99+ 처리"
   },
   {
+    "name": "Figure",
+    "family": "Display",
+    "platform": "both",
+    "ref": "신규 · 설치 구성도·증빙 사진",
+    "variants": "aspect video/auto · caption · ref(data-ref)",
+    "states": "",
+    "note": "alt 필수 · 캡션 1줄 · 식별자 없음 · 자산 URL은 prop(ui는 자산을 import하지 않는다)"
+  },
+  {
     "name": "Logo",
     "family": "Display",
     "platform": "both",

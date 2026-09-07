@@ -1037,6 +1037,8 @@ screens:
   states:
   - id: default
     name: 기본
+  - id: pending
+    name: 영상 업로드 대기
   nav: []
   trace:
     task:

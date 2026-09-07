@@ -25,6 +25,7 @@ test('[A1-03] C-105 접수 → in-progress · 이력 · 완료 확인 · 정비 
   await page.getByRole('button', { name: '입장' }).click();
   await page.locator('ul[aria-label="업무"] li a').first().click();
   await expect(page).toHaveURL(/\/a1\/inbox\/C-105$/);
+  await expect(page.locator('[data-evidence="partial"]')).toContainText('영상 일부 확보'); // EV-001 연결(ENT-19)
   await expect(page.locator(`[data-scr="${SCR['A1-03']}"]`)).toBeVisible();
   await expect(page.getByText('E-021', { exact: false }).first()).toBeVisible();
   await page.getByRole('button', { name: '정비 담당 호출' }).click();

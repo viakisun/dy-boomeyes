@@ -12,6 +12,8 @@
     DocumentCard,
     EQUIPMENT_TONE,
     ERROR_CODE_LABEL,
+    EVIDENCE_LABEL,
+    EVIDENCE_TONE,
     SEVERITY_LABEL,
     SEVERITY_TONE,
     StatusPill,
@@ -96,6 +98,13 @@
       >
       <span class={cx('tabular-nums', due.overdue && 'text-danger-fg font-semibold')}>기한 {due.label}</span>
       <span>{data.site?.name ?? data.task.siteId}</span>
+      {#if data.event}<span data-evidence={data.event.evidence} class="inline-flex items-center"
+          ><StatusPill
+            tone={EVIDENCE_TONE[data.event.evidence]}
+            label="영상 {EVIDENCE_LABEL[data.event.evidence]}"
+            size="sm"
+          /></span
+        >{/if}
     </div>
   </header>
 

@@ -37,6 +37,7 @@ export { default as TaskCard } from './primitives/TaskCard.svelte';
 export { default as DocumentCard } from './primitives/DocumentCard.svelte';
 export { default as EquipmentCard } from './primitives/EquipmentCard.svelte';
 export { default as Timeline } from './primitives/Timeline.svelte';
+export { default as Figure } from './primitives/Figure.svelte';
 export { default as Logo } from './brand/Logo.svelte';
 export { default as EscalationTimer } from './primitives/EscalationTimer.svelte';
 export { default as CheckinCard } from './primitives/CheckinCard.svelte';
@@ -72,6 +73,8 @@ export {
   PART_GROUP_LABEL,
   PART_EVENT_LABEL,
   NAV_SHORT_LABEL,
+  EVIDENCE_LABEL,
+  EVIDENCE_TONE,
 } from './lib/labels';
 export { fmtDateTime, fmtTime, dueLabel, elapsedLabel } from './lib/format';
 export { connectivity } from './lib/connectivity.svelte';

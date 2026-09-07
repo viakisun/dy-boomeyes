@@ -10,6 +10,7 @@
     EQUIPMENT_LABEL,
     EQUIPMENT_TONE,
     EmptyState,
+    Figure,
     Inspector,
     KeyValueList,
     PageHeader,
@@ -22,7 +23,7 @@
     toast,
     type Column,
   } from '@boomeyes/ui';
-  import { CameraWall } from '@boomeyes/video';
+  import { CameraWall, MOUNT_LABEL, STILL } from '@boomeyes/video';
   let { data } = $props();
   const TABS = [
     { id: 'devices', label: '장비' },
@@ -233,6 +234,12 @@
           onapply={(p) =>
             run(`프로파일 — ${profileSite?.name} ${p}`, () => data.api.setSiteProfile(profileSite!.id, p))}
         />
+        <Figure
+          src={STILL.front}
+          alt="설치 구성도 — 붐 위 카메라 2대의 시야: 일반 카메라는 본체·1번 관절 인근, AI 카메라는 마지막 강체·경사 시야"
+          caption="설치 구성도 · 일반 카메라 {MOUNT_LABEL['body-joint1']} · AI 카메라 {MOUNT_LABEL['last-rigid']}"
+          ref="DISC-040 DISC-004"
+        />
         <CameraWall
           cameras={data.cameras.filter((c) => profileDevices.some((d) => d.id === c.deviceId))}
           devices={profileDevices}
@@ -323,6 +330,7 @@
             { label: '이벤트·라이브', value: `${flags.eventRoute} · ${flags.liveRoute}` },
             { label: '바디캠(AX-6)', value: flags.bodycam ?? '없음' },
             { label: '장비', value: `${profileDevices.length}대` },
+            { label: '장착 위치', value: `일반 ${MOUNT_LABEL['body-joint1']} · AI ${MOUNT_LABEL['last-rigid']}` },
           ]}
         />
         <p class="text-body-sm text-fg-muted">

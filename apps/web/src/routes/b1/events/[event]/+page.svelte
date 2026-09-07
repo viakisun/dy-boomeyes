@@ -4,6 +4,8 @@
   import { SCR, type ReplayLane, type ReplaySource } from '@boomeyes/domain';
   import {
     Badge,
+    EVIDENCE_LABEL,
+    EVIDENCE_TONE,
     EmptyState,
     KeyValueList,
     PageHeader,
@@ -73,6 +75,9 @@
       ref="DISC-039 NFR-014"
     >
       {#snippet actions()}
+        <span data-evidence={ev.evidence}
+          ><StatusPill tone={EVIDENCE_TONE[ev.evidence]} label="영상 {EVIDENCE_LABEL[ev.evidence]}" size="sm" /></span
+        >
         {#if ev.locked}<Badge tone="danger" variant="solid" ref="NFR-015">원본 보존</Badge>{/if}
       {/snippet}
     </PageHeader>
@@ -100,6 +105,10 @@
               : (ev.caseId ?? '없음'),
           },
           { label: '보존', value: ev.locked ? '원본 보존 — 복기 완료 전에는 삭제되지 않습니다' : '잠금 없음' },
+          {
+            label: '영상 확보',
+            value: `${EVIDENCE_LABEL[ev.evidence]}${ev.evidence === 'partial' ? ' — 일반·AI 세그먼트 있음 · 바디캠 없음' : ev.evidence === 'pending' ? ' — 현장 업로드 뒤 갱신' : ''}`,
+          },
           { label: '동기', value: '공통 시각 오차 ±1초 목표 — 검증 준비 중', muted: true },
         ]}
       />

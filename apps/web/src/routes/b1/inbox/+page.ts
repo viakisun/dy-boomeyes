@@ -8,5 +8,6 @@ export const load: PageLoad = async ({ parent, url }) => {
   const [requests, sites, users] = await Promise.all([api.requests(scope), api.sites(scope), api.users()]);
   const caseId = url.searchParams.get('case');
   const focus = caseId ? await api.case(caseId) : undefined;
-  return { requests, sites, users, focus, req: url.searchParams.get('req') };
+  const focusEvent = focus?.eventId ? await api.event(focus.eventId) : undefined; // 영상 확보 상태(ENT-19)
+  return { requests, sites, users, focus, focusEvent, req: url.searchParams.get('req') };
 };
