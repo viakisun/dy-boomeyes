@@ -14,7 +14,7 @@ fr: [FR-004, FR-005, FR-034, FR-028, FR-030, FR-002, FR-007, FR-016, FR-022, FR-
 | 코드 | 이름 | 라우트 | 상태 픽스처 |
 |---|---|---|---|
 | A1-04 | 현장 모니터 | `/a1/monitor` | `monitor` |
-| A1-05 | 장비 상세 | `/a1/monitor/[device]` | `dev` |
+| A1-05 | 장비 상세 | `/a1/monitor/[device]` | `dev` · `plite` · `stale` |
 | B1-02M | 카메라 영상 모달 | `/b1/dash?cam=[camera]` | `cam` |
 | A3-04 | 장비 열람(본사) | `/a3/sites/[site]/devices` | `dev` |
 | B2-03 | 현장 상세(본사 웹) | `/b2/sites/[site]` | `site` |
@@ -36,7 +36,7 @@ fr: [FR-004, FR-005, FR-034, FR-028, FR-030, FR-002, FR-007, FR-016, FR-022, FR-
 - **AC-13** Given 현장 안전관리자 When A1-04(또는 A1-05)의 "신고" → 시트(유형 · 설명 필수 · 카메라 · 영상 시점 저장) → 신고 Then 업무(현장 신고 · new)와 알림이 생겨 A1-02 업무함에 보이고 업무 이력에 '신고'가 남는다 [FR-038, FR-008]
 
 ## 상태 픽스처
-`screens.yaml` A1-04 `monitor` `plite` · A1-05 `dev`(상태 탭) `plite`(영상 탭) · B1-02M `cam` · A3-04 `dev` · B2-03 `site`. 픽스처 ID: CPB-003 · CAM-3-1(일반) · CAM-3-2(AI) · CAM-2-2(AI 판단 불가) · DOC-001(D-27). `monitor`는 CAM-1-1을 offline, CAM-2-2를 ai-unavailable로 변형한다.
+`screens.yaml` A1-04 `monitor` `plite` · A1-05 `dev`(상태 탭) `plite`(영상 탭) `stale`(상태 탭 — CPB-003 25분 전 수신 · 단선 미연동) · B1-02M `cam` · A3-04 `dev` · B2-03 `site`. 픽스처 ID: CPB-003 · CAM-3-1(일반) · CAM-3-2(AI) · CAM-2-2(AI 판단 불가) · DOC-001(D-27). `monitor`는 CAM-1-1을 offline, CAM-2-2를 ai-unavailable로 변형한다.
 
 ## 비범위
 HLS/WebRTC 실스트림(IF-006 L1~L3, W3) · 저장 영상 실재생(목록·타임라인 자리만, W4) · 바디캠 실연동(W4) · 본사·건설사 영상 실스트림(W3).

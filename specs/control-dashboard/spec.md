@@ -24,6 +24,7 @@ fr: [FR-002, FR-003, FR-004, FR-006, FR-011, FR-034]
 - **AC-5** Given 타일 클릭 When 모달(B1-02M) 열림 Then 채널 칩 2(일반/AI)·라이브/스냅샷 전환·녹화 배지·저장 소스 탭(서버/SD/NVR — 프로파일별)·bbox 오버레이(AI 채널 클립)가 있고 Esc로 닫힌다 [FR-004, FR-005]
 - **AC-6** Given `?state=cam` When 캡처 Then `[data-capture-dialog]`가 모달을 클립하고 `b1-02m-cam.png`가 시각 회귀 기준과 일치한다 [FR-004]
 - **AC-7** Given `data-theme="dark"` When 카메라 월만 wall 강제 Then 타일 영역은 다크, 나머지 대시보드는 현재 테마다 [FR-004]
+- **AC-8** Given 인스펙터에서 장비 선택 When 두절 장비(CPB-004) Then TelemetryStrip 수신 상태 줄이 "두절 · 마지막 HH:MM"(warning)이고 마지막 값(전압·단선·고장코드)을 남기며, 연동 안 된 계측(CPB-005 단선)은 "미연동"으로 보인다 — GPS·수송관·필터 행은 그대로 [FR-034, FR-002]
 
 ## 상태 픽스처
 `screens.yaml` B1-02 states(`dash` `show` …) · B1-02M `cam`. 추가 제안: `dash-quiet`(이상 0건) · `dash-offline`(CPB-004 두절) — `/ssot`로 등록 후 사용.
