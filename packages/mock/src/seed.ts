@@ -135,7 +135,7 @@ export function seed(): Db {
       at: t(20_000),
     }),
     dev(4, 'SITE-002', 'offline', 36.4241, 127.392, { lte: 'lost', at: t(2 * H + 5 * MIN) }),
-    dev(5, 'SITE-002', 'maintenance', 36.4236, 127.3912, { boomAngle: 0 }),
+    dev(5, 'SITE-002', 'maintenance', 36.4236, 127.3912, { boomAngle: 0, unlinked: ['harness'] }), // 정비 중 — 단선 센서 미연동(FR-034 표기 예)
   ];
   const cameras: Camera[] = devices.flatMap((d) => [
     {

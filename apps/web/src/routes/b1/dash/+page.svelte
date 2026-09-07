@@ -19,6 +19,7 @@
     PageHeader,
     DataTable,
     StatGroup,
+    TelemetryStrip,
     type Column,
   } from '@boomeyes/ui';
   import { CameraWall, SOURCE_LABEL, VideoPlayer, visibleIn } from '@boomeyes/video';
@@ -228,21 +229,14 @@
       <dl class="gap-stack-xs text-body-sm grid grid-cols-2">
         <dt class="text-fg-muted">현장</dt>
         <dd>{site(selected)?.name}</dd>
-        <dt class="text-fg-muted">전압</dt>
-        <dd class={cx('tabular-nums', selected.telemetry.voltageStatus === 'abnormal' && 'text-danger-fg')}>
-          {selected.telemetry.voltage}V · {selected.telemetry.voltageStatus === 'abnormal' ? '이상' : '정상'}
-        </dd>
-        <dt class="text-fg-muted">단선</dt>
-        <dd>{selected.telemetry.harness === 'ok' ? '정상' : '단선'}</dd>
-        <dt class="text-fg-muted">LTE · GPS</dt>
-        <dd>{selected.telemetry.lte} · {selected.telemetry.gpsFix ? 'fix' : 'no fix'}</dd>
+        <dt class="text-fg-muted">GPS</dt>
+        <dd>{selected.telemetry.gpsFix ? 'fix' : 'no fix'}</dd>
         <dt class="text-fg-muted">수송관 · 필터</dt>
         <dd class="tabular-nums">
           {Math.round(selected.telemetry.pipeRatio * 100)}% · {Math.round(selected.telemetry.filterRatio * 100)}%
         </dd>
-        <dt class="text-fg-muted">고장코드</dt>
-        <dd class="font-mono">{selected.telemetry.errorCode ?? '—'}</dd>
       </dl>
+      <TelemetryStrip telemetry={selected.telemetry} now={data.clock.now()} class="mt-stack-sm" />
       {#if data.cases.find((c) => c.deviceId === selected.id && c.state !== 'done')}
         {@const c = data.cases.find((x) => x.deviceId === selected.id && x.state !== 'done')}
         <div class="rounded-card border-border bg-surface-sunken p-inset-md text-body-sm border">

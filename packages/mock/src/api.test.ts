@@ -1,5 +1,14 @@
 import { describe, expect, it } from 'vitest';
-import { INSPECTION_ITEMS, canAccess, profileAxes, profileFlags, maskName, maskPhone } from '@boomeyes/domain';
+import {
+  INSPECTION_ITEMS,
+  TELEMETRY_STALE_MS,
+  canAccess,
+  profileAxes,
+  profileFlags,
+  maskName,
+  maskPhone,
+  telemetryStatus,
+} from '@boomeyes/domain';
 import { bootMock, clock, DAY, H, MIN } from './index';
 
 describe('[FR-008] MockApi 업무 흐름', () => {
@@ -549,5 +558,17 @@ describe('[FR-033] 영상 확보 상태(ENT-19) · 연결 이벤트 · [FR-004] 
     expect((await api.case('C-105'))?.eventId).toBe('EV-001');
     const cams = await api.cameras();
     expect(cams.every((c) => c.mount === (c.kind === 'ai' ? 'last-rigid' : 'body-joint1'))).toBe(true);
+  });
+});
+
+describe('[FR-034] 텔레메트리 수신 상태(NFR-009 기준안 10분)', () => {
+  it('임계 안 = ok · 초과 = stale · LTE 두절 = offline · CPB-005 단선 미연동', async () => {
+    const now = new Date('2026-07-03T10:42:00+09:00');
+    const at = (msAgo: number) => new Date(now.getTime() - msAgo).toISOString();
+    expect(telemetryStatus({ at: at(30_000), lte: 'connected' }, now)).toBe('ok');
+    expect(telemetryStatus({ at: at(TELEMETRY_STALE_MS + 1), lte: 'connected' }, now)).toBe('stale');
+    expect(telemetryStatus({ at: at(1_000), lte: 'lost' }, now)).toBe('offline');
+    const api = bootMock({ capture: true });
+    expect((await api.device('CPB-005'))?.telemetry.unlinked).toEqual(['harness']);
   });
 });

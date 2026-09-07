@@ -24,6 +24,15 @@ export const FIXTURES: Record<string, Fixture> = {
     ),
   }),
   'A1-05:dev': (db) => db,
+  // 수신 임계 초과(NFR-009 기준안 10분) + 단선 미연동 — '미수신 · 마지막 HH:MM' · '미연동' 표기(FR-034)
+  'A1-05:stale': (db) => ({
+    ...db,
+    devices: db.devices.map((d) =>
+      d.id === 'CPB-003'
+        ? { ...d, telemetry: { ...d.telemetry, at: clock.minus(25 * MIN), unlinked: ['harness' as const] } }
+        : d,
+    ),
+  }),
   // 현장 프로파일 AX-1 P-LITE(1채널 · 저장 서버만): SITE-001을 P-LITE로 — A1-04 타일 1채널 · A1-05 소스 탭 서버만 (video-basics AC-4 · PWA 측 검증)
   'A1-04:plite': (db) => ({
     ...db,
