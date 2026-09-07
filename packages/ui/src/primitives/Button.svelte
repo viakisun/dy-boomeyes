@@ -51,14 +51,23 @@
       danger: 'text-danger-fg hover:underline underline-offset-2',
     },
   };
+  // 비활성 — 톤(accent·neutral·danger)과 무관하게 항상 같은 중립 톤(화면 검수 F-22).
+  // opacity 합성 대신 이미 대비 감사를 통과한 토큰 쌍만 쓴다(fg.muted × bg.surface-sunken · bg.canvas · bg.surface = 4.5:1, check.mjs PAIRS)
+  const DISABLED: Record<Variant, string> = {
+    solid: 'disabled:bg-surface-sunken disabled:text-fg-muted',
+    outline: 'disabled:border-border disabled:text-fg-muted',
+    ghost: 'disabled:text-fg-muted',
+    link: 'disabled:text-fg-muted',
+  };
 </script>
 
 <button
   class={cx(
-    'gap-inline-xs ease-standard duration-fast inline-flex items-center justify-center font-medium whitespace-nowrap transition-colors select-none disabled:pointer-events-none disabled:opacity-40',
+    'gap-inline-xs ease-standard duration-fast inline-flex items-center justify-center font-medium whitespace-nowrap transition-colors select-none disabled:pointer-events-none',
     FOCUS,
     variant === 'link' ? 'h-auto px-0' : SIZE[size],
     STYLE[variant][tone],
+    DISABLED[variant],
     pill ? 'rounded-pill' : 'rounded-control',
     block && 'w-full',
     cls,
