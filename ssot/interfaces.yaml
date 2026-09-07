@@ -555,8 +555,8 @@ protocol:
   - id: user_id
     summary: 사용자 식별자
   sample: |-
-    { "protocol_version": "cpb.v0.1", "device_id": "CPB-026", "controller_id": "CTRL-026-A",
-      "site_id": "SITE-GS-001", "timestamp": "2026-08-05T09:41:23+09:00",
+    { "protocol_version": "cpb.v0.1", "device_id": "CPB-003", "controller_id": "CTRL-003-A",
+      "site_id": "SITE-001", "timestamp": "2026-07-03T09:41:23+09:00",
       "gps": { "latitude": 37.3941, "longitude": 127.1111, "accuracy": 5.2, "fix_status": "fixed" },
       "network": { "type": "LTE", "signal_strength": -72, "status": "connected" },
       "can": [ { "channel": "can0", "can_id": "0x18FF01", "signal_name": "pump_status", "parsed_value": "normal" } ],

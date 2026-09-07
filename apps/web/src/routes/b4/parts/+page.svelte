@@ -155,7 +155,7 @@
       <ProgressBar
         value={(selected.pouredM3 / maxPoured) * 100}
         label="누적 타설"
-        hint="{selected.pouredM3} m³"
+        hint="{selected.pouredM3} / {maxPoured} m³(최대 타설 부품 대비)"
         tone="neutral"
       />
       {#if timeline.length}

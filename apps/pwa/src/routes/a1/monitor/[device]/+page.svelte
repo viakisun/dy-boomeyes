@@ -87,9 +87,9 @@
     <TelemetryStrip telemetry={d.telemetry} {now} />
     <dl class="gap-x-inline-md gap-y-stack-xs text-body-sm grid grid-cols-[auto_1fr]" aria-label="CAN · IO">
       <dt class="text-fg-muted">CAN</dt>
-      <dd>pump_status {d.state === 'fault' ? 'abnormal' : 'normal'} · 붐 각도 {d.telemetry.boomAngle}°</dd>
+      <dd>펌프 상태 {d.state === 'fault' ? '이상' : '정상'} · 붐 각도 {d.telemetry.boomAngle}°</dd>
       <dt class="text-fg-muted">IO</dt>
-      <dd>DI1 입력 1 · 정상</dd>
+      <dd>입력 신호 정상</dd>
     </dl>
   {:else if data.tab === 'parts'}
     <section
