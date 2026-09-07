@@ -46,8 +46,8 @@ disc:
   - B1-02M
   - B4-03
   scope_note: null
-  baseline: 옵션 — 서버 서브스트림 N일 / SD 병행 / 소형 NVR / Edge+SSD 중 현장별 선택 · 보존 기간 현장별 (DISC-028)
-  ask: 녹화·저장 옵션·보존 기간 (현장별)
+  baseline: 옵션 — 서버 서브스트림 N일 / SD 병행 / 소형 NVR / Edge+SSD 중 현장별 선택 · 보존 기간 현장별 (DISC-028) · 참고자료 v5.0 §28 전제(2채널 × 0.5Mbps × 8h ≈ 3.6GB/일)는 NFR-006(1Mbps ≈ 11GB/일/채널)과 비트레이트·시간 전제가 달라 상충 — 계약 수치 미확정 · 이벤트 전후 클립(전 10초·후 20초)은 v5.0 제안값
+  ask: 녹화·저장 옵션·보존 기간 (현장별) · 비트레이트·채널 수·녹화 시간 전제 확정
   track: C
   status: open
   source: docset-v0.3
@@ -66,7 +66,7 @@ disc:
   - B1-02M
   - B4-03
   scope_note: null
-  baseline: 옵션 — 서버(S3) / 카메라 SD / 현장 녹화기(소형 NVR · Edge PC) — 녹화 옵션과 함께 현장별 선택 (DISC-028)
+  baseline: 옵션 — 서버(S3) / 카메라 SD / 현장 녹화기(소형 NVR · Edge PC) — 녹화 옵션과 함께 현장별 선택 (DISC-028) · 참고자료 v5.0 §28의 microSD 병행·소형 NVR 병행·녹화용 PC·SSD 버퍼는 같은 옵션군, 통신 복구 시 재전송 우선순위(상태 → 사건 → 영상 순차)는 미확정
   ask: 원본 저장 위치 옵션 (서버·SD·현장 녹화기)
   track: C
   status: open
@@ -77,7 +77,7 @@ disc:
   - A1-05
   - B4-02
   scope_note: null
-  baseline: DY 제공 대기 — 프로토콜 v1.x
+  baseline: DY 제공 대기 — 프로토콜 v1.x · 참고자료 v5.0 §10의 붐 자세(관절각·선회)·풍속 항목은 현행 ENT-12에 없음 — 데이터맵 확정 뒤 반영 대상
   ask: CAN 데이터맵 제공
   track: A
   status: open
@@ -88,7 +88,7 @@ disc:
   - A1-05
   - B4-02
   scope_note: null
-  baseline: DY 제공 대기
+  baseline: DY 제공 대기 · 참고자료 v5.0 §10·§12의 압송·사용량(별도 펌프 연동)과 현장 경고 출력(I/O 연동 시)은 채널 정의 뒤 반영 대상
   ask: IO 채널 정의 제공
   track: A
   status: open
@@ -438,7 +438,7 @@ disc:
   - B1-08
   scope_note: null
   baseline: v2.0 §11 — 일반 CCTV·AI CCTV·바디캠·CPB 상태·부품 이력 동기 복기
-  ask: event_id 채번·공통 시각 원천(NTP/PTP)·오차 허용치 확정
+  ask: event_id 채번·공통 시각 원천(NTP/PTP)·오차 허용치 확정 · 수신 시각 필드(발생 시각·수신 시각·출처 공통 형식, 참고자료 v5.0 §27) · 카메라 이벤트 중복 통합 기준(DISC-050 병합과 정합)
   track: A
   status: open
   source: video-parts-review-v2.0
@@ -449,8 +449,8 @@ disc:
   - A1-04
   - B4-03
   scope_note: null
-  baseline: v2.0 §13 — 세 제품 모두 CPB 전용 인증 아님 · 브래킷·안전 와이어·케이블 스트레인 릴리프 필요
-  ask: 우선 후보 2종 채택 및 진동·EIS·M12·AI 실증 계획 확정
+  baseline: v2.0 §13 — 세 제품 모두 CPB 전용 인증 아님 · 브래킷·안전 와이어·케이블 스트레인 릴리프 필요 · 참고자료 v5.0 §31~§34 후보는 다르다 — 일반 Brigade IP-7101C(W) 1차 · AXIS P3925-R + TP3826-E 대안, AI Hanwha TNV-C8014RM 일체형 · AXIS F2107-RE + F9111-R Mk II 분리형(자체 모델) · TNV-C8034RM 보조 — options.yaml 우선 후보(P3925-LRE M12 · TNV-C8014RM)와 정합 필요
+  ask: 우선 후보 2종 채택 및 진동·EIS·M12·AI 실증 계획 확정 · v2.0·v5.0 후보 정합
   track: A
   status: open
   source: video-parts-review-v2.0
@@ -540,3 +540,100 @@ disc:
     by: 사용자(VIA) — DY 확인 전 기준안 채택
     summary: 기준안 그대로 — 전송은 HTTPS 멀티파트(IF-011) · 파일은 S3(ENT-07) · 촬영 원본은 앱 큐(ADR-010)에 보관 후 서버 저장 · 허용 형식·용량 상한·서명 URL은 W3 전송 ADR에서 DY 값으로 확정(신규 수치 없음)
   source: w2-plan-2026-09-05
+- id: DISC-047
+  title: 현장 운영 설정 단계·필수 서류 세트
+  scope:
+  - B4-03
+  - B4-06
+  - A1-07
+  scope_note: null
+  baseline: 현행 — 현장 등록은 현장명·주소·기간·안전관리자·프로파일(FR-018 · B4-03), 서류 유형은 DISC-016 · 만료 알림(FR-016). 참고자료 v5.0 §5의 '운영 설정'(참여자 역할·권한·기간 · 동·층·작업구역 · 배치별 필수 서류 세트) 단계는 SSOT에 없다 — 화면·엔티티 미정의
+  ask: 운영 설정 단계 도입 여부 · 항목(참여자 권한 기간 · 작업구역) · 현장별 필수 서류 세트(장비·운전자·현장) 확정
+  track: C
+  status: open
+  source: deck-v5.0-2026-09-07
+- id: DISC-048
+  title: 배정 후 서류 자동 요청·설치·인수 단계
+  scope:
+  - B4-03
+  - B1-03
+  - A2-05
+  - B4-06
+  scope_note: null
+  baseline: 현행 — 호기 배정(assignDevice)은 즉시 완료, 서류는 만료 알림·수동 신청(FR-016 · FR-017), lease 기계는 계약 단위. 참고자료 v5.0 §6의 배정 → 필수 서류 자동 요청 → 현장 확인(서류 승인·설치·인수) → 철수·이동 단계가 request/lease 상태기계에 없다
+  ask: 단계 도입 여부 · 자동 요청 규칙(배치별 서류 세트 · 대상자) · 설치 위치(동·층)·인수 조건·철수 기록의 주체와 완료 조건
+  track: B
+  status: open
+  source: deck-v5.0-2026-09-07
+- id: DISC-049
+  title: 작업(타설) 엔티티·작업 ID 연결 키
+  scope:
+  - B1-08
+  - B4-03
+  - A1-07
+  scope_note: null
+  baseline: 현행 — 이력 연결 키는 event_id + 공통 시각(FR-033 · DISC-039), 타설 일정 입력 주체는 DISC-034. 참고자료 v5.0 §9의 작업(준비·타설·재시작·세척) 엔티티와 '장비 ID + 작업 ID + 발생 시각' 연결 키, 장비 위치 이력(설치·이동·해체), 영상 배정(카메라·착용자·촬영 기간)이 SSOT에 없다 — 덱 대비 가장 큰 구조 격차
+  ask: 작업 엔티티 도입 여부 · 채번 · 알림·업무·이벤트·부품 이력과의 연결 키 · 1단계/2단계 귀속
+  track: B
+  status: open
+  source: deck-v5.0-2026-09-07
+- id: DISC-050
+  title: 미인수 대체 담당자 재통지·사건 병합·재발 통지
+  scope:
+  - B1-04
+  - A1-02
+  - B4-05
+  scope_note: null
+  baseline: 현행 — 에스컬레이션은 발행된 업무가 1h 미접수일 때 상위(본사·관제) 통보(FR-010)이고 담당자 교체는 없다 · 알림은 건별 발행. 참고자료 v5.0 §15의 '미인수 → 대체 담당자 재통지'와 '반복 검출은 같은 사건으로 묶고 재발 통지'는 규칙이 없고, v5.0의 '사건'은 본 SSOT의 알림(ENT-08)·업무(ENT-06)·이벤트(ENT-19)에 걸친다
+  ask: 대체 담당자 지정·재통지 간격 · 병합 기준(장비·원인·시간창) · 재발 통지 조건 · 에스컬레이션과의 관계
+  track: B
+  status: open
+  source: deck-v5.0-2026-09-07
+- id: DISC-051
+  title: 소유주 정비 배정·복귀 확인
+  scope:
+  - A4-03
+  - A4-05
+  - B1-04
+  scope_note: null
+  baseline: 현행 — 정비 호출·완료 확인은 현장(DISC-015 · FR-011), 장비 fault → maintenance → normal 전이는 현장 완료 확인. 참고자료 v5.0 §18의 결함 등록 → 정비 배정(소유주 일정·부품 준비) → 교체·검사 → 복귀 확인의 소유주 축은 없다(A4는 2단계 · DISC-026)
+  ask: 정비 배정 권한(소유주·운영사) · 복귀(운영 재개) 확인 주체·기록 · 사건 종결과 장비 복귀의 분리 여부
+  track: C
+  status: open
+  source: deck-v5.0-2026-09-07
+- id: DISC-052
+  title: 소유주 확장 화면 (가동·정비 일정·부품 준비·비용·서류)
+  scope:
+  - A4-02
+  - A4-05
+  - A4-06
+  scope_note: null
+  baseline: 현행 — A4 화면 5(현황·요청·운전자·계약·서류 · FR-025~027 · 2단계 · DISC-026). 참고자료 v5.0 §22의 가동·중단 시간 요약(일·주·월) · 정비 일정(예정·지연·수리 중) · 마모·교체 부품 준비·구매 요청 · 운영 비용·재고 · 장비 서류(검사·보험·매뉴얼 만료)는 범위 밖
+  ask: 확장 화면 도입 범위 · 단계 귀속 · 비용·재고 연계 여부
+  track: C
+  status: open
+  source: deck-v5.0-2026-09-07
+- id: DISC-053
+  title: 감사·서비스 로그·고객 지원 권한·반출 기록
+  scope:
+  - B4-04
+  - B1-05
+  - B3-05
+  scope_note: null
+  baseline: 현행 — 이력은 append-only 기록(FR-012 · ENT-09), 열람 로그는 개인정보 옵션(FR-031 · NFR-013). 참고자료 v5.0 §23·§25의 감사·서비스 로그(계정·접속·설정·지원 — 누가·언제·무엇을), 고객 지원 권한(허용 장비·영상·기간 내 열람), 자료 반출 기록은 SSOT에 없다
+  ask: 감사 로그 범위·보존 · 지원 계정 권한 모델 · 반출 승인·기록 규칙
+  track: B
+  status: open
+  source: deck-v5.0-2026-09-07
+- id: DISC-054
+  title: AI 고도화 로드맵 (ACAP·VPU·모델 운영·작업구역·현장 경고)
+  scope:
+  - B1-02M
+  - A1-04
+  - B4-05
+  scope_note: null
+  baseline: 현행 — 온보드 사람·차량 감지(FR-028 · DISC-027), 작업별 경보 등급(FR-036 · DISC-042), 기종은 DISC-040. 참고자료 v5.0 §12·§29의 카메라 전용 모델(ACAP) · 현장 VPU 복합 판단 · 학습·현장 검증 · 모델 버전 배포·롤백, 작업 허용구역·접근 경고구역 정의, 현장 경고 I/O 출력은 SSOT에 없고 '자동 제어는 DY 별도 범위'
+  ask: 처리 위치(온보드·현장 VPU·서버) · 모델 운영 주체·단계 · 구역 정의·편집 주체 · 현장 경고 출력 연동 여부 · 자동 제어 경계 명문화
+  track: A
+  status: open
+  source: deck-v5.0-2026-09-07
