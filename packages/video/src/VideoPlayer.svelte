@@ -24,7 +24,7 @@
     mode?: 'live' | 'snapshot';
     class?: string;
   } = $props();
-  let live = $state<{ kind: 'mp4' | 'hls'; url: string } | null>(null);
+  let live = $state<{ kind: 'mp4' | 'hls'; url: string; poster?: string } | null>(null);
   let snap = $state<{ url: string; at: string } | null>(null);
   let paused = $state(untrack(() => capture)); // capture 모드는 첫 프레임 정지(초기값만)
   const off = $derived(camera.state === 'offline' || camera.health === 'lost');
@@ -59,6 +59,7 @@
     <video
       class="h-full w-full object-cover"
       src={live.url}
+      poster={live.poster}
       muted
       loop
       playsinline

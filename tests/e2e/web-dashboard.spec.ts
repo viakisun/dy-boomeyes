@@ -66,9 +66,11 @@ test('[B1-02M] 라이브/스냅샷 전환 · P-SD 소스 탭(서버·SD, NVR 없
   const player = dialog.locator('[data-camera="CAM-3-2"]');
   await expect(player).toHaveAttribute('data-mode', 'snapshot'); // AI 채널 기본 스냅샷
   await expect(player.locator('img[alt*="스냅샷"]')).toBeVisible();
+  await expect(player.locator('img[alt*="스냅샷"]')).toHaveAttribute('src', /boom-person.*\.webp/); // 인원 접근 알림(AL-008)이 있는 AI 채널 = 사람 장면 스틸
   await dialog.getByRole('button', { name: '라이브', exact: true }).click();
   await expect(player.locator('video')).toHaveCount(1);
   await expect(player.locator('video')).toHaveAttribute('src', /boom.*\.mp4/);
+  await expect(player.locator('video')).toHaveAttribute('poster', /boom.*\.webp/); // 첫 프레임 = 평시 스틸
   await expect(dialog.getByRole('tab', { name: '서버 녹화' })).toBeVisible();
   await expect(dialog.getByRole('tab', { name: 'SD 녹화' })).toBeVisible();
   await expect(dialog.getByRole('tab', { name: /NVR/ })).toHaveCount(0);

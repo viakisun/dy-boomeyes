@@ -10,7 +10,8 @@ import { build, files, version } from '$service-worker';
 const sw = self as unknown as ServiceWorkerGlobalScope;
 const CACHE = `boomeyes-${version}`;
 const SHELL = '/';
-const ASSETS = [...build, ...files, SHELL];
+// 루프 MP4(각 ~140KB)는 선캐시하지 않는다 — addAll은 원자적이라 설치 비용·실패 위험을 키운다. 첫 재생 때 아래 런타임 캐시가 담는다
+const ASSETS = [...build.filter((f) => !/\.mp4$/.test(f)), ...files, SHELL];
 
 sw.addEventListener('install', (event) => {
   event.waitUntil(

@@ -15,5 +15,6 @@
 | # | 작업 | DoD | Refs |
 |---|---|---|---|
 | W2 | A3-04 · B2-03 · CameraWall·EquipmentCard 추출 · 픽스처 2 · e2e 3 · axe 2 | AC-8 · AC-9 | SCR-A3-04 SCR-B2-03 |
+| W2.6 | 삽화 대체 영상 — `tools/media` 생성기 · 스틸 3 · 루프 2 · CameraTile `img[data-still]` · VideoPlayer poster · mock snapshot 스틸 · AL-008 bbox = STILL_BBOX · SW mp4 선캐시 제외 · Vitest 5 · e2e 단언 +5 | AC-1 · AC-2 · AC-3(영상 표시) | SCR-B1-02 SCR-B1-02M SCR-B1-07 SCR-B1-08 SCR-A1-04 SCR-A3-04 SCR-B2-03 |
 
 커밋 예: `feat(video): VideoPlayer · 스냅샷 폴러 — Refs: SCR-B1-02M FR-004`.
