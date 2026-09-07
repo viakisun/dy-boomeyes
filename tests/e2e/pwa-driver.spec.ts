@@ -50,10 +50,27 @@ test('[A2-03] 체크인 후 5항목 제출 → 제출 완료 · 오늘 배너 su
   const boxes = page.getByRole('checkbox');
   await expect(boxes).toHaveCount(5);
   for (let i = 0; i < 4; i++) await boxes.nth(i).check();
-  await expect(page.getByText('이상 1건')).toBeVisible();
+  await page.getByRole('button', { name: /이상 표시/ }).click(); // 5번째는 명시적으로 이상 표시(미입력인 채로는 제출 불가, 화면 검수 F-19)
+  await expect(page.getByText('이상 1건', { exact: true })).toBeVisible(); // 미입력 포함 문구 없음 — 전 항목 확인됨
   await page.getByRole('button', { name: '점검 제출' }).click();
   await expect(page.getByText('제출 완료', { exact: true })).toBeVisible(); // 토스트('일일점검 제출 완료')와 구분
-  await expect(page.getByText('이상 1건')).toBeVisible();
+  await expect(page.getByText('이상 1건', { exact: true })).toBeVisible();
+});
+
+test('[A2-03] 미입력 항목이 있으면 제출 버튼이 비활성 — 전 항목 확인해야 활성화(화면 검수 F-19) [FR-014]', async ({
+  page,
+}) => {
+  await page.goto('/a2/today/inspect?state=inspect&capture=1');
+  const boxes = page.getByRole('checkbox');
+  const submit = page.getByRole('button', { name: '점검 제출' });
+  await expect(submit).toBeDisabled(); // 0/5 확인
+  await expect(page.getByText('미입력 5 포함')).toBeVisible();
+  for (let i = 0; i < 4; i++) await boxes.nth(i).check();
+  await expect(submit).toBeDisabled(); // 4/5 확인 — 마지막 1건 미입력
+  await expect(page.getByText('미입력 1 포함')).toBeVisible();
+  await page.getByRole('button', { name: /이상 표시/ }).click(); // 5/5 확인
+  await expect(submit).toBeEnabled();
+  await expect(page.getByText('미입력', { exact: false })).toHaveCount(0);
 });
 
 test('[A2-03] 미체크인이면 제출 불가 안내 [FR-014]', async ({ page }) => {
