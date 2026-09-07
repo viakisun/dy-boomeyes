@@ -2,6 +2,7 @@
 import type {
   Case,
   DocKind,
+  EvidenceState,
   DocState,
   EquipmentState,
   Request,
@@ -31,6 +32,19 @@ export const CASE_KIND_LABEL: Record<Case['kind'], string> = {
   comm: '통신',
 };
 export const SEVERITY_LABEL: Record<Severity, string> = { critical: '긴급', warning: '경고', info: '정보' };
+/** 영상 확보 상태(ENT-19) — 사건(업무) 상태와 별개(참고자료 v5.0 §15). 색은 확보 불가만 warning, 나머지는 텍스트(§0-4) */
+export const EVIDENCE_LABEL: Record<EvidenceState, string> = {
+  pending: '업로드 대기',
+  partial: '일부 확보',
+  secured: '확보',
+  unavailable: '확보 불가',
+};
+export const EVIDENCE_TONE: Record<EvidenceState, Tone> = {
+  pending: 'neutral',
+  partial: 'neutral',
+  secured: 'neutral',
+  unavailable: 'warning',
+};
 export const REQUEST_KIND_LABEL: Record<Request['kind'], string> = {
   'site-open': '현장 개설',
   'device-assign': '장비 배정',

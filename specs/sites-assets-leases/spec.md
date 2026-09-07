@@ -3,7 +3,7 @@ id: SPEC-sites-assets-leases
 status: draft
 wave: 2
 screens: [B4-03, B4-04, B1-06, B2-02, A1-07, A2-06, A3-03]
-fr: [FR-018, FR-021, FR-019, FR-017, FR-022, FR-003, FR-024, FR-029, FR-031]
+fr: [FR-018, FR-021, FR-019, FR-017, FR-022, FR-003, FR-024, FR-029, FR-031, FR-004]
 ---
 # sites-assets-leases — 현장·장비·프로파일 마스터 · 사용자·권한 · 임대 계약 · 본사 지도 · 현장 정보 · 신청
 
@@ -29,6 +29,7 @@ fr: [FR-018, FR-021, FR-019, FR-017, FR-022, FR-003, FR-024, FR-029, FR-031]
 - **AC-5** Given `safety01` When 메뉴(A1-07) Then 현장 기본정보(현장명·주소·기간·프로파일)와 "현장 개설 신청" 시트(`apply`)가 있고, 제출하면 `request`(ENT-20) `submitted → review`로 수신함(B1-03)에 RQ가 나타난다 [FR-017, FR-018]
 - **AC-6** Given `driver03` When 메뉴(A2-06) Then 배정 현장 기본정보·동의 요약(ENT-15)·앱 정보가 보이고 편집 액션은 없다 [FR-018, FR-031]
 - **AC-7** Given `hq01` When 현장 상세(A3-03) `site` · `normal` Then 현장 요약(장비 수·이상·업무·완비율)과 "확인 요청" 액션(DISC-015)만 있고 처리 버튼은 없다; `normal`(대전 B)은 이상 0으로 렌더된다 [FR-022]
+- **AC-8** Given B4-03 프로파일 탭 When 로드 Then 설치 구성도 그림(alt·캡션: 일반 카메라 본체·1번 관절 인근 · AI 카메라 마지막 강체·경사 시야)과 프로파일 요약의 장착 위치 행이 보인다 [FR-018, FR-004]
 
 ## 상태 픽스처
 `B4-03:assets` · `B4-04:users` · `B1-06:lease`(LS-001 D-27 최상단) · `B2-02:work` · `A1-07:menu` · `A1-07:apply`(신청 시트 열림) · `A2-06:menu` · `A3-03:site` · `A3-03:normal`(SITE-002 장비 정상). 픽스처 ID: LS-001 · RQ-006(신청 결과).

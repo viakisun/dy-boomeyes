@@ -55,6 +55,7 @@ ent:
   - recording_mode
   - stream_url
   - 보존(현장별)
+  - 장착 위치(body-joint1|last-rigid — 본체·1번 관절 인근 / 마지막 강체·경사 시야, 참고자료 v5.0 §8)
   relations:
   - N─1 장비 (기본 2대)
   store: RDS · 영상은 S3/SD/현장 녹화기 (프로파일)
@@ -79,6 +80,7 @@ ent:
   - 상태
   - 기한
   - 심각도
+  - 연결 이벤트(event_id · 0..1)
   relations:
   - N─1 장비/현장
   - 1─N 이력
@@ -267,6 +269,7 @@ ent:
   - 소스 4 참조(일반 CCTV·AI CCTV·바디캠·CPB 상태/부품 이력) 세그먼트 메타
   - 연결(알림·업무·부품 이력)
   - 원본 보존 잠금
+  - 영상 확보 상태(pending|partial|secured|unavailable — 업로드 대기·일부 확보·확보·확보 불가, 사건 상태와 별개 · 참고자료 v5.0 §15)
   relations:
   - N─1 장비
   - 1─1 알림

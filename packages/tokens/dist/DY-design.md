@@ -10,7 +10,7 @@
 | ref(원시) | 208 |
 | sys(시맨틱) | 324 |
 | cmp(컴포넌트) | 92 |
-| 컴포넌트 카탈로그 | 80 |
+| 컴포넌트 카탈로그 | 81 |
 | 대비 검사 | 94/94 통과 |
 
 | 산출물 | 용도 |
@@ -782,7 +782,7 @@ cmp 층은 sys만 참조한다(ref 직접 참조 금지 — 검사로 강제). �
 | `cmp.table.row-selected` | #ebf1ff | #ebf1ff | {sys.color.bg.selected} |  |
 | `cmp.table.header-fg` | #616368 | #616368 | {sys.color.fg.muted} |  |
 
-## 8. 컴포넌트 카탈로그 (80)
+## 8. 컴포넌트 카탈로그 (81)
 
 이름 PascalCase · prop 어휘 고정: `variant`(형태) · `tone`(색 의도: accent/neutral/info/success/warning/danger/progress) · `size`(sm/md/lg) · 상태 boolean(`disabled` `loading` `selected` `invalid`). 플랫폼 both = 같은 Svelte 컴포넌트가 밀도 토큰으로 두 플랫폼을 소화.
 
@@ -818,6 +818,7 @@ cmp 층은 sys만 참조한다(ref 직접 참조 금지 — 검사로 강제). �
 | 컴포넌트 | 플랫폼 | 참조 | 변형(prop) | 상태 | 비고 |
 |---|---|---|---|---|---|
 | **Badge** | both | CE Badge · Label/status | variant dot/count/pill · tone 6 · size sm/md |  | 숫자 99+ 처리 |
+| **Figure** | both | 신규 · 설치 구성도·증빙 사진 | aspect video/auto · caption · ref(data-ref) |  | alt 필수 · 캡션 1줄 · 식별자 없음 · 자산 URL은 prop(ui는 자산을 import하지 않는다) |
 | **StatusPill** | both | CE Label/status · Label/Map | tone(domain 매핑) · icon · size |  | 색+아이콘+텍스트 병행 |
 | **StatusDot** | both | CE Label/connect | tone · pulse(live) |  | 연결·라이브 표시 |
 | **Chip** | both | CE Chip | variant filter/keyword/status/removable/dropdown · count | selected/disabled |  |

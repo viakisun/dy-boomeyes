@@ -45,6 +45,7 @@ test('[A1-05] CPB-003 상세: 342V · E-021 · 도달률 · 서류 완비율 · 
   await expect(page.getByText(/완비율 \d+%/)).toBeVisible();
   await expect(page.getByText(/박기사 교육 이수증 · 만료 임박 · D-27/)).toBeVisible();
   await page.getByRole('tab', { name: '영상' }).click();
+  await expect(page.locator('[data-mount="last-rigid"]')).toContainText('마지막 강체·경사 시야'); // AI 채널 장착 위치(ENT-04)
   await expect(page).toHaveURL(/tab=video/);
   await expect(page.getByRole('tab', { name: '서버' })).toBeVisible();
   await expect(page.getByRole('tab', { name: 'SD' })).toBeVisible();

@@ -16,6 +16,8 @@ test('[B1-08] EV-001: 헤더(event_id·종류·장비·t0·AL-001·C-105) · 4�
   const link = page.locator('dl[aria-label="연결"]');
   await expect(link).toContainText('AL-001');
   await expect(link).toContainText('C-105');
+  await expect(link).toContainText('일부 확보 — 일반·AI 세그먼트 있음 · 바디캠 없음'); // 영상 확보 상태(ENT-19) — 사건 상태와 별개
+  await expect(page.locator('[data-evidence="partial"]')).toContainText('영상 일부 확보');
   await expect(page.getByText('원본 보존', { exact: true })).toBeVisible();
   await expect(page.getByText('원본 보존', { exact: true })).toHaveAttribute('data-ref', 'NFR-015');
   const lanes = page.locator('section[aria-label="복기 타임라인"] ol');
@@ -61,4 +63,13 @@ test('[B1-02] 알림 피드 E-021 행의 "복기" 링크 → /b1/events/EV-001 [
   await replay.click();
   await expect(page.locator(`[data-scr="${SCR['B1-08']}"]`)).toBeVisible();
   await expect(page.getByRole('heading', { name: /이벤트 복기 — EV-001/ })).toBeVisible();
+});
+
+test('[B1-08] pending 픽스처: 영상 업로드 대기 — 업무(C-105)·잠금 표시는 그대로 [FR-033]', async ({ page }) => {
+  await page.goto('/b1/events/EV-001?state=pending&capture=1');
+  await expect(page.locator(`[data-scr="${SCR['B1-08']}"]`)).toBeVisible();
+  await expect(page.locator('[data-evidence="pending"]')).toContainText('영상 업로드 대기');
+  await expect(page.locator('dl[aria-label="연결"]')).toContainText('현장 업로드 뒤 갱신');
+  await expect(page.locator('dl[aria-label="연결"]')).toContainText('C-105');
+  await expect(page.getByText('원본 보존', { exact: true })).toBeVisible();
 });

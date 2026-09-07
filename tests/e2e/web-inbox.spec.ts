@@ -24,6 +24,7 @@ test('[B1-03] ?case=C-105 → 알림에서 열린 업무 패널 · 접수 [FR-01
   await page.getByText('control01', { exact: true }).click();
   await page.goto('/b1/inbox?case=C-105');
   const panel = page.getByRole('region', { name: '알림에서 열린 업무' });
+  await expect(panel.locator('[data-evidence="partial"]')).toContainText('영상 일부 확보'); // C-105 → EV-001(ENT-19)
   await expect(panel).toContainText('C-105');
   await panel.getByRole('button', { name: '접수' }).click();
   await expect(page.getByRole('status').first()).toContainText('접수 — C-105');

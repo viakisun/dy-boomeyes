@@ -541,3 +541,13 @@ describe('[FR-037] 쓰기 멱등 — 같은 clientId 재전송은 같은 결과 
     expect((await api.cases({ role: 'site-safety' })).filter((c) => c.docId === 'DOC-001')).toHaveLength(1); // 두 번째는 업무를 다시 만들지 않는다
   });
 });
+
+describe('[FR-033] 영상 확보 상태(ENT-19) · 연결 이벤트 · [FR-004] 장착 위치', () => {
+  it('EV-001은 일부 확보(partial) · C-105.eventId = EV-001 · 카메라마다 mount', async () => {
+    const api = bootMock({ capture: true });
+    expect((await api.event('EV-001'))?.evidence).toBe('partial');
+    expect((await api.case('C-105'))?.eventId).toBe('EV-001');
+    const cams = await api.cameras();
+    expect(cams.every((c) => c.mount === (c.kind === 'ai' ? 'last-rigid' : 'body-joint1'))).toBe(true);
+  });
+});

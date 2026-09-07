@@ -6,6 +6,8 @@
   import {
     Button,
     DataTable,
+    EVIDENCE_LABEL,
+    EVIDENCE_TONE,
     EmptyState,
     REQUEST_KIND_LABEL,
     REQUEST_STATE_LABEL,
@@ -94,6 +96,13 @@
           <span class="text-label-md text-fg-muted">알림에서 열린 업무 {c.id}</span>
           <StatusPill tone={TASK_TONE[c.state]} label={TASK_LABEL[c.state]} size="sm" />
           <StatusPill tone={SEVERITY_TONE[c.severity]} label={SEVERITY_LABEL[c.severity]} size="sm" />
+          {#if data.focusEvent}<span data-evidence={data.focusEvent.evidence}
+              ><StatusPill
+                tone={EVIDENCE_TONE[data.focusEvent.evidence]}
+                label="영상 {EVIDENCE_LABEL[data.focusEvent.evidence]}"
+                size="sm"
+              /></span
+            >{/if}
         </div>
         <span class="text-heading-sm">{c.title}</span>
         <div class="gap-inline-sm flex flex-wrap">

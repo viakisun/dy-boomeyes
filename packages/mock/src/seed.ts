@@ -141,6 +141,7 @@ export function seed(): Db {
       id: `CAM-${d.unitNo}-1`,
       deviceId: d.id,
       kind: 'general',
+      mount: 'body-joint1',
       state: d.state === 'offline' ? 'offline' : 'live',
       ingest: 'E1',
       live: 'L1',
@@ -152,6 +153,7 @@ export function seed(): Db {
       id: `CAM-${d.unitNo}-2`,
       deviceId: d.id,
       kind: 'ai',
+      mount: 'last-rigid',
       state: d.state === 'offline' ? 'offline' : d.unitNo === 2 ? 'ai-unavailable' : 'snapshot',
       ingest: 'E1',
       live: 'L1',
@@ -234,6 +236,7 @@ export function seed(): Db {
       dueAt: t(-H),
       createdAt: t(20_000),
       history: [{ at: t(20_000), by: 'system', action: '발행 — E-021 380V 전압 이상' }],
+      eventId: 'EV-001',
     },
     {
       id: 'C-106',
@@ -774,6 +777,7 @@ export function seed(): Db {
       alertId: 'AL-001',
       caseId: 'C-105',
       locked: true,
+      evidence: 'partial', // 일반·AI 세그먼트 있음 · 바디캠 없음 — 사건 상태와 별개(참고자료 v5.0 §15)
       lanes: {
         general: {
           source: 'general',

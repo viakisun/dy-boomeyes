@@ -3,7 +3,7 @@ id: SPEC-task-escalation
 status: draft
 wave: 1
 screens: [A1-02, A1-03, B1-03, B1-04, A1-08, A3-02, A3-05]
-fr: [FR-008, FR-009, FR-011, FR-006, FR-002, FR-017, FR-018, FR-010, FR-024, FR-022]
+fr: [FR-008, FR-009, FR-011, FR-006, FR-002, FR-017, FR-018, FR-010, FR-024, FR-022, FR-033]
 ---
 # task-escalation — 업무함 · 업무 상세 · 운영사 수신함 · 에스컬레이션
 
@@ -34,6 +34,7 @@ fr: [FR-008, FR-009, FR-011, FR-006, FR-002, FR-017, FR-018, FR-010, FR-024, FR-
 - **AC-9** Given C-105 `in-progress`(정비 보고 수신) When 완료 처리 시트(A1-08, `/a1/inbox/C-105?sheet=complete`)에서 조치 내용(필수)을 입력해 완료 Then `in-progress → done`으로 전이되고 이력에 행위자·조치 내용이 남으며 시트는 A1-03 위 `[data-capture-dialog]`로 열린다(모달형, `data-scr` 스왑) [FR-008]
 - **AC-10** Given `hq01`(SITE-001·002) When 현장 목록(A3-02) Then 현장 카드 2에 이상 장비·미처리 업무·에스컬레이션 배지가 보이고 탭(업무 · 기록)으로 A3-05·A3-06에 가며, 에스컬레이션 알림(FR-010)은 이 화면으로 딥링크된다 [FR-010, FR-024]
 - **AC-11** Given `hq01` When 업무(열람, A3-05) Then 전 현장 업무가 통합 목록으로 보이고 접수·완료 버튼은 없으며 "확인 요청"만 있다(DISC-015 권한 경계) [FR-024]
+- **AC-12** Given C-105(연결 이벤트 EV-001 · 영상 일부 확보) When 업무 상세(A1-03)와 수신함 `?case=C-105`(B1-03) Then 업무 헤더에 "영상 일부 확보"가 업무 상태와 별개의 라벨로 보인다 [FR-033, FR-008]
 
 ## 상태 픽스처
 `screens.yaml` A1-02 `inbox` `filter` · A1-03 `case` · B1-03 `inbox` · B1-04 `esc`. 픽스처 ID: C-105(E-021 · CPB-003) · C-104(에스컬레이션 대상, `escalated`).

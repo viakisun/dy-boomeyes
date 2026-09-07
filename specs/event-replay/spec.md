@@ -20,6 +20,7 @@ event_id와 공통 시각으로 일반 CCTV · AI CCTV · 바디캠 · CPB 상�
 - **AC-2** Given 커서 When ←/→(1초) 또는 레인 클릭으로 이동 Then 4레인의 표시 시각이 동일하게 바뀌고, 소스가 없는 레인(바디캠 없음 · 부품 이력 없음)은 "없음"으로 표기된다 [FR-033]
 - **AC-3** Given 긴급 이벤트 When 표시 Then 원본 보존 잠금 배지(NFR-015)가 보이고 삭제·편집 액션이 없다; 없는 event_id는 404 EmptyState다 [FR-033]
 - **AC-4** Given B1-02 알림 피드의 E-021 행 When "복기" 링크 Then `/b1/events/EV-001`로 이동한다(nav B1-02→B1-08) [FR-024]
+- **AC-5** Given EV-001(영상 확보 상태 partial — 일반·AI 세그먼트 있음, 바디캠 없음) When B1-08 Then 헤더에 "영상 일부 확보"가 텍스트로 보이고 연결 목록에 확보 상태 행이 있으며, `?state=pending`이면 "영상 업로드 대기"다; 확보 불가만 warning pill이고 사건(업무) 상태와는 별개다 [FR-033]
 
 ## 상태 픽스처
 `B1-08:default` — EV-001. 영상 레인은 루프 클립(`@boomeyes/video` assets) + 시각 오버레이(seek 없음, "목업" 표기).

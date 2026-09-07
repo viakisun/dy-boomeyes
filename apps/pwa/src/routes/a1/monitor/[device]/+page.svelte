@@ -16,7 +16,7 @@
     dueLabel,
     fmtDateTime,
   } from '@boomeyes/ui';
-  import { CameraTile, HealthBadge, SOURCE_LABEL } from '@boomeyes/video';
+  import { CameraTile, HealthBadge, MOUNT_LABEL, SOURCE_LABEL } from '@boomeyes/video';
   let { data } = $props();
   const d = $derived(data.device);
   const EQUIP_LABEL = { normal: '정상', caution: '주의', fault: '고장', offline: '두절', maintenance: '정비' } as const;
@@ -155,6 +155,9 @@
           <div class="gap-stack-xs flex flex-col" data-camera={c.id}>
             <CameraTile camera={c} deviceLabel="{d.unitNo}호기" compact status={false} />
             <HealthBadge camera={c} />
+            <span class="text-label-sm text-fg-muted" data-mount={c.mount}
+              >{c.mount ? MOUNT_LABEL[c.mount] : '장착 위치 미등록'}</span
+            >
           </div>
         {/each}
       </div>

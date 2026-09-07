@@ -61,6 +61,8 @@ export interface DocSummary {
 }
 /** FR-034 카메라 헬스 — 정지화면·흐림·가림·수신 끊김이면 "정상" 표시 금지 */
 export type CameraHealth = 'ok' | 'frozen' | 'blurry' | 'occluded' | 'lost';
+/** 장착 위치(ENT-04) — 본체·1번 관절 인근 / 마지막 강체·경사 시야 (참고자료 v5.0 §8) */
+export type CameraMount = 'body-joint1' | 'last-rigid';
 export interface Camera {
   id: string;
   deviceId: string;
@@ -74,6 +76,7 @@ export interface Camera {
   recording: 'server' | 'sd' | 'nvr' | 'edge';
   retentionDays: number;
   snapshotAt: string;
+  mount?: CameraMount;
 } // ENT-04
 export interface Alert {
   id: string;
@@ -104,6 +107,8 @@ export interface Case {
   history: HistoryItem[];
   /** kind=doc 업무가 검토하는 서류 */
   docId?: string;
+  /** 연결 이벤트(ENT-19 · 0..1) — 이벤트 복기 B1-08 · 영상 확보 상태 표시 */
+  eventId?: string;
 } // ENT-06
 export interface HistoryItem {
   at: string;
@@ -378,6 +383,8 @@ export interface ReplayLane {
   /** 공통 시각축 위의 마커(상태 변화 · 알림 · 부품 이력) */
   markers: { at: string; label: string }[];
 }
+/** 영상 확보 상태(ENT-19) — 사건(업무) 상태와 별개: 업로드 대기 · 일부 확보 · 확보 · 확보 불가 (참고자료 v5.0 §15) */
+export type EvidenceState = 'pending' | 'partial' | 'secured' | 'unavailable';
 export interface ReplayEvent {
   id: string;
   kind: Alert['kind'];
@@ -391,6 +398,7 @@ export interface ReplayEvent {
   lanes: Record<ReplaySource, ReplayLane>;
   /** 긴급 이벤트 원본 보존 잠금(NFR-015) — 삭제·편집 없음 */
   locked: boolean;
+  evidence: EvidenceState;
 }
 /** FR-023 쇼케이스(B1-07) — 읽기 전용 집계 · 이름·연락처는 마스킹된 채로 온다(mask.ts) */
 export interface Showcase {

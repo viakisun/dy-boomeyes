@@ -37,6 +37,7 @@ export { default as TaskCard } from './primitives/TaskCard.svelte';
 export { default as DocumentCard } from './primitives/DocumentCard.svelte';
 export { default as EquipmentCard } from './primitives/EquipmentCard.svelte';
 export { default as Timeline } from './primitives/Timeline.svelte';
+export { default as Figure } from './primitives/Figure.svelte';
 export { default as EscalationTimer } from './primitives/EscalationTimer.svelte';
 export { default as CheckinCard } from './primitives/CheckinCard.svelte';
 export { default as ChecklistForm } from './primitives/ChecklistForm.svelte';
