@@ -67,8 +67,11 @@
       busy = false;
     }
   }
-  const selectTab = (id: string) =>
-    goto(resolve(`/b4/rules?tab=${id}` as '/'), { keepFocus: true, noScroll: true, replaceState: true });
+  const selectTab = (id: string) => {
+    const u = new URL(location.href); // 다른 쿼리(?state= ?capture=) 유지 — mock db 캐시 키(QA §3)
+    u.searchParams.set('tab', id);
+    goto(resolve((u.pathname + u.search) as '/'), { keepFocus: true, noScroll: true, replaceState: true });
+  };
 </script>
 
 <div class="gap-stack-lg flex min-w-0 flex-col" data-scr={SCR['B4-05']}>

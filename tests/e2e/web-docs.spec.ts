@@ -35,7 +35,7 @@ test('[B4-06] 5유형 등록 → valid · 만료 D-10이면 expiring · 목록·
   await form.getByLabel('서류명').fill('CPB-001 비파괴 검사 성적서');
   await form.getByLabel('유효기간(만료일)').fill('2026-07-13'); // 고정 시각 7/3 + 10일 → expiring
   await form.getByRole('button', { name: '등록' }).click();
-  await expect(page.getByRole('status').first()).toContainText('등록 — DOC-007 만료 임박');
+  await expect(page.getByRole('status').filter({ hasText: 'DOC-007' })).toContainText('등록 — DOC-007 만료 임박');
   await expect(page.locator('table tbody tr')).toHaveCount(7);
   await expect(page.getByRole('complementary', { name: '서류 상세' })).toContainText('DOC-007');
   // 현장을 대상으로 등록(AC-5 현장) → valid
@@ -44,6 +44,6 @@ test('[B4-06] 5유형 등록 → valid · 만료 D-10이면 expiring · 목록·
   await form.getByLabel('대상').selectOption('SITE-002');
   await form.getByLabel('서류명').fill('대전 B 물류센터 안전관리자 선임증');
   await form.getByRole('button', { name: '등록' }).click();
-  await expect(page.getByRole('status').first()).toContainText('등록 — DOC-008 유효');
+  await expect(page.getByRole('status').filter({ hasText: 'DOC-008' })).toContainText('등록 — DOC-008 유효');
   await expect(page.locator('table tbody tr')).toHaveCount(8);
 });

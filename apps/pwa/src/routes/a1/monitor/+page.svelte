@@ -13,6 +13,11 @@
     { id: 'cameras', label: '카메라' },
     ...(data.flags.bodycam ? [{ id: 'bodycam', label: '바디캠' }] : []),
   ]);
+  const selectTab = (id: string) => {
+    const u = new URL(location.href); // 다른 쿼리(?state= ?capture=) 유지 — mock db 캐시 키(QA §3)
+    u.searchParams.set('tab', id);
+    goto(resolve((u.pathname + u.search) as '/'), { keepFocus: true, noScroll: true, replaceState: true });
+  };
   // AX-1 1채널 프로파일이면 AI 채널 숨김
   const camsOf = (deviceId: string) =>
     data.cameras.filter((c) => c.deviceId === deviceId && (data.flags.channels === 2 || c.kind === 'general'));
@@ -51,14 +56,7 @@
     clock={data.clock}
     by={session.user?.userId ?? 'safety01'}
   />
-  <Tabs
-    variant="pill"
-    size="sm"
-    {tabs}
-    value={data.tab}
-    onchange={(id) =>
-      goto(resolve(`/a1/monitor?tab=${id}` as '/'), { keepFocus: true, noScroll: true, replaceState: true })}
-  />
+  <Tabs variant="pill" size="sm" {tabs} value={data.tab} onchange={selectTab} />
 
   {#if data.tab === 'bodycam'}
     <EmptyState title="바디캠 세션" description="바디캠 영상은 준비 중입니다" ref="FR-030 DISC-030" />
