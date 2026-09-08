@@ -110,3 +110,25 @@ test('[B4-05] 알림 8종 · 임계 편집 → 저장 → 이력 · 고장코드
   await page.getByRole('tab', { name: '시나리오 등급' }).click();
   await expect(page.getByText('잠금 · 현장 검증 후')).toHaveCount(2);
 });
+
+test('[B4-05] off 픽스처: 통신 두절만 꺼짐(스위치 aria-checked=false·행 흐림) · 나머지 7건은 켜짐 [FR-011] [FR-036]', async ({
+  page,
+}) => {
+  await page.goto('/b4/rules?state=off&capture=1');
+  await expect(page.locator(`[data-scr="${SCR['B4-05']}"]`)).toBeVisible();
+  const rows = page.getByRole('region', { name: '알림 기준 목록' }).locator('[data-kind]');
+  await expect(rows).toHaveCount(8);
+  await expect(page.getByRole('switch', { name: '통신 두절 사용' })).toHaveAttribute('aria-checked', 'false');
+  await expect(page.locator('[data-kind="comm"]')).toHaveClass(/opacity-60/);
+  for (const on of [
+    'GPS 미수신',
+    '380V 전압 이상',
+    '하네스 단선',
+    '고장코드',
+    '서류 미비·만료',
+    '수송관 도달률',
+    '필터 도달률',
+  ]) {
+    await expect(page.getByRole('switch', { name: `${on} 사용` })).toHaveAttribute('aria-checked', 'true');
+  }
+});

@@ -1384,6 +1384,8 @@ screens:
   states:
   - id: rules
     name: rules
+  - id: off
+    name: 통신 두절 알림 꺼짐
   nav: []
   trace:
     task:
