@@ -12,7 +12,7 @@
     "tokens:check": "node packages/tokens/scripts/check.mjs && node packages/tokens/scripts/catalog.mjs",
     "tokens:lint": "node packages/tokens/scripts/lint.mjs",
     "tokens:build": "node packages/tokens/scripts/build.mjs",
-    "verify": "pnpm ssot:check && pnpm tokens:check && pnpm tokens:lint && pnpm lint && pnpm check && pnpm test && pnpm ssot:build && pnpm tokens:build && git diff --exit-code -- docs/generated packages/domain/src/generated packages/tokens/dist",
+    "verify": "pnpm ssot:check && pnpm tokens:check && pnpm tokens:lint && pnpm design:audit:query && pnpm lint && pnpm check && pnpm test && pnpm ssot:build && pnpm tokens:build && git diff --exit-code -- docs/generated packages/domain/src/generated packages/tokens/dist",
     "dev": "turbo run dev",
     "build": "turbo run build",
     "check": "turbo run check",
@@ -26,6 +26,7 @@
     "docs:check": "python3 tools/docs-gen/check_set.py",
     "design:audit": "node tools/design/copy-audit.mjs",
     "design:audit:color": "node tools/design/color-audit.mjs",
+    "design:audit:query": "node tools/design/query-audit.mjs",
     "brand:generate": "python3 tools/brand/wordmark.py && node tools/brand/mark.mjs",
     "brand:build": "node tools/brand/build.mjs",
     "e2e": "playwright test"

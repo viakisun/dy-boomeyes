@@ -92,8 +92,17 @@
       hour: '2-digit',
       minute: '2-digit',
     });
-  const openCam = (id: string) => goto(resolve(`/b1/dash?cam=${id}` as '/'), { keepFocus: true, noScroll: true });
-  const closeCam = () => goto(resolve('/b1/dash' as '/'), { keepFocus: true, noScroll: true });
+  // 다른 쿼리(?state= ?capture=) 유지 — mock db 캐시 키(QA §3)
+  const openCam = (id: string) => {
+    const u = new URL(location.href);
+    u.searchParams.set('cam', id);
+    goto(resolve((u.pathname + u.search) as '/'), { keepFocus: true, noScroll: true });
+  };
+  const closeCam = () => {
+    const u = new URL(location.href);
+    u.searchParams.delete('cam');
+    goto(resolve((u.pathname + u.search) as '/'), { keepFocus: true, noScroll: true });
+  };
 </script>
 
 <div

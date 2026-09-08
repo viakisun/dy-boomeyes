@@ -30,7 +30,7 @@
 ## 검증 명령
 
 ```
-pnpm verify          # ssot:check · tokens:check · tokens:lint · lint · check · test · ssot:build · tokens:build · 생성물 diff 0
+pnpm verify          # ssot:check · tokens:check · tokens:lint · design:audit:query · lint · check · test · ssot:build · tokens:build · 생성물 diff 0
 pnpm ssot:check      # 스키마·ID·참조·어휘·화면 규칙·DISC 생애주기 → 마지막 줄을 PR에 인용
 node tools/ssot/check.mjs --specs | --docs | --commits <range>
 ```
