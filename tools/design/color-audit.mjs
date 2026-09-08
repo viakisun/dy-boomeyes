@@ -1,6 +1,6 @@
 // color-audit.mjs — 화면별 점·색 사용량을 DOM에서 센다 (DY-design §0-4 색 예산 · W2.5 D9). 빌드 뒤 실행: node tools/design/color-audit.mjs [--json] [--no-serve]
 //   dots = size-size-indicator(상태 점 — StatusDot·StatusPill·Badge, Timeline 눈금 rounded-mark 제외) · glyph = "●" 텍스트 · markers = 지도 마커 · bg = 톤 배경 요소(pill·배너·타일) · fg = 톤 텍스트만인 요소 · hues = 사용된 색상 계열(neutral 제외)
-//   예산: 화면당 hues ≤ 3(accent · warning · danger) · dots는 LIVE·REC·촬영 중만 — 초과는 △로 표시(보고용, exit 0)
+//   예산: 화면당 hues ≤ 3(accent · warning · danger) · dots는 LIVE·REC·촬영 중만 — BASELINE 밖의 새 초과는 exit 1(화면 검수 §4 backlog 2, CI e2e job에서 build 후 실행 — verify는 build 의존이 없어 편입하지 않는다)
 import { chromium } from '@playwright/test';
 import { spawn } from 'node:child_process';
 import { readFileSync } from 'node:fs';
@@ -113,7 +113,24 @@ const f = (o) =>
     .map(([k, v]) => `${k.slice(0, 3)}${v}`)
     .join(' ');
 const over = ok.filter((r) => r.hues.length > 3);
-if (JSON_OUT) console.log(JSON.stringify({ rows, over: over.map((r) => r.id) }, null, 1));
+// 기존부터 있던 색상 계열 4+ 초과 3건 — TelemetryGauge 초록을 색 예산에 넣을지는 아직 사용자 결정 대기(디자인 잔여 백로그)
+// 새로 늘어난 화면만 게이트가 잡는다. 결정이 나면 이 배열에서 빼고(또는 코드를 고치고) exit 1로 되돌린다
+const BASELINE_OVER = ['A2-04', 'B1-07', 'B4-05'];
+const newOver = over.filter((r) => !BASELINE_OVER.includes(r.id));
+const erroredScreens = rows.filter((r) => r.error);
+if (JSON_OUT)
+  console.log(
+    JSON.stringify(
+      {
+        rows,
+        over: over.map((r) => r.id),
+        newOver: newOver.map((r) => r.id),
+        errored: erroredScreens.map((r) => r.id),
+      },
+      null,
+      1,
+    ),
+  );
 else {
   console.log('code    | dots glyph mark | bg(by tone)                          | fg-only(by tone)            | hues');
   for (const r of rows) {
@@ -131,6 +148,9 @@ else {
   const totf = {};
   for (const r of ok) for (const [k, v] of Object.entries(r.fgBy)) totf[k] = (totf[k] || 0) + v;
   console.log(
-    `${over.length ? '△' : '✓'} color-audit: ${ok.length}화면 · 점 ${sum('dots')} · ● ${sum('glyph')} · 마커 ${sum('markers')} · 색 배경 ${sum('bgN')}(${f(tot)}) · 색 텍스트 ${sum('fgN')}(${f(totf)}) · 텍스트 요소 ${sum('text')} · 색상 계열 4+ 화면 ${over.length}(${over.map((r) => r.id).join(' ')})`,
+    `${newOver.length || erroredScreens.length ? '✗' : over.length ? '△' : '✓'} color-audit: ${ok.length}화면 · 점 ${sum('dots')} · ● ${sum('glyph')} · 마커 ${sum('markers')} · 색 배경 ${sum('bgN')}(${f(tot)}) · 색 텍스트 ${sum('fgN')}(${f(totf)}) · 텍스트 요소 ${sum('text')} · 색상 계열 4+ 화면 ${over.length}(${over.map((r) => r.id).join(' ')})${newOver.length ? ` · BASELINE 밖 신규 ${newOver.length}(${newOver.map((r) => r.id).join(' ')})` : ''}`,
   );
+  if (erroredScreens.length)
+    console.error(`✗ color-audit: 렌더 실패 ${erroredScreens.length}(${erroredScreens.map((r) => r.id).join(' ')})`);
 }
+if (newOver.length || erroredScreens.length) process.exit(1);
