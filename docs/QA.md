@@ -11,7 +11,7 @@
 | 3 | 생성물 최신성 | `pnpm verify` 끝의 `git diff --exit-code` (docs/generated · domain/generated · tokens/dist) | CI 실패 | 있음 |
 | 4 | 타입·정적 | svelte-check(error 0) · ESLint(경계 규칙 `eslint-plugin-boundaries`) · Prettier | 커밋 차단 | 있음 |
 | 5 | 단위 | Vitest — 업무·서류·장비·카메라·부품 상태기계 · 프로파일→피처플래그 · 프로토콜 파서 · scr 커버리지 | 푸시 차단 | 있음(상태기계·라우트·mock) |
-| 6 | e2e·캡처 | `pnpm e2e`(Playwright, 빌드 후) — 역할 로그인 8(웹 4 · 앱 4)·가드 스모크 · 화면별 AC · 장면 1~10 · axe serious/critical 0(wave ≤ 2 화면 41 전수, wcag2a·2aa·best-practice) · `pnpm capture --dark --strict` 라우트 × 상태 전수 + 다크 + 자리 화면 0 · `pnpm capture:compare` 기준선 대비 픽셀 차 0.2%(ADR-008 A) | PR 차단(CI `e2e` 잡, shots 아티팩트) | 있음 |
+| 6 | e2e·캡처 | `pnpm e2e`(Playwright, 빌드 후) — 역할 로그인 8(웹 4 · 앱 4)·가드 스모크 · 화면별 AC · 장면 1~10 · axe serious/critical 0(wave ≤ 2 화면 41 전수, wcag2a·2aa·best-practice) · `pnpm capture --dark --strict` 라우트 × 상태 전수 + 다크 + 자리 화면 0 · `pnpm capture:compare` 기준선 대비 픽셀 차 0.2%(ADR-008 A) · `pnpm design:audit:color` 색상 계열 4+ 화면이 `BASELINE_OVER`(기존 3건) 밖에서 새로 늘면 실패 | PR 차단(CI `e2e` 잡, shots 아티팩트) | 있음 |
 | 7 | 추적·문서 | `check --specs`(frontmatter ID·AC ≥3) · `check --docs`(링크·ID) · `check --commits`(Refs 트레일러) | PR 차단 | 있음 |
 | 8 | 문서 세트 | `pnpm docs:set`(설계서 HTML/PDF · `DELTA.md` · `MANIFEST.md`) → `pnpm docs:check`(check_set ① 캡처 매니페스트 ② 설계서 화면 전수·문서 번호 ③ DELTA 신규 ID 전수 ④ MANIFEST 해시) — 로컬 실행, `shots/manifest.json`(`pnpm capture`) 필요 | 발행 차단(사람 게이트: `set_version` 승격·DY 전달은 사용자 승인) | 있음(ADR-011 · W2 B14) |
 
@@ -27,8 +27,8 @@
 - [ ] 캡처 파일 `shots/<code>-<state>.png` 갱신 · 시각 회귀 통과
 - [ ] 테스트 제목 `[FR-nnn]`/`[코드]` · 커밋 `Refs:`
 - [ ] 골격(DY-design §11): 웹은 PageHeader 첫 요소 · 부제 1줄(≤ 60자) · 우측 액션 ≤ 2 · Stat 값 중립색 · 표 식별자 셀 nowrap·텍스트 1줄 · 폼 폭 640 · 내비 아이콘 실물(자리 사각형 0)
-- [ ] 색·점(DY-design §0-4): `pnpm design:audit:color`(빌드 뒤) 이 화면의 색상 계열 ≤ 3(accent · warning · danger) · 점은 LIVE·REC·촬영 중만 · 성공/정보/진행 상태는 텍스트
-- [ ] 카피(DY-design §12): `pnpm tokens:lint` `copy-*` 0건(SSOT 식별자·웨이브·구현 용어·표면 코드 노출 없음 — `pnpm design:audit`는 보고용) · 근거는 `data-ref`/`ref` · 미구현은 "준비 중" · 라벨은 labels.ts
+- [ ] 색·점(DY-design §0-4): `pnpm design:audit:color`(빌드 뒤, CI `e2e` 잡에 편입) 이 화면의 색상 계열 ≤ 3(accent · warning · danger) · 점은 LIVE·REC·촬영 중만 · 성공/정보/진행 상태는 텍스트 — 기존 초과 3건(A2-04·B1-07·B4-05)은 스크립트 안 `BASELINE_OVER`로 예외 처리 중(디자인 잔여 백로그, 사용자 결정 대기), 새 초과만 PR을 막는다
+- [ ] 카피(DY-design §12): `pnpm tokens:lint` `copy-*` 0건(SSOT 식별자·웨이브·구현 용어·표면 코드 노출 없음, 이미 verify 하드 게이트 — `pnpm design:audit`는 같은 4패턴을 apps 마크업에서만 파일별로 집계하는 탐색용 리포트, 겹치는 범위는 이미 잡히므로 verify에 중복 편입하지 않는다) · 근거는 `data-ref`/`ref` · 미구현은 "준비 중" · 라벨은 labels.ts
 
 ## 3. 캡처 규약 (`tools/capture`, W0)
 
