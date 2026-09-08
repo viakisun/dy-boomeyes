@@ -287,7 +287,7 @@ export const SCREENS = {
   'B4-02': { name: "프로토콜 관리", surface: 'B4', app: 'web', route: "/b4/protocols", roles: ["ops-admin"], phase: 1, wave: 1, default: 'proto', states: ["proto"] },
   'B4-03': { name: "장비·현장·프로파일", surface: 'B4', app: 'web', route: "/b4/assets", roles: ["ops-admin"], phase: 1, wave: 2, default: 'assets', states: ["assets"] },
   'B4-04': { name: "사용자·권한", surface: 'B4', app: 'web', route: "/b4/users", roles: ["ops-admin"], phase: 1, wave: 2, default: 'users', states: ["users"] },
-  'B4-05': { name: "알림 기준", surface: 'B4', app: 'web', route: "/b4/rules", roles: ["ops-admin"], phase: 1, wave: 1, default: 'rules', states: ["rules"] },
+  'B4-05': { name: "알림 기준", surface: 'B4', app: 'web', route: "/b4/rules", roles: ["ops-admin"], phase: 1, wave: 1, default: 'rules', states: ["rules","off"] },
   'B4-06': { name: "서류 관리", surface: 'B4', app: 'web', route: "/b4/docs", roles: ["ops-admin"], phase: 1, wave: 2, default: 'docs', states: ["docs"] },
   'B4-07': { name: "부품 대장", surface: 'B4', app: 'web', route: "/b4/parts", roles: ["ops-admin"], phase: 1, wave: 2, default: 'default', states: ["default"] },
   'B4-08': { name: "점검·교체 이력", surface: 'B4', app: 'web', route: "/b4/parts/history", roles: ["ops-admin"], phase: 1, wave: 2, default: 'default', states: ["default"] },

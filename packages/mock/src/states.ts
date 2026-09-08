@@ -180,6 +180,11 @@ export const FIXTURES: Record<string, Fixture> = {
   }),
   'B4-02:proto': (db) => db,
   'B4-05:rules': (db) => db,
+  // 화면 검수 backlog 5 — 시드 alerts 8건이 전부 enabled:true라 "꺼짐" 렌더가 캡처된 적이 없었다. 통신 두절 1건만 꺼서 재현
+  'B4-05:off': (db) => ({
+    ...db,
+    rules: { ...db.rules, alerts: db.rules.alerts.map((a) => (a.kind === 'comm' ? { ...a, enabled: false } : a)) },
+  }),
   // sites-assets-leases(W2 B5): 마스터 — 시드 그대로(현장 2 · 장비 5 · 계정 7)
   'B4-03:assets': (db) => db,
   'B4-04:users': (db) => db,

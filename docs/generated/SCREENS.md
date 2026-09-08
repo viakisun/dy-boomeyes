@@ -65,7 +65,7 @@
 | `B4-02` | 프로토콜 관리 | B4 | `/b4/protocols` | ops-admin | 1 | 1 | 1 (proto) | FR-020 | admin-protocol-rules demo-scripts |
 | `B4-03` | 장비·현장·프로파일 | B4 | `/b4/assets` | ops-admin | 1 | 2 | 1 (assets) | FR-018 FR-026 FR-029 FR-031 | sites-assets-leases |
 | `B4-04` | 사용자·권한 | B4 | `/b4/users` | ops-admin | 1 | 2 | 1 (users) | FR-021 | sites-assets-leases |
-| `B4-05` | 알림 기준 | B4 | `/b4/rules` | ops-admin | 1 | 1 | 1 (rules) | FR-006 FR-007 FR-011 FR-036 | admin-protocol-rules |
+| `B4-05` | 알림 기준 | B4 | `/b4/rules` | ops-admin | 1 | 1 | 2 (rules off) | FR-006 FR-007 FR-011 FR-036 | admin-protocol-rules |
 | `B4-06` | 서류 관리 | B4 | `/b4/docs` | ops-admin | 1 | 2 | 1 (docs) | FR-016 | documents |
 | `B4-07` | 부품 대장 | B4 | `/b4/parts` | ops-admin | 1 | 2 | 1 (default) | FR-032 | equipment-parts |
 | `B4-08` | 점검·교체 이력 | B4 | `/b4/parts/history` | ops-admin | 1 | 2 | 1 (default) | FR-032 | equipment-parts |
