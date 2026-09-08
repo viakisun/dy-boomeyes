@@ -1,5 +1,6 @@
 // copy-audit.mjs — 화면 템플릿 텍스트에 내부 식별자·프로젝트 상태가 노출된 곳을 센다 (DY-design §12 카피·식별자 정책, 디자인 개선 D0 지표)
-//   node tools/design/copy-audit.mjs [--json]   → 파일별 건수 · 총계 · 노출 1건 이상이면 exit 1(pnpm verify에 편입, 화면 검수 §4 backlog 2)
+//   node tools/design/copy-audit.mjs [--json]   → 파일별 건수 · 총계 · 노출 1건 이상이면 exit 1(화면 검수 §4 backlog 2)
+//   packages/tokens/scripts/lint.mjs의 카피 검사(COPY 규칙, apps/web·pwa만 — 172-188행)와 범위·패턴이 완전히 같아 pnpm verify에는 편입하지 않는다(중복 실행). 그쪽이 이미 verify 하드 게이트다
 // 대상: apps/*/src/**/*.svelte 의 <script> 밖 마크업(주석 · data-ref/ref 속성 제외). 도메인 ID(CPB-/C-/DOC-/E-/RQ-/P-/LS-/SITE-)는 사용자 언어라 세지 않는다
 // 경계: JS의 \b는 한글 뒤에서 매치되지 않으므로 (?<![\w가-힣]) … (?![\w가-힣])를 쓴다 · 규칙마다 PROBES로 생존을 확인한다(죽으면 exit 2)
 import { readdirSync, readFileSync, statSync } from 'node:fs';
