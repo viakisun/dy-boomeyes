@@ -5023,6 +5023,10 @@
           {
             "id": "docnew",
             "name": "서류 검토 업무 접수 전(C-106 new)"
+          },
+          {
+            "id": "review",
+            "name": "서류 반려 사유 시트(?sheet=review — data-scr는 A1-03 유지, A1-08과 달리 별도 화면 아님)"
           }
         ],
         "nav": [

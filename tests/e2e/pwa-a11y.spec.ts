@@ -3,7 +3,7 @@ import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
 import { SCR } from '../../packages/domain/src/generated/ids';
 
-const PAGES: { scr: string; url: string; ready: (page: Page) => Promise<void> }[] = [
+const PAGES: { scr: string; label?: string; url: string; ready: (page: Page) => Promise<void> }[] = [
   {
     scr: SCR['A1-01'],
     url: '/a1/login',
@@ -22,6 +22,12 @@ const PAGES: { scr: string; url: string; ready: (page: Page) => Promise<void> }[
   {
     scr: SCR['A1-08'],
     url: '/a1/inbox/C-105?sheet=complete&state=sheet&capture=1',
+    ready: (p) => expect(p.locator('dialog[open][data-bottom-sheet]')).toBeVisible(),
+  },
+  {
+    scr: SCR['A1-03'],
+    label: '반려 시트(화면 검수 backlog 7)',
+    url: '/a1/inbox/C-106?state=review&sheet=review&capture=1',
     ready: (p) => expect(p.locator('dialog[open][data-bottom-sheet]')).toBeVisible(),
   },
   {
@@ -108,8 +114,8 @@ const PAGES: { scr: string; url: string; ready: (page: Page) => Promise<void> }[
   },
 ];
 
-for (const { scr, url, ready } of PAGES) {
-  test(`[${scr}] axe serious/critical 0`, async ({ page }) => {
+for (const { scr, label, url, ready } of PAGES) {
+  test(`[${scr}]${label ? ` ${label}` : ''} axe serious/critical 0`, async ({ page }) => {
     await page.goto(url);
     await expect(page.locator(`[data-scr="${scr}"]`).first()).toBeVisible();
     await ready(page);
