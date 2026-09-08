@@ -35,7 +35,9 @@ test('[B1-02] 셸 안에서 렌더 · 고정 시각 KST [FR-024]', async ({ page
   await expect(page.getByText('7. 3. 오전 10:42')).toBeVisible();
 });
 
-test('[B1-02M] ?cam= 모달 열림 · Esc 닫힘 [FR-004]', async ({ page }) => {
+test('[B1-02M] ?cam= 모달 열림 · Esc 닫힘 → cam=만 제거·state=·capture= 유지(화면 검수 §4 backlog 3) [FR-004]', async ({
+  page,
+}) => {
   await page.goto(`${DASH}&cam=CAM-3-2`);
   const dialog = page.locator('dialog[open]');
   await expect(dialog).toBeVisible();
@@ -43,6 +45,8 @@ test('[B1-02M] ?cam= 모달 열림 · Esc 닫힘 [FR-004]', async ({ page }) => 
   await page.keyboard.press('Escape');
   await expect(dialog).toHaveCount(0);
   await expect(page).not.toHaveURL(/cam=/);
+  await expect(page).toHaveURL(/state=dash/);
+  await expect(page).toHaveURL(/capture=1/);
 });
 
 test('[B1-02] mock realtime 알림 도착 → 피드 상단·토스트 · 클릭 → 업무 C-105 [FR-011]', async ({ page }) => {

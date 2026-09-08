@@ -42,7 +42,9 @@
   const selected = $derived(data.leases.find((l) => l.id === (picked ?? data.lease)) ?? sorted[0] ?? null);
   const select = (id: string) => {
     picked = id;
-    goto(resolve(`/b1/leases?lease=${id}` as '/'), { keepFocus: true, noScroll: true, replaceState: true });
+    const u = new URL(location.href); // 다른 쿼리(?state= ?capture=) 유지 — mock db 캐시 키(QA §3)
+    u.searchParams.set('lease', id);
+    goto(resolve((u.pathname + u.search) as '/'), { keepFocus: true, noScroll: true, replaceState: true });
   };
   let toSiteId = $state('');
   let note = $state('');

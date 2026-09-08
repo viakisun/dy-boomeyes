@@ -26,6 +26,12 @@
   const sorted = $derived([...data.docs].sort((a, b) => ((a.expiresAt ?? '9') < (b.expiresAt ?? '9') ? -1 : 1)));
   const expiring = $derived(data.docs.filter((d) => d.state === 'expiring' || d.state === 'rejected'));
   let picked = $state<string | null>(null);
+  const select = (id: string) => {
+    picked = id;
+    const u = new URL(location.href); // 다른 쿼리(?state= ?capture=) 유지 — mock db 캐시 키(QA §3)
+    u.searchParams.set('doc', id);
+    goto(resolve((u.pathname + u.search) as '/'), { keepFocus: true, noScroll: true, replaceState: true });
+  };
   const selectedId = $derived(
     picked && data.docs.some((d) => d.id === picked) ? picked : (data.doc ?? expiring[0]?.id ?? sorted[0]?.id ?? null),
   );
@@ -102,10 +108,7 @@
       rows={sorted}
       rowKey={(d: Doc) => d.id}
       selectedKey={selectedId}
-      onselect={(row: Doc) => (
-        (picked = row.id),
-        goto(resolve(`/b1/docs?doc=${row.id}` as '/'), { keepFocus: true, noScroll: true, replaceState: true })
-      )}
+      onselect={(row: Doc) => select(row.id)}
       caption="서류 목록 — 만료 빠른 순"
     >
       {#snippet cell(row: Doc, col: Column)}

@@ -45,7 +45,9 @@
   }
   const select = (id: string) => {
     picked = id;
-    goto(resolve(`/b4/users?user=${id}` as '/'), { keepFocus: true, noScroll: true, replaceState: true });
+    const u = new URL(location.href); // 다른 쿼리(?state= ?capture=) 유지 — mock db 캐시 키(QA §3)
+    u.searchParams.set('user', id);
+    goto(resolve((u.pathname + u.search) as '/'), { keepFocus: true, noScroll: true, replaceState: true });
   };
   const setRole = (u: User, role: RoleId) =>
     run(`역할 — ${u.display} → ${ROLE_NAME[role]}`, async () => {

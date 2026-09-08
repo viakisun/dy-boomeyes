@@ -25,8 +25,11 @@
   const count = (s: TaskState) => data.cases.filter((c) => c.state === s).length;
   const now = $derived(data.clock.now());
   const siteName = (id: string) => data.sites.find((s) => s.id === id)?.name ?? id;
-  const select = (id: string) =>
-    goto(resolve(`/a3/tasks?filter=${id}` as '/'), { keepFocus: true, noScroll: true, replaceState: true });
+  const select = (id: string) => {
+    const u = new URL(location.href); // 다른 쿼리(?state= ?capture=) 유지 — mock db 캐시 키(QA §3)
+    u.searchParams.set('filter', id);
+    goto(resolve((u.pathname + u.search) as '/'), { keepFocus: true, noScroll: true, replaceState: true });
+  };
   let busy = $state<string | null>(null);
   async function confirm(c: Case) {
     busy = c.id;
