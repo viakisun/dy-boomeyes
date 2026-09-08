@@ -39,7 +39,13 @@ const PARAMS = {
   '[event]': 'EV-001',
 };
 // 상태 픽스처가 다른 개체를 다루면 여기서 파라미터를 바꾼다 (docnew = C-106 서류 검토 업무)
-const STATE_PARAMS = { 'A1-03:docnew': { '[case]': 'C-106' }, 'A3-03:normal': { '[site]': 'SITE-002' } };
+const STATE_PARAMS = {
+  'A1-03:docnew': { '[case]': 'C-106' },
+  'A1-03:review': { '[case]': 'C-106' },
+  'A3-03:normal': { '[site]': 'SITE-002' },
+};
+// 같은 data-scr를 공유하는 상태가 state= 외에 추가 쿼리(예: 시트 오픈)가 필요할 때만 채운다(화면 검수 backlog 7)
+const STATE_QUERY = { 'A1-03:review': 'sheet=review' };
 const surfaces = Object.fromEntries(ssot.screens.surfaces.map((s) => [s.id, s.app]));
 const screens = ssot.screens.screens.filter((s) => s.wave <= WAVE && (!ONLY || ONLY.includes(s.id)));
 
@@ -132,7 +138,8 @@ for (const s of screens) {
   const phone = app === 'pwa';
   for (const st of PRESET ? s.states.filter((x) => x.id === s.default) : s.states) {
     const route = s.route.replace(/\[[a-z]+\]/g, (m) => STATE_PARAMS[`${s.id}:${st.id}`]?.[m] ?? PARAMS[m] ?? 'X');
-    const base = `${BASE[app]}${route}${route.includes('?') ? '&' : '?'}state=${st.id}&capture=1`;
+    const extra = STATE_QUERY[`${s.id}:${st.id}`];
+    const base = `${BASE[app]}${route}${route.includes('?') ? '&' : '?'}state=${st.id}&capture=1${extra ? `&${extra}` : ''}`;
     const name0 = `${s.id.toLowerCase()}-${st.id}`;
     const variants = [{ url: base, name: name0 }];
     if (DARK && st.id === s.default) variants.push({ url: `${base}&theme=dark`, name: `${name0}-dark` });

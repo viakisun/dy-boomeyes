@@ -117,6 +117,8 @@ export const FIXTURES: Record<string, Fixture> = {
         : c,
     ),
   }),
+  // 화면 검수 backlog 7 — 반려 시트(?sheet=review)는 C-106 기본 시드(접수됨·서류 검토 대기)로 이미 열 수 있어 데이터 변형 불필요. capture.mjs의 STATE_PARAMS·STATE_QUERY가 [case]=C-106·sheet=review를 채운다
+  'A1-03:review': (db) => db,
   'A3-02:sites': (db) => db,
   'A3-05:inbox': (db) => db,
   // video-basics W2: 본사 열람 — A1-04 monitor와 같은 카메라 변형(오프라인·흐림)

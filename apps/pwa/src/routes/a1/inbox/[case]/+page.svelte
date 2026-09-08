@@ -204,7 +204,7 @@
     {/if}
   </div>
 
-  <BottomSheet open={data.review} title="반려 사유" onclose={closeSheet}>
+  <BottomSheet open={data.review} title="반려 사유" capture onclose={closeSheet}>
     <div class="gap-stack-sm flex flex-col">
       <p class="text-body-sm text-fg-muted">{data.doc?.subject} · {data.doc ? DOC_STATE_LABEL[data.doc.state] : ''}</p>
       <TextField label="반려 사유(필수)" bind:value={reason} placeholder="예: 사본 흐림 — 원본 재촬영" />
