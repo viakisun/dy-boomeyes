@@ -96,6 +96,11 @@ export const FR = {
   'FR-036': 'FR-036',
   'FR-037': 'FR-037',
   'FR-038': 'FR-038',
+  'FR-039': 'FR-039',
+  'FR-040': 'FR-040',
+  'FR-041': 'FR-041',
+  'FR-042': 'FR-042',
+  'FR-043': 'FR-043',
 } as const;
 export type FrId = keyof typeof FR;
 
@@ -178,6 +183,11 @@ export const DISC = {
   'DISC-052': 'DISC-052',
   'DISC-053': 'DISC-053',
   'DISC-054': 'DISC-054',
+  'DISC-055': 'DISC-055',
+  'DISC-056': 'DISC-056',
+  'DISC-057': 'DISC-057',
+  'DISC-058': 'DISC-058',
+  'DISC-059': 'DISC-059',
 } as const;
 export type DiscId = keyof typeof DISC;
 
@@ -201,6 +211,9 @@ export const IF = {
   'IF-017': 'IF-017',
   'IF-018': 'IF-018',
   'IF-019': 'IF-019',
+  'IF-020': 'IF-020',
+  'IF-021': 'IF-021',
+  'IF-022': 'IF-022',
 } as const;
 export type IfId = keyof typeof IF;
 

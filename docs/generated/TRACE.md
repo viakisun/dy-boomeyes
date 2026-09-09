@@ -5,11 +5,11 @@
 | 지표 | 값 |
 |---|---|
 | 화면 | 53 |
-| FR | 38 |
+| FR | 43 |
 | FR 0건 화면(고아) | 0 |
 | 화면 0건 FR | 0 |
 | 현재 웨이브(2) 이하 spec 없는 화면 | 0 |
-| 참조 수 | 1608 |
+| 참조 수 | 1671 |
 | 검사 오류 | 0 |
 
 ## FR → 화면 · IF · ACC · spec
@@ -54,6 +54,11 @@
 | `FR-036` | 시나리오별 알림 등급 — 정상 타설 무알림 · 호스 주변 인원 접근 즉시 · 전도/무동작 고우선 · 배관·호스 이상 긴급 · 영상 장애 알림 | 2 | 제안 | 2단계 | B4-05 B1-02 A1-05 | IF-010 IF-014 IF-015 | — | admin-protocol-rules control-dashboard demo-scripts video-basics |
 | `FR-037` | 오프라인 제출 큐 — 체크인·체크아웃·일일점검·서류를 저장 후 연결 시 순서대로 동기 | 1 | 기본 | 개발 단계 | A2-02 A2-03 A2-05 | IF-009 IF-011 | — | demo-scripts driver-daily notifications documents |
 | `FR-038` | 현장 신고 — 안전관리자가 영상 화면에서 상황(작업자 상태 이상 · 호스·배관 이상 · 기타)을 신고해 업무·알림을 만든다 | 1 | 제안 | 개발 단계 | A1-04 A1-05 A1-02 B1-03 | IF-009 IF-010 | — | demo-scripts video-basics documents notifications task-escalation |
+| `FR-039` | 타설량 산출·가동률 — 수송관 진동 센서 기반 시간당 타설량(m³/h)·누적 타설량·가동률 | 2 | 제안 | 미착수 | B1-02 A1-05 A2-04 B4-07 | IF-021 | — | control-dashboard demo-scripts video-basics driver-daily equipment-parts |
+| `FR-040` | 전력 상태 계측 — 3상 전압·전류 실측 · 결상·역상·과전압 판정 · 모터 구동 가능 여부 | 1 | 제안 | 미착수 | B1-02 A1-05 A2-04 B4-05 | IF-020 IF-002 | — | control-dashboard demo-scripts video-basics driver-daily admin-protocol-rules |
+| `FR-041` | 장비 문서·가이드 — 취급설명서·안전 매뉴얼·설치 가이드·고장 진단/수리·파트북(부품 품번) | 2 | 제안 | 미착수 | B1-02 A1-05 A1-07 A2-06 B4-07 | IF-009 | — | control-dashboard demo-scripts video-basics sites-assets-leases driver-daily equipment-parts |
+| `FR-042` | 바디캠 실시간 스트리밍·현장 이동 재배정 — 작업팀 이동 시 바디캠↔현장 연동 | 2 | 제안 | 미착수 | B1-02M A1-04 B1-08 B4-03 | IF-022 IF-018 | — | control-dashboard video-basics demo-scripts event-replay sites-assets-leases |
+| `FR-043` | 통신 단말기 탈부착 운영 — 미가동 장비 단말기 탈거·재장착과 월 유지비 관리 | 2 | 제안 | 미착수 | B4-03 B1-02 B1-06 | IF-009 | — | sites-assets-leases control-dashboard demo-scripts |
 
 ## 화면 → 과업 절 · OUT · RFP · DISC · IF
 
@@ -62,18 +67,18 @@
 | `A1-01` | 4.3.2 | OUT-002 | RFP-018 | DISC-020 | IF-009 |
 | `A1-02` | 4.3.2 | OUT-002 | RFP-018 RFP-020 EXT-1 | DISC-016 DISC-036 DISC-050 | IF-009 IF-010 IF-014 |
 | `A1-03` | 4.3.2 | OUT-002 | RFP-015 EXT-1 | DISC-012 DISC-015 DISC-035 | IF-009 IF-010 |
-| `A1-04` | 4.3.2 4.3.8 | OUT-002 | RFP-007 | DISC-004 DISC-025 DISC-027 DISC-028 DISC-029 DISC-030 DISC-040 DISC-042 DISC-054 | IF-005 IF-006 IF-009 IF-015 IF-016 IF-017 |
-| `A1-05` | 4.3.2 | OUT-002 | RFP-008 RFP-010 RFP-011 RFP-012 RFP-013 RFP-014 RFP-016 RFP-017 RFP-020 | DISC-008 DISC-009 DISC-010 DISC-011 | IF-001 IF-002 IF-004 IF-006 IF-007 IF-009 |
+| `A1-04` | 4.3.2 4.3.8 | OUT-002 | RFP-007 | DISC-004 DISC-025 DISC-027 DISC-028 DISC-029 DISC-030 DISC-040 DISC-042 DISC-054 DISC-058 | IF-005 IF-006 IF-009 IF-015 IF-016 IF-017 IF-022 |
+| `A1-05` | 4.3.2 | OUT-002 | RFP-008 RFP-010 RFP-011 RFP-012 RFP-013 RFP-014 RFP-016 RFP-017 RFP-020 | DISC-008 DISC-009 DISC-010 DISC-011 DISC-055 DISC-056 DISC-057 | IF-001 IF-002 IF-004 IF-006 IF-007 IF-009 IF-020 IF-021 |
 | `A1-06` | 4.3.2 4.3.11 | OUT-002 | EXT-1 | — | IF-009 |
-| `A1-07` | 4.3.2 4.3.9 | OUT-002 | RFP-018 | DISC-034 DISC-047 DISC-049 | IF-009 |
+| `A1-07` | 4.3.2 4.3.9 | OUT-002 | RFP-018 | DISC-034 DISC-047 DISC-049 DISC-057 | IF-009 |
 | `A1-08` | 4.3.2 | OUT-002 | EXT-1 | DISC-015 | IF-009 IF-010 |
 | `A1-11` | 5.3.3 | OUT-014 | RFP-016 RFP-017 | DISC-038 DISC-043 DISC-044 | IF-009 IF-011 IF-019 |
 | `A2-01` | 4.3.1 | OUT-001 | RFP-018 | DISC-020 | IF-009 |
 | `A2-02` | 4.3.1 | OUT-001 | RFP-015 RFP-018 EXT-2 | DISC-031 DISC-036 DISC-045 | IF-009 IF-010 IF-014 |
 | `A2-03` | 4.3.1 | OUT-001 | EXT-2 | DISC-033 DISC-045 | IF-009 |
-| `A2-04` | 4.3.1 | OUT-001 | RFP-010 RFP-011 RFP-013 RFP-016 RFP-017 | DISC-010 DISC-013 DISC-014 | IF-001 IF-009 IF-010 |
+| `A2-04` | 4.3.1 | OUT-001 | RFP-010 RFP-011 RFP-013 RFP-016 RFP-017 | DISC-010 DISC-013 DISC-014 DISC-055 DISC-056 | IF-001 IF-009 IF-010 |
 | `A2-05` | 4.3.1 4.3.10 | OUT-001 | RFP-020 EXT-2 | DISC-016 DISC-045 DISC-046 DISC-048 | IF-009 IF-011 |
-| `A2-06` | 4.3.1 | OUT-001 | RFP-018 | — | IF-009 |
+| `A2-06` | 4.3.1 | OUT-001 | RFP-018 | DISC-057 | IF-009 |
 | `A2-09` | 5.3.3 | OUT-014 | RFP-016 RFP-017 | DISC-038 DISC-043 DISC-044 | IF-009 IF-011 IF-019 |
 | `A3-01` | 4.3.2 | OUT-002 | RFP-018 RFP-022 | DISC-020 | IF-009 |
 | `A3-02` | 4.3.2 | OUT-002 | RFP-022 EXT-3 | DISC-015 | IF-009 IF-014 |
@@ -88,14 +93,14 @@
 | `A4-05` | 4.3.9 | OUT-009 | EXT-4 EXT-5 | DISC-026 DISC-051 DISC-052 | — |
 | `A4-06` | 4.3.10 | OUT-010 | RFP-020 EXT-5 | DISC-016 DISC-026 DISC-052 | — |
 | `B0-01` | 4.3.5 | OUT-005 | RFP-019 | DISC-020 DISC-023 DISC-024 DISC-031 | IF-009 |
-| `B1-02` | 4.3.3 | OUT-003 | RFP-009 RFP-010 RFP-013 RFP-014 RFP-015 RFP-019 RFP-021 | DISC-025 DISC-037 | IF-003 IF-004 IF-009 IF-010 IF-013 |
-| `B1-02M` | 4.3.3 4.3.8 | OUT-003 | RFP-007 RFP-008 | DISC-004 DISC-005 DISC-007 DISC-027 DISC-028 DISC-029 DISC-040 DISC-042 DISC-054 | IF-005 IF-006 IF-007 IF-008 IF-015 IF-018 |
+| `B1-02` | 4.3.3 | OUT-003 | RFP-009 RFP-010 RFP-013 RFP-014 RFP-015 RFP-019 RFP-021 | DISC-025 DISC-037 DISC-055 DISC-056 DISC-057 DISC-059 | IF-003 IF-004 IF-009 IF-010 IF-013 IF-020 IF-021 |
+| `B1-02M` | 4.3.3 4.3.8 | OUT-003 | RFP-007 RFP-008 | DISC-004 DISC-005 DISC-007 DISC-027 DISC-028 DISC-029 DISC-040 DISC-042 DISC-054 DISC-058 | IF-005 IF-006 IF-007 IF-008 IF-015 IF-018 IF-022 |
 | `B1-03` | 4.3.9 4.3.4 | OUT-009 | RFP-020 EXT-1 | DISC-048 | IF-009 IF-010 |
 | `B1-04` | 4.3.11 | OUT-011 | EXT-3 | DISC-015 DISC-035 DISC-050 DISC-051 | IF-009 IF-010 IF-014 |
 | `B1-05` | 4.3.10 | OUT-010 | RFP-020 | DISC-016 DISC-053 | IF-009 |
-| `B1-06` | 4.3.9 | OUT-009 | EXT-4 | DISC-037 | IF-009 |
+| `B1-06` | 4.3.9 | OUT-009 | EXT-4 | DISC-037 DISC-059 | IF-009 |
 | `B1-07` | 4.3.3 | OUT-003 | RFP-021 | DISC-019 DISC-031 | IF-009 IF-010 |
-| `B1-08` | 5.3.1 | OUT-012 | RFP-008 | DISC-039 DISC-040 DISC-044 DISC-049 | IF-008 IF-009 IF-017 IF-018 |
+| `B1-08` | 5.3.1 | OUT-012 | RFP-008 | DISC-039 DISC-040 DISC-044 DISC-049 DISC-058 | IF-008 IF-009 IF-017 IF-018 |
 | `B2-02` | 4.3.3 | OUT-003 | RFP-009 RFP-022 | — | IF-003 IF-009 IF-010 IF-013 |
 | `B2-03` | 4.3.3 4.3.8 | OUT-003 | RFP-007 RFP-022 | DISC-015 | IF-006 IF-009 |
 | `B2-04` | 4.3.3 | OUT-003 | RFP-022 | — | IF-009 |
@@ -106,11 +111,11 @@
 | `B3-06` | 4.3.3 | OUT-003 | RFP-021 | DISC-019 | IF-009 |
 | `B3-07` | 5.3.3 | OUT-014 | RFP-022 | DISC-019 DISC-038 | IF-009 |
 | `B4-02` | 4.3.6 4.3.4 | OUT-006 | RFP-023 | DISC-008 DISC-009 | IF-009 IF-012 |
-| `B4-03` | 4.3.9 4.3.4 | OUT-009 | — | DISC-004 DISC-005 DISC-007 DISC-026 DISC-028 DISC-030 DISC-031 DISC-034 DISC-040 DISC-047 DISC-048 DISC-049 | IF-009 |
+| `B4-03` | 4.3.9 4.3.4 | OUT-009 | — | DISC-004 DISC-005 DISC-007 DISC-026 DISC-028 DISC-030 DISC-031 DISC-034 DISC-040 DISC-047 DISC-048 DISC-049 DISC-058 DISC-059 | IF-009 |
 | `B4-04` | 4.3.4 | OUT-004 | — | DISC-015 DISC-053 | IF-009 |
-| `B4-05` | 4.3.11 4.3.4 | OUT-011 | RFP-015 RFP-016 RFP-017 | DISC-012 DISC-013 DISC-014 DISC-036 DISC-050 DISC-054 | IF-002 IF-009 |
+| `B4-05` | 4.3.11 4.3.4 | OUT-011 | RFP-015 RFP-016 RFP-017 | DISC-012 DISC-013 DISC-014 DISC-036 DISC-050 DISC-054 DISC-056 | IF-002 IF-009 |
 | `B4-06` | 4.3.10 4.3.4 | OUT-010 | RFP-020 | DISC-016 DISC-046 DISC-047 DISC-048 | IF-009 IF-011 |
-| `B4-07` | 5.3.3 | OUT-014 | RFP-016 RFP-017 | DISC-038 DISC-043 DISC-044 | IF-009 IF-019 |
+| `B4-07` | 5.3.3 | OUT-014 | RFP-016 RFP-017 | DISC-038 DISC-043 DISC-044 DISC-055 DISC-057 | IF-009 IF-019 |
 | `B4-08` | 5.3.3 | OUT-014 | RFP-016 RFP-017 | DISC-038 DISC-044 | IF-009 |
 
 ## 과업 절 커버리지
