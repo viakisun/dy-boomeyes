@@ -290,6 +290,52 @@ if:
   screens:
   - A1-11
   - A2-09
+- id: IF-020
+  segment: CPB 전장 → 제어기 (계측 입력)
+  protocol: ADC 아날로그 입력 (3상 전압·전류 · 진동 센서) · 리모컨 CAN
+  data: 상별 전압·전류 실측값 · 결상·역상·과전압 판정 입력 · 진동 레벨 · 리모컨 조작 정보
+  trigger: 상시 수집
+  phase: 1
+  optional: false
+  basis:
+    text: V5 검토자료 목표사양 4-1·4-3 / 제어팀 회신 2026-09-09 (전장팀 사양 협의 예정)
+    disc:
+    - DISC-056
+    sections:
+    - 4.3.1
+  screens:
+  - A1-05
+  - B1-02
+- id: IF-021
+  segment: 수송관 진동 센서(S1·S2) → 제어기
+  protocol: 진동 센서 2점 (밴드형 탈부착) — 타격 신호 · S1→S2 도달 시간차
+  data: 타수 · 시간차(Δt) → 유속 v=L/Δt · 토출량 Q=v×A · 누적 타설량
+  trigger: 타설 중 상시
+  phase: 2
+  optional: false
+  basis:
+    text: 기술경진대회 자료 CPB 스마트 통합 모니터링 시스템(연구개발2팀) §4~5
+    disc:
+    - DISC-055
+    sections: []
+  screens:
+  - B1-02
+  - A1-05
+- id: IF-022
+  segment: 바디캠 → 현장망·스마트폰 → 서버 (라이브)
+  protocol: 실시간 스트리밍 — 방식 미확정(독립 단말 직접 송출 vs 스마트폰 앱 경유, DISC-058)
+  data: 작업자 시점 실시간 영상 · 착용자·현장 배정 정보
+  trigger: 착용·작업 중
+  phase: 2
+  optional: false
+  basis:
+    text: 제어팀 회신 2026-09-09 (바디캠 실시간 스트리밍 요청 · 3~4대 · 작업팀 현장 이동) / V5 목표사양 1-5(스마트폰 연동 ↔ 앱 연계)
+    disc:
+    - DISC-058
+    sections: []
+  screens:
+  - B1-02M
+  - A1-04
 api:
 - id: API-001
   resource: 인증·세션
