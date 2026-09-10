@@ -24,6 +24,7 @@ export const ALERT_KIND_LABEL: Record<Alert['kind'], string> = {
   'ai-person': 'AI 인원 접근',
   'camera-health': '카메라 상태',
   report: '현장 신고',
+  phase: '3상 전원',
 };
 /** 표면별 딥링크(specs/notifications AC-3): 현장 a1 → 업무 상세(업무 없으면 업무함) · 운전자 a2 → 오늘 · 본사 a3 → 현장 목록 · 사업주 a4 → 보유 현황(wave 4 선반영 — 라우트는 아직 없다) */
 export function toPushPayload(alert: Alert, surface: PushSurface): PushPayload {

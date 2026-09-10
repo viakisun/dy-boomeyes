@@ -1,5 +1,5 @@
 // 운영 규칙 상수 — 원천 ssot entities.rules ("에스컬레이션 · 알림")
-import type { Device } from './types';
+import type { Device, PowerReading, TelemetryField } from './types';
 /** 중대 업무 미접수 에스컬레이션 임계 — "임계 1시간(협의)" (DISC-036 확정 전 기본값) */
 export const ESCALATE_AFTER_MS = 60 * 60 * 1000;
 
@@ -32,4 +32,36 @@ export type TelemetryStatus = 'ok' | 'stale' | 'offline';
 export function telemetryStatus(t: Pick<Device['telemetry'], 'at' | 'lte'>, now: Date): TelemetryStatus {
   if (t.lte === 'lost') return 'offline';
   return now.getTime() - Date.parse(t.at) > TELEMETRY_STALE_MS ? 'stale' : 'ok';
+}
+
+/** 3상 공급 전압 정격 — V5 목표사양 4-1 "현장 공급 전압 380V" */
+export const PHASE_NOMINAL_V = 380;
+/** 3상 판정 임계 — DISC-056(결상·역상·단상·과전압 임계·등급) 확정 전 기준안. 확정되면 이 상수만 바꾸거나 B4-05 규칙(AlertRule.threshold)으로 옮긴다 */
+export const PHASE_LIMITS = {
+  /** 정격 대비 저전압(단상 운전 의심) */
+  under: 0.9,
+  /** 정격 대비 과전압 */
+  over: 1.1,
+  /** 한 상이 이 비율 아래면 결상 */
+  loss: 0.5,
+  /** 상간 불평형 (max−min)/avg — 이 이상이면 역상·접촉 불량 의심 */
+  imbalance: 0.1,
+} as const;
+export type PowerStatus = 'unlinked' | 'normal' | PowerReading['fault'];
+/** 상간 불평형률 (max−min)/avg — 0이면 완전 균형 */
+export function phaseImbalance(p: PowerReading): number {
+  const v = [p.volts.r, p.volts.s, p.volts.t];
+  const avg = (v[0]! + v[1]! + v[2]!) / 3;
+  return avg ? (Math.max(...v) - Math.min(...v)) / avg : 0;
+}
+/** 3상 상태 — 계측 미연동이면 unlinked(FR-034 정직 표기) · 제어기 판정(p.fault)이 있으면 그대로 · 없으면 임계로 판정 */
+export function powerStatus(p: PowerReading | undefined, unlinked?: TelemetryField[]): PowerStatus {
+  if (unlinked?.includes('power') || !p) return 'unlinked';
+  if (p.fault && p.fault !== 'none') return p.fault;
+  const v = [p.volts.r, p.volts.s, p.volts.t];
+  if (v.some((x) => x < PHASE_NOMINAL_V * PHASE_LIMITS.loss)) return 'loss';
+  if (v.some((x) => x > PHASE_NOMINAL_V * PHASE_LIMITS.over)) return 'over';
+  if (v.some((x) => x < PHASE_NOMINAL_V * PHASE_LIMITS.under)) return 'under';
+  if (phaseImbalance(p) > PHASE_LIMITS.imbalance) return 'reverse';
+  return 'normal';
 }
