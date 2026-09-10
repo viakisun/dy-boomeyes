@@ -35,10 +35,29 @@ export function pourSummary(buckets: PourBucket[]): { totalM3: number; utilizati
   const active = work.filter((b) => b.m3 > 0).length;
   return { totalM3, utilization: work.length ? Math.round((active / work.length) * 1000) / 1000 : 0 };
 }
-/** 시계열 조립 — now가 속한 버킷까지 최근 m3.length개(오래된 것부터). m3는 호출부 리터럴(시드 결정성) */
-export function pourSeries(now: string | Date, m3: number[], extra: { cumulativeM3: number }): PourSeries {
+/** 오늘 타설량 — KST 자정(UTC 15:00 전날) 이후 버킷 합. 시간대 API 없이 정수 산술 */
+export function todayM3(buckets: PourBucket[], now: string | Date): number {
+  const DAY = 86_400_000;
+  const off = WORK_WINDOW.tzOffsetH * 3_600_000;
+  const t = typeof now === 'string' ? Date.parse(now) : now.getTime();
+  const kstMidnight = Math.floor((t + off) / DAY) * DAY - off;
+  return Math.round(buckets.filter((b) => Date.parse(b.at) >= kstMidnight).reduce((s, b) => s + b.m3, 0) * 10) / 10;
+}
+/** 버킷의 KST 시각(0~23) — 시간대 API 없이 정수 산술 */
+export const kstHour = (at: string) => (new Date(at).getUTCHours() + WORK_WINDOW.tzOffsetH) % 24;
+/**
+ * 시계열 조립 — now가 속한 버킷까지 최근 24버킷(오래된 것부터). 값은 KST 시각별 표 m3ByHour[0..23](호출부 리터럴).
+ * 24버킷이 매 시각을 정확히 한 번씩 덮으므로 합계·가동률은 now와 무관(시연 장면은 live 시계 — 몇 시에 열어도 같은 수치), 차트 모양만 돈다.
+ * 상태 서사(고장 뒤 정지 · 두절 뒤 무데이터)도 표의 0으로 굽는다 — now 기준으로 버킷을 지우면(예: "현재 버킷 0") 이미 0인 시각(점심·야간)에는
+ * 지울 게 없어 가동률이 시각에 따라 달라진다(리뷰 #61 발견). 결정성이 서사 정합보다 앞선다(specs/pour-metrics AC-5).
+ */
+export function pourSeries(now: string | Date, m3ByHour: number[], extra: { cumulativeM3: number }): PourSeries {
+  if (m3ByHour.length !== 24) throw new Error('pourSeries: m3ByHour는 KST 0~23시 24개');
   const end = Date.parse(bucketStart(now));
-  const buckets = m3.map((v, i) => ({ at: new Date(end - (m3.length - 1 - i) * BUCKET_MS).toISOString(), m3: v }));
+  const buckets = Array.from({ length: 24 }, (_, i) => {
+    const at = new Date(end - (23 - i) * BUCKET_MS).toISOString();
+    return { at, m3: m3ByHour[kstHour(at)]! };
+  });
   return {
     basis: {
       pipeDiaMm: PIPE_D125_M * 1000,

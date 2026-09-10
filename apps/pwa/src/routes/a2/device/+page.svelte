@@ -1,7 +1,7 @@
 <script lang="ts">
   // A2-04 내 장비 (specs/driver-daily AC-5) — 통신·전압·단선·고장코드 + 수송관·필터 도달률 임계
   import { resolve } from '$app/paths';
-  import { SCR } from '@boomeyes/domain';
+  import { SCR, todayM3 } from '@boomeyes/domain';
   import {
     CAMERA_TONE,
     EQUIPMENT_TONE,
@@ -9,6 +9,7 @@
     EmptyState,
     StatusPill,
     TelemetryGauge,
+    ProgressBar,
     TelemetryStrip,
     fmtDateTime,
   } from '@boomeyes/ui';
@@ -41,6 +42,29 @@
     </header>
 
     <TelemetryStrip telemetry={d.telemetry} now={data.clock.now()} />
+
+    <!-- 타설량(FR-039 · specs/pour-metrics AC-3) — 운전자는 오늘 합계·가동률만, 차트 없음 -->
+    {#if d.pour}
+      {@const p = d.pour}
+      <section
+        class="rounded-card border-border bg-surface p-inset-md gap-stack-sm flex flex-col border"
+        aria-label="타설량"
+      >
+        <div class="flex items-baseline justify-between">
+          <h3 class="text-heading-sm">오늘 타설량</h3>
+          <span class="text-heading-lg tabular-nums">{todayM3(p.buckets, data.clock.now())} m³</span>
+        </div>
+        <ProgressBar
+          value={p.utilization * 100}
+          label="가동률"
+          hint="작업 시간대 기준 {Math.round(p.utilization * 100)}%"
+          tone="neutral"
+        />
+        <span class="text-body-sm text-fg-muted" data-ref="DISC-055"
+          >누적 {p.cumulativeM3.toLocaleString('ko-KR')} m³ · 산출 기준 확정 전</span
+        >
+      </section>
+    {/if}
 
     <section
       class="rounded-card border-border bg-surface p-inset-md gap-stack-md flex flex-col border"

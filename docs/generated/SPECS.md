@@ -13,6 +13,7 @@
 | event-replay | SPEC-event-replay | draft | 2 | B1-08 | FR-033 FR-024 | [specs/event-replay/spec.md](../../specs/event-replay/spec.md) |
 | notifications | SPEC-notifications | draft | 2 | A1-02 A2-02 A3-02 | FR-011 FR-010 FR-036 | [specs/notifications/spec.md](../../specs/notifications/spec.md) |
 | owner-showcase | SPEC-owner-showcase | draft | 2 | B1-07 | FR-023 FR-024 | [specs/owner-showcase/spec.md](../../specs/owner-showcase/spec.md) |
+| pour-metrics | SPEC-pour-metrics | draft | 2 | B1-02 A1-05 A2-04 B4-07 | FR-039 FR-032 FR-034 | [specs/pour-metrics/spec.md](../../specs/pour-metrics/spec.md) |
 | records-reports | SPEC-records-reports | draft | 2 | A1-06 A3-06 B2-04 | FR-012 FR-022 FR-023 FR-024 | [specs/records-reports/spec.md](../../specs/records-reports/spec.md) |
 | shell-auth | SPEC-shell-auth | draft | 0 | B0-01 A1-01 A2-01 A3-01 A4-01 | FR-001 FR-024 | [specs/shell-auth/spec.md](../../specs/shell-auth/spec.md) |
 | sites-assets-leases | SPEC-sites-assets-leases | draft | 2 | B4-03 B4-04 B1-06 B2-02 A1-07 A2-06 A3-03 | FR-018 FR-021 FR-019 FR-017 FR-022 FR-003 FR-024 FR-029 FR-031 FR-004 | [specs/sites-assets-leases/spec.md](../../specs/sites-assets-leases/spec.md) |

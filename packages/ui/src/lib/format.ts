@@ -13,6 +13,10 @@ export const fmtDateTime = (iso: string) =>
 export const fmtTime = (iso: string) =>
   new Date(iso).toLocaleTimeString('ko-KR', { timeZone: TZ, hour: '2-digit', minute: '2-digit' });
 
+/** 시간 버킷 라벨 — KST 정시 '10시'(BarChart bars[].label — 컴포넌트는 시각을 모른다) */
+export const fmtHour = (iso: string) =>
+  `${Number(new Intl.DateTimeFormat('en-US', { timeZone: TZ, hourCycle: 'h23', hour: 'numeric' }).format(new Date(iso)))}시`;
+
 /** 길이 — 60초 미만은 초, 그 이상은 분. 저장 영상 목록(반올림으로 0분이 되지 않게) */
 export const fmtDuration = (sec: number) => (sec < 60 ? `${sec}초` : `${Math.round(sec / 60)}분`);
 

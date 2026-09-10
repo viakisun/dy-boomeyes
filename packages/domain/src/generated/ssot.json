@@ -5323,6 +5323,10 @@
             "name": "dev"
           },
           {
+            "id": "pour",
+            "name": "부품 탭 · 타설량 24버킷(?tab=parts)"
+          },
+          {
             "id": "plite",
             "name": "P-LITE 현장(1채널 · 저장 소스 서버만)"
           },
@@ -11094,6 +11098,7 @@
         ],
         "specs": [
           "demo-scripts",
+          "pour-metrics",
           "video-basics"
         ]
       },
@@ -11238,7 +11243,8 @@
           "DISC-056"
         ],
         "specs": [
-          "driver-daily"
+          "driver-daily",
+          "pour-metrics"
         ]
       },
       "A2-05": {
@@ -11503,7 +11509,8 @@
         ],
         "specs": [
           "control-dashboard",
-          "demo-scripts"
+          "demo-scripts",
+          "pour-metrics"
         ]
       },
       "B1-02M": {
@@ -11924,7 +11931,8 @@
           "DISC-057"
         ],
         "specs": [
-          "equipment-parts"
+          "equipment-parts",
+          "pour-metrics"
         ]
       },
       "B4-08": {

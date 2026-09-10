@@ -152,10 +152,13 @@
           },
         ]}
       />
+      <!-- 분모는 참고 기준 guideM3(FR-039 · specs/pour-metrics AC-4) — 없으면 종전 최대 타설 부품. 단독 폐기 기준 아님(FR-032) -->
       <ProgressBar
-        value={(selected.pouredM3 / maxPoured) * 100}
+        value={(selected.pouredM3 / (selected.guideM3 ?? maxPoured)) * 100}
         label="누적 타설"
-        hint="{selected.pouredM3} / {maxPoured} m³(최대 타설 부품 대비)"
+        hint={selected.guideM3
+          ? `${selected.pouredM3} / ${selected.guideM3} m³(참고 기준 · 단독 폐기 기준 아님)`
+          : `${selected.pouredM3} / ${maxPoured} m³(최대 타설 부품 대비)`}
         tone="neutral"
       />
       {#if timeline.length}

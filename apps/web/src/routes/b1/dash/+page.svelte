@@ -29,6 +29,8 @@
     TelemetryStrip,
     type Column,
     fmtDuration,
+    fmtHour,
+    BarChart,
   } from '@boomeyes/ui';
   import { CameraWall, SOURCE_LABEL, VideoPlayer, visibleIn } from '@boomeyes/video';
   let { data } = $props();
@@ -262,6 +264,24 @@
         </dd>
       </dl>
       <TelemetryStrip telemetry={selected.telemetry} now={data.clock.now()} class="mt-stack-sm" />
+      <!-- 타설량(FR-039 · specs/pour-metrics AC-1) — 최근 12버킷 · 집계는 PourSeries가 들고 온다 · 라벨은 fmtHour(KST) -->
+      {#if selected.pour}
+        {@const p = selected.pour}
+        <BarChart
+          label="타설량 12h"
+          unit=" m³"
+          bars={p.buckets.slice(-12).map((b) => ({ key: b.at, label: fmtHour(b.at), value: b.m3 }))}
+          markKey={p.buckets.at(-1)?.at}
+          hint="가동률 {Math.round(p.utilization * 100)}%"
+          class="mt-stack-sm"
+        />
+        <span class="text-body-sm text-fg-muted" data-ref="DISC-055"
+          >누적 {p.cumulativeM3.toLocaleString('ko-KR')} m³ · 산출 기준안 D{p.basis.pipeDiaMm}
+          {p.basis.areaM2} m² · L {p.basis.sensorGapM} m</span
+        >
+      {:else}
+        <span class="text-body-sm text-fg-muted" data-ref="DISC-055">타설량 미연동</span>
+      {/if}
       {#if data.cases.find((c) => c.deviceId === selected.id && c.state !== 'done')}
         {@const c = data.cases.find((x) => x.deviceId === selected.id && x.state !== 'done')}
         <div class="rounded-card border-border bg-surface-sunken p-inset-md text-body-sm border">

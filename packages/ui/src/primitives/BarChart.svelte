@@ -1,6 +1,6 @@
 <script lang="ts">
   // 시간 버킷 막대 차트(카탈로그 BarChart, Display) — 저장소 첫 차트 컴포넌트(FR-039 타설량 추세).
-  // 원칙: 시각을 모른다(라벨은 호출부가 fmtTime으로 만든다 — 캡처 결정성) · 색 1개(accent, hue 증가 0 — color-audit) ·
+  // 원칙: 시각을 모른다(라벨은 호출부가 fmtTime으로 만든다 — 캡처 결정성) · 색 1개(accent 솔리드 · 강조는 solid-active — 트랙 sunken 위에서 보이게, ProgressBar 전례 · hue 증가 0) ·
   // hex·px 0(토큰 유틸리티 + style="height: %", B1-08 레인 전례) · 접근성 = 보이는 figcaption + sr-only 표 · 집계는 호출부.
   import { cx } from '../lib/cx';
   let {
@@ -55,7 +55,7 @@
       {#each bars as b (b.key)}
         <div class="flex h-full flex-1 flex-col justify-end" data-bar={b.key}>
           <div
-            class={cx('rounded-control w-full', b.key === markKey ? 'bg-accent' : 'bg-accent-bg-subtle')}
+            class={cx('rounded-control w-full', b.key === markKey ? 'bg-accent-solid-active' : 'bg-accent')}
             style="height: {pct(b.value)}%"
           ></div>
         </div>
@@ -67,7 +67,7 @@
       <span>{bars[bars.length - 1]!.label}</span>
     </div>
     <table class="sr-only">
-      <caption>{label}{unit ? ` (${unit})` : ''}</caption>
+      <caption>{label}{unit ? ` (${unit.trim()})` : ''}</caption>
       <thead><tr><th scope="col">구간</th><th scope="col">값</th></tr></thead>
       <tbody>
         {#each bars as b (b.key)}
