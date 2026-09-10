@@ -1,6 +1,6 @@
 // 시드 — 데모 픽스처(INTENT §7 · docs/DEMO.md): CPB-003 E-021 전압 이상 · CPB-004 통신 두절 · C-105 · D-27 임대 · 교육 이수증
 import ssot from '@boomeyes/domain/generated/ssot.json';
-import { CPB_V0_1 } from '@boomeyes/domain';
+import { CPB_V0_1, pourSeries } from '@boomeyes/domain';
 import { STILL_BBOX } from '@boomeyes/video/assets';
 import type {
   Alert,
@@ -683,6 +683,7 @@ export function seed(): Db {
       baseThicknessMm: 4.5,
       lastThicknessMm: null,
       pouredM3: 1820,
+      guideM3: 3000,
       runHours: 310,
       state: 'installed',
     },
@@ -697,6 +698,7 @@ export function seed(): Db {
       baseThicknessMm: 6.0,
       lastThicknessMm: 5.2,
       pouredM3: 1820,
+      guideM3: 3000,
       runHours: 310,
       state: 'inspected',
     },
@@ -711,6 +713,7 @@ export function seed(): Db {
       baseThicknessMm: 8.0,
       lastThicknessMm: null,
       pouredM3: 1210,
+      guideM3: 3000,
       runHours: 205,
       state: 'installed',
     },
@@ -725,6 +728,7 @@ export function seed(): Db {
       baseThicknessMm: 3.5,
       lastThicknessMm: 3.1,
       pouredM3: 820,
+      guideM3: 3000,
       runHours: 140,
       state: 'due',
     },
@@ -739,6 +743,7 @@ export function seed(): Db {
       baseThicknessMm: 5.0,
       lastThicknessMm: null,
       pouredM3: 820,
+      guideM3: 3000,
       runHours: 140,
       state: 'installed',
     },
@@ -836,6 +841,22 @@ export function seed(): Db {
       },
     },
   ];
+  // 타설량 시계열(FR-039 · ADR-013) — 24버킷 리터럴(Math.random 0). idx0 = 23시간 전(KST 11시) … idx23 = 현재 버킷(KST 10시).
+  // 야간 0 → 오전 상승 → 점심(12시) 0 → 오후 → 0. 상태별 패턴: 고장은 현재 버킷 0, 통신 두절은 오늘 0, 정비는 전부 0.
+  const POUR: Record<Device['state'], { m3: number[]; cumulativeM3: number }> = {
+    normal: {
+      m3: [26, 0, 30, 32, 28, 22, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 24, 31, 14],
+      cumulativeM3: 4820,
+    },
+    caution: {
+      m3: [30, 0, 34, 36, 33, 29, 12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 28, 35, 17],
+      cumulativeM3: 6140,
+    },
+    fault: { m3: [24, 0, 28, 30, 26, 20, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 18, 9, 0], cumulativeM3: 3910 },
+    offline: { m3: [22, 0, 26, 27, 25, 19, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], cumulativeM3: 2760 },
+    maintenance: { m3: new Array<number>(24).fill(0), cumulativeM3: 1120 },
+  };
+  for (const d of devices) d.pour = pourSeries(now, POUR[d.state].m3, { cumulativeM3: POUR[d.state].cumulativeM3 });
   return {
     users,
     sites,
