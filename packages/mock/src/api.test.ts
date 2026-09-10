@@ -167,7 +167,7 @@ describe('[FR-020] 프로토콜 관리 (B4-02)', () => {
 });
 
 describe('[FR-011] 알림 기준 · 고장코드 (B4-05)', () => {
-  it('알림 8종 · 고장코드 4 · 시나리오 잠금 2 · 저장 시 이력', async () => {
+  it('알림 9종 · 고장코드 5 · 시나리오 잠금 2 · 저장 시 이력', async () => {
     const api = bootMock({ capture: true });
     const r = await api.rules();
     expect(r.alerts.map((a) => a.kind)).toEqual([
@@ -175,12 +175,15 @@ describe('[FR-011] 알림 기준 · 고장코드 (B4-05)', () => {
       'gps',
       'voltage',
       'harness',
+      'phase',
       'error',
       'doc',
       'pipe',
       'filter',
     ]);
     expect(r.errorCodes.find((c) => c.code === 'E-021')?.severity).toBe('critical');
+    expect(r.errorCodes.find((c) => c.code === 'E-022')?.severity).toBe('critical'); // 3상 전원 이상(FR-040)
+    expect(r.alerts.find((a) => a.kind === 'phase')?.threshold).toBeUndefined(); // 임계는 DISC-056 확정 전
     expect(r.scenarios.filter((s) => s.locked).map((s) => s.title)).toEqual(['전도', '무동작']);
     const alerts = r.alerts.map((a) =>
       a.kind === 'pipe' ? { ...a, threshold: { caution: 0.85, danger: 1, unit: '비율' } } : a,
@@ -568,14 +571,14 @@ describe('[FR-033] 영상 확보 상태(ENT-19) · 연결 이벤트 · [FR-004] 
 });
 
 describe('[FR-034] 텔레메트리 수신 상태(NFR-009 기준안 10분)', () => {
-  it('임계 안 = ok · 초과 = stale · LTE 두절 = offline · CPB-005 단선 미연동', async () => {
+  it('임계 안 = ok · 초과 = stale · LTE 두절 = offline · CPB-005 단선·3상 미연동', async () => {
     const now = new Date('2026-07-03T10:42:00+09:00');
     const at = (msAgo: number) => new Date(now.getTime() - msAgo).toISOString();
     expect(telemetryStatus({ at: at(30_000), lte: 'connected' }, now)).toBe('ok');
     expect(telemetryStatus({ at: at(TELEMETRY_STALE_MS + 1), lte: 'connected' }, now)).toBe('stale');
     expect(telemetryStatus({ at: at(1_000), lte: 'lost' }, now)).toBe('offline');
     const api = bootMock({ capture: true });
-    expect((await api.device('CPB-005'))?.telemetry.unlinked).toEqual(['harness']);
+    expect((await api.device('CPB-005'))?.telemetry.unlinked).toEqual(['harness', 'power']);
   });
 });
 

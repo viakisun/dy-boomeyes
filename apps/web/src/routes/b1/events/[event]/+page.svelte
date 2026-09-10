@@ -77,6 +77,7 @@
     error: '고장코드',
     'ai-person': 'AI 사람 접근',
     'camera-health': '카메라 헬스',
+    phase: '3상 전원 이상',
     harness: '단선',
     gps: 'GPS',
     doc: '서류',

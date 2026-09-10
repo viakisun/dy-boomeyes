@@ -89,6 +89,7 @@ export const DOC_KIND_LABEL: Record<DocKind, string> = {
 };
 export const ERROR_CODE_LABEL: Record<string, string> = {
   'E-021': '380V 전압 이상 — 상 전압 342V, 릴레이·입력 전원 점검',
+  'E-022': '3상 전원 이상 — 결상·역상 시 모터 구동 불가, 3상 결선·차단기 점검',
 };
 export const REQUEST_TONE: Record<RequestState, Tone> = {
   submitted: 'info',

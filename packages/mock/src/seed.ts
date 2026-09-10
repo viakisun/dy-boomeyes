@@ -122,6 +122,8 @@ export function seed(): Db {
       pipeRatio: 0.62,
       filterRatio: 0.48,
       boomAngle: 54,
+      // 3상 계측(FR-040 · IF-020) — 기본은 균형 정상. 상별 값은 DISC-056 확정 전 목업 기준안
+      power: { volts: { r: 381, s: 380, t: 382 }, fault: 'none', motorReady: true },
       ...extra,
     },
   });
@@ -133,9 +135,11 @@ export function seed(): Db {
       voltageStatus: 'abnormal',
       errorCode: 'E-021',
       at: t(20_000),
+      // 342V의 원인 = S상 결상(시연 장면 11 서사) — 대표 전압은 남기고 상별 실측을 붙인다
+      power: { volts: { r: 381, s: 118, t: 379 }, fault: 'loss', motorReady: false },
     }),
     dev(4, 'SITE-002', 'offline', 36.4241, 127.392, { lte: 'lost', at: t(2 * H + 5 * MIN) }),
-    dev(5, 'SITE-002', 'maintenance', 36.4236, 127.3912, { boomAngle: 0, unlinked: ['harness'] }), // 정비 중 — 단선 센서 미연동(FR-034 표기 예)
+    dev(5, 'SITE-002', 'maintenance', 36.4236, 127.3912, { boomAngle: 0, unlinked: ['harness', 'power'] }), // 정비 중 — 단선·3상 계측 미연동(FR-034 표기 예)
   ];
   const cameras: Camera[] = devices.flatMap((d) => [
     {
@@ -581,6 +585,14 @@ export function seed(): Db {
         enabled: true,
       },
       { kind: 'harness', label: '하네스 단선', severity: 'critical', roles: ['control', 'site-safety'], enabled: true },
+      // 3상 전원 이상(FR-040) — 종류는 등록, 임계는 DISC-056 확정 전이라 threshold 없음(comm·gps·voltage와 같은 형태)
+      {
+        kind: 'phase',
+        label: '3상 전원 이상',
+        severity: 'critical',
+        roles: ['control', 'site-safety', 'maintenance'],
+        enabled: true,
+      },
       {
         kind: 'error',
         label: '고장코드',
@@ -626,6 +638,12 @@ export function seed(): Db {
         severity: 'critical',
         guide: '상 전압 확인(342V 이하 저전압), 릴레이·입력 전원 점검 후 재기동',
       },
+      {
+        code: 'E-022',
+        name: '3상 전원 이상',
+        severity: 'critical',
+        guide: '결상·역상 시 모터 구동 불가 — 3상 결선·차단기·상 순서 점검 후 재기동',
+      },
       { code: 'E-031', name: '하네스 단선', severity: 'critical', guide: '단선 채널 커넥터 점검, 작업 중지' },
       {
         code: 'E-041',
@@ -650,7 +668,7 @@ export function seed(): Db {
     ],
     updatedAt: t(5 * DAY),
     updatedBy: 'ops01',
-    history: [{ at: t(5 * DAY), by: 'ops01', action: '알림 기준 등록 — 8종 · 고장코드 4' }],
+    history: [{ at: t(5 * DAY), by: 'ops01', action: '알림 기준 등록 — 9종 · 고장코드 5' }],
   };
   // equipment-parts(W2 B9, 구조): CPB-003 5군 각 1 — P-004 가스켓은 점검 불합으로 due · 이력 3 · 재고 5 (임계·주기는 DISC-038)
   const parts: Part[] = [

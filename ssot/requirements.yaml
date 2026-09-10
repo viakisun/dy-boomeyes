@@ -847,7 +847,7 @@ fr:
   acc: []
   phase: 1
   kind: proposed
-  status: not-started
+  status: development
   note: 전압을 나르는 IF-002는 380V 정상/이상 접점과 하네스 단선만 전달하고 FR-002도 계측값을 다루지 않는다(FR-002의 if[]는 IF-004·IF-009·IF-010이라 IF-002는 이 FR이 처음 참조한다) — 계측값 표시·3상 이상 판정·모터 구동 가능 여부는 신규 · 임계는 DISC-010(전압 기준) 확장
 - id: FR-041
   title: 장비 문서·가이드 — 취급설명서·안전 매뉴얼·설치 가이드·고장 진단/수리·파트북(부품 품번)
