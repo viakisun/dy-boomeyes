@@ -15,7 +15,7 @@ test('[B1-02] 장면 1: 진입 시 CPB-003 정상 → 타임라인 E-021 긴급 
   await expect(page.getByRole('status').first()).toContainText('380V 전압 이상', { timeout: 10_000 }); // 대본 3s
   await expect(page.locator('.be-marker[data-state="fault"]')).toHaveCount(1, { timeout: 10_000 });
   await expect(page.locator('table tbody tr').first()).toContainText('CPB-003');
-  await expect(page.locator('[data-demo-bar]')).toContainText('장면 1/10');
+  await expect(page.locator('[data-demo-bar]')).toContainText('장면 1/11');
   await expect(page.locator('[data-demo-bar]')).toContainText(`wave ${CURRENT_WAVE} · mock`); // 웨이브·mock 표기는 장면 바에서만
 });
 
@@ -25,7 +25,7 @@ test('[B1-03] 장면 4: C-105 접수됨으로 진입 · ?case=C-105 패널 진�
   const panel = page.getByRole('region', { name: '알림에서 열린 업무' });
   await expect(panel).toContainText('C-105');
   await expect(panel).toContainText('진행 중');
-  await expect(page.locator('[data-demo-bar]')).toContainText('장면 4/10');
+  await expect(page.locator('[data-demo-bar]')).toContainText('장면 4/11');
   await expect(page.locator('[data-demo-bar]')).toContainText('원격 진단·배정');
 });
 
@@ -66,7 +66,7 @@ test('[B4-02] 장면 8: ops01 세션으로 프로토콜 화면 진입 · 장면 
   await expect(page.locator(root(SCR['B4-02']))).toBeVisible();
   await expect(page.getByText('cpb.v0.1').first()).toBeVisible();
   const bar = page.locator('[data-demo-bar]');
-  await expect(bar).toContainText('장면 8/10');
+  await expect(bar).toContainText('장면 8/11');
   await expect(page.locator('[data-demo-bar]')).toContainText('확장성');
   await expect(bar.getByRole('link', { name: '← 이전' })).toHaveAttribute('href', /4174\/a2\/docs\?scene=7$/);
   await expect(bar.getByRole('link', { name: '다음 →' })).toHaveAttribute('href', /\/b1\/leases\?scene=9$/);
@@ -89,7 +89,7 @@ test('[B1-06] 장면 9: control01 세션 · LS-001 D-27 최상단 · 재배치 �
   await page.goto('/b1/leases?scene=9');
   await expect(page.locator(root(SCR['B1-06']))).toBeVisible();
   const bar = page.locator('[data-demo-bar]');
-  await expect(bar).toContainText('장면 9/10');
+  await expect(bar).toContainText('장면 9/11');
   await expect(bar).toContainText('사업 가치');
   await expect(page.locator('table tbody tr').first()).toContainText('D-27');
   const form = page.getByRole('form', { name: '재배치 계획' });
@@ -99,14 +99,31 @@ test('[B1-06] 장면 9: control01 세션 · LS-001 D-27 최상단 · 재배치 �
   await expect(bar.getByRole('link', { name: '다음 →' })).toHaveAttribute('href', /scene=10$/);
 });
 
-test('[B1-07] 장면 10: 쇼케이스에서 시작(control 대체 세션) · 다크 강제 · 장면 바 10/10 · 이전(장면 9) [FR-023] [FR-024]', async ({
+test('[B1-07] 장면 10: 쇼케이스에서 시작(control 대체 세션) · 다크 강제 · 장면 바 10/11 · 이전(장면 9) · 다음(장면 11) [FR-023] [FR-024]', async ({
   page,
 }) => {
   await page.goto('/b1/showcase?scene=10');
   await expect(page.locator(root(SCR['B1-07']))).toBeVisible();
   await expect(page.locator('[data-showcase]')).toHaveAttribute('data-theme', 'dark');
   const bar = page.locator('[data-demo-bar]');
-  await expect(bar).toContainText('장면 10/10');
+  await expect(bar).toContainText('장면 10/11');
   await expect(bar).toContainText('쇼케이스');
   await expect(bar.getByRole('link', { name: '← 이전' })).toHaveAttribute('href', /\/b1\/leases\?scene=9$/);
+  await expect(bar.getByRole('link', { name: '다음 →' })).toHaveAttribute('href', /\/b1\/dash\?scene=11$/);
+});
+
+test('[B1-02] 장면 11: 쌓인 데이터 — CPB-003 인스펙터 타설량 12h · 가동률 82% · 3상 결상 · 장면 바 11/11 · 이전(장면 10) [FR-039] [FR-040] [FR-024]', async ({
+  page,
+}) => {
+  await page.goto('/b1/dash?scene=11');
+  await expect(page.locator(root(SCR['B1-02']))).toBeVisible();
+  const bar = page.locator('[data-demo-bar]');
+  await expect(bar).toContainText('장면 11/11');
+  await expect(bar).toContainText('쌓인 데이터');
+  const aside = page.locator('aside[aria-label="장비 상세"]');
+  await expect(aside).toContainText('CPB-003 · 3호기');
+  await expect(aside.getByRole('figure', { name: '타설량 12h' })).toContainText('가동률 82%');
+  await expect(aside.locator('dl[aria-label="텔레메트리"]')).toContainText('결상');
+  await expect(bar.getByRole('link', { name: '← 이전' })).toHaveAttribute('href', /\/b1\/showcase\?scene=10$/);
+  await expect(bar.getByRole('link', { name: '다음 →' })).toHaveCount(0);
 });

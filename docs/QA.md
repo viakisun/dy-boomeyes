@@ -12,7 +12,7 @@
 | 3 | 생성물 최신성 | `pnpm verify` 끝의 `git diff --exit-code` (docs/generated · domain/generated · tokens/dist) | CI 실패 | 있음 |
 | 4 | 타입·정적 | svelte-check(error 0) · ESLint(경계 규칙 `eslint-plugin-boundaries`) · Prettier | 커밋 차단 | 있음 |
 | 5 | 단위 | Vitest — 업무·서류·장비·카메라·부품 상태기계 · 프로파일→피처플래그 · 프로토콜 파서 · scr 커버리지 | 푸시 차단 | 있음(상태기계·라우트·mock) |
-| 6 | e2e·캡처 | `pnpm e2e`(Playwright, 빌드 후) — 역할 로그인 8(웹 4 · 앱 4)·가드 스모크 · 화면별 AC · 장면 1~10 · axe serious/critical 0(wave ≤ 2 화면 41 전수, wcag2a·2aa·best-practice) · `pnpm capture --dark --strict` 라우트 × 상태 전수 + 다크 + 자리 화면 0 · `pnpm capture:compare` 기준선 대비 픽셀 차 0.2%(ADR-008 A) · `pnpm design:audit:color` 색상 계열 4+ 화면이 `BASELINE_OVER`(기존 3건) 밖에서 새로 늘면 실패 | PR 차단(CI `e2e` 잡, shots 아티팩트) | 있음 |
+| 6 | e2e·캡처 | `pnpm e2e`(Playwright, 빌드 후) — 역할 로그인 8(웹 4 · 앱 4)·가드 스모크 · 화면별 AC · 장면 1~11 · axe serious/critical 0(wave ≤ 2 화면 41 전수, wcag2a·2aa·best-practice) · `pnpm capture --dark --strict` 라우트 × 상태 전수 + 다크 + 자리 화면 0 · `pnpm capture:compare` 기준선 대비 픽셀 차 0.2%(ADR-008 A) · `pnpm design:audit:color` 색상 계열 4+ 화면이 `BASELINE_OVER`(기존 3건) 밖에서 새로 늘면 실패 | PR 차단(CI `e2e` 잡, shots 아티팩트) | 있음 |
 | 7 | 추적·문서 | `check --specs`(frontmatter ID·AC ≥3) · `check --docs`(링크·ID) · `check --commits`(Refs 트레일러) | PR 차단 | 있음 |
 | 8 | 문서 세트 | `pnpm docs:set`(설계서 HTML/PDF · `DELTA.md` · `MANIFEST.md`) → `pnpm docs:check`(check_set ① 캡처 매니페스트 ② 설계서 화면 전수·문서 번호 ③ DELTA 신규 ID 전수 ④ MANIFEST 해시) — 로컬 실행, `shots/manifest.json`(`pnpm capture`) 필요 | 발행 차단(사람 게이트: `set_version` 승격·DY 전달은 사용자 승인) | 있음(ADR-011 · W2 B14) |
 
