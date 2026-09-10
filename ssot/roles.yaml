@@ -53,13 +53,13 @@ roles:
   org: 운영사 (DY)
   surfaces:
   - B1
-  surface_note: B1 관제 WEB
-  summary: 전국 전 장비 관제·원격 진단·수신함 승인·에스컬레이션
+  surface_note: B1 전국 스코프 · 읽기 위주 (ADR-012 — 상황실 아님)
+  summary: 제조사 전국 운영 뷰 — 가동률·이상 추이·부품 수명 열람 · 정비·AS 연계. 관제 운영 주체는 소유주·건설사
   persona:
     name: 이관제
-    env: 관제실 대형 모니터 상시
-    goal: 전국 호기 이상 조기 감지 · 원격 진단 후 정비 연결
-    pain: 장비 상태를 실시간으로 알 방법이 없음
+    env: 사무실 PC · 필요할 때
+    goal: 전국 호기 운영 데이터로 정비·부품 판매·모델 개선 계획
+    pain: 제조사가 출고 뒤 현장 데이터를 못 봄
   demo_account:
     login: control01
     display: 이관제
@@ -97,14 +97,15 @@ roles:
   name: 사업주 (장비 소유주)
   org: 사업주
   surfaces:
+  - B1
   - A4
-  surface_note: A4 사업주 PWA (2단계 제안)
-  summary: CPB 보유·가용 관리 · 투입 요청 승인·호기 배정 · 운전자 배치·서류 — DISC-026
+  surface_note: B1 운영 WEB(PC) + A4 PWA(폰) — 1단계 주인공 (ADR-012 · DISC-060)
+  summary: DY CPB를 다수 구매·보유한 중기업체 — 전국 임대 영업 · 보유 호기 관리·관제 · 투입 요청 승인·배정 · 운전자 배치 · 계약. 원 의뢰자
   persona:
     name: 차사장
-    env: 폰 위주 · 사무실 PC 병행
-    goal: 보유 호기 가용·투입 파악 · 요청 승인·배정·운전자 배치를 한 화면에서
-    pain: 가용 대수를 수첩·전화로 관리 — 요청 올 때마다 현장별 전화 확인
+    env: 사무실 PC(B1) + 이동 중 폰(A4)
+    goal: 보유 100대가 어디서 얼마나 가동되는지 한 화면에서 · 요청 승인·배정·운전자 배치 · 현장에 관제를 제공해 영업
+    pain: 가용 대수를 수첩·전화로 관리 — 요청 올 때마다 현장별 전화 확인 · 어느 호기가 놀고 있는지 모름
   demo_account:
     login: owner01
     display: 차사장
