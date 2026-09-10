@@ -470,7 +470,7 @@ events:
   - SVC-03
   - SVC-04
   - SVC-05
-  summary: 알림 8종 판정 결과 (등급 포함)
+  summary: 알림 9종 판정 결과 (등급 포함 · 계약 8종 + 제안 3상 FR-040)
 - event: case.created
   publisher: SVC-03
   subscribers:

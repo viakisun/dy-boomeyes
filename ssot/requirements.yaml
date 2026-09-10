@@ -239,6 +239,7 @@ fr:
   phase: 1
   kind: core
   status: reflected
+  note: 계약 범위는 8종 — 3상 전원 이상(FR-040)은 DISC-056 확정 전 제안 단계라 미포함. B4-05 기준표·ENT-12 알림 유형은 제안분을 포함해 9종
 - id: FR-012
   title: 이력 저장·기록 열람 (증빙)
   source:
