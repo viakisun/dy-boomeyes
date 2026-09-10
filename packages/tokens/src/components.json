@@ -315,6 +315,15 @@
     "note": "계기 대신 선형 우선"
   },
   {
+    "name": "BarChart",
+    "family": "Display",
+    "platform": "both",
+    "ref": "new · 타설량 시간 버킷(FR-039 · 경진대회 §6)",
+    "variants": "unit · max · markKey · hint",
+    "states": "empty",
+    "note": "저장소 첫 차트 — 시각 무지(라벨은 호출부) · accent 1색 · style=% 만 · figcaption + sr-only 표 · 집계는 호출부"
+  },
+  {
     "name": "Stepper",
     "family": "Display",
     "platform": "both",

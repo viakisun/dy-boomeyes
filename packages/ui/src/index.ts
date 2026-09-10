@@ -52,6 +52,7 @@ export { default as KeyValueList } from './primitives/KeyValueList.svelte';
 export { default as SiteProfileForm } from './primitives/SiteProfileForm.svelte';
 export { default as Chip } from './primitives/Chip.svelte';
 export { default as ProgressBar } from './primitives/ProgressBar.svelte';
+export { default as BarChart } from './primitives/BarChart.svelte';
 export { default as ShowcaseOverlay } from './primitives/ShowcaseOverlay.svelte';
 export {
   TASK_LABEL,
