@@ -1,6 +1,6 @@
 // 시드 — 데모 픽스처(INTENT §7 · docs/DEMO.md): CPB-003 E-021 전압 이상 · CPB-004 통신 두절 · C-105 · D-27 임대 · 교육 이수증
 import ssot from '@boomeyes/domain/generated/ssot.json';
-import { CPB_V0_1, bucketStart, pourSeries } from '@boomeyes/domain';
+import { CPB_V0_1, pourSeries } from '@boomeyes/domain';
 import { STILL_BBOX } from '@boomeyes/video/assets';
 import type {
   Alert,
@@ -842,9 +842,10 @@ export function seed(): Db {
     },
   ];
   // 타설량 시계열(FR-039 · ADR-013) — KST 시각별 리터럴 24(Math.random 0): 야간 0 → 07시 상승 → 12시(점심) 0 → 오후 → 18시 이후 0.
-  // 24버킷이 매 시각을 한 번씩 덮으므로 합계·가동률은 시연 시각과 무관(장면 = live 시계). 상태 서사는 now 기준: 고장은 현재 버킷 0 · 두절은 두절 시점(2h 5m 전) 이후 0 · 정비는 전부 0.
-  const ZERO24 = new Array<number>(24).fill(0);
-  const POUR: Record<Device['state'], { byHour: number[]; cumulativeM3: number; zeroFrom?: (n: Date) => Date }> = {
+  // 24버킷이 매 시각을 한 번씩 덮으므로 합계·가동률은 시연 시각과 무관(장면 = live 시계). 상태 서사도 표에 굽는다:
+  // 고장(CPB-003)은 10시 버킷 0(E-021 뒤 정지) · 두절(CPB-004)은 09·10시 0(08:37 두절 뒤 무데이터) · 정비는 전부 0 —
+  // now 기준으로 버킷을 지우면 이미 0인 시각(점심·야간)엔 지울 게 없어 가동률이 시각에 따라 달라진다(리뷰 #61).
+  const POUR: Record<Device['state'], { byHour: number[]; cumulativeM3: number }> = {
     normal: {
       byHour: [0, 0, 0, 0, 0, 0, 0, 6, 24, 31, 14, 26, 0, 30, 32, 28, 22, 8, 0, 0, 0, 0, 0, 0],
       cumulativeM3: 4820,
@@ -854,21 +855,16 @@ export function seed(): Db {
       cumulativeM3: 6140,
     },
     fault: {
-      byHour: [0, 0, 0, 0, 0, 0, 0, 4, 18, 9, 14, 24, 0, 28, 30, 26, 20, 6, 0, 0, 0, 0, 0, 0],
+      byHour: [0, 0, 0, 0, 0, 0, 0, 4, 18, 9, 0, 24, 0, 28, 30, 26, 20, 6, 0, 0, 0, 0, 0, 0],
       cumulativeM3: 3910,
-      zeroFrom: (n) => new Date(bucketStart(n)),
     },
     offline: {
-      byHour: [0, 0, 0, 0, 0, 0, 0, 5, 20, 15, 10, 22, 0, 26, 27, 25, 19, 5, 0, 0, 0, 0, 0, 0],
+      byHour: [0, 0, 0, 0, 0, 0, 0, 5, 20, 0, 0, 22, 0, 26, 27, 25, 19, 5, 0, 0, 0, 0, 0, 0],
       cumulativeM3: 2760,
-      zeroFrom: (n) => new Date(n.getTime() - (2 * H + 5 * MIN)),
     },
-    maintenance: { byHour: ZERO24, cumulativeM3: 1120 },
+    maintenance: { byHour: new Array<number>(24).fill(0), cumulativeM3: 1120 },
   };
-  for (const d of devices) {
-    const p = POUR[d.state];
-    d.pour = pourSeries(now, p.byHour, { cumulativeM3: p.cumulativeM3, zeroFrom: p.zeroFrom?.(now) });
-  }
+  for (const d of devices) d.pour = pourSeries(now, POUR[d.state].byHour, { cumulativeM3: POUR[d.state].cumulativeM3 });
   return {
     users,
     sites,

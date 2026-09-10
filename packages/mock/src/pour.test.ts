@@ -12,14 +12,14 @@ describe('[FR-039] 타설량 시드 결정성', () => {
     expect(d?.pour?.totalM3).toBe(221);
     expect(d?.pour?.utilization).toBe(0.909);
   });
-  it('CPB-003(고장) — 현재 버킷 0 · 가동률 0.818 · 장면 1~5 E-021 서사와 같은 시각', async () => {
+  it('CPB-003(고장) — 10시 버킷 0(표에 구운 서사) · 가동률 0.818 · 장면 1~5 E-021 서사와 같은 시각', async () => {
     const api = bootMock({ capture: true });
     const d = await api.device('CPB-003');
     expect(d?.pour?.buckets[23]!.m3).toBe(0);
     expect(d?.pour?.utilization).toBe(0.818);
     expect(d?.pour?.cumulativeM3).toBe(3910);
   });
-  it('CPB-004(두절 08:37) — 09·10시 버킷 0 · 08시는 남는다 · 가동률 8/11 = 0.727', async () => {
+  it('CPB-004(두절 08:37) — 09·10시 버킷 0(표에 구운 서사) · 08시는 남는다 · 가동률 8/11 = 0.727', async () => {
     const api = bootMock({ capture: true });
     const d = await api.device('CPB-004');
     expect(d?.pour?.buckets.slice(-2).map((b) => b.m3)).toEqual([0, 0]);
