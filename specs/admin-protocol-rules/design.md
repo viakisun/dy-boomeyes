@@ -8,7 +8,7 @@
 카탈로그: `ProtocolUploader` · `FileUpload` · `RuleThresholdRow` · `DataTable` `Tabs` `Banner` `Badge` `Timeline` `Toast`. JSON 표시는 `<pre>` + `sys.type.code-md`(컴포넌트 아님). 토큰: `cmp.table.*` · `sys.type.code-md` · 결과 = `sys.color.status.*`.
 
 ## 데이터 · 로직
-- ENT-11 프로토콜 버전(version · kind(운영/테스트) · fields[] · sample · uploadedAt) — 시드는 `ssot interfaces.protocol`(cpb.v0.1 필드·샘플). 규칙 = 알림 8종(kind → severity · roles · threshold) · 고장코드 표(시드 E-0xx) · 시나리오 등급(FR-036, 2단계 표시).
+- ENT-11 프로토콜 버전(version · kind(운영/테스트) · fields[] · sample · uploadedAt) — 시드는 `ssot interfaces.protocol`(cpb.v0.1 필드·샘플). 규칙 = 알림 9종(kind → severity · roles · threshold — 3상 전원(phase)은 FR-040, threshold 없음·DISC-056) · 고장코드 표(시드 E-0xx) · 시나리오 등급(FR-036, 2단계 표시).
 - `packages/domain/protocol.ts`: `validateProtocol(def)`(필수 필드 · 타입 · 단위 — number 타입은 `unit` 필수 · 중복) · `parseSample(def, json)` → `{ ok, errors: [{ path, reason }], alerts: [{ kind, severity }] }`. YAML 파싱은 `yaml` 패키지 — **`apps/web` 런타임 의존**(업로드 화면이 텍스트를 객체로 파싱해 `api.uploadProtocol(def)`에 넘김; domain·PWA 번들에는 싣지 않음, ADR-002 Rules 기록). Vitest `[FR-020]`(QA 게이트 5 "프로토콜 파서").
 - mock: `api.protocols()` · `api.uploadProtocol(text)`(검증 후 테스트 버전으로 추가, 저장은 메모리) · `api.testSample(version, json)` · `api.rules()` · `api.saveRules(rules, by)`(이력) · `api.errorCodes()`.
 

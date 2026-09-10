@@ -1,5 +1,5 @@
 <script lang="ts">
-  // B4-05 알림 기준 (specs/admin-protocol-rules AC-4 알림 8종 · AC-5 고장코드 · AC-6 시나리오 등급 · AC-7 저장 이력)
+  // B4-05 알림 기준 (specs/admin-protocol-rules AC-4 알림 9종 · AC-5 고장코드 · AC-6 시나리오 등급 · AC-7 저장 이력)
   import { goto, invalidateAll } from '$app/navigation';
   import { resolve } from '$app/paths';
   import { SCR, type AlertRule, type ErrorCode, type RoleId, type Severity } from '@boomeyes/domain';
@@ -78,8 +78,9 @@
   <div class="gap-stack-lg flex min-w-0 flex-col">
     <PageHeader
       title="알림 기준"
-      description="알림 8종의 등급 · 수신 역할 · 임계 — 마지막 갱신 {fmtDateTime(data.rules.updatedAt)} · {data.rules
-        .updatedBy}"
+      description="알림 {data.rules.alerts.length}종의 등급 · 수신 역할 · 임계 — 마지막 갱신 {fmtDateTime(
+        data.rules.updatedAt,
+      )} · {data.rules.updatedBy}"
     >
       <Tabs tabs={TABS} value={data.tab} onchange={selectTab} />
     </PageHeader>

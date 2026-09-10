@@ -125,6 +125,14 @@ export const CPB_V0_1: ProtocolDef = {
         n('voltage_value', { required: true, unit: 'V' }),
         s('phase_status'),
         s('alert_level'),
+        // 3상 상별 실측(IF-020 · FR-040) — 선택. 전류는 계측 미연동 현장이 있어 선택
+        n('phase_voltage_r', { unit: 'V' }),
+        n('phase_voltage_s', { unit: 'V' }),
+        n('phase_voltage_t', { unit: 'V' }),
+        n('phase_current_r', { unit: 'A' }),
+        n('phase_current_s', { unit: 'A' }),
+        n('phase_current_t', { unit: 'A' }),
+        b('motor_ready'),
       ],
     },
     {
@@ -308,6 +316,9 @@ export function previewAlerts(sample: Record<string, unknown>): ParseResult['ale
       severity: 'critical',
       message: `380V 전압 이상 (${typeof power.voltage_value === 'number' ? power.voltage_value : '-'}V)`,
     });
+  // 3상 이상(FR-040) — 선언만 되고 읽히지 않던 phase_status를 살린다(장면 8 오류 샘플 미리보기가 풍부해진다)
+  if (typeof power?.phase_status === 'string' && power.phase_status && power.phase_status !== 'normal')
+    out.push({ kind: 'phase', severity: 'critical', message: `3상 전원 이상 (${power.phase_status})` });
   const harness = obj(sample.harness);
   if (harness?.disconnected === true) out.push({ kind: 'harness', severity: 'critical', message: '하네스 단선' });
   const net = obj(sample.network);
