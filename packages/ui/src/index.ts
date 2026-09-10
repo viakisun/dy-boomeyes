@@ -78,7 +78,7 @@ export {
   EVIDENCE_TONE,
   REPORT_TYPE_LABEL,
 } from './lib/labels';
-export { fmtDateTime, fmtTime, fmtDuration, dueLabel, elapsedLabel } from './lib/format';
+export { fmtDateTime, fmtTime, fmtDuration, dueLabel, elapsedLabel, fmtHour } from './lib/format';
 export { connectivity } from './lib/connectivity.svelte';
 export { demoRefs, applyDemoRefs } from './lib/demo-refs.svelte';
 // 아이콘(@lucide/svelte) — 앱은 ui를 통해서만 쓴다

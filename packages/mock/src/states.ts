@@ -26,6 +26,7 @@ export const FIXTURES: Record<string, Fixture> = {
     ),
   }),
   'A1-05:dev': (db) => db,
+  'A1-05:pour': (db) => db, // 부품 탭 — 데이터는 dev와 같고 ?tab=parts(capture STATE_QUERY)
   // 수신 임계 초과(NFR-009 기준안 10분) + 단선 미연동 — '미수신 · 마지막 HH:MM' · '미연동' 표기(FR-034)
   'A1-05:stale': (db) => ({
     ...db,

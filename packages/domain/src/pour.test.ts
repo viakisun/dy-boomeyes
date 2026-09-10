@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { FIXED_CLOCK } from './generated/ids';
-import { PIPE_AREA_M2, bucketStart, inWorkWindow, pourRateM3h, pourSeries } from './pour';
+import { PIPE_AREA_M2, bucketStart, inWorkWindow, pourRateM3h, pourSeries, todayM3 } from './pour';
 
 // 정상 패턴 — idx0 = 23시간 전(KST 11시) … idx23 = 현재 버킷(KST 10시). 점심(12시) 0 · 야간 0
 const PATTERN_A = [26, 0, 30, 32, 28, 22, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 24, 31, 14];
@@ -28,6 +28,10 @@ describe('[FR-039] 타설량 산출 기준안(DISC-055)', () => {
     expect(s.totalM3).toBe(221);
     expect(s.utilization).toBe(0.909);
     expect(s.basis.areaM2).toBe(0.0123);
+  });
+  it('오늘 = KST 자정 이후 버킷(07·08·09·10시) 합 75 — 전날 버킷은 빠진다', () => {
+    const s = pourSeries(FIXED_CLOCK, PATTERN_A, { cumulativeM3: 0 });
+    expect(todayM3(s.buckets, FIXED_CLOCK)).toBe(75);
   });
   it('전부 0이면 합계 0 · 가동률 0(분모는 남는다) — 미연동(pour 없음)과 구분', () => {
     const s = pourSeries(FIXED_CLOCK, new Array<number>(24).fill(0), { cumulativeM3: 0 });

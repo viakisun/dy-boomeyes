@@ -5323,6 +5323,10 @@
             "name": "dev"
           },
           {
+            "id": "pour",
+            "name": "부품 탭 · 타설량 24버킷(?tab=parts)"
+          },
+          {
             "id": "plite",
             "name": "P-LITE 현장(1채널 · 저장 소스 서버만)"
           },

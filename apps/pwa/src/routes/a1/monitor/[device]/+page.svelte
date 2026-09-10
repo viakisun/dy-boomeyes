@@ -2,7 +2,7 @@
   // A1-05 장비 상세 (specs/video-basics AC-3) — 상단 탭 4(상태 · 서류 · 영상 · 부품): 텔레메트리 · 서류 완비율/만료 · 저장 영상(프로파일 소스 탭)+카메라 · 마모·교체 부품
   import { goto } from '$app/navigation';
   import { resolve } from '$app/paths';
-  import { SCR, type Doc, type Recording } from '@boomeyes/domain';
+  import { SCR, todayM3, type Doc, type Recording } from '@boomeyes/domain';
   import {
     Badge,
     DOC_TONE,
@@ -11,7 +11,9 @@
     EmptyState,
     StatusPill,
     Tabs,
+    BarChart,
     TelemetryGauge,
+    fmtHour,
     TelemetryStrip,
     dueLabel,
     fmtDateTime,
@@ -121,6 +123,38 @@
       <h3 class="text-heading-sm">마모·교체 부품 도달률</h3>
       <TelemetryGauge label="수송관" value={d.telemetry.pipeRatio} />
       <TelemetryGauge label="필터" value={d.telemetry.filterRatio} />
+    </section>
+    <!-- 타설량(FR-039 · specs/pour-metrics AC-2·AC-5) — 24버킷 전부 · 오늘은 todayM3(KST 자정 이후) -->
+    <section
+      class="rounded-card border-border bg-surface p-inset-md gap-stack-md flex flex-col border"
+      aria-label="타설량"
+    >
+      <h3 class="text-heading-sm">타설량</h3>
+      {#if d.pour}
+        {@const p = d.pour}
+        <dl class="gap-stack-xs text-body-sm grid grid-cols-2">
+          <dt class="text-fg-muted">누적</dt>
+          <dd class="tabular-nums">{p.cumulativeM3.toLocaleString('ko-KR')} m³</dd>
+          <dt class="text-fg-muted">24시간</dt>
+          <dd class="tabular-nums">{p.totalM3} m³</dd>
+          <dt class="text-fg-muted">오늘</dt>
+          <dd class="tabular-nums">{todayM3(p.buckets, data.clock.now())} m³</dd>
+          <dt class="text-fg-muted">가동률</dt>
+          <dd class="tabular-nums">{Math.round(p.utilization * 100)}%</dd>
+        </dl>
+        <BarChart
+          label="타설량 24h"
+          unit=" m³"
+          bars={p.buckets.map((b) => ({ key: b.at, label: fmtHour(b.at), value: b.m3 }))}
+          markKey={p.buckets.at(-1)?.at}
+          hint="작업 시간대 기준"
+        />
+        <span class="text-body-sm text-fg-muted" data-ref="DISC-055"
+          >산출 기준안 D{p.basis.pipeDiaMm} {p.basis.areaM2} m² · L {p.basis.sensorGapM} m · 확정 전</span
+        >
+      {:else}
+        <span class="text-body-sm text-fg-muted" data-ref="DISC-055">타설량 미연동</span>
+      {/if}
     </section>
     <a href={resolve(`/a1/parts/inspect` as '/')} class="text-body-md text-accent-fg" data-link="parts"
       >마모·교체 부품 점검 입력 ›</a

@@ -35,6 +35,14 @@ export function pourSummary(buckets: PourBucket[]): { totalM3: number; utilizati
   const active = work.filter((b) => b.m3 > 0).length;
   return { totalM3, utilization: work.length ? Math.round((active / work.length) * 1000) / 1000 : 0 };
 }
+/** 오늘 타설량 — KST 자정(UTC 15:00 전날) 이후 버킷 합. 시간대 API 없이 정수 산술 */
+export function todayM3(buckets: PourBucket[], now: string | Date): number {
+  const DAY = 86_400_000;
+  const off = WORK_WINDOW.tzOffsetH * 3_600_000;
+  const t = typeof now === 'string' ? Date.parse(now) : now.getTime();
+  const kstMidnight = Math.floor((t + off) / DAY) * DAY - off;
+  return Math.round(buckets.filter((b) => Date.parse(b.at) >= kstMidnight).reduce((s, b) => s + b.m3, 0) * 10) / 10;
+}
 /** 시계열 조립 — now가 속한 버킷까지 최근 m3.length개(오래된 것부터). m3는 호출부 리터럴(시드 결정성) */
 export function pourSeries(now: string | Date, m3: number[], extra: { cumulativeM3: number }): PourSeries {
   const end = Date.parse(bucketStart(now));
