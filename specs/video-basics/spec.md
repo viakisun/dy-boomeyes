@@ -3,7 +3,7 @@ id: SPEC-video-basics
 status: draft
 wave: 1
 screens: [A1-04, A1-05, B1-02M, A3-04, B2-03]
-fr: [FR-004, FR-005, FR-034, FR-028, FR-030, FR-002, FR-007, FR-016, FR-022, FR-038]
+fr: [FR-004, FR-005, FR-034, FR-028, FR-030, FR-002, FR-007, FR-016, FR-022, FR-038, FR-040]
 ---
 # video-basics — 현장 모니터 · 장비 상세 · 카메라 모달 완성
 

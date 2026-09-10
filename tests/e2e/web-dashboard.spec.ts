@@ -144,7 +144,7 @@ test('[B1-02M] 저장 영상 재생: 목록 길이 = 클립 길이 · 재생 →
   await expect(sd.nth(1)).toContainText('구간 회수 필요');
 });
 
-test('[B1-02] 인스펙터 텔레메트리에 3상 셀 — 기본 선택 CPB-003 결상 · 전압 셀 문구 불변 [FR-040] [FR-002]', async ({
+test('[B1-02] 인스펙터 텔레메트리에 3상 셀 — 기본 선택 CPB-003 결상 · 전압 셀 문구 불변 · CPB-005는 두 셀 모두 미연동 [FR-040] [FR-002] [FR-034]', async ({
   page,
 }) => {
   await page.goto('/b1/dash?state=dash&capture=1');
@@ -152,4 +152,12 @@ test('[B1-02] 인스펙터 텔레메트리에 3상 셀 — 기본 선택 CPB-003
   await expect(strip).toContainText('342V · 이상');
   await expect(strip).toContainText('R 381 · S 118 · T 379V');
   await expect(strip).toContainText('결상');
+  // AC-18 셋째 절 — 3상 계측 미연동(CPB-005 unlinked power)은 전압·판정 두 셀 모두 '미연동'이고 '정상'이 아니다
+  await page.locator('.be-marker[data-state="maintenance"]').click(); // 5호기
+  await expect(page.getByText('CPB-005 · 5호기')).toBeVisible();
+  for (const name of ['3상 전압', '3상 판정']) {
+    const cell = strip.locator('div').filter({ has: page.getByText(name, { exact: true }) });
+    await expect(cell).toContainText('미연동');
+    await expect(cell.getByText('정상', { exact: true })).toHaveCount(0);
+  }
 });
