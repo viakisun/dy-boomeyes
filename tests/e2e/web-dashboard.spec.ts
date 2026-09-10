@@ -143,3 +143,13 @@ test('[B1-02M] 저장 영상 재생: 목록 길이 = 클립 길이 · 재생 →
   await expect(sd.nth(1).getByRole('button', { name: '재생' })).toBeDisabled();
   await expect(sd.nth(1)).toContainText('구간 회수 필요');
 });
+
+test('[B1-02] 인스펙터 텔레메트리에 3상 셀 — 기본 선택 CPB-003 결상 · 전압 셀 문구 불변 [FR-040] [FR-002]', async ({
+  page,
+}) => {
+  await page.goto('/b1/dash?state=dash&capture=1');
+  const strip = page.locator('aside[aria-label="장비 상세"] dl[aria-label="텔레메트리"]');
+  await expect(strip).toContainText('342V · 이상');
+  await expect(strip).toContainText('R 381 · S 118 · T 379V');
+  await expect(strip).toContainText('결상');
+});

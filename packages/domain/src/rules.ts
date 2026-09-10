@@ -47,7 +47,8 @@ export const PHASE_LIMITS = {
   /** 상간 불평형 (max−min)/avg — 이 이상이면 역상·접촉 불량 의심 */
   imbalance: 0.1,
 } as const;
-export type PowerStatus = 'unlinked' | 'normal' | PowerReading['fault'];
+/** 'none'(정상 판정)은 normal로 접힌다 — 화면의 판정 문구 맵이 없는 키를 갖지 않게 타입에서 뺀다 */
+export type PowerStatus = 'unlinked' | 'normal' | Exclude<PowerReading['fault'], 'none'>;
 /** 상간 불평형률 (max−min)/avg — 0이면 완전 균형 */
 export function phaseImbalance(p: PowerReading): number {
   const v = [p.volts.r, p.volts.s, p.volts.t];

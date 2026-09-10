@@ -31,6 +31,12 @@ const PAGES: { scr: string; label?: string; url: string; ready: (page: Page) => 
     ready: (p) => expect(p.locator('dialog[open][data-bottom-sheet]')).toBeVisible(),
   },
   {
+    scr: SCR['A1-05'],
+    label: '3상 역상(전력 블록)',
+    url: '/a1/monitor/CPB-003?state=phase&capture=1',
+    ready: (p) => expect(p.getByRole('region', { name: '전력' })).toContainText('역상'),
+  },
+  {
     scr: SCR['A1-04'],
     label: '카메라 영상 시트',
     url: '/a1/monitor?state=live&capture=1&cam=CAM-3-1',
