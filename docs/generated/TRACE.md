@@ -55,7 +55,7 @@
 | `FR-037` | 오프라인 제출 큐 — 체크인·체크아웃·일일점검·서류를 저장 후 연결 시 순서대로 동기 | 1 | 기본 | 개발 단계 | A2-02 A2-03 A2-05 | IF-009 IF-011 | — | demo-scripts driver-daily notifications documents |
 | `FR-038` | 현장 신고 — 안전관리자가 영상 화면에서 상황(작업자 상태 이상 · 호스·배관 이상 · 기타)을 신고해 업무·알림을 만든다 | 1 | 제안 | 개발 단계 | A1-04 A1-05 A1-02 B1-03 | IF-009 IF-010 | — | demo-scripts video-basics documents notifications task-escalation |
 | `FR-039` | 타설량 산출·가동률 — 수송관 진동 센서 기반 시간당 타설량(m³/h)·누적 타설량·가동률 | 2 | 제안 | 개발 단계 | B1-02 A1-05 A2-04 B4-07 | IF-021 | — | control-dashboard demo-scripts video-basics driver-daily equipment-parts |
-| `FR-040` | 전력 상태 계측 — 3상 전압·전류 실측 · 결상·역상·과전압 판정 · 모터 구동 가능 여부 | 1 | 제안 | 미착수 | B1-02 A1-05 A2-04 B4-05 | IF-020 IF-002 | — | control-dashboard demo-scripts video-basics driver-daily admin-protocol-rules |
+| `FR-040` | 전력 상태 계측 — 3상 전압·전류 실측 · 결상·역상·과전압 판정 · 모터 구동 가능 여부 | 1 | 제안 | 개발 단계 | B1-02 A1-05 A2-04 B4-05 | IF-020 IF-002 | — | control-dashboard demo-scripts video-basics driver-daily admin-protocol-rules |
 | `FR-041` | 장비 문서·가이드 — 취급설명서·안전 매뉴얼·설치 가이드·고장 진단/수리·파트북(부품 품번) | 2 | 제안 | 미착수 | B1-02 A1-05 A1-07 A2-06 B4-07 | IF-009 | — | control-dashboard demo-scripts video-basics sites-assets-leases driver-daily equipment-parts |
 | `FR-042` | 바디캠 실시간 스트리밍·현장 이동 재배정 — 작업팀 이동 시 바디캠↔현장 연동 | 2 | 제안 | 미착수 | B1-02M A1-04 B1-08 B4-03 | IF-022 IF-018 | — | control-dashboard video-basics demo-scripts event-replay sites-assets-leases |
 | `FR-043` | 통신 단말기 탈부착 운영 — 미가동 장비 단말기 탈거·재장착과 월 유지비 관리 | 2 | 제안 | 미착수 | B4-03 B1-02 B1-06 | IF-009 | — | sites-assets-leases control-dashboard demo-scripts |

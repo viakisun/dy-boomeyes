@@ -27,7 +27,19 @@ export interface Owner {
   contact: string;
 } // ENT-13
 /** 연동되지 않은 계측 항목 — 화면은 '미연동'으로 표기(FR-034 · 참고자료 v5.0 §10) */
-export type TelemetryField = 'lte' | 'voltage' | 'harness' | 'errorCode' | 'gps';
+export type TelemetryField = 'lte' | 'voltage' | 'harness' | 'errorCode' | 'gps' | 'power';
+/** 3상 전원(FR-040 · IF-020) — 상별 실측과 판정. 임계·등급·판정 주체는 DISC-056 미결 */
+export type Phase = 'r' | 's' | 't';
+/** 결상 loss · 역상 reverse · 단상(저전압) under · 과전압 over · 정상 none */
+export type PhaseFault = 'none' | 'loss' | 'reverse' | 'under' | 'over';
+export interface PowerReading {
+  volts: Record<Phase, number>;
+  /** 전류 미연동이면 없음 */
+  amps?: Record<Phase, number>;
+  fault: PhaseFault;
+  /** V5 4-3 — 3상 결선 오류면 모터 회전 방향 오류 → 구동 불가 */
+  motorReady: boolean;
+}
 export interface Device {
   // ENT-02 (+ENT-12 최신 상태)
   id: string;
@@ -50,6 +62,8 @@ export interface Device {
     pipeRatio: number;
     filterRatio: number;
     boomAngle: number;
+    /** 3상 계측(FR-040) — 대표 전압(voltage)은 남기고 곁에 붙인다. 없으면 unlinked: ['power']로 미연동 표기 */
+    power?: PowerReading;
     unlinked?: TelemetryField[];
   };
 }
@@ -97,7 +111,8 @@ export interface Alert {
     | 'filter'
     | 'ai-person'
     | 'camera-health'
-    | 'report';
+    | 'report'
+    | 'phase';
   severity: Severity;
   message: string;
   at: string;

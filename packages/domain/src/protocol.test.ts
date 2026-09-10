@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import ssot from './generated/ssot.json';
-import { CPB_V0_1, parseSample, validateProtocol } from './protocol';
+import { CPB_V0_1, parseSample, previewAlerts, validateProtocol } from './protocol';
 
 const proto = (
   ssot as {
@@ -109,5 +109,21 @@ describe('[FR-020] 샘플 파싱 (정상 · 필드 누락 · 타입 오류)', ()
       'comm:warning',
       'pipe:warning',
     ]);
+  });
+});
+
+describe('[FR-040] 3상 전원 — phase_status 미리보기', () => {
+  it('phase_status가 normal이 아니면 phase 알림 · normal·없음이면 없음 · 상별 전압 필드는 단위 V', () => {
+    const s = sample();
+    const power = { ...(s.power as Record<string, unknown>), phase_status: 'loss' };
+    expect(previewAlerts({ ...s, power }).some((a) => a.kind === 'phase' && /loss/.test(a.message))).toBe(true);
+    expect(previewAlerts({ ...s, power: { ...power, phase_status: 'normal' } }).some((a) => a.kind === 'phase')).toBe(
+      false,
+    );
+    expect(previewAlerts(s).some((a) => a.kind === 'phase')).toBe(false); // ssot 샘플은 정상
+    const g = CPB_V0_1.groups.find((x) => x.key === 'power')!;
+    for (const k of ['phase_voltage_r', 'phase_voltage_s', 'phase_voltage_t'])
+      expect(g.fields.find((f) => f.name === k)?.unit).toBe('V');
+    expect(g.fields.find((f) => f.name === 'motor_ready')?.type).toBe('boolean');
   });
 });

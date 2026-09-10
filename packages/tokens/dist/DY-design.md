@@ -10,7 +10,7 @@
 | ref(원시) | 208 |
 | sys(시맨틱) | 324 |
 | cmp(컴포넌트) | 92 |
-| 컴포넌트 카탈로그 | 82 |
+| 컴포넌트 카탈로그 | 83 |
 | 대비 검사 | 94/94 통과 |
 
 | 산출물 | 용도 |
@@ -782,7 +782,7 @@ cmp 층은 sys만 참조한다(ref 직접 참조 금지 — 검사로 강제). �
 | `cmp.table.row-selected` | #ebf1ff | #ebf1ff | {sys.color.bg.selected} |  |
 | `cmp.table.header-fg` | #616368 | #616368 | {sys.color.fg.muted} |  |
 
-## 8. 컴포넌트 카탈로그 (82)
+## 8. 컴포넌트 카탈로그 (83)
 
 이름 PascalCase · prop 어휘 고정: `variant`(형태) · `tone`(색 의도: accent/neutral/info/success/warning/danger/progress) · `size`(sm/md/lg) · 상태 boolean(`disabled` `loading` `selected` `invalid`). 플랫폼 both = 같은 Svelte 컴포넌트가 밀도 토큰으로 두 플랫폼을 소화.
 
@@ -835,6 +835,7 @@ cmp 층은 sys만 참조한다(ref 직접 참조 금지 — 검사로 강제). �
 | **EmptyState** | both | Linear | icon · title · description · action |  | 목록 0건·필터 0건·오류 3종 문안 규칙 |
 | **Skeleton** | both | Linear | shape text/rect/circle |  | 로딩 300ms 이후 표시 |
 | **ProgressBar** | both | new · CE 부하율 | tone · size · label | indeterminate | 계기 대신 선형 우선 |
+| **BarChart** | both | new · 타설량 시간 버킷(FR-039 · 경진대회 §6) | unit · max · markKey · hint | empty | 저장소 첫 차트 — 시각 무지(라벨은 호출부) · accent 1색 · style=% 만 · figcaption + sr-only 표 · 집계는 호출부 |
 | **Stepper** | both | CE Stepper · Vertical Progress Step | orientation · current | complete/current/upcoming | 업무 상태 진행 |
 | **Divider** | both | — | orientation · inset |  |  |
 | **Tooltip** | web | Linear | placement · shortcut |  | PWA는 툴팁 금지(터치) |
