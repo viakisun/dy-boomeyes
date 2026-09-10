@@ -13,7 +13,7 @@ event_id와 공통 시각으로 일반 CCTV · AI CCTV · 바디캠 · CPB 상�
 ## 화면
 | 코드 | 이름 | 라우트 | 상태 픽스처 |
 |---|---|---|---|
-| B1-08 | 이벤트 복기 | `/b1/events/[event]` | `default` |
+| B1-08 | 이벤트 복기 | `/b1/events/[event]` | `default` · `pending` · `pinned` |
 
 ## 수용 기준
 - **AC-1** Given EV-001(E-021 · CPB-003 · t0 = 알림 시각 · 창 ±60초) When 이벤트 복기(B1-08) 로드 Then 헤더에 event_id·종류·장비·t0·연결된 알림(AL-001)·업무(C-105)가 보이고 4레인(일반 CCTV · AI CCTV · 바디캠 · CPB 상태/부품 이력)이 공통 시각축 위에 그려진다 [FR-033, FR-024]
@@ -24,7 +24,7 @@ event_id와 공통 시각으로 일반 CCTV · AI CCTV · 바디캠 · CPB 상�
 - **AC-5** Given EV-001(영상 확보 상태 partial — 일반·AI 세그먼트 있음, 바디캠 없음) When B1-08 Then 헤더에 "영상 일부 확보"가 텍스트로 보이고 연결 목록에 확보 상태 행이 있으며, `?state=pending`이면 "영상 업로드 대기"다; 확보 불가만 warning pill이고 사건(업무) 상태와는 별개다 [FR-033]
 
 ## 상태 픽스처
-`B1-08:default` — EV-001. 영상 레인은 루프 클립(`@boomeyes/video` assets) + 시각 오버레이(seek 없음, "목업" 표기).
+`B1-08:default` — EV-001. 영상 레인은 대체 클립(`@boomeyes/video` assets) + 표시 시각 오버레이 — 커서 위치에 비례한 되감기는 없다(AC-6). 기본 상태(커서 0)에서 AI 패널은 평시 스틸이다.
 
 AI 레인에는 보존 프레임 마커(t0−12초 · `markers[].still`)가 있어 커서가 ±3초 안이면 그 프레임으로 고정된다(`B1-08:pinned` = `?cursor=-12`). 커서 위치에 비례한 되감기는 없다.
 
