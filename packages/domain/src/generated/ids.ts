@@ -188,6 +188,7 @@ export const DISC = {
   'DISC-057': 'DISC-057',
   'DISC-058': 'DISC-058',
   'DISC-059': 'DISC-059',
+  'DISC-060': 'DISC-060',
 } as const;
 export type DiscId = keyof typeof DISC;
 
