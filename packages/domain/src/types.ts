@@ -37,6 +37,8 @@ export interface Device {
   state: EquipmentState;
   lat: number;
   lng: number;
+  /** 타설량 시계열(FR-039 · ADR-013) — 없으면 미연동 */
+  pour?: PourSeries;
   telemetry: {
     at: string;
     voltage: number;
@@ -362,6 +364,8 @@ export interface Part {
   /** 보조지표(단독 폐기 기준 아님, FR-032 note) */
   pouredM3: number;
   runHours: number;
+  /** 참고 기준 타설량 — OEM 참고값, 단독 폐기 기준 아님(FR-032). B4-07 진행 막대 분모 */
+  guideM3?: number;
   state: PartState;
 }
 /** ENT-17 부품 이력(append-only) — 점검 실측·외관·체결·합불 · 교체/폐기 사유·작업자·증빙 */
@@ -445,4 +449,24 @@ export interface Scope {
   role: RoleId;
   siteIds?: string[];
   ownerId?: string;
+}
+
+/** ENT-12 타설량 시계열(FR-039 · DISC-055 기준안) — 서버 집계 시간 버킷(ADR-013). 원시 타수·Δt는 싣지 않는다 */
+export interface PourBucket {
+  /** 버킷 시작(ISO, UTC 정시) */
+  at: string;
+  /** 버킷 타설량 m³ */
+  m3: number;
+}
+export interface PourSeries {
+  /** 산출 근거 — 화면이 근거로 보여준다(DISC-055 확정 전 기준안) */
+  basis: { pipeDiaMm: number; areaM2: number; sensorGapM: number; bucketMs: number };
+  /** 최근 24버킷, 오래된 것부터 */
+  buckets: PourBucket[];
+  /** 버킷 합계 m³ */
+  totalM3: number;
+  /** 가동률 0~1 — 작업 시간대 버킷 중 타설 버킷 비율 */
+  utilization: number;
+  /** 센서 리셋 이후 누적 m³ — Part.pouredM3(부품별)와 다른 축 */
+  cumulativeM3: number;
 }

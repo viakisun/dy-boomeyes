@@ -3173,7 +3173,7 @@
         "acc": [],
         "phase": 2,
         "kind": "proposed",
-        "status": "not-started",
+        "status": "development",
         "note": "미등록 요구 — 현행 SSOT는 누적 타설량을 부품 점검 보조지표로만 둔다(FR-032 · DISC-038) · 측정·표시 기능은 없음 · 산출 로직·센서 검증은 DY 연구개발2팀 STEP1~4 진행 중이며 실차 적용은 CPB 1호기 입고 후"
       },
       {
