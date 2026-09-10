@@ -1,6 +1,9 @@
 // 목업 카메라 자산 — 참고자료 v5.0 삽화(저장소 밖 PPTX)에서 tools/media/build.py가 만든 스틸(WebP 960×540)과 루프 MP4(640×360 · 6s · 무음).
 // 실스트림 대신 라이브 자리(INTENT §5). Vite가 URL로 번들한다 — 두 앱이 import하는 이 모듈의 new URL()은 두 번들에 모두 emit되므로
 // 웹 전용 클립은 별도 모듈(assets-web.ts)로 분리한다(이번엔 없음). 원천·크롭·바이트는 ./assets/manifest.json.
+/** 루프 클립 길이(초) — assets/manifest.json의 mp4.duration. 저장 영상 목록의 길이 표기가 이 값을 쓴다(assets.test가 고정) */
+export const LOOP_SEC = 6;
+
 export const LOOP_MP4 = {
   /** 일반 카메라 · 전방 조망(붐 전개, 슬라이드 11) — 파일명 유지: e2e가 boom.*\.mp4 를 단언 */
   front: new URL('./assets/front.mp4', import.meta.url).href,

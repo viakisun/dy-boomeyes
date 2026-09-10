@@ -60,7 +60,8 @@ test('[A1-05] CPB-003 상세: 342V · E-021 · 도달률 · 서류 완비율 · 
   await expect(page.getByRole('list', { name: '저장 영상 목록' }).locator('li')).toHaveCount(3);
   await page.getByRole('tab', { name: 'SD' }).click();
   await expect(page.getByRole('list', { name: '저장 영상 목록' }).locator('li')).toHaveCount(2);
-  await expect(page.getByText('구간 회수 가능').first()).toBeVisible();
+  // 회수 표기는 프로파일 성격이 아니라 그 구간의 상태다 — 서버로 올라온 최신 구간은 바로 재생, 나머지가 "구간 회수 필요"(IF-007)
+  await expect(page.getByText('구간 회수 필요')).toHaveCount(1);
 });
 
 test('[A1-04] plite 픽스처(SITE-001 P-LITE): 장비 3 × 1채널 — AI 채널 숨김 · 프로파일 P-LITE [FR-004] [FR-005]', async ({
@@ -174,6 +175,17 @@ test('[A1-05] 영상 탭 카메라 타일 → 시트 재생 [FR-004]', async ({ 
   await expect(page.locator('dialog[open][data-bottom-sheet]')).toBeVisible();
   await expect(page.locator('[data-cam-sheet] video')).toHaveAttribute('src', /front.*\.mp4/);
   await expect(page).toHaveURL(/state=dev/);
+});
+
+test('[A1-05] 저장 영상 재생 → 카메라 시트에 클립 · 목록 길이가 실제 길이 [FR-005]', async ({ page }) => {
+  await page.goto('/a1/monitor/CPB-003?state=dev&capture=1&tab=video');
+  const list = page.getByRole('list', { name: '저장 영상 목록' });
+  await expect(list.locator('li').first()).toContainText('6초');
+  await list.locator('li').first().getByRole('button', { name: '재생' }).click();
+  await expect(page.locator('dialog[open][data-bottom-sheet]')).toBeVisible();
+  const player = page.locator('[data-cam-sheet] [data-camera]');
+  await expect(player).toHaveAttribute('data-frame', 'clip');
+  await expect(player.locator('video')).toHaveAttribute('src', /front.*\.mp4/);
 });
 
 test('[A1-05] 내 현장 밖 장비(SITE-002 CPB-004)는 딥링크로도 열리지 않는다 [FR-004] [FR-022]', async ({ page }) => {

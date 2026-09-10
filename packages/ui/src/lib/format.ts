@@ -13,6 +13,9 @@ export const fmtDateTime = (iso: string) =>
 export const fmtTime = (iso: string) =>
   new Date(iso).toLocaleTimeString('ko-KR', { timeZone: TZ, hour: '2-digit', minute: '2-digit' });
 
+/** 길이 — 60초 미만은 초, 그 이상은 분. 저장 영상 목록(반올림으로 0분이 되지 않게) */
+export const fmtDuration = (sec: number) => (sec < 60 ? `${sec}초` : `${Math.round(sec / 60)}분`);
+
 /** 기한 라벨 — 오늘 · D-n(남음) · D+n(초과). 자정 기준이 아니라 24h 단위 반올림 */
 export function dueLabel(dueAt: string, now: Date): { label: string; overdue: boolean } {
   const diff = Math.round((Date.parse(dueAt) - now.getTime()) / DAY);

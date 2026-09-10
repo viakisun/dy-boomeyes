@@ -30,4 +30,4 @@ fr: [FR-002, FR-003, FR-004, FR-006, FR-011, FR-034]
 `screens.yaml` B1-02 states(`dash` `show` …) · B1-02M `cam`. 추가 제안: `dash-quiet`(이상 0건) · `dash-offline`(CPB-004 두절) — `/ssot`로 등록 후 사용.
 
 ## 비범위
-HLS/WebRTC 실스트림(루프 MP4·스냅샷으로 대체) · 저장 영상 실재생(목록·타임라인 자리만) · 지도 주소 검색.
+HLS/WebRTC 실스트림(루프 MP4·스냅샷으로 대체) · 저장 영상 타임라인·구간 스크럽(W4 — 목록의 재생은 대체 클립) · 지도 주소 검색.
