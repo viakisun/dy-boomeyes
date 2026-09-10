@@ -22,5 +22,7 @@ export const load: PageLoad = async ({ parent, url }) => {
     flags,
     tab: url.searchParams.get('tab') === 'bodycam' ? 'bodycam' : 'cameras',
     reportSheet,
+    // 카메라 영상 시트(FR-004 · IF-006) — B1-02M과 같은 ?cam= 규약
+    cam: url.searchParams.get('cam'),
   };
 };

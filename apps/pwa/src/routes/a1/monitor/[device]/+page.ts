@@ -37,5 +37,7 @@ export const load: PageLoad = async ({ parent, params, url }) => {
     completeness: completeness.find((c) => c.subjectId === device.id),
     flags,
     source: source && flags.sources.includes(source as 'server') ? source : flags.sources[0]!,
+    // 카메라 영상 시트(FR-004 · IF-006) — B1-02M과 같은 ?cam= 규약
+    cam: url.searchParams.get('cam'),
   };
 };

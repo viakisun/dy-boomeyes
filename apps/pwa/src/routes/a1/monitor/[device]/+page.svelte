@@ -18,6 +18,7 @@
     Button,
   } from '@boomeyes/ui';
   import { CameraTile, HealthBadge, MOUNT_LABEL, SOURCE_LABEL } from '@boomeyes/video';
+  import CameraSheet from '$lib/CameraSheet.svelte';
   import ReportSheet from '$lib/ReportSheet.svelte';
   import { session } from '$lib/session.svelte';
   let { data } = $props();
@@ -51,6 +52,17 @@
     u.searchParams.set(key, value);
     goto(resolve((u.pathname + u.search) as '/'), { keepFocus: true, noScroll: true, replaceState: true });
   };
+  // 카메라 영상 시트(?cam=) — replaceState를 쓰지 않는다: 뒤로가기로 닫혀야 한다
+  const withCam = (id: string | null) => {
+    const u = new URL(location.href);
+    if (id) u.searchParams.set('cam', id);
+    else u.searchParams.delete('cam');
+    return (u.pathname + u.search) as '/';
+  };
+  const openCam = (id: string) => goto(resolve(withCam(id)), { keepFocus: true, noScroll: true });
+  const closeCam = () => goto(resolve(withCam(null)), { keepFocus: true, noScroll: true });
+  // data.cameras는 loader가 이미 AX-1로 걸렀다 — 그 안에 있으면 열 수 있다
+  const sheetCam = $derived(data.cam ? (data.cameras.find((c) => c.id === data.cam) ?? null) : null);
 </script>
 
 <div class="gap-stack-md flex flex-col" data-scr={SCR['A1-05']}>
@@ -169,7 +181,7 @@
       <div class="gap-inline-sm grid grid-cols-2">
         {#each data.cameras as c (c.id)}
           <div class="gap-stack-xs flex flex-col" data-camera={c.id}>
-            <CameraTile camera={c} deviceLabel="{d.unitNo}호기" compact status={false} />
+            <CameraTile camera={c} deviceLabel="{d.unitNo}호기" compact status={false} onclick={openCam} />
             <HealthBadge camera={c} />
             <span class="text-label-sm text-fg-muted" data-mount={c.mount}
               >{c.mount ? MOUNT_LABEL[c.mount] : '장착 위치 미등록'}</span
@@ -179,4 +191,15 @@
       </div>
     </section>
   {/if}
+
+  <CameraSheet
+    camera={sheetCam}
+    siblings={data.cameras}
+    device={d}
+    media={data.media}
+    capture={data.capture}
+    snapshotEveryMs={data.flags.snapshotEveryMs}
+    onopen={openCam}
+    onclose={closeCam}
+  />
 </div>

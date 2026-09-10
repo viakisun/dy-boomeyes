@@ -19,7 +19,7 @@
 | `A1-01` | 로그인 | A1 | `/a1/login` | site-safety | 1 | 1 | 1 (login) | FR-001 | shell-auth |
 | `A1-02` | 업무함 | A1 | `/a1/inbox` | site-safety | 1 | 1 | 3 (inbox filter push) | FR-008 FR-009 FR-011 FR-015 FR-038 | demo-scripts documents notifications task-escalation |
 | `A1-03` | 업무 상세 | A1 | `/a1/inbox/[case]` | site-safety | 1 | 1 | 3 (case docnew review) | FR-006 FR-008 FR-033 | demo-scripts documents task-escalation |
-| `A1-04` | 관제(장비·영상) | A1 | `/a1/monitor` | site-safety | 1 | 1 | 3 (monitor plite report) | FR-004 FR-028 FR-030 FR-034 FR-038 FR-042 | demo-scripts video-basics |
+| `A1-04` | 관제(장비·영상) | A1 | `/a1/monitor` | site-safety | 1 | 1 | 4 (monitor plite report live) | FR-004 FR-028 FR-030 FR-034 FR-038 FR-042 | demo-scripts video-basics |
 | `A1-05` | 장비 상세 | A1 | `/a1/monitor/[device]` | site-safety | 1 | 1 | 3 (dev plite stale) | FR-002 FR-005 FR-007 FR-016 FR-034 FR-036 FR-038 FR-039 FR-040 FR-041 | demo-scripts video-basics |
 | `A1-06` | 기록 | A1 | `/a1/records` | site-safety | 1 | 2 | 1 (rec) | FR-012 | records-reports |
 | `A1-07` | 메뉴·현장 정보 | A1 | `/a1/menu` | site-safety | 1 | 2 | 2 (menu apply) | FR-017 FR-018 FR-026 FR-041 | sites-assets-leases |

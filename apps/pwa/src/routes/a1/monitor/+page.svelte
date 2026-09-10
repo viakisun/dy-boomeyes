@@ -5,6 +5,7 @@
   import { onMount } from 'svelte';
   import { SCR, type Alert } from '@boomeyes/domain';
   import { Badge, Banner, Button, EmptyState, Tabs, fmtTime, toast, EquipmentCard } from '@boomeyes/ui';
+  import CameraSheet from '$lib/CameraSheet.svelte';
   import ReportSheet from '$lib/ReportSheet.svelte';
   import { session } from '$lib/session.svelte';
   import { BboxOverlay, CameraTile, HealthBadge } from '@boomeyes/video';
@@ -21,6 +22,27 @@
   // AX-1 1채널 프로파일이면 AI 채널 숨김
   const camsOf = (deviceId: string) =>
     data.cameras.filter((c) => c.deviceId === deviceId && (data.flags.channels === 2 || c.kind === 'general'));
+  // 카메라 영상 시트(?cam=) — 시트 열기/닫기는 다른 쿼리를 유지한다(mock db 캐시 키). replaceState는 쓰지 않는다: 뒤로가기로 닫혀야 한다
+  const withCam = (id: string | null) => {
+    const u = new URL(location.href);
+    if (id) u.searchParams.set('cam', id);
+    else u.searchParams.delete('cam');
+    return (u.pathname + u.search) as '/';
+  };
+  const openCam = (id: string) => goto(resolve(withCam(id)), { keepFocus: true, noScroll: true });
+  const closeCam = () => goto(resolve(withCam(null)), { keepFocus: true, noScroll: true });
+  // 딥링크 가드 — 내 현장 장비이고 프로파일이 보여주는 채널일 때만 연다(B1-02M과 같은 규칙)
+  const sheetCam = $derived(
+    data.cam
+      ? (data.cameras.find(
+          (c) =>
+            c.id === data.cam &&
+            data.devices.some((d) => d.id === c.deviceId) &&
+            (data.flags.channels === 2 || c.kind === 'general'),
+        ) ?? null)
+      : null,
+  );
+  const sheetDevice = $derived(sheetCam ? data.devices.find((d) => d.id === sheetCam.deviceId) : undefined);
   // AI 이벤트(mock realtime, IF-015) — 카메라별 최신 이벤트 → 타일 bbox + 배너 (AC-2)
   let events = $state<Record<string, Alert>>({});
   onMount(() =>
@@ -79,6 +101,7 @@
                   compact
                   status={false}
                   still={ev?.bbox ? 'boom-person' : undefined}
+                  onclick={openCam}
                 />
                 {#if ev?.bbox}<BboxOverlay boxes={[{ ...ev.bbox, label: '사람', score: 0.91 }]} tone="danger" />{/if}
               </div>
@@ -91,4 +114,16 @@
       <EmptyState title="현장에 장비가 없습니다" />
     {/each}
   {/if}
+
+  <CameraSheet
+    camera={sheetCam}
+    siblings={sheetCam ? camsOf(sheetCam.deviceId) : []}
+    device={sheetDevice}
+    media={data.media}
+    capture={data.capture}
+    snapshotEveryMs={data.flags.snapshotEveryMs}
+    boxes={sheetCam && events[sheetCam.id]?.bbox ? [{ ...events[sheetCam.id].bbox!, label: '사람', score: 0.91 }] : []}
+    onopen={openCam}
+    onclose={closeCam}
+  />
 </div>
