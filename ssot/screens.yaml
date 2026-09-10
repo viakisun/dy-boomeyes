@@ -1049,6 +1049,8 @@ screens:
     name: 기본
   - id: pending
     name: 영상 업로드 대기
+  - id: pinned
+    name: 마커 프레임 고정(?cursor=-12 — AI 레인 인원 접근 마커)
   nav: []
   trace:
     task:

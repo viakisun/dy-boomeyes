@@ -2,7 +2,7 @@
   // 카메라 타일 16:9 — 채널 칩(일반/AI) · 상태 배지(domain.video · camera 상태기계) · 스냅샷 시각. 실스트림 대신 삽화 스틸(STILL) + 시각.
   import type { Camera } from '@boomeyes/domain';
   import { CAMERA_TONE, StatusPill, cx } from '@boomeyes/ui';
-  import { STILL, type StillId } from './assets';
+  import { STILL, idleStill, type StillId } from './assets';
   import { CAMERA_LABEL } from './labels';
   let {
     camera,
@@ -24,7 +24,7 @@
     onclick?: (id: string) => void;
   } = $props();
   const off = $derived(camera.state === 'offline');
-  const stillId = $derived<StillId>(still ?? (camera.kind === 'ai' ? 'boom' : 'front'));
+  const stillId = $derived<StillId>(still ?? idleStill(camera));
   const time = $derived(
     new Date(camera.snapshotAt).toLocaleTimeString('ko-KR', {
       timeZone: 'Asia/Seoul',

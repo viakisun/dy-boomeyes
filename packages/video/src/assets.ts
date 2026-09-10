@@ -21,6 +21,10 @@ export const STILL = {
   'boom-person': new URL('./assets/boom-person.webp', import.meta.url).href,
 } as const;
 export type StillId = keyof typeof STILL;
+/** 문자열이 스틸 키인지 — domain의 markers[].still(string)을 좁힌다 */
+export const isStillId = (x: string | undefined): x is StillId => !!x && x in STILL;
+/** 채널 평시 스틸 — 알람 그래픽 없는 프레임 */
+export const idleStill = (c: { kind: 'general' | 'ai' }): StillId => (c.kind === 'ai' ? 'boom' : 'front');
 
 // STILL_BBOX:begin — tools/media/build.py가 sources.json의 bbox_px를 크롭 안에서 정규화해 쓴다. seed·realtime이 그대로 소비(리터럴 금지)
 export const STILL_BBOX = {
