@@ -19,6 +19,13 @@ describe('[FR-039] 타설량 시드 결정성', () => {
     expect(d?.pour?.utilization).toBe(0.818);
     expect(d?.pour?.cumulativeM3).toBe(3910);
   });
+  it('CPB-004(두절 08:37) — 09·10시 버킷 0 · 08시는 남는다 · 가동률 8/11 = 0.727', async () => {
+    const api = bootMock({ capture: true });
+    const d = await api.device('CPB-004');
+    expect(d?.pour?.buckets.slice(-2).map((b) => b.m3)).toEqual([0, 0]);
+    expect(d?.pour?.buckets[21]!.m3).toBe(20);
+    expect(d?.pour?.utilization).toBe(0.727);
+  });
   it('API 경계는 복사본 — 돌려받은 pour를 바꿔도 다음 읽기에 안 보인다', async () => {
     const api = bootMock({ capture: true });
     const a = await api.device('CPB-001');
