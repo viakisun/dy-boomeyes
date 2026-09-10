@@ -12,6 +12,8 @@
     capture = false,
     snapshotEveryMs,
     boxes = [],
+    clip,
+    onlive,
     onopen,
     onclose,
   }: {
@@ -25,6 +27,9 @@
     snapshotEveryMs: number;
     /** AI 감지 영역 — VideoPlayer가 직접 그린다 */
     boxes?: { x: number; y: number; w: number; h: number; label?: string; score?: number }[];
+    /** 저장 영상 재생(FR-005) — 있으면 라이브 대신 이 클립 */
+    clip?: { url: string; poster?: string; label: string };
+    onlive?: () => void;
     onopen: (id: string) => void;
     onclose: () => void;
   } = $props();
@@ -48,7 +53,16 @@
           >● 녹화 {SOURCE_LABEL[camera.recording === 'edge' ? 'server' : camera.recording]} · {camera.retentionDays}일</Badge
         >
       </div>
-      <VideoPlayer {camera} {media} {capture} {snapshotEveryMs} {boxes} deviceLabel="{device?.unitNo ?? ''}호기" />
+      <VideoPlayer
+        {camera}
+        {media}
+        {capture}
+        {snapshotEveryMs}
+        {boxes}
+        {clip}
+        {onlive}
+        deviceLabel="{device?.unitNo ?? ''}호기"
+      />
       <HealthBadge {camera} />
     </div>
   {/if}
