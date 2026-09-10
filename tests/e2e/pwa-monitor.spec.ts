@@ -136,3 +136,51 @@ test('[A1-04] 현장 신고: 신고 → 시트(유형·내용·카메라·영상
   await expect(page.getByRole('region', { name: '신고' })).toContainText('작업자 상태 이상 · CAM-3-2 · 영상 시점');
   await expect(page.getByRole('region', { name: '이력' })).toContainText('신고');
 });
+
+test('[A1-04] 타일 터치 → ?cam= 시트에 라이브 대체 재생 · 채널 전환 · Esc로 닫히고 쿼리 유지 [FR-004] [FR-034]', async ({
+  page,
+}) => {
+  await page.goto('/a1/monitor?state=live&capture=1');
+  await expect(page.locator(`[data-scr="${SCR['A1-04']}"]`)).toBeVisible();
+  await expect(page.locator('[data-camera]')).toHaveCount(6); // 닫힌 시트는 타일 개수를 늘리지 않는다
+  await page.locator('[data-camera="CAM-3-1"] button').first().click();
+  const sheet = page.locator('dialog[open][data-bottom-sheet]');
+  await expect(sheet).toBeVisible();
+  await expect(page).toHaveURL(/cam=CAM-3-1/);
+  // 시트 안에서만 찾는다 — 같은 data-camera가 타일에도 있다
+  await expect(page.locator('[data-cam-sheet] video')).toHaveAttribute('src', /front.*\.mp4/);
+  await expect(page.locator('[data-cam-sheet] [data-camera="CAM-3-1"]')).toHaveCount(1);
+  await page.locator('[data-cam-sheet]').getByRole('button', { name: 'AI · 붐 끝' }).click();
+  await expect(page).toHaveURL(/cam=CAM-3-2/);
+  await page.keyboard.press('Escape');
+  await expect(sheet).toHaveCount(0);
+  await expect(page.locator('[data-cam-sheet]')).toHaveCount(0); // 닫히면 영상이 DOM에서 사라진다
+  await expect(page).not.toHaveURL(/cam=/);
+  await expect(page).toHaveURL(/state=live/); // 다른 쿼리 유지 — mock db 캐시 키
+  await expect(page).toHaveURL(/capture=1/);
+});
+
+test('[A1-04] P-LITE 1채널: AI 채널 ?cam= 딥링크는 열리지 않는다 [FR-004] [FR-005]', async ({ page }) => {
+  await page.goto('/a1/monitor?state=plite&capture=1&cam=CAM-3-2');
+  await expect(page.locator(`[data-scr="${SCR['A1-04']}"]`)).toBeVisible();
+  await expect(page.locator('dialog[open][data-bottom-sheet]')).toHaveCount(0);
+  await expect(page.locator('[data-cam-sheet]')).toHaveCount(0);
+});
+
+test('[A1-05] 영상 탭 카메라 타일 → 시트 재생 [FR-004]', async ({ page }) => {
+  await page.goto('/a1/monitor/CPB-003?state=dev&capture=1&tab=video');
+  await expect(page.locator(`[data-scr="${SCR['A1-05']}"]`)).toBeVisible();
+  await page.locator('[data-camera="CAM-3-1"] button').first().click();
+  await expect(page.locator('dialog[open][data-bottom-sheet]')).toBeVisible();
+  await expect(page.locator('[data-cam-sheet] video')).toHaveAttribute('src', /front.*\.mp4/);
+  await expect(page).toHaveURL(/state=dev/);
+});
+
+test('[A1-05] 내 현장 밖 장비(SITE-002 CPB-004)는 딥링크로도 열리지 않는다 [FR-004] [FR-022]', async ({ page }) => {
+  await page.goto('/a1/login');
+  await page.getByRole('button', { name: '입장' }).click();
+  await page.goto('/a1/monitor/CPB-004?cam=CAM-4-1'); // safety01은 SITE-001만 담당
+  await expect(page.locator(`[data-scr="${SCR['A1-05']}"]`)).toHaveCount(0);
+  await expect(page.locator('[data-cam-sheet]')).toHaveCount(0);
+  await expect(page.getByText('장비 CPB-004 없음')).toBeVisible();
+});

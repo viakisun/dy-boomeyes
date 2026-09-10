@@ -34,9 +34,11 @@ fr: [FR-004, FR-005, FR-034, FR-028, FR-030, FR-002, FR-007, FR-016, FR-022, FR-
 - **AC-11** Given `?state=stale`(CPB-003 마지막 수신 25분 전 · 단선 센서 미연동) When A1-05 상태 탭 Then 수신 상태 줄에 "미수신 · 마지막 HH:MM"(warning)이 보이고 단선 칸은 "미연동"이며 정상 표시가 없다; 두절 장비(CPB-004)는 B1-02 인스펙터에 마지막 값과 "두절 · 마지막 HH:MM"을 남긴다 [FR-034, FR-002]
 - **AC-12** Given monitor 픽스처의 CAM-3-2(health view-changed) When A1-04·A3-04 Then 헬스 배지가 "시야 변경 · 판단 유보"(warning)이고 AI 타일에 "판단 유보" 오버레이가 있으며 "정상"은 없다 — 'AI 판단 불가'(장애)와 구분 [FR-034]
 - **AC-13** Given 현장 안전관리자 When A1-04(또는 A1-05)의 "신고" → 시트(유형 · 설명 필수 · 카메라 · 영상 시점 저장) → 신고 Then 업무(현장 신고 · new)와 알림이 생겨 A1-02 업무함에 보이고 업무 이력에 '신고'가 남는다 [FR-038, FR-008]
+- **AC-14** Given 현장 안전관리자·P-SD 현장의 A1-04(또는 A1-05) 카메라 타일 When 타일을 누르면 Then 현재 URL에 `?cam=<camera>`가 더해지고(다른 쿼리 유지) 카메라 시트가 열려 라이브 대체 재생 · 스냅샷 주기 갱신 · 헬스 배지 · 녹화 배지 · 채널 전환(일반/AI)이 보이며, 뒤로 가기·Esc로 닫으면 `?cam=`이 지워지고 시트 안 영상이 DOM에서 사라진다 [FR-004, FR-034]
+- **AC-15** Given AX-1 1채널 프로파일(P-LITE)의 AI 채널이거나 내 현장 밖 카메라 When `?cam=`으로 직접 열면 Then 시트가 열리지 않고 화면 그대로다 — B1-02M 딥링크 가드와 같은 규칙이다 [FR-004, FR-005]
 
 ## 상태 픽스처
-`screens.yaml` A1-04 `monitor` `plite` · A1-05 `dev`(상태 탭) `plite`(영상 탭) `stale`(상태 탭 — CPB-003 25분 전 수신 · 단선 미연동) · B1-02M `cam` · A3-04 `dev` · B2-03 `site`. 픽스처 ID: CPB-003 · CAM-3-1(일반) · CAM-3-2(AI) · CAM-2-2(AI 판단 불가) · DOC-001(D-27). `monitor`는 CAM-1-1을 offline, CAM-2-2를 ai-unavailable로 변형한다.
+`screens.yaml` A1-04 `monitor` `plite` `live`(카메라 시트 — `?cam=CAM-3-1`) · A1-05 `dev`(상태 탭) `plite`(영상 탭) `stale`(상태 탭 — CPB-003 25분 전 수신 · 단선 미연동) · B1-02M `cam` · A3-04 `dev` · B2-03 `site`. 픽스처 ID: CPB-003 · CAM-3-1(일반) · CAM-3-2(AI) · CAM-2-2(AI 판단 불가) · DOC-001(D-27). `monitor`는 CAM-1-1을 offline, CAM-2-2를 ai-unavailable로 변형한다.
 
 ## 비범위
 HLS/WebRTC 실스트림(IF-006 L1~L3, W3) · 저장 영상 실재생(목록·타임라인 자리만, W4) · 바디캠 실연동(W4) · 본사·건설사 영상 실스트림(W3).

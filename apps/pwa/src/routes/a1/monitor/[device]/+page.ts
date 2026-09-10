@@ -11,6 +11,9 @@ export const load: PageLoad = async ({ parent, params, url }) => {
   const users = await api.users();
   const me = users.find((u) => u.id === session.user?.userId);
   const scope = { role: (me?.role ?? 'site-safety') as RoleId, siteIds: me?.siteIds };
+  // 내 현장 밖 장비는 딥링크로도 열지 않는다 — api.device(id)는 scope를 받지 않아 여기서 막는다(AC-15).
+  // siteIds가 비면 전 현장(캡처 세션·본사) — mock api의 inScope와 같은 규칙
+  if (scope.siteIds?.length && !scope.siteIds.includes(device.siteId)) error(404, `장비 ${params.device} 없음`);
   const [cameras, sites, docs, completeness] = await Promise.all([
     api.cameras(device.id),
     api.sites(scope),
@@ -37,5 +40,7 @@ export const load: PageLoad = async ({ parent, params, url }) => {
     completeness: completeness.find((c) => c.subjectId === device.id),
     flags,
     source: source && flags.sources.includes(source as 'server') ? source : flags.sources[0]!,
+    // 카메라 영상 시트(FR-004 · IF-006) — B1-02M과 같은 ?cam= 규약
+    cam: url.searchParams.get('cam'),
   };
 };

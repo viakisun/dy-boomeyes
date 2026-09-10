@@ -46,6 +46,8 @@ export const FIXTURES: Record<string, Fixture> = {
   }),
   // 현장 신고(FR-038 제안) — A1-04 시트는 URL이 연다(?state=report → +page.ts) · B1-03은 C-107 시드
   'A1-04:report': (db) => db,
+  // 카메라 영상 시트(?cam=CAM-3-1) — 뒤 화면은 monitor와 같게 두고 시트만 연다. CAM-3-1은 시드가 live(CPB-003 fault)
+  'A1-04:live': (db) => FIXTURES['A1-04:monitor']!(db),
   'B1-03:report': (db) => ({
     ...db,
     cases: [
