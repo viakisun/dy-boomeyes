@@ -28,6 +28,21 @@ export const FIXTURES: Record<string, Fixture> = {
   'A1-05:dev': (db) => db,
   'A1-05:pour': (db) => db, // 부품 탭 — 데이터는 dev와 같고 ?tab=parts(capture STATE_QUERY)
   // 수신 임계 초과(NFR-009 기준안 10분) + 단선 미연동 — '미수신 · 마지막 HH:MM' · '미연동' 표기(FR-034)
+  // 3상 역상(FR-040) — 기본 시드는 CPB-003 S상 결상이라, 다른 판정(역상·전압은 균형·모터 불가)을 보인다
+  'A1-05:phase': (db) => ({
+    ...db,
+    devices: db.devices.map((d) =>
+      d.id === 'CPB-003'
+        ? {
+            ...d,
+            telemetry: {
+              ...d.telemetry,
+              power: { volts: { r: 381, s: 380, t: 382 }, fault: 'reverse' as const, motorReady: false },
+            },
+          }
+        : d,
+    ),
+  }),
   'A1-05:stale': (db) => ({
     ...db,
     devices: db.devices.map((d) =>
