@@ -6,7 +6,7 @@
 - `KeyValueList`/`<dl>` — 누적 · 24시간 · 오늘 · 가동률.
 
 ## 데이터
-- `Device.pour?: PourSeries`(ENT-12 · ADR-013) — mock 시드 상태별 24버킷 리터럴. 화면은 집계하지 않는다: 합계·가동률은 `PourSeries`가 들고 오고, "오늘"만 `todayM3(buckets, now)`(KST 자정 이후 버킷 합, UTC 산술)로 센다.
+- `Device.pour?: PourSeries`(ENT-12 · ADR-013) — mock 시드 상태별 **KST 시각별 리터럴 24**(`pourSeries(now, m3ByHour, {zeroFrom?})`): 합계·가동률은 시각 불변, 차트 모양만 시각에 맞게 돈다. 고장 = 현재 버킷 0 · 두절 = 두절 시점 이후 0 · 정비 = 전부 0. 화면은 집계하지 않는다: 합계·가동률은 `PourSeries`가 들고 오고, "오늘"만 `todayM3(buckets, now)`(KST 자정 이후 버킷 합, UTC 산술)로 센다.
 - B1-02는 `buckets.slice(-12)`, A1-05는 24개 전부, A2-04는 숫자만.
 - `Part.guideM3?` — B4-07 분모. 없으면 종전 `maxPoured`.
 

@@ -50,6 +50,16 @@ describe('[FR-039] 타설량 산출 기준안(DISC-055)', () => {
     expect(lost.buckets.slice(-2).map((b) => b.m3)).toEqual([0, 0]); // 09시 · 10시
     expect(lost.buckets[21]!.m3).toBe(24); // 08시 버킷은 두절 전 시작
   });
+  it('todayM3 자정 경계 — KST 23:59면 당일 24버킷 전부 · 00:01이면 현재 버킷 1개만(시 단위 판별)', () => {
+    const ones = new Array<number>(24).fill(1);
+    const before = pourSeries('2026-07-02T14:59:00.000Z', ones, { cumulativeM3: 0 }); // KST 07-02 23:59
+    expect(todayM3(before.buckets, '2026-07-02T14:59:00.000Z')).toBe(24);
+    const after = pourSeries('2026-07-02T15:01:00.000Z', ones, { cumulativeM3: 0 }); // KST 07-03 00:01
+    expect(todayM3(after.buckets, '2026-07-02T15:01:00.000Z')).toBe(1);
+  });
+  it('m3ByHour가 24개가 아니면 throw — 시드 표 길이 실수를 부팅에서 잡는다', () => {
+    expect(() => pourSeries(FIXED_CLOCK, [1, 2, 3], { cumulativeM3: 0 })).toThrow('24개');
+  });
   it('전부 0이면 합계 0 · 가동률 0(분모는 남는다) — 미연동(pour 없음)과 구분', () => {
     const s = pourSeries(FIXED_CLOCK, new Array<number>(24).fill(0), { cumulativeM3: 0 });
     expect(s.totalM3).toBe(0);
