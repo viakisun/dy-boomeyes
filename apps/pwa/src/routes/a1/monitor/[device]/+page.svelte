@@ -2,13 +2,14 @@
   // A1-05 장비 상세 (specs/video-basics AC-3) — 상단 탭 4(상태 · 서류 · 영상 · 부품): 텔레메트리 · 서류 완비율/만료 · 저장 영상(프로파일 소스 탭)+카메라 · 마모·교체 부품
   import { goto } from '$app/navigation';
   import { resolve } from '$app/paths';
-  import { SCR, type Doc, type Recording } from '@boomeyes/domain';
+  import { SCR, powerStatus, type Doc, type Recording } from '@boomeyes/domain';
   import {
     Badge,
     DOC_TONE,
     EQUIPMENT_TONE,
     ERROR_CODE_LABEL,
     EmptyState,
+    KeyValueList,
     StatusPill,
     Tabs,
     TelemetryGauge,
@@ -36,6 +37,15 @@
   const complete = $derived(data.completeness?.rate ?? 0); // FR-016 완비율은 API(docCompleteness)
   const expiring = $derived([...data.deviceDocs, ...data.driverDocs].filter((x) => x.state === 'expiring'));
   const now = $derived(data.clock.now());
+  // 3상 판정(FR-040) — 임계·문구는 DISC-056 확정 전 기준안(rules.ts)
+  const power = $derived(powerStatus(d.telemetry.power, d.telemetry.unlinked));
+  const PHASE_TEXT = {
+    normal: '정상',
+    loss: '결상',
+    reverse: '역상 — 모터 회전 방향',
+    under: '단상(저전압)',
+    over: '과전압',
+  } as const;
   const tabs = $derived(data.flags.sources.map((s) => ({ id: s, label: SOURCE_LABEL[s] })));
   const general = $derived(data.cameras.find((c) => c.kind === 'general') ?? data.cameras[0]);
   const docRow = (x: Doc) =>
@@ -107,12 +117,34 @@
 
   {#if data.tab === 'status'}
     <TelemetryStrip telemetry={d.telemetry} {now} />
-    <dl class="gap-x-inline-md gap-y-stack-xs text-body-sm grid grid-cols-[auto_1fr]" aria-label="CAN · IO">
-      <dt class="text-fg-muted">CAN</dt>
-      <dd>펌프 상태 {d.state === 'fault' ? '이상' : '정상'} · 붐 각도 {d.telemetry.boomAngle}°</dd>
-      <dt class="text-fg-muted">IO</dt>
-      <dd>입력 신호 정상</dd>
-    </dl>
+    <!-- 전력(FR-040 · IF-020) — 시드에 없던 CAN/IO 하드코딩 문구(화면 검수 2026-09-07)를 실 계측 블록으로 교체 -->
+    <section
+      class="rounded-card border-border bg-surface p-inset-md gap-stack-sm flex flex-col border"
+      aria-label="전력"
+    >
+      <div class="flex items-center justify-between">
+        <h3 class="text-heading-sm">3상 전원</h3>
+        {#if power === 'unlinked'}
+          <span class="text-body-sm text-fg-muted" data-unlinked>미연동</span>
+        {:else}
+          <StatusPill tone={power === 'normal' ? 'success' : 'danger'} label={PHASE_TEXT[power]} size="sm" />
+        {/if}
+      </div>
+      {#if d.telemetry.power}
+        <KeyValueList
+          columns={2}
+          items={[
+            { label: 'R상', value: `${d.telemetry.power.volts.r}V` },
+            { label: 'S상', value: `${d.telemetry.power.volts.s}V` },
+            { label: 'T상', value: `${d.telemetry.power.volts.t}V` },
+            { label: '모터 구동', value: d.telemetry.power.motorReady ? '가능' : '불가' },
+          ]}
+        />
+      {/if}
+      <p class="text-label-sm text-fg-muted" data-ref="DISC-056">
+        판정 기준은 준비 중입니다 · 붐 각도 {d.telemetry.boomAngle}°
+      </p>
+    </section>
   {:else if data.tab === 'parts'}
     <section
       class="rounded-card border-border bg-surface p-inset-md gap-stack-md flex flex-col border"

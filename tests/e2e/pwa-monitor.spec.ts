@@ -196,3 +196,29 @@ test('[A1-05] 내 현장 밖 장비(SITE-002 CPB-004)는 딥링크로도 열리�
   await expect(page.locator('[data-cam-sheet]')).toHaveCount(0);
   await expect(page.getByText('장비 CPB-004 없음')).toBeVisible();
 });
+
+test('[A1-05] 3상 전원: 결상 셀·판정·전력 블록 · ?state=phase 역상 · 기존 전압 셀 문구 불변 [FR-040] [FR-034]', async ({
+  page,
+}) => {
+  await page.goto('/a1/monitor/CPB-003?state=dev&capture=1');
+  await expect(page.locator(`[data-scr="${SCR['A1-05']}"]`)).toBeVisible();
+  const strip = page.locator('dl[aria-label="텔레메트리"]');
+  await expect(strip).toContainText('342V · 이상'); // 기존 전압 셀 — 문구 그대로
+  await expect(strip).toContainText('R 381 · S 118 · T 379V');
+  await expect(strip).toContainText('결상');
+  const power = page.getByRole('region', { name: '전력' });
+  await expect(power).toContainText('S상');
+  await expect(power).toContainText('118V');
+  await expect(power).toContainText('모터 구동');
+  await expect(power).toContainText('불가');
+  await expect(power.getByText('판단 기준은 준비 중입니다')).toHaveCount(0); // 오타 방지 — 정확한 문구는 아래
+  await expect(power.getByText('판정 기준은 준비 중입니다')).toBeVisible();
+  await expect(power.getByText('판정 기준은 준비 중입니다')).toHaveAttribute('data-ref', 'DISC-056');
+  // 3상 판정 셀만 본다 — 단선 셀은 정당하게 '정상'이다(FR-034: 이상 계측을 정상으로 표시하지 않는다는 규칙은 셀 단위)
+  const phaseCell = strip.locator('div').filter({ has: page.getByText('3상 판정', { exact: true }) });
+  await expect(phaseCell).toContainText('결상');
+  await expect(phaseCell.getByText('정상', { exact: true })).toHaveCount(0);
+  await page.goto('/a1/monitor/CPB-003?state=phase&capture=1');
+  await expect(page.locator('dl[aria-label="텔레메트리"]')).toContainText('역상 — 모터 회전 방향');
+  await expect(page.getByRole('region', { name: '전력' })).toContainText('불가');
+});
