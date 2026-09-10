@@ -91,6 +91,7 @@ if:
   - B1-02M
   - A1-04
   - B3-02
+  - A1-05
 - id: IF-007
   segment: 카메라/현장 → 서버 (녹화)
   protocol: 옵션 — 서브스트림 서버 녹화 · SD/NVR/Edge 구간 회수(ISAPI ContentMgmt search/download)

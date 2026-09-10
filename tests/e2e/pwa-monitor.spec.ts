@@ -175,3 +175,12 @@ test('[A1-05] 영상 탭 카메라 타일 → 시트 재생 [FR-004]', async ({ 
   await expect(page.locator('[data-cam-sheet] video')).toHaveAttribute('src', /front.*\.mp4/);
   await expect(page).toHaveURL(/state=dev/);
 });
+
+test('[A1-05] 내 현장 밖 장비(SITE-002 CPB-004)는 딥링크로도 열리지 않는다 [FR-004] [FR-022]', async ({ page }) => {
+  await page.goto('/a1/login');
+  await page.getByRole('button', { name: '입장' }).click();
+  await page.goto('/a1/monitor/CPB-004?cam=CAM-4-1'); // safety01은 SITE-001만 담당
+  await expect(page.locator(`[data-scr="${SCR['A1-05']}"]`)).toHaveCount(0);
+  await expect(page.locator('[data-cam-sheet]')).toHaveCount(0);
+  await expect(page.getByText('장비 CPB-004 없음')).toBeVisible();
+});
