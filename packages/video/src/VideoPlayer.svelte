@@ -5,6 +5,7 @@
   import { Button, cx, fmtTime } from '@boomeyes/ui';
   import BboxOverlay, { type Box } from './BboxOverlay.svelte';
   import HealthBadge from './HealthBadge.svelte';
+  import { STILL, type StillId } from './assets';
   let {
     camera,
     media,
@@ -14,6 +15,8 @@
     deviceLabel,
     clip,
     onlive,
+    still,
+    frameLabel,
     mode = $bindable(camera.state === 'snapshot' ? 'snapshot' : 'live'),
     class: cls,
   }: {
@@ -27,6 +30,10 @@
     clip?: { url: string; poster?: string; label: string };
     /** 저장 영상에서 라이브로 돌아가기 */
     onlive?: () => void;
+    /** 프레임 고정 — 있으면 라이브·스냅샷 폴링 대신 이 스틸. 복기의 마커 프레임(seek 아님) */
+    still?: StillId;
+    /** 고정 프레임 캡션(마커 시각·사유) */
+    frameLabel?: string;
     mode?: 'live' | 'snapshot';
     class?: string;
   } = $props();
@@ -41,7 +48,7 @@
   $effect(() => {
     const id = camera.id;
     let alive = true;
-    if (clip) return; // 저장 영상 재생 중에는 스냅샷 폴링을 끈다
+    if (clip || still) return; // 저장 영상 재생·프레임 고정 중에는 스냅샷 폴링을 끈다
     const refresh = () => media.snapshot(id).then((r) => alive && (snap = r));
     refresh();
     if (capture) return;
@@ -57,12 +64,19 @@
   class={cx('bg-media-bg rounded-card relative aspect-video w-full overflow-hidden', cls)}
   data-camera={camera.id}
   data-mode={mode}
-  data-frame={clip ? 'clip' : undefined}
+  data-frame={still ? 'still' : clip ? 'clip' : undefined}
 >
   {#if off}
     <div class="text-media-fg text-body-md absolute inset-0 flex flex-col items-center justify-center">
       <span>수신 끊김</span><span class="text-label-sm text-media-muted">마지막 {fmtTime(camera.snapshotAt)}</span>
     </div>
+  {:else if still}
+    <img
+      class="h-full w-full object-cover"
+      src={STILL[still]}
+      data-still={still}
+      alt="{deviceLabel ?? camera.deviceId} 보존 프레임 {frameLabel ?? ''}"
+    />
   {:else if clip}
     <video
       class="h-full w-full object-cover"
@@ -110,7 +124,9 @@
     <HealthBadge {camera} />
   </div>
   <div class="gap-inline-xs p-inset-xs absolute inset-x-0 bottom-0 flex items-center justify-between">
-    {#if clip}
+    {#if still}
+      <span class="rounded-pill bg-media-scrim px-inset-xs text-label-sm text-media-fg">{frameLabel ?? '스냅샷'}</span>
+    {:else if clip}
       <span class="gap-inline-xs flex items-center">
         <span class="rounded-pill bg-media-scrim px-inset-xs text-label-sm text-media-fg">저장 영상 · {clip.label}</span
         >
@@ -137,7 +153,7 @@
       </span>
     {/if}
     <span class="gap-inline-xs flex items-center">
-      {#if (clip || mode === 'live') && !off}<Button
+      {#if !still && (clip || mode === 'live') && !off}<Button
           size="sm"
           variant="outline"
           tone="neutral"

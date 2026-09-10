@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { STILL_BBOX } from '@boomeyes/video/assets';
 import {
   INSPECTION_ITEMS,
   TELEMETRY_STALE_MS,
@@ -474,6 +475,11 @@ describe('[FR-033] 이벤트 복기(W2 구조) — EV-001 lookup · 4레인 · �
     expect(ev!.lanes.bodycam.available).toBe(false);
     expect(ev!.lanes.general.cameraId).toBe('CAM-3-1');
     expect(ev!.lanes.ai.cameraId).toBe('CAM-3-2');
+    // 보존 프레임 마커(FR-033 · FR-028) — 인원 접근 마커만 still+bbox, t0 마커는 프레임 없음
+    expect(ev!.lanes.ai.markers[0]!.still).toBe('boom-person');
+    expect(ev!.lanes.ai.markers[0]!.bbox).toEqual(STILL_BBOX['boom-person']);
+    expect(ev!.lanes.ai.markers[1]!.still).toBeUndefined();
+    for (const l of Object.values(ev!.lanes)) for (const s of l.segments) expect(s.label).not.toContain('목업');
     expect(ev!.lanes.cpb.markers.map((m) => m.label)).toContain('전압 342V · E-021 발생');
     expect(ev!.lanes.cpb.markers.some((m) => m.label.startsWith('부품'))).toBe(false); // P-004 점검은 2일 전 — 창 밖
     expect(ev!.lanes.cpb.note).toContain('부품 이력 없음');

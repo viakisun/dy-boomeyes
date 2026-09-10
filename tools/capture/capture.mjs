@@ -45,7 +45,7 @@ const STATE_PARAMS = {
   'A3-03:normal': { '[site]': 'SITE-002' },
 };
 // 같은 data-scr를 공유하는 상태가 state= 외에 추가 쿼리(예: 시트 오픈)가 필요할 때만 채운다(화면 검수 backlog 7)
-const STATE_QUERY = { 'A1-03:review': 'sheet=review', 'A1-04:live': 'cam=CAM-3-1' };
+const STATE_QUERY = { 'A1-03:review': 'sheet=review', 'A1-04:live': 'cam=CAM-3-1', 'B1-08:pinned': 'cursor=-12' };
 const surfaces = Object.fromEntries(ssot.screens.surfaces.map((s) => [s.id, s.app]));
 const screens = ssot.screens.screens.filter((s) => s.wave <= WAVE && (!ONLY || ONLY.includes(s.id)));
 

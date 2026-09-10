@@ -287,7 +287,7 @@ export const SCREENS = {
   'B1-05': { name: "서류 현황", surface: 'B1', app: 'web', route: "/b1/docs", roles: ["control","maintenance"], phase: 1, wave: 2, default: 'docs', states: ["docs"] },
   'B1-06': { name: "임대 계약", surface: 'B1', app: 'web', route: "/b1/leases", roles: ["control","maintenance"], phase: 1, wave: 2, default: 'lease', states: ["lease"] },
   'B1-07': { name: "쇼케이스", surface: 'B1', app: 'web', route: "/b1/showcase", roles: ["control","maintenance"], phase: 2, wave: 2, default: 'show', states: ["show"] },
-  'B1-08': { name: "이벤트 복기", surface: 'B1', app: 'web', route: "/b1/events/[event]", roles: ["control","maintenance"], phase: 1, wave: 2, default: 'default', states: ["default","pending"] },
+  'B1-08': { name: "이벤트 복기", surface: 'B1', app: 'web', route: "/b1/events/[event]", roles: ["control","maintenance"], phase: 1, wave: 2, default: 'default', states: ["default","pending","pinned"] },
   'B2-02': { name: "본사 지도", surface: 'B2', app: 'web', route: "/b2/map", roles: ["hq-safety"], phase: 1, wave: 2, default: 'work', states: ["work"] },
   'B2-03': { name: "현장 상세", surface: 'B2', app: 'web', route: "/b2/sites/[site]", roles: ["hq-safety"], phase: 1, wave: 2, default: 'site', states: ["site"] },
   'B2-04': { name: "보고 모드", surface: 'B2', app: 'web', route: "/b2/report", roles: ["hq-safety"], phase: 2, wave: 2, default: 'report', states: ["report"] },

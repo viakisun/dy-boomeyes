@@ -1,7 +1,7 @@
 <script lang="ts">
-  // B1-08 이벤트 복기(W2 구조) — 헤더(event_id·종류·장비·t0·알림·업무) · 4레인(일반 CCTV · AI CCTV · 바디캠 · CPB 상태/부품 이력) 공통 시각축 + 커서(←/→ 1초 · 레인 클릭 · 슬라이더) · 소스 없는 레인 "없음" · 원본 보존 잠금(NFR-015) · 삭제·편집 없음 · 영상은 루프 클립(seek 없음, 목업) · ±1초 동기(NFR-014)는 표기만 (specs/event-replay AC-1~3 · DISC-039 · DISC-044)
+  // B1-08 이벤트 복기(W2 구조) — 헤더(event_id·종류·장비·t0·알림·업무) · 4레인(일반 CCTV · AI CCTV · 바디캠 · CPB 상태/부품 이력) 공통 시각축 + 커서(←/→ 1초 · 레인 클릭 · 슬라이더) · 소스 없는 레인 "없음" · 원본 보존 잠금(NFR-015) · 삭제·편집 없음 · 영상은 대체 클립 + 마커 프레임 고정(±PIN_SEC초, 시간 비례 seek 금지 — 없는 동기를 있는 척하지 않는다) · ±1초 동기(NFR-014)는 표기만 (specs/event-replay AC-1~3 · DISC-039 · DISC-044)
   import { resolve } from '$app/paths';
-  import { SCR, type ReplayLane, type ReplaySource } from '@boomeyes/domain';
+  import { SCR, type Camera, type ReplayLane, type ReplaySource } from '@boomeyes/domain';
   import {
     Badge,
     EVIDENCE_LABEL,
@@ -16,13 +16,13 @@
     fmtDateTime,
     fmtTime,
   } from '@boomeyes/ui';
-  import { VideoPlayer } from '@boomeyes/video';
+  import { VideoPlayer, idleStill, isStillId, type StillId } from '@boomeyes/video';
   let { data } = $props();
   const ev = $derived(data.event);
   const t0 = $derived(ev ? Date.parse(ev.at) : 0);
   const win = $derived(ev?.windowSec ?? 60);
   // 공통 커서 — t0 기준 초. 4레인이 같은 값을 읽는다(AC-2)
-  let cursor = $state(0);
+  let cursor = $state(data.cursor);
   const cursorAt = $derived(new Date(t0 + cursor * 1000).toISOString());
   const pct = (iso: string) => Math.max(0, Math.min(100, (((Date.parse(iso) - t0) / 1000 + win) / (2 * win)) * 100));
   const LANES: { key: ReplaySource; label: string }[] = [
@@ -32,6 +32,29 @@
     { key: 'cpb', label: 'CPB 상태/부품 이력' },
   ];
   const camOf = (lane: ReplayLane) => data.cameras.find((c) => c.id === lane.cameraId) ?? null;
+  const secOf = (iso: string) => Math.round((Date.parse(iso) - t0) / 1000);
+  // 마커 프레임 유효 반경 — 커서가 이 안일 때만 보존 프레임으로 고정. 프레임 없는 마커(t0 등)는 고정하지 않는다
+  const PIN_SEC = 3;
+  const pinOf = (l: ReplayLane) =>
+    l.markers.find((m) => isStillId(m.still) && Math.abs(secOf(m.at) - cursor) <= PIN_SEC);
+  // 프레임 규칙: 마커 프레임 > 스냅샷 채널은 평시 스틸(복기에서도 스냅샷 — 시간 무관 인원 접근 스틸이 새지 않게) > 연속 녹화 채널은 대체 클립
+  const frameOf = (l: ReplayLane, cam: Camera | null) => {
+    const m = pinOf(l);
+    if (m)
+      return {
+        still: m.still as StillId,
+        label: `마커 프레임 · ${fmtTime(m.at)} ${m.label}`,
+        boxes: m.bbox ? [{ ...m.bbox, label: '사람', score: 0.91 }] : [],
+        pinned: true,
+      };
+    return {
+      still: cam?.state === 'snapshot' ? idleStill(cam) : undefined,
+      label: undefined,
+      boxes: [],
+      pinned: false,
+    };
+  };
+  const jumpTo = (iso: string) => (cursor = Math.max(-win, Math.min(win, secOf(iso))));
   const seekLane = (e: MouseEvent) => {
     const el = e.currentTarget as HTMLElement;
     const r = el.getBoundingClientRect();
@@ -194,10 +217,11 @@
             </div>
             {#if l.available && l.markers.length}
               <p class="text-label-sm text-fg-muted col-start-2" data-lane-markers>
-                {#each l.markers as m, i (m.at + m.label)}{i ? ' · ' : ''}<span class="tabular-nums"
-                    >t0{Math.round((Date.parse(m.at) - t0) / 1000) >= 0 ? '+' : ''}{Math.round(
-                      (Date.parse(m.at) - t0) / 1000,
-                    )}s</span
+                {#each l.markers as m, i (m.at + m.label)}{i ? ' · ' : ''}<button
+                    type="button"
+                    class="text-accent-fg tabular-nums"
+                    data-marker-jump={secOf(m.at)}
+                    onclick={() => jumpTo(m.at)}>t0{secOf(m.at) >= 0 ? '+' : ''}{secOf(m.at)}s</button
                   >
                   {m.label}{/each}
               </p>
@@ -213,7 +237,12 @@
     <section class="gap-inline-lg grid md:grid-cols-2" aria-label="영상">
       {#each [ev.lanes.general, ev.lanes.ai] as l (l.source)}
         {@const cam = camOf(l)}
-        <div class="gap-stack-xs flex flex-col" data-video-lane={l.source}>
+        {@const frame = frameOf(l, cam)}
+        <div
+          class="gap-stack-xs flex flex-col"
+          data-video-lane={l.source}
+          data-frame={frame.pinned ? 'pinned' : undefined}
+        >
           <div class="flex items-center justify-between">
             <span class="text-label-md"
               >{l.source === 'ai' ? 'AI CCTV · 붐 끝' : '일반 CCTV · 전방'} {cam ? `· ${cam.id}` : ''}</span
@@ -226,6 +255,9 @@
               media={data.media}
               capture={data.capture}
               deviceLabel="{data.device?.unitNo}호기"
+              still={frame.still}
+              frameLabel={frame.label}
+              boxes={frame.boxes}
             />
           {:else}
             <EmptyState title="카메라 없음" />

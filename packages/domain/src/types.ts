@@ -398,8 +398,8 @@ export interface ReplayLane {
   note?: string;
   /** 공통 시각축 위의 세그먼트(메타만, 실영상 seek 없음) */
   segments: { from: string; to: string; label: string }[];
-  /** 공통 시각축 위의 마커(상태 변화 · 알림 · 부품 이력) */
-  markers: { at: string; label: string }[];
+  /** 공통 시각축 위의 마커(상태 변화 · 알림 · 부품 이력). still = 그 시각에 보존된 증거 프레임(스틸 키, infra 타입은 domain에서 참조 불가) — 없으면 프레임 없는 마커(t0 등) */
+  markers: { at: string; label: string; still?: string; bbox?: { x: number; y: number; w: number; h: number } }[];
 }
 /** 영상 확보 상태(ENT-19) — 사건(업무) 상태와 별개: 업로드 대기 · 일부 확보 · 확보 · 확보 불가 (참고자료 v5.0 §15) */
 export type EvidenceState = 'pending' | 'partial' | 'secured' | 'unavailable';

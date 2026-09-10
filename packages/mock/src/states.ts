@@ -267,6 +267,8 @@ export const FIXTURES: Record<string, Fixture> = {
     events: db.events.map((e) => (e.id === 'EV-001' ? { ...e, evidence: 'pending' as const } : e)),
   }),
   // owner-showcase(W2 B11): 시드 집계 그대로(무사고 D+ = 현장 개설일 기준)
+  // 마커 프레임 고정 — 데이터는 default와 같고 ?cursor=-12(capture STATE_QUERY)가 AI 레인 마커 반경에 커서를 둔다
+  'B1-08:pinned': (db) => db,
   'B1-07:show': (db) => db,
 };
 /** 오늘 출근·점검 1건씩(driver03 · CPB-003) — 기록 4종이 모두 보이게 */

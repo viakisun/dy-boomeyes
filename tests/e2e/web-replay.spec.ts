@@ -2,7 +2,7 @@
 import { expect, test } from '@playwright/test';
 import { SCR } from '../../packages/domain/src/generated/ids';
 
-test('[B1-08] EV-001: 헤더(event_id·종류·장비·t0·AL-001·C-105) · 4레인 · 바디캠 없음 · 잠금 배지 · 삭제·편집 없음 · 영상 2(목업) [FR-033] [FR-024]', async ({
+test('[B1-08] EV-001: 헤더(event_id·종류·장비·t0·AL-001·C-105) · 4레인 · 바디캠 없음 · 잠금 배지 · 삭제·편집 없음 · 영상 2(대체 클립·마커 프레임) [FR-033] [FR-024]', async ({
   page,
 }) => {
   await page.goto('/b1/events/EV-001?state=default&capture=1');
@@ -27,6 +27,8 @@ test('[B1-08] EV-001: 헤더(event_id·종류·장비·t0·AL-001·C-105) · 4�
   await expect(page.locator('[data-video-lane] [data-camera]')).toHaveCount(2); // 일반 = 라이브(video) · AI = 스냅샷(img)
   await expect(page.locator('video')).toHaveCount(1);
   await expect(page.getByText('목업')).toHaveCount(0); // 구현 상태는 화면에 내지 않는다(§12.2)
+  await expect(page.locator('[title*="목업"]')).toHaveCount(0); // 툴팁(title 속성)도 — getByText는 속성을 안 본다
+  await expect(page.locator('[data-video-lane="ai"] img[data-still="boom"]')).toHaveCount(1); // 커서 0 = 마커 밖 → 평시 스틸(인원 접근 스틸이 새지 않는다)
   await expect(page.getByRole('button', { name: /삭제|편집|수정/ })).toHaveCount(0);
 });
 
@@ -72,4 +74,32 @@ test('[B1-08] pending 픽스처: 영상 업로드 대기 — 업무(C-105)·잠�
   await expect(page.locator('dl[aria-label="연결"]')).toContainText('현장 업로드 뒤 갱신');
   await expect(page.locator('dl[aria-label="연결"]')).toContainText('C-105');
   await expect(page.getByText('원본 보존', { exact: true })).toBeVisible();
+});
+
+test('[B1-08] 마커 프레임: ?cursor=-12 → AI 패널 보존 프레임 + bbox · 커서 −20 → 평시 스틸 · 점프 버튼 · video는 일반 레인 1 유지 [FR-033] [FR-028]', async ({
+  page,
+}) => {
+  await page.goto('/b1/events/EV-001?state=pinned&capture=1&cursor=-12');
+  const root = page.locator(`[data-scr="${SCR['B1-08']}"]`);
+  await expect(root).toHaveAttribute('data-cursor', '-12');
+  const ai = page.locator('[data-video-lane="ai"]');
+  await expect(ai).toHaveAttribute('data-frame', 'pinned');
+  await expect(ai.locator('img[data-still="boom-person"]')).toHaveCount(1);
+  await expect(ai.locator('svg[data-bbox] rect')).toHaveCount(1);
+  await expect(ai.getByText(/마커 프레임 ·/)).toBeVisible();
+  await expect(page.locator('video')).toHaveCount(1); // 일반 레인만 video — 스냅샷 채널은 복기에서도 스냅샷
+  // 반경(±3초) 밖으로 — 평시 스틸로 복귀, 고정 해제
+  await page.locator('input[aria-label="커서(초)"]').fill('-20');
+  await expect(root).toHaveAttribute('data-cursor', '-20');
+  await expect(ai).not.toHaveAttribute('data-frame', 'pinned');
+  await expect(ai.locator('img[data-still="boom"]')).toHaveCount(1);
+  await expect(ai.locator('svg[data-bbox] rect')).toHaveCount(0);
+  // 마커 줄의 점프 버튼 → 정확히 그 마커 시각
+  await page.locator('[data-lane="ai"] [data-marker-jump="-12"]').click();
+  await expect(root).toHaveAttribute('data-cursor', '-12');
+  await expect(ai).toHaveAttribute('data-frame', 'pinned');
+  // t0 마커(프레임 없음)는 고정하지 않는다 — 기존 커서 e2e(0·2·3)가 다른 화면을 보지 않게
+  await page.locator('[data-lane="ai"] [data-marker-jump="0"]').click();
+  await expect(root).toHaveAttribute('data-cursor', '0');
+  await expect(ai).not.toHaveAttribute('data-frame', 'pinned');
 });

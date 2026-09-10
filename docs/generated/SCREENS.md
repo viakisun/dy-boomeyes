@@ -52,7 +52,7 @@
 | `B1-05` | 서류 현황 | B1 | `/b1/docs` | control maintenance | 1 | 2 | 1 (docs) | FR-016 FR-024 | documents |
 | `B1-06` | 임대 계약 | B1 | `/b1/leases` | control maintenance | 1 | 2 | 1 (lease) | FR-019 FR-024 FR-043 | sites-assets-leases |
 | `B1-07` | 쇼케이스 | B1 | `/b1/showcase` | control maintenance | 2 | 2 | 1 (show) | FR-023 FR-024 | owner-showcase |
-| `B1-08` | 이벤트 복기 | B1 | `/b1/events/[event]` | control maintenance | 1 | 2 | 2 (default pending) | FR-024 FR-033 FR-042 | event-replay |
+| `B1-08` | 이벤트 복기 | B1 | `/b1/events/[event]` | control maintenance | 1 | 2 | 3 (default pending pinned) | FR-024 FR-033 FR-042 | event-replay |
 | `B2-02` | 본사 지도 | B2 | `/b2/map` | hq-safety | 1 | 2 | 1 (work) | FR-003 FR-022 FR-024 | sites-assets-leases |
 | `B2-03` | 현장 상세 | B2 | `/b2/sites/[site]` | hq-safety | 1 | 2 | 1 (site) | FR-004 FR-022 FR-024 | video-basics |
 | `B2-04` | 보고 모드 | B2 | `/b2/report` | hq-safety | 2 | 2 | 1 (report) | FR-022 FR-023 FR-024 | records-reports |
