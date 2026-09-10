@@ -31,6 +31,12 @@ const PAGES: { scr: string; label?: string; url: string; ready: (page: Page) => 
     ready: (p) => expect(p.locator('dialog[open][data-bottom-sheet]')).toBeVisible(),
   },
   {
+    scr: SCR['A1-04'],
+    label: '카메라 영상 시트',
+    url: '/a1/monitor?state=live&capture=1&cam=CAM-3-1',
+    ready: (p) => expect(p.locator('dialog[open][data-bottom-sheet]')).toBeVisible(),
+  },
+  {
     scr: SCR['A3-02'],
     url: '/a3/sites?state=sites&capture=1',
     ready: (p) => expect(p.locator('ul[aria-label="현장"] li')).toHaveCount(2),

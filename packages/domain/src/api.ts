@@ -190,10 +190,17 @@ export interface MediaSource {
   /** poster = 첫 프레임 스틸(선택) — 실스트림(W3)에서는 서버 스냅샷 URL */
   live(cameraId: string): Promise<{ kind: 'mp4' | 'hls'; url: string; poster?: string } | null>;
   snapshot(cameraId: string): Promise<{ url: string; at: string } | null>;
-  recordings(
-    cameraId: string,
-    source: 'server' | 'sd' | 'nvr',
-  ): Promise<{ id: string; at: string; durationSec: number; source: 'server' | 'sd' | 'nvr' }[]>;
+  recordings(cameraId: string, source: 'server' | 'sd' | 'nvr'): Promise<Recording[]>;
+}
+/** 저장 영상 메타(IF-008) — url이 없으면 아직 재생할 수 없는 구간(SD 구간 회수 전 · NVR 미연동). 실 구간 조회는 W4 */
+export interface Recording {
+  id: string;
+  at: string;
+  /** 재생 가능한 길이(초) — 목록 표기와 실제 재생 길이가 같아야 한다 */
+  durationSec: number;
+  source: 'server' | 'sd' | 'nvr';
+  url?: string;
+  poster?: string;
 }
 export type RealtimeEvent =
   | { type: 'alert.raised'; alert: Alert }

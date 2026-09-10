@@ -2,7 +2,7 @@
   // A1-05 장비 상세 (specs/video-basics AC-3) — 상단 탭 4(상태 · 서류 · 영상 · 부품): 텔레메트리 · 서류 완비율/만료 · 저장 영상(프로파일 소스 탭)+카메라 · 마모·교체 부품
   import { goto } from '$app/navigation';
   import { resolve } from '$app/paths';
-  import { SCR, type Doc } from '@boomeyes/domain';
+  import { SCR, type Doc, type Recording } from '@boomeyes/domain';
   import {
     Badge,
     DOC_TONE,
@@ -15,9 +15,11 @@
     TelemetryStrip,
     dueLabel,
     fmtDateTime,
+    fmtDuration,
     Button,
   } from '@boomeyes/ui';
   import { CameraTile, HealthBadge, MOUNT_LABEL, SOURCE_LABEL } from '@boomeyes/video';
+  import CameraSheet from '$lib/CameraSheet.svelte';
   import ReportSheet from '$lib/ReportSheet.svelte';
   import { session } from '$lib/session.svelte';
   let { data } = $props();
@@ -50,6 +52,26 @@
     const u = new URL(location.href);
     u.searchParams.set(key, value);
     goto(resolve((u.pathname + u.search) as '/'), { keepFocus: true, noScroll: true, replaceState: true });
+  };
+  // 카메라 영상 시트(?cam=) — replaceState를 쓰지 않는다: 뒤로가기로 닫혀야 한다
+  const withCam = (id: string | null) => {
+    const u = new URL(location.href);
+    if (id) u.searchParams.set('cam', id);
+    else u.searchParams.delete('cam');
+    return (u.pathname + u.search) as '/';
+  };
+  const openCam = (id: string) => goto(resolve(withCam(id)), { keepFocus: true, noScroll: true });
+  const closeCam = () => goto(resolve(withCam(null)), { keepFocus: true, noScroll: true });
+  // data.cameras는 loader가 이미 AX-1로 걸렀다 — 그 안에 있으면 열 수 있다
+  const sheetCam = $derived(data.cam ? (data.cameras.find((c) => c.id === data.cam) ?? null) : null);
+  // 저장 영상 재생(FR-005) — 목록 행의 재생이 카메라 시트를 열고 대체 클립을 넘긴다. 시트를 닫으면 해제
+  let playing = $state<Recording | null>(null);
+  $effect(() => {
+    if (!sheetCam) playing = null;
+  });
+  const playRec = (r: Recording) => {
+    playing = r;
+    if (general) openCam(general.id);
   };
 </script>
 
@@ -148,11 +170,10 @@
               aria-label="저장 영상 목록"
             >
               {#each list as r (r.id)}
-                <li class="px-inset-md py-inset-xs flex items-center justify-between">
-                  <span class="tabular-nums">{fmtDateTime(r.at)} ~ +{Math.round(r.durationSec / 60)}분</span>
-                  <span class="text-fg-muted"
-                    >{SOURCE_LABEL[r.source]}{data.flags.sdRecall && r.source === 'sd' ? ' · 구간 회수 가능' : ''}</span
-                  >
+                <li class="px-inset-md py-inset-xs gap-inline-sm flex items-center justify-between">
+                  <span class="tabular-nums">{fmtDateTime(r.at)} · {fmtDuration(r.durationSec)}</span>
+                  <span class="text-fg-muted flex-1">{SOURCE_LABEL[r.source]}{r.url ? '' : ' · 구간 회수 필요'}</span>
+                  <Button size="sm" variant="link" disabled={!r.url} onclick={() => playRec(r)}>재생</Button>
                 </li>
               {/each}
             </ul>
@@ -169,7 +190,7 @@
       <div class="gap-inline-sm grid grid-cols-2">
         {#each data.cameras as c (c.id)}
           <div class="gap-stack-xs flex flex-col" data-camera={c.id}>
-            <CameraTile camera={c} deviceLabel="{d.unitNo}호기" compact status={false} />
+            <CameraTile camera={c} deviceLabel="{d.unitNo}호기" compact status={false} onclick={openCam} />
             <HealthBadge camera={c} />
             <span class="text-label-sm text-fg-muted" data-mount={c.mount}
               >{c.mount ? MOUNT_LABEL[c.mount] : '장착 위치 미등록'}</span
@@ -179,4 +200,17 @@
       </div>
     </section>
   {/if}
+
+  <CameraSheet
+    camera={sheetCam}
+    siblings={data.cameras}
+    device={d}
+    media={data.media}
+    capture={data.capture}
+    snapshotEveryMs={data.flags.snapshotEveryMs}
+    clip={playing?.url ? { url: playing.url, poster: playing.poster, label: fmtDateTime(playing.at) } : undefined}
+    onlive={() => (playing = null)}
+    onopen={openCam}
+    onclose={closeCam}
+  />
 </div>

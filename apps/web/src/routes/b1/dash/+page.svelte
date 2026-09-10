@@ -2,7 +2,14 @@
   // B1-02 관제 대시보드 (specs/control-dashboard AC-1~5) · B1-02M 카메라 모달(?cam=)
   import { goto, invalidateAll } from '$app/navigation';
   import { resolve } from '$app/paths';
-  import { profileFlags, type Alert, type Camera, type Device, type StorageSource } from '@boomeyes/domain';
+  import {
+    profileFlags,
+    type Alert,
+    type Camera,
+    type Device,
+    type Recording,
+    type StorageSource,
+  } from '@boomeyes/domain';
   import { onMount } from 'svelte';
   import { MapView } from '@boomeyes/map';
   import {
@@ -21,6 +28,7 @@
     StatGroup,
     TelemetryStrip,
     type Column,
+    fmtDuration,
   } from '@boomeyes/ui';
   import { CameraWall, SOURCE_LABEL, VideoPlayer, visibleIn } from '@boomeyes/video';
   let { data } = $props();
@@ -68,6 +76,13 @@
   let live = $state<Alert[]>([]);
   // 실시간 도착분이 다시 읽은 목록에도 있으면(장면 1: db에 기록된 알림) 한 번만 — 키드 each 중복 방지
   const feed = $derived([...live.filter((a) => !data.alerts.some((x) => x.id === a.id)), ...data.alerts]);
+  // 저장 영상 재생(FR-005) — 대체 클립. 채널·소스를 바꾸면 해제한다
+  let playing = $state<Recording | null>(null);
+  $effect(() => {
+    void modalCam?.id;
+    void modalSource;
+    playing = null;
+  });
   const modalBoxes = $derived(
     modalCam
       ? feed
@@ -296,6 +311,8 @@
         snapshotEveryMs={modalFlags.snapshotEveryMs}
         boxes={modalBoxes}
         deviceLabel="{modalDevice?.unitNo}호기"
+        clip={playing?.url ? { url: playing.url, poster: playing.poster, label: fmt(playing.at) } : undefined}
+        onlive={() => (playing = null)}
       />
       <Tabs
         tabs={modalFlags.sources.map((s) => ({ id: s, label: `${SOURCE_LABEL[s]} 녹화` }))}
@@ -312,17 +329,20 @@
         >
           {#each list as r (r.id)}
             <li class="px-inset-md py-inset-xs gap-inline-sm flex items-center justify-between">
-              <span class="font-mono tabular-nums">{fmt(r.at)} ~ +{Math.round(r.durationSec / 60)}분</span>
-              <span class="text-fg-muted flex-1"
-                >{SOURCE_LABEL[r.source]}{modalFlags.sdRecall && r.source === 'sd' ? ' · 구간 회수' : ''}</span
-              >
-              <Button size="sm" variant="link">재생</Button>
+              <span class="font-mono tabular-nums">{fmt(r.at)} · {fmtDuration(r.durationSec)}</span>
+              <span class="text-fg-muted flex-1">{SOURCE_LABEL[r.source]}{r.url ? '' : ' · 구간 회수 필요'}</span>
+              <Button size="sm" variant="link" disabled={!r.url} onclick={() => (playing = r)}>재생</Button>
             </li>
           {/each}
         </ul>
       {/await}
       {#if modalFlags.sdRecall && modalSource === 'sd'}
-        <Button size="sm" variant="outline" tone="neutral">SD 구간 회수 요청</Button>
+        <Button
+          size="sm"
+          variant="outline"
+          tone="neutral"
+          onclick={() => toast('구간 회수 요청 — 회수되면 목록에서 재생할 수 있습니다')}>SD 구간 회수 요청</Button
+        >
       {/if}
       {#if modalFlags.nvrTimeline}<span class="text-label-sm text-fg-muted">NVR 타임라인 — 준비 중</span>{/if}
     </div>

@@ -47,7 +47,9 @@ sw.addEventListener('fetch', (event) => {
       (hit) =>
         hit ??
         fetch(request).then((res) => {
-          if (res.ok) caches.open(CACHE).then((c) => c.put(request, res.clone()));
+          // 206(Range)은 캐시할 수 없다 — <video>가 보내는 Range 요청은 res.ok가 true라도 cache.put이 던진다
+          if (res.status === 200 && !request.headers.has('range'))
+            caches.open(CACHE).then((c) => c.put(request, res.clone()));
           return res;
         }),
     ),

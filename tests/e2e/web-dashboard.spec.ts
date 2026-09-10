@@ -120,3 +120,26 @@ test('[B1-02] 셸에는 웨이브·mock 표기가 없다 — 시연 장면 바�
   await expect(page.getByText(/wave \d+ · mock/)).toHaveCount(0);
   await expect(page.getByRole('complementary', { name: '주 내비게이션' })).toContainText('운영사 관제 WEB'); // 사이드바 그룹 = 표면 이름(코드 B1 아님)
 });
+
+test('[B1-02M] 저장 영상 재생: 목록 길이 = 클립 길이 · 재생 → clip 프레임 · 라이브 복귀 · SD 미회수 구간은 비활성 [FR-005]', async ({
+  page,
+}) => {
+  await page.goto('/b1/dash?state=cam&capture=1&cam=CAM-3-2');
+  const dialog = page.locator('dialog[open]');
+  const player = dialog.locator('[data-camera="CAM-3-2"]');
+  const list = dialog.getByRole('list', { name: '저장 영상 목록' });
+  await expect(list.locator('li').first()).toContainText('6초'); // "+0분"이 아니라 실제 클립 길이
+  await expect(list.locator('li').first()).not.toContainText('60분');
+  await list.locator('li').first().getByRole('button', { name: '재생' }).click();
+  await expect(player).toHaveAttribute('data-frame', 'clip');
+  await expect(player.locator('video')).toHaveAttribute('src', /boom.*\.mp4/);
+  await expect(player.getByText(/저장 영상 ·/)).toBeVisible();
+  await player.getByRole('button', { name: '라이브', exact: true }).click();
+  await expect(player).not.toHaveAttribute('data-frame', 'clip');
+  // SD 병행: 최신 구간만 재생 가능, 나머지는 구간 회수 필요
+  await dialog.getByRole('tab', { name: 'SD 녹화' }).click();
+  const sd = dialog.getByRole('list', { name: '저장 영상 목록' }).locator('li');
+  await expect(sd.first().getByRole('button', { name: '재생' })).toBeEnabled();
+  await expect(sd.nth(1).getByRole('button', { name: '재생' })).toBeDisabled();
+  await expect(sd.nth(1)).toContainText('구간 회수 필요');
+});

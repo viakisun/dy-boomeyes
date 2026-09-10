@@ -3517,7 +3517,8 @@
         "screens": [
           "B1-02M",
           "A1-04",
-          "B3-02"
+          "B3-02",
+          "A1-05"
         ]
       },
       {
@@ -5274,6 +5275,10 @@
           {
             "id": "report",
             "name": "현장 신고 시트"
+          },
+          {
+            "id": "live",
+            "name": "카메라 영상 시트(?cam= — data-scr는 A1-04 유지, B1-02M과 달리 별도 화면 아님)"
           }
         ],
         "nav": [
@@ -11925,6 +11930,6 @@
         ]
       }
     },
-    "summary": "screens 53 · fr 43 · disc open 53 (A24/B12/C17) · refs 1676"
+    "summary": "screens 53 · fr 43 · disc open 53 (A24/B12/C17) · refs 1677"
   }
 }

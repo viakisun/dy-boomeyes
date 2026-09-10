@@ -255,7 +255,7 @@ export const SCREENS = {
   'A1-01': { name: "로그인", surface: 'A1', app: 'pwa', route: "/a1/login", roles: ["site-safety"], phase: 1, wave: 1, default: 'login', states: ["login"] },
   'A1-02': { name: "업무함", surface: 'A1', app: 'pwa', route: "/a1/inbox", roles: ["site-safety"], phase: 1, wave: 1, default: 'inbox', states: ["inbox","filter","push"] },
   'A1-03': { name: "업무 상세", surface: 'A1', app: 'pwa', route: "/a1/inbox/[case]", roles: ["site-safety"], phase: 1, wave: 1, default: 'case', states: ["case","docnew","review"] },
-  'A1-04': { name: "관제(장비·영상)", surface: 'A1', app: 'pwa', route: "/a1/monitor", roles: ["site-safety"], phase: 1, wave: 1, default: 'monitor', states: ["monitor","plite","report"] },
+  'A1-04': { name: "관제(장비·영상)", surface: 'A1', app: 'pwa', route: "/a1/monitor", roles: ["site-safety"], phase: 1, wave: 1, default: 'monitor', states: ["monitor","plite","report","live"] },
   'A1-05': { name: "장비 상세", surface: 'A1', app: 'pwa', route: "/a1/monitor/[device]", roles: ["site-safety"], phase: 1, wave: 1, default: 'dev', states: ["dev","plite","stale"] },
   'A1-06': { name: "기록", surface: 'A1', app: 'pwa', route: "/a1/records", roles: ["site-safety"], phase: 1, wave: 2, default: 'rec', states: ["rec"] },
   'A1-07': { name: "메뉴·현장 정보", surface: 'A1', app: 'pwa', route: "/a1/menu", roles: ["site-safety"], phase: 1, wave: 2, default: 'menu', states: ["menu","apply"] },
