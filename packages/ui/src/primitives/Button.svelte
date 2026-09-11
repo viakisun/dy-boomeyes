@@ -19,6 +19,8 @@
   }: HTMLButtonAttributes & {
     /** 있으면 <a>(role link)로 렌더 — 링크 버튼 */
     href?: string;
+    target?: string;
+    rel?: string;
     variant?: Variant;
     tone?: Tone;
     size?: Size;

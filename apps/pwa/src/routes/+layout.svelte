@@ -2,6 +2,7 @@
   import '../app.css';
   import { page } from '$app/state';
   import OwnerPage from '$lib/OwnerPage.svelte';
+  import { STILL } from '@boomeyes/video';
   import { OwnerEntry, OwnerShell } from '@boomeyes/ui';
   import { ownerPath } from '@boomeyes/domain';
   import { goto, invalidateAll } from '$app/navigation';
@@ -127,7 +128,7 @@
 </svelte:head>
 
 {#if data.ownerView === 'entry'}
-  <OwnerEntry app="pwa" screen={data.screen ?? ''} onstart={ownerStart} />
+  <OwnerEntry app="pwa" screen={data.screen ?? ''} onstart={ownerStart} poster={STILL.front} />
 {:else if data.ownerView && data.ownerApi && !data.forbidden}
   <OwnerShell app="pwa" view={data.ownerView} url={page.url} onlogout={ownerExit}>
     <OwnerPage api={data.ownerApi} view={data.ownerView} capture={data.capture} />

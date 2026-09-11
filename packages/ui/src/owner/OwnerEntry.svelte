@@ -2,10 +2,74 @@
   import type { OwnerApp } from '@boomeyes/domain';
   import Logo from '../brand/Logo.svelte';
   import Button from '../primitives/Button.svelte';
+  import StatusPill from '../primitives/StatusPill.svelte';
+  import List from '../primitives/List.svelte';
+  import FleetSummary from './FleetSummary.svelte';
+  import EquipmentRow from './EquipmentRow.svelte';
+  import AlertCard from './AlertCard.svelte';
+  import type { OwnerAlert, OwnerDevice } from '@boomeyes/domain';
   import ArrowRight from '@lucide/svelte/icons/arrow-right';
-  import Truck from '@lucide/svelte/icons/truck';
-  import Check from '@lucide/svelte/icons/check';
-  let { app, onstart, screen }: { app: OwnerApp; onstart: () => Promise<void>; screen: string } = $props();
+  let {
+    app,
+    onstart,
+    screen,
+    poster,
+  }: {
+    app: OwnerApp;
+    onstart: () => Promise<void>;
+    screen: string;
+    /** 미리보기 스틸 URL(앱이 주입) */ poster?: string;
+  } = $props();
+  // 미리보기 — 실제 컴포넌트에 정적 시연 자료(한빛중기 5대 중 2대 + 알림 1건)를 넣는다. 데이터 부팅 전이므로 리터럴.
+  const PREVIEW_URL = new URL('https://boomeyes.local/');
+  const dev = (unit: number, site: string, extra: Partial<OwnerDevice> = {}): OwnerDevice => ({
+    id: `CPB-${String(unit).padStart(3, '0')}`,
+    ownerId: 'OWN-001',
+    unit,
+    model: 'DY CPB 32',
+    site,
+    address: '',
+    location: null,
+    deployment: 'deployed',
+    connection: 'current',
+    receivedAt: '2026-07-03T10:41:00+09:00',
+    voltage: 380,
+    fault: null,
+    inspection: null,
+    contract: { company: '한빛건설', from: '2026-06-01', to: '2026-09-30', installed: '2026-06-03' },
+    contact: { name: '김현장', job: '현장 담당자', phone: '010-0000-0000' },
+    parts: [],
+    ...extra,
+  });
+  const PREVIEW: { at: string; devices: OwnerDevice[]; alerts: OwnerAlert[] } = {
+    at: '2026-07-03T10:42:00+09:00',
+    devices: [
+      dev(1, '마포 주상복합 신축'),
+      dev(2, '송도 업무시설 신축', { voltage: 342, fault: '공급 전압 저하' }),
+      dev(3, '평택 물류센터'),
+      dev(4, '대전 공동주택'),
+      dev(5, '용인 장비 보관소', {
+        deployment: 'stored',
+        connection: 'detached',
+        receivedAt: null,
+        voltage: null,
+        contract: null,
+        contact: null,
+      }),
+    ],
+    alerts: [
+      {
+        id: 'CPB-002-FAULT',
+        deviceId: 'CPB-002',
+        kind: 'fault',
+        title: '공급 전압 저하',
+        detail: '',
+        at: '2026-07-03T10:38:00+09:00',
+        read: false,
+      },
+    ],
+  };
+
   let busy = $state(false);
   let error = $state('');
   async function start() {
@@ -50,40 +114,23 @@
       </div>
     </section>
     <section
-      class="rounded-card border-border-subtle bg-surface shadow-card p-inset-xl border"
+      class="rounded-card bg-surface shadow-raised p-inset-md gap-stack-md flex min-w-0 flex-col"
       aria-label="소유주 화면 미리보기"
     >
-      <div class="gap-inline-md mb-stack-lg flex items-center justify-between">
-        <span class="text-heading-md">한빛중기 운영 현황</span>
+      <div class="rounded-card bg-media-bg relative aspect-video overflow-hidden">
+        {#if poster}<img src={poster} alt="" class="h-full w-full object-cover" />{/if}
+        <StatusPill solid tone="neutral" label="타설 위치 · 10:41" class="top-stack-sm left-stack-sm absolute" />
       </div>
-      <div class="border-border-subtle pb-stack-xl gap-inline-md flex items-end border-b">
-        <div>
-          <p class="text-label-md text-fg-muted">전체 보유</p>
-          <p class="text-display-lg">5<span class="text-heading-md text-fg-muted">대</span></p>
-        </div>
-        <p class="text-body-md text-fg-muted pb-stack-xs">현장 투입 4 · 보관 1</p>
-      </div>
-      <div class="gap-stack-md py-stack-xl flex flex-col">
-        <div class="gap-inline-md flex items-center">
-          <Truck class="text-accent-fg size-size-icon-xl" aria-hidden="true" />
-          <div>
-            <p class="text-heading-md">1호기 · 마포 주상복합</p>
-            <p class="text-body-md text-fg-muted">현장 투입 · 최근 수신</p>
-          </div>
-          <Check class="text-fg-muted size-size-icon-lg ml-auto" aria-label="수신 정상" />
-        </div>
-        <dl class="bg-surface-sunken rounded-control gap-stack-sm p-inset-lg text-body-md grid grid-cols-2">
-          <dt class="text-fg-muted">계약 종료</dt>
-          <dd class="text-right font-semibold">2026. 9. 30.</dd>
-          <dt class="text-fg-muted">현장 담당자</dt>
-          <dd class="text-right font-semibold">김현장</dd>
-        </dl>
-      </div>
-      <div
-        class="border-border-subtle pt-stack-lg text-body-md gap-inline-sm flex items-center justify-between border-t"
-      >
-        <span>2호기 · 공급 전압 확인 필요</span><span class="text-warning-fg font-semibold">확인 1건</span>
-      </div>
+      <FleetSummary devices={PREVIEW.devices} alerts={PREVIEW.alerts} {app} url={PREVIEW_URL} interactive={false} />
+      <List items={PREVIEW.devices.slice(0, 2)} key={(d) => d.id} label="미리보기 장비" variant="plain">
+        {#snippet item(device)}<EquipmentRow {device} now={PREVIEW.at} />{/snippet}
+      </List>
+      <AlertCard
+        alert={PREVIEW.alerts[0]!}
+        device={PREVIEW.devices[1]}
+        now={PREVIEW.at}
+        class="bg-surface-sunken rounded-control"
+      />
     </section>
   </div>
   <footer class="text-body-sm text-fg-muted max-w-layout-container-max py-stack-lg mx-auto w-full">

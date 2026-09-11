@@ -1,6 +1,22 @@
 <script lang="ts">
   import { ownerHref, ownerDetailReturn, type OwnerCamera, type OwnerViewProps } from '@boomeyes/domain';
-  import { Button, fmtDateTime, fmtDuration, connectivity } from '@boomeyes/ui';
+  import {
+    Button,
+    Chip,
+    EmptyState,
+    IconTile,
+    KeyValueList,
+    PageHeader,
+    Skeleton,
+    StatusPill,
+    IconPlay as Play,
+    IconPause as Pause,
+    IconRotateCcw as RotateCcw,
+    IconVideoOff as VideoOff,
+    fmtDateTime,
+    fmtDuration,
+    connectivity,
+  } from '@boomeyes/ui';
   import { onDestroy } from 'svelte';
   let { data, api, app, url, navigate, capture = false }: OwnerViewProps = $props();
   const deviceId = $derived.by(() => {
@@ -121,70 +137,41 @@
 </script>
 
 <div class="gap-stack-xl flex min-w-0 flex-col">
-  <header class="gap-stack-md flex flex-wrap items-start justify-between">
-    <div class="gap-stack-sm flex flex-col">
-      <p class="text-label-md text-fg-muted">현장 확인</p>
-      <h1 class="text-heading-xl">{device ? `${device.unit}호기 영상` : '장비 영상'}</h1>
-      {#if device}<p class="text-body-md text-fg-muted">{device.site}</p>{/if}
-    </div>
-    {#if device}<Button
-        variant="outline"
-        tone="neutral"
-        class="min-h-size-touch-min"
-        onclick={() => {
-          video?.pause();
-          navigate(ownerDetailReturn(url, app, deviceId));
-        }}>장비 상세로</Button
-      >{/if}
-  </header>
+  <PageHeader title={device ? `${device.unit}호기 영상` : '장비 영상'}>
+    {#snippet meta()}{#if device}<span class="text-body-sm text-fg-muted">{device.site}</span>{/if}{/snippet}
+    {#snippet actions()}
+      {#if device}<Button
+          variant="outline"
+          tone="neutral"
+          onclick={() => {
+            video?.pause();
+            navigate(ownerDetailReturn(url, app, deviceId));
+          }}>장비 상세로</Button
+        >{/if}
+    {/snippet}
+  </PageHeader>
   {#if !device}
     <p class="text-body-md text-danger-fg" role="alert">이 장비의 영상에 접근할 수 없습니다.</p>
   {:else}
-    <section class="border-border rounded-card bg-surface min-w-0 overflow-hidden border" aria-label="영상 선택">
-      <div class="p-inset-lg gap-stack-lg flex flex-col">
-        <div class="gap-stack-sm flex flex-col">
-          <h2 class="text-heading-sm">확인할 위치</h2>
-          <div class="gap-inline-sm flex flex-wrap" role="group" aria-label="영상 용도">
-            <Button
-              class="min-h-size-touch-min"
-              variant={purpose === 'pour' ? 'solid' : 'outline'}
-              tone={purpose === 'pour' ? 'accent' : 'neutral'}
-              aria-pressed={purpose === 'pour'}
-              onclick={() => select({ purpose: 'pour' })}>타설 위치</Button
-            >
-            <Button
-              class="min-h-size-touch-min"
-              variant={purpose === 'install' ? 'solid' : 'outline'}
-              tone={purpose === 'install' ? 'accent' : 'neutral'}
-              aria-pressed={purpose === 'install'}
-              onclick={() => select({ purpose: 'install' })}>마스트 설치</Button
+    <section class="rounded-card bg-surface shadow-raised min-w-0 overflow-hidden" aria-label="영상 선택">
+      <div class="p-inset-md gap-stack-md flex flex-col">
+        <div class="gap-inline-lg flex flex-wrap items-center">
+          <div class="gap-inline-sm flex flex-wrap items-center" role="group" aria-label="영상 용도">
+            <span class="text-label-md text-fg-muted">위치</span>
+            <Chip size="md" selected={purpose === 'pour'} onclick={() => select({ purpose: 'pour' })}>타설 위치</Chip>
+            <Chip size="md" selected={purpose === 'install'} onclick={() => select({ purpose: 'install' })}
+              >마스트 설치</Chip
             >
           </div>
-        </div>
-        <div class="gap-stack-sm flex flex-col">
-          <h2 class="text-heading-sm">영상 시점</h2>
-          <div class="gap-inline-sm flex flex-wrap" role="group" aria-label="영상 시점">
-            <Button
-              class="min-h-size-touch-min"
-              variant={mode === 'live' ? 'solid' : 'outline'}
-              tone={mode === 'live' ? 'accent' : 'neutral'}
-              aria-pressed={mode === 'live'}
-              onclick={() => select({ mode: 'live' })}>실시간 예시</Button
+          <div class="gap-inline-sm flex flex-wrap items-center" role="group" aria-label="영상 시점">
+            <span class="text-label-md text-fg-muted">시점</span>
+            <Chip size="md" selected={mode === 'live'} onclick={() => select({ mode: 'live' })}>실시간 예시</Chip>
+            <Chip
+              size="md"
+              selected={mode === 'recorded'}
+              onclick={() => select({ mode: 'recorded', date: candidate?.operatingDay ?? '' })}>가동일 저장</Chip
             >
-            <Button
-              class="min-h-size-touch-min"
-              variant={mode === 'recorded' ? 'solid' : 'outline'}
-              tone={mode === 'recorded' ? 'accent' : 'neutral'}
-              aria-pressed={mode === 'recorded'}
-              onclick={() => select({ mode: 'recorded', date: candidate?.operatingDay ?? '' })}>가동일 저장</Button
-            >
-            <Button
-              class="min-h-size-touch-min"
-              variant={mode === 'snapshot' ? 'solid' : 'outline'}
-              tone={mode === 'snapshot' ? 'accent' : 'neutral'}
-              aria-pressed={mode === 'snapshot'}
-              onclick={() => select({ mode: 'snapshot' })}>스냅샷</Button
-            >
+            <Chip size="md" selected={mode === 'snapshot'} onclick={() => select({ mode: 'snapshot' })}>스냅샷</Chip>
           </div>
         </div>
         {#if mode === 'recorded'}
@@ -206,8 +193,8 @@
         {/if}
       </div>
       {#if loading}
-        <div class="bg-surface-sunken p-inset-xl text-body-md" role="status" aria-busy="true">
-          영상을 준비하는 중입니다.
+        <div class="bg-surface-sunken p-inset-md gap-stack-sm flex flex-col" role="status" aria-busy="true">
+          <Skeleton shape="rect" class="aspect-video h-auto" /><span class="sr-only">영상을 준비하는 중입니다.</span>
         </div>
       {:else if error}
         <div class="gap-stack-md p-inset-xl flex flex-col items-start" role="alert">
@@ -215,19 +202,17 @@
           <Button class="min-h-size-touch-min" onclick={() => retry++}>다시 불러오기</Button>
         </div>
       {:else if !camera || !camera.available}
-        <div class="bg-surface-sunken p-inset-xl gap-stack-sm flex flex-col">
-          <h2 class="text-heading-sm">{device.connection === 'detached' ? '단말기 미장착' : '영상 미확보'}</h2>
-          <p class="text-body-md text-fg-muted">
-            {device.connection === 'detached'
-              ? '장비에 단말기가 장착되면 영상을 확인할 수 있습니다.'
-              : '이 위치에 등록된 영상이 없습니다.'}
-          </p>
-        </div>
+        <EmptyState title={device.connection === 'detached' ? '단말기 미장착' : '영상 미확보'} class="m-inset-md">
+          {#snippet icon()}<IconTile><VideoOff class="size-size-icon-lg" /></IconTile>{/snippet}
+        </EmptyState>
       {:else if missingDate}
-        <div class="bg-surface-sunken p-inset-xl gap-stack-sm flex flex-col">
-          <h2 class="text-heading-sm">선택한 가동일의 저장 영상이 없습니다</h2>
-          <p class="text-body-md text-fg-muted">영상이 등록된 {camera.operatingDay}을 선택해 주세요.</p>
-        </div>
+        <EmptyState
+          title="선택한 가동일의 저장 영상 없음"
+          description="영상이 등록된 날짜: {camera.operatingDay}"
+          class="m-inset-md"
+        >
+          {#snippet icon()}<IconTile><VideoOff class="size-size-icon-lg" /></IconTile>{/snippet}
+        </EmptyState>
       {:else}
         <section data-camera={camera.id} data-mode={mode} aria-label="{device.unit}호기 {purposeLabel} {modeLabel}">
           {#if mediaFailed}
@@ -270,15 +255,24 @@
                   ></video>
                 {/if}
               {/key}
-              <span
-                class="bg-media-scrim text-media-fg text-label-md rounded-pill px-inset-sm py-inset-xs top-stack-sm left-stack-sm absolute"
-                >{purposeLabel}</span
-              >
+              <StatusPill
+                solid
+                tone="neutral"
+                label="{purposeLabel} · {modeLabel}"
+                class="top-stack-sm left-stack-sm absolute"
+              />
             </div>
             {#if mode !== 'snapshot'}
               <div class="p-inset-lg gap-stack-md flex flex-wrap items-center">
-                <Button class="min-h-size-touch-min" variant="outline" tone="neutral" onclick={play}
-                  >{ended ? '다시 재생' : paused ? '재생' : '일시정지'}</Button
+                <Button variant="outline" tone="neutral" onclick={play}
+                  >{#if ended}<RotateCcw class="size-size-icon-sm" aria-hidden="true" />{:else if paused}<Play
+                      class="size-size-icon-sm"
+                      aria-hidden="true"
+                    />{:else}<Pause class="size-size-icon-sm" aria-hidden="true" />{/if}{ended
+                    ? '다시 재생'
+                    : paused
+                      ? '재생'
+                      : '일시정지'}</Button
                 >
                 <label class="gap-inline-sm text-body-sm flex min-w-0 flex-1 items-center">
                   <span class="sr-only">영상 재생 위치</span>
@@ -301,16 +295,18 @@
               </div>
             {/if}
           {/if}
-          <div class="border-border p-inset-lg gap-stack-xs flex flex-col border-t">
-            <h2 class="text-heading-sm">{purposeLabel} · {modeLabel}</h2>
-            <p class="text-body-md text-fg-muted">
-              {mode === 'recorded'
-                ? `저장 시각 ${fmtDateTime(camera.recordedAt)} · ${fmtDuration(camera.durationSec)}`
-                : `${fmtDateTime(data.at)} 기준`}
-            </p>
-            <p class="text-body-sm text-fg-muted">
-              {mode === 'live' ? '6초 샘플 반복' : mode === 'recorded' ? '6초 샘플' : '정지 화면'}
-            </p>
+          <div class="border-border-subtle p-inset-md border-t">
+            <KeyValueList
+              columns={2}
+              items={[
+                { label: '위치', value: purposeLabel },
+                { label: '시점', value: modeLabel },
+                mode === 'recorded'
+                  ? { label: '저장 시각', value: fmtDateTime(camera.recordedAt) }
+                  : { label: '기준 시각', value: fmtDateTime(data.at) },
+                { label: '길이', value: mode === 'snapshot' ? '정지 화면' : `${fmtDuration(camera.durationSec)} 샘플` },
+              ]}
+            />
           </div>
         </section>
       {/if}

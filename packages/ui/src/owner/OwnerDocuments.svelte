@@ -7,8 +7,19 @@
     type OwnerViewProps,
   } from '@boomeyes/domain';
   import { onDestroy, tick } from 'svelte';
+  import FileText from '@lucide/svelte/icons/file-text';
+  import Paperclip from '@lucide/svelte/icons/paperclip';
+  import Calendar from '@lucide/svelte/icons/calendar';
+  import ExternalLink from '@lucide/svelte/icons/external-link';
   import Button from '../primitives/Button.svelte';
+  import Badge from '../primitives/Badge.svelte';
+  import IconTile from '../primitives/IconTile.svelte';
+  import EmptyState from '../primitives/EmptyState.svelte';
+  import PageHeader from '../primitives/PageHeader.svelte';
+  import Skeleton from '../primitives/Skeleton.svelte';
   import Dialog from '../primitives/Dialog.svelte';
+  import { OWNER_DOC_TYPE_LABEL } from '../lib/labels';
+  import { dueLabel } from '../lib/format';
   import DocumentViewer from './DocumentViewer.svelte';
   import { connectivity } from '../lib/connectivity.svelte';
   import { FOCUS } from '../lib/cx';
@@ -161,15 +172,9 @@
 </script>
 
 <div class="gap-stack-xl flex min-w-0 flex-col">
-  <header class="gap-stack-sm flex flex-col">
-    <p class="text-label-md text-fg-muted">장비 기록</p>
-    <h1 class="text-heading-xl">장비 서류</h1>
-  </header>
+  <PageHeader title="장비 서류" />
   {#if data.devices.length === 0}
-    <div class="border-border p-inset-xl rounded-card border">
-      <h2 class="text-heading-sm">등록된 장비가 없습니다</h2>
-      <p class="text-body-md text-fg-muted">장비가 등록되면 서류를 확인할 수 있습니다.</p>
-    </div>
+    <EmptyState title="등록된 장비 없음" />
   {:else}
     <div class="gap-stack-md flex flex-wrap items-end justify-between">
       <div class="gap-stack-xs flex min-w-0 flex-1 flex-col">
@@ -186,7 +191,6 @@
       {#if device}<Button
           variant="outline"
           tone="neutral"
-          class="min-h-size-touch-min"
           onclick={() => navigate(ownerDetailReturn(url, app, device.id))}>장비 상세로</Button
         >{/if}
     </div>
@@ -196,53 +200,90 @@
       </p>
     {:else}
       <section
-        class="border-border rounded-card bg-surface border"
+        class="rounded-card bg-surface shadow-raised overflow-hidden"
         aria-labelledby="owner-document-list"
         data-device={device.id}
       >
-        <div class="p-inset-lg gap-stack-sm border-border flex flex-wrap items-baseline justify-between border-b">
-          <h2 id="owner-document-list" tabindex="-1" class="text-heading-md">
-            {device.unit}호기 서류 <span class="text-fg-muted">{documents.length}건</span>
+        <div class="px-inset-md py-inset-sm gap-inline-md flex flex-wrap items-baseline justify-between">
+          <h2 id="owner-document-list" tabindex="-1" class="gap-inline-sm text-heading-sm flex items-center">
+            {device.unit}호기 서류 <Badge count={documents.length} />
           </h2>
-          <p class="text-body-sm text-fg-muted">{device.site}</p>
+          <span class="text-body-sm text-fg-muted">{device.site}</span>
         </div>
-        {#each documents as record (record.id)}
-          <button
-            class="{FOCUS} border-border hover:bg-ui-hover gap-stack-sm p-inset-lg flex w-full flex-wrap items-center justify-between border-b text-left last:border-b-0"
-            class:bg-selected={selectedId === record.id}
-            data-doc={record.id}
-            aria-label="{record.title} 열기"
-            aria-pressed={selectedId === record.id}
-            onclick={() => openDocument(record.id)}
-          >
-            <span class="gap-stack-xs flex min-w-0 flex-col"
-              ><span class="text-body-md font-semibold break-words">{record.title}</span><span
-                class="text-body-sm text-fg-muted"
-                >{record.issuedAt.slice(0, 10)} · {record.type === 'application/pdf'
-                  ? 'PDF'
-                  : '이미지'}{record.sessionOnly ? ' · 시연용 첨부' : ''}</span
-              ></span
-            >
-            <span class="text-label-lg text-accent-fg">원문 보기 ↗</span>
-          </button>
-        {:else}<p class="text-body-md text-fg-muted p-inset-lg">이 호기에 등록된 서류가 없습니다.</p>{/each}
+        <ul class="divide-border-subtle divide-y" aria-label="{device.unit}호기 서류 목록">
+          {#each documents as record (record.id)}
+            {@const due = record.expiresAt ? dueLabel(record.expiresAt, new Date(data.at)) : null}
+            <li>
+              <button
+                class="{FOCUS} hover:bg-ui-hover gap-inline-md px-inset-md py-inset-sm flex w-full min-w-0 items-center text-left"
+                class:bg-selected={selectedId === record.id}
+                data-doc={record.id}
+                aria-label="{record.title} 열기"
+                aria-pressed={selectedId === record.id}
+                onclick={() => openDocument(record.id)}
+              >
+                {#if record.previewUrl || record.type !== 'application/pdf'}
+                  <img
+                    src={record.previewUrl ?? record.url}
+                    alt=""
+                    loading="lazy"
+                    class="border-border-subtle rounded-mark bg-surface-sunken h-size-avatar-lg aspect-[210/297] shrink-0 border object-cover object-top"
+                  />
+                {:else}
+                  <IconTile
+                    >{#if record.sessionOnly}<Paperclip class="size-size-icon-lg" />{:else}<FileText
+                        class="size-size-icon-lg"
+                      />{/if}</IconTile
+                  >
+                {/if}
+                <span class="gap-stack-xs flex min-w-0 flex-1 flex-col">
+                  <span class="text-body-md font-semibold break-words">{record.title}</span>
+                  <span class="gap-inline-sm text-body-sm text-fg-muted flex items-center"
+                    ><Calendar class="size-size-icon-sm shrink-0" aria-hidden="true" /><span
+                      >{record.issuedAt.slice(0, 10)}</span
+                    >{#if due}<span class={due.overdue ? 'text-danger-fg font-medium' : 'text-fg-muted'}
+                        >유효 {due.label}</span
+                      >{/if}</span
+                  >
+                </span>
+                <span class="gap-inline-sm flex shrink-0 flex-wrap items-center justify-end">
+                  {#if record.sessionOnly}<Badge variant="outline">시연용 첨부</Badge>{/if}
+                  <Badge variant="outline">{OWNER_DOC_TYPE_LABEL[record.type]}</Badge>
+                  <span class="text-label-md text-accent-fg gap-inline-xs inline-flex items-center"
+                    >원문 <ExternalLink class="size-size-icon-sm" aria-hidden="true" /></span
+                  >
+                </span>
+              </button>
+            </li>
+          {:else}
+            <li class="p-inset-md">
+              <EmptyState title="등록된 서류 없음">
+                {#snippet icon()}<IconTile><FileText class="size-size-icon-lg" /></IconTile>{/snippet}
+              </EmptyState>
+            </li>
+          {/each}
+        </ul>
       </section>
-      {#if loading}<div class="bg-surface-sunken rounded-card p-inset-xl text-body-md" aria-busy="true" role="status">
-          원문을 불러오는 중입니다.
-        </div>
-      {:else if error}<div
-          class="gap-stack-md p-inset-lg border-danger-border rounded-card flex flex-col items-start border"
-          role="alert"
+      {#if loading}<div
+          class="rounded-card bg-surface shadow-raised p-inset-md gap-stack-sm flex flex-col"
+          aria-busy="true"
+          role="status"
         >
-          <p>{error}</p>
-          <Button class="min-h-size-touch-min" onclick={() => revision++}>다시 불러오기</Button>
+          <Skeleton class="w-layout-field-short" /><Skeleton shape="rect" class="h-layout-panel-height" /><span
+            class="sr-only">원문을 불러오는 중입니다.</span
+          >
         </div>
+      {:else if error}<EmptyState title={error} tone="danger">
+          {#snippet action()}<Button onclick={() => revision++}>다시 불러오기</Button>{/snippet}
+        </EmptyState>
       {:else if selected}<DocumentViewer document={selected} onclose={closeViewer} />{/if}
       <section
-        class="border-border p-inset-lg gap-stack-md rounded-card flex flex-col border"
+        class="bg-surface-sunken p-inset-md gap-stack-sm rounded-card flex flex-col"
         aria-labelledby="owner-upload-title"
       >
-        <h2 id="owner-upload-title" class="text-heading-sm">시연 파일 첨부</h2>
+        <h2 id="owner-upload-title" class="gap-inline-sm text-heading-sm flex items-center">
+          <Paperclip class="size-size-icon-md text-fg-muted" aria-hidden="true" />시연 파일 첨부
+        </h2>
         <p class="text-body-sm text-fg-muted">PDF · PNG · JPEG · 최대 10 MB</p>
         <label for="owner-upload" class="text-label-lg">시연 파일 선택</label>
         <input

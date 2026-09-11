@@ -1,7 +1,12 @@
 <script lang="ts">
   import type { OwnerDocument } from '@boomeyes/domain';
+  import FileText from '@lucide/svelte/icons/file-text';
+  import Image from '@lucide/svelte/icons/image';
+  import ExternalLink from '@lucide/svelte/icons/external-link';
   import Button from '../primitives/Button.svelte';
-  import { FOCUS } from '../lib/cx';
+  import Badge from '../primitives/Badge.svelte';
+  import IconTile from '../primitives/IconTile.svelte';
+  import { OWNER_DOC_TYPE_LABEL } from '../lib/labels';
   let {
     document: record,
     onclose,
@@ -20,31 +25,32 @@
 </script>
 
 <section
-  class="border-border bg-surface rounded-card min-w-0 overflow-hidden border"
+  class="bg-surface rounded-card shadow-raised min-w-0 overflow-hidden"
   data-document-viewer
   data-doc={record.id}
   aria-label="{record.deviceId} {record.title} 원문"
 >
-  <div class="border-border gap-stack-md p-inset-lg flex flex-wrap items-start justify-between border-b">
-    <div class="gap-stack-xs flex min-w-0 flex-col">
-      <p class="text-label-md text-fg-muted">
-        {record.deviceId} · {record.type === 'application/pdf' ? 'PDF' : '이미지'}
-      </p>
-      <h2 class="text-heading-sm break-words">{record.title}</h2>
-      <p class="text-label-md text-fg-muted">
-        {record.sessionOnly ? '첨부 미리보기' : '1페이지'}
-      </p>
+  <div class="border-border-subtle gap-inline-md p-inset-md flex flex-wrap items-center justify-between border-b">
+    <div class="gap-inline-md flex min-w-0 items-center">
+      <IconTile
+        >{#if record.type === 'application/pdf'}<FileText class="size-size-icon-lg" />{:else}<Image
+            class="size-size-icon-lg"
+          />{/if}</IconTile
+      >
+      <div class="gap-stack-xs flex min-w-0 flex-col">
+        <h2 class="text-heading-sm break-words">{record.title}</h2>
+        <span class="gap-inline-sm flex flex-wrap items-center">
+          <Badge variant="outline">{OWNER_DOC_TYPE_LABEL[record.type]}</Badge>
+          {#if record.sessionOnly}<Badge variant="outline">첨부 미리보기</Badge>{/if}
+          <span class="text-code-sm text-fg-muted">{record.deviceId}</span>
+        </span>
+      </div>
     </div>
     <div class="gap-inline-sm flex flex-wrap">
-      <a
-        class="{FOCUS} border-border-strong rounded-control text-label-lg px-inset-md inline-flex min-h-[max(var(--sys-size-touch-min),var(--sys-size-control-md))] items-center border"
-        href={record.url}
-        target="_blank"
-        rel="noopener noreferrer">원문 새 창 열기</a
+      <Button variant="outline" tone="neutral" href={record.url} target="_blank" rel="noopener noreferrer"
+        >원문 새 창 열기 <ExternalLink class="size-size-icon-sm" aria-hidden="true" /></Button
       >
-      {#if onclose}<Button variant="ghost" tone="neutral" class="min-h-size-touch-min" onclick={onclose}
-          >서류 목록으로</Button
-        >{/if}
+      {#if onclose}<Button variant="ghost" tone="neutral" onclick={onclose}>서류 목록으로</Button>{/if}
     </div>
   </div>
   {#if failed}

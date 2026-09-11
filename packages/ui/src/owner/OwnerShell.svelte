@@ -2,7 +2,12 @@
   import type { Snippet } from 'svelte';
   import { OWNER_DEMO, OWNER_MENU, ownerHref, type OwnerApp, type OwnerView } from '@boomeyes/domain';
   import Logo from '../brand/Logo.svelte';
-  import Button from '../primitives/Button.svelte';
+  import IconButton from '../primitives/IconButton.svelte';
+  import Banner from '../primitives/Banner.svelte';
+  import Moon from '@lucide/svelte/icons/moon';
+  import Sun from '@lucide/svelte/icons/sun';
+  import LogOut from '@lucide/svelte/icons/log-out';
+  import WifiOff from '@lucide/svelte/icons/wifi-off';
   import { NAV_ICON } from '../shell/nav-icons';
   import { theme, toggleTheme } from '../lib/theme.svelte';
   import { connectivity } from '../lib/connectivity.svelte';
@@ -55,16 +60,27 @@
         <span class="text-label-lg font-semibold">소유주 운영</span>
       </div>
       <div class="gap-inline-xs flex">
-        <Button variant="ghost" tone="neutral" onclick={toggleTheme} aria-label={dark ? '라이트 모드' : '다크 모드'}
-          >{dark ? '라이트' : '다크'}</Button
+        <IconButton
+          variant="ghost"
+          tone="neutral"
+          label={dark ? '라이트 모드' : '다크 모드'}
+          class="min-w-size-touch-min"
+          onclick={toggleTheme}
+          >{#if dark}<Sun class="size-size-icon-md" aria-hidden="true" />{:else}<Moon
+              class="size-size-icon-md"
+              aria-hidden="true"
+            />{/if}</IconButton
         >
-        <Button variant="ghost" tone="neutral" onclick={onlogout}>로그아웃</Button>
+        <IconButton variant="ghost" tone="neutral" label="로그아웃" class="min-w-size-touch-min" onclick={onlogout}
+          ><LogOut class="size-size-icon-md" aria-hidden="true" /></IconButton
+        >
       </div>
     </header>
     {#if !connectivity.online}
-      <div role="status" class="bg-warning-bg text-warning-fg px-page-gutter py-inset-md text-body-md">
-        오프라인 · 마지막으로 불러온 화면입니다.
-      </div>
+      <Banner tone="warning" class="mx-page-gutter mt-inset-sm">
+        {#snippet icon()}<WifiOff class="size-size-icon-md" aria-hidden="true" />{/snippet}오프라인 · 마지막으로 불러온
+        화면입니다.
+      </Banner>
     {/if}
     <main data-owner-scroll class="p-page-gutter max-w-layout-container-max mx-auto w-full min-w-0 flex-1">
       {@render children()}
