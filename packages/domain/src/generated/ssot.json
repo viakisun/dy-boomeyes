@@ -46,7 +46,7 @@
       {
         "milestone": "프로토타입 2set 시연",
         "when": "2026-09-30",
-        "criterion": "ACC-1xx · 시연 시나리오 장면 1~10"
+        "criterion": "ACC-1xx · 시연 시나리오 장면 1~11"
       },
       {
         "milestone": "2단계 운영형 고도화",
@@ -161,7 +161,7 @@
         "kind": "파생·산출",
         "title": "시연 시나리오 (930)",
         "version": "rev02",
-        "role": "1단계 검수(ACC-1xx) 장면 1~10 — DISC-017"
+        "role": "1단계 검수(ACC-1xx) 장면 1~11 — DISC-017"
       },
       {
         "kind": "파생·산출",
@@ -7586,7 +7586,7 @@
         "title": "시연 시나리오",
         "scope": [],
         "scope_note": "— (930 시연시나리오 rev02)",
-        "baseline": "장면 1~10 문서화",
+        "baseline": "장면 1~11 문서화(11 = 쌓인 데이터 · 타설량·3상, 2026-09-11 추가 — DY 자료 gap 반영)",
         "ask": "9/30 시연 시나리오 확정",
         "track": "A",
         "status": "open",
@@ -9916,6 +9916,29 @@
         "fixture": {
           "account": "safety01"
         }
+      },
+      {
+        "scene": 11,
+        "title": "쌓인 데이터",
+        "surface": "B1 관제 WEB · A1 현장 PWA",
+        "screens": [
+          "B1-02",
+          "A1-05"
+        ],
+        "steps": [
+          "CPB-003 인스펙터 — 타설량 12h 추세 · 가동률 82% · 누적 3,910 m³ (FR-039 · DISC-055 기준안)",
+          "3상 전압 R 381 · S 118 · T 379V · 결상 — 장면 1~5의 342V 저전압은 S상 결상이 원인 (FR-040 · DISC-056)",
+          "A1-05 부품 탭 — 24시간 추세 · 오늘 31 m³ · 산출 근거"
+        ],
+        "message": "쌓인 사용 기록이 고장 전에 교체 시기를 가리킨다 — 인입 데이터가 서비스가 된다",
+        "acc": [
+          "ACC-110"
+        ],
+        "track": "D1",
+        "fixture": {
+          "device": "CPB-003",
+          "account": "control01"
+        }
       }
     ],
     "workflows": [
@@ -10870,7 +10893,10 @@
             "actor": "—(시스템)",
             "auto": true,
             "do": "도달률 추세와 사용 시간을 모아 교체 시기를 예측한다",
-            "screens": []
+            "screens": [
+              "B1-02",
+              "A1-05"
+            ]
           },
           {
             "actor": "DY(운영)",
@@ -10894,6 +10920,8 @@
         "status": "proposed",
         "phase": 2,
         "screens": [
+          "B1-02",
+          "A1-05",
           "B4-05",
           "B4-07"
         ],
@@ -10903,7 +10931,8 @@
           "DISC-013",
           "DISC-014"
         ],
-        "note": "2단계 · 축적 데이터가 쌓인 뒤에 가능하다"
+        "note": "2단계 · 축적 데이터가 쌓인 뒤에 가능하다",
+        "scene": 11
       },
       {
         "id": "WF-18",
@@ -11963,6 +11992,6 @@
         ]
       }
     },
-    "summary": "screens 53 · fr 43 · disc open 53 (A24/B12/C17) · refs 1677"
+    "summary": "screens 53 · fr 43 · disc open 53 (A24/B12/C17) · refs 1684"
   }
 }

@@ -34,7 +34,7 @@ schedule:
   criterion: ACC-0xx
 - milestone: 프로토타입 2set 시연
   when: '2026-09-30'
-  criterion: ACC-1xx · 시연 시나리오 장면 1~10
+  criterion: ACC-1xx · 시연 시나리오 장면 1~11
 - milestone: 2단계 운영형 고도화
   when: 2026-10-01 ~ 12-31
   criterion: 'ACC-1xx (범위: DISC-019)'
@@ -113,7 +113,7 @@ basis_docs:
 - kind: 파생·산출
   title: 시연 시나리오 (930)
   version: rev02
-  role: 1단계 검수(ACC-1xx) 장면 1~10 — DISC-017
+  role: 1단계 검수(ACC-1xx) 장면 1~11 — DISC-017
 - kind: 파생·산출
   title: 문서 체계·추적성 구성안
   version: v1.3
