@@ -130,10 +130,10 @@ class ReviewPDF:
 # Reviewed crop rectangles in the canonical 1280px WEB / 390px PWA full captures.
 # Preserve actual pixels; the manifest records source file/hash and every crop.
 SUPPLEMENTS = [
-    ("web", "video", "영상의 재생과 시간 조작", (264, 383, 1256, 1115), False),
-    ("web", "documents", "1호기 제작증 원문", (440, 614, 1080, 1520), True),
-    ("pwa", "detail", "휴대폰에서 계약과 현장 담당자 확인", (20, 160, 370, 1115), True),
-    ("pwa", "documents", "휴대폰에서 제작증 원문 열람", (20, 615, 370, 1275), True),
+    ("web", "video", "영상의 재생과 시간 조작", (260, 175, 1260, 1012), False),
+    ("web", "documents", "1호기 제작증 원문", (260, 480, 1260, 1510), True),
+    ("pwa", "detail", "휴대폰에서 계약과 현장 담당자 확인", (20, 620, 370, 1140), True),
+    ("pwa", "documents", "휴대폰에서 제작증 원문 열람", (20, 490, 370, 1180), True),
 ]
 
 def supplement_images(output, directory, capture):
