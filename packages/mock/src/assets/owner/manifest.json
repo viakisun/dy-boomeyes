@@ -1,0 +1,86 @@
+[
+  {
+    "device": "CPB-001",
+    "kind": "certificate",
+    "preview": "cpb-001-certificate.png",
+    "pages": 1,
+    "sample": true
+  },
+  {
+    "device": "CPB-001",
+    "kind": "inspection",
+    "preview": "cpb-001-inspection.png",
+    "pages": 1,
+    "sample": true
+  },
+  {
+    "device": "CPB-002",
+    "kind": "certificate",
+    "preview": "cpb-002-certificate.png",
+    "pages": 1,
+    "sample": true
+  },
+  {
+    "device": "CPB-002",
+    "kind": "inspection",
+    "preview": "cpb-002-inspection.png",
+    "pages": 1,
+    "sample": true
+  },
+  {
+    "device": "CPB-003",
+    "kind": "certificate",
+    "preview": "cpb-003-certificate.png",
+    "pages": 1,
+    "sample": true
+  },
+  {
+    "device": "CPB-003",
+    "kind": "inspection",
+    "preview": "cpb-003-inspection.png",
+    "pages": 1,
+    "sample": true
+  },
+  {
+    "device": "CPB-004",
+    "kind": "certificate",
+    "preview": "cpb-004-certificate.png",
+    "pages": 1,
+    "sample": true
+  },
+  {
+    "device": "CPB-004",
+    "kind": "inspection",
+    "preview": "cpb-004-inspection.png",
+    "pages": 1,
+    "sample": true
+  },
+  {
+    "device": "CPB-005",
+    "kind": "certificate",
+    "preview": "cpb-005-certificate.png",
+    "pages": 1,
+    "sample": true
+  },
+  {
+    "device": "CPB-005",
+    "kind": "inspection",
+    "preview": "cpb-005-inspection.png",
+    "pages": 1,
+    "sample": true
+  },
+  {
+    "device": "CPB-101",
+    "kind": "certificate",
+    "preview": "cpb-101-certificate.png",
+    "pages": 1,
+    "sample": true
+  },
+  {
+    "device": "CPB-101",
+    "kind": "inspection",
+    "preview": "cpb-101-inspection.png",
+    "pages": 1,
+    "sample": true
+  }
+]
