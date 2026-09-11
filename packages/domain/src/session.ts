@@ -1,4 +1,3 @@
-import type { Scope } from './types';
 // 세션 — 목업 단계: 역할 카드 로그인 (실인증 없음, DISC-020·023)
 import { ROLE, SCREENS, type RoleId, type ScrId } from './generated/ids';
 import type { Scope } from './types';
