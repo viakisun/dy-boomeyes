@@ -1,6 +1,6 @@
 # owner-visual-2026-09-11 — 검증 기록
 
-- 소스: `feat/owner-entry-login` `accecbe`(C0~C3 + 문서 + 크롭 조정 + 진입 로그인 카드) · 작업 트리 clean(manifest `sourceSha`·`workingTreeHash`).
+- 소스: `feat/owner-entry-login` `accecbe`(C0~C3 + 문서 + 크롭 조정 + 진입 실제 로그인 폼) · 작업 트리 clean(manifest `sourceSha`·`workingTreeHash`).
 - 캡처: `pnpm capture:owner --output docs/design/evidence/owner-visual-2026-09-11` → 112/112 required · failed 0(라이트·다크 × 웹 4폭 · PWA 4폭 × 7뷰). 첫 실행에서 `pwa-detail-768x1024-light`가 지도 준비 대기 20초 초과로 1회 실패(같은 조합 다크는 통과) → 재실행 통과. 표본 1회라 flaky 판정은 보류.
 - e2e: `pnpm exec playwright test 'web-owner.*spec.ts' 'pwa-owner.*spec.ts' --reporter=json` → 88 passed(web 44 · pwa 44, AC-O01~16).
 - 정합: `pnpm owner:check --captures …/manifest.json --e2e /tmp/owner-e2e.json` → captures 112 · executed 88 · errors 0.

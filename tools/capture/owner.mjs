@@ -234,7 +234,7 @@ try {
     try {
       if (row.view !== 'entry') {
         await page.goto(new URL(entryPath(row.app), BASE[row.app]).href);
-        await page.getByRole('button', { name: '데모 시작하기', exact: true }).click();
+        await page.getByRole('button', { name: '데모 계정으로 로그인', exact: true }).click();
         await page.waitForURL((url) => url.pathname === (row.app === 'web' ? '/b1/dash' : '/a4/overview'));
         const user = await page.evaluate(() => JSON.parse(localStorage.getItem('boomeyes.session') ?? 'null'));
         check(

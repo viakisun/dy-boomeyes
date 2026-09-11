@@ -3,7 +3,7 @@
   import { page } from '$app/state';
   import OwnerPage from '$lib/OwnerPage.svelte';
   import { OwnerEntry, OwnerShell } from '@boomeyes/ui';
-  import { ownerPath } from '@boomeyes/domain';
+  import { ownerPath, OWNER_DEMO_LOGIN } from '@boomeyes/domain';
   import { goto, invalidateAll } from '$app/navigation';
   import { env } from '$env/dynamic/public';
   import { resolve } from '$app/paths';
@@ -52,9 +52,11 @@
     data.jumpHour();
     invalidateAll();
   };
-  async function ownerStart() {
-    const user = (await data.api.users()).find((u) => u.id === 'owner01');
-    if (!user?.ownerId) throw new Error('소유주 계정 준비 실패');
+  // 소유주 로그인 — 실인증 전 mock 검증(DISC-020): 데모 계정(OWNER_DEMO_LOGIN)만 통과, 나머지는 같은 오류 문구
+  async function ownerLogin(userId: string, password: string) {
+    const ok = userId.trim() === OWNER_DEMO_LOGIN.userId && password === OWNER_DEMO_LOGIN.password;
+    const user = ok ? (await data.api.users()).find((u) => u.id === OWNER_DEMO_LOGIN.userId) : undefined;
+    if (!user?.ownerId) throw new Error('아이디 또는 비밀번호가 올바르지 않습니다.');
     data.resetMock();
     data.resetOwner();
     login({ userId: user.id, role: user.role, display: user.display, org: user.org, ownerId: user.ownerId });
@@ -78,7 +80,7 @@
 </svelte:head>
 
 {#if data.ownerView === 'entry'}
-  <OwnerEntry app="web" screen={data.screen ?? ''} onstart={ownerStart} />
+  <OwnerEntry app="web" screen={data.screen ?? ''} onlogin={ownerLogin} />
 {:else if data.ownerView && data.ownerApi && !data.forbidden}
   <OwnerShell app="web" view={data.ownerView} url={page.url} onlogout={ownerExit}>
     <OwnerPage api={data.ownerApi} view={data.ownerView} capture={data.capture} />

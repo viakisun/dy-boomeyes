@@ -84,6 +84,8 @@ export interface OwnerApi {
   attach(deviceId: string, file: OwnerAttachment): Promise<OwnerDocument>;
 }
 export const OWNER_CLOCK = FIXED_CLOCK;
+/** 소유주 데모 계정 — 실인증(IdP) 전 mock 검증(DISC-020). 화면에는 ID를 표시하지 않고 "데모 계정으로 로그인"이 채워 넣는다 */
+export const OWNER_DEMO_LOGIN = { userId: 'owner01', password: 'boomeyes' } as const;
 export const OWNER_UPLOAD_LIMIT = 10 * 1024 * 1024;
 export const OWNER_MENU: readonly OwnerView[] = [...OWNER_DEMO]
   .filter((v) => v.menu > 0)

@@ -46,7 +46,7 @@ export const ownerHost = (page: Page, view?: string) =>
   page.locator(view ? `[data-owner-view="${view}"]` : '[data-owner-view]').first();
 export async function startOwner(page: Page, app: OwnerApp) {
   await page.goto(OWNER_PATHS[app].entry);
-  await page.getByRole('button', { name: '데모 시작하기', exact: true }).click();
+  await page.getByRole('button', { name: '데모 계정으로 로그인', exact: true }).click();
   await expect(page).toHaveURL(new RegExp(`${OWNER_PATHS[app].overview.replaceAll('/', '\\/')}(?:\\?|$)`));
   await expect(ownerHost(page, 'overview')).toHaveAttribute('data-owner-role', 'owner');
   expect(await page.evaluate(() => JSON.parse(localStorage.getItem('boomeyes.session') ?? 'null'))).toMatchObject({

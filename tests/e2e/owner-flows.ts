@@ -14,9 +14,24 @@ const PNG = 'apps/pwa/static/icons/icon-192.png';
 
 export function ownerFlows(app: OwnerApp) {
   const paths = OWNER_PATHS[app];
+  test('[B0-01] [FR-001] [AC-O01] login form rejects wrong credentials and accepts the demo owner account', async ({
+    page,
+  }) => {
+    await page.goto(paths.entry);
+    const form = page.getByRole('button', { name: '로그인', exact: true });
+    await page.getByLabel('아이디').fill('owner01');
+    await page.getByLabel('비밀번호', { exact: true }).fill('wrong');
+    await form.click();
+    await expect(page.getByRole('alert')).toContainText('아이디 또는 비밀번호');
+    expect(await page.evaluate(() => localStorage.getItem('boomeyes.session'))).toBeNull();
+    await page.getByLabel('비밀번호', { exact: true }).fill('boomeyes');
+    await form.click();
+    await expect(page).toHaveURL(new RegExp(`${paths.overview.replaceAll('/', '\\/')}(?:\\?|$)`));
+    await expect(ownerHost(page, 'overview')).toHaveAttribute('data-owner-role', 'owner');
+  });
   test('[B1-02] [FR-024] [AC-O01] actual owner entry and four working menus', async ({ page }) => {
     await page.goto(paths.entry);
-    await expect(page.getByRole('button', { name: '데모 시작하기', exact: true })).toBeVisible();
+    await expect(page.getByRole('button', { name: '데모 계정으로 로그인', exact: true })).toBeVisible();
     for (const account of ['control01', 'ops01', 'maint01', 'owner01'])
       await expect(page.getByText(account, { exact: true })).toHaveCount(0);
     await startOwner(page, app);
@@ -31,7 +46,7 @@ export function ownerFlows(app: OwnerApp) {
       await expect(ownerHost(page, view)).toBeVisible();
     }
     await page.getByRole('button', { name: '로그아웃', exact: true }).click();
-    await expect(page.getByRole('button', { name: '데모 시작하기', exact: true })).toBeVisible();
+    await expect(page.getByRole('button', { name: '데모 계정으로 로그인', exact: true })).toBeVisible();
     expect(await page.evaluate(() => localStorage.getItem('boomeyes.session'))).toBeNull();
   });
 
@@ -229,7 +244,7 @@ export function ownerFlows(app: OwnerApp) {
     }) => {
       await testSession(context, ownerId);
       await page.goto(paths.fleet);
-      await expect(page.getByText(/다시 시작|접근 권한|데모 시작하기/).first()).toBeVisible();
+      await expect(page.getByText(/다시 시작|접근 권한|데모 계정으로 로그인/).first()).toBeVisible();
       await expect(page.locator('[data-device]')).toHaveCount(0);
       await expect(page.getByText('김현장')).toHaveCount(0);
     });
@@ -305,7 +320,7 @@ export function ownerFlows(app: OwnerApp) {
     context,
   }) => {
     await page.goto(paths.fleet);
-    await expect(page.getByRole('button', { name: '데모 시작하기', exact: true })).toBeVisible();
+    await expect(page.getByRole('button', { name: '데모 계정으로 로그인', exact: true })).toBeVisible();
     expect(await page.evaluate(() => localStorage.getItem('boomeyes.session'))).toBeNull();
     await testSession(context, 'OWN-002');
     await page.goto(paths.entry);

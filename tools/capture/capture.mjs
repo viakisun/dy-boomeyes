@@ -158,7 +158,7 @@ for (const s of screens) {
         const ownerState = ['owner', 'empty', 'error', 'boundaries', 'large'].includes(st.id);
         if (ownerView && ownerView.view !== 'entry' && ownerState) {
           await page.goto(`${BASE[app]}${app === 'web' ? '/login?demo=owner' : '/a4/login'}`);
-          await page.getByRole('button', { name: '데모 시작하기', exact: true }).click();
+          await page.getByRole('button', { name: '데모 계정으로 로그인', exact: true }).click();
           await page.locator('[data-owner-view="overview"][data-owner-role="owner"]').waitFor();
         }
         await page.goto(url, { waitUntil: 'networkidle' });

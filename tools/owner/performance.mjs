@@ -152,7 +152,7 @@ try {
     );
     try {
       await page.goto(new URL(settings.entry, settings.base).href);
-      await page.getByRole('button', { name: '데모 시작하기', exact: true }).click();
+      await page.getByRole('button', { name: '데모 계정으로 로그인', exact: true }).click();
       await page.waitForURL((url) => url.pathname === settings.home);
       const session = await page.evaluate(() => JSON.parse(localStorage.getItem('boomeyes.session') ?? 'null'));
       if (session?.role !== 'owner' || session?.ownerId !== 'OWN-001')

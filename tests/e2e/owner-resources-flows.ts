@@ -132,7 +132,7 @@ export function ownerResourcesFlows(app: OwnerApp) {
     await expect(documents).toHaveCount(3);
     await expect(documents.filter({ hasText: 'cpb-001-certificate.pdf' })).toHaveCount(1);
     await page.getByRole('button', { name: '로그아웃', exact: true }).click();
-    await expect(page.getByRole('button', { name: '데모 시작하기', exact: true })).toBeVisible();
+    await expect(page.getByRole('button', { name: '데모 계정으로 로그인', exact: true })).toBeVisible();
     await expect.poll(async () => (await resources()).activeUrls).toEqual([]);
     await expect.poll(async () => (await resources()).activeWorkers).toEqual([]);
     const final = await resources();

@@ -33,7 +33,7 @@ SPEC.loader.exec_module(CHECK)
 # Narrative templates, not a screen catalog: inventory, order, labels, questions,
 # routes and references are always read from owner_demo and capture evidence.
 NARRATION = {
-    "entry": (20, "데모 시작하기를 누릅니다.", "소유주의 보유 장비를 보는 화면으로 바로 들어갑니다."),
+    "entry": (20, "아이디와 비밀번호로 로그인합니다.", "시연에서는 데모 계정으로 로그인을 눌러 소유주 계정으로 들어갑니다."),
     "overview": (40, "운영 구성과 우선 확인할 장비를 살펴봅니다.", "현장 투입과 보관 대수를 구분하고, 확인할 장비 목록에서 다음 행동을 선택합니다. 보관 중이라는 표시만으로 투입 가능 여부를 판단하지 않습니다."),
     "fleet": (45, "호기 또는 현장명으로 검색하고 장비를 선택합니다.", "이상이 있는 장비뿐 아니라 정상 장비와 보관 장비도 같은 목록에서 찾습니다. 검색 결과 수와 선택한 장비의 현장을 함께 확인합니다."),
     "detail": (55, "계약 기간, 현장 담당자, 마지막 수신 시각을 확인합니다.", "선택한 호기를 기준으로 계약과 연락처를 확인합니다. 수신이 지연된 값은 현재 상태와 구분해서 읽고, 필요한 서류나 영상으로 이동합니다."),

@@ -1,22 +1,42 @@
 <script lang="ts">
-  // 소유주 진입 — 로그인 화면. 로고 · 제목 · 데모 시작 버튼. 입력란·가입·회사 선택은 시연에 불필요한 장식이라 두지 않는다(디자인 진단 §4).
-  import type { OwnerApp } from '@boomeyes/domain';
+  // 소유주 로그인 — 실제 로그인 화면 기준: 아이디 · 비밀번호(표시 토글) · 로그인 상태 유지 · 비밀번호 찾기 · 로그인 · 오류 한 줄.
+  // 데모 계정은 보조 링크가 채워 넣는다(화면에 계정 ID를 쓰지 않는다). 인증은 앱의 onlogin이 mock으로 판정한다(DISC-020).
+  import { OWNER_DEMO_LOGIN, type OwnerApp } from '@boomeyes/domain';
+  import Eye from '@lucide/svelte/icons/eye';
+  import EyeOff from '@lucide/svelte/icons/eye-off';
   import Logo from '../brand/Logo.svelte';
   import Button from '../primitives/Button.svelte';
-  import ArrowRight from '@lucide/svelte/icons/arrow-right';
-  let { app, onstart, screen }: { app: OwnerApp; onstart: () => Promise<void>; screen: string } = $props();
+  import TextField from '../primitives/TextField.svelte';
+  import Checkbox from '../primitives/Checkbox.svelte';
+  import Badge from '../primitives/Badge.svelte';
+  import IconButton from '../primitives/IconButton.svelte';
+  let {
+    app,
+    onlogin,
+    screen,
+  }: { app: OwnerApp; onlogin: (userId: string, password: string) => Promise<void>; screen: string } = $props();
+  let userId = $state('');
+  let password = $state('');
+  let remember = $state(false);
+  let show = $state(false);
   let busy = $state(false);
   let error = $state('');
-  async function start() {
+  async function submit(id = userId, pw = password) {
+    if (busy) return;
     busy = true;
     error = '';
     try {
-      await onstart();
-    } catch {
-      error = '데모를 시작하지 못했습니다. 다시 시도해 주세요.';
+      await onlogin(id, pw);
+    } catch (e) {
+      error = e instanceof Error ? e.message : '로그인하지 못했습니다.';
     } finally {
       busy = false;
     }
+  }
+  function demo() {
+    userId = OWNER_DEMO_LOGIN.userId;
+    password = OWNER_DEMO_LOGIN.password;
+    void submit(OWNER_DEMO_LOGIN.userId, OWNER_DEMO_LOGIN.password);
   }
 </script>
 
@@ -29,18 +49,66 @@
   class="bg-canvas text-fg p-page-gutter flex min-h-dvh flex-col items-center justify-center"
 >
   <section
-    class="rounded-card bg-surface shadow-raised p-inset-xl gap-stack-lg max-w-layout-form-max flex w-full flex-col items-center text-center"
-    aria-labelledby="owner-entry-title"
+    class="rounded-card bg-surface shadow-raised p-inset-xl gap-stack-lg max-w-layout-form-max flex w-full flex-col"
+    aria-labelledby="owner-login-title"
   >
-    <Logo variant="lockup" color label="BoomEyes" class="h-size-avatar-lg w-auto" />
-    <div class="gap-stack-xs flex flex-col">
-      <h1 id="owner-entry-title" class="text-heading-xl">소유주 로그인</h1>
-      <p class="text-body-md text-fg-muted">보유 장비 · 계약 · 서류 · 현장 영상</p>
+    <div class="gap-stack-md flex flex-col items-center text-center">
+      <Logo variant="lockup" color label="BoomEyes" class="h-size-avatar-lg w-auto" />
+      <h1 id="owner-login-title" class="text-heading-xl">로그인</h1>
     </div>
-    <Button class="w-full" size="lg" onclick={start} loading={busy}
-      >데모 시작하기 <ArrowRight class="size-size-icon-lg" aria-hidden="true" /></Button
+    <form
+      class="gap-stack-md flex flex-col"
+      novalidate
+      onsubmit={(event) => {
+        event.preventDefault();
+        void submit();
+      }}
     >
-    {#if error}<p role="alert" class="text-danger-fg text-body-md">{error}</p>{/if}
-    <p class="text-body-sm text-fg-muted">시연용 데이터 · 실제 장비에 연결되지 않음</p>
+      <TextField
+        label="아이디"
+        name="username"
+        autocomplete="username"
+        bind:value={userId}
+        error={error && !userId ? '아이디를 입력하세요.' : undefined}
+      />
+      <TextField
+        label="비밀번호"
+        name="password"
+        type={show ? 'text' : 'password'}
+        autocomplete="current-password"
+        bind:value={password}
+        error={error && !password ? '비밀번호를 입력하세요.' : undefined}
+      >
+        {#snippet suffix()}
+          <IconButton
+            variant="ghost"
+            tone="neutral"
+            size="sm"
+            label={show ? '비밀번호 숨기기' : '비밀번호 표시'}
+            aria-pressed={show}
+            onclick={() => (show = !show)}
+            >{#if show}<EyeOff class="size-size-icon-sm" aria-hidden="true" />{:else}<Eye
+                class="size-size-icon-sm"
+                aria-hidden="true"
+              />{/if}</IconButton
+          >
+        {/snippet}
+      </TextField>
+      <div class="gap-inline-md flex flex-wrap items-center justify-between">
+        <Checkbox label="로그인 상태 유지" bind:checked={remember} />
+        <Button variant="link" tone="neutral" type="button" title="준비 중" aria-disabled="true">비밀번호 찾기</Button>
+      </div>
+      {#if error && userId && password}<p role="alert" class="text-danger-fg text-body-sm">{error}</p>{/if}
+      <Button type="submit" size="lg" block loading={busy}>로그인</Button>
+    </form>
+    <div class="gap-inline-md border-border-subtle pt-stack-md flex flex-wrap items-center justify-between border-t">
+      <Button variant="ghost" tone="neutral" type="button" onclick={demo} disabled={busy}>데모 계정으로 로그인</Button>
+      <Badge variant="outline">데모 환경</Badge>
+    </div>
   </section>
+  <footer class="gap-inline-lg text-body-sm text-fg-muted mt-stack-lg flex flex-wrap justify-center">
+    <Button variant="link" tone="neutral" type="button" title="준비 중" aria-disabled="true">도움말</Button>
+    <Button variant="link" tone="neutral" type="button" title="준비 중" aria-disabled="true">이용약관</Button>
+    <Button variant="link" tone="neutral" type="button" title="준비 중" aria-disabled="true">개인정보 처리방침</Button>
+  </footer>
 </main>

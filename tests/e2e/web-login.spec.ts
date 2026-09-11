@@ -34,7 +34,7 @@ test.describe('[B0-01] 역할 카드 로그인', () => {
         url.searchParams.get('demo') === 'owner' &&
         url.searchParams.get('next') === '/b1/dash',
     );
-    await expect(page.getByRole('button', { name: '데모 시작하기', exact: true })).toBeVisible();
+    await expect(page.getByRole('button', { name: '데모 계정으로 로그인', exact: true })).toBeVisible();
   });
 
   test('[FR-024] 권한 밖 화면은 403 안내 + 첫 화면으로', async ({ page }) => {

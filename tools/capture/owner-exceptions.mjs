@@ -376,7 +376,7 @@ try {
       const entryUrl = new URL(entryScreen.route, BASE[scenario.app]);
       if (scenario.app === 'web') entryUrl.searchParams.set('demo', 'owner');
       await page.goto(entryUrl.href, { waitUntil: 'domcontentloaded' });
-      await page.getByRole('button', { name: '데모 시작하기', exact: true }).click();
+      await page.getByRole('button', { name: '데모 계정으로 로그인', exact: true }).click();
       await expect(page.locator('[data-owner-view="overview"]')).toBeVisible();
       const target = new URL(scenario.route.replace('[device]', scenario.device ?? 'CPB-001'), BASE[scenario.app]);
       for (const [key, value] of Object.entries({

@@ -15,7 +15,7 @@ for (const { surface, scr, role, home } of SURFACES) {
   test(`[${scr}] ${surface} ${role} 로그인 → ${home} [FR-001]`, async ({ page }) => {
     await page.goto(`/${surface}/login`);
     await expect(page.locator(`[data-scr="${scr}"]`)).toBeVisible();
-    await page.getByRole('button', { name: role === 'owner' ? '데모 시작하기' : '입장' }).click();
+    await page.getByRole('button', { name: role === 'owner' ? '데모 계정으로 로그인' : '입장' }).click();
     await expect(page).toHaveURL(at(home));
     // PwaShell(AC-4): 앱바 로그아웃 · 하단 내비
     await expect(page.getByRole('button', { name: '로그아웃' })).toBeVisible();

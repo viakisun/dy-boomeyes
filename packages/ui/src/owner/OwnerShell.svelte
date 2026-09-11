@@ -100,7 +100,7 @@
 <style>
   :global([data-owner-root] button),
   :global([data-owner-root] select),
-  :global([data-owner-root] input:not([type='file'])),
+  :global([data-owner-root] input:not([type='file']):not([type='checkbox']):not([type='radio'])),
   :global([data-owner-root] .owner-nav-link) {
     min-height: max(var(--sys-size-touch-min), var(--sys-size-control-md));
   }
