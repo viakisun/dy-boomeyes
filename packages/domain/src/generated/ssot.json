@@ -9692,7 +9692,7 @@
         "fixture": {
           "device": "CPB-003",
           "event": "E-021",
-          "account": "control01"
+          "account": "owner01"
         }
       },
       {
@@ -9772,7 +9772,7 @@
         "fixture": {
           "case": "C-105",
           "event": "E-021",
-          "account": "control01"
+          "account": "owner01"
         }
       },
       {
@@ -9893,7 +9893,7 @@
         "track": "D4",
         "fixture": {
           "lease": "D-27",
-          "account": "control01"
+          "account": "owner01"
         }
       },
       {
@@ -9937,7 +9937,7 @@
         "track": "D1",
         "fixture": {
           "device": "CPB-003",
-          "account": "control01"
+          "account": "owner01"
         }
       }
     ],

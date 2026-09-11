@@ -51,7 +51,7 @@ relates_to: [DISC-026, DISC-060, FR-039, FR-043, ADR-006]
 ## 후속 (별도 PR — 화면·코드에 보이는 변경)
 1. `ssot/screens.yaml` — B1 표면 이름 '운영사 관제 WEB' → 소유주 운영 WEB(e2e `web-dashboard.spec.ts:121` 단언·사이드바·기준선) · B1 8화면 `roles += owner` · A4 phase/wave 재배치
 2. `ssot/roles.yaml` — DY 3역할 `org` '운영사 (DY)' → 제조사(B1 탑바·B4-04 표시 → 기준선)
-3. `ssot/scenarios.yaml` — 장면 1·4·9 `control01` → `owner01` · 장면 6은 계정 `hq01` 유지하되 B1-04 구간의 주체 재검토 · 계획 중인 신설 장면 11(FR-039·040 시연, 아직 없음)도 `owner01` 기준 · 장면 9를 척추로
+3. (적용됨 — PR-B) `ssot/scenarios.yaml` — 장면 1·4·9 `control01` → `owner01` · 장면 6은 계정 `hq01` 유지하되 B1-04 구간의 주체 재검토 · 계획 중인 신설 장면 11(FR-039·040 시연, 아직 없음)도 `owner01` 기준 · 장면 9를 척추로
 4. 웹 로그인 카드 `owner01` · B1 loader `Scope.ownerId` · `control` 뷰는 읽기 위주(승인 버튼 숨김)
 5. PR8(FR-039) — 타설량·가동률을 인스펙터가 아니라 **KPI 첫 줄**에
 6. DISC-026 `decided` 전환은 DY 확인(DISC-060) 후

@@ -46,17 +46,17 @@ HLS/WebRTC 중계·RTSP·VPN · MQTT/SSE 서버 · 실인증 · S3 업로드 · 
 
 | 장면 | 진입 URL(preview) | 계정 | 재생 |
 |---|---|---|---|
-| 1 | `web/b1/dash?scene=1` | control01 | 진입 시 CPB-003 정상 → 3초 뒤 E-021 긴급 알림 · fault 전환 · C-105 발행 |
+| 1 | `web/b1/dash?scene=1` | owner01 | 진입 시 CPB-003 정상 → 3초 뒤 E-021 긴급 알림 · fault 전환 · C-105 발행 |
 | 2 | `pwa/a2/today?scene=2` | driver03 | 알림 → 체크인 → 점검 제출(같은 장면 안에서 db 유지) |
 | 3 | `pwa/a1/inbox?scene=3` | safety01 | C-105 접수 → 영상(A1-04/05) → 정비 호출 |
-| 4 | `web/b1/dash?scene=4` | control01 | C-105 접수됨 상태 · `?case=C-105` 패널 |
+| 4 | `web/b1/dash?scene=4` | owner01 | C-105 접수됨 상태 · `?case=C-105` 패널 |
 | 5 | `pwa/a1/inbox/C-105?scene=5` | safety01 | 정비 호출 이력 → 완료 확인 시트(조치 내용 필수) → 기록 탭(A1-06) 최상단에 완료 확인 행 |
 | 6 | `web/b1/escalation?scene=6` | control01 | CPB-004 55분 방치 → 장면 바 "1시간 경과" → 본사·관제 통보 |
 | 7 | `pwa/a2/docs?scene=7` | driver03 | DOC-001 만료 임박 D-27 → 촬영·제출 → 검토 중(수신함·현장 업무함에 서류 업무) |
 | 8 | `web/b4/protocols?scene=8` | ops01 | YAML 업로드 · 오류 샘플 · 알림 미리보기 |
-| 9 | `web/b1/leases?scene=9` | control01 | LS-001 D-27 만료 임박 최상단 → 재배치 계획(대상 현장 · 메모) → relocated · 이력 · 안전관리자 홍보 연계 문구 |
+| 9 | `web/b1/leases?scene=9` | owner01 | LS-001 D-27 만료 임박 최상단 → 재배치 계획(대상 현장 · 메모) → relocated · 이력 · 안전관리자 홍보 연계 문구 |
 | 10 | `web/b1/showcase?scene=10` | safety01 → control01 대체(B1-07 권한) | 다크 강제 쇼케이스 · 무사고 D+ · 점검·서류 지표 · 카메라 월 · 마스킹(DISC-031) · Esc/클릭 → B1-02 |
-| 11 | `web/b1/dash?scene=11` | control01 | CPB-003 자동 선택 · 인스펙터 타설량 12h(가동률 82% · 누적 3,910 m³ · DISC-055 근거) · 3상 R 381 · S 118 · T 379V 결상(342V의 원인) → A1-05 부품 탭 24h · 타임라인 없음 |
+| 11 | `web/b1/dash?scene=11` | owner01 | CPB-003 자동 선택 · 인스펙터 타설량 12h(가동률 82% · 누적 3,910 m³ · DISC-055 근거) · 3상 R 381 · S 118 · T 379V 결상(342V의 원인) → A1-05 부품 탭 24h · 타임라인 없음 |
 
 리셋 = 같은 `?scene=N`으로 새로고침(장면 db는 세션 캐시 키 `scene|N`).
 

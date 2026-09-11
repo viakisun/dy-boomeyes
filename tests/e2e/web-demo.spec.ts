@@ -83,7 +83,7 @@ test('[B1-02] 장면 바: 장면 1 → 다음은 장면 2(A2 앱 절대 URL) · 
   await expect(page.locator('[data-demo-bar]')).toHaveCount(0);
 });
 
-test('[B1-06] 장면 9: control01 세션 · LS-001 D-27 최상단 · 재배치 계획 → relocated · 장면 바 다음(장면 10) [FR-019] [FR-024]', async ({
+test('[B1-06] 장면 9: owner01 세션 · LS-001 D-27 최상단 · 재배치 계획 → relocated · 장면 바 다음(장면 10) [FR-019] [FR-024]', async ({
   page,
 }) => {
   await page.goto('/b1/leases?scene=9');
@@ -91,6 +91,7 @@ test('[B1-06] 장면 9: control01 세션 · LS-001 D-27 최상단 · 재배치 �
   const bar = page.locator('[data-demo-bar]');
   await expect(bar).toContainText('장면 9/11');
   await expect(bar).toContainText('사업 가치');
+  await expect(page.getByText('차사장')).toBeVisible(); // owner01 세션 — 소유주가 주인공(ADR-012 §후속 3)
   await expect(page.locator('table tbody tr').first()).toContainText('D-27');
   const form = page.getByRole('form', { name: '재배치 계획' });
   await form.getByLabel('재배치 대상 현장').selectOption('SITE-002');
@@ -117,6 +118,7 @@ test('[B1-02] 장면 11: 쌓인 데이터 — CPB-003 인스펙터 타설량 12h
 }) => {
   await page.goto('/b1/dash?scene=11');
   await expect(page.locator(root(SCR['B1-02']))).toBeVisible();
+  await expect(page.getByText('차사장')).toBeVisible(); // 장면 11 계정 owner01 — 소유주가 주인공(ADR-012)
   const bar = page.locator('[data-demo-bar]');
   await expect(bar).toContainText('장면 11/11');
   await expect(bar).toContainText('쌓인 데이터');
