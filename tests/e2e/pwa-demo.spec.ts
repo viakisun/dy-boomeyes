@@ -9,7 +9,7 @@ test('[A2-02] 장면 2: driver03 세션 · 미체크인 · E-021 알림 → 대�
 }) => {
   await page.goto('/a2/today?scene=2');
   await expect(page.locator(root(SCR['A2-02']))).toBeVisible();
-  await expect(page.locator('[data-demo-bar]')).toContainText('장면 2/10');
+  await expect(page.locator('[data-demo-bar]')).toContainText('장면 2/11');
   await expect(page.locator('[data-demo-bar]')).toContainText('운전자 인지');
   await page.getByRole('button', { name: /E-021/ }).first().click();
   const dialog = page.getByRole('dialog');
@@ -68,7 +68,7 @@ test('[A1-03] 장면 5: 정비 호출 이력이 있는 C-105(진행 중) · 완�
   const rows = page.locator('ol[aria-label="기록"] li');
   await expect(rows.first()).toContainText('완료 확인');
   await expect(rows.first()).toContainText('전압 릴레이 교체');
-  await expect(page.locator('[data-demo-bar]')).toContainText('장면 5/10');
+  await expect(page.locator('[data-demo-bar]')).toContainText('장면 5/11');
 });
 
 test('[A2-05] 장면 7: 내 서류(DOC-001 D-27 촬영·제출 액션) · 장면 바 이전(장면 6 웹)/다음(장면 8 웹) [FR-015] [FR-024]', async ({

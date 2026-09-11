@@ -3,12 +3,13 @@ import { SCENES, SCENE_FIXTURES, bootMock, clock, createSceneRealtime, H, sceneO
 import { seed } from './seed';
 
 describe('[FR-011] demo-scripts 장면', () => {
-  it('SCENES는 ssot demo 10장면 · 첫 화면 라우트 · 계정', () => {
-    expect(SCENES).toHaveLength(10);
+  it('SCENES는 ssot demo 11장면 · 첫 화면 라우트 · 계정', () => {
+    expect(SCENES).toHaveLength(11);
+    expect(sceneOf(11)).toMatchObject({ title: '쌓인 데이터', entry: '/b1/dash', account: 'control01', app: 'web' });
+    expect(sceneOf(12)).toBeNull();
     expect(sceneOf(1)).toMatchObject({ title: '상황 발생', entry: '/b1/dash', account: 'control01', app: 'web' });
     expect(sceneOf(2)).toMatchObject({ entry: '/a2/today', account: 'driver03', app: 'pwa' });
     expect(sceneOf(5)?.entry).toBe('/a1/inbox/C-105');
-    expect(sceneOf(11)).toBeNull();
   });
   it('장면 1 픽스처 = 상황 발생 전(CPB-003 정상 · C-105 없음) → 타임라인이 E-021을 만든다', async () => {
     const api = bootMock({ scene: 1, capture: false, latencyMs: 0 });

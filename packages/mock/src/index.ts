@@ -12,6 +12,7 @@ export { createMockRealtime } from './realtime';
 export { createMockMedia } from './media';
 export { createMockApi } from './api';
 export { FIXTURES, applyState } from './states';
+import { sceneOf } from './demo';
 export { SCENES, sceneOf, SCENE_FIXTURES, createSceneRealtime, type DemoScene } from './demo';
 
 export interface MockOptions {
@@ -84,6 +85,6 @@ export function optionsFromUrl(url: URL, screen?: ScrId): MockOptions {
     screen,
     state: url.searchParams.get('state'),
     capture: url.searchParams.get('capture') === '1',
-    scene: Number.isInteger(n) && n >= 1 && n <= 10 ? n : null,
+    scene: Number.isInteger(n) && sceneOf(n) ? n : null, // 장면 목록은 ssot demo[]에서 — 범위 하드코딩 금지(장면 11 추가 사고)
   };
 }

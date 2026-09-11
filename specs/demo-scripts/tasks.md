@@ -10,3 +10,5 @@
 완료(W2): 장면 5(완료 확인 → 기록 최상단) · 6 · 7(서류 촬영·제출) · 9(재배치) · 10(쇼케이스) e2e — 장면 1~10 전 커버. `docs/DEMO.md` §5 갱신.
 
 커밋 예: `feat(demo): 장면 재생 — ?scene=N · DemoBar · 장면 1 타임라인 · e2e 9 — Refs: SCR-B1-02 SCR-A2-02 FR-011 FR-010 FR-024`
+
+장면 11 "쌓인 데이터"(DY gap 라운드 PR9): `ssot/scenarios.yaml demo[]` append(재번호 없음) · WF-17 연결 · `index.ts` 장면 범위를 `sceneOf`로(하드코딩 `n <= 10` 제거) · `SCENE_FIXTURES[11]` 기본 시드 · e2e `web-demo` +1 · 장면 바 N/11 · `docs/DEMO.md` §1·§5.
