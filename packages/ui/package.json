@@ -20,7 +20,8 @@
   "dependencies": {
     "@boomeyes/domain": "workspace:*",
     "@boomeyes/tokens": "workspace:*",
-    "@lucide/svelte": "^1.41.0"
+    "@lucide/svelte": "^1.41.0",
+    "pdfjs-dist": "^6.3.289"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^7.1.2",
