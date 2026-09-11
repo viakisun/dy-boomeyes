@@ -298,12 +298,67 @@ Stat(전압 — 값 380 · 단위 V · 힌트 "마지막 수신 10:41" · fault�
 
 지켜야 할 e2e 계약(`tests/e2e/owner-*.ts`): `data-owner-view` · `data-owner-summary` · `data-device` · `data-alert` · `data-doc` · `data-camera[data-mode]` · `data-document-viewer`, region "장비 상태" · "알림 목록" · "선택한 알림 상세", list "우선 확인 알림" · "현장별 장비" · "보유 장비 목록", label "호기·현장 검색" · "배치 필터" · "시연 파일 선택", 버튼 · 링크 이름, 상태 문자열 "수신 지연" · "단말기 미장착" · "미연동" · "공급 전압 · 마지막 수신값" · "380", "0 V" 없음, "승인" 0, 오프라인 전후 "장비 상태" 텍스트 동일, 가로 오버플로 0.
 
-## 9. 검증 기록
+## 9. 구현 결과(2026-09-11, C0~C3)
 
-- 측정: 부록 A 스크립트 실행 결과가 §2 표와 일치(2026-09-11, `5c59540`).
-- 시안: Playwright 1.62.1 chromium, 소스 SHA `5c59540`, 사용한 `--sys-*` 변수 69개 전부 `DY.tokens.css`에 실존(조립 스크립트가 검증) — [render-check.json](proposals/owner-visual-2026-09-11/render-check.json). PNG 4장 육안 확인: 지도 히어로가 첫 뷰포트 폭의 8/12 · 높이 492px, 설명 문장 0, `·` 나열 0, 카드마다 미디어 또는 IconTile.
-- 문서: `node tools/ssot/check.mjs --docs` exit 0 — `✓ ssot: docs 115 · errors 0`. `git diff --check` exit 0.
-- 제품 코드 · SSOT · 토큰 원천 · 테스트 변경 없음. 변경 파일: 이 문서 · `proposals/owner-visual-2026-09-11/` · `docs/PLAN.md` 한 줄.
+브랜치 체인 `docs/owner-visual-language` → `chore/owner-copy-density` → `feat/owner-visual-list` → `feat/owner-visual-detail` → `feat/owner-visual-media` → `docs/owner-visual-evidence`. 사용자 결정: 소유주 웹 comfortable 밀도 전환(2026-09-11).
+
+### 측정 전/후
+
+| 지표 | 전 | 후 | 목표 | 판정 |
+|---|---|---|---|---|
+| 설명 문장 | 58 | **23** | ≤ 8 | 미달 — 남은 23은 오류 · 오프라인 · 첨부 안내 · 로딩 sr-only · 진입 카피(e2e가 문장을 단언하는 것 6건 포함). 제품 표면의 지시 부제 · 각주 · 자리 문장은 0 |
+| `·` 나열 메타 | 29 | **13** | 0 | 미달 — 남은 13은 `N호기 · 현장`(식별자 쌍 · e2e 단언), 서류 select option, 알림 요약 `N대 · N건` |
+| `border` | 149 | **40** | ≤ 40 | 충족 |
+| `<img>` | 2 | **6** | 카드마다 미디어 | 충족(스틸 · 썸네일 · IconTile) |
+| 아이콘 | 18 | 40 | 상태 · 메타 자리 1개, 장식 0 | 충족 |
+| 상태를 `text-*-fg` 삼항으로 그리는 곳 | 2 | **1**(전압 값 danger 채색 — §11.4 허용) | 0 | 충족 |
+| 프리미티브 사용 | 5종 | **16종**(Badge · Banner · Button · Chip · ContactCard · ContextHeader · Dialog · EmptyState · IconButton · IconTile · KeyValueList · List · PageHeader · PeriodBar · Skeleton · StatusPill) | 전부 | 충족 |
+| 첫 뷰포트 주인공 | 현황 지도 약 11% | 지도 8/12열 × 420px ≈ 33% · 상세 히어로 첫 뷰포트 45% | ≥ 50% | 부분 — 지도는 폭 8/12 기준 첫 뷰포트의 절반 이상을 차지하나 높이 기준 33% |
+
+### 전/후 캡처(웹 1280×842 · PWA 390×800, 라이트)
+
+증거: [owner-visual-2026-09-11](evidence/owner-visual-2026-09-11/manifest.json) — 112/112 · failed 0 · owner e2e 88 · `owner:check` errors 0. 검토안 [owner-review.html](evidence/owner-visual-2026-09-11/review/owner-review.html). "전"은 `owner-final-2026-09-11`의 같은 조합을 복사한 것.
+
+| 화면 | 전 | 후 |
+|---|---|---|
+| 운영 현황 웹 | ![전](evidence/owner-visual-2026-09-11/before/web-overview-1280x842-light.png) | ![후](evidence/owner-visual-2026-09-11/web-overview-1280x842-light.png) |
+| 보유 장비 웹 | ![전](evidence/owner-visual-2026-09-11/before/web-fleet-1280x842-light.png) | ![후](evidence/owner-visual-2026-09-11/web-fleet-1280x842-light.png) |
+| 호기 상세 웹 | ![전](evidence/owner-visual-2026-09-11/before/web-detail-1280x842-light.png) | ![후](evidence/owner-visual-2026-09-11/web-detail-1280x842-light.png) |
+| 이상·점검 웹 | ![전](evidence/owner-visual-2026-09-11/before/web-alerts-1280x842-light.png) | ![후](evidence/owner-visual-2026-09-11/web-alerts-1280x842-light.png) |
+| 장비 서류 웹 | ![전](evidence/owner-visual-2026-09-11/before/web-documents-1280x842-light.png) | ![후](evidence/owner-visual-2026-09-11/web-documents-1280x842-light.png) |
+| 영상 웹 | ![전](evidence/owner-visual-2026-09-11/before/web-video-1280x842-light.png) | ![후](evidence/owner-visual-2026-09-11/web-video-1280x842-light.png) |
+| 진입 웹 | ![전](evidence/owner-visual-2026-09-11/before/web-entry-1280x842-light.png) | ![후](evidence/owner-visual-2026-09-11/web-entry-1280x842-light.png) |
+| 운영 현황 PWA | ![전](evidence/owner-visual-2026-09-11/before/pwa-overview-390x800-light.png) | ![후](evidence/owner-visual-2026-09-11/pwa-overview-390x800-light.png) |
+| 보유 장비 PWA | ![전](evidence/owner-visual-2026-09-11/before/pwa-fleet-390x800-light.png) | ![후](evidence/owner-visual-2026-09-11/pwa-fleet-390x800-light.png) |
+| 호기 상세 PWA | ![전](evidence/owner-visual-2026-09-11/before/pwa-detail-390x800-light.png) | ![후](evidence/owner-visual-2026-09-11/pwa-detail-390x800-light.png) |
+| 이상·점검 PWA | ![전](evidence/owner-visual-2026-09-11/before/pwa-alerts-390x800-light.png) | ![후](evidence/owner-visual-2026-09-11/pwa-alerts-390x800-light.png) |
+| 장비 서류 PWA | ![전](evidence/owner-visual-2026-09-11/before/pwa-documents-390x800-light.png) | ![후](evidence/owner-visual-2026-09-11/pwa-documents-390x800-light.png) |
+| 영상 PWA | ![전](evidence/owner-visual-2026-09-11/before/pwa-video-390x800-light.png) | ![후](evidence/owner-visual-2026-09-11/pwa-video-390x800-light.png) |
+| 진입 PWA | ![전](evidence/owner-visual-2026-09-11/before/pwa-entry-390x800-light.png) | ![후](evidence/owner-visual-2026-09-11/pwa-entry-390x800-light.png) |
+
+### 명세와 다르게 한 것
+
+- ContextHeader는 교차 관찰자 대신 스크롤 컨테이너(`[data-owner-scroll]`)의 스크롤 이벤트로 판정한다. 캡처 도구의 `scrollIntoView` 왕복에서 교차 관찰자가 되돌리지 않았다. 축약 바는 compact일 때만 렌더한다(`aria-hidden` 안 포커스 요소 = axe serious).
+- Chip 필터는 `role=group` 안 `<button aria-pressed>`(Tabs 미채택 이유 그대로). 영상 재생 버튼은 아이콘 + 텍스트(이름 "재생"/"일시정지" 유지).
+- 진입 미리보기의 스틸은 앱이 `poster` prop으로 주입한다(ui는 video 자산을 import하지 않는다). 영상 화면의 lucide 아이콘은 ui 재수출(`IconPlay` 등)로 쓴다(video 패키지는 lucide 의존이 없다).
+- 캡처 도구 `tools/capture/owner.mjs`의 마커 검사는 뷰별 기대값(현황 5 · 상세 1)이다.
+- 320px 폭 캡처 · `color-audit --owner` · 측정 스크립트의 `tools/design/` 이관은 하지 않았다(후속).
+
+### 게이트 기록
+
+| PR | verify | build | owner e2e | capture:owner | 비고 |
+|---|---|---|---|---|---|
+| C0 `c663db4` | 0 | 0 | 88 passed | 112/112 failed 0 | 설명 문장 58→34 |
+| C1 `afae05f` | 생성물 diff(DY-design.md)만 | 0 | 88 passed | 112/112 + overview/fleet 재캡처 | heading 이름에 배지 텍스트가 섞여 1회 실패 → 배지를 제목 밖으로 |
+| C2 `7253626` | 생성물 diff만 · ui vitest 4 passed | 0 | 88 passed | detail/alerts 32/32 | axe aria-hidden-focus 1회 실패 → 축약 바 조건 렌더 |
+| C3 `5df0683` | 0 | 0 | 88 passed | entry/documents/video 48/48 | Button target/rel · video 아이콘 재수출 |
+| C4(이 문서) | — | — | 88(JSON) | 112/112 · owner:check 0 · review 재생성 | 증거 커밋 |
+
+### 남은 것
+
+- 설명 문장 23 → 8: e2e가 단언하는 안내 문장(첨부 · 오프라인 · 파일 확인)을 짧은 라벨로 바꾸려면 테스트 계약을 함께 고쳐야 한다(별도 PR).
+- reviewer "머지 가능" 판정 · CI(`baseline` 기준선은 wave ≤ 2 화면만이라 소유주 화면은 비교 대상 아님) · main 병합은 사용자 지시 뒤.
+- 부록 B 별도 트랙(다국어 · 해외 규제)은 그대로.
 
 ## 부록 A — 측정 스크립트
 
