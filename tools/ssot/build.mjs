@@ -131,6 +131,7 @@ const ts = [
   constBlock('ROLE', [...d.roles.roles].map((r) => r.id).sort(cmp), 'RoleId'),
   `export const SCREENS = {\n${screens.map((s) => `  '${s.id}': { name: ${JSON.stringify(s.name)}, surface: '${s.surface}', app: '${d.screens.surfaces.find((x) => x.id === s.surface).app}', route: ${JSON.stringify(s.route)}, roles: ${JSON.stringify(s.roles)}, phase: ${s.phase}, wave: ${s.wave}, default: '${s.default}', states: ${JSON.stringify(s.states.map((x) => x.id))} },`).join('\n')}\n} as const satisfies Record<ScrId, { name: string; surface: string; app: 'web' | 'pwa'; route: string; roles: readonly RoleId[]; phase: 1 | 2; wave: number; default: string; states: readonly string[] }>;`,
   '',
+  `export const OWNER_DEMO = ${JSON.stringify(d.screens.owner_demo, null, 2)} as const satisfies readonly { view: string; menu: number; label: string; web: ScrId; pwa: ScrId; question: string; source_cells: readonly string[] }[];`,
   `export const MACHINES = ${JSON.stringify(Object.fromEntries(Object.entries(d.entities.machines).map(([k, m]) => [k, { entity: m.entity, states: m.states, transitions: m.transitions.map((t) => [t.from, t.to]) }])), null, 2)} as const;`,
   '',
   `export const FIXED_CLOCK = '${d.meta.fixed_clock}';`,

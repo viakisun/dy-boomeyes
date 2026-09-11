@@ -659,10 +659,20 @@ screens:
   wave: 4
   default: login
   states:
+  - id: owner
+    name: 소유주 데모
+  - id: empty
+    name: 보유 장비 없음
+  - id: error
+    name: 조회 실패 후 재시도
+  - id: boundaries
+    name: 미확인 정보
+  - id: large
+    name: 120대 탐색
   - id: login
     name: login
   nav:
-  - to: A4-02
+  - to: A4-07
     label: 로그인
   trace:
     task:
@@ -675,7 +685,7 @@ screens:
     - DISC-026
     if: []
 - id: A4-02
-  name: 보유·가용 현황
+  name: 보유 장비
   surface: A4
   route: /a4/fleet
   roles: *id004
@@ -683,6 +693,16 @@ screens:
   wave: 4
   default: fleet
   states:
+  - id: owner
+    name: 소유주 데모
+  - id: empty
+    name: 보유 장비 없음
+  - id: error
+    name: 조회 실패 후 재시도
+  - id: boundaries
+    name: 미확인 정보
+  - id: large
+    name: 120대 탐색
   - id: fleet
     name: fleet
   nav:
@@ -800,6 +820,7 @@ screens:
   surface: B0
   route: /login
   roles:
+  - owner
   - control
   - hq-safety
   - site-safety
@@ -814,6 +835,8 @@ screens:
   - B4-01
   default: login-b1
   states:
+  - id: owner
+    name: 소유주 전용 데모 진입
   - id: login-b1
     name: B1 로그인
   - id: login-b2
@@ -858,6 +881,16 @@ screens:
   wave: 0
   default: dash
   states:
+  - id: owner
+    name: 소유주 데모
+  - id: empty
+    name: 보유 장비 없음
+  - id: error
+    name: 조회 실패 후 재시도
+  - id: boundaries
+    name: 미확인 정보
+  - id: large
+    name: 120대 탐색
   - id: dash
     name: dash
   nav:
@@ -983,6 +1016,16 @@ screens:
   wave: 2
   default: docs
   states:
+  - id: owner
+    name: 소유주 데모
+  - id: empty
+    name: 보유 장비 없음
+  - id: error
+    name: 조회 실패 후 재시도
+  - id: boundaries
+    name: 미확인 정보
+  - id: large
+    name: 120대 탐색
   - id: docs
     name: docs
   nav: []
@@ -1491,3 +1534,379 @@ screens:
     if:
     - IF-009
   note: 점검(실측두께·외관·체결·OEM 합불)·교체·폐기 이력 — 누적 타설량·운전시간은 보조지표 · 단계 귀속은 DISC-044(1단계 = 구조·자리, 실동작 2단계)
+
+- id: A4-07
+  name: 운영 현황
+  surface: A4
+  route: /a4/overview
+  roles:
+    - owner
+  phase: 2
+  wave: 4
+  default: owner
+  states:
+    - id: owner
+      name: 소유주 기본 데이터
+    - id: empty
+      name: 보유 장비 없음
+    - id: error
+      name: 조회 실패 후 재시도
+    - id: boundaries
+      name: 미확인 배치·미연동·계약 미등록
+    - id: large
+      name: 120대 탐색
+  nav:
+    - to: A4-02
+      label: 보유 장비
+  trace:
+    task:
+      - 4.3.3
+    out: OUT-002
+    rfp:
+      - RFP-009
+    disc:
+      - DISC-052
+    if:
+      - IF-009
+  note: V5 관제기능 H70 · H76 — 소유주 데모 조회·샘플. 실제 운영 규칙 및 계약 단계 확정 아님
+- id: B1-09
+  name: 보유 장비
+  surface: B1
+  route: /b1/fleet
+  roles:
+    - owner
+  phase: 2
+  wave: 4
+  default: owner
+  states:
+    - id: owner
+      name: 소유주 기본 데이터
+    - id: empty
+      name: 보유 장비 없음
+    - id: error
+      name: 조회 실패 후 재시도
+    - id: boundaries
+      name: 미확인 배치·미연동·계약 미등록
+    - id: large
+      name: 120대 탐색
+  nav:
+    - to: B1-09
+      label: 보유 장비
+  trace:
+    task:
+      - 4.3.3
+    out: OUT-002
+    rfp:
+      - RFP-009
+    disc:
+      - DISC-052
+    if:
+      - IF-009
+  note: V5 관제기능 I9:N25 · H71 · H77 — 소유주 데모 조회·샘플. 실제 운영 규칙 및 계약 단계 확정 아님
+- id: B1-10
+  name: 호기 상세
+  surface: B1
+  route: /b1/fleet/[device]
+  roles:
+    - owner
+  phase: 2
+  wave: 4
+  default: owner
+  states:
+    - id: owner
+      name: 소유주 기본 데이터
+    - id: empty
+      name: 보유 장비 없음
+    - id: error
+      name: 조회 실패 후 재시도
+    - id: boundaries
+      name: 미확인 배치·미연동·계약 미등록
+    - id: large
+      name: 120대 탐색
+  nav:
+    - to: B1-09
+      label: 보유 장비
+  trace:
+    task:
+      - 4.3.3
+    out: OUT-002
+    rfp:
+      - RFP-009
+    disc:
+      - DISC-052
+    if:
+      - IF-009
+  note: V5 관제기능 H60:H68 · H71 · H77 — 소유주 데모 조회·샘플. 실제 운영 규칙 및 계약 단계 확정 아님
+- id: A4-08
+  name: 호기 상세
+  surface: A4
+  route: /a4/fleet/[device]
+  roles:
+    - owner
+  phase: 2
+  wave: 4
+  default: owner
+  states:
+    - id: owner
+      name: 소유주 기본 데이터
+    - id: empty
+      name: 보유 장비 없음
+    - id: error
+      name: 조회 실패 후 재시도
+    - id: boundaries
+      name: 미확인 배치·미연동·계약 미등록
+    - id: large
+      name: 120대 탐색
+  nav:
+    - to: A4-02
+      label: 보유 장비
+  trace:
+    task:
+      - 4.3.3
+    out: OUT-002
+    rfp:
+      - RFP-009
+    disc:
+      - DISC-052
+    if:
+      - IF-009
+  note: V5 관제기능 H60:H68 · H71 · H77 — 소유주 데모 조회·샘플. 실제 운영 규칙 및 계약 단계 확정 아님
+- id: B1-11
+  name: 영상
+  surface: B1
+  route: /b1/fleet/[device]/video
+  roles:
+    - owner
+  phase: 2
+  wave: 4
+  default: owner
+  states:
+    - id: owner
+      name: 소유주 기본 데이터
+    - id: empty
+      name: 보유 장비 없음
+    - id: error
+      name: 조회 실패 후 재시도
+    - id: boundaries
+      name: 미확인 배치·미연동·계약 미등록
+    - id: large
+      name: 120대 탐색
+  nav:
+    - to: B1-09
+      label: 보유 장비
+  trace:
+    task:
+      - 4.3.3
+    out: OUT-002
+    rfp:
+      - RFP-009
+    disc:
+      - DISC-052
+    if:
+      - IF-009
+  note: V5 관제기능 H47:H55 · H72:H73 · H78:H79 — 소유주 데모 조회·샘플. 실제 운영 규칙 및 계약 단계 확정 아님
+- id: A4-09
+  name: 영상
+  surface: A4
+  route: /a4/fleet/[device]/video
+  roles:
+    - owner
+  phase: 2
+  wave: 4
+  default: owner
+  states:
+    - id: owner
+      name: 소유주 기본 데이터
+    - id: empty
+      name: 보유 장비 없음
+    - id: error
+      name: 조회 실패 후 재시도
+    - id: boundaries
+      name: 미확인 배치·미연동·계약 미등록
+    - id: large
+      name: 120대 탐색
+  nav:
+    - to: A4-02
+      label: 보유 장비
+  trace:
+    task:
+      - 4.3.3
+    out: OUT-002
+    rfp:
+      - RFP-009
+    disc:
+      - DISC-052
+    if:
+      - IF-009
+  note: V5 관제기능 H47:H55 · H72:H73 · H78:H79 — 소유주 데모 조회·샘플. 실제 운영 규칙 및 계약 단계 확정 아님
+- id: A4-10
+  name: 장비 서류
+  surface: A4
+  route: /a4/docs
+  roles:
+    - owner
+  phase: 2
+  wave: 4
+  default: owner
+  states:
+    - id: owner
+      name: 소유주 기본 데이터
+    - id: empty
+      name: 보유 장비 없음
+    - id: error
+      name: 조회 실패 후 재시도
+    - id: boundaries
+      name: 미확인 배치·미연동·계약 미등록
+    - id: large
+      name: 120대 탐색
+  nav:
+    - to: A4-02
+      label: 보유 장비
+  trace:
+    task:
+      - 4.3.3
+    out: OUT-002
+    rfp:
+      - RFP-009
+    disc:
+      - DISC-052
+    if:
+      - IF-009
+  note: V5 관제기능 H36 · H74 · H80 — 소유주 데모 조회·샘플. 실제 운영 규칙 및 계약 단계 확정 아님
+- id: B1-12
+  name: 이상·점검
+  surface: B1
+  route: /b1/alerts
+  roles:
+    - owner
+  phase: 2
+  wave: 4
+  default: owner
+  states:
+    - id: owner
+      name: 소유주 기본 데이터
+    - id: empty
+      name: 보유 장비 없음
+    - id: error
+      name: 조회 실패 후 재시도
+    - id: boundaries
+      name: 미확인 배치·미연동·계약 미등록
+    - id: large
+      name: 120대 탐색
+  nav:
+    - to: B1-09
+      label: 보유 장비
+  trace:
+    task:
+      - 4.3.3
+    out: OUT-002
+    rfp:
+      - RFP-009
+    disc:
+      - DISC-052
+    if:
+      - IF-009
+  note: V5 관제기능 H37:H38 · H60:H68 — 소유주 데모 조회·샘플. 실제 운영 규칙 및 계약 단계 확정 아님
+- id: A4-11
+  name: 이상·점검
+  surface: A4
+  route: /a4/alerts
+  roles:
+    - owner
+  phase: 2
+  wave: 4
+  default: owner
+  states:
+    - id: owner
+      name: 소유주 기본 데이터
+    - id: empty
+      name: 보유 장비 없음
+    - id: error
+      name: 조회 실패 후 재시도
+    - id: boundaries
+      name: 미확인 배치·미연동·계약 미등록
+    - id: large
+      name: 120대 탐색
+  nav:
+    - to: A4-02
+      label: 보유 장비
+  trace:
+    task:
+      - 4.3.3
+    out: OUT-002
+    rfp:
+      - RFP-009
+    disc:
+      - DISC-052
+    if:
+      - IF-009
+  note: V5 관제기능 H37:H38 · H60:H68 — 소유주 데모 조회·샘플. 실제 운영 규칙 및 계약 단계 확정 아님
+
+owner_demo:
+  - view: entry
+    menu: 0
+    label: 소유주 데모
+    web: B0-01
+    pwa: A4-01
+    question: 내 장비를 어떻게 관리하나요?
+    source_cells:
+      - M39
+      - H39:H40
+  - view: overview
+    menu: 1
+    label: 운영 현황
+    web: B1-02
+    pwa: A4-07
+    question: 어느 현장과 장비부터 확인할까요?
+    source_cells:
+      - H70
+      - H76
+  - view: fleet
+    menu: 2
+    label: 보유 장비
+    web: B1-09
+    pwa: A4-02
+    question: 찾는 호기가 어디에 있나요?
+    source_cells:
+      - I9:N25
+      - H71
+      - H77
+  - view: detail
+    menu: 0
+    label: 호기 상세
+    web: B1-10
+    pwa: A4-08
+    question: 계약과 현장 담당자는 누구인가요?
+    source_cells:
+      - H60:H68
+      - H71
+      - H77
+  - view: video
+    menu: 0
+    label: 영상
+    web: B1-11
+    pwa: A4-09
+    question: 타설·설치 상황과 저장 영상을 볼 수 있나요?
+    source_cells:
+      - H47:H55
+      - H72:H73
+      - H78:H79
+  - view: documents
+    menu: 4
+    label: 장비 서류
+    web: B1-05
+    pwa: A4-10
+    question: 필요한 제작증과 검사 성적서를 열 수 있나요?
+    source_cells:
+      - H36
+      - H74
+      - H80
+  - view: alerts
+    menu: 3
+    label: 이상·점검
+    web: B1-12
+    pwa: A4-11
+    question: 어떤 장비에 연락과 점검이 필요한가요?
+    source_cells:
+      - H37:H38
+      - H60:H68

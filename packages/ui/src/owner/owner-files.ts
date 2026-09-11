@@ -1,3 +1,5 @@
+// eslint-disable-next-line @typescript-eslint/triple-slash-reference -- Vite URL ambient declaration must also be visible to source consumers in video/apps.
+/// <reference path="./assets.d.ts" />
 import { OWNER_UPLOAD_LIMIT, type OwnerAttachment } from '@boomeyes/domain';
 
 /** Parse the actual file before offering confirmation; MIME alone is not validation. */

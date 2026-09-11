@@ -1,11 +1,18 @@
 <script lang="ts">
-  import { ownerHref, type OwnerAttachment, type OwnerDocument, type OwnerViewProps } from '@boomeyes/domain';
+  import {
+    ownerHref,
+    ownerDetailReturn,
+    type OwnerAttachment,
+    type OwnerDocument,
+    type OwnerViewProps,
+  } from '@boomeyes/domain';
   import { onDestroy, tick } from 'svelte';
   import Button from '../primitives/Button.svelte';
   import Dialog from '../primitives/Dialog.svelte';
   import DocumentViewer from './DocumentViewer.svelte';
   import { connectivity } from '../lib/connectivity.svelte';
   import { FOCUS } from '../lib/cx';
+  import { toast } from '../primitives/toast-store.svelte';
   import { prepareOwnerAttachment, releaseOwnerAttachment } from './owner-files';
   let { data, api, app, url, navigate, refresh, capture = false }: OwnerViewProps = $props();
   const deviceId = $derived(url.searchParams.get('device') ?? data.devices[0]?.id);
@@ -21,7 +28,6 @@
   let preparing = $state(false);
   let saving = $state(false);
   let uploadError = $state('');
-  let success = $state('');
   let dialogOpen = $state(false);
   let input = $state<HTMLInputElement>();
   let generation = 0;
@@ -74,11 +80,12 @@
   });
   function changeDevice(value: string) {
     cancel();
-    success = '';
-    navigate(ownerHref(url, 'documents', app, { device: value }));
+    navigate(ownerHref(url, 'documents', app, { device: value, return: ownerDetailReturn(url, app, value) }));
   }
   function openDocument(id: string) {
-    navigate(ownerHref(url, 'documents', app, { device: deviceId ?? null, doc: id }));
+    navigate(
+      ownerHref(url, 'documents', app, { device: deviceId ?? null, doc: id, return: url.searchParams.get('return') }),
+    );
   }
   async function choose(event: Event) {
     const file = (event.currentTarget as HTMLInputElement).files?.[0];
@@ -89,7 +96,6 @@
     releaseOwnerAttachment($state.snapshot(pending));
     pending = null;
     uploadError = '';
-    success = '';
     if (!connectivity.online) {
       uploadError = '오프라인에서는 첨부할 수 없습니다. 연결 후 다시 선택해 주세요.';
       return;
@@ -119,6 +125,7 @@
     dialogOpen = false;
     preparing = false;
     if (input) input.value = '';
+    void tick().then(() => input?.focus());
   }
   async function confirm() {
     if (!pending || !device || saving) return;
@@ -133,8 +140,8 @@
       pending = null; // URL ownership moves to the browser session API.
       dialogOpen = false;
       await refresh();
-      success = '시연 파일을 첨부했습니다.';
       openDocument(attached.id);
+      toast('시연 파일을 첨부했습니다.');
     } catch (cause) {
       uploadError = cause instanceof Error ? cause.message : '첨부하지 못했습니다. 다시 시도해 주세요.';
     } finally {
@@ -181,7 +188,7 @@
           variant="outline"
           tone="neutral"
           class="min-h-size-touch-min"
-          onclick={() => navigate(ownerHref(url, 'detail', app, {}, device.id))}>장비 상세로</Button
+          onclick={() => navigate(ownerDetailReturn(url, app, device.id))}>장비 상세로</Button
         >{/if}
     </div>
     {#if !device}
@@ -256,7 +263,6 @@
           </p>{/if}
         {#if preparing}<p role="status" class="text-body-md">파일 내용을 확인하는 중입니다.</p>{/if}
         {#if uploadError && !dialogOpen}<p role="alert" class="text-body-md text-danger-fg">{uploadError}</p>{/if}
-        {#if success}<p role="status" class="text-body-md text-success-fg">{success}</p>{/if}
       </section>
     {/if}
   {/if}

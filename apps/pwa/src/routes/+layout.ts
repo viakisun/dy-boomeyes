@@ -1,7 +1,9 @@
 import { redirect } from '@sveltejs/kit';
-import { SCREENS, canAccess, screenForPath, type RoleId, type ScrId } from '@boomeyes/domain';
+import { SCREENS, ownerViewOf, canAccess, screenForPath, type RoleId, type ScrId } from '@boomeyes/domain';
 import {
   bootMock,
+  bootOwner,
+  resetOwner,
   clock,
   createMockMedia,
   createMockRealtime,
@@ -100,16 +102,37 @@ export const load: LayoutLoad = async ({ url }) => {
   }
   if (opts.capture && !session.user && screen && !LOGINS.includes(screen))
     session.user = demoSession(SCREENS[screen].roles[0] as RoleId);
+  const requestedOwnerView = ownerViewOf(screen, 'pwa');
+  const ownerEntry = requestedOwnerView === 'entry';
+  const ownerActive = !scene && (ownerEntry || (session.user?.role === 'owner' && !!requestedOwnerView));
+  const ownerView = ownerActive ? requestedOwnerView : undefined;
+  const ownerState = opts.capture ? opts.state : null;
+  const dataset =
+    ownerState === 'empty' || ownerState === 'boundaries' || ownerState === 'large' ? ownerState : 'owner';
+  const ownerApi =
+    ownerActive && !ownerEntry
+      ? bootOwner(session.user, {
+          dataset,
+          error: ownerState === 'error',
+          latencyMs: opts.capture ? 0 : 120,
+          offline: () => typeof navigator !== 'undefined' && !navigator.onLine,
+        })
+      : undefined;
   const user = session.user;
   const surface = url.pathname.split('/')[1] ?? 'a1';
   if (screen && !LOGINS.includes(screen) && !user && !opts.capture) throw redirect(302, `/${surface}/login`);
   const forbidden = !!(user && screen && !canAccess(user.role, screen));
   const t = url.searchParams.get('theme');
   const theme: 'dark' | 'light' | null = t === 'dark' || t === 'light' ? t : null; // 캡처·e2e용 루트 테마(저장 안 함)
-  const realtime = scene ? createSceneRealtime(scene.scene, mock) : createMockRealtime({ enabled: !opts.capture });
+  const realtime = scene
+    ? createSceneRealtime(scene.scene, mock)
+    : createMockRealtime({ enabled: !opts.capture && !ownerActive });
   const media = createMockMedia(mock.db);
   return {
     api,
+    ownerView,
+    ownerApi,
+    resetOwner,
     clock,
     realtime,
     media,

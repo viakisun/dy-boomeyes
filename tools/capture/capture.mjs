@@ -50,6 +50,7 @@ const STATE_QUERY = {
   'A1-04:live': 'cam=CAM-3-1',
   'B1-08:pinned': 'cursor=-12',
   'A1-05:pour': 'tab=parts',
+  'B0-01:owner': 'demo=owner',
 };
 const surfaces = Object.fromEntries(ssot.screens.surfaces.map((s) => [s.id, s.app]));
 const screens = ssot.screens.screens.filter((s) => s.wave <= WAVE && (!ONLY || ONLY.includes(s.id)));
@@ -110,12 +111,12 @@ if (!args.includes('--no-serve'))
   }
 process.on('exit', stopServers);
 const browser = await chromium.launch();
-const ctx = await browser.newContext({
+const CONTEXT_OPTIONS = {
   deviceScaleFactor: DPR,
   locale: 'ko-KR',
   timezoneId: 'Asia/Seoul',
   reducedMotion: 'reduce',
-});
+};
 // 시각·난수 고정은 앱의 DemoClock(?capture=1)이 담당한다 — 브라우저 Date 프록시는 MapLibre 로드를 막는다
 let n = 0,
   fail = 0,
@@ -149,9 +150,17 @@ for (const s of screens) {
     const variants = [{ url: base, name: name0 }];
     if (DARK && st.id === s.default) variants.push({ url: `${base}&theme=dark`, name: `${name0}-dark` });
     for (const { url, name } of variants) {
+      const ctx = await browser.newContext(CONTEXT_OPTIONS);
       const page = await ctx.newPage();
       await page.setViewportSize(phone ? { width: 440, height: 900 } : { width: 1280, height: 842 });
       try {
+        const ownerView = ssot.screens.owner_demo?.find((item) => item[app] === s.id);
+        const ownerState = ['owner', 'empty', 'error', 'boundaries', 'large'].includes(st.id);
+        if (ownerView && ownerView.view !== 'entry' && ownerState) {
+          await page.goto(`${BASE[app]}${app === 'web' ? '/login?demo=owner' : '/a4/login'}`);
+          await page.getByRole('button', { name: '데모 시작하기', exact: true }).click();
+          await page.locator('[data-owner-view="overview"][data-owner-role="owner"]').waitFor();
+        }
         await page.goto(url, { waitUntil: 'networkidle' });
         await page.waitForSelector(`[data-scr="${s.id}"]`, { timeout: 10_000 });
         // 자리 화면(캐치올 EmptyState) — data-scr는 캐치올도 붙이므로 루트 data-stub로 판별한다
@@ -221,7 +230,7 @@ for (const s of screens) {
           error: String(e.message).split('\n')[0],
         });
       }
-      await page.close();
+      await ctx.close();
     }
   }
 }

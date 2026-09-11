@@ -259,7 +259,40 @@ try {
       check(row.view === 'entry' || result.renderedRole === 'owner', 'Rendered owner role is missing or wrong');
       check(row.view === 'entry' || result.dataset === 'owner', 'Owner dataset is missing or wrong');
       check((await page.locator('html').getAttribute('data-theme')) === row.theme, 'Theme mismatch');
-      if (await page.locator('.be-map').count()) await page.locator('[data-map-ready]').waitFor({ timeout: 20_000 });
+      if (await page.locator('.be-map').count()) {
+        const map = page.locator('.be-map');
+        await page.locator('[data-map-ready]').waitFor({ timeout: 20_000 });
+        result.map = await map.evaluate((element) => {
+          const box = element.getBoundingClientRect();
+          return { width: box.width, height: box.height, markers: element.querySelectorAll('.be-marker').length };
+        });
+        check(result.map.width >= 200 && result.map.height >= 200, 'Map has no usable visible area');
+        check(result.map.markers === 5, 'Map must show all five owned equipment markers');
+        check((await page.locator('[data-map-error]').count()) === 0, 'Map tiles failed');
+        await map.evaluate((element) => element.scrollIntoView({ block: 'center', inline: 'nearest' }));
+        result.map.targets = await map.locator('.be-marker').evaluateAll((markers) =>
+          markers.map((marker) => {
+            const box = marker.getBoundingClientRect();
+            return {
+              label: marker.textContent,
+              width: box.width,
+              height: box.height,
+              reachable: [...marker.children].every((part) => {
+                const b = part.getBoundingClientRect();
+                return marker.contains(document.elementFromPoint(b.x + b.width / 2, b.y + b.height / 2));
+              }),
+            };
+          }),
+        );
+        const targetSize = row.app === 'pwa' ? 48 : 44;
+        check(
+          result.map.targets.every(
+            (target) => target.reachable && target.width >= targetSize && target.height >= targetSize,
+          ),
+          'Map targets overlap or are too small',
+        );
+        await page.evaluate(() => window.scrollTo(0, 0));
+      }
       if (row.view === 'documents') {
         await page.locator('[data-document-viewer] img').first().waitFor({ state: 'visible' });
         await page.waitForFunction(() =>
@@ -292,6 +325,18 @@ try {
       result.sha256 = createHash('sha256')
         .update(readFileSync(join(OUT, result.file)))
         .digest('hex');
+      // 첫 화면 112조합과 별도로, 대표 PC/폰 라이트의 전체 내용을 남긴다.
+      // fullPage가 WebGL을 비우는 SOP를 피하기 위해 실제 viewport 높이를 늘린다.
+      if (row.theme === 'light' && row.width === (row.app === 'web' ? 1280 : 390)) {
+        result.fullFile = `${row.key}-full.png`;
+        result.fullHeight = await page.evaluate(() => Math.max(innerHeight, document.documentElement.scrollHeight));
+        await page.setViewportSize({ width: row.width, height: result.fullHeight });
+        await page.waitForTimeout(250);
+        await page.screenshot({ path: join(OUT, result.fullFile) });
+        result.fullSha256 = createHash('sha256')
+          .update(readFileSync(join(OUT, result.fullFile)))
+          .digest('hex');
+      }
       result.ok = true;
       result.status = 'automated-capture-pass';
       console.log(`ok ${row.key}`);

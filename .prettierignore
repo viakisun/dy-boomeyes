@@ -14,3 +14,8 @@ archive
 
 # 캡처 산출물(기준선 사이드카 JSON은 도구가 쓴다 — ADR-008)
 shots/
+
+# 브라우저 trace·검증 해시가 있는 생성 증거는 소스 포맷 대상이 아니다.
+test-results/
+playwright-report/
+docs/design/evidence/

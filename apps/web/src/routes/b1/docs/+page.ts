@@ -4,7 +4,8 @@ import { session } from '$lib/session.svelte';
 import type { PageLoad } from './$types';
 
 export const load: PageLoad = async ({ parent, url }) => {
-  const { api } = await parent();
+  const { api, ownerView } = await parent();
+  if (ownerView) return { docs: [], completeness: [], requests: [], sites: [], doc: null };
   const scope = scopeOf(session.user); // 세션 역할 + 소유주면 ownerId(ADR-012)
   const [docs, completeness, requests, sites] = await Promise.all([
     api.docs(scope),

@@ -5,6 +5,7 @@ import { clock } from './clock';
 import { demoUsers, seed } from './seed';
 import { applyState } from './states';
 import { SCENE_FIXTURES } from './demo';
+import { resetOwner } from './owner';
 
 export { clock, H, MIN, DAY } from './clock';
 export { seed, demoUsers, type Db } from './seed';
@@ -12,6 +13,7 @@ export { createMockRealtime } from './realtime';
 export { createMockMedia } from './media';
 export { createMockApi } from './api';
 export { FIXTURES, applyState } from './states';
+export { bootOwner, createOwnerApi, seedOwner, resetOwner } from './owner';
 import { sceneOf } from './demo';
 export { SCENES, sceneOf, SCENE_FIXTURES, createSceneRealtime, type DemoScene } from './demo';
 
@@ -31,6 +33,7 @@ let cache: { key: string; api: ReturnType<typeof createMockApi> } | null = null;
 let active: number | null = null;
 export const activeScene = () => active;
 export function resetMock() {
+  resetOwner();
   cache = null;
   active = null;
   clock.reset();

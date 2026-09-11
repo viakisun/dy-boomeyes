@@ -2123,7 +2123,9 @@
         "screens": [
           "A1-05",
           "A2-04",
-          "B1-02"
+          "B1-02",
+          "B1-10",
+          "A4-08"
         ],
         "if": [
           "IF-004",
@@ -2152,7 +2154,8 @@
         },
         "screens": [
           "B1-02",
-          "B2-02"
+          "B2-02",
+          "A4-07"
         ],
         "if": [
           "IF-003",
@@ -2183,7 +2186,9 @@
           "A3-04",
           "B1-02M",
           "B2-03",
-          "B3-02"
+          "B3-02",
+          "B1-11",
+          "A4-09"
         ],
         "if": [
           "IF-005",
@@ -2217,7 +2222,9 @@
         },
         "screens": [
           "B1-02M",
-          "A1-05"
+          "A1-05",
+          "B1-11",
+          "A4-09"
         ],
         "if": [
           "IF-007",
@@ -2247,7 +2254,9 @@
         "screens": [
           "A1-03",
           "B1-02",
-          "B4-05"
+          "B4-05",
+          "B1-12",
+          "A4-11"
         ],
         "if": [
           "IF-004",
@@ -2275,7 +2284,11 @@
         "screens": [
           "A2-04",
           "A1-05",
-          "B4-05"
+          "B4-05",
+          "B1-12",
+          "A4-11",
+          "B1-10",
+          "A4-08"
         ],
         "if": [
           "IF-004"
@@ -2511,7 +2524,10 @@
           "B1-05",
           "B3-04",
           "B4-06",
-          "A1-05"
+          "A1-05",
+          "A4-10",
+          "B1-10",
+          "A4-08"
         ],
         "if": [
           "IF-009",
@@ -2585,7 +2601,9 @@
           "disc": []
         },
         "screens": [
-          "B1-06"
+          "B1-06",
+          "B1-10",
+          "A4-08"
         ],
         "if": [
           "IF-009"
@@ -2736,7 +2754,16 @@
           "B3-04",
           "B3-05",
           "B3-06",
-          "B3-07"
+          "B3-07",
+          "A4-07",
+          "B1-09",
+          "B1-10",
+          "A4-08",
+          "B1-11",
+          "A4-09",
+          "A4-10",
+          "B1-12",
+          "A4-11"
         ],
         "if": [
           "IF-009"
@@ -2765,7 +2792,11 @@
         },
         "screens": [
           "A4-02",
-          "A4-05"
+          "A4-05",
+          "B1-09",
+          "B1-10",
+          "A4-07",
+          "A4-08"
         ],
         "if": [
           "IF-009"
@@ -3166,7 +3197,10 @@
           "B1-02",
           "A1-05",
           "A2-04",
-          "B4-07"
+          "B4-07",
+          "A4-07",
+          "B1-10",
+          "A4-08"
         ],
         "if": [
           "IF-021"
@@ -3194,7 +3228,9 @@
           "B1-02",
           "A1-05",
           "A2-04",
-          "B4-05"
+          "B4-05",
+          "B1-10",
+          "A4-08"
         ],
         "if": [
           "IF-020",
@@ -3274,7 +3310,11 @@
         "screens": [
           "B4-03",
           "B1-02",
-          "B1-06"
+          "B1-06",
+          "B1-09",
+          "A4-02",
+          "B1-10",
+          "A4-08"
         ],
         "if": [
           "IF-009"
@@ -3579,7 +3619,17 @@
             "4.3.5"
           ]
         },
-        "screens": [],
+        "screens": [
+          "A4-07",
+          "A4-08",
+          "A4-09",
+          "A4-10",
+          "A4-11",
+          "B1-09",
+          "B1-10",
+          "B1-11",
+          "B1-12"
+        ],
         "note": "전 화면 · 쓰기 요청은 클라이언트 생성 Idempotency-Key(ULID)·발생 시각 at을 실어 재전송에 안전(FR-037 · NFR-016)"
       },
       {
@@ -6072,13 +6122,33 @@
         "default": "login",
         "states": [
           {
+            "id": "owner",
+            "name": "소유주 데모"
+          },
+          {
+            "id": "empty",
+            "name": "보유 장비 없음"
+          },
+          {
+            "id": "error",
+            "name": "조회 실패 후 재시도"
+          },
+          {
+            "id": "boundaries",
+            "name": "미확인 정보"
+          },
+          {
+            "id": "large",
+            "name": "120대 탐색"
+          },
+          {
             "id": "login",
             "name": "login"
           }
         ],
         "nav": [
           {
-            "to": "A4-02",
+            "to": "A4-07",
             "label": "로그인"
           }
         ],
@@ -6099,7 +6169,7 @@
       },
       {
         "id": "A4-02",
-        "name": "보유·가용 현황",
+        "name": "보유 장비",
         "surface": "A4",
         "route": "/a4/fleet",
         "roles": [
@@ -6109,6 +6179,26 @@
         "wave": 4,
         "default": "fleet",
         "states": [
+          {
+            "id": "owner",
+            "name": "소유주 데모"
+          },
+          {
+            "id": "empty",
+            "name": "보유 장비 없음"
+          },
+          {
+            "id": "error",
+            "name": "조회 실패 후 재시도"
+          },
+          {
+            "id": "boundaries",
+            "name": "미확인 정보"
+          },
+          {
+            "id": "large",
+            "name": "120대 탐색"
+          },
           {
             "id": "fleet",
             "name": "fleet"
@@ -6292,6 +6382,7 @@
         "surface": "B0",
         "route": "/login",
         "roles": [
+          "owner",
           "control",
           "hq-safety",
           "site-safety",
@@ -6308,6 +6399,10 @@
         ],
         "default": "login-b1",
         "states": [
+          {
+            "id": "owner",
+            "name": "소유주 전용 데모 진입"
+          },
           {
             "id": "login-b1",
             "name": "B1 로그인"
@@ -6382,6 +6477,26 @@
         "wave": 0,
         "default": "dash",
         "states": [
+          {
+            "id": "owner",
+            "name": "소유주 데모"
+          },
+          {
+            "id": "empty",
+            "name": "보유 장비 없음"
+          },
+          {
+            "id": "error",
+            "name": "조회 실패 후 재시도"
+          },
+          {
+            "id": "boundaries",
+            "name": "미확인 정보"
+          },
+          {
+            "id": "large",
+            "name": "120대 탐색"
+          },
           {
             "id": "dash",
             "name": "dash"
@@ -6578,6 +6693,26 @@
         "wave": 2,
         "default": "docs",
         "states": [
+          {
+            "id": "owner",
+            "name": "소유주 데모"
+          },
+          {
+            "id": "empty",
+            "name": "보유 장비 없음"
+          },
+          {
+            "id": "error",
+            "name": "조회 실패 후 재시도"
+          },
+          {
+            "id": "boundaries",
+            "name": "미확인 정보"
+          },
+          {
+            "id": "large",
+            "name": "120대 탐색"
+          },
           {
             "id": "docs",
             "name": "docs"
@@ -7354,6 +7489,600 @@
           ]
         },
         "note": "점검(실측두께·외관·체결·OEM 합불)·교체·폐기 이력 — 누적 타설량·운전시간은 보조지표 · 단계 귀속은 DISC-044(1단계 = 구조·자리, 실동작 2단계)"
+      },
+      {
+        "id": "A4-07",
+        "name": "운영 현황",
+        "surface": "A4",
+        "route": "/a4/overview",
+        "roles": [
+          "owner"
+        ],
+        "phase": 2,
+        "wave": 4,
+        "default": "owner",
+        "states": [
+          {
+            "id": "owner",
+            "name": "소유주 기본 데이터"
+          },
+          {
+            "id": "empty",
+            "name": "보유 장비 없음"
+          },
+          {
+            "id": "error",
+            "name": "조회 실패 후 재시도"
+          },
+          {
+            "id": "boundaries",
+            "name": "미확인 배치·미연동·계약 미등록"
+          },
+          {
+            "id": "large",
+            "name": "120대 탐색"
+          }
+        ],
+        "nav": [
+          {
+            "to": "A4-02",
+            "label": "보유 장비"
+          }
+        ],
+        "trace": {
+          "task": [
+            "4.3.3"
+          ],
+          "out": "OUT-002",
+          "rfp": [
+            "RFP-009"
+          ],
+          "disc": [
+            "DISC-052"
+          ],
+          "if": [
+            "IF-009"
+          ]
+        },
+        "note": "V5 관제기능 H70 · H76 — 소유주 데모 조회·샘플. 실제 운영 규칙 및 계약 단계 확정 아님"
+      },
+      {
+        "id": "B1-09",
+        "name": "보유 장비",
+        "surface": "B1",
+        "route": "/b1/fleet",
+        "roles": [
+          "owner"
+        ],
+        "phase": 2,
+        "wave": 4,
+        "default": "owner",
+        "states": [
+          {
+            "id": "owner",
+            "name": "소유주 기본 데이터"
+          },
+          {
+            "id": "empty",
+            "name": "보유 장비 없음"
+          },
+          {
+            "id": "error",
+            "name": "조회 실패 후 재시도"
+          },
+          {
+            "id": "boundaries",
+            "name": "미확인 배치·미연동·계약 미등록"
+          },
+          {
+            "id": "large",
+            "name": "120대 탐색"
+          }
+        ],
+        "nav": [
+          {
+            "to": "B1-09",
+            "label": "보유 장비"
+          }
+        ],
+        "trace": {
+          "task": [
+            "4.3.3"
+          ],
+          "out": "OUT-002",
+          "rfp": [
+            "RFP-009"
+          ],
+          "disc": [
+            "DISC-052"
+          ],
+          "if": [
+            "IF-009"
+          ]
+        },
+        "note": "V5 관제기능 I9:N25 · H71 · H77 — 소유주 데모 조회·샘플. 실제 운영 규칙 및 계약 단계 확정 아님"
+      },
+      {
+        "id": "B1-10",
+        "name": "호기 상세",
+        "surface": "B1",
+        "route": "/b1/fleet/[device]",
+        "roles": [
+          "owner"
+        ],
+        "phase": 2,
+        "wave": 4,
+        "default": "owner",
+        "states": [
+          {
+            "id": "owner",
+            "name": "소유주 기본 데이터"
+          },
+          {
+            "id": "empty",
+            "name": "보유 장비 없음"
+          },
+          {
+            "id": "error",
+            "name": "조회 실패 후 재시도"
+          },
+          {
+            "id": "boundaries",
+            "name": "미확인 배치·미연동·계약 미등록"
+          },
+          {
+            "id": "large",
+            "name": "120대 탐색"
+          }
+        ],
+        "nav": [
+          {
+            "to": "B1-09",
+            "label": "보유 장비"
+          }
+        ],
+        "trace": {
+          "task": [
+            "4.3.3"
+          ],
+          "out": "OUT-002",
+          "rfp": [
+            "RFP-009"
+          ],
+          "disc": [
+            "DISC-052"
+          ],
+          "if": [
+            "IF-009"
+          ]
+        },
+        "note": "V5 관제기능 H60:H68 · H71 · H77 — 소유주 데모 조회·샘플. 실제 운영 규칙 및 계약 단계 확정 아님"
+      },
+      {
+        "id": "A4-08",
+        "name": "호기 상세",
+        "surface": "A4",
+        "route": "/a4/fleet/[device]",
+        "roles": [
+          "owner"
+        ],
+        "phase": 2,
+        "wave": 4,
+        "default": "owner",
+        "states": [
+          {
+            "id": "owner",
+            "name": "소유주 기본 데이터"
+          },
+          {
+            "id": "empty",
+            "name": "보유 장비 없음"
+          },
+          {
+            "id": "error",
+            "name": "조회 실패 후 재시도"
+          },
+          {
+            "id": "boundaries",
+            "name": "미확인 배치·미연동·계약 미등록"
+          },
+          {
+            "id": "large",
+            "name": "120대 탐색"
+          }
+        ],
+        "nav": [
+          {
+            "to": "A4-02",
+            "label": "보유 장비"
+          }
+        ],
+        "trace": {
+          "task": [
+            "4.3.3"
+          ],
+          "out": "OUT-002",
+          "rfp": [
+            "RFP-009"
+          ],
+          "disc": [
+            "DISC-052"
+          ],
+          "if": [
+            "IF-009"
+          ]
+        },
+        "note": "V5 관제기능 H60:H68 · H71 · H77 — 소유주 데모 조회·샘플. 실제 운영 규칙 및 계약 단계 확정 아님"
+      },
+      {
+        "id": "B1-11",
+        "name": "영상",
+        "surface": "B1",
+        "route": "/b1/fleet/[device]/video",
+        "roles": [
+          "owner"
+        ],
+        "phase": 2,
+        "wave": 4,
+        "default": "owner",
+        "states": [
+          {
+            "id": "owner",
+            "name": "소유주 기본 데이터"
+          },
+          {
+            "id": "empty",
+            "name": "보유 장비 없음"
+          },
+          {
+            "id": "error",
+            "name": "조회 실패 후 재시도"
+          },
+          {
+            "id": "boundaries",
+            "name": "미확인 배치·미연동·계약 미등록"
+          },
+          {
+            "id": "large",
+            "name": "120대 탐색"
+          }
+        ],
+        "nav": [
+          {
+            "to": "B1-09",
+            "label": "보유 장비"
+          }
+        ],
+        "trace": {
+          "task": [
+            "4.3.3"
+          ],
+          "out": "OUT-002",
+          "rfp": [
+            "RFP-009"
+          ],
+          "disc": [
+            "DISC-052"
+          ],
+          "if": [
+            "IF-009"
+          ]
+        },
+        "note": "V5 관제기능 H47:H55 · H72:H73 · H78:H79 — 소유주 데모 조회·샘플. 실제 운영 규칙 및 계약 단계 확정 아님"
+      },
+      {
+        "id": "A4-09",
+        "name": "영상",
+        "surface": "A4",
+        "route": "/a4/fleet/[device]/video",
+        "roles": [
+          "owner"
+        ],
+        "phase": 2,
+        "wave": 4,
+        "default": "owner",
+        "states": [
+          {
+            "id": "owner",
+            "name": "소유주 기본 데이터"
+          },
+          {
+            "id": "empty",
+            "name": "보유 장비 없음"
+          },
+          {
+            "id": "error",
+            "name": "조회 실패 후 재시도"
+          },
+          {
+            "id": "boundaries",
+            "name": "미확인 배치·미연동·계약 미등록"
+          },
+          {
+            "id": "large",
+            "name": "120대 탐색"
+          }
+        ],
+        "nav": [
+          {
+            "to": "A4-02",
+            "label": "보유 장비"
+          }
+        ],
+        "trace": {
+          "task": [
+            "4.3.3"
+          ],
+          "out": "OUT-002",
+          "rfp": [
+            "RFP-009"
+          ],
+          "disc": [
+            "DISC-052"
+          ],
+          "if": [
+            "IF-009"
+          ]
+        },
+        "note": "V5 관제기능 H47:H55 · H72:H73 · H78:H79 — 소유주 데모 조회·샘플. 실제 운영 규칙 및 계약 단계 확정 아님"
+      },
+      {
+        "id": "A4-10",
+        "name": "장비 서류",
+        "surface": "A4",
+        "route": "/a4/docs",
+        "roles": [
+          "owner"
+        ],
+        "phase": 2,
+        "wave": 4,
+        "default": "owner",
+        "states": [
+          {
+            "id": "owner",
+            "name": "소유주 기본 데이터"
+          },
+          {
+            "id": "empty",
+            "name": "보유 장비 없음"
+          },
+          {
+            "id": "error",
+            "name": "조회 실패 후 재시도"
+          },
+          {
+            "id": "boundaries",
+            "name": "미확인 배치·미연동·계약 미등록"
+          },
+          {
+            "id": "large",
+            "name": "120대 탐색"
+          }
+        ],
+        "nav": [
+          {
+            "to": "A4-02",
+            "label": "보유 장비"
+          }
+        ],
+        "trace": {
+          "task": [
+            "4.3.3"
+          ],
+          "out": "OUT-002",
+          "rfp": [
+            "RFP-009"
+          ],
+          "disc": [
+            "DISC-052"
+          ],
+          "if": [
+            "IF-009"
+          ]
+        },
+        "note": "V5 관제기능 H36 · H74 · H80 — 소유주 데모 조회·샘플. 실제 운영 규칙 및 계약 단계 확정 아님"
+      },
+      {
+        "id": "B1-12",
+        "name": "이상·점검",
+        "surface": "B1",
+        "route": "/b1/alerts",
+        "roles": [
+          "owner"
+        ],
+        "phase": 2,
+        "wave": 4,
+        "default": "owner",
+        "states": [
+          {
+            "id": "owner",
+            "name": "소유주 기본 데이터"
+          },
+          {
+            "id": "empty",
+            "name": "보유 장비 없음"
+          },
+          {
+            "id": "error",
+            "name": "조회 실패 후 재시도"
+          },
+          {
+            "id": "boundaries",
+            "name": "미확인 배치·미연동·계약 미등록"
+          },
+          {
+            "id": "large",
+            "name": "120대 탐색"
+          }
+        ],
+        "nav": [
+          {
+            "to": "B1-09",
+            "label": "보유 장비"
+          }
+        ],
+        "trace": {
+          "task": [
+            "4.3.3"
+          ],
+          "out": "OUT-002",
+          "rfp": [
+            "RFP-009"
+          ],
+          "disc": [
+            "DISC-052"
+          ],
+          "if": [
+            "IF-009"
+          ]
+        },
+        "note": "V5 관제기능 H37:H38 · H60:H68 — 소유주 데모 조회·샘플. 실제 운영 규칙 및 계약 단계 확정 아님"
+      },
+      {
+        "id": "A4-11",
+        "name": "이상·점검",
+        "surface": "A4",
+        "route": "/a4/alerts",
+        "roles": [
+          "owner"
+        ],
+        "phase": 2,
+        "wave": 4,
+        "default": "owner",
+        "states": [
+          {
+            "id": "owner",
+            "name": "소유주 기본 데이터"
+          },
+          {
+            "id": "empty",
+            "name": "보유 장비 없음"
+          },
+          {
+            "id": "error",
+            "name": "조회 실패 후 재시도"
+          },
+          {
+            "id": "boundaries",
+            "name": "미확인 배치·미연동·계약 미등록"
+          },
+          {
+            "id": "large",
+            "name": "120대 탐색"
+          }
+        ],
+        "nav": [
+          {
+            "to": "A4-02",
+            "label": "보유 장비"
+          }
+        ],
+        "trace": {
+          "task": [
+            "4.3.3"
+          ],
+          "out": "OUT-002",
+          "rfp": [
+            "RFP-009"
+          ],
+          "disc": [
+            "DISC-052"
+          ],
+          "if": [
+            "IF-009"
+          ]
+        },
+        "note": "V5 관제기능 H37:H38 · H60:H68 — 소유주 데모 조회·샘플. 실제 운영 규칙 및 계약 단계 확정 아님"
+      }
+    ],
+    "owner_demo": [
+      {
+        "view": "entry",
+        "menu": 0,
+        "label": "소유주 데모",
+        "web": "B0-01",
+        "pwa": "A4-01",
+        "question": "내 장비를 어떻게 관리하나요?",
+        "source_cells": [
+          "M39",
+          "H39:H40"
+        ]
+      },
+      {
+        "view": "overview",
+        "menu": 1,
+        "label": "운영 현황",
+        "web": "B1-02",
+        "pwa": "A4-07",
+        "question": "어느 현장과 장비부터 확인할까요?",
+        "source_cells": [
+          "H70",
+          "H76"
+        ]
+      },
+      {
+        "view": "fleet",
+        "menu": 2,
+        "label": "보유 장비",
+        "web": "B1-09",
+        "pwa": "A4-02",
+        "question": "찾는 호기가 어디에 있나요?",
+        "source_cells": [
+          "I9:N25",
+          "H71",
+          "H77"
+        ]
+      },
+      {
+        "view": "detail",
+        "menu": 0,
+        "label": "호기 상세",
+        "web": "B1-10",
+        "pwa": "A4-08",
+        "question": "계약과 현장 담당자는 누구인가요?",
+        "source_cells": [
+          "H60:H68",
+          "H71",
+          "H77"
+        ]
+      },
+      {
+        "view": "video",
+        "menu": 0,
+        "label": "영상",
+        "web": "B1-11",
+        "pwa": "A4-09",
+        "question": "타설·설치 상황과 저장 영상을 볼 수 있나요?",
+        "source_cells": [
+          "H47:H55",
+          "H72:H73",
+          "H78:H79"
+        ]
+      },
+      {
+        "view": "documents",
+        "menu": 4,
+        "label": "장비 서류",
+        "web": "B1-05",
+        "pwa": "A4-10",
+        "question": "필요한 제작증과 검사 성적서를 열 수 있나요?",
+        "source_cells": [
+          "H36",
+          "H74",
+          "H80"
+        ]
+      },
+      {
+        "view": "alerts",
+        "menu": 3,
+        "label": "이상·점검",
+        "web": "B1-12",
+        "pwa": "A4-11",
+        "question": "어떤 장비에 연락과 점검이 필요한가요?",
+        "source_cells": [
+          "H37:H38",
+          "H60:H68"
+        ]
       }
     ]
   },
@@ -8108,11 +8837,20 @@
         "id": "DISC-052",
         "title": "소유주 확장 화면 (가동·정비 일정·부품 준비·비용·서류)",
         "scope": [
+          "A4-07",
+          "A4-08",
+          "A4-09",
+          "A4-10",
+          "A4-11",
+          "B1-09",
+          "B1-10",
+          "B1-11",
+          "B1-12",
           "A4-02",
           "A4-05",
           "A4-06"
         ],
-        "scope_note": null,
+        "scope_note": "이번 7종×WEB/PWA 화면은 2026-09-11 승인된 내부 소유주 데모 범위이며 기존 2단계 계약 baseline의 확정·비용·재고 연계 승인을 뜻하지 않는다.",
         "baseline": "현행 — A4 화면 5(현황·요청·운전자·계약·서류 · FR-025~027 · 2단계 · DISC-026). 참고자료 v5.0 §22의 가동·중단 시간 요약(일·주·월) · 정비 일정(예정·지연·수리 중) · 마모·교체 부품 준비·구매 요청 · 운영 비용·재고 · 장비 서류(검사·보험·매뉴얼 만료)는 범위 밖",
         "ask": "확장 화면 도입 범위 · 단계 귀속 · 비용·재고 연계 여부",
         "track": "C",
@@ -11438,12 +12176,14 @@
           "DISC-026"
         ],
         "specs": [
+          "owner-experience",
           "shell-auth"
         ]
       },
       "A4-02": {
         "fr": [
-          "FR-025"
+          "FR-025",
+          "FR-043"
         ],
         "if_all": [],
         "disc_all": [
@@ -11451,7 +12191,9 @@
           "DISC-052",
           "DISC-060"
         ],
-        "specs": []
+        "specs": [
+          "owner-experience"
+        ]
       },
       "A4-03": {
         "fr": [
@@ -11499,6 +12241,92 @@
         ],
         "specs": []
       },
+      "A4-07": {
+        "fr": [
+          "FR-003",
+          "FR-024",
+          "FR-025",
+          "FR-039"
+        ],
+        "if_all": [
+          "IF-009"
+        ],
+        "disc_all": [
+          "DISC-052"
+        ],
+        "specs": [
+          "owner-experience"
+        ]
+      },
+      "A4-08": {
+        "fr": [
+          "FR-002",
+          "FR-007",
+          "FR-016",
+          "FR-019",
+          "FR-024",
+          "FR-025",
+          "FR-039",
+          "FR-040",
+          "FR-043"
+        ],
+        "if_all": [
+          "IF-009"
+        ],
+        "disc_all": [
+          "DISC-052"
+        ],
+        "specs": [
+          "owner-experience"
+        ]
+      },
+      "A4-09": {
+        "fr": [
+          "FR-004",
+          "FR-005",
+          "FR-024"
+        ],
+        "if_all": [
+          "IF-009"
+        ],
+        "disc_all": [
+          "DISC-052"
+        ],
+        "specs": [
+          "owner-experience"
+        ]
+      },
+      "A4-10": {
+        "fr": [
+          "FR-016",
+          "FR-024"
+        ],
+        "if_all": [
+          "IF-009"
+        ],
+        "disc_all": [
+          "DISC-052"
+        ],
+        "specs": [
+          "owner-experience"
+        ]
+      },
+      "A4-11": {
+        "fr": [
+          "FR-006",
+          "FR-007",
+          "FR-024"
+        ],
+        "if_all": [
+          "IF-009"
+        ],
+        "disc_all": [
+          "DISC-052"
+        ],
+        "specs": [
+          "owner-experience"
+        ]
+      },
       "B0-01": {
         "fr": [
           "FR-001",
@@ -11514,6 +12342,7 @@
           "DISC-031"
         ],
         "specs": [
+          "owner-experience",
           "shell-auth"
         ]
       },
@@ -11551,6 +12380,7 @@
         "specs": [
           "control-dashboard",
           "demo-scripts",
+          "owner-experience",
           "pour-metrics"
         ]
       },
@@ -11645,7 +12475,8 @@
           "DISC-053"
         ],
         "specs": [
-          "documents"
+          "documents",
+          "owner-experience"
         ]
       },
       "B1-06": {
@@ -11704,6 +12535,76 @@
         ],
         "specs": [
           "event-replay"
+        ]
+      },
+      "B1-09": {
+        "fr": [
+          "FR-024",
+          "FR-025",
+          "FR-043"
+        ],
+        "if_all": [
+          "IF-009"
+        ],
+        "disc_all": [
+          "DISC-052"
+        ],
+        "specs": [
+          "owner-experience"
+        ]
+      },
+      "B1-10": {
+        "fr": [
+          "FR-002",
+          "FR-007",
+          "FR-016",
+          "FR-019",
+          "FR-024",
+          "FR-025",
+          "FR-039",
+          "FR-040",
+          "FR-043"
+        ],
+        "if_all": [
+          "IF-009"
+        ],
+        "disc_all": [
+          "DISC-052"
+        ],
+        "specs": [
+          "owner-experience"
+        ]
+      },
+      "B1-11": {
+        "fr": [
+          "FR-004",
+          "FR-005",
+          "FR-024"
+        ],
+        "if_all": [
+          "IF-009"
+        ],
+        "disc_all": [
+          "DISC-052"
+        ],
+        "specs": [
+          "owner-experience"
+        ]
+      },
+      "B1-12": {
+        "fr": [
+          "FR-006",
+          "FR-007",
+          "FR-024"
+        ],
+        "if_all": [
+          "IF-009"
+        ],
+        "disc_all": [
+          "DISC-052"
+        ],
+        "specs": [
+          "owner-experience"
         ]
       },
       "B2-02": {
@@ -11992,6 +12893,6 @@
         ]
       }
     },
-    "summary": "screens 53 · fr 43 · disc open 53 (A24/B12/C17) · refs 1684"
+    "summary": "screens 62 · fr 43 · disc open 53 (A24/B12/C17) · refs 1787"
   }
 }

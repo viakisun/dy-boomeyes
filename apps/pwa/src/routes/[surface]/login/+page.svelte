@@ -22,7 +22,7 @@
   async function enter() {
     const u = demo;
     if (!meta || !u) return;
-    login({ userId: u.id, role: u.role, display: u.display, org: u.org });
+    login({ userId: u.id, role: u.role, display: u.display, org: u.org, ownerId: u.ownerId });
     const h = APP_HOME_OF[meta.role];
     if (h) await goto(resolve(SCREENS[h].route as '/'));
   }

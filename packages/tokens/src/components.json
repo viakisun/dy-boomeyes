@@ -745,5 +745,113 @@
     "variants": "state live/snapshot/recording/offline/ai-unavailable · size sm/md",
     "states": "—",
     "note": "camera 상태기계 값 그대로 표시(labels.ts). 장애 채널을 정상으로 표시하지 않는다(FR-034)"
+  },
+  {
+    "name": "OwnerShell",
+    "family": "Owner experience",
+    "platform": "both",
+    "ref": "V5 관제기능 · owner-experience",
+    "variants": "app web/pwa",
+    "states": "loading/empty/error/offline/default",
+    "note": "소유주 4메뉴 · 반응형 WEB/PWA 셸"
+  },
+  {
+    "name": "OwnerEntry",
+    "family": "Owner experience",
+    "platform": "both",
+    "ref": "V5 관제기능 · owner-experience",
+    "variants": "app web/pwa",
+    "states": "loading/empty/error/offline/default",
+    "note": "소유주 단일 진입과 정상 운영 미리보기"
+  },
+  {
+    "name": "OwnerWorkspace",
+    "family": "Owner experience",
+    "platform": "both",
+    "ref": "V5 관제기능 · owner-experience",
+    "variants": "app web/pwa",
+    "states": "loading/empty/error/offline/default",
+    "note": "역할·조회 상태와 목적별 화면 합성"
+  },
+  {
+    "name": "OwnerOverview",
+    "family": "Owner experience",
+    "platform": "both",
+    "ref": "V5 관제기능 · owner-experience",
+    "variants": "app web/pwa",
+    "states": "loading/empty/error/offline/default",
+    "note": "배치 분포와 확인할 장비"
+  },
+  {
+    "name": "OwnerFleet",
+    "family": "Owner experience",
+    "platform": "both",
+    "ref": "V5 관제기능 · owner-experience",
+    "variants": "app web/pwa",
+    "states": "loading/empty/error/offline/default",
+    "note": "보유 전체 장비 검색·필터·상세 이동"
+  },
+  {
+    "name": "OwnerDetail",
+    "family": "Owner experience",
+    "platform": "both",
+    "ref": "V5 관제기능 · owner-experience",
+    "variants": "app web/pwa",
+    "states": "loading/empty/error/offline/default",
+    "note": "호기 식별·계약·담당자·수신 정보"
+  },
+  {
+    "name": "EquipmentRow",
+    "family": "Owner experience",
+    "platform": "both",
+    "ref": "V5 관제기능 · owner-experience",
+    "variants": "app web/pwa",
+    "states": "loading/empty/error/offline/default",
+    "note": "식별자·현장 2줄 · 상태와 다음 행동"
+  },
+  {
+    "name": "FleetSummary",
+    "family": "Owner experience",
+    "platform": "both",
+    "ref": "V5 관제기능 · owner-experience",
+    "variants": "app web/pwa",
+    "states": "loading/empty/error/offline/default",
+    "note": "전체 대수와 배치 분포 · 이상 집계 분리"
+  },
+  {
+    "name": "OwnerAlerts",
+    "family": "Owner experience",
+    "platform": "both",
+    "ref": "V5 관제기능 · owner-experience",
+    "variants": "app web/pwa",
+    "states": "loading/empty/error/offline/default",
+    "note": "장비별 이상·점검 선택·읽음·담당자"
+  },
+  {
+    "name": "OwnerDocuments",
+    "family": "Owner experience",
+    "platform": "both",
+    "ref": "V5 관제기능 · owner-experience",
+    "variants": "app web/pwa",
+    "states": "loading/empty/error/offline/default",
+    "note": "장비 서류 원문·시연용 첨부"
+  },
+  {
+    "name": "DocumentViewer",
+    "family": "Owner experience",
+    "platform": "both",
+    "ref": "V5 관제기능 · owner-experience",
+    "variants": "app web/pwa",
+    "states": "loading/empty/error/offline/default",
+    "note": "원문 이미지/PDF · 닫기·오류·복귀"
+  },
+  {
+    "name": "OwnerVideo",
+    "family": "Owner experience",
+    "platform": "both",
+    "ref": "V5 관제기능 · owner-experience",
+    "variants": "app web/pwa",
+    "states": "loading/empty/error/offline/default",
+    "note": "목적과 시간에 따른 시연 영상·실재생"
   }
 ]

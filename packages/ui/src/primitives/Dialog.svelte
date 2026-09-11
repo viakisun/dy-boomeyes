@@ -46,7 +46,7 @@
     if (e.target === el) close();
   }}
   class={cx(
-    'rounded-dialog border-border bg-surface text-fg shadow-modal backdrop:bg-overlay m-auto max-w-[calc(100vw-2*var(--spacing-inset-lg))] border p-0',
+    'rounded-dialog border-border bg-surface text-fg shadow-modal backdrop:bg-overlay m-auto max-w-[calc(100%-2*var(--spacing-inset-lg))] border p-0',
     W[size],
     cls,
   )}
@@ -56,6 +56,6 @@
   <div class="gap-stack-md p-inset-xl flex flex-col">
     {#if title}<h2 id="dlg-title" class={cx('text-heading-md', destructive && 'text-danger-fg')}>{title}</h2>{/if}
     {@render children?.()}
-    {#if footer}<div class="gap-inline-sm pt-stack-xs flex justify-end">{@render footer()}</div>{/if}
+    {#if footer}<div class="gap-inline-sm pt-stack-xs flex flex-wrap justify-end">{@render footer()}</div>{/if}
   </div>
 </dialog>

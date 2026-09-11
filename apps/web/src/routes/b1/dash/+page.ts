@@ -2,7 +2,18 @@ import { scopeOf, todayM3 } from '@boomeyes/domain';
 import { session } from '$lib/session.svelte';
 import type { PageLoad } from './$types';
 export const load: PageLoad = async ({ parent, url }) => {
-  const { api, clock } = await parent();
+  const { api, clock, ownerView } = await parent();
+  if (ownerView)
+    return {
+      devices: [],
+      sites: [],
+      cameras: [],
+      alerts: [],
+      cases: [],
+      kpis: { normal: 0, caution: 0, fault: 0, offline: 0, maintenance: 0, total: 0, openCases: 0, escalated: 0 },
+      fleet: { count: 0, utilization: 0, todayM3: 0, pouring: 0 },
+      cam: null,
+    };
   const scope = scopeOf(session.user); // 세션 역할 + 소유주면 ownerId(ADR-012) — owner는 보유 호기만
   const [devices, sites, cameras, alerts, cases, kpis] = await Promise.all([
     api.devices(scope),

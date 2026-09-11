@@ -18,7 +18,7 @@ PageHeader  제목 heading-xl · 부제 1줄(body-sm muted, ≤ 60자) · 메타
 
 | 규칙 | 값 |
 |---|---|
-| 행 높이 | `row.default`(compact 36) 기본 · 조밀 표만 `row.dense`(32) · 두 줄 셀은 만들지 않는다 |
+| 행 높이 | `row.default`(compact 36) 기본 · 조밀 표만 `row.dense`(32) · 식별자+현장처럼 의미가 다른 정보는 2줄 허용. 좁은 폭에서 주요 정보 숨김 금지 |
 | 식별자 셀 | `code-md` · `whitespace-nowrap` · 최소 폭 = 가장 긴 ID |
 | 텍스트 셀 | 1줄 · 넘치면 `truncate` + `title` |
 | 수치 셀 | 우측 정렬 · `tabular-nums` · 단위는 헤더에 |
@@ -67,3 +67,7 @@ PageHeader  제목 heading-xl · 부제 1줄(body-sm muted, ≤ 60자) · 메타
 ### 11.6 4상태
 
 빈(EmptyState — 행동 버튼) · 오류(재시도) · 오프라인(셸 배너 + 큐, §10) · 로딩(300ms 후 Skeleton). 화면당 spec에 넷을 적는다.
+
+### 소유주 데모 패턴
+
+owner-experience의 현황/탐색/상세/뷰어는 목적별 구성을 적용한다. FleetSummary는 전체와 배치 분포를 묶고, 이상·점검 수는 별도 행동 목록으로 표현한다. 보관 대수를 가용 대수로 표시하지 않는다. EquipmentRow는 식별자·현장 2줄을 허용하고 긴 이름은 줄바꿈한다. 원문과 계약·담당자 패널은 좁은 폭에서 본문으로 이동한다. 모든 색·타입·간격은 기존 토큰을 사용하며 대비·터치·포커스 기준은 동일하다.

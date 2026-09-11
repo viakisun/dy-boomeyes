@@ -1,5 +1,9 @@
 <script lang="ts">
   import '../app.css';
+  import { page } from '$app/state';
+  import OwnerPage from '$lib/OwnerPage.svelte';
+  import { OwnerEntry, OwnerShell } from '@boomeyes/ui';
+  import { ownerPath } from '@boomeyes/domain';
   import { goto, invalidateAll } from '$app/navigation';
   import { env } from '$env/dynamic/public';
   import { resolve } from '$app/paths';
@@ -21,7 +25,7 @@
     theme,
     toggleTheme,
   } from '@boomeyes/ui';
-  import { logout, session } from '$lib/session.svelte';
+  import { login, logout, session } from '$lib/session.svelte';
   let { data, children } = $props();
   const role = $derived(session.user?.role as RoleId | undefined);
   const groups = $derived(role ? navFor(role, 'web', data.screen, (p) => resolve(p as '/')) : []);
@@ -44,13 +48,38 @@
     data.jumpHour();
     invalidateAll();
   };
+  async function ownerStart() {
+    const user = (await data.api.users()).find((u) => u.id === 'owner01');
+    if (!user?.ownerId) throw new Error('소유주 계정 준비 실패');
+    data.resetMock();
+    data.resetOwner();
+    login({ userId: user.id, role: user.role, display: user.display, org: user.org, ownerId: user.ownerId });
+    const next = new URL(ownerPath('overview', 'web'), page.url.origin);
+    for (const key of ['capture', 'state', 'theme']) {
+      const value = page.url.searchParams.get(key);
+      if (value) next.searchParams.set(key, value);
+    }
+    await goto(resolve((next.pathname + next.search) as '/'));
+  }
+  function ownerExit() {
+    logout();
+    data.resetMock();
+    data.resetOwner();
+    void goto(resolve(ownerPath('entry', 'web') as '/'));
+  }
 </script>
 
 <svelte:head>
   <title>{data.screen ? `${SCREENS[data.screen].name} · BoomEyes` : 'BoomEyes'}</title>
 </svelte:head>
 
-{#if data.screen === 'B0-01' || !session.user}
+{#if data.ownerView === 'entry'}
+  <OwnerEntry app="web" screen={data.screen ?? ''} onstart={ownerStart} />
+{:else if data.ownerView && data.ownerApi && !data.forbidden}
+  <OwnerShell app="web" view={data.ownerView} url={page.url} onlogout={ownerExit}>
+    <OwnerPage api={data.ownerApi} view={data.ownerView} capture={data.capture} />
+  </OwnerShell>
+{:else if data.screen === 'B0-01' || !session.user}
   {@render children()}
 {:else}
   <WebShell {groups} {crumbs}>

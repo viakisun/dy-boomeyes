@@ -54,6 +54,8 @@ async function actionable(page: Page, control: Locator) {
 
 export function ownerContentFlows(app: OwnerApp) {
   const paths = OWNER_PATHS[app];
+  // Route fault injection must reach the network; SW installation/offline-shell behavior has its own regression suite.
+  test.use({ serviceWorkers: 'block' });
 
   test('[FR-016] [AC-O10] [AC-O11] actual certificate PDF parses, previews and attaches unchanged to the selected equipment', async ({
     page,
@@ -189,6 +191,7 @@ export function ownerContentFlows(app: OwnerApp) {
     await startOwner(page, app);
     await page.goto(`${paths.documents}?device=CPB-001`);
     const input = page.getByLabel('시연 파일 선택', { exact: true });
+    await loadedOriginal(page.locator('[data-document-viewer] img'));
     const measurements = [];
     for (const variant of [
       { name: 'css-zoom-200', width: app === 'web' ? 1280 : 390, height: app === 'web' ? 842 : 800, zoom: 2 },
@@ -276,14 +279,41 @@ export function ownerContentFlows(app: OwnerApp) {
                 connected: player.isConnected,
                 paused: player.paused,
                 src: player.getAttribute('src'),
-                currentSrc: player.currentSrc,
+                readyState: player.readyState,
+                networkState: player.networkState,
+                buffered: player.buffered.length,
+                seekable: player.seekable.length,
+                currentTime: player.currentTime,
+                durationUnknown: Number.isNaN(player.duration),
+                videoWidth: player.videoWidth,
               };
             }),
           )
-          .toEqual({ connected: false, paused: true, src: null, currentSrc: '' });
+          .toEqual({
+            connected: false,
+            paused: true,
+            src: null,
+            readyState: 0,
+            networkState: 0,
+            buffered: 0,
+            seekable: 0,
+            currentTime: 0,
+            durationUnknown: true,
+            videoWidth: 0,
+          });
       }
       for (const handle of retired) {
-        expect(await handle.evaluate((element) => (element as HTMLVideoElement).paused)).toBe(true);
+        expect(
+          await handle.evaluate((element) => {
+            const player = element as HTMLVideoElement;
+            return {
+              paused: player.paused,
+              currentTime: player.currentTime,
+              buffered: player.buffered.length,
+              readyState: player.readyState,
+            };
+          }),
+        ).toEqual({ paused: true, currentTime: 0, buffered: 0, readyState: 0 });
       }
       expect(retired).toHaveLength(10);
     } finally {

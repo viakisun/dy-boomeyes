@@ -128,6 +128,27 @@ export function runChecks(d) {
   const errors = [],
     warnings = [];
   const ids = indexIds(d);
+  // 소유주 데모 원천: 7 목적 × 두 앱, 메뉴 4개. 참조 누락·중복은 생성 전에 차단한다.
+  const ownerViews = d.screens.owner_demo ?? [];
+  if (ownerViews.length !== 7 || new Set(ownerViews.map((v) => v.view)).size !== 7)
+    errors.push('owner_demo: 서로 다른 화면 목적 7개 필요');
+  if (
+    ownerViews
+      .filter((v) => v.menu > 0)
+      .map((v) => v.menu)
+      .sort()
+      .join(',') !== '1,2,3,4'
+  )
+    errors.push('owner_demo: 메뉴 순서 1~4 필요');
+  for (const app of ['web', 'pwa']) {
+    if (new Set(ownerViews.map((v) => v[app])).size !== 7) errors.push(`owner_demo: ${app} 화면 중복`);
+    for (const v of ownerViews) {
+      const screen = d.screens.screens.find((s) => s.id === v[app]);
+      const surface = screen && d.screens.surfaces.find((s) => s.id === screen.surface);
+      if (!screen || surface?.app !== app || !screen.roles.includes('owner'))
+        errors.push(`owner_demo: ${v.view}/${app} 참조·역할 오류`);
+    }
+  }
   // 1. 스키마
   for (const f of FILES) {
     const sp = join(SSOT, 'schema', `${f}.schema.json`);

@@ -29,6 +29,11 @@ export const SCR = {
   'A4-04': 'A4-04',
   'A4-05': 'A4-05',
   'A4-06': 'A4-06',
+  'A4-07': 'A4-07',
+  'A4-08': 'A4-08',
+  'A4-09': 'A4-09',
+  'A4-10': 'A4-10',
+  'A4-11': 'A4-11',
   'B0-01': 'B0-01',
   'B1-02': 'B1-02',
   'B1-02M': 'B1-02M',
@@ -38,6 +43,10 @@ export const SCR = {
   'B1-06': 'B1-06',
   'B1-07': 'B1-07',
   'B1-08': 'B1-08',
+  'B1-09': 'B1-09',
+  'B1-10': 'B1-10',
+  'B1-11': 'B1-11',
+  'B1-12': 'B1-12',
   'B2-02': 'B2-02',
   'B2-03': 'B2-03',
   'B2-04': 'B2-04',
@@ -274,21 +283,30 @@ export const SCREENS = {
   'A3-04': { name: "장비 열람", surface: 'A3', app: 'pwa', route: "/a3/sites/[site]/devices", roles: ["hq-safety"], phase: 1, wave: 2, default: 'dev', states: ["dev"] },
   'A3-05': { name: "업무(열람)", surface: 'A3', app: 'pwa', route: "/a3/tasks", roles: ["hq-safety"], phase: 1, wave: 2, default: 'inbox', states: ["inbox"] },
   'A3-06': { name: "기록", surface: 'A3', app: 'pwa', route: "/a3/records", roles: ["hq-safety"], phase: 1, wave: 2, default: 'rec', states: ["rec"] },
-  'A4-01': { name: "로그인", surface: 'A4', app: 'pwa', route: "/a4/login", roles: ["owner"], phase: 2, wave: 4, default: 'login', states: ["login"] },
-  'A4-02': { name: "보유·가용 현황", surface: 'A4', app: 'pwa', route: "/a4/fleet", roles: ["owner"], phase: 2, wave: 4, default: 'fleet', states: ["fleet"] },
+  'A4-01': { name: "로그인", surface: 'A4', app: 'pwa', route: "/a4/login", roles: ["owner"], phase: 2, wave: 4, default: 'login', states: ["owner","empty","error","boundaries","large","login"] },
+  'A4-02': { name: "보유 장비", surface: 'A4', app: 'pwa', route: "/a4/fleet", roles: ["owner"], phase: 2, wave: 4, default: 'fleet', states: ["owner","empty","error","boundaries","large","fleet"] },
   'A4-03': { name: "투입 요청·배정", surface: 'A4', app: 'pwa', route: "/a4/requests", roles: ["owner"], phase: 2, wave: 4, default: 'inbox', states: ["inbox"] },
   'A4-04': { name: "운전자 배치", surface: 'A4', app: 'pwa', route: "/a4/drivers", roles: ["owner"], phase: 2, wave: 4, default: 'drivers', states: ["drivers"] },
   'A4-05': { name: "임대 계약", surface: 'A4', app: 'pwa', route: "/a4/leases", roles: ["owner"], phase: 2, wave: 4, default: 'lease', states: ["lease"] },
   'A4-06': { name: "운전자 서류", surface: 'A4', app: 'pwa', route: "/a4/drivers/docs", roles: ["owner"], phase: 2, wave: 4, default: 'docs', states: ["docs"] },
-  'B0-01': { name: "웹 공통 로그인", surface: 'B0', app: 'web', route: "/login", roles: ["control","hq-safety","site-safety","ops-admin","maintenance"], phase: 1, wave: 0, default: 'login-b1', states: ["login-b1","login-b2","login-b3","login-b4","login-owner","login-maint"] },
-  'B1-02': { name: "관제 대시보드", surface: 'B1', app: 'web', route: "/b1/dash", roles: ["control","maintenance","owner"], phase: 1, wave: 0, default: 'dash', states: ["dash"] },
+  'A4-07': { name: "운영 현황", surface: 'A4', app: 'pwa', route: "/a4/overview", roles: ["owner"], phase: 2, wave: 4, default: 'owner', states: ["owner","empty","error","boundaries","large"] },
+  'A4-08': { name: "호기 상세", surface: 'A4', app: 'pwa', route: "/a4/fleet/[device]", roles: ["owner"], phase: 2, wave: 4, default: 'owner', states: ["owner","empty","error","boundaries","large"] },
+  'A4-09': { name: "영상", surface: 'A4', app: 'pwa', route: "/a4/fleet/[device]/video", roles: ["owner"], phase: 2, wave: 4, default: 'owner', states: ["owner","empty","error","boundaries","large"] },
+  'A4-10': { name: "장비 서류", surface: 'A4', app: 'pwa', route: "/a4/docs", roles: ["owner"], phase: 2, wave: 4, default: 'owner', states: ["owner","empty","error","boundaries","large"] },
+  'A4-11': { name: "이상·점검", surface: 'A4', app: 'pwa', route: "/a4/alerts", roles: ["owner"], phase: 2, wave: 4, default: 'owner', states: ["owner","empty","error","boundaries","large"] },
+  'B0-01': { name: "웹 공통 로그인", surface: 'B0', app: 'web', route: "/login", roles: ["owner","control","hq-safety","site-safety","ops-admin","maintenance"], phase: 1, wave: 0, default: 'login-b1', states: ["owner","login-b1","login-b2","login-b3","login-b4","login-owner","login-maint"] },
+  'B1-02': { name: "관제 대시보드", surface: 'B1', app: 'web', route: "/b1/dash", roles: ["control","maintenance","owner"], phase: 1, wave: 0, default: 'dash', states: ["owner","empty","error","boundaries","large","dash"] },
   'B1-02M': { name: "카메라 영상 모달", surface: 'B1', app: 'web', route: "/b1/dash?cam=[camera]", roles: ["control","maintenance","owner"], phase: 1, wave: 1, default: 'cam', states: ["cam"] },
   'B1-03': { name: "수신함", surface: 'B1', app: 'web', route: "/b1/inbox", roles: ["control","maintenance","owner"], phase: 1, wave: 1, default: 'inbox', states: ["inbox","report"] },
   'B1-04': { name: "에스컬레이션", surface: 'B1', app: 'web', route: "/b1/escalation", roles: ["control","maintenance","owner"], phase: 1, wave: 1, default: 'esc', states: ["esc"] },
-  'B1-05': { name: "서류 현황", surface: 'B1', app: 'web', route: "/b1/docs", roles: ["control","maintenance","owner"], phase: 1, wave: 2, default: 'docs', states: ["docs"] },
+  'B1-05': { name: "서류 현황", surface: 'B1', app: 'web', route: "/b1/docs", roles: ["control","maintenance","owner"], phase: 1, wave: 2, default: 'docs', states: ["owner","empty","error","boundaries","large","docs"] },
   'B1-06': { name: "임대 계약", surface: 'B1', app: 'web', route: "/b1/leases", roles: ["control","maintenance","owner"], phase: 1, wave: 2, default: 'lease', states: ["lease"] },
   'B1-07': { name: "쇼케이스", surface: 'B1', app: 'web', route: "/b1/showcase", roles: ["control","maintenance","owner"], phase: 2, wave: 2, default: 'show', states: ["show"] },
   'B1-08': { name: "이벤트 복기", surface: 'B1', app: 'web', route: "/b1/events/[event]", roles: ["control","maintenance","owner"], phase: 1, wave: 2, default: 'default', states: ["default","pending","pinned"] },
+  'B1-09': { name: "보유 장비", surface: 'B1', app: 'web', route: "/b1/fleet", roles: ["owner"], phase: 2, wave: 4, default: 'owner', states: ["owner","empty","error","boundaries","large"] },
+  'B1-10': { name: "호기 상세", surface: 'B1', app: 'web', route: "/b1/fleet/[device]", roles: ["owner"], phase: 2, wave: 4, default: 'owner', states: ["owner","empty","error","boundaries","large"] },
+  'B1-11': { name: "영상", surface: 'B1', app: 'web', route: "/b1/fleet/[device]/video", roles: ["owner"], phase: 2, wave: 4, default: 'owner', states: ["owner","empty","error","boundaries","large"] },
+  'B1-12': { name: "이상·점검", surface: 'B1', app: 'web', route: "/b1/alerts", roles: ["owner"], phase: 2, wave: 4, default: 'owner', states: ["owner","empty","error","boundaries","large"] },
   'B2-02': { name: "본사 지도", surface: 'B2', app: 'web', route: "/b2/map", roles: ["hq-safety"], phase: 1, wave: 2, default: 'work', states: ["work"] },
   'B2-03': { name: "현장 상세", surface: 'B2', app: 'web', route: "/b2/sites/[site]", roles: ["hq-safety"], phase: 1, wave: 2, default: 'site', states: ["site"] },
   'B2-04': { name: "보고 모드", surface: 'B2', app: 'web', route: "/b2/report", roles: ["hq-safety"], phase: 2, wave: 2, default: 'report', states: ["report"] },
@@ -307,6 +325,96 @@ export const SCREENS = {
   'B4-08': { name: "점검·교체 이력", surface: 'B4', app: 'web', route: "/b4/parts/history", roles: ["ops-admin"], phase: 1, wave: 2, default: 'default', states: ["default"] },
 } as const satisfies Record<ScrId, { name: string; surface: string; app: 'web' | 'pwa'; route: string; roles: readonly RoleId[]; phase: 1 | 2; wave: number; default: string; states: readonly string[] }>;
 
+export const OWNER_DEMO = [
+  {
+    "view": "entry",
+    "menu": 0,
+    "label": "소유주 데모",
+    "web": "B0-01",
+    "pwa": "A4-01",
+    "question": "내 장비를 어떻게 관리하나요?",
+    "source_cells": [
+      "M39",
+      "H39:H40"
+    ]
+  },
+  {
+    "view": "overview",
+    "menu": 1,
+    "label": "운영 현황",
+    "web": "B1-02",
+    "pwa": "A4-07",
+    "question": "어느 현장과 장비부터 확인할까요?",
+    "source_cells": [
+      "H70",
+      "H76"
+    ]
+  },
+  {
+    "view": "fleet",
+    "menu": 2,
+    "label": "보유 장비",
+    "web": "B1-09",
+    "pwa": "A4-02",
+    "question": "찾는 호기가 어디에 있나요?",
+    "source_cells": [
+      "I9:N25",
+      "H71",
+      "H77"
+    ]
+  },
+  {
+    "view": "detail",
+    "menu": 0,
+    "label": "호기 상세",
+    "web": "B1-10",
+    "pwa": "A4-08",
+    "question": "계약과 현장 담당자는 누구인가요?",
+    "source_cells": [
+      "H60:H68",
+      "H71",
+      "H77"
+    ]
+  },
+  {
+    "view": "video",
+    "menu": 0,
+    "label": "영상",
+    "web": "B1-11",
+    "pwa": "A4-09",
+    "question": "타설·설치 상황과 저장 영상을 볼 수 있나요?",
+    "source_cells": [
+      "H47:H55",
+      "H72:H73",
+      "H78:H79"
+    ]
+  },
+  {
+    "view": "documents",
+    "menu": 4,
+    "label": "장비 서류",
+    "web": "B1-05",
+    "pwa": "A4-10",
+    "question": "필요한 제작증과 검사 성적서를 열 수 있나요?",
+    "source_cells": [
+      "H36",
+      "H74",
+      "H80"
+    ]
+  },
+  {
+    "view": "alerts",
+    "menu": 3,
+    "label": "이상·점검",
+    "web": "B1-12",
+    "pwa": "A4-11",
+    "question": "어떤 장비에 연락과 점검이 필요한가요?",
+    "source_cells": [
+      "H37:H38",
+      "H60:H68"
+    ]
+  }
+] as const satisfies readonly { view: string; menu: number; label: string; web: ScrId; pwa: ScrId; question: string; source_cells: readonly string[] }[];
 export const MACHINES = {
   "task": {
     "entity": "ENT-06",

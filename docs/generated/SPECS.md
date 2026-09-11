@@ -12,6 +12,7 @@
 | equipment-parts | SPEC-equipment-parts | draft | 2 | B4-07 B4-08 A1-11 A2-09 | FR-032 FR-035 FR-024 | [specs/equipment-parts/spec.md](../../specs/equipment-parts/spec.md) |
 | event-replay | SPEC-event-replay | draft | 2 | B1-08 | FR-033 FR-024 | [specs/event-replay/spec.md](../../specs/event-replay/spec.md) |
 | notifications | SPEC-notifications | draft | 2 | A1-02 A2-02 A3-02 | FR-011 FR-010 FR-036 | [specs/notifications/spec.md](../../specs/notifications/spec.md) |
+| owner-experience | SPEC-owner-experience | draft | 4 | B0-01 A4-01 B1-02 B1-05 A4-02 A4-07 A4-08 A4-09 A4-10 A4-11 B1-09 B1-10 B1-11 B1-12 | FR-001 FR-002 FR-003 FR-004 FR-005 FR-006 FR-007 FR-016 FR-019 FR-024 FR-025 FR-039 FR-040 FR-043 | [specs/owner-experience/spec.md](../../specs/owner-experience/spec.md) |
 | owner-showcase | SPEC-owner-showcase | draft | 2 | B1-07 | FR-023 FR-024 | [specs/owner-showcase/spec.md](../../specs/owner-showcase/spec.md) |
 | pour-metrics | SPEC-pour-metrics | draft | 2 | B1-02 A1-05 A2-04 B4-07 | FR-039 FR-032 FR-034 | [specs/pour-metrics/spec.md](../../specs/pour-metrics/spec.md) |
 | records-reports | SPEC-records-reports | draft | 2 | A1-06 A3-06 B2-04 | FR-012 FR-022 FR-023 FR-024 | [specs/records-reports/spec.md](../../specs/records-reports/spec.md) |

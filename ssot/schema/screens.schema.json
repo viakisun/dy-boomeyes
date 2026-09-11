@@ -154,6 +154,41 @@
         "required": ["id", "name", "surface", "route", "roles", "phase", "wave", "default", "states", "nav", "trace"],
         "additionalProperties": false
       }
+    },
+    "owner_demo": {
+      "type": "array",
+      "minItems": 7,
+      "items": {
+        "type": "object",
+        "properties": {
+          "view": {
+            "enum": ["entry", "overview", "fleet", "detail", "video", "documents", "alerts"]
+          },
+          "label": {
+            "type": "string"
+          },
+          "web": {
+            "type": "string"
+          },
+          "pwa": {
+            "type": "string"
+          },
+          "question": {
+            "type": "string"
+          },
+          "source_cells": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "menu": {
+            "type": "integer"
+          }
+        },
+        "required": ["view", "label", "web", "pwa", "question", "source_cells", "menu"],
+        "additionalProperties": false
+      }
     }
   },
   "required": ["surfaces", "screens"],

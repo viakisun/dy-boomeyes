@@ -7,9 +7,9 @@
 | A1 | 현장 안전관리자 APP (pwa) | 9 | 0 | 5 | 4 | 0 |
 | A2 | 운전자 APP (pwa) | 7 | 0 | 4 | 3 | 0 |
 | A3 | 본사 안전관리자 APP (pwa) | 6 | 0 | 0 | 6 | 0 |
-| A4 | 사업주 PWA (pwa) | 6 | 0 | 0 | 0 | 6 |
+| A4 | 사업주 PWA (pwa) | 11 | 0 | 0 | 0 | 11 |
 | B0 | 웹 공통 로그인 (web) | 1 | 1 | 0 | 0 | 0 |
-| B1 | 소유주 운영 WEB (web) | 8 | 1 | 3 | 4 | 0 |
+| B1 | 소유주 운영 WEB (web) | 12 | 1 | 3 | 4 | 4 |
 | B2 | 건설사 본사 관리 WEB (web) | 3 | 0 | 0 | 3 | 0 |
 | B3 | 현장 안전관리자 WEB (web) | 6 | 0 | 0 | 0 | 6 |
 | B4 | 관리자 WEB 백오피스 (web) | 7 | 0 | 2 | 5 | 0 |
@@ -38,21 +38,30 @@
 | `A3-04` | 장비 열람 | A3 | `/a3/sites/[site]/devices` | hq-safety | 1 | 2 | 1 (dev) | FR-004 FR-022 | video-basics |
 | `A3-05` | 업무(열람) | A3 | `/a3/tasks` | hq-safety | 1 | 2 | 1 (inbox) | FR-022 | task-escalation |
 | `A3-06` | 기록 | A3 | `/a3/records` | hq-safety | 1 | 2 | 1 (rec) | FR-012 FR-022 | records-reports |
-| `A4-01` | 로그인 | A4 | `/a4/login` | owner | 2 | 4 | 1 (login) | FR-001 | shell-auth |
-| `A4-02` | 보유·가용 현황 | A4 | `/a4/fleet` | owner | 2 | 4 | 1 (fleet) | FR-025 | — |
+| `A4-01` | 로그인 | A4 | `/a4/login` | owner | 2 | 4 | 6 (owner empty error boundaries large login) | FR-001 | owner-experience shell-auth |
+| `A4-02` | 보유 장비 | A4 | `/a4/fleet` | owner | 2 | 4 | 6 (owner empty error boundaries large fleet) | FR-025 FR-043 | owner-experience |
 | `A4-03` | 투입 요청·배정 | A4 | `/a4/requests` | owner | 2 | 4 | 1 (inbox) | FR-026 | — |
 | `A4-04` | 운전자 배치 | A4 | `/a4/drivers` | owner | 2 | 4 | 1 (drivers) | FR-027 | — |
 | `A4-05` | 임대 계약 | A4 | `/a4/leases` | owner | 2 | 4 | 1 (lease) | FR-025 | — |
 | `A4-06` | 운전자 서류 | A4 | `/a4/drivers/docs` | owner | 2 | 4 | 1 (docs) | FR-027 | — |
-| `B0-01` | 웹 공통 로그인 | B0 | `/login` | control hq-safety site-safety ops-admin maintenance | 1 | 0 | 6 (login-b1 login-b2 login-b3 login-b4 login-owner login-maint) | FR-001 FR-031 | shell-auth |
-| `B1-02` | 관제 대시보드 | B1 | `/b1/dash` | control maintenance owner | 1 | 0 | 1 (dash) | FR-002 FR-003 FR-006 FR-024 FR-034 FR-036 FR-039 FR-040 FR-041 FR-043 | control-dashboard demo-scripts pour-metrics |
+| `A4-07` | 운영 현황 | A4 | `/a4/overview` | owner | 2 | 4 | 5 (owner empty error boundaries large) | FR-003 FR-024 FR-025 FR-039 | owner-experience |
+| `A4-08` | 호기 상세 | A4 | `/a4/fleet/[device]` | owner | 2 | 4 | 5 (owner empty error boundaries large) | FR-002 FR-007 FR-016 FR-019 FR-024 FR-025 FR-039 FR-040 FR-043 | owner-experience |
+| `A4-09` | 영상 | A4 | `/a4/fleet/[device]/video` | owner | 2 | 4 | 5 (owner empty error boundaries large) | FR-004 FR-005 FR-024 | owner-experience |
+| `A4-10` | 장비 서류 | A4 | `/a4/docs` | owner | 2 | 4 | 5 (owner empty error boundaries large) | FR-016 FR-024 | owner-experience |
+| `A4-11` | 이상·점검 | A4 | `/a4/alerts` | owner | 2 | 4 | 5 (owner empty error boundaries large) | FR-006 FR-007 FR-024 | owner-experience |
+| `B0-01` | 웹 공통 로그인 | B0 | `/login` | owner control hq-safety site-safety ops-admin maintenance | 1 | 0 | 7 (owner login-b1 login-b2 login-b3 login-b4 login-owner login-maint) | FR-001 FR-031 | owner-experience shell-auth |
+| `B1-02` | 관제 대시보드 | B1 | `/b1/dash` | control maintenance owner | 1 | 0 | 6 (owner empty error boundaries large dash) | FR-002 FR-003 FR-006 FR-024 FR-034 FR-036 FR-039 FR-040 FR-041 FR-043 | control-dashboard demo-scripts owner-experience pour-metrics |
 | `B1-02M` | 카메라 영상 모달 | B1 | `/b1/dash?cam=[camera]` | control maintenance owner | 1 | 1 | 1 (cam) | FR-004 FR-005 FR-024 FR-028 FR-029 FR-034 FR-042 | control-dashboard video-basics |
 | `B1-03` | 수신함 | B1 | `/b1/inbox` | control maintenance owner | 1 | 1 | 2 (inbox report) | FR-017 FR-018 FR-024 FR-033 FR-038 | demo-scripts task-escalation |
 | `B1-04` | 에스컬레이션 | B1 | `/b1/escalation` | control maintenance owner | 1 | 1 | 1 (esc) | FR-010 FR-024 | demo-scripts task-escalation |
-| `B1-05` | 서류 현황 | B1 | `/b1/docs` | control maintenance owner | 1 | 2 | 1 (docs) | FR-016 FR-024 | documents |
+| `B1-05` | 서류 현황 | B1 | `/b1/docs` | control maintenance owner | 1 | 2 | 6 (owner empty error boundaries large docs) | FR-016 FR-024 | documents owner-experience |
 | `B1-06` | 임대 계약 | B1 | `/b1/leases` | control maintenance owner | 1 | 2 | 1 (lease) | FR-019 FR-024 FR-043 | sites-assets-leases |
 | `B1-07` | 쇼케이스 | B1 | `/b1/showcase` | control maintenance owner | 2 | 2 | 1 (show) | FR-023 FR-024 | owner-showcase |
 | `B1-08` | 이벤트 복기 | B1 | `/b1/events/[event]` | control maintenance owner | 1 | 2 | 3 (default pending pinned) | FR-024 FR-033 FR-042 | event-replay |
+| `B1-09` | 보유 장비 | B1 | `/b1/fleet` | owner | 2 | 4 | 5 (owner empty error boundaries large) | FR-024 FR-025 FR-043 | owner-experience |
+| `B1-10` | 호기 상세 | B1 | `/b1/fleet/[device]` | owner | 2 | 4 | 5 (owner empty error boundaries large) | FR-002 FR-007 FR-016 FR-019 FR-024 FR-025 FR-039 FR-040 FR-043 | owner-experience |
+| `B1-11` | 영상 | B1 | `/b1/fleet/[device]/video` | owner | 2 | 4 | 5 (owner empty error boundaries large) | FR-004 FR-005 FR-024 | owner-experience |
+| `B1-12` | 이상·점검 | B1 | `/b1/alerts` | owner | 2 | 4 | 5 (owner empty error boundaries large) | FR-006 FR-007 FR-024 | owner-experience |
 | `B2-02` | 본사 지도 | B2 | `/b2/map` | hq-safety | 1 | 2 | 1 (work) | FR-003 FR-022 FR-024 | sites-assets-leases |
 | `B2-03` | 현장 상세 | B2 | `/b2/sites/[site]` | hq-safety | 1 | 2 | 1 (site) | FR-004 FR-022 FR-024 | video-basics |
 | `B2-04` | 보고 모드 | B2 | `/b2/report` | hq-safety | 2 | 2 | 1 (report) | FR-022 FR-023 FR-024 | records-reports |

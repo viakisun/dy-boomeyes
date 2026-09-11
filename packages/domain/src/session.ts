@@ -26,7 +26,7 @@ export const APP_HOME_OF: Partial<Record<RoleId, ScrId>> = {
   'site-safety': 'A1-02',
   'hq-safety': 'A3-02',
   driver: 'A2-02',
-  owner: 'A4-02',
+  owner: 'A4-07',
 };
 
 export const isRole = (v: unknown): v is RoleId => typeof v === 'string' && v in ROLE;

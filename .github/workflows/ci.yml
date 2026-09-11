@@ -57,3 +57,30 @@ jobs:
             playwright-report/
             test-results/
           retention-days: 14
+  owner-demo:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: pnpm }
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq fonts-noto-cjk
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm exec playwright install --with-deps chromium
+      - run: pnpm build
+      - name: owner normal sessions, content and boundaries
+        run: pnpm exec playwright test 'web-owner.*spec.ts' 'pwa-owner.*spec.ts' --reporter=json > /tmp/owner-e2e.json
+      - name: owner 112 viewport and theme combinations
+        run: pnpm capture:owner --output docs/design/evidence/owner-ci
+      - name: reject missing, stale or partial evidence
+        run: pnpm owner:check --captures docs/design/evidence/owner-ci/manifest.json --e2e /tmp/owner-e2e.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: owner-demo-evidence
+          path: |
+            docs/design/evidence/owner-ci/
+            /tmp/owner-e2e.json
+            test-results/
+          retention-days: 14

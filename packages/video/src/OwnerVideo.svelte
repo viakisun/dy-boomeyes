@@ -1,9 +1,15 @@
 <script lang="ts">
-  import { ownerHref, type OwnerCamera, type OwnerViewProps } from '@boomeyes/domain';
+  import { ownerHref, ownerDetailReturn, type OwnerCamera, type OwnerViewProps } from '@boomeyes/domain';
   import { Button, fmtDateTime, fmtDuration, connectivity } from '@boomeyes/ui';
   import { onDestroy } from 'svelte';
   let { data, api, app, url, navigate, capture = false }: OwnerViewProps = $props();
-  const deviceId = $derived(decodeURIComponent(url.pathname.split('/').at(-2) ?? ''));
+  const deviceId = $derived.by(() => {
+    try {
+      return decodeURIComponent(url.pathname.split('/').at(-2) ?? '');
+    } catch {
+      return '';
+    }
+  });
   const device = $derived(data.devices.find((item) => item.id === deviceId));
   const purpose = $derived(url.searchParams.get('purpose') === 'install' ? 'install' : 'pour');
   const mode = $derived(
@@ -31,6 +37,7 @@
   $effect(() => {
     const id = url.searchParams.get('camera') ?? candidate?.id;
     const expectedDevice = deviceId;
+    const expectedPurpose = purpose;
     void retry;
     camera = null;
     loading = false;
@@ -43,7 +50,8 @@
       .camera(id)
       .then((result) => {
         if (!active) return;
-        if (result.deviceId !== expectedDevice) throw new Error('카메라와 장비가 다릅니다.');
+        if (result.deviceId !== expectedDevice || result.purpose !== expectedPurpose)
+          throw new Error('카메라와 장비·용도가 다릅니다.');
         camera = result;
       })
       .catch(() => {
@@ -89,6 +97,7 @@
           purpose,
           mode,
           date: mode === 'recorded' ? date : null,
+          return: url.searchParams.get('return'),
           ...values,
         },
         deviceId,
@@ -124,7 +133,7 @@
         class="min-h-size-touch-min"
         onclick={() => {
           video?.pause();
-          navigate(ownerHref(url, 'detail', app, {}, deviceId));
+          navigate(ownerDetailReturn(url, app, deviceId));
         }}>장비 상세로</Button
       >{/if}
   </header>

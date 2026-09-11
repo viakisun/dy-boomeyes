@@ -27,7 +27,7 @@
 - [ ] 키보드(웹): 포커스 링 · Esc 닫기 · 목록 행 포커스
 - [ ] 캡처 파일 `shots/<code>-<state>.png` 갱신 · 시각 회귀 통과
 - [ ] 테스트 제목 `[FR-nnn]`/`[코드]` · 커밋 `Refs:`
-- [ ] 골격(DY-design §11): 웹은 PageHeader 첫 요소 · 부제 1줄(≤ 60자) · 우측 액션 ≤ 2 · Stat 값 중립색 · 표 식별자 셀 nowrap·텍스트 1줄 · 폼 폭 640 · 내비 아이콘 실물(자리 사각형 0)
+- [ ] 골격(DY-design §11): 웹은 PageHeader 첫 요소 · 부제 1줄(≤ 60자) · 우측 액션 ≤ 2 · Stat 값 중립색 · 표 식별자와 현장 정보 2줄 허용·좁은 폭 주요 정보 유지 · 폼 폭 640 · 내비 아이콘 실물(자리 사각형 0)
 - [ ] 색·점(DY-design §0-4): `pnpm design:audit:color`(빌드 뒤, CI `e2e` 잡에 편입) 이 화면의 색상 계열 ≤ 3(accent · warning · danger) · 점은 LIVE·REC·촬영 중만 · 성공/정보/진행 상태는 텍스트 — 기존 초과 3건(A2-04·B1-07·B4-05)은 스크립트 안 `BASELINE_OVER`로 예외 처리 중(디자인 잔여 백로그, 사용자 결정 대기), 새 초과만 PR을 막는다
 - [ ] 카피(DY-design §12): `pnpm tokens:lint` `copy-*` 0건(SSOT 식별자·웨이브·구현 용어·표면 코드 노출 없음, 이미 verify 하드 게이트 — `pnpm design:audit`는 같은 4패턴을 apps 마크업에서만 파일별로 집계하는 탐색용 리포트, 겹치는 범위는 이미 잡히므로 verify에 중복 편입하지 않는다) · 근거는 `data-ref`/`ref` · 미구현은 "준비 중" · 라벨은 labels.ts
 
@@ -61,3 +61,15 @@
 
 - `data-scr` 값 · 테스트 접두 · 커밋 트레일러의 ID는 `ssot`에 실존해야 한다(`check --commits` · `--docs`). `ids.ts` 상수를 import한 코드만 화면 코드를 참조한다.
 - FR 0건 화면(고아)·화면 0건 FR은 `docs/generated/TRACE.md`에서 0이어야 한다.
+
+## 6. 소유주 데모 검증
+
+[실행 계획 §8–10](plans/owner-demo-implementation-plan.md)에 소유주 데모의 데이터·세션·과제·반응형·미디어·회귀·문서 검증을 정의했다. 기본 WEB 캡처나 `capture=1` 가드 우회 결과만으로 소유주 데이터 격리·A4 PWA·다른 폭의 사용성을 입증하지 않는다.
+
+`pnpm capture:owner --output <새 증거 폴더>`는 `ssot/screens.yaml owner_demo`의 7종을 WEB/PWA·4폭·2테마, 총 112조합으로 검사한다. 대표 WEB 1280/PWA 390 라이트 14개는 전체 내용도 별도 캡처한다. 실제 시작 버튼의 owner 세션, 자료 시각, 지도 영역/5마커, 원문·영상 표시, 가로 넘침, 콘솔 오류를 기록한다. `--only`는 부분 증거이며 exit 2다.
+
+`pnpm exec playwright test 'web-owner.*spec.ts' 'pwa-owner.*spec.ts' --reporter=json > /tmp/owner-e2e.json`으로 일반 세션 과제·경계·실제 파일/영상·확대 검사를 실행한다. `pnpm owner:check --captures <폴더>/manifest.json --e2e /tmp/owner-e2e.json`은 현재 테스트 discovery와 실행 건수·AC, 전체 캡처 목록, 파일 해시, 소스 SHA/변경 해시를 대조한다. 누락·skip·flaky·오래된 증거는 실패한다. CI의 `owner-demo` 잡에서 이 순서를 실행한다.
+
+네트워크 503 주입 검사는 서비스 워커를 차단하여 캐시가 오류를 가리지 않게 한다. 실제 PWA 설치·오프라인 셸·큐는 기존 별도 e2e로 검사한다. 확대 검사의 자동화 방법은 CSS zoom 2이며, 브라우저 메뉴의 확대를 실행한 것으로 기록하지 않는다. 수신 상태는 시연 세트의 명시값으로 검사하며 실제 수신 임계 계산 엔진의 검증을 뜻하지 않는다.
+
+112개 기본 상태는 예외 상태·육안 판정·실제 고객 확인을 대신하지 않는다. 예외 캡처, 독립 소유주 과제 검토, 성능, PDF 전페이지 판정은 실행 증거 묶음에 별도로 남긴다. 검토안 생성·검사는 [도구 안내](../tools/owner/README.md), 현재 실행 결과는 [실행 기록](plans/owner-demo-execution.md)을 따른다.

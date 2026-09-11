@@ -66,7 +66,7 @@
           <img
             src={record.previewUrl ?? record.url}
             alt="{record.deviceId} {record.title} 원문"
-            class="max-w-layout-form-max mx-auto h-auto w-full"
+            class="max-w-layout-form-max mx-auto aspect-[210/297] w-full object-contain"
             onerror={() => (failed = true)}
           />
         {:else}

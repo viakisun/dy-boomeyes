@@ -101,6 +101,25 @@ if (value('--captures')) {
         );
       requireThat(createHash('sha256').update(png).digest('hex') === shot.sha256, `PNG content mismatch ${shot.key}`);
     }
+    if (shot.theme === 'light' && shot.width === (shot.app === 'web' ? 1280 : 390)) {
+      const full = resolve(dirname(path), shot.fullFile ?? '');
+      const present = !!shot.fullFile && existsSync(full);
+      requireThat(present, `Missing full content capture ${shot.key}`);
+      if (present) {
+        const png = readFileSync(full);
+        requireThat(
+          png.length >= 24 &&
+            png.readUInt32BE(16) === shot.width &&
+            png.readUInt32BE(20) === shot.fullHeight &&
+            shot.fullHeight >= shot.height,
+          `Wrong full capture dimensions ${shot.key}`,
+        );
+        requireThat(
+          createHash('sha256').update(png).digest('hex') === shot.fullSha256,
+          `Full PNG content mismatch ${shot.key}`,
+        );
+      }
+    }
   }
   for (const key of required) requireThat(seen.has(key), `Missing required capture ${key}`);
   requireThat(captures === 112, 'Capture manifest must contain exactly 112 rows');

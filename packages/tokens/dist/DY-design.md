@@ -10,7 +10,7 @@
 | ref(원시) | 208 |
 | sys(시맨틱) | 324 |
 | cmp(컴포넌트) | 92 |
-| 컴포넌트 카탈로그 | 83 |
+| 컴포넌트 카탈로그 | 95 |
 | 대비 검사 | 94/94 통과 |
 
 | 산출물 | 용도 |
@@ -31,7 +31,11 @@
 7. **코드가 원천.** Figma 파일은 참조였고 동기 대상이 아니다. 토큰·문서·CSS는 `packages/tokens/src`에서 생성되며, 디자인 변경은 소스 변경으로 기록된다.
 8. **작게 유지.** 색조 7, 램프 12단, 타입 역할 14, 간격 16단. 새 값은 기존 값으로 표현할 수 없음을 보이고 나서 추가한다.
 9. **사용자의 말로 쓴다.** 화면의 글은 현장·본사·운영사 사람이 읽는다. 식별자(DISC·FR·ENT…)·웨이브·구현 용어는 UI 밖(`data-ref` · 데모 바)에 둔다. 부제는 한 줄, 버튼은 동사. (§12)
-10. **한 페이지 한 골격.** 웹은 PageHeader → 요약 → 목록/표 → 인스펙터, PWA는 AppBar → 배너 → 카드 → 고정 CTA. 화면마다 헤더·표·폼을 새로 그리지 않는다. (§11)
+10. **목적에 맞는 페이지 구성.** 현황은 전체·분포·확인할 항목, 탐색은 검색·목록, 상세는 식별·계약·담당자, 뷰어는 원문과 복귀를 중심에 둔다. 공통 토큰·컨트롤은 공유한다. (§11)
+
+### 소유주 데모 패턴
+
+owner-experience의 현황/탐색/상세/뷰어는 목적별 구성을 적용한다. FleetSummary는 전체와 배치 분포를 묶고, 이상·점검 수는 별도 행동 목록으로 표현한다. 보관 대수를 가용 대수로 표시하지 않는다. EquipmentRow는 식별자·현장 2줄을 허용하고 긴 이름은 줄바꿈한다. 원문과 계약·담당자 패널은 좁은 폭에서 본문으로 이동한다. 모든 색·타입·간격은 기존 토큰을 사용하며 대비·터치·포커스 기준은 동일하다.
 
 ## 1. 명명 규칙
 
@@ -782,7 +786,7 @@ cmp 층은 sys만 참조한다(ref 직접 참조 금지 — 검사로 강제). �
 | `cmp.table.row-selected` | #ebf1ff | #ebf1ff | {sys.color.bg.selected} |  |
 | `cmp.table.header-fg` | #616368 | #616368 | {sys.color.fg.muted} |  |
 
-## 8. 컴포넌트 카탈로그 (83)
+## 8. 컴포넌트 카탈로그 (95)
 
 이름 PascalCase · prop 어휘 고정: `variant`(형태) · `tone`(색 의도: accent/neutral/info/success/warning/danger/progress) · `size`(sm/md/lg) · 상태 boolean(`disabled` `loading` `selected` `invalid`). 플랫폼 both = 같은 Svelte 컴포넌트가 밀도 토큰으로 두 플랫폼을 소화.
 
@@ -904,6 +908,23 @@ cmp 층은 sys만 참조한다(ref 직접 참조 금지 — 검사로 강제). �
 | **BboxOverlay** | both | — | boxes[] 정규화 좌표 · label · tone warning/danger | hidden/visible | AI 채널 클립·스냅샷 위 SVG 오버레이. 텍스트 대체 필수(사람 1 — 호스 주변) |
 | **HealthBadge** | both | — | state live/snapshot/recording/offline/ai-unavailable · size sm/md | — | camera 상태기계 값 그대로 표시(labels.ts). 장애 채널을 정상으로 표시하지 않는다(FR-034) |
 
+### Owner experience
+
+| 컴포넌트 | 플랫폼 | 참조 | 변형(prop) | 상태 | 비고 |
+|---|---|---|---|---|---|
+| **OwnerShell** | both | V5 관제기능 · owner-experience | app web/pwa | loading/empty/error/offline/default | 소유주 4메뉴 · 반응형 WEB/PWA 셸 |
+| **OwnerEntry** | both | V5 관제기능 · owner-experience | app web/pwa | loading/empty/error/offline/default | 소유주 단일 진입과 정상 운영 미리보기 |
+| **OwnerWorkspace** | both | V5 관제기능 · owner-experience | app web/pwa | loading/empty/error/offline/default | 역할·조회 상태와 목적별 화면 합성 |
+| **OwnerOverview** | both | V5 관제기능 · owner-experience | app web/pwa | loading/empty/error/offline/default | 배치 분포와 확인할 장비 |
+| **OwnerFleet** | both | V5 관제기능 · owner-experience | app web/pwa | loading/empty/error/offline/default | 보유 전체 장비 검색·필터·상세 이동 |
+| **OwnerDetail** | both | V5 관제기능 · owner-experience | app web/pwa | loading/empty/error/offline/default | 호기 식별·계약·담당자·수신 정보 |
+| **EquipmentRow** | both | V5 관제기능 · owner-experience | app web/pwa | loading/empty/error/offline/default | 식별자·현장 2줄 · 상태와 다음 행동 |
+| **FleetSummary** | both | V5 관제기능 · owner-experience | app web/pwa | loading/empty/error/offline/default | 전체 대수와 배치 분포 · 이상 집계 분리 |
+| **OwnerAlerts** | both | V5 관제기능 · owner-experience | app web/pwa | loading/empty/error/offline/default | 장비별 이상·점검 선택·읽음·담당자 |
+| **OwnerDocuments** | both | V5 관제기능 · owner-experience | app web/pwa | loading/empty/error/offline/default | 장비 서류 원문·시연용 첨부 |
+| **DocumentViewer** | both | V5 관제기능 · owner-experience | app web/pwa | loading/empty/error/offline/default | 원문 이미지/PDF · 닫기·오류·복귀 |
+| **OwnerVideo** | both | V5 관제기능 · owner-experience | app web/pwa | loading/empty/error/offline/default | 목적과 시간에 따른 시연 영상·실재생 |
+
 ## 9. 플랫폼 가이드 — 웹 백오피스 (Linear 참조)
 
 대상: B0 로그인 · B1 관제 · B2 본사 · B3 현장 · B4 관리자(백오피스). 기본 모드 light/compact. 사용자가 탑바 토글로 전체 다크를 고를 수 있다(기기 단위 `localStorage dy.theme`, 기본은 light). 모니터링 월보드·쇼케이스(B1-07 · B3-06 · CameraWall)는 사용자 설정과 무관하게 dark 강제.
@@ -923,6 +944,10 @@ cmp 층은 sys만 참조한다(ref 직접 참조 금지 — 검사로 강제). �
 11. **빈·오류·로딩.** 목록 0건 `EmptyState`(행동 버튼 포함), 필터 0건(필터 초기화), 오류(재시도). 로딩은 300ms 후 Skeleton.
 12. **밀도 고정.** 웹 루트는 `data-density="compact"`. 사용자가 comfortable로 바꾸는 설정은 두지 않는다(관제 화면 정보량 보호). 화면이 뷰포트 절반 아래를 비우면 요약을 줄이거나 표 밀도를 올린다.
 13. **카피.** §12 — 부제 1줄 · 식별자 UI 밖 · "준비 중" 패턴 · 표현 사전.
+
+### 소유주 데모 패턴
+
+owner-experience의 현황/탐색/상세/뷰어는 목적별 구성을 적용한다. FleetSummary는 전체와 배치 분포를 묶고, 이상·점검 수는 별도 행동 목록으로 표현한다. 보관 대수를 가용 대수로 표시하지 않는다. EquipmentRow는 식별자·현장 2줄을 허용하고 긴 이름은 줄바꿈한다. 원문과 계약·담당자 패널은 좁은 폭에서 본문으로 이동한다. 모든 색·타입·간격은 기존 토큰을 사용하며 대비·터치·포커스 기준은 동일하다.
 
 ## 10. 플랫폼 가이드 — 현장 PWA (Crane Eyes 참조)
 
@@ -967,7 +992,7 @@ PageHeader  제목 heading-xl · 부제 1줄(body-sm muted, ≤ 60자) · 메타
 
 | 규칙 | 값 |
 |---|---|
-| 행 높이 | `row.default`(compact 36) 기본 · 조밀 표만 `row.dense`(32) · 두 줄 셀은 만들지 않는다 |
+| 행 높이 | `row.default`(compact 36) 기본 · 조밀 표만 `row.dense`(32) · 식별자+현장처럼 의미가 다른 정보는 2줄 허용. 좁은 폭에서 주요 정보 숨김 금지 |
 | 식별자 셀 | `code-md` · `whitespace-nowrap` · 최소 폭 = 가장 긴 ID |
 | 텍스트 셀 | 1줄 · 넘치면 `truncate` + `title` |
 | 수치 셀 | 우측 정렬 · `tabular-nums` · 단위는 헤더에 |
@@ -1016,6 +1041,10 @@ PageHeader  제목 heading-xl · 부제 1줄(body-sm muted, ≤ 60자) · 메타
 ### 11.6 4상태
 
 빈(EmptyState — 행동 버튼) · 오류(재시도) · 오프라인(셸 배너 + 큐, §10) · 로딩(300ms 후 Skeleton). 화면당 spec에 넷을 적는다.
+
+### 소유주 데모 패턴
+
+owner-experience의 현황/탐색/상세/뷰어는 목적별 구성을 적용한다. FleetSummary는 전체와 배치 분포를 묶고, 이상·점검 수는 별도 행동 목록으로 표현한다. 보관 대수를 가용 대수로 표시하지 않는다. EquipmentRow는 식별자·현장 2줄을 허용하고 긴 이름은 줄바꿈한다. 원문과 계약·담당자 패널은 좁은 폭에서 본문으로 이동한다. 모든 색·타입·간격은 기존 토큰을 사용하며 대비·터치·포커스 기준은 동일하다.
 
 ## 12. 카피 · 식별자 정책
 

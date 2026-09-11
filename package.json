@@ -29,7 +29,11 @@
     "design:audit:query": "node tools/design/query-audit.mjs",
     "brand:generate": "python3 tools/brand/wordmark.py && node tools/brand/mark.mjs",
     "brand:build": "node tools/brand/build.mjs",
-    "e2e": "playwright test"
+    "e2e": "playwright test",
+    "capture:owner": "node tools/capture/owner.mjs",
+    "owner:check": "node tools/owner/check.mjs",
+    "docs:owner": "python3 tools/owner/build-review.py",
+    "docs:owner:check": "python3 tools/owner/check-review.py"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.13.0",
