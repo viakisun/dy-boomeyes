@@ -118,7 +118,7 @@ test('[B1-02] 셸에는 웨이브·mock 표기가 없다 — 시연 장면 바�
   await page.goto('/b1/dash?state=dash&capture=1');
   await expect(page.locator(root(SCR['B1-02']))).toBeVisible();
   await expect(page.getByText(/wave \d+ · mock/)).toHaveCount(0);
-  await expect(page.getByRole('complementary', { name: '주 내비게이션' })).toContainText('운영사 관제 WEB'); // 사이드바 그룹 = 표면 이름(코드 B1 아님)
+  await expect(page.getByRole('complementary', { name: '주 내비게이션' })).toContainText('소유주 운영 WEB'); // 사이드바 그룹 = 표면 이름(코드 B1 아님) · ADR-012
 });
 
 test('[B1-02M] 저장 영상 재생: 목록 길이 = 클립 길이 · 재생 → clip 프레임 · 라이브 복귀 · SD 미회수 구간은 비활성 [FR-005]', async ({
@@ -160,4 +160,28 @@ test('[B1-02] 인스펙터 텔레메트리에 3상 셀 — 기본 선택 CPB-003
     await expect(cell).toContainText('미연동');
     await expect(cell.getByText('정상', { exact: true })).toHaveCount(0);
   }
+});
+
+test('[B1-02] 소유주 KPI 첫 줄 — 보유 호기 5대 · 가동률 67% · 오늘 220 m³ · 타설 중 2대 · 상태 KPI는 둘째 줄 [FR-039] [FR-002]', async ({
+  page,
+}) => {
+  await page.goto('/b1/dash?state=dash&capture=1');
+  await expect(page.locator(`[data-scr="${SCR['B1-02']}"]`)).toBeVisible();
+  const fleet = page.locator('[data-ref="DISC-055"]').first(); // KPI 래퍼 — 인스펙터의 DISC-055 근거 문구보다 앞
+  await expect(fleet).toContainText('보유 호기');
+  await expect(fleet).toContainText('67'); // (0.909+0.909+0.818+0.727+0)/5
+  await expect(fleet).toContainText('220'); // 75+89+31+25+0 (capture 10:42 · KST 07~10시)
+  await expect(fleet).toContainText('2'); // 현재 버킷 타설: CPB-001 · CPB-002
+  await expect(fleet).toContainText('5대 평균');
+});
+
+test('[B1-02] 소유주 owner01 세션 — 보유 호기 5대 · 사이드바 표면명 소유주 운영 WEB [FR-001] [FR-002]', async ({
+  page,
+}) => {
+  await page.goto('/login');
+  await page.getByText('owner01', { exact: true }).click();
+  await expect(page).toHaveURL(/\/b1\/dash/);
+  await expect(page.getByText('전국 CPB 5대')).toBeVisible(); // 시드 전 장비 OWN-001 — 스코프가 같은 5대
+  await expect(page.getByRole('complementary', { name: '주 내비게이션' })).toContainText('소유주 운영 WEB');
+  await expect(page.getByText('차사장')).toBeVisible();
 });

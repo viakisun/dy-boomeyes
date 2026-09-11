@@ -135,6 +135,15 @@
       {/snippet}
     </PageHeader>
 
+    <!-- 소유주 KPI 첫 줄(ADR-012 §후속 5 · FR-039 · specs/control-dashboard AC-9) — 보유 호기 전체의 가동률·오늘 타설량. 집계는 loader 1회 · tone 중립(hue 증가 0) -->
+    <div data-ref="DISC-055">
+      <StatGroup label="보유 호기" cols={4}>
+        <Stat label="보유 호기" value={data.fleet.count} unit="대" hint="타설량 계측 연동" />
+        <Stat label="가동률" value={data.fleet.utilization} unit="%" hint="작업 시간대 · {data.fleet.count}대 평균" />
+        <Stat label="오늘 타설량" value={data.fleet.todayM3} unit="m³" hint="보유 호기 합계" />
+        <Stat label="타설 중" value={data.fleet.pouring} unit="대" hint="현재 버킷 타설" />
+      </StatGroup>
+    </div>
     <StatGroup label="KPI" cols={6}>
       <Stat label="가동" value={data.kpis.normal} unit="대" hint="정상 텔레메트리 수신" />
       <Stat

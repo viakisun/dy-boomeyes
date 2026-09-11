@@ -4,6 +4,7 @@ import { SCR } from '../../packages/domain/src/generated/ids';
 
 // 기대 라우트는 spec AC-1 표에서 그대로 — 구현 상수(HOME_OF)를 읽지 않는다
 const WEB: { role: string; login: string; home: string }[] = [
+  { role: 'owner', login: 'owner01', home: '/b1/dash' }, // 소유주 = B1 주인(ADR-012) · 웹 첫 화면 B1-02
   { role: 'control', login: 'control01', home: '/b1/dash' },
   { role: 'hq-safety', login: 'hq01', home: '/b2/map' },
   { role: 'site-safety', login: 'safety01', home: '/b3/console' },

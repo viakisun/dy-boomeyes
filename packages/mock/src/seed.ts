@@ -64,6 +64,7 @@ export function demoUsers(): User[] {
       r.id === 'site-safety' || r.id === 'driver' ? ['SITE-001'] : r.id === 'hq-safety' ? ['SITE-001', 'SITE-002'] : [],
     deviceId: r.id === 'driver' ? 'CPB-003' : undefined,
     phone: r.id === 'maintenance' ? '010-0000-0009' : undefined,
+    ownerId: r.id === 'owner' ? 'OWN-001' : undefined, // 소유주 계정 — B1 스코프(ADR-012)
   }));
 }
 

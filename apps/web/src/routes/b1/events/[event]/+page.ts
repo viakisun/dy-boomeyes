@@ -1,9 +1,11 @@
 // B1-08 이벤트 복기(W2 구조) — event_id로 4레인 메타 · 없으면 404 EmptyState(에러 페이지 대신 화면이 그린다) (specs/event-replay AC-1 · AC-3)
+import { scopeOf } from '@boomeyes/domain';
+import { session } from '$lib/session.svelte';
 import type { PageLoad } from './$types';
 
 export const load: PageLoad = async ({ parent, params, url }) => {
   const { api } = await parent();
-  const scope = { role: 'control' as const };
+  const scope = scopeOf(session.user); // 세션 역할 + 소유주면 ownerId(ADR-012)
   const [event, devices, cameras, alerts, cases] = await Promise.all([
     api.event(params.event),
     api.devices(scope),

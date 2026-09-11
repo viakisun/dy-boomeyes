@@ -9,7 +9,7 @@
 | A3 | 본사 안전관리자 APP (pwa) | 6 | 0 | 0 | 6 | 0 |
 | A4 | 사업주 PWA (pwa) | 6 | 0 | 0 | 0 | 6 |
 | B0 | 웹 공통 로그인 (web) | 1 | 1 | 0 | 0 | 0 |
-| B1 | 운영사 관제 WEB (web) | 8 | 1 | 3 | 4 | 0 |
+| B1 | 소유주 운영 WEB (web) | 8 | 1 | 3 | 4 | 0 |
 | B2 | 건설사 본사 관리 WEB (web) | 3 | 0 | 0 | 3 | 0 |
 | B3 | 현장 안전관리자 WEB (web) | 6 | 0 | 0 | 0 | 6 |
 | B4 | 관리자 WEB 백오피스 (web) | 7 | 0 | 2 | 5 | 0 |
@@ -44,15 +44,15 @@
 | `A4-04` | 운전자 배치 | A4 | `/a4/drivers` | owner | 2 | 4 | 1 (drivers) | FR-027 | — |
 | `A4-05` | 임대 계약 | A4 | `/a4/leases` | owner | 2 | 4 | 1 (lease) | FR-025 | — |
 | `A4-06` | 운전자 서류 | A4 | `/a4/drivers/docs` | owner | 2 | 4 | 1 (docs) | FR-027 | — |
-| `B0-01` | 웹 공통 로그인 | B0 | `/login` | control hq-safety site-safety ops-admin maintenance | 1 | 0 | 5 (login-b1 login-b2 login-b3 login-b4 login-maint) | FR-001 FR-031 | shell-auth |
-| `B1-02` | 관제 대시보드 | B1 | `/b1/dash` | control maintenance | 1 | 0 | 1 (dash) | FR-002 FR-003 FR-006 FR-024 FR-034 FR-036 FR-039 FR-040 FR-041 FR-043 | control-dashboard demo-scripts pour-metrics |
-| `B1-02M` | 카메라 영상 모달 | B1 | `/b1/dash?cam=[camera]` | control maintenance | 1 | 1 | 1 (cam) | FR-004 FR-005 FR-024 FR-028 FR-029 FR-034 FR-042 | control-dashboard video-basics |
-| `B1-03` | 수신함 | B1 | `/b1/inbox` | control maintenance | 1 | 1 | 2 (inbox report) | FR-017 FR-018 FR-024 FR-033 FR-038 | demo-scripts task-escalation |
-| `B1-04` | 에스컬레이션 | B1 | `/b1/escalation` | control maintenance | 1 | 1 | 1 (esc) | FR-010 FR-024 | demo-scripts task-escalation |
-| `B1-05` | 서류 현황 | B1 | `/b1/docs` | control maintenance | 1 | 2 | 1 (docs) | FR-016 FR-024 | documents |
-| `B1-06` | 임대 계약 | B1 | `/b1/leases` | control maintenance | 1 | 2 | 1 (lease) | FR-019 FR-024 FR-043 | sites-assets-leases |
-| `B1-07` | 쇼케이스 | B1 | `/b1/showcase` | control maintenance | 2 | 2 | 1 (show) | FR-023 FR-024 | owner-showcase |
-| `B1-08` | 이벤트 복기 | B1 | `/b1/events/[event]` | control maintenance | 1 | 2 | 3 (default pending pinned) | FR-024 FR-033 FR-042 | event-replay |
+| `B0-01` | 웹 공통 로그인 | B0 | `/login` | control hq-safety site-safety ops-admin maintenance | 1 | 0 | 6 (login-b1 login-b2 login-b3 login-b4 login-owner login-maint) | FR-001 FR-031 | shell-auth |
+| `B1-02` | 관제 대시보드 | B1 | `/b1/dash` | control maintenance owner | 1 | 0 | 1 (dash) | FR-002 FR-003 FR-006 FR-024 FR-034 FR-036 FR-039 FR-040 FR-041 FR-043 | control-dashboard demo-scripts pour-metrics |
+| `B1-02M` | 카메라 영상 모달 | B1 | `/b1/dash?cam=[camera]` | control maintenance owner | 1 | 1 | 1 (cam) | FR-004 FR-005 FR-024 FR-028 FR-029 FR-034 FR-042 | control-dashboard video-basics |
+| `B1-03` | 수신함 | B1 | `/b1/inbox` | control maintenance owner | 1 | 1 | 2 (inbox report) | FR-017 FR-018 FR-024 FR-033 FR-038 | demo-scripts task-escalation |
+| `B1-04` | 에스컬레이션 | B1 | `/b1/escalation` | control maintenance owner | 1 | 1 | 1 (esc) | FR-010 FR-024 | demo-scripts task-escalation |
+| `B1-05` | 서류 현황 | B1 | `/b1/docs` | control maintenance owner | 1 | 2 | 1 (docs) | FR-016 FR-024 | documents |
+| `B1-06` | 임대 계약 | B1 | `/b1/leases` | control maintenance owner | 1 | 2 | 1 (lease) | FR-019 FR-024 FR-043 | sites-assets-leases |
+| `B1-07` | 쇼케이스 | B1 | `/b1/showcase` | control maintenance owner | 2 | 2 | 1 (show) | FR-023 FR-024 | owner-showcase |
+| `B1-08` | 이벤트 복기 | B1 | `/b1/events/[event]` | control maintenance owner | 1 | 2 | 3 (default pending pinned) | FR-024 FR-033 FR-042 | event-replay |
 | `B2-02` | 본사 지도 | B2 | `/b2/map` | hq-safety | 1 | 2 | 1 (work) | FR-003 FR-022 FR-024 | sites-assets-leases |
 | `B2-03` | 현장 상세 | B2 | `/b2/sites/[site]` | hq-safety | 1 | 2 | 1 (site) | FR-004 FR-022 FR-024 | video-basics |
 | `B2-04` | 보고 모드 | B2 | `/b2/report` | hq-safety | 2 | 2 | 1 (report) | FR-022 FR-023 FR-024 | records-reports |

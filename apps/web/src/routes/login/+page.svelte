@@ -9,10 +9,17 @@
   let { data } = $props();
   const CARDS: { role: RoleId; surface: SurfaceId; title: string; desc: string; state: string }[] = [
     {
+      role: 'owner',
+      surface: 'B1',
+      title: '소유주 운영',
+      desc: '보유 호기 전국 현황 · 가동률·타설량 · 임대 계약 · 수신함',
+      state: 'login-owner',
+    },
+    {
       role: 'control',
       surface: 'B1',
-      title: '운영사 관제',
-      desc: '전국 CPB 관제 · 원격 진단 · 수신함 · 에스컬레이션',
+      title: '제조사 전국 뷰',
+      desc: '전국 CPB 운영 현황 · 원격 진단 · 정비·AS 연계 — 읽기 위주',
       state: 'login-b1',
     },
     {
@@ -52,7 +59,7 @@
   async function enter(role: RoleId) {
     const u = users.find((x) => x.role === role);
     if (!u) return;
-    login({ userId: u.id, role: u.role, display: u.display, org: u.org });
+    login({ userId: u.id, role: u.role, display: u.display, org: u.org, ownerId: u.ownerId });
     const next = page.url.searchParams.get('next');
     await goto(resolve((next ?? SCREENS[HOME_OF[role]].route) as '/'));
   }
