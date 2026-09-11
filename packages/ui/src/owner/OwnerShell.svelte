@@ -34,12 +34,7 @@
   {/each}
 {/snippet}
 
-<div
-  class="bg-canvas text-fg flex min-h-dvh"
-  data-owner-root
-  data-owner-app={app}
-  data-density={app === 'pwa' ? 'comfortable' : 'compact'}
->
+<div class="bg-canvas text-fg flex min-h-dvh" data-owner-root data-owner-app={app} data-density="comfortable">
   {#if app === 'web'}
     <aside
       class="border-border-subtle bg-surface w-layout-sidebar-width p-inset-xl sticky top-0 hidden h-dvh shrink-0 flex-col border-r lg:flex"
@@ -49,9 +44,6 @@
       >
       <p class="text-label-sm text-fg-muted mt-stack-xl mb-stack-sm">소유주 운영</p>
       <nav aria-label="소유주 메뉴" class="gap-stack-xs flex flex-col">{@render navigation()}</nav>
-      <div class="border-border-subtle text-body-sm text-fg-muted pt-stack-lg mt-auto border-t">
-        장비의 위치부터<br />계약과 현장 연락까지.
-      </div>
     </aside>
   {/if}
   <div class="flex min-w-0 flex-1 flex-col">
@@ -61,7 +53,6 @@
       <div class="gap-inline-sm flex items-center">
         <Logo variant="glyph" class="size-size-avatar-sm" />
         <span class="text-label-lg font-semibold">소유주 운영</span>
-        <span class="bg-surface-sunken text-fg-muted rounded-control px-inset-sm py-inset-xs text-label-sm">시연</span>
       </div>
       <div class="gap-inline-xs flex">
         <Button variant="ghost" tone="neutral" onclick={toggleTheme} aria-label={dark ? '라이트 모드' : '다크 모드'}
@@ -72,7 +63,7 @@
     </header>
     {#if !connectivity.online}
       <div role="status" class="bg-warning-bg text-warning-fg px-page-gutter py-inset-md text-body-md">
-        오프라인 · 마지막으로 불러온 화면입니다. 연결 후 다시 확인하세요.
+        오프라인 · 마지막으로 불러온 화면입니다.
       </div>
     {/if}
     <main data-owner-scroll class="p-page-gutter max-w-layout-container-max mx-auto w-full min-w-0 flex-1">

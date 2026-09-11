@@ -43,7 +43,7 @@
 </script>
 
 <div class="gap-stack-xl flex min-w-0 flex-col">
-  <PageHeader title="보유 장비" description="호기나 현장으로 찾아 계약과 담당자를 확인하세요." />
+  <PageHeader title="보유 장비" />
   <section class="gap-stack-md flex flex-col" aria-label="장비 검색 및 목록">
     <div class="gap-inline-md grid min-w-0 grid-cols-1 sm:grid-cols-[minmax(0,1fr)_auto]">
       <div class="gap-stack-xs flex min-w-0 flex-col">
@@ -58,13 +58,13 @@
             autocomplete="off"
             value={query}
             placeholder="예: 1호기, CPB-001, 판교"
-            class="{ownerControl(app)} text-body-md min-w-0 flex-1 bg-transparent"
+            class="{ownerControl()} text-body-md min-w-0 flex-1 bg-transparent"
             oninput={(event) => update(event.currentTarget.value, filter)}
           />
           {#if query}
             <button
               type="button"
-              class="{ownerControl(app)} rounded-control min-w-size-touch-min inline-flex items-center justify-center"
+              class="{ownerControl()} rounded-control min-w-size-touch-min inline-flex items-center justify-center"
               aria-label="검색어 지우기"
               onclick={() => update('', filter)}
             >
@@ -78,7 +78,7 @@
         <select
           id="owner-fleet-filter"
           value={filter}
-          class="{ownerControl(app)} rounded-control border-border-strong bg-surface text-body-md px-inset-md border"
+          class="{ownerControl()} rounded-control border-border-strong bg-surface text-body-md px-inset-md border"
           onchange={(event) => update(query, event.currentTarget.value)}
         >
           <option value="all">전체 장비</option>
@@ -94,7 +94,7 @@
         전체 <strong>{data.devices.length}대</strong> 중 <strong>{matches.length}대</strong> 표시
       </p>
       {#if query || filter !== 'all'}
-        <button type="button" class={ownerLink(app)} onclick={() => update('', 'all')}>검색·필터 초기화</button>
+        <button type="button" class={ownerLink()} onclick={() => update('', 'all')}>검색·필터 초기화</button>
       {/if}
     </div>
     {#if data.devices.length === 0}
@@ -107,24 +107,17 @@
         title="검색 결과가 없습니다"
         description="호기 번호와 현장 이름을 확인하거나 배치 필터를 변경해 주세요."
       >
-        {#snippet action()}<button type="button" class={ownerLink(app)} onclick={() => update('', 'all')}
+        {#snippet action()}<button type="button" class={ownerLink()} onclick={() => update('', 'all')}
             >전체 장비 보기</button
           >{/snippet}
       </EmptyState>
     {:else}
       <div class="rounded-card border-border bg-surface overflow-hidden border">
-        <div
-          class="gap-inline-md border-border bg-surface-sunken px-inset-lg py-inset-sm text-label-md text-fg-muted hidden grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto] border-b sm:grid"
-          aria-hidden="true"
-        >
-          <span>호기 · 현장</span><span>장비 상태 · 수신 시각</span><span class="w-size-icon-md"></span>
-        </div>
         <ul class="divide-border divide-y" aria-label="보유 장비 목록">
           {#each matches as device (device.id)}
             <li>
               <EquipmentRow
                 {device}
-                {app}
                 href={ownerHref(url, 'detail', app, { return: url.pathname + url.search }, device.id)}
                 onselect={select}
               />
@@ -132,11 +125,6 @@
           {/each}
         </ul>
       </div>
-    {/if}
-    {#if filter === 'stored'}
-      <p class="text-body-sm text-fg-muted">
-        보관 중인 장비의 현장 투입 가능 여부는 계약과 점검 상태를 별도로 확인해 주세요.
-      </p>
     {/if}
   </section>
 </div>

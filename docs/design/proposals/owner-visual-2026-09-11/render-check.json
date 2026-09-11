@@ -1,38 +1,38 @@
 {
- "sourceSha": "5c595404fbe32b6e1eb2771b461ab5e4b27d8dae",
- "tokensCss": "4dbdf3552f30dd8929d3997ba3306eb6b465937f47c31cfe77f61f4b0f33d79d",
- "density": "comfortable (:root)",
- "theme": "light",
- "renderer": "Version 1.62.1",
- "pages": [
-  {
-   "template": "overview-web.html",
-   "png": "01-overview-web-after.png",
-   "viewport": "1280,842",
-   "fullPage": false,
-   "sha256": "2dc35b731bdd14695b838054c66acb62298ee340c1b8a20dea7b7f447e04ad3e"
-  },
-  {
-   "template": "detail-web.html",
-   "png": "02-detail-web-after.png",
-   "viewport": "1280,842",
-   "fullPage": false,
-   "sha256": "9562f379e5ecbedcafc8774651af86e5b39c87240f10af5ba26dcd08ac7aa53d"
-  },
-  {
-   "template": "fleet-pwa.html",
-   "png": "03-fleet-pwa-after.png",
-   "viewport": "390,800",
-   "fullPage": false,
-   "sha256": "8e45df5800e83b1dea0ca5fec8838d56060ec80bac14596808a1f667696ebaad"
-  },
-  {
-   "template": "components.html",
-   "png": "04-components.png",
-   "viewport": "1280,900",
-   "fullPage": true,
-   "sha256": "ed9b194959481a0094ebd151a0bf020877dda967c37944e1c31e3ac974329eb5"
-  }
- ],
- "tokenVarsUsed": 69
+  "sourceSha": "5c595404fbe32b6e1eb2771b461ab5e4b27d8dae",
+  "tokensCss": "4dbdf3552f30dd8929d3997ba3306eb6b465937f47c31cfe77f61f4b0f33d79d",
+  "density": "comfortable (:root)",
+  "theme": "light",
+  "renderer": "Version 1.62.1",
+  "pages": [
+    {
+      "template": "overview-web.html",
+      "png": "01-overview-web-after.png",
+      "viewport": "1280,842",
+      "fullPage": false,
+      "sha256": "2dc35b731bdd14695b838054c66acb62298ee340c1b8a20dea7b7f447e04ad3e"
+    },
+    {
+      "template": "detail-web.html",
+      "png": "02-detail-web-after.png",
+      "viewport": "1280,842",
+      "fullPage": false,
+      "sha256": "9562f379e5ecbedcafc8774651af86e5b39c87240f10af5ba26dcd08ac7aa53d"
+    },
+    {
+      "template": "fleet-pwa.html",
+      "png": "03-fleet-pwa-after.png",
+      "viewport": "390,800",
+      "fullPage": false,
+      "sha256": "8e45df5800e83b1dea0ca5fec8838d56060ec80bac14596808a1f667696ebaad"
+    },
+    {
+      "template": "components.html",
+      "png": "04-components.png",
+      "viewport": "1280,900",
+      "fullPage": true,
+      "sha256": "ed9b194959481a0094ebd151a0bf020877dda967c37944e1c31e3ac974329eb5"
+    }
+  ],
+  "tokenVarsUsed": 69
 }

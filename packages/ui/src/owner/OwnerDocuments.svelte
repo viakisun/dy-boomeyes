@@ -164,7 +164,6 @@
   <header class="gap-stack-sm flex flex-col">
     <p class="text-label-md text-fg-muted">장비 기록</p>
     <h1 class="text-heading-xl">장비 서류</h1>
-    <p class="text-body-md text-fg-muted">호기를 선택하고 제작증과 검사 성적서 원문을 확인하세요.</p>
   </header>
   {#if data.devices.length === 0}
     <div class="border-border p-inset-xl rounded-card border">
@@ -244,9 +243,7 @@
         aria-labelledby="owner-upload-title"
       >
         <h2 id="owner-upload-title" class="text-heading-sm">시연 파일 첨부</h2>
-        <p class="text-body-sm text-fg-muted">
-          PDF·PNG·JPEG, 최대 10 MB. 첨부한 파일은 새로고침하거나 로그아웃하면 사라집니다.
-        </p>
+        <p class="text-body-sm text-fg-muted">PDF · PNG · JPEG · 최대 10 MB</p>
         <label for="owner-upload" class="text-label-lg">시연 파일 선택</label>
         <input
           id="owner-upload"

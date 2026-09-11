@@ -41,9 +41,7 @@
 
 <div class="gap-stack-xl flex flex-col">
   <header class="gap-stack-sm flex flex-col">
-    <p class="text-label-md text-fg-muted">장비별 확인과 현장 연락</p>
     <h1 class="text-heading-xl">이상·점검 알림</h1>
-    <p class="text-body-md text-fg-muted">{summary.attention}대에서 {summary.alerts}건의 확인이 필요합니다.</p>
   </header>
   <div class="gap-inline-sm flex flex-wrap" role="group" aria-label="알림 종류">
     {#each [['all', '전체'], ['fault', '장비 이상'], ['inspection', '부품 점검'], ['connection', '수신 지연']] as [value, label] (value)}
@@ -110,13 +108,12 @@
           <dd>{device.contact?.name ?? '담당자 미등록'}</dd>
         </dl>
         {#if device.contact}<p class="text-body-md">
-            연락처 {device.contact.phone}<span class="text-fg-muted"> · 시연용 연락처</span>
+            연락처 {device.contact.phone}
           </p>{/if}
         <div class="gap-stack-sm flex flex-col">
           <Button onclick={read} disabled={selected.read} loading={busy}
             >{selected.read ? '읽음으로 표시됨' : '읽음으로 표시'}</Button
           >
-          <p class="text-body-sm text-fg-muted">읽음 표시는 장비 이상을 해소하거나 점검을 완료하지 않습니다.</p>
         </div>
         {#if error}<p role="alert" class="text-danger-fg text-body-md">{error}</p>{/if}
         <a
@@ -128,9 +125,7 @@
     {:else if url.searchParams.has('alert')}
       <EmptyState title="이 알림을 조회할 수 없습니다" description="보유 장비의 알림 목록에서 다시 선택하세요." />
     {:else}
-      <div class="border-border-subtle rounded-card p-inset-xl text-body-md text-fg-muted border">
-        알림을 선택하면 해당 장비의 현장 담당자와 발생 정보를 함께 확인할 수 있습니다.
-      </div>
+      <EmptyState title="선택한 알림 없음" />
     {/if}
   </div>
 </div>

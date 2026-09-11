@@ -26,7 +26,7 @@
   data-owner-view="entry"
   data-owner-root
   data-owner-app={app}
-  data-density={app === 'pwa' ? 'comfortable' : 'compact'}
+  data-density="comfortable"
   class="bg-canvas text-fg p-page-gutter flex min-h-dvh flex-col"
 >
   <header class="max-w-layout-container-max py-stack-lg gap-inline-sm mx-auto flex w-full items-center justify-between">
@@ -47,7 +47,6 @@
           >데모 시작하기 <ArrowRight class="size-size-icon-lg" aria-hidden="true" /></Button
         >
         {#if error}<p role="alert" class="text-danger-fg text-body-md">{error}</p>{/if}
-        <p class="text-body-sm text-fg-muted">가입 없이 5대의 예시 장비를 살펴볼 수 있습니다.</p>
       </div>
     </section>
     <section
@@ -55,7 +54,7 @@
       aria-label="소유주 화면 미리보기"
     >
       <div class="gap-inline-md mb-stack-lg flex items-center justify-between">
-        <span class="text-heading-md">한빛중기 운영 현황</span><span class="text-label-sm text-fg-muted">예시</span>
+        <span class="text-heading-md">한빛중기 운영 현황</span>
       </div>
       <div class="border-border-subtle pb-stack-xl gap-inline-md flex items-end border-b">
         <div>

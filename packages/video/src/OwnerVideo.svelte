@@ -272,7 +272,7 @@
               {/key}
               <span
                 class="bg-media-scrim text-media-fg text-label-md rounded-pill px-inset-sm py-inset-xs top-stack-sm left-stack-sm absolute"
-                >시연 영상 · {purposeLabel}</span
+                >{purposeLabel}</span
               >
             </div>
             {#if mode !== 'snapshot'}
@@ -306,21 +306,15 @@
             <p class="text-body-md text-fg-muted">
               {mode === 'recorded'
                 ? `저장 시각 ${fmtDateTime(camera.recordedAt)} · ${fmtDuration(camera.durationSec)}`
-                : `시연 기준 ${fmtDateTime(data.at)}`}
+                : `${fmtDateTime(data.at)} 기준`}
             </p>
             <p class="text-body-sm text-fg-muted">
-              {mode === 'live'
-                ? '6초 샘플을 반복 재생하는 실시간 화면 예시입니다.'
-                : mode === 'recorded'
-                  ? '가동일에 저장된 6초 샘플입니다. 영상 끝에서 재생이 멈춥니다.'
-                  : '시연용 영상의 한 프레임입니다.'}
+              {mode === 'live' ? '6초 샘플 반복' : mode === 'recorded' ? '6초 샘플' : '정지 화면'}
             </p>
           </div>
         </section>
       {/if}
     </section>
-    {#if !connectivity.online}<p class="text-body-md text-warning-fg" role="status">
-        오프라인입니다. 새로운 영상을 불러오려면 다시 연결해 주세요.
-      </p>{/if}
+    {#if !connectivity.online}<p class="text-body-md text-warning-fg" role="status">오프라인</p>{/if}
   {/if}
 </div>

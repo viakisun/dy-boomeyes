@@ -48,8 +48,5 @@
         class="h-full"
       />
     </div>
-    <p class="text-body-sm text-fg-muted mt-stack-sm">
-      원점과 선으로 실제 좌표와 펼친 호기를 연결합니다. 수신 지연은 마지막 위치, 미장착은 등록된 보관 위치입니다.
-    </p>
   {/snippet}
 </OwnerWorkspace>

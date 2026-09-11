@@ -111,8 +111,5 @@
     {:else if view === 'documents'}<OwnerDocuments {...viewProps} />
     {:else if view === 'alerts'}<OwnerAlerts {...viewProps} />
     {:else if view === 'video'}{@render video(viewProps)}{/if}
-    <footer class="border-border-subtle mt-stack-xl pt-stack-lg text-body-sm text-fg-muted border-t">
-      {snapshot?.company} · 시연용 자료 · 기준 2026. 7. 3. 10:42
-    </footer>
   {/if}
 </section>

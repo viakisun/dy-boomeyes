@@ -1,18 +1,16 @@
 <script lang="ts">
   import ChevronRight from '@lucide/svelte/icons/chevron-right';
-  import { OWNER_CONNECTION, OWNER_DEPLOYMENT, type OwnerApp, type OwnerDevice } from '@boomeyes/domain';
+  import { OWNER_CONNECTION, OWNER_DEPLOYMENT, type OwnerDevice } from '@boomeyes/domain';
   import { fmtDateTime } from '../lib/format';
   import { equipmentCondition, ownerControl } from './core-helpers';
   let {
     device,
     href,
-    app,
     onselect,
     location = false,
   }: {
     device: OwnerDevice;
     href: string;
-    app: OwnerApp;
     onselect?: (device: OwnerDevice) => void;
     location?: boolean;
   } = $props();
@@ -23,9 +21,7 @@
   {href}
   data-device={device.id}
   aria-label="{device.unit}호기 {device.id} {device.site} 상세 보기"
-  class="{ownerControl(
-    app,
-  )} gap-inline-md px-inset-lg py-inset-md hover:bg-ui-hover grid min-w-0 grid-cols-[minmax(0,1fr)_auto] items-center transition-colors sm:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto]"
+  class="{ownerControl()} gap-inline-md px-inset-lg py-inset-md hover:bg-ui-hover grid min-w-0 grid-cols-[minmax(0,1fr)_auto] items-center transition-colors sm:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto]"
   onclick={(event) => {
     if (onselect && !event.ctrlKey && !event.metaKey && !event.shiftKey && !event.altKey && event.button === 0) {
       event.preventDefault();
@@ -59,8 +55,8 @@
         최근 수신 {fmtDateTime(device.receivedAt)}
       {:else if device.connection === 'stale' && device.receivedAt}
         마지막 수신 {fmtDateTime(device.receivedAt)}
-      {:else}
-        {OWNER_CONNECTION[device.connection]} · 현재 상태 확인 불가
+      {:else if OWNER_CONNECTION[device.connection] !== condition.label}
+        {OWNER_CONNECTION[device.connection]}
       {/if}
     </p>
   </div>

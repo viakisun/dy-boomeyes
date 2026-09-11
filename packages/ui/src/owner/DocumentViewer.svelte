@@ -32,7 +32,7 @@
       </p>
       <h2 class="text-heading-sm break-words">{record.title}</h2>
       <p class="text-label-md text-fg-muted">
-        {record.sessionOnly ? '시연용 첨부 · 첫 페이지 미리보기' : '시연용 원문 · 1페이지'}
+        {record.sessionOnly ? '첨부 미리보기' : '1페이지'}
       </p>
     </div>
     <div class="gap-inline-sm flex flex-wrap">

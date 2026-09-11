@@ -22,9 +22,7 @@
 >
   <a
     href={ownerHref(url, 'fleet', app)}
-    class="{ownerControl(
-      app,
-    )} gap-inline-md rounded-control sm:gap-stack-xs flex shrink-0 items-center sm:flex-col sm:items-start"
+    class="{ownerControl()} gap-inline-md rounded-control sm:gap-stack-xs flex shrink-0 items-center sm:flex-col sm:items-start"
     aria-label="전체 장비 {summary.total}대 보기"
   >
     <span class="text-body-md text-fg-muted">전체 장비</span>
@@ -40,7 +38,7 @@
       {#each segments.filter((segment) => segment.count > 0 || segment.key !== 'unknown') as segment (segment.key)}
         <a
           href={ownerHref(url, 'fleet', app, { filter: segment.key })}
-          class="{ownerControl(app)} gap-inline-sm rounded-control text-body-md hover:text-accent-fg flex items-center"
+          class="{ownerControl()} gap-inline-sm rounded-control text-body-md hover:text-accent-fg flex items-center"
         >
           <span class="text-fg-muted">{segment.label}</span>
           <strong class="text-heading-md tabular-nums"

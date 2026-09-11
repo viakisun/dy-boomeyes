@@ -1,10 +1,9 @@
 import { ownerHref, ownerPath, type OwnerApp, type OwnerDevice } from '@boomeyes/domain';
 import { FOCUS } from '../lib/cx';
 
-export const ownerControl = (app: OwnerApp) =>
-  `${FOCUS} min-h-size-touch-min ${app === 'pwa' ? 'min-h-size-control-md' : ''}`;
-export const ownerLink = (app: OwnerApp) =>
-  `${ownerControl(app)} inline-flex items-center justify-center gap-inline-sm rounded-control px-inset-md py-inset-sm text-body-md text-accent-fg hover:bg-accent-bg`;
+export const ownerControl = () => `${FOCUS} min-h-size-touch-min min-h-size-control-md`;
+export const ownerLink = () =>
+  `${ownerControl()} inline-flex items-center justify-center gap-inline-sm rounded-control px-inset-md py-inset-sm text-body-md text-accent-fg hover:bg-accent-bg`;
 
 export function ownerDate(value: string) {
   const date = new Date(value);

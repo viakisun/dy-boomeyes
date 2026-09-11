@@ -35,6 +35,10 @@
   $effect(() => {
     if (data.theme) applyTheme(data.theme, false);
   });
+  // 소유주 화면은 comfortable 밀도(토큰 원칙 6 — 밀도는 역할에서): 루트 data-density를 전환한다
+  $effect(() => {
+    document.documentElement.dataset.density = data.ownerView ? 'comfortable' : 'compact';
+  });
   const dark = $derived(theme.value ? theme.value === 'dark' : theme.system);
   // 시연 장면 바(specs/demo-scripts AC-7): 이웃 장면 링크(다른 앱이면 절대 URL — PUBLIC_*_URL, preview 기본 포트) · 장면 6 "1시간 경과"
   const APP = 'web';

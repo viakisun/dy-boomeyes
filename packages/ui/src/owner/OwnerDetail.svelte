@@ -26,9 +26,7 @@
 </script>
 
 <div class="gap-stack-xl flex min-w-0 flex-col">
-  <a href={back} class="{ownerLink(app)} w-fit"
-    ><ArrowLeft class="size-size-icon-md" aria-hidden="true" />장비 목록으로</a
-  >
+  <a href={back} class="{ownerLink()} w-fit"><ArrowLeft class="size-size-icon-md" aria-hidden="true" />장비 목록으로</a>
   {#if !device || !condition}
     <EmptyState
       title="장비를 찾을 수 없습니다"
@@ -76,11 +74,6 @@
             </dl>
           {:else}
             <p class="text-heading-md">{device.deployment === 'stored' ? '진행 중인 계약 없음' : '계약 정보 미등록'}</p>
-            <p class="text-body-md text-fg-muted">
-              {device.deployment === 'stored'
-                ? '보관 중인 장비입니다. 다음 현장 투입 전 계약과 점검 상태를 확인해 주세요.'
-                : '계약 기간과 설치일을 확인할 수 없습니다.'}
-            </p>
           {/if}
         </section>
         <section
@@ -98,12 +91,12 @@
               </div>
               <a
                 href="tel:{device.contact.phone.replace(/[^+\d]/g, '')}"
-                class="{ownerLink(app)} border-border-strong border"
+                class="{ownerLink()} border-border-strong border"
                 ><Phone class="size-size-icon-md" aria-hidden="true" />{device.contact.phone}</a
               >
             </div>
           {:else}
-            <p class="text-body-md text-fg-muted">담당자 미등록 · 연락처를 확인할 수 없습니다.</p>
+            <p class="text-body-md text-fg-muted">담당자 미등록</p>
           {/if}
         </section>
       </div>
@@ -128,11 +121,7 @@
         </p>
         {#if device.connection !== 'current'}
           <p class="text-body-md {device.connection === 'stale' ? 'text-warning-fg' : 'text-fg-muted'}">
-            {device.connection === 'stale'
-              ? '새 데이터가 도착하지 않아 현재 상태를 확인할 수 없습니다.'
-              : device.connection === 'detached'
-                ? '단말기가 장착되어 있지 않아 현재 상태를 확인할 수 없습니다.'
-                : '장비가 연동되지 않아 측정 정보를 확인할 수 없습니다.'}
+            현재 상태를 확인할 수 없습니다.
           </p>
         {/if}
         <div class="gap-stack-sm border-border py-inset-lg flex flex-col border-y">
@@ -147,12 +136,12 @@
           </p>
         </div>
         {#if device.inspection}
-          <p class="text-body-md text-warning-fg break-words">점검 확인 · {device.inspection}</p>
+          <p class="text-body-md text-warning-fg break-words">{device.inspection}</p>
         {/if}
         {#if alerts.length > 0}
           <a
             href={ownerHref(url, 'alerts', app, { ...context, alert: alerts[0]!.id })}
-            class="{ownerLink(app)} border-border-strong w-full border"
+            class="{ownerLink()} border-border-strong w-full border"
             >관련 알림 {alerts.length}건 보기 <ArrowRight class="size-size-icon-md" aria-hidden="true" /></a
           >
         {/if}
@@ -163,27 +152,21 @@
       <div class="gap-inline-lg grid min-w-0 grid-cols-1 sm:grid-cols-2">
         <a
           href={ownerHref(url, 'documents', app, context)}
-          class="{ownerControl(
-            app,
-          )} gap-inline-md rounded-card border-border bg-surface p-inset-lg hover:bg-ui-hover flex min-w-0 items-center border"
+          class="{ownerControl()} gap-inline-md rounded-card border-border bg-surface p-inset-lg hover:bg-ui-hover flex min-w-0 items-center border"
         >
           <FileText class="size-size-icon-xl text-fg-muted shrink-0" aria-hidden="true" />
           <div class="gap-stack-xs flex min-w-0 flex-1 flex-col">
             <p class="text-heading-sm">장비 서류 <span class="ml-inline-xs tabular-nums">{documents.length}개</span></p>
-            <p class="text-body-md text-fg-muted">제작증·검사 성적서 원문 확인</p>
           </div>
           <ArrowRight class="size-size-icon-md text-fg-muted shrink-0" aria-hidden="true" />
         </a>
         <a
           href={ownerHref(url, 'video', app, { return: url.pathname + url.search }, device.id)}
-          class="{ownerControl(
-            app,
-          )} gap-inline-md rounded-card border-border bg-surface p-inset-lg hover:bg-ui-hover flex min-w-0 items-center border"
+          class="{ownerControl()} gap-inline-md rounded-card border-border bg-surface p-inset-lg hover:bg-ui-hover flex min-w-0 items-center border"
         >
           <Video class="size-size-icon-xl text-fg-muted shrink-0" aria-hidden="true" />
           <div class="gap-stack-xs flex min-w-0 flex-1 flex-col">
             <p class="text-heading-sm">현장 영상</p>
-            <p class="text-body-md text-fg-muted">타설·설치 영상과 저장 영상 확인</p>
           </div>
           <ArrowRight class="size-size-icon-md text-fg-muted shrink-0" aria-hidden="true" />
         </a>
