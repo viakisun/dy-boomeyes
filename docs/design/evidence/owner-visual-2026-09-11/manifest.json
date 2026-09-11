@@ -5,7 +5,7 @@
     "AC-O16",
     "AC-O18"
   ],
-  "sourceSha": "accecbe7f98cb7fa1d21f759d37357122e68a73d",
+  "sourceSha": "d0f93c6144157b19e50d58bb3c69dd3f65e2322c",
   "workingTreeHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
   "registryHash": "5f7afd017b41ae6d9a31f98db3537817bb10a4b465dfb119cc9544a9cdd09c87",
   "command": [
@@ -14,7 +14,7 @@
     "--output",
     "docs/design/evidence/owner-visual-2026-09-11"
   ],
-  "createdAt": "2026-09-11T23:26:16.350Z",
+  "createdAt": "2026-09-11T23:43:08.707Z",
   "environment": {
     "platform": "darwin",
     "node": "v24.9.0",
@@ -61,10 +61,10 @@
         "mainWidth": 1280,
         "mainScrollWidth": 1280
       },
-      "sha256": "4c8b856289233047545fe146cafbdacb0edd3e288062fb08955af4bdcef1ad65",
+      "sha256": "a07360b3f82c49203db1871f22191d7a288bce145607dffcf17d35dcb7bd690d",
       "fullFile": "web-entry-1280x842-light-full.png",
       "fullHeight": 842,
-      "fullSha256": "4c8b856289233047545fe146cafbdacb0edd3e288062fb08955af4bdcef1ad65",
+      "fullSha256": "a07360b3f82c49203db1871f22191d7a288bce145607dffcf17d35dcb7bd690d",
       "status": "automated-capture-pass"
     },
     {
@@ -96,7 +96,7 @@
         "mainWidth": 1280,
         "mainScrollWidth": 1280
       },
-      "sha256": "5de58ef5813401374011ebd21a4b5d9fd50cb94f28c08a303f7f81f646261c24",
+      "sha256": "93cb68a4e4eadcb2aec52d721988b8f3e2ca19fac28f78aacd24feef6d125f1e",
       "status": "automated-capture-pass"
     },
     {
@@ -128,7 +128,7 @@
         "mainWidth": 1024,
         "mainScrollWidth": 1024
       },
-      "sha256": "a128656e44a8881fb869d6e9964e9c43c86df71e14af89835a6e7695fd98797f",
+      "sha256": "0facc123bedd51116749b9ded447ea439f86f809d875ae02ced3f025fce30380",
       "status": "automated-capture-pass"
     },
     {
@@ -160,7 +160,7 @@
         "mainWidth": 1024,
         "mainScrollWidth": 1024
       },
-      "sha256": "e6b0b644b641b65330594c638eac421a4dee42042f4be41a1a3f889aed2e4620",
+      "sha256": "58688bd1e8f87bfd3002bbf83c71c5dc7dc0eda8854d53ffde5dc29f2129fc0f",
       "status": "automated-capture-pass"
     },
     {
@@ -192,7 +192,7 @@
         "mainWidth": 768,
         "mainScrollWidth": 768
       },
-      "sha256": "5b275dfb26e8ec711c19c6310c682d6913e10ee56d8f32d072b05135f83f8347",
+      "sha256": "8aded77536b732023005a03094b848e173ad82a32c5962260800d744514cf7e7",
       "status": "automated-capture-pass"
     },
     {
@@ -224,7 +224,7 @@
         "mainWidth": 768,
         "mainScrollWidth": 768
       },
-      "sha256": "da424cd539feef20932746350a67be61b5902e4e9e43fa26335d5a1c9197fe9f",
+      "sha256": "9b172ae034fc390ae0303913395930b242c24abd27fee9478e629f3f3bec2d3b",
       "status": "automated-capture-pass"
     },
     {
@@ -256,7 +256,7 @@
         "mainWidth": 390,
         "mainScrollWidth": 390
       },
-      "sha256": "1318c2e9589be6bb8c82662f1c3a87dcd4abc59de5b51a22d48647b45b1c2c32",
+      "sha256": "6f25c735aecc563c36f7a8b800c0fa6e5b0a20e9ed746f12c2020d47b848ec69",
       "status": "automated-capture-pass"
     },
     {
@@ -288,7 +288,7 @@
         "mainWidth": 390,
         "mainScrollWidth": 390
       },
-      "sha256": "05a07ff5c8ad448544514d7c71377741e80983e8f17c66c8d36a5fa7e804cfe5",
+      "sha256": "305d8eecdca3d9d2be0f155fd6df4a6940fcdd9e2067573703dcab0cc4637b45",
       "status": "automated-capture-pass"
     },
     {
@@ -320,7 +320,7 @@
         "mainWidth": 375,
         "mainScrollWidth": 375
       },
-      "sha256": "957824f097a96f9b9e4bbe352c53bd9629d12eaac2da4460d66768a7bf029fee",
+      "sha256": "ed035e33c34d79f348734f0a0bdad0dd717f519946773fe53ff45b87be742544",
       "status": "automated-capture-pass"
     },
     {
@@ -352,7 +352,7 @@
         "mainWidth": 375,
         "mainScrollWidth": 375
       },
-      "sha256": "9c62255fb96e416cb2e95013b66f57f8bbc1bacd946f4b5313111914e60058a6",
+      "sha256": "a9ad6bbf9703b1d8280b7bcd5d958e8342e6433cdb27e2ebcc0b3e154f14d43c",
       "status": "automated-capture-pass"
     },
     {
@@ -384,10 +384,10 @@
         "mainWidth": 390,
         "mainScrollWidth": 390
       },
-      "sha256": "1318c2e9589be6bb8c82662f1c3a87dcd4abc59de5b51a22d48647b45b1c2c32",
+      "sha256": "6f25c735aecc563c36f7a8b800c0fa6e5b0a20e9ed746f12c2020d47b848ec69",
       "fullFile": "pwa-entry-390x800-light-full.png",
       "fullHeight": 800,
-      "fullSha256": "1318c2e9589be6bb8c82662f1c3a87dcd4abc59de5b51a22d48647b45b1c2c32",
+      "fullSha256": "6f25c735aecc563c36f7a8b800c0fa6e5b0a20e9ed746f12c2020d47b848ec69",
       "status": "automated-capture-pass"
     },
     {
@@ -419,7 +419,7 @@
         "mainWidth": 390,
         "mainScrollWidth": 390
       },
-      "sha256": "05a07ff5c8ad448544514d7c71377741e80983e8f17c66c8d36a5fa7e804cfe5",
+      "sha256": "305d8eecdca3d9d2be0f155fd6df4a6940fcdd9e2067573703dcab0cc4637b45",
       "status": "automated-capture-pass"
     },
     {
@@ -451,7 +451,7 @@
         "mainWidth": 430,
         "mainScrollWidth": 430
       },
-      "sha256": "fd7c9277d1d9227c86fef6cd6aed3d3a6730a8b7ca61dc3759d121cdeb91f933",
+      "sha256": "5fbceeb59d5a67ae164b2c0054948089f04d8ba0397a0329dbcab53e19d1b28d",
       "status": "automated-capture-pass"
     },
     {
@@ -483,7 +483,7 @@
         "mainWidth": 430,
         "mainScrollWidth": 430
       },
-      "sha256": "d103ffb064cf5f041594d273b6454fdf4a912432f9b8b1e5e888ab977e0ffd84",
+      "sha256": "0f38d90a437555b3417e849a8e2bdbc5243f15de34a7753a3143184b077bd6e6",
       "status": "automated-capture-pass"
     },
     {
@@ -515,7 +515,7 @@
         "mainWidth": 768,
         "mainScrollWidth": 768
       },
-      "sha256": "f68660ec1b1b5bc35700d7f5a8f5dec8b2aa4c0a5ab416144c0c666f1bf1683d",
+      "sha256": "acf8b3e6c9827be1f9377842b6b920dc95d0f9ada28fa96632fb4ec991c01687",
       "status": "automated-capture-pass"
     },
     {
@@ -547,7 +547,7 @@
         "mainWidth": 768,
         "mainScrollWidth": 768
       },
-      "sha256": "e105ba89c1c690ba2d758ad9f76a654787f40048ec94ceff7c4d8482d6f4fe4d",
+      "sha256": "87208e3170408d704885b5e59ae2f561b94fe5f1aab4c7ad1acc9027faacabc4",
       "status": "automated-capture-pass"
     },
     {
@@ -1948,7 +1948,7 @@
         "mainWidth": 375,
         "mainScrollWidth": 375
       },
-      "sha256": "eca050235ffab5ed06ec068661de4af56b505fa64a481bbbe0953106cc362dd1",
+      "sha256": "b24ce41d3b58786503d6b5a80f8cec5a2ead3e20423f061c7530efa1d4ec2cc4",
       "status": "automated-capture-pass"
     },
     {
@@ -3237,7 +3237,7 @@
         "mainWidth": 375,
         "mainScrollWidth": 375
       },
-      "sha256": "fce3038ed54c77aa657f5a47e4eee12d1a8db24b59f7671c398ae301eebe6d4a",
+      "sha256": "3e6013172e94c641d5ab8ada430f6c7ec31ddc80a80084e5c6f2e69ce77710a2",
       "status": "automated-capture-pass"
     },
     {
@@ -3311,10 +3311,10 @@
         "mainWidth": 390,
         "mainScrollWidth": 390
       },
-      "sha256": "07bc1b6b178a93fae173a14a11321e75411916d8bcc2ba8a34314a86764f0ee3",
+      "sha256": "3f427a35888540f081be94e9220edab17739fecddb6d8f0d2b4f92d33d115ff9",
       "fullFile": "pwa-video-390x800-light-full.png",
       "fullHeight": 800,
-      "fullSha256": "07bc1b6b178a93fae173a14a11321e75411916d8bcc2ba8a34314a86764f0ee3",
+      "fullSha256": "3f427a35888540f081be94e9220edab17739fecddb6d8f0d2b4f92d33d115ff9",
       "status": "automated-capture-pass"
     },
     {
@@ -3351,7 +3351,7 @@
         "mainWidth": 390,
         "mainScrollWidth": 390
       },
-      "sha256": "9a9cae915c18c167526966d9f642f915086ed8a4d9f0a2c7132bd12163c78a4b",
+      "sha256": "a8e808ce9108cf208f8a51b68bca2b37bec15b7e13bb5363a011102d5f02b116",
       "status": "automated-capture-pass"
     },
     {
@@ -3388,7 +3388,7 @@
         "mainWidth": 430,
         "mainScrollWidth": 430
       },
-      "sha256": "5de1620c6888d5c6a929d329ba3180b5cbbd97a7e07989c9abd0d005a78fabe8",
+      "sha256": "f16791eaa0c260726554f5408760c9e6c403ca638c40972191dd93c98afa7d9b",
       "status": "automated-capture-pass"
     },
     {
@@ -3425,7 +3425,7 @@
         "mainWidth": 430,
         "mainScrollWidth": 430
       },
-      "sha256": "56f84173518791ce4a0d4a6efcdf82763fb1fde82e8015d79ae50c5244b1be4f",
+      "sha256": "c5b377dafee2bc9a1dc489a175eec88bcfd64ffc5ef4e2bf2b749a402157c5e0",
       "status": "automated-capture-pass"
     },
     {
@@ -4540,5 +4540,5 @@
     }
   ],
   "exitCode": 0,
-  "finishedAt": "2026-09-11T23:27:47.572Z"
+  "finishedAt": "2026-09-11T23:44:37.057Z"
 }
