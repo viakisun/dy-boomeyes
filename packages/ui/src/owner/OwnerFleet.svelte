@@ -6,6 +6,8 @@
   import PageHeader from '../primitives/PageHeader.svelte';
   import EmptyState from '../primitives/EmptyState.svelte';
   import EquipmentRow from './EquipmentRow.svelte';
+  import List from '../primitives/List.svelte';
+  import { devicePoster } from './core-helpers';
   import { listReturn, ownerControl, ownerLink } from './core-helpers';
   let { data, app, url, navigate }: OwnerViewProps = $props();
   let query = $state('');
@@ -112,19 +114,18 @@
           >{/snippet}
       </EmptyState>
     {:else}
-      <div class="rounded-card border-border bg-surface overflow-hidden border">
-        <ul class="divide-border divide-y" aria-label="보유 장비 목록">
-          {#each matches as device (device.id)}
-            <li>
-              <EquipmentRow
-                {device}
-                href={ownerHref(url, 'detail', app, { return: url.pathname + url.search }, device.id)}
-                onselect={select}
-              />
-            </li>
-          {/each}
-        </ul>
-      </div>
+      <List items={matches} key={(d) => d.id} label="보유 장비 목록">
+        {#snippet item(device)}
+          <EquipmentRow
+            {device}
+            now={data.at}
+            layout="columns"
+            poster={devicePoster(data.cameras, device.id)}
+            href={ownerHref(url, 'detail', app, { return: url.pathname + url.search }, device.id)}
+            onselect={select}
+          />
+        {/snippet}
+      </List>
     {/if}
   </section>
 </div>

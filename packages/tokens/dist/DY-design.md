@@ -10,7 +10,7 @@
 | ref(원시) | 208 |
 | sys(시맨틱) | 324 |
 | cmp(컴포넌트) | 92 |
-| 컴포넌트 카탈로그 | 95 |
+| 컴포넌트 카탈로그 | 97 |
 | 대비 검사 | 94/94 통과 |
 
 | 산출물 | 용도 |
@@ -786,7 +786,7 @@ cmp 층은 sys만 참조한다(ref 직접 참조 금지 — 검사로 강제). �
 | `cmp.table.row-selected` | #ebf1ff | #ebf1ff | {sys.color.bg.selected} |  |
 | `cmp.table.header-fg` | #616368 | #616368 | {sys.color.fg.muted} |  |
 
-## 8. 컴포넌트 카탈로그 (95)
+## 8. 컴포넌트 카탈로그 (97)
 
 이름 PascalCase · prop 어휘 고정: `variant`(형태) · `tone`(색 의도: accent/neutral/info/success/warning/danger/progress) · `size`(sm/md/lg) · 상태 boolean(`disabled` `loading` `selected` `invalid`). 플랫폼 both = 같은 Svelte 컴포넌트가 밀도 토큰으로 두 플랫폼을 소화.
 
@@ -822,6 +822,7 @@ cmp 층은 sys만 참조한다(ref 직접 참조 금지 — 검사로 강제). �
 | 컴포넌트 | 플랫폼 | 참조 | 변형(prop) | 상태 | 비고 |
 |---|---|---|---|---|---|
 | **Badge** | both | CE Badge · Label/status | variant dot/count/pill · tone 6 · size sm/md |  | 숫자 99+ 처리 |
+| **IconTile** | both | Linear · Samsara 카드 미디어 | tone neutral/warning/danger · size md/lg |  | 카드 미디어 자리의 아이콘 타일 — 틴트는 warning·danger만(§0-4), aria-hidden |
 | **Figure** | both | 신규 · 설치 구성도·증빙 사진 | aspect video/auto · caption · ref(data-ref) |  | alt 필수 · 캡션 1줄 · 식별자 없음 · 자산 URL은 prop(ui는 자산을 import하지 않는다) |
 | **Logo** | both | 신규 · 브랜드 마크(§13) | variant mark/glyph/lockup · color(두 톤 = accent.fg) · label(role=img, 없으면 aria-hidden) |  | 셸은 단색(currentColor) · 두 톤은 로그인·아이콘·문서 표지만 · 최소 mark 32 · glyph 16 · 여백 = 마크 높이 1/4 · 원천 logo.json(tools/brand) |
 | **StatusPill** | both | CE Label/status · Label/Map | tone(domain 매핑) · icon · size |  | 색+아이콘+텍스트 병행 |
@@ -834,7 +835,7 @@ cmp 층은 sys만 참조한다(ref 직접 참조 금지 — 검사로 강제). �
 | **StatGroup** | both | new · §11.4 | cols 4/6 | — | Stat 묶음 — 열 폭 layout.stat.width로 좌측 정렬, 늘려 채우지 않는다 · 모바일 2열 |
 | **Card** | both | CE Card layout · Linear | variant default/interactive/selected/brand · padding | hover/selected | PWA 카드 5유형(CTA·정보+버튼·배지+제목·지표·키-값) 프리셋 |
 | **DataTable** | web | Linear 리스트 | density · sortable · sticky header · selectable · rowActions · groupBy | loading/empty/error | 행 36 · 셀 좌측 정렬 · 수치 우측 · 가상 스크롤 |
-| **List** | both | Linear · CE | variant plain/card · leading/trailing · divider |  | PWA 기본 목록 |
+| **List** | both | Linear · CE | variant plain/card · leading/trailing · divider |  | PWA 기본 목록 · <ul aria-label>+<li> 보장 · 카드 크롬은 여기만 |
 | **Timeline** | both | new | orientation · tone per item |  | 업무 이력·에스컬레이션 |
 | **EmptyState** | both | Linear | icon · title · description · action |  | 목록 0건·필터 0건·오류 3종 문안 규칙 |
 | **Skeleton** | both | Linear | shape text/rect/circle |  | 로딩 300ms 이후 표시 |
@@ -918,7 +919,8 @@ cmp 층은 sys만 참조한다(ref 직접 참조 금지 — 검사로 강제). �
 | **OwnerOverview** | both | V5 관제기능 · owner-experience | app web/pwa | loading/empty/error/offline/default | 배치 분포와 확인할 장비 |
 | **OwnerFleet** | both | V5 관제기능 · owner-experience | app web/pwa | loading/empty/error/offline/default | 보유 전체 장비 검색·필터·상세 이동 |
 | **OwnerDetail** | both | V5 관제기능 · owner-experience | app web/pwa | loading/empty/error/offline/default | 호기 식별·계약·담당자·수신 정보 |
-| **EquipmentRow** | both | V5 관제기능 · owner-experience | app web/pwa | loading/empty/error/offline/default | 식별자·현장 2줄 · 상태와 다음 행동 |
+| **EquipmentRow** | both | V5 관제기능 · owner-experience | layout columns/stacked · poster | loading/empty/error/offline/default | 미디어 · 식별 · 배치 Badge · 조건 StatusPill · 수신 · 계약 D-n · 빠른 행동 |
+| **AlertCard** | both | Trackunit Attention · Samsara Alerts | href/onclick · selected | loading/empty/error/offline/default | IconTile(종류 톤) · 제목(미확인 semibold) · 호기·현장 · 상대 시각 · 미확인 배지 |
 | **FleetSummary** | both | V5 관제기능 · owner-experience | app web/pwa | loading/empty/error/offline/default | 전체 대수와 배치 분포 · 이상 집계 분리 |
 | **OwnerAlerts** | both | V5 관제기능 · owner-experience | app web/pwa | loading/empty/error/offline/default | 장비별 이상·점검 선택·읽음·담당자 |
 | **OwnerDocuments** | both | V5 관제기능 · owner-experience | app web/pwa | loading/empty/error/offline/default | 장비 서류 원문·시연용 첨부 |

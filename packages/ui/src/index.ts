@@ -38,6 +38,8 @@ export { default as DocumentCard } from './primitives/DocumentCard.svelte';
 export { default as EquipmentCard } from './primitives/EquipmentCard.svelte';
 export { default as Timeline } from './primitives/Timeline.svelte';
 export { default as Figure } from './primitives/Figure.svelte';
+export { default as IconTile } from './primitives/IconTile.svelte';
+export { default as List } from './primitives/List.svelte';
 export { default as Logo } from './brand/Logo.svelte';
 export { default as OwnerShell } from './owner/OwnerShell.svelte';
 export { default as OwnerEntry } from './owner/OwnerEntry.svelte';
@@ -81,7 +83,7 @@ export {
   EVIDENCE_TONE,
   REPORT_TYPE_LABEL,
 } from './lib/labels';
-export { fmtDateTime, fmtTime, fmtDuration, dueLabel, elapsedLabel, fmtHour } from './lib/format';
+export { relativeLabel, fmtDateTime, fmtTime, fmtDuration, dueLabel, elapsedLabel, fmtHour } from './lib/format';
 export { connectivity } from './lib/connectivity.svelte';
 export { demoRefs, applyDemoRefs } from './lib/demo-refs.svelte';
 // 아이콘(@lucide/svelte) — 앱은 ui를 통해서만 쓴다

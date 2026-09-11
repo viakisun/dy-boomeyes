@@ -169,3 +169,11 @@ export const PART_EVENT_LABEL: Record<PartEvent['kind'], string> = {
   replace: '교체',
   discard: '폐기',
 };
+/** 소유주 알림 종류 */
+export const OWNER_ALERT_KIND_LABEL = { fault: '장비 이상', inspection: '부품 점검', connection: '수신 지연' } as const;
+/** 소유주 서류 파일 종류 */
+export const OWNER_DOC_TYPE_LABEL = {
+  'application/pdf': 'PDF',
+  'image/png': '이미지',
+  'image/jpeg': '이미지',
+} as const;

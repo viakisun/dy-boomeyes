@@ -37,3 +37,13 @@ export function elapsedLabel(ms: number): string {
   if (h) return `${h}h ${mm}m`;
   return `${mm}m`;
 }
+
+/** 상대 시각 — 방금 · N분 전 · N시간 전 · N일 전. now는 DemoClock(data.at)에서 온다(컴포넌트는 new Date()를 쓰지 않는다) */
+export function relativeLabel(iso: string, now: string): string {
+  const m = Math.max(0, Math.floor((Date.parse(now) - Date.parse(iso)) / 60_000));
+  if (m < 1) return '방금';
+  if (m < 60) return `${m}분 전`;
+  const h = Math.floor(m / 60);
+  if (h < 24) return `${h}시간 전`;
+  return `${Math.floor(h / 24)}일 전`;
+}

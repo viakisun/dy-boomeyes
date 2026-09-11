@@ -162,6 +162,15 @@
     "note": "숫자 99+ 처리"
   },
   {
+    "name": "IconTile",
+    "family": "Display",
+    "platform": "both",
+    "ref": "Linear · Samsara 카드 미디어",
+    "variants": "tone neutral/warning/danger · size md/lg",
+    "states": "",
+    "note": "카드 미디어 자리의 아이콘 타일 — 틴트는 warning·danger만(§0-4), aria-hidden"
+  },
+  {
     "name": "Figure",
     "family": "Display",
     "platform": "both",
@@ -276,7 +285,7 @@
     "ref": "Linear · CE",
     "variants": "variant plain/card · leading/trailing · divider",
     "states": "",
-    "note": "PWA 기본 목록"
+    "note": "PWA 기본 목록 · <ul aria-label>+<li> 보장 · 카드 크롬은 여기만"
   },
   {
     "name": "Timeline",
@@ -805,9 +814,18 @@
     "family": "Owner experience",
     "platform": "both",
     "ref": "V5 관제기능 · owner-experience",
-    "variants": "app web/pwa",
+    "variants": "layout columns/stacked · poster",
     "states": "loading/empty/error/offline/default",
-    "note": "식별자·현장 2줄 · 상태와 다음 행동"
+    "note": "미디어 · 식별 · 배치 Badge · 조건 StatusPill · 수신 · 계약 D-n · 빠른 행동"
+  },
+  {
+    "name": "AlertCard",
+    "family": "Owner experience",
+    "platform": "both",
+    "ref": "Trackunit Attention · Samsara Alerts",
+    "variants": "href/onclick · selected",
+    "states": "loading/empty/error/offline/default",
+    "note": "IconTile(종류 톤) · 제목(미확인 semibold) · 호기·현장 · 상대 시각 · 미확인 배지"
   },
   {
     "name": "FleetSummary",

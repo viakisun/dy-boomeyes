@@ -39,7 +39,7 @@
 <OwnerWorkspace {api} {view} app={APP} url={page.url} {navigate} {capture}>
   {#snippet video(props)}<OwnerVideo {...props} />{/snippet}
   {#snippet map(devices)}
-    <div class="h-layout-map-min rounded-card overflow-hidden" aria-label="보유 장비 위치 지도">
+    <div class="rounded-card h-full w-full min-w-0 flex-1 overflow-hidden" aria-label="보유 장비 위치 지도">
       <MapView
         fitMarkers
         markers={markers(devices)}
