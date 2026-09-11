@@ -267,7 +267,8 @@ try {
           return { width: box.width, height: box.height, markers: element.querySelectorAll('.be-marker').length };
         });
         check(result.map.width >= 200 && result.map.height >= 200, 'Map has no usable visible area');
-        check(result.map.markers === 5, 'Map must show all five owned equipment markers');
+        const expectedMarkers = row.view === 'detail' ? 1 : 5;
+        check(result.map.markers === expectedMarkers, `Map must show ${expectedMarkers} owned equipment marker(s)`);
         check((await page.locator('[data-map-error]').count()) === 0, 'Map tiles failed');
         await map.evaluate((element) => element.scrollIntoView({ block: 'center', inline: 'nearest' }));
         result.map.targets = await map.locator('.be-marker').evaluateAll((markers) =>

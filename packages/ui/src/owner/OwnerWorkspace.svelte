@@ -107,7 +107,7 @@
       />
     {:else if view === 'overview'}<OwnerOverview {...viewProps} {map} />
     {:else if view === 'fleet'}<OwnerFleet {...viewProps} />
-    {:else if view === 'detail'}<OwnerDetail {...viewProps} />
+    {:else if view === 'detail'}<OwnerDetail {...viewProps} {map} />
     {:else if view === 'documents'}<OwnerDocuments {...viewProps} />
     {:else if view === 'alerts'}<OwnerAlerts {...viewProps} />
     {:else if view === 'video'}{@render video(viewProps)}{/if}

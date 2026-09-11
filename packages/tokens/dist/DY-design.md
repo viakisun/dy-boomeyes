@@ -10,7 +10,7 @@
 | ref(원시) | 208 |
 | sys(시맨틱) | 324 |
 | cmp(컴포넌트) | 92 |
-| 컴포넌트 카탈로그 | 97 |
+| 컴포넌트 카탈로그 | 100 |
 | 대비 검사 | 94/94 통과 |
 
 | 산출물 | 용도 |
@@ -786,7 +786,7 @@ cmp 층은 sys만 참조한다(ref 직접 참조 금지 — 검사로 강제). �
 | `cmp.table.row-selected` | #ebf1ff | #ebf1ff | {sys.color.bg.selected} |  |
 | `cmp.table.header-fg` | #616368 | #616368 | {sys.color.fg.muted} |  |
 
-## 8. 컴포넌트 카탈로그 (97)
+## 8. 컴포넌트 카탈로그 (100)
 
 이름 PascalCase · prop 어휘 고정: `variant`(형태) · `tone`(색 의도: accent/neutral/info/success/warning/danger/progress) · `size`(sm/md/lg) · 상태 boolean(`disabled` `loading` `selected` `invalid`). 플랫폼 both = 같은 Svelte 컴포넌트가 밀도 토큰으로 두 플랫폼을 소화.
 
@@ -823,6 +823,7 @@ cmp 층은 sys만 참조한다(ref 직접 참조 금지 — 검사로 강제). �
 |---|---|---|---|---|---|
 | **Badge** | both | CE Badge · Label/status | variant dot/count/pill · tone 6 · size sm/md |  | 숫자 99+ 처리 |
 | **IconTile** | both | Linear · Samsara 카드 미디어 | tone neutral/warning/danger · size md/lg |  | 카드 미디어 자리의 아이콘 타일 — 틴트는 warning·danger만(§0-4), aria-hidden |
+| **PeriodBar** | both | Apple HIG Charts · Linear | markers · warnWithinDays | before/during/after | 기간 막대 — 양끝 time · 오늘 마커(rounded-mark) · 종료까지 D-n(≤30일 warning) |
 | **Figure** | both | 신규 · 설치 구성도·증빙 사진 | aspect video/auto · caption · ref(data-ref) |  | alt 필수 · 캡션 1줄 · 식별자 없음 · 자산 URL은 prop(ui는 자산을 import하지 않는다) |
 | **Logo** | both | 신규 · 브랜드 마크(§13) | variant mark/glyph/lockup · color(두 톤 = accent.fg) · label(role=img, 없으면 aria-hidden) |  | 셸은 단색(currentColor) · 두 톤은 로그인·아이콘·문서 표지만 · 최소 mark 32 · glyph 16 · 여백 = 마크 높이 1/4 · 원천 logo.json(tools/brand) |
 | **StatusPill** | both | CE Label/status · Label/Map | tone(domain 매핑) · icon · size |  | 색+아이콘+텍스트 병행 |
@@ -844,6 +845,44 @@ cmp 층은 sys만 참조한다(ref 직접 참조 금지 — 검사로 강제). �
 | **Stepper** | both | CE Stepper · Vertical Progress Step | orientation · current | complete/current/upcoming | 업무 상태 진행 |
 | **Divider** | both | — | orientation · inset |  |  |
 | **Tooltip** | web | Linear | placement · shortcut |  | PWA는 툴팁 금지(터치) |
+
+### Domain
+
+| 컴포넌트 | 플랫폼 | 참조 | 변형(prop) | 상태 | 비고 |
+|---|---|---|---|---|---|
+| **ContactCard** | both | Samsara Fleet App(Call) | copy · actions |  | 이니셜 아바타 · 이름 · 역할 · tel: 링크 버튼 · 복사 |
+| **EquipmentCard** | both | CE 크레인 카드 | status(domain.equipment) · telemetry summary · actions |  | CPB 호기 카드 — 상태 점+필+수치 |
+| **TelemetryGauge** | both | CE 모니터링 계기 | kind voltage/pressure/reach/temp · thresholds | normal/caution/fault | 선형 우선 · 임계 마커 · 모노 수치 |
+| **TelemetryStrip** | both | new | items 3~6 |  | 카드 하단 요약 지표 줄 |
+| **CameraTile** | both | new | channel main/ai · live/snapshot/rec · badges | live/offline/loading | 16:9 · 라이브 점 · 채널 칩 |
+| **CameraWall** | web | new | cols · autoRotate · wall theme |  | 다크 강제([data-theme=dark]) · 쇼케이스 |
+| **VideoPlayer** | both | new | source hls/mp4/snapshot · bbox overlay · timeline |  | AI bbox SVG 오버레이 |
+| **MapView** | both | CE 지도 · Linear | markers · cluster · fit |  | MapLibre + 토큰화 마커 |
+| **MapMarker** | both | CE Map pin | status(domain.map) · selected · label |  | safe=accent · service=progress |
+| **TaskCard** | both | new | status(domain.task) · sla timer · assignee |  | 업무함 항목 |
+| **EscalationTimer** | both | new | deadline · tone by remaining |  | 1h 규칙 시각화 |
+| **CheckinCard** | pwa | CE 출근 카드 | state before/after · geofence |  | 출근·퇴근 · 반경 밖 시트 |
+| **ChecklistForm** | pwa | new | items · photo per item |  | 일일점검 |
+| **DocumentCard** | both | new | status(domain.doc) · type 5 · actions |  | 서류 5종 워크플로 |
+| **SiteProfileForm** | web | new | preset 4 · axes 8 · retention |  | 현장 프로파일(DISC-028) |
+| **BodycamSessionCard** | both | new | state · consent badge · upload |  | 바디캠 세션·동의 |
+| **ShowcaseOverlay** | both | new | mask · watermark |  | 쇼케이스 마스킹 |
+| **ProtocolUploader** | web | new | yaml/json · validation table |  | 프로토콜 업로드·오류 판정 |
+| **RuleThresholdRow** | web | new | metric · operator · value · tone |  | 알림 기준 편집 |
+| **WeatherStrip** | pwa | CE weather | hours 6 · wind |  | 홈 기상 요약 |
+| **BboxOverlay** | both | — | boxes[] 정규화 좌표 · label · tone warning/danger | hidden/visible | AI 채널 클립·스냅샷 위 SVG 오버레이. 텍스트 대체 필수(사람 1 — 호스 주변) |
+| **HealthBadge** | both | — | state live/snapshot/recording/offline/ai-unavailable · size sm/md | — | camera 상태기계 값 그대로 표시(labels.ts). 장애 채널을 정상으로 표시하지 않는다(FR-034) |
+
+### Layout
+
+| 컴포넌트 | 플랫폼 | 참조 | 변형(prop) | 상태 | 비고 |
+|---|---|---|---|---|---|
+| **ContextHeader** | both | Linear · Apple HIG | status · actions | expanded/compact | 상세 히어로 + 스크롤 시 sticky 축약 바(제목·상태·주 행동), scroll-margin으로 포커스 미가림 |
+| **WebShell** | web | Linear | sidebar · topbar · content · inspector |  | 3열 · 데이터 밀도 compact 고정 |
+| **PwaShell** | pwa | CE 앱 구조 | appbar · content · bottomnav · sheet host · offline banner |  | safe-area · 뒤로가기 규칙 |
+| **PageHeader** | both | Linear | title · description · actions · tabs |  |  |
+| **Section** | both | — | title · action · divider |  |  |
+| **Grid** | both | — | cols · gap(sys.space) |  |  |
 
 ### Navigation
 
@@ -872,42 +911,6 @@ cmp 층은 sys만 참조한다(ref 직접 참조 금지 — 검사로 강제). �
 | **Drawer** | web | Linear | side right/left · width | open | 폼·상세 편집 |
 | **Popover** | both | CE Popover | placement · arrow | open |  |
 | **Spinner** | both | — | size |  | 버튼 내 로딩은 Button loading |
-
-### Layout
-
-| 컴포넌트 | 플랫폼 | 참조 | 변형(prop) | 상태 | 비고 |
-|---|---|---|---|---|---|
-| **WebShell** | web | Linear | sidebar · topbar · content · inspector |  | 3열 · 데이터 밀도 compact 고정 |
-| **PwaShell** | pwa | CE 앱 구조 | appbar · content · bottomnav · sheet host · offline banner |  | safe-area · 뒤로가기 규칙 |
-| **PageHeader** | both | Linear | title · description · actions · tabs |  |  |
-| **Section** | both | — | title · action · divider |  |  |
-| **Grid** | both | — | cols · gap(sys.space) |  |  |
-
-### Domain
-
-| 컴포넌트 | 플랫폼 | 참조 | 변형(prop) | 상태 | 비고 |
-|---|---|---|---|---|---|
-| **EquipmentCard** | both | CE 크레인 카드 | status(domain.equipment) · telemetry summary · actions |  | CPB 호기 카드 — 상태 점+필+수치 |
-| **TelemetryGauge** | both | CE 모니터링 계기 | kind voltage/pressure/reach/temp · thresholds | normal/caution/fault | 선형 우선 · 임계 마커 · 모노 수치 |
-| **TelemetryStrip** | both | new | items 3~6 |  | 카드 하단 요약 지표 줄 |
-| **CameraTile** | both | new | channel main/ai · live/snapshot/rec · badges | live/offline/loading | 16:9 · 라이브 점 · 채널 칩 |
-| **CameraWall** | web | new | cols · autoRotate · wall theme |  | 다크 강제([data-theme=dark]) · 쇼케이스 |
-| **VideoPlayer** | both | new | source hls/mp4/snapshot · bbox overlay · timeline |  | AI bbox SVG 오버레이 |
-| **MapView** | both | CE 지도 · Linear | markers · cluster · fit |  | MapLibre + 토큰화 마커 |
-| **MapMarker** | both | CE Map pin | status(domain.map) · selected · label |  | safe=accent · service=progress |
-| **TaskCard** | both | new | status(domain.task) · sla timer · assignee |  | 업무함 항목 |
-| **EscalationTimer** | both | new | deadline · tone by remaining |  | 1h 규칙 시각화 |
-| **CheckinCard** | pwa | CE 출근 카드 | state before/after · geofence |  | 출근·퇴근 · 반경 밖 시트 |
-| **ChecklistForm** | pwa | new | items · photo per item |  | 일일점검 |
-| **DocumentCard** | both | new | status(domain.doc) · type 5 · actions |  | 서류 5종 워크플로 |
-| **SiteProfileForm** | web | new | preset 4 · axes 8 · retention |  | 현장 프로파일(DISC-028) |
-| **BodycamSessionCard** | both | new | state · consent badge · upload |  | 바디캠 세션·동의 |
-| **ShowcaseOverlay** | both | new | mask · watermark |  | 쇼케이스 마스킹 |
-| **ProtocolUploader** | web | new | yaml/json · validation table |  | 프로토콜 업로드·오류 판정 |
-| **RuleThresholdRow** | web | new | metric · operator · value · tone |  | 알림 기준 편집 |
-| **WeatherStrip** | pwa | CE weather | hours 6 · wind |  | 홈 기상 요약 |
-| **BboxOverlay** | both | — | boxes[] 정규화 좌표 · label · tone warning/danger | hidden/visible | AI 채널 클립·스냅샷 위 SVG 오버레이. 텍스트 대체 필수(사람 1 — 호스 주변) |
-| **HealthBadge** | both | — | state live/snapshot/recording/offline/ai-unavailable · size sm/md | — | camera 상태기계 값 그대로 표시(labels.ts). 장애 채널을 정상으로 표시하지 않는다(FR-034) |
 
 ### Owner experience
 

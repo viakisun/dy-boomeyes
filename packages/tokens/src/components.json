@@ -171,6 +171,33 @@
     "note": "카드 미디어 자리의 아이콘 타일 — 틴트는 warning·danger만(§0-4), aria-hidden"
   },
   {
+    "name": "PeriodBar",
+    "family": "Display",
+    "platform": "both",
+    "ref": "Apple HIG Charts · Linear",
+    "variants": "markers · warnWithinDays",
+    "states": "before/during/after",
+    "note": "기간 막대 — 양끝 time · 오늘 마커(rounded-mark) · 종료까지 D-n(≤30일 warning)"
+  },
+  {
+    "name": "ContactCard",
+    "family": "Domain",
+    "platform": "both",
+    "ref": "Samsara Fleet App(Call)",
+    "variants": "copy · actions",
+    "states": "",
+    "note": "이니셜 아바타 · 이름 · 역할 · tel: 링크 버튼 · 복사"
+  },
+  {
+    "name": "ContextHeader",
+    "family": "Layout",
+    "platform": "both",
+    "ref": "Linear · Apple HIG",
+    "variants": "status · actions",
+    "states": "expanded/compact",
+    "note": "상세 히어로 + 스크롤 시 sticky 축약 바(제목·상태·주 행동), scroll-margin으로 포커스 미가림"
+  },
+  {
     "name": "Figure",
     "family": "Display",
     "platform": "both",
