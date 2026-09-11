@@ -86,6 +86,41 @@ export function ownerFlows(app: OwnerApp) {
     await expect(ownerHost(page, 'fleet').locator('[data-device]')).toHaveCount(5);
   });
 
+  test('[B1-02] [FR-024] [AC-O07] overview shows three of four alerts and opens all four', async ({ page }) => {
+    await startOwner(page, app);
+    await page.goto(`${paths.overview}?capture=1&state=boundaries`);
+    const overview = ownerHost(page, 'overview');
+    const preview = overview.getByRole('list', { name: '우선 확인 알림', exact: true });
+    await expect(preview.getByRole('listitem')).toHaveCount(3);
+    await expect(overview).toContainText('전체 알림 4건 중 3건 표시');
+    await expect(overview.getByRole('heading', { name: '확인이 필요한 장비 3대', exact: true })).toBeVisible();
+    // The fourth alert must remain reachable even when it falls outside the overview limit.
+    await expect(preview.locator('[data-device="CPB-004"]')).toHaveCount(0);
+    await overview.getByRole('link', { name: '알림 전체 보기', exact: true }).click();
+    const alerts = ownerHost(page, 'alerts').getByRole('region', { name: '알림 목록', exact: true });
+    await expect(alerts).toContainText('표시 4건 / 전체 4건');
+    await expect(alerts.locator('[data-alert]')).toHaveCount(4);
+    await expect(alerts.locator('[data-alert="CPB-004-STALE"]')).toBeVisible();
+  });
+
+  test('[B1-02] [FR-024] [AC-O07] overview shows five of 120 devices and opens the complete fleet', async ({
+    page,
+  }) => {
+    await startOwner(page, app);
+    await page.goto(`${paths.overview}?capture=1&state=large`);
+    const overview = ownerHost(page, 'overview');
+    const preview = overview.getByRole('list', { name: '현장별 장비', exact: true });
+    await expect(preview.getByRole('listitem')).toHaveCount(5);
+    await expect(overview).toContainText('전체 120대 중 5대 표시');
+    await overview.getByRole('link', { name: '전체 장비 보기', exact: true }).click();
+    const fleet = ownerHost(page, 'fleet');
+    await expect(fleet.getByRole('status')).toHaveText('전체 120대 중 120대 표시');
+    const devices = fleet.getByRole('list', { name: '보유 장비 목록', exact: true });
+    await expect(devices.getByRole('listitem')).toHaveCount(120);
+    await expect(devices.locator('[data-device="CPB-121"]')).toHaveCount(1);
+    await expect(devices.locator('[data-device="CPB-101"]')).toHaveCount(0);
+  });
+
   for (const material of ['documents', 'video'] as const) {
     test(`[B1-02] [FR-024] [AC-O03] [AC-O15] filtered fleet → ${material} → detail → fleet preserves context`, async ({
       page,
