@@ -175,13 +175,18 @@ test('[B1-02] 소유주 KPI 첫 줄 — 보유 호기 5대 · 가동률 67% · �
   await expect(fleet).toContainText('5대 평균');
 });
 
-test('[B1-02] 소유주 owner01 세션 — 보유 호기 5대 · 사이드바 표면명 소유주 운영 WEB [FR-001] [FR-002]', async ({
+test('[B1-02] 소유주 owner01 일반 세션 — 운영 현황 · 보유 장비 5대 · 소유주 메뉴 4개 [FR-001] [FR-002]', async ({
   page,
 }) => {
   await page.goto('/login');
   await page.getByText('owner01', { exact: true }).click();
   await expect(page).toHaveURL(/\/b1\/dash/);
-  await expect(page.getByText('전국 CPB 5대')).toBeVisible(); // 시드 전 장비 OWN-001 — 스코프가 같은 5대
-  await expect(page.getByRole('complementary', { name: '주 내비게이션' })).toContainText('소유주 운영 WEB');
-  await expect(page.getByText('차사장')).toBeVisible();
+  await expect(page.locator('[data-owner-view="overview"]')).toHaveAttribute('data-owner-role', 'owner');
+  await expect(page.getByRole('heading', { name: '운영 현황', exact: true })).toBeVisible();
+  await expect(page.getByRole('region', { name: '장비 운영 구성', exact: true })).toHaveAttribute('data-total', '5');
+  await expect(page.getByRole('link', { name: '전체 장비 5대 보기', exact: true })).toBeVisible();
+  const navigation = page.getByRole('navigation', { name: '소유주 메뉴', exact: true });
+  await expect(navigation.getByRole('link')).toHaveCount(4);
+  for (const label of ['운영 현황', '보유 장비', '이상·점검', '장비 서류'])
+    await expect(navigation.getByRole('link', { name: label, exact: true })).toBeVisible();
 });

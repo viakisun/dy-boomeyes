@@ -26,9 +26,15 @@ test.describe('[B0-01] 역할 카드 로그인', () => {
     });
   }
 
-  test('[FR-024] 미로그인 접근은 /login?next= 로 보낸다', async ({ page }) => {
+  test('[FR-024] 미로그인 소유주 접근은 데모 진입과 복귀 경로로 보낸다', async ({ page }) => {
     await page.goto('/b1/dash');
-    await expect(page).toHaveURL(/\/login\?next=%2Fb1%2Fdash/);
+    await expect(page).toHaveURL(
+      (url) =>
+        url.pathname === '/login' &&
+        url.searchParams.get('demo') === 'owner' &&
+        url.searchParams.get('next') === '/b1/dash',
+    );
+    await expect(page.getByRole('button', { name: '데모 시작하기', exact: true })).toBeVisible();
   });
 
   test('[FR-024] 권한 밖 화면은 403 안내 + 첫 화면으로', async ({ page }) => {
