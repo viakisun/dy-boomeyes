@@ -5,9 +5,9 @@ import { seed } from './seed';
 describe('[FR-011] demo-scripts 장면', () => {
   it('SCENES는 ssot demo 11장면 · 첫 화면 라우트 · 계정', () => {
     expect(SCENES).toHaveLength(11);
-    expect(sceneOf(11)).toMatchObject({ title: '쌓인 데이터', entry: '/b1/dash', account: 'control01', app: 'web' });
+    expect(sceneOf(11)).toMatchObject({ title: '쌓인 데이터', entry: '/b1/dash', account: 'owner01', app: 'web' });
     expect(sceneOf(12)).toBeNull();
-    expect(sceneOf(1)).toMatchObject({ title: '상황 발생', entry: '/b1/dash', account: 'control01', app: 'web' });
+    expect(sceneOf(1)).toMatchObject({ title: '상황 발생', entry: '/b1/dash', account: 'owner01', app: 'web' }); // 소유주가 주인공(ADR-012)
     expect(sceneOf(2)).toMatchObject({ entry: '/a2/today', account: 'driver03', app: 'pwa' });
     expect(sceneOf(5)?.entry).toBe('/a1/inbox/C-105');
   });
