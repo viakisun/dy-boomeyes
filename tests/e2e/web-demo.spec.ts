@@ -91,6 +91,7 @@ test('[B1-06] 장면 9: owner01 세션 · LS-001 D-27 최상단 · 재배치 계
   const bar = page.locator('[data-demo-bar]');
   await expect(bar).toContainText('장면 9/11');
   await expect(bar).toContainText('사업 가치');
+  await expect(page.getByText('차사장')).toBeVisible(); // owner01 세션 — 소유주가 주인공(ADR-012 §후속 3)
   await expect(page.locator('table tbody tr').first()).toContainText('D-27');
   const form = page.getByRole('form', { name: '재배치 계획' });
   await form.getByLabel('재배치 대상 현장').selectOption('SITE-002');
