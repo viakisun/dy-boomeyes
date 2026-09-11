@@ -86,6 +86,54 @@ export function ownerFlows(app: OwnerApp) {
     await expect(ownerHost(page, 'fleet').locator('[data-device]')).toHaveCount(5);
   });
 
+  for (const material of ['documents', 'video'] as const) {
+    test(`[B1-02] [FR-024] [AC-O03] [AC-O15] filtered fleet → ${material} → detail → fleet preserves context`, async ({
+      page,
+    }) => {
+      await startOwner(page, app);
+      await page.getByRole('navigation').getByRole('link', { name: '보유 장비', exact: true }).click();
+      await page.getByLabel('호기·현장 검색', { exact: true }).fill('마포');
+      await page.getByLabel('배치 필터', { exact: true }).selectOption('deployed');
+      await ownerHost(page, 'fleet').locator('[data-device="CPB-001"]').click();
+      const detail = ownerHost(page, 'detail');
+      await expect(detail).toContainText('CPB-001');
+      await detail.getByRole('link', { name: material === 'documents' ? /장비 서류/ : /현장 영상/ }).click();
+      if (material === 'documents') {
+        await page.getByRole('button', { name: '1호기 제작증 열기', exact: true }).click();
+        await expect(page.locator('[data-document-viewer]')).toHaveAttribute('data-doc', 'CPB-001-CERT');
+        await expect(page.locator('[data-document-viewer] img')).toBeVisible();
+      } else {
+        await page.getByRole('button', { name: '마스트 설치', exact: true }).click();
+        await page.getByRole('button', { name: '가동일 저장', exact: true }).click();
+        await expect(page.locator('[data-camera="CPB-001-install"]')).toHaveAttribute('data-mode', 'recorded');
+        await expect(page.locator('[data-camera="CPB-001-install"] video')).toBeVisible();
+      }
+      await page.getByRole('button', { name: '장비 상세로', exact: true }).click();
+      await expect(detail).toContainText('CPB-001');
+      await detail.getByRole('link', { name: '장비 목록으로', exact: true }).click();
+      await expect(page.getByLabel('호기·현장 검색', { exact: true })).toHaveValue('마포');
+      await expect(page.getByLabel('배치 필터', { exact: true })).toHaveValue('deployed');
+      await expect(ownerHost(page, 'fleet').locator('[data-device]')).toHaveCount(1);
+      await expect(ownerHost(page, 'fleet').locator('[data-device]')).toHaveAttribute('data-device', 'CPB-001');
+    });
+  }
+
+  test('[B1-02] [FR-024] [AC-O06] [AC-O08] [AC-O12] conflicting purpose and device queries cannot show unrelated content', async ({
+    page,
+  }) => {
+    await startOwner(page, app);
+    await page.goto(`${paths.video}?purpose=pour&camera=CPB-001-install`);
+    await expect(ownerHost(page, 'video').getByRole('alert')).toBeVisible();
+    await expect(ownerHost(page, 'video').locator('video')).toHaveCount(0);
+    await expect(ownerHost(page, 'video').locator('[data-camera="CPB-001-install"]')).toHaveCount(0);
+    await page.goto(`${paths.alerts}?device=CPB-002&alert=CPB-003-INSP-DUE`);
+    await expect(ownerHost(page, 'alerts')).toBeVisible();
+    await expect(ownerHost(page, 'alerts').locator('[data-alert="CPB-002-FAULT"]')).toBeVisible();
+    await expect(page.getByRole('region', { name: '선택한 알림 상세', exact: true })).toHaveCount(0);
+    await expect(ownerHost(page, 'alerts')).not.toContainText('박현장');
+    await expect(ownerHost(page, 'alerts').locator('[data-alert="CPB-003-INSP-DUE"]')).toHaveCount(0);
+  });
+
   test('[B1-02] [FR-024] [AC-O05] [AC-O14] stale, detached, missing contracts and telemetry stay distinct', async ({
     page,
   }) => {

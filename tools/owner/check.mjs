@@ -4,6 +4,7 @@ import { readFileSync, existsSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createHash } from 'node:crypto';
+import { execFileSync } from 'node:child_process';
 import { parse } from 'yaml';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
@@ -49,6 +50,19 @@ if (value('--captures')) {
   requireThat(
     /^[a-f0-9]{40}$/.test(result.sourceSha ?? '') && /^[a-f0-9]{64}$/.test(result.workingTreeHash ?? ''),
     'Missing source SHA or working tree content hash',
+  );
+  const git = (...command) => execFileSync('git', command, { cwd: ROOT, encoding: 'utf8' }).trim();
+  const currentSha = git('rev-parse', 'HEAD');
+  const diff = execFileSync('git', ['diff', 'HEAD', '--', '.', ':!docs/design/evidence'], { cwd: ROOT });
+  const untracked = git('ls-files', '--others', '--exclude-standard')
+    .split('\n')
+    .filter((file) => file && !file.startsWith('docs/design/evidence/'));
+  const hasher = createHash('sha256').update(diff);
+  for (const file of untracked.sort()) hasher.update(file).update(readFileSync(join(ROOT, file)));
+  requireThat(result.sourceSha === currentSha, `Capture HEAD mismatch: ${result.sourceSha} != ${currentSha}`);
+  requireThat(
+    result.workingTreeHash === hasher.digest('hex'),
+    'Capture working tree content differs from current tracked/untracked source',
   );
   const seen = new Set();
   for (const shot of result.shots ?? []) {
@@ -96,11 +110,32 @@ if (value('--e2e')) {
   const collect = (suite) => [...(suite.specs ?? []), ...(suite.suites ?? []).flatMap(collect)];
   const specs = (report.suites ?? []).flatMap(collect).filter((s) => /owner/.test(s.file ?? ''));
   requireThat(specs.length > 0, 'Zero owner tests in Playwright report');
-  const coverage = new Set();
+  const applications = {
+    web: { count: 0, coverage: new Set(), titles: new Set() },
+    pwa: { count: 0, coverage: new Set(), titles: new Set() },
+  };
+  const discovered = JSON.parse(
+    execFileSync('pnpm', ['exec', 'playwright', 'test', '--list', '--reporter=json'], {
+      cwd: ROOT,
+      encoding: 'utf8',
+      maxBuffer: 10 * 1024 * 1024,
+    }),
+  );
+  const expected = { web: new Set(), pwa: new Set() };
+  for (const spec of (discovered.suites ?? []).flatMap(collect).filter((s) => /owner/.test(s.file ?? '')))
+    for (const test of spec.tests ?? []) expected[test.projectName]?.add(spec.title);
+  const required = (value('--require-ac') ?? '01,02,03,04,05,06,07,08,09,10,11,12,13,14,15,16').split(',');
   for (const spec of specs) {
-    for (const match of spec.title.matchAll(/\[AC-O(\d{2})\]/g)) coverage.add(match[1]);
     for (const test of spec.tests ?? []) {
       tests++;
+      const app = applications[test.projectName];
+      requireThat(!!app, `Unknown owner test project: ${test.projectName}`);
+      if (app) {
+        app.count++;
+        requireThat(!app.titles.has(spec.title), `Duplicate owner test in ${test.projectName}: ${spec.title}`);
+        app.titles.add(spec.title);
+        for (const match of spec.title.matchAll(/\[AC-O(\d{2})\]/g)) app.coverage.add(match[1]);
+      }
       requireThat(
         test.expectedStatus === 'passed' &&
           test.status === 'expected' &&
@@ -111,8 +146,24 @@ if (value('--e2e')) {
     }
   }
   requireThat(tests > 0, 'Zero executed owner tests');
-  const required = (value('--require-ac') ?? '01,02,03,04,05,06,07,08,09,10,11,12,13,14,15,16').split(',');
-  for (const ac of required) requireThat(coverage.has(ac), `No owner test mapped to AC-O${ac}`);
+  for (const [name, app] of Object.entries(applications)) {
+    requireThat(app.count > 0, `Zero executed owner tests for ${name}`);
+    requireThat(
+      expected[name].size > 0 && app.count === expected[name].size,
+      `${name} owner execution count ${app.count} differs from current discovery ${expected[name].size}`,
+    );
+    for (const title of expected[name])
+      requireThat(app.titles.has(title), `${name} required owner test missing: ${title}`);
+    for (const title of app.titles)
+      requireThat(expected[name].has(title), `${name} obsolete/unregistered owner test: ${title}`);
+    for (const ac of required) requireThat(app.coverage.has(ac), `No ${name} owner test mapped to AC-O${ac}`);
+    console.log(`owner ${name}: executed ${app.count} · AC coverage ${[...app.coverage].sort().join(',')}`);
+  }
+  requireThat(applications.web.count === applications.pwa.count, 'WEB/PWA owner test counts differ');
+  for (const title of applications.web.titles)
+    requireThat(applications.pwa.titles.has(title), `PWA counterpart missing: ${title}`);
+  for (const title of applications.pwa.titles)
+    requireThat(applications.web.titles.has(title), `WEB counterpart missing: ${title}`);
   requireThat(
     !report.errors?.length && !report.stats?.unexpected && !report.stats?.skipped && !report.stats?.flaky,
     'Playwright report has errors, unexpected results, skipped tests or flakes',
