@@ -69,13 +69,13 @@ export function bootMock(opts: MockOptions = {}) {
 /** capture 모드: 로그인 없이 셸까지 그리기 위한 세션 합성 (저장하지 않음 · 가드 우회는 W3 전 제거) */
 export function demoSession(role: RoleId): Session | null {
   const u = demoUsers().find((x) => x.role === role);
-  return u ? { userId: u.id, role: u.role, display: u.display, org: u.org } : null;
+  return u ? { userId: u.id, role: u.role, display: u.display, org: u.org, ownerId: u.ownerId } : null;
 }
 
 /** 데모 계정(login = users[].id)의 세션 합성 — ?scene= 진입용 (저장하지 않음 · 가드 우회는 W3 전 제거) */
 export function demoSessionFor(login: string): Session | null {
   const u = demoUsers().find((x) => x.id === login);
-  return u ? { userId: u.id, role: u.role, display: u.display, org: u.org } : null;
+  return u ? { userId: u.id, role: u.role, display: u.display, org: u.org, ownerId: u.ownerId } : null;
 }
 
 /** URL 쿼리 → MockOptions (`?state=` `?capture=1` `?scene=N`) */

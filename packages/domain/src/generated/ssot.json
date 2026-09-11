@@ -250,7 +250,7 @@
       {
         "id": "control",
         "name": "CPB 관제 담당",
-        "org": "운영사 (DY)",
+        "org": "제조사 (DY)",
         "surfaces": [
           "B1"
         ],
@@ -270,7 +270,7 @@
       {
         "id": "maintenance",
         "name": "정비 담당",
-        "org": "운영사 (DY)",
+        "org": "제조사 (DY)",
         "surfaces": [
           "B1"
         ],
@@ -290,7 +290,7 @@
       {
         "id": "ops-admin",
         "name": "CPB 운영 관리자",
-        "org": "운영사 (DY)",
+        "org": "제조사 (DY)",
         "surfaces": [
           "B4"
         ],
@@ -5078,7 +5078,7 @@
       },
       {
         "id": "B1",
-        "name": "운영사 관제 WEB",
+        "name": "소유주 운영 WEB",
         "app": "web"
       },
       {
@@ -6325,6 +6325,10 @@
             "name": "B4 로그인"
           },
           {
+            "id": "login-owner",
+            "name": "소유주 카드 선택 (ADR-012)"
+          },
+          {
             "id": "login-maint",
             "name": "정비 담당 로그인(B1 연계)"
           }
@@ -6371,7 +6375,8 @@
         "route": "/b1/dash",
         "roles": [
           "control",
-          "maintenance"
+          "maintenance",
+          "owner"
         ],
         "phase": 1,
         "wave": 0,
@@ -6442,7 +6447,8 @@
         "route": "/b1/dash?cam=[camera]",
         "roles": [
           "control",
-          "maintenance"
+          "maintenance",
+          "owner"
         ],
         "phase": 1,
         "wave": 1,
@@ -6484,7 +6490,8 @@
         "route": "/b1/inbox",
         "roles": [
           "control",
-          "maintenance"
+          "maintenance",
+          "owner"
         ],
         "phase": 1,
         "wave": 1,
@@ -6525,7 +6532,8 @@
         "route": "/b1/escalation",
         "roles": [
           "control",
-          "maintenance"
+          "maintenance",
+          "owner"
         ],
         "phase": 1,
         "wave": 1,
@@ -6563,7 +6571,8 @@
         "route": "/b1/docs",
         "roles": [
           "control",
-          "maintenance"
+          "maintenance",
+          "owner"
         ],
         "phase": 1,
         "wave": 2,
@@ -6599,7 +6608,8 @@
         "route": "/b1/leases",
         "roles": [
           "control",
-          "maintenance"
+          "maintenance",
+          "owner"
         ],
         "phase": 1,
         "wave": 2,
@@ -6633,7 +6643,8 @@
         "route": "/b1/showcase",
         "roles": [
           "control",
-          "maintenance"
+          "maintenance",
+          "owner"
         ],
         "phase": 2,
         "wave": 2,
@@ -6670,7 +6681,8 @@
         "route": "/b1/events/[event]",
         "roles": [
           "control",
-          "maintenance"
+          "maintenance",
+          "owner"
         ],
         "phase": 1,
         "wave": 2,

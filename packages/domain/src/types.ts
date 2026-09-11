@@ -192,6 +192,8 @@ export interface User {
   siteIds: string[];
   /** 운전자 배정 장비 (driver-daily) */
   deviceId?: string;
+  /** 소유주 계정의 사업주 ID(ENT-13) — B1 스코프(ADR-012). 다른 역할은 없음 */
+  ownerId?: string;
   phone?: string;
   /** 계정 상태(B4-04) — 없으면 active */
   status?: 'active' | 'suspended';

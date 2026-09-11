@@ -50,7 +50,7 @@ roles:
     display: 최본부
 - id: control
   name: CPB 관제 담당
-  org: 운영사 (DY)
+  org: 제조사 (DY)
   surfaces:
   - B1
   surface_note: B1 전국 스코프 · 읽기 위주 (ADR-012 — 상황실 아님)
@@ -65,7 +65,7 @@ roles:
     display: 이관제
 - id: maintenance
   name: 정비 담당
-  org: 운영사 (DY)
+  org: 제조사 (DY)
   surfaces:
   - B1
   surface_note: B1 연계 (호출·보고)
@@ -80,7 +80,7 @@ roles:
     display: 정정비
 - id: ops-admin
   name: CPB 운영 관리자
-  org: 운영사 (DY)
+  org: 제조사 (DY)
   surfaces:
   - B4
   surface_note: B4 백오피스

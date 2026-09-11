@@ -17,7 +17,7 @@ surfaces:
   name: 웹 공통 로그인
   app: web
 - id: B1
-  name: 운영사 관제 WEB
+  name: 소유주 운영 WEB
   app: web
 - id: B2
   name: 건설사 본사 관리 WEB
@@ -822,6 +822,8 @@ screens:
     name: B3 로그인
   - id: login-b4
     name: B4 로그인
+  - id: login-owner
+    name: 소유주 카드 선택 (ADR-012)
   - id: login-maint
     name: 정비 담당 로그인(B1 연계)
   nav:
@@ -851,6 +853,7 @@ screens:
   roles: &id005
   - control
   - maintenance
+  - owner
   phase: 1
   wave: 0
   default: dash
