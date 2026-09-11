@@ -545,11 +545,18 @@ try {
       if (existsSync(join(OUT, result.failureFile))) result.failureSha256 = sha256(join(OUT, result.failureFile));
       console.log(`FAIL ${scenario.key}: ${error.message}`);
     } finally {
+      await context.close();
       Object.assign(result, classified());
+      if (
+        result.status === 'automated-capture-pass' &&
+        (pageErrors.length || result.unexpectedConsoleErrors.length || result.unexpectedRequestFailures.length)
+      ) {
+        result.status = 'failed';
+        result.error = 'Unexpected error arrived after the last capture frame';
+      }
       manifest.cases.push(result);
       manifest.actualCases++;
       write();
-      await context.close();
     }
   }
   const finalSource = fingerprint();
