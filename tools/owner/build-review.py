@@ -18,7 +18,7 @@ import shutil
 import subprocess
 
 from PIL import Image
-from reportlab.lib.pagesizes import A3, landscape
+from reportlab.lib.pagesizes import A3, landscape, portrait
 from reportlab.lib.styles import ParagraphStyle
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
@@ -101,8 +101,10 @@ class ReviewPDF:
         item.drawOn(self.canvas, x, y - height)
         return y - height
 
-    def start(self, title, subtitle=""):
+    def start(self, title, subtitle="", tall=False):
         if self.page: self.canvas.showPage()
+        self.w, self.h = portrait(A3) if tall else landscape(A3)
+        self.canvas.setPageSize((self.w, self.h))
         self.page += 1
         self.pages.append({"page": self.page, "title": title})
         self.canvas.setFillColor(PAPER)
@@ -125,7 +127,33 @@ class ReviewPDF:
         return height
 
 
-def pdf_document(output, scenes, capture, font):
+# Reviewed crop rectangles in the canonical 1280px WEB / 390px PWA full captures.
+# Preserve actual pixels; the manifest records source file/hash and every crop.
+SUPPLEMENTS = [
+    ("web", "video", "영상의 재생과 시간 조작", (264, 383, 1256, 1115), False),
+    ("web", "documents", "1호기 제작증 원문", (440, 614, 1080, 1520), True),
+    ("pwa", "detail", "휴대폰에서 계약과 현장 담당자 확인", (20, 160, 370, 1115), True),
+    ("pwa", "documents", "휴대폰에서 제작증 원문 열람", (20, 615, 370, 1275), True),
+]
+
+def supplement_images(output, directory, capture):
+    result = []
+    for app, view, title, box, tall in SUPPLEMENTS:
+        row = next(s for s in capture["shots"] if s["app"] == app and s["view"] == view and s["theme"] == "light" and s["width"] == (1280 if app == "web" else 390))
+        path = CHECK.contained_file(directory, row["fullFile"])
+        if CHECK.sha256(path) != row["fullSha256"]: raise ValueError("Full capture hash mismatch")
+        with Image.open(path) as source:
+            if not (0 <= box[0] < box[2] <= source.width and 0 <= box[1] < box[3] <= source.height):
+                raise ValueError("Supplement crop exceeds actual capture")
+            name = f"screens/{app}-{view}-expanded.png"
+            source.crop(box).save(output / name)
+        result.append({"app": app, "view": view, "title": title, "tall": tall,
+                       "captureKey": row["key"], "sourceFile": row["fullFile"], "sourceSha256": row["fullSha256"],
+                       "crop": list(box), "file": name, "sha256": CHECK.sha256(output / name)})
+    return result
+
+
+def pdf_document(output, scenes, capture, font, supplements):
     pdf = ReviewPDF(output / "owner-review.pdf", font)
     pdf.start("내 장비를 찾고, 현장 확인까지", "소유주를 위한 PC·휴대폰 데모 화면")
     y = pdf.paragraph("보유 장비의 현장과 상태를 찾고, 계약·담당자·서류·영상으로 이어지는 흐름을 살펴봅니다.", 58, pdf.h - 168, 780, 25)
@@ -134,7 +162,7 @@ def pdf_document(output, scenes, capture, font):
         y = pdf.paragraph(f"{scene['number']:02}  {scene['label']}  /  {scene['question']}", 58, y - 20, pdf.w - 116, 15)
     pdf.paragraph("고객 확인은 아직 진행하지 않았습니다. 이 자료는 검토를 위한 로컬 초안입니다.", 58, 134, pdf.w - 116, 12, MUTED)
     for scene in scenes:
-        pdf.start(f"{scene['number']:02}  {scene['label']}", "PC에서 확인하기")
+        pdf.start(f"{scene['number']:02}  {scene['label']}", "PC 첫 화면 · 영상·서류의 하단 내용은 뒤의 확대 페이지에서 확인")
         image_width = 808
         pdf.image(output / "screens" / scene["web_shot"]["file"], 44, pdf.h - 139, image_width, 582)
         x, width, y = 879, pdf.w - 923, pdf.h - 143
@@ -146,7 +174,7 @@ def pdf_document(output, scenes, capture, font):
         pdf.paragraph(scene["next"], x, y - 25, width, 12)
     for first in range(0, len(scenes), 2):
         pair = scenes[first:first + 2]
-        pdf.start("휴대폰에서 이어서 확인하기", "같은 장비 · 같은 계약과 기록")
+        pdf.start("휴대폰에서 이어서 확인하기", "휴대폰 첫 화면 · 계약·원문은 뒤의 확대 페이지에서 확인")
         cell_width = (pdf.w - 110) / 2
         for column, scene in enumerate(pair):
             x = 44 + column * (cell_width + 22)
@@ -156,6 +184,9 @@ def pdf_document(output, scenes, capture, font):
             y = pdf.paragraph(scene["question"], tx, y, tw, 17)
             y = pdf.paragraph(scene["action"], tx, y - 26, tw, 13)
             pdf.paragraph(scene["next"], tx, y - 26, tw, 11, MUTED)
+    for extra in supplements:
+        pdf.start(extra["title"], "같은 호기의 실제 화면 확대 · 첫 화면 아래에서 이어지는 내용", tall=extra["tall"])
+        pdf.image(output / extra["file"], 44, pdf.h - 140, pdf.w - 88, pdf.h - 220)
     pdf.start("검토 전에 알아둘 시연 조건", "예시 데이터와 실제 운영 판단을 구분합니다")
     y = pdf.h - 143
     for index, assumption in enumerate(ASSUMPTIONS):
@@ -179,16 +210,17 @@ def pdf_document(output, scenes, capture, font):
     return pdf.pages
 
 
-def html_document(output, scenes, capture):
+def html_document(output, scenes, capture, supplements):
     nav = "".join(f'<a href="#{s["view"]}">{s["number"]}. {escape(s["label"])}</a>' for s in scenes)
     sections = []
     for scene in scenes:
         shots = "".join(f'<figure><figcaption>{app}</figcaption><a href="screens/{scene[key]["file"]}" target="_blank"><img src="screens/{scene[key]["file"]}" alt="{escape(scene["label"])} {app} 실제 데모 화면"></a></figure>' for app, key in [("PC", "web_shot"), ("휴대폰", "pwa_shot")])
         sections.append(f'<section id="{scene["view"]}"><p class="eyebrow">{scene["number"]:02} / {escape(scene["label"])}</p><h2>{escape(scene["question"])}</h2><p class="action">{escape(scene["action"])}</p><p>{escape(scene["talk"])}</p><div class="screens">{shots}</div><p class="next">{escape(scene["next"])}</p></section>')
+    expanded = "".join(f'<section><h2>{escape(e["title"])}</h2><p>같은 호기의 실제 화면 확대</p><a href="{e["file"]}" target="_blank"><img style="max-width:800px" src="{e["file"]}" alt="{escape(e["title"])}"></a></section>' for e in supplements)
     assumptions = "".join(f"<li>{escape(text)}</li>" for text in ASSUMPTIONS)
     rows = "".join(f'<tr><th>{escape(s["label"])}</th><td>{escape(", ".join(s["source_cells"]))}</td><td>{s["web"]} / {s["pwa"]}</td></tr>' for s in scenes)
     style = """*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;color:#172D39;background:#F0F4F4;font:17px/1.65 system-ui,sans-serif}header,main,footer{max-width:1280px;margin:auto;padding:32px}header{padding-top:56px}h1{font-size:42px;line-height:1.2}h2{font-size:29px;line-height:1.4}nav{display:flex;flex-wrap:wrap;gap:12px}a{color:#075A60}nav a{padding:12px 16px;background:white;border:1px solid #CAD5D9;border-radius:8px}section{padding:30px;background:white;border:1px solid #CAD5D9;border-radius:12px;margin:24px 0;scroll-margin-top:24px}.eyebrow{color:#0A6166;font-weight:650}.action{font-size:21px}.screens{display:grid;grid-template-columns:minmax(0,3fr) minmax(200px,1fr);gap:24px;align-items:start}figure{margin:0}figcaption{font-weight:650;margin:12px 0}img{width:100%;height:auto;border:1px solid #CAD5D9}p,li,td{overflow-wrap:anywhere}li{margin:12px 0}table{width:100%;border-collapse:collapse;font-size:15px}th,td{text-align:left;padding:12px;border-bottom:1px solid #CAD5D9}.next{font-weight:650}code{font-size:13px}footer{font-size:14px}a:focus-visible{outline:3px solid #0A6166;outline-offset:4px}@media(max-width:700px){header,main,footer{padding:20px}h1{font-size:32px}h2{font-size:25px}section{padding:20px}.screens{grid-template-columns:1fr}.screens figure:last-child{max-width:390px;margin:auto}}@media print{@page{size:A3 landscape;margin:14mm}body{background:white}nav{display:none}header,main,footer{max-width:none;padding:0}section{break-before:page;border:0;padding:0}.screens{grid-template-columns:3fr 1fr}a{color:inherit;text-decoration:none}}"""
-    html = f'<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>BoomEyes 소유주 화면 검토안</title><style>{style}</style></head><body><header><p class="eyebrow">BOOMEYES / OWNER DEMO</p><h1>내 장비를 찾고, 현장 확인까지</h1><p>소유주 화면 검토안 · 내부 검토용 초안</p><nav aria-label="검토 화면">{nav}</nav></header><main>{"".join(sections)}<section><h2>시연 조건</h2><ol>{assumptions}</ol></section><section><h2>부록 · 원문 근거와 빌드 기록</h2><p>2026-09-08 V5 · 관제기능 시트</p><table><thead><tr><th>화면</th><th>원문 셀</th><th>검토 코드 (PC / 폰)</th></tr></thead><tbody>{rows}</tbody></table><p>전체 자동 캡처 112 / 112. 고객 확인은 아직 진행하지 않았습니다.</p><p>소스 커밋 <code>{capture["sourceSha"]}</code><br>작업 내용 해시 <code>{capture["workingTreeHash"]}</code><br>원천 해시 <code>{capture["registryHash"]}</code></p></section></main><footer>로컬 검토용 자료입니다. 화면 이미지를 선택하면 원래 크기로 열립니다.</footer></body></html>'
+    html = f'<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>BoomEyes 소유주 화면 검토안</title><style>{style}</style></head><body><header><p class="eyebrow">BOOMEYES / OWNER DEMO</p><h1>내 장비를 찾고, 현장 확인까지</h1><p>소유주 화면 검토안 · 내부 검토용 초안</p><nav aria-label="검토 화면">{nav}</nav></header><main>{"".join(sections)}{expanded}<section><h2>시연 조건</h2><ol>{assumptions}</ol></section><section><h2>부록 · 원문 근거와 빌드 기록</h2><p>2026-09-08 V5 · 관제기능 시트</p><table><thead><tr><th>화면</th><th>원문 셀</th><th>검토 코드 (PC / 폰)</th></tr></thead><tbody>{rows}</tbody></table><p>전체 자동 캡처 112 / 112. 고객 확인은 아직 진행하지 않았습니다.</p><p>소스 커밋 <code>{capture["sourceSha"]}</code><br>작업 내용 해시 <code>{capture["workingTreeHash"]}</code><br>원천 해시 <code>{capture["registryHash"]}</code></p></section></main><footer>로컬 검토용 자료입니다. 화면 이미지를 선택하면 원래 크기로 열립니다.</footer></body></html>'
     (output / "owner-review.html").write_text(html, encoding="utf-8")
 
 
@@ -238,8 +270,9 @@ def main():
                 shutil.copyfile(manifest_path.parent / shot["file"], output / "screens" / shot["file"])
                 selected.append({"view": scene["view"], "app": app, "captureKey": shot["key"],
                                  "file": f"screens/{shot['file']}", "sha256": shot["sha256"]})
-        pages = pdf_document(output, scenes, capture, font)
-        html_document(output, scenes, capture)
+        supplements = supplement_images(output, manifest_path.parent, capture)
+        pages = pdf_document(output, scenes, capture, font, supplements)
+        html_document(output, scenes, capture, supplements)
         script_document(output, scenes)
         rendered = render_pages(output, pages) if args.render else []
         if any(CHECK.fingerprint(repo)[key] != capture[key] for key in ["sourceSha", "workingTreeHash", "registryHash"]):
@@ -249,7 +282,7 @@ def main():
                   "captureManifestSha256": CHECK.sha256(manifest_path), "captureManifest": str(manifest_path),
                   "generatedAt": datetime.now(timezone.utc).isoformat(), "status": "generated-awaiting-visual-review",
                   "customerReview": "not-performed", "visualReview": "pending", "pageCount": len(pages),
-                  "pages": pages, "screens": selected, "renderedPages": rendered, "fontSha256": CHECK.sha256(font),
+                  "pages": pages, "screens": selected, "supplements": supplements, "renderedPages": rendered, "fontSha256": CHECK.sha256(font),
                   "artifacts": artifacts}
         (output / "review-manifest.json").write_text(json.dumps(record, ensure_ascii=False, indent=2) + "\n")
         CHECK.check_review(repo, manifest_path, output)

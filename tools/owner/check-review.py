@@ -137,6 +137,24 @@ def check_review(repo, manifest_path, directory, require_visual=False):
             raise ValueError("Review screen file disagrees with its actual capture")
         if sha256(contained_file(directory, row["file"])) != source["sha256"]:
             raise ValueError("Review image was changed after the browser capture")
+    extras = record.get("supplements", [])
+    if {(e.get("app"), e.get("view")) for e in extras} != {("web", "video"), ("web", "documents"), ("pwa", "detail"), ("pwa", "documents")} or len(extras) != 4:
+        raise ValueError("Review must expand all four below-fold tasks")
+    for extra in extras:
+        source = capture_shots.get(extra.get("captureKey"))
+        if not source or extra.get("sourceFile") != source.get("fullFile") or extra.get("sourceSha256") != source.get("fullSha256"):
+            raise ValueError("Expanded image is not linked to a full actual capture")
+        original = contained_file(manifest_path.parent, extra["sourceFile"])
+        derived = contained_file(directory, extra["file"])
+        if sha256(original) != extra["sourceSha256"] or sha256(derived) != extra["sha256"]:
+            raise ValueError("Expanded capture hash mismatch")
+        box = extra.get("crop", [])
+        with Image.open(original) as full, Image.open(derived) as crop:
+            if len(box) != 4 or not (0 <= box[0] < box[2] <= full.width and 0 <= box[1] < box[3] <= full.height):
+                raise ValueError("Expanded crop is outside the captured screen")
+            expected_crop = full.crop(box)
+            if expected_crop.size != crop.size or expected_crop.convert("RGBA").tobytes() != crop.convert("RGBA").tobytes():
+                raise ValueError("Expanded view is not an unchanged crop of the actual screen")
     artifact_names = {row["file"] for row in record.get("artifacts", [])}
     if not {"owner-review.pdf", "owner-review.html", "five-minute-demo.md"}.issubset(artifact_names):
         raise ValueError("Review artifact manifest omits PDF, HTML or demo script")
@@ -151,11 +169,11 @@ def check_review(repo, manifest_path, directory, require_visual=False):
     text = re.sub(r"\s+", "", "\n".join(page.extract_text() or "" for page in reader.pages))
     if any(re.sub(r"\s+", "", view["question"]) not in text for view in views) or "고객확인은아직진행하지않았습니다" not in text:
         raise ValueError("Required customer questions or review status missing in PDF")
-    if sum(len(page.images) for page in reader.pages) != 14:
-        raise ValueError("Review PDF must contain the fourteen selected actual screen images")
+    if sum(len(page.images) for page in reader.pages) != 14 + len(extras):
+        raise ValueError("Review PDF must contain fourteen selected screens and all four expanded views")
     html = (directory / "owner-review.html").read_text()
-    images = re.findall(r'<img src="([^"]+)"', html)
-    if len(images) != 14 or set(images) != {row["file"] for row in record["screens"]}:
+    images = re.findall(r'<img\b[^>]*\bsrc="([^"]+)"', html)
+    if len(images) != 14 + len(extras) or set(images) != {row["file"] for row in record["screens"] + extras}:
         raise ValueError("Review HTML does not contain the fourteen selected actual screens")
     script = (directory / "five-minute-demo.md").read_text()
     if script.count("**고객의 질문:**") != 7 or "5:00" not in script:
