@@ -131,6 +131,10 @@ for (const { scr, label, url, ready } of PAGES) {
     await page.goto(url);
     await expect(page.locator(`[data-scr="${scr}"]`).first()).toBeVisible();
     await ready(page);
+    // 휴지 상태만 검사 — Button 등의 transition-colors(F-22) 중간 프레임에서 axe color-contrast가 간헐 실패(A2-01·A3-01 CI/로컬 flake)
+    await page.addStyleTag({
+      content: '*, *::before, *::after { transition: none !important; animation: none !important; }',
+    });
     const result = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'best-practice']).analyze();
     const bad = result.violations
       .filter((v) => v.impact === 'serious' || v.impact === 'critical')
