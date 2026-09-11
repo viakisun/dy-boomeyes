@@ -71,7 +71,7 @@
             <p class="text-heading-md">1호기 · 마포 주상복합</p>
             <p class="text-body-md text-fg-muted">현장 투입 · 최근 수신</p>
           </div>
-          <Check class="text-success-fg size-size-icon-lg ml-auto" aria-label="수신 정상" />
+          <Check class="text-fg-muted size-size-icon-lg ml-auto" aria-label="수신 정상" />
         </div>
         <dl class="bg-surface-sunken rounded-control gap-stack-sm p-inset-lg text-body-md grid grid-cols-2">
           <dt class="text-fg-muted">계약 종료</dt>

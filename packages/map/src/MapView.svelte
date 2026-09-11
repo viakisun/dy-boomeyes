@@ -52,8 +52,9 @@
     d.setAttribute('aria-label', `${m.description ?? m.label} — ${m.state}`);
     d.dataset.state = m.state;
     d.title = m.description ?? m.label;
-    d.style.cssText = `--pin:${COLOR[m.state] ?? COLOR.offline}`;
-    (d.querySelector('.be-marker__dot') as HTMLElement).textContent = GLYPH[m.state] ?? '';
+    d.style.cssText = `--pin:${fitMarkers && m.state === 'normal' ? 'var(--sys-color-fg-muted)' : (COLOR[m.state] ?? COLOR.offline)}`;
+    (d.querySelector('.be-marker__dot') as HTMLElement).textContent =
+      fitMarkers && m.state === 'normal' ? '✓' : (GLYPH[m.state] ?? '');
     (d.querySelector('.be-marker__label') as HTMLElement).textContent = m.label;
   }
   function pin(m: M) {
