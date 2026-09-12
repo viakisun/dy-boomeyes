@@ -16,7 +16,7 @@ node tools/ssot/check.mjs --docs     # md 링크·ID 실존
 | `contract.yaml` | 과업 절 `4.3.x/5.3.x` · RFP `RFP-nnn`/`EXT-n` · 산출물 `OUT-nnn` · 검수 `ACC-nnn` · WP `WP-Xn` · 마일스톤 | 계약 축 | rfp·sections → screens[] |
 | `requirements.yaml` | `FR-nnn` · `NFR-nnn` | | **FR → screens[]·if[]·acc[]** (역방향 금지) |
 | `interfaces.yaml` | `IF-nnn` · `API-nnn` · MQTT 토픽 · 이벤트 · 프로토콜 필드 | | if → screens[] · api → if[] |
-| `entities.yaml` | `ENT-nn` · 상태기계(task·doc·equipment·camera·part) · 규칙 · 저장소 · 축적 | | 값 |
+| `entities.yaml` | `ENT-nn` · 상태기계 7(task·doc·equipment·camera·part·request·lease) · 규칙 · 저장소 · 축적 | | 값 |
 | `screens.yaml` | 표면 `A1..B4` · 화면 `A1-03` `B1-02M` | 맨 코드(`SCR-` 접두는 표시용) | **화면 → trace{task,out,rfp,disc,if}** · states · nav · wave |
 | `decisions.yaml` | `DISC-nnn` (고객용 미결 원장) | | scope → screens[] · `decided`면 `resolved` 필수 |
 | `options.yaml` | 현장 프로파일 옵션 축 `AX-n` · 후보 기종 · 프리셋 | | 값 |
