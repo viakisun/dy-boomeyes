@@ -11,7 +11,7 @@ fr: [FR-001, FR-002, FR-003, FR-004, FR-005, FR-006, FR-007, FR-016, FR-019, FR-
 V5(20260908) 관제기능의 소유주 장비 조회 흐름. 승인된 [구현 계획](../../docs/plans/owner-demo-implementation-plan.md)을 실행한다. 실제 고객 승인·실인증·장비 연동은 이번 내부 데모 검증과 구분한다.
 
 ## 화면
-화면·메뉴·고객 질문·원문 셀은 ssot/screens.yaml의 owner_demo에서 생성한다. 진입 1종과 업무 10종을 WEB/PWA로 제공하고 **좌측 메뉴는 운영 현황 · 보유 장비 · 계약 셋**이다(시안 «결정 2026-09-12»). 이상·점검과 장비 서류는 메뉴에서 내려와 종 알림 패널과 호기 화면의 접기로 들어가지만 화면 자체는 남는다. 계약·운전자의 수용 기준은 [owner-contracts](../owner-contracts/spec.md)·[owner-drivers](../owner-drivers/spec.md)가 갖는다. scene 모드는 기존 시연 명세와 데이터를 우선하며 일반 owner 세션에서 새 경험을 제공한다.
+화면·메뉴·고객 질문·원문 셀은 ssot/screens.yaml의 owner_demo에서 생성한다. 진입과 업무 화면을 WEB/PWA 쌍으로 제공하고(목적 수는 `owner_demo`가 정한다) **좌측 메뉴는 운영 현황 · 보유 장비 · 계약 셋**이다(시안 «결정 2026-09-12»). 이상·점검과 장비 서류는 메뉴에서 내려와 종 알림 패널과 호기 화면의 접기로 들어가지만 화면 자체는 남는다. 계약·운전자의 수용 기준은 [owner-contracts](../owner-contracts/spec.md)·[owner-drivers](../owner-drivers/spec.md)가 갖는다. scene 모드는 기존 시연 명세와 데이터를 우선하며 일반 owner 세션에서 새 경험을 제공한다.
 
 ## 수용 기준
 - **AC-1** Given 승인된 소유주 데모 세트 When 소유주 데모 URL → 로그인 폼(아이디·비밀번호, 데모 계정은 "데모 계정으로 로그인"이 채움 · 잘못된 계정은 오류 한 줄) → owner 세션·ownerId·운영 현황·4메뉴. 역할 재선택 없음, 화면에 계정 ID 표시 없음 Then AC-O01 진입의 결과를 VT-02·03로 확인한다. [FR-001, FR-024]
