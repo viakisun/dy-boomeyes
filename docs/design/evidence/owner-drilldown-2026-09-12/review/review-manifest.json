@@ -1,0 +1,620 @@
+{
+  "sourceSha": "897efa750e96323a193639278a5fef254651f618",
+  "workingTreeHash": "d2f59403ae774772909cf2cdefb0ac2f9dc83e7986e81bc91c7e5e7f5a9e19c8",
+  "registryHash": "ef797e172b56b17727d8926f46987d70e7c4f7841dab5c0b059fbf100fcd29df",
+  "captureManifestSha256": "4cde1d0c2f8b4c3d880afdfb6d6832da7a8e8dd91ad3648967af7dd9be516c1b",
+  "captureManifest": "/Users/adminvia/devwork/_DY/boomeyes/docs/design/evidence/owner-drilldown-2026-09-12/manifest.json",
+  "generatedAt": "2026-09-12T04:42:11.832834+00:00",
+  "status": "generated-awaiting-visual-review",
+  "customerReview": "not-performed",
+  "visualReview": "pending",
+  "pageCount": 21,
+  "pages": [
+    {
+      "page": 1,
+      "title": "내 장비를 찾고, 현장 확인까지"
+    },
+    {
+      "page": 2,
+      "title": "01  소유주 데모"
+    },
+    {
+      "page": 3,
+      "title": "02  운영 현황"
+    },
+    {
+      "page": 4,
+      "title": "03  보유 장비"
+    },
+    {
+      "page": 5,
+      "title": "04  호기 상세"
+    },
+    {
+      "page": 6,
+      "title": "05  영상"
+    },
+    {
+      "page": 7,
+      "title": "06  장비 서류"
+    },
+    {
+      "page": 8,
+      "title": "07  이상·점검"
+    },
+    {
+      "page": 9,
+      "title": "휴대폰에서 이어서 확인하기"
+    },
+    {
+      "page": 10,
+      "title": "휴대폰에서 이어서 확인하기"
+    },
+    {
+      "page": 11,
+      "title": "휴대폰에서 이어서 확인하기"
+    },
+    {
+      "page": 12,
+      "title": "휴대폰에서 이어서 확인하기"
+    },
+    {
+      "page": 13,
+      "title": "영상의 재생과 시간 조작"
+    },
+    {
+      "page": 14,
+      "title": "1호기 제작증 원문"
+    },
+    {
+      "page": 15,
+      "title": "휴대폰에서 계약과 현장 담당자 확인"
+    },
+    {
+      "page": 16,
+      "title": "휴대폰에서 제작증 원문 열람"
+    },
+    {
+      "page": 17,
+      "title": "현장 단계 — 마포 주상복합 신축의 호기 5대"
+    },
+    {
+      "page": 18,
+      "title": "호기 단계 — 1호기 실시간 영상·계약·담당자"
+    },
+    {
+      "page": 19,
+      "title": "휴대폰 호기 단계 — 지도 위 시트에서 호기 영상"
+    },
+    {
+      "page": 20,
+      "title": "검토 전에 알아둘 시연 조건"
+    },
+    {
+      "page": 21,
+      "title": "원문 근거와 빌드 기록"
+    }
+  ],
+  "screens": [
+    {
+      "view": "entry",
+      "app": "web",
+      "captureKey": "web-entry-1280x842-light",
+      "file": "screens/web-entry-1280x842-light.png",
+      "sha256": "a07360b3f82c49203db1871f22191d7a288bce145607dffcf17d35dcb7bd690d"
+    },
+    {
+      "view": "entry",
+      "app": "pwa",
+      "captureKey": "pwa-entry-390x800-light",
+      "file": "screens/pwa-entry-390x800-light.png",
+      "sha256": "6f25c735aecc563c36f7a8b800c0fa6e5b0a20e9ed746f12c2020d47b848ec69"
+    },
+    {
+      "view": "overview",
+      "app": "web",
+      "captureKey": "web-overview-1280x842-light",
+      "file": "screens/web-overview-1280x842-light.png",
+      "sha256": "c33e276930012f25cf724c085c39005075232e60bdfbfaab1d6a32af9ed300f5"
+    },
+    {
+      "view": "overview",
+      "app": "pwa",
+      "captureKey": "pwa-overview-390x800-light",
+      "file": "screens/pwa-overview-390x800-light.png",
+      "sha256": "8c0b94485893935a3272b27ac8a3d06e735e83edc98fbb2751168af57e922e8e"
+    },
+    {
+      "view": "fleet",
+      "app": "web",
+      "captureKey": "web-fleet-1280x842-light",
+      "file": "screens/web-fleet-1280x842-light.png",
+      "sha256": "5bd996b3bed0f505f145103178b4c65acbef98b61b596f6327505dbccca0ff1b"
+    },
+    {
+      "view": "fleet",
+      "app": "pwa",
+      "captureKey": "pwa-fleet-390x800-light",
+      "file": "screens/pwa-fleet-390x800-light.png",
+      "sha256": "8432c4a269475b84ffd4eca6b4d8fad1c2657611f8b7615fe94a0f86197e8170"
+    },
+    {
+      "view": "detail",
+      "app": "web",
+      "captureKey": "web-detail-1280x842-light",
+      "file": "screens/web-detail-1280x842-light.png",
+      "sha256": "bee121c8469495531c470934a7d0eb068e4d76d05e9801af1f9a99f2a562eb33"
+    },
+    {
+      "view": "detail",
+      "app": "pwa",
+      "captureKey": "pwa-detail-390x800-light",
+      "file": "screens/pwa-detail-390x800-light.png",
+      "sha256": "249b77e6934eb7def0926c27fa31e314ce746dadf92d0c585f22d5b78858225b"
+    },
+    {
+      "view": "video",
+      "app": "web",
+      "captureKey": "web-video-1280x842-light",
+      "file": "screens/web-video-1280x842-light.png",
+      "sha256": "bdb2bb8e52fce2f375a85b07f29c9c14d2e3c24cf79805902a934fbe295bae87"
+    },
+    {
+      "view": "video",
+      "app": "pwa",
+      "captureKey": "pwa-video-390x800-light",
+      "file": "screens/pwa-video-390x800-light.png",
+      "sha256": "d4eb983851d59a7801be7ccf60c144bcb98bd2d24189356dd94e702e450dadf0"
+    },
+    {
+      "view": "documents",
+      "app": "web",
+      "captureKey": "web-documents-1280x842-light",
+      "file": "screens/web-documents-1280x842-light.png",
+      "sha256": "d96abce5580c9d566a5322d150aa9039379a230402f7b6f45ed9a23b64166ac6"
+    },
+    {
+      "view": "documents",
+      "app": "pwa",
+      "captureKey": "pwa-documents-390x800-light",
+      "file": "screens/pwa-documents-390x800-light.png",
+      "sha256": "7b7da168933369d1ee4c250f9983ebfeaa1ab5f3b5f6c29ca233f61e59c051f9"
+    },
+    {
+      "view": "alerts",
+      "app": "web",
+      "captureKey": "web-alerts-1280x842-light",
+      "file": "screens/web-alerts-1280x842-light.png",
+      "sha256": "7351839f1497d9ccb03d3c751a2a7a6c0aad95655ccdba0c21bfc06ad6720437"
+    },
+    {
+      "view": "alerts",
+      "app": "pwa",
+      "captureKey": "pwa-alerts-390x800-light",
+      "file": "screens/pwa-alerts-390x800-light.png",
+      "sha256": "ace62a6c44717b71b6a9a400fcae4a69ce67a6b0f8369009a1c00fada74d531d"
+    }
+  ],
+  "supplements": [
+    {
+      "app": "web",
+      "view": "video",
+      "level": null,
+      "title": "영상의 재생과 시간 조작",
+      "tall": false,
+      "captureKey": "web-video-1280x842-light",
+      "sourceFile": "web-video-1280x842-light-full.png",
+      "sourceSha256": "110ef9653f3d1d6eabed4c6de36ca7966a6ead86ca02585fd28b59f413233563",
+      "crop": [
+        260,
+        175,
+        1260,
+        1012
+      ],
+      "file": "screens/web-video-expanded.png",
+      "sha256": "f1f01b075397f68fe6a84172ce907b2af586221de414cfcf76c7d16bc1aa9b37"
+    },
+    {
+      "app": "web",
+      "view": "documents",
+      "level": null,
+      "title": "1호기 제작증 원문",
+      "tall": true,
+      "captureKey": "web-documents-1280x842-light",
+      "sourceFile": "web-documents-1280x842-light-full.png",
+      "sourceSha256": "1d51212ae684c0e3584097cfa5d154c5e4b97797482f6851f35bc80c118f2b3d",
+      "crop": [
+        260,
+        480,
+        1260,
+        1510
+      ],
+      "file": "screens/web-documents-expanded.png",
+      "sha256": "7c47ba1852c576439cbed20fdd694cea67481c66551785dec1cc7640cd5f1846"
+    },
+    {
+      "app": "pwa",
+      "view": "detail",
+      "level": null,
+      "title": "휴대폰에서 계약과 현장 담당자 확인",
+      "tall": true,
+      "captureKey": "pwa-detail-390x800-light",
+      "sourceFile": "pwa-detail-390x800-light-full.png",
+      "sourceSha256": "5084e34254d27750138d03aed68784a4bccfed0fe09a8d38274f10b6743d15b4",
+      "crop": [
+        20,
+        620,
+        370,
+        1140
+      ],
+      "file": "screens/pwa-detail-expanded.png",
+      "sha256": "a66f02d6eb421f6e3d88d25e9de30307fdc47e611dfb38dcaf974a872b5c119d"
+    },
+    {
+      "app": "pwa",
+      "view": "documents",
+      "level": null,
+      "title": "휴대폰에서 제작증 원문 열람",
+      "tall": true,
+      "captureKey": "pwa-documents-390x800-light",
+      "sourceFile": "pwa-documents-390x800-light-full.png",
+      "sourceSha256": "1fa522911d37df9e2b517780515845e0d56ee7eca82cedea7ffc6ba574ad4d83",
+      "crop": [
+        20,
+        490,
+        370,
+        1180
+      ],
+      "file": "screens/pwa-documents-expanded.png",
+      "sha256": "88af4f138b533bd7e7cd3f59f3c8e95e734a71d401b160c1e52b41898727ae71"
+    },
+    {
+      "app": "web",
+      "view": "overview",
+      "level": "site",
+      "title": "현장 단계 — 마포 주상복합 신축의 호기 5대",
+      "tall": false,
+      "captureKey": "web-overview-site-1280x842-light",
+      "sourceFile": "web-overview-site-1280x842-light-full.png",
+      "sourceSha256": "6e8549c989bace174b9af8cb47d095ca8ad481032615229364edd74adb4b0f54",
+      "crop": [
+        56,
+        160,
+        1280,
+        842
+      ],
+      "file": "screens/web-overview-site-expanded.png",
+      "sha256": "d9f6719b861744c0ba025bdea8d54d35cd28f2307821997e90fb387c69859391"
+    },
+    {
+      "app": "web",
+      "view": "overview",
+      "level": "unit",
+      "title": "호기 단계 — 1호기 실시간 영상·계약·담당자",
+      "tall": false,
+      "captureKey": "web-overview-unit-1280x842-light",
+      "sourceFile": "web-overview-unit-1280x842-light-full.png",
+      "sourceSha256": "61bf5b10ec1138dd13ec7123e5995b1fbec36f0e370a3b3f95a313f34ec36f2b",
+      "crop": [
+        56,
+        160,
+        1280,
+        842
+      ],
+      "file": "screens/web-overview-unit-expanded.png",
+      "sha256": "cfeaf4195b0117d1e810d3f743844c3167c69abd283f03a4ed45fb92ba403a19"
+    },
+    {
+      "app": "pwa",
+      "view": "overview",
+      "level": "unit",
+      "title": "휴대폰 호기 단계 — 지도 위 시트에서 호기 영상",
+      "tall": true,
+      "captureKey": "pwa-overview-unit-390x800-light",
+      "sourceFile": "pwa-overview-unit-390x800-light-full.png",
+      "sourceSha256": "1fe82332d895e63280fe3d2ca80bf4126555a73994c6b22e0e63464fe40fea26",
+      "crop": [
+        20,
+        300,
+        370,
+        800
+      ],
+      "file": "screens/pwa-overview-unit-expanded.png",
+      "sha256": "9cf374ceb40f2a2122c7584f9b059e69d8985caa3842aa500b8ec2630c596f30"
+    }
+  ],
+  "renderedPages": [
+    {
+      "page": 1,
+      "file": "rendered-pages/page-01.png",
+      "sha256": "633dbea659c1037c0c970b4ca5e5b6e778232a2aed76e2299d3efae8458a9246"
+    },
+    {
+      "page": 2,
+      "file": "rendered-pages/page-02.png",
+      "sha256": "b7e22487c1aa1b62add195d152e17b68df0470493055b6a591e54f8a27ea778d"
+    },
+    {
+      "page": 3,
+      "file": "rendered-pages/page-03.png",
+      "sha256": "a3421a9b4d712e0e788c831b1291f1615cf19d293d2b8737fc956af4c3e5fb10"
+    },
+    {
+      "page": 4,
+      "file": "rendered-pages/page-04.png",
+      "sha256": "5722610e992998adc6756b5d17b7da35d7726d6ffd036a2202f12b4e79416a81"
+    },
+    {
+      "page": 5,
+      "file": "rendered-pages/page-05.png",
+      "sha256": "5ee9b8c6f7059baabe5b47cc863ee1e3f872f8809ebadc99b152392c076016f1"
+    },
+    {
+      "page": 6,
+      "file": "rendered-pages/page-06.png",
+      "sha256": "410dd0ec19a5ffbde44d953a2721a3e26b3765bf592f06522347dd78288bb34f"
+    },
+    {
+      "page": 7,
+      "file": "rendered-pages/page-07.png",
+      "sha256": "799f15131d66e3a2707e0c6a496c6252f0008cbba40733e1b3694de518326f58"
+    },
+    {
+      "page": 8,
+      "file": "rendered-pages/page-08.png",
+      "sha256": "87e9e28b7285fad0d6d14a67931fa5ce04b5c063804f7c893241c9aa939127a7"
+    },
+    {
+      "page": 9,
+      "file": "rendered-pages/page-09.png",
+      "sha256": "ad28288bdc20e9f107e983be4e72e1147bdb089fbcd746abfefe0c1827cbdce9"
+    },
+    {
+      "page": 10,
+      "file": "rendered-pages/page-10.png",
+      "sha256": "5b8402c36aafe09ab84a27df46039a197c550421388e00385c493f7f580e2227"
+    },
+    {
+      "page": 11,
+      "file": "rendered-pages/page-11.png",
+      "sha256": "1d4d5055907bfdbbeb0b214eef9d496cdf12cd7f6cdbcb559c4a97f3c84a104d"
+    },
+    {
+      "page": 12,
+      "file": "rendered-pages/page-12.png",
+      "sha256": "bd2a9cc73cb3fab8cd3d1fe2f996e96be1c5d55d71399246a95d433dda2343ab"
+    },
+    {
+      "page": 13,
+      "file": "rendered-pages/page-13.png",
+      "sha256": "775aa01ff037448a8137579eab7dd2c78738b8528127b2c74f4098ce2a941678"
+    },
+    {
+      "page": 14,
+      "file": "rendered-pages/page-14.png",
+      "sha256": "502aa9435a2cd7dc16431c016bbaf9bcf0f6f3ccb4d0bbf77833c7ce944f4015"
+    },
+    {
+      "page": 15,
+      "file": "rendered-pages/page-15.png",
+      "sha256": "2836bb706f6f4ecf7205d00adc39df89ca015fbace4649d66367e62d20caf462"
+    },
+    {
+      "page": 16,
+      "file": "rendered-pages/page-16.png",
+      "sha256": "fe8be3e3985bb18804f9093dd580e4c723eb0cc9d02a39e64bc31f339e5966f5"
+    },
+    {
+      "page": 17,
+      "file": "rendered-pages/page-17.png",
+      "sha256": "217a57f50d0127ef7e5971c5c9e1b0c52ff244e30b6dfbc2401d8c8afcb2bcd2"
+    },
+    {
+      "page": 18,
+      "file": "rendered-pages/page-18.png",
+      "sha256": "a4a4672179abcd5c96ab7d74239c44ca4820b0f70e5ac4bad22ff9c16d79db65"
+    },
+    {
+      "page": 19,
+      "file": "rendered-pages/page-19.png",
+      "sha256": "34104f0b513259229620c759506fcdaaabdaadc64b751764cc2ccd2fef88c79b"
+    },
+    {
+      "page": 20,
+      "file": "rendered-pages/page-20.png",
+      "sha256": "95d0182ebb255a9edfd724f6101fffcf4dce202633092d69f4569813b45336a2"
+    },
+    {
+      "page": 21,
+      "file": "rendered-pages/page-21.png",
+      "sha256": "d55930ea3a5738192fe7e60cbfe6e7a3b285e5a1b9d58b0d29ded1a4fffd3d92"
+    }
+  ],
+  "fontSha256": "876af2cd4854644e7f3e7feb2f688997fdb3343c6df6693611209c9dfb47ccec",
+  "artifacts": [
+    {
+      "file": "five-minute-demo.md",
+      "sha256": "269ad519586f354a60830ec891da946031fe9e864e5d2b3e4a3fe7a320eaa21f"
+    },
+    {
+      "file": "owner-review.html",
+      "sha256": "69466e4a799937d24c5c7c436fdd3bfa39279d7f6d19014e34a9dd67b54b2377"
+    },
+    {
+      "file": "owner-review.pdf",
+      "sha256": "6b963a24d790f606f7de460681d619edd5823f2fa4085b5bc57538dce620d44f"
+    },
+    {
+      "file": "rendered-pages/index.html",
+      "sha256": "86d3d45d36fd4e1f86e9c6a6c840e3370025f86fd314aedd8137785ebfea47e9"
+    },
+    {
+      "file": "rendered-pages/page-01.png",
+      "sha256": "633dbea659c1037c0c970b4ca5e5b6e778232a2aed76e2299d3efae8458a9246"
+    },
+    {
+      "file": "rendered-pages/page-02.png",
+      "sha256": "b7e22487c1aa1b62add195d152e17b68df0470493055b6a591e54f8a27ea778d"
+    },
+    {
+      "file": "rendered-pages/page-03.png",
+      "sha256": "a3421a9b4d712e0e788c831b1291f1615cf19d293d2b8737fc956af4c3e5fb10"
+    },
+    {
+      "file": "rendered-pages/page-04.png",
+      "sha256": "5722610e992998adc6756b5d17b7da35d7726d6ffd036a2202f12b4e79416a81"
+    },
+    {
+      "file": "rendered-pages/page-05.png",
+      "sha256": "5ee9b8c6f7059baabe5b47cc863ee1e3f872f8809ebadc99b152392c076016f1"
+    },
+    {
+      "file": "rendered-pages/page-06.png",
+      "sha256": "410dd0ec19a5ffbde44d953a2721a3e26b3765bf592f06522347dd78288bb34f"
+    },
+    {
+      "file": "rendered-pages/page-07.png",
+      "sha256": "799f15131d66e3a2707e0c6a496c6252f0008cbba40733e1b3694de518326f58"
+    },
+    {
+      "file": "rendered-pages/page-08.png",
+      "sha256": "87e9e28b7285fad0d6d14a67931fa5ce04b5c063804f7c893241c9aa939127a7"
+    },
+    {
+      "file": "rendered-pages/page-09.png",
+      "sha256": "ad28288bdc20e9f107e983be4e72e1147bdb089fbcd746abfefe0c1827cbdce9"
+    },
+    {
+      "file": "rendered-pages/page-10.png",
+      "sha256": "5b8402c36aafe09ab84a27df46039a197c550421388e00385c493f7f580e2227"
+    },
+    {
+      "file": "rendered-pages/page-11.png",
+      "sha256": "1d4d5055907bfdbbeb0b214eef9d496cdf12cd7f6cdbcb559c4a97f3c84a104d"
+    },
+    {
+      "file": "rendered-pages/page-12.png",
+      "sha256": "bd2a9cc73cb3fab8cd3d1fe2f996e96be1c5d55d71399246a95d433dda2343ab"
+    },
+    {
+      "file": "rendered-pages/page-13.png",
+      "sha256": "775aa01ff037448a8137579eab7dd2c78738b8528127b2c74f4098ce2a941678"
+    },
+    {
+      "file": "rendered-pages/page-14.png",
+      "sha256": "502aa9435a2cd7dc16431c016bbaf9bcf0f6f3ccb4d0bbf77833c7ce944f4015"
+    },
+    {
+      "file": "rendered-pages/page-15.png",
+      "sha256": "2836bb706f6f4ecf7205d00adc39df89ca015fbace4649d66367e62d20caf462"
+    },
+    {
+      "file": "rendered-pages/page-16.png",
+      "sha256": "fe8be3e3985bb18804f9093dd580e4c723eb0cc9d02a39e64bc31f339e5966f5"
+    },
+    {
+      "file": "rendered-pages/page-17.png",
+      "sha256": "217a57f50d0127ef7e5971c5c9e1b0c52ff244e30b6dfbc2401d8c8afcb2bcd2"
+    },
+    {
+      "file": "rendered-pages/page-18.png",
+      "sha256": "a4a4672179abcd5c96ab7d74239c44ca4820b0f70e5ac4bad22ff9c16d79db65"
+    },
+    {
+      "file": "rendered-pages/page-19.png",
+      "sha256": "34104f0b513259229620c759506fcdaaabdaadc64b751764cc2ccd2fef88c79b"
+    },
+    {
+      "file": "rendered-pages/page-20.png",
+      "sha256": "95d0182ebb255a9edfd724f6101fffcf4dce202633092d69f4569813b45336a2"
+    },
+    {
+      "file": "rendered-pages/page-21.png",
+      "sha256": "d55930ea3a5738192fe7e60cbfe6e7a3b285e5a1b9d58b0d29ded1a4fffd3d92"
+    },
+    {
+      "file": "screens/pwa-alerts-390x800-light.png",
+      "sha256": "ace62a6c44717b71b6a9a400fcae4a69ce67a6b0f8369009a1c00fada74d531d"
+    },
+    {
+      "file": "screens/pwa-detail-390x800-light.png",
+      "sha256": "249b77e6934eb7def0926c27fa31e314ce746dadf92d0c585f22d5b78858225b"
+    },
+    {
+      "file": "screens/pwa-detail-expanded.png",
+      "sha256": "a66f02d6eb421f6e3d88d25e9de30307fdc47e611dfb38dcaf974a872b5c119d"
+    },
+    {
+      "file": "screens/pwa-documents-390x800-light.png",
+      "sha256": "7b7da168933369d1ee4c250f9983ebfeaa1ab5f3b5f6c29ca233f61e59c051f9"
+    },
+    {
+      "file": "screens/pwa-documents-expanded.png",
+      "sha256": "88af4f138b533bd7e7cd3f59f3c8e95e734a71d401b160c1e52b41898727ae71"
+    },
+    {
+      "file": "screens/pwa-entry-390x800-light.png",
+      "sha256": "6f25c735aecc563c36f7a8b800c0fa6e5b0a20e9ed746f12c2020d47b848ec69"
+    },
+    {
+      "file": "screens/pwa-fleet-390x800-light.png",
+      "sha256": "8432c4a269475b84ffd4eca6b4d8fad1c2657611f8b7615fe94a0f86197e8170"
+    },
+    {
+      "file": "screens/pwa-overview-390x800-light.png",
+      "sha256": "8c0b94485893935a3272b27ac8a3d06e735e83edc98fbb2751168af57e922e8e"
+    },
+    {
+      "file": "screens/pwa-overview-unit-expanded.png",
+      "sha256": "9cf374ceb40f2a2122c7584f9b059e69d8985caa3842aa500b8ec2630c596f30"
+    },
+    {
+      "file": "screens/pwa-video-390x800-light.png",
+      "sha256": "d4eb983851d59a7801be7ccf60c144bcb98bd2d24189356dd94e702e450dadf0"
+    },
+    {
+      "file": "screens/web-alerts-1280x842-light.png",
+      "sha256": "7351839f1497d9ccb03d3c751a2a7a6c0aad95655ccdba0c21bfc06ad6720437"
+    },
+    {
+      "file": "screens/web-detail-1280x842-light.png",
+      "sha256": "bee121c8469495531c470934a7d0eb068e4d76d05e9801af1f9a99f2a562eb33"
+    },
+    {
+      "file": "screens/web-documents-1280x842-light.png",
+      "sha256": "d96abce5580c9d566a5322d150aa9039379a230402f7b6f45ed9a23b64166ac6"
+    },
+    {
+      "file": "screens/web-documents-expanded.png",
+      "sha256": "7c47ba1852c576439cbed20fdd694cea67481c66551785dec1cc7640cd5f1846"
+    },
+    {
+      "file": "screens/web-entry-1280x842-light.png",
+      "sha256": "a07360b3f82c49203db1871f22191d7a288bce145607dffcf17d35dcb7bd690d"
+    },
+    {
+      "file": "screens/web-fleet-1280x842-light.png",
+      "sha256": "5bd996b3bed0f505f145103178b4c65acbef98b61b596f6327505dbccca0ff1b"
+    },
+    {
+      "file": "screens/web-overview-1280x842-light.png",
+      "sha256": "c33e276930012f25cf724c085c39005075232e60bdfbfaab1d6a32af9ed300f5"
+    },
+    {
+      "file": "screens/web-overview-site-expanded.png",
+      "sha256": "d9f6719b861744c0ba025bdea8d54d35cd28f2307821997e90fb387c69859391"
+    },
+    {
+      "file": "screens/web-overview-unit-expanded.png",
+      "sha256": "cfeaf4195b0117d1e810d3f743844c3167c69abd283f03a4ed45fb92ba403a19"
+    },
+    {
+      "file": "screens/web-video-1280x842-light.png",
+      "sha256": "bdb2bb8e52fce2f375a85b07f29c9c14d2e3c24cf79805902a934fbe295bae87"
+    },
+    {
+      "file": "screens/web-video-expanded.png",
+      "sha256": "f1f01b075397f68fe6a84172ce907b2af586221de414cfcf76c7d16bc1aa9b37"
+    }
+  ]
+}
