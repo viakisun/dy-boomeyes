@@ -34,7 +34,7 @@
     navigate: (href: string) => void;
     capture?: boolean;
     video: Snippet<[OwnerViewProps]>;
-    map?: Snippet<[OwnerDevice[]]>;
+    map?: Snippet<[OwnerDevice[], string | undefined]>;
   } = $props();
   let snapshot = $state<OwnerSnapshot>();
   let error = $state('');

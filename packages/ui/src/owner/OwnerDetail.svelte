@@ -34,7 +34,7 @@
   import List from '../primitives/List.svelte';
   import AlertCard from './AlertCard.svelte';
   import { devicePoster, equipmentCondition, fleetReturn, ownerDate, ownerLink } from './core-helpers';
-  let { data, app, url, map }: OwnerViewProps & { map?: Snippet<[OwnerDevice[]]> } = $props();
+  let { data, app, url, map }: OwnerViewProps & { map?: Snippet<[OwnerDevice[], string | undefined]> } = $props();
   const deviceId = $derived.by(() => {
     try {
       return decodeURIComponent(url.pathname.split('/fleet/')[1]?.split('/')[0] ?? '');
@@ -221,7 +221,7 @@
     <div class="gap-stack-lg grid min-w-0 grid-cols-1 lg:grid-cols-12">
       {#if map && device.location}
         <div class="rounded-card shadow-raised h-layout-map-min flex overflow-hidden lg:col-span-6">
-          {@render map([device])}
+          {@render map([device], device.id)}
         </div>
       {/if}
       <section

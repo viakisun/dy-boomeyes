@@ -10,6 +10,7 @@
   import WifiOff from '@lucide/svelte/icons/wifi-off';
   import { NAV_ICON } from '../shell/nav-icons';
   import { theme, toggleTheme } from '../lib/theme.svelte';
+  import { ownerControl } from './core-helpers';
   import { connectivity } from '../lib/connectivity.svelte';
   let {
     app,
@@ -42,13 +43,31 @@
 <div class="bg-canvas text-fg flex min-h-dvh" data-owner-root data-owner-app={app} data-density="comfortable">
   {#if app === 'web'}
     <aside
-      class="border-border-subtle bg-surface w-layout-sidebar-width p-inset-xl sticky top-0 hidden h-dvh shrink-0 flex-col border-r lg:flex"
+      class="border-border-subtle bg-surface w-layout-sidebar-collapsed gap-stack-lg py-inset-md sticky top-0 hidden h-dvh shrink-0 flex-col items-center border-r lg:flex"
     >
-      <a href={ownerHref(url, 'overview', app)} aria-label="BoomEyes 홈" class="py-inset-md"
-        ><Logo class="h-size-avatar-md w-auto" variant="lockup" /></a
+      <a
+        href={ownerHref(url, 'overview', app)}
+        aria-label="BoomEyes 홈"
+        class="{ownerControl()} rounded-control flex items-center justify-center"
+        ><Logo class="size-size-avatar-sm" variant="glyph" /></a
       >
-      <p class="text-label-sm text-fg-muted mt-stack-xl mb-stack-sm">소유주 운영</p>
-      <nav aria-label="소유주 메뉴" class="gap-stack-xs flex flex-col">{@render navigation()}</nav>
+      <nav aria-label="소유주 메뉴" class="gap-stack-xs flex w-full flex-col items-stretch">
+        {#each items as item (item.view)}
+          {@const Icon = NAV_ICON[item[app]]}
+          <a
+            href={ownerHref(url, item.view, app)}
+            aria-current={active === item.view ? 'page' : undefined}
+            title={item.label}
+            class="owner-nav-link gap-stack-xs rounded-control py-inset-xs text-label-sm mx-inset-xs flex flex-col items-center justify-center text-center {active ===
+            item.view
+              ? 'bg-selected text-accent-fg'
+              : 'text-fg-muted hover:bg-ui-hover'}"
+          >
+            <Icon class="size-size-icon-lg shrink-0" aria-hidden="true" />
+            <span class="truncate">{item.label}</span>
+          </a>
+        {/each}
+      </nav>
     </aside>
   {/if}
   <div class="flex min-w-0 flex-1 flex-col">
@@ -82,7 +101,7 @@
         화면입니다.
       </Banner>
     {/if}
-    <main data-owner-scroll class="p-page-gutter max-w-layout-container-max mx-auto w-full min-w-0 flex-1">
+    <main data-owner-scroll class="p-page-gutter w-full min-w-0 flex-1">
       {@render children()}
     </main>
     <nav

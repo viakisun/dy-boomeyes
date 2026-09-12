@@ -1051,10 +1051,10 @@ PageHeader  제목 heading-xl · 부제 1줄(body-sm muted, ≤ 60자) · 메타
 
 owner-experience의 현황/탐색/상세/뷰어는 목적별 구성을 적용한다(§0-10). 근거와 측정은 `docs/design/OWNER-VISUAL-LANGUAGE-2026-09-11.md`.
 
-1. **한 화면 한 주인공** — 현황 = 지도(xl 12열 중 8, 높이 `layout.panel.height`), 보유 = 장비 행/카드, 상세 = 장비 히어로(display 호기 · 스틸 · 조건 pill · 배치 배지 · 주 행동), 영상 = 플레이어, 서류 = 원문, 알림 = 선택한 알림. 주인공이 첫 뷰포트의 절반 이상.
+1. **한 화면 한 주인공** — 현황 = 지도(lg 12열 중 7, 7:6 비율, 오른쪽 5/12 패널은 셀 안 스크롤; 사이드바는 아이콘 레일 `layout.sidebar.collapsed`), 보유 = 장비 행/카드, 상세 = 장비 히어로(display 호기 · 스틸 · 조건 pill · 배치 배지 · 주 행동), 영상 = 플레이어, 서류 = 원문, 알림 = 선택한 알림. 주인공이 첫 뷰포트의 절반 이상.
 2. **설명하지 않고 보여준다** — 지시 부제·각주·상태 설명 문장을 두지 않는다. 문장은 빈·오류·오프라인 상태에만. 상태는 아이콘 + 2~4어 라벨(StatusPill · Badge). "시연" 칩·"기준 시각" 문장·푸터는 화면에 두지 않는다(DemoBar).
 3. **큰 숫자, 작은 라벨** — 값 `display` + 라벨 `label-md` muted + 단위 `body-sm`. `·`로 메타를 이어 붙이지 않고 아이콘 메타 행(줄당 아이콘 ≤ 1: map-pin 현장 · building-2 건설사 · clock 수신 · calendar 계약 · wifi-off 미수신) 또는 KeyValueList.
-4. **시각 인코딩** — 계약 기간 = PeriodBar(양끝 time · 오늘 마커 `radius.mark` · 종료까지 D-n, ≤ 30일 warning), 보유 구성 = FleetSummary 분포 막대(`role=img`), 담당자 = ContactCard(이니셜 아바타 · tel: 링크 · 복사), 장비 = 카메라 poster 스틸 또는 IconTile, 서류 = previewUrl 썸네일 또는 IconTile, 위치 = 지도 스니펫(상세는 1마커 `fitMarkers`).
+4. **시각 인코딩** — 계약 기간 = PeriodBar(양끝 time · 오늘 마커 `radius.mark` · 종료까지 D-n, ≤ 30일 warning), 보유 구성 = FleetSummary 분포 막대(`role=img`), 담당자 = ContactCard(이니셜 아바타 · tel: 링크 · 복사), 장비 = 카메라 poster 스틸 또는 IconTile, 서류 = previewUrl 썸네일 또는 IconTile, 위치 = 지도 스니펫(상세는 1마커 `fitMarkers`, 지명은 `labelLocale="ko"`, 핀은 상태 점 + 호기 알약 · 480px 미만은 번호 원형 핀).
 5. **선 대신 여백·층** — 카드 크롬(`radius.card` · `shadow.raised` · `bg.surface`)은 List와 카드 외곽에만. 섹션은 제목 + 간격 + `bg.surface-sunken` 층. 표 머리글 텍스트 없음. 행 구분선은 `border.subtle`.
 6. **시각은 상대 + 절대** — 목록은 `relativeLabel`(DemoClock 기준) + `<time title>` 절대. 미수신은 "마지막 수신 + 절대 시각"을 warning 텍스트로(FR-034). 상세 "장비 상태" 영역은 절대 시각만(오프라인 전후 텍스트 동일).
 7. **밀도는 역할에서(§0-6)** — 소유주 화면은 웹도 comfortable. 웹 레이아웃이 루트 `data-density`를 전환한다.

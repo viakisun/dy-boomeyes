@@ -14,6 +14,7 @@
     interactive = true,
     fitMarkers = false,
     onselect,
+    labelLocale,
     class: cls = '',
   }: MapViewProps = $props();
   let el = $state<HTMLDivElement>();
@@ -23,6 +24,9 @@
   let ready = $state(false);
   let failed = $state(false);
   let leaders = $state<{ id: string; x: number; y: number; endX: number }[]>([]);
+  // 좁은 지도(< 480px)에서는 호기 번호만 담은 원형 핀 — 알약이 펼쳐져 화면 밖으로 나가지 않게
+  let compact = $state(false);
+  const COMPACT_BELOW = 480;
   const COLOR: Record<string, string> = {
     normal: 'var(--sys-color-domain-equipment-normal-solid)',
     caution: 'var(--sys-color-domain-equipment-caution-solid)',
@@ -36,8 +40,8 @@
     if (!map) return;
     const off = fanOffsets(
       markers.map((m) => ({ id: m.id, ...map!.project([m.lng, m.lat]) })),
-      fitMarkers ? FAN_PX * 1.5 : FAN_PX,
-      fitMarkers ? FAN_PX : 24,
+      fitMarkers ? (compact ? FAN_PX : FAN_PX * 1.75) : FAN_PX, // fit-markers 알약(≈ 80px) · 좁은 지도 원형 핀(48px)
+      fitMarkers ? (compact ? FAN_PX : FAN_PX * 1.5) : 24, // 묶음 거리 ≥ 핀 폭(48) — 겹치는 핀이 반드시 펼쳐진다
     );
     for (const [id, h] of handles) h.setOffset([off.get(id) ?? 0, 0]);
     if (fitMarkers)
@@ -53,8 +57,11 @@
     d.dataset.state = m.state;
     d.title = m.description ?? m.label;
     d.style.cssText = `--pin:${fitMarkers && m.state === 'normal' ? 'var(--sys-color-fg-muted)' : (COLOR[m.state] ?? COLOR.offline)}`;
-    (d.querySelector('.be-marker__dot') as HTMLElement).textContent =
-      fitMarkers && m.state === 'normal' ? '✓' : (GLYPH[m.state] ?? '');
+    (d.querySelector('.be-marker__dot') as HTMLElement).textContent = compact
+      ? m.label.replace(/호기$/, '')
+      : fitMarkers && m.state === 'normal'
+        ? '✓'
+        : (GLYPH[m.state] ?? '');
     (d.querySelector('.be-marker__label') as HTMLElement).textContent = m.label;
   }
   function pin(m: M) {
@@ -79,25 +86,45 @@
       interactive,
       attributionControl: { compact: true },
     });
+    // 지명 라벨 언어 — 스타일의 symbol 레이어 text-field를 name:<locale> 우선으로 바꾼다(타일에 없으면 name)
+    const localize = () => {
+      if (!map || !labelLocale) return;
+      for (const layer of map.getStyle()?.layers ?? []) {
+        if (layer.type !== 'symbol' || !layer.layout || !('text-field' in layer.layout)) continue;
+        map.setLayoutProperty(layer.id, 'text-field', ['coalesce', ['get', `name:${labelLocale}`], ['get', 'name']]);
+      }
+    };
     map.on('load', () => {
+      localize();
       ready = true;
     });
+    map.on('style.load', localize);
     map.on('error', () => {
       if (fitMarkers) failed = true;
     });
     map.once('idle', () => el?.setAttribute('data-map-ready', ''));
+    const ro =
+      fitMarkers && typeof ResizeObserver !== 'undefined'
+        ? new ResizeObserver(() => {
+            compact = (el?.clientWidth ?? 0) < COMPACT_BELOW;
+          })
+        : undefined;
+    ro?.observe(el);
+    compact = fitMarkers && el.clientWidth < COMPACT_BELOW;
     map.on('zoomend', relayout);
     if (fitMarkers) {
       map.on('move', relayout);
       map.on('resize', relayout);
     }
     return () => {
+      ro?.disconnect();
       map?.remove();
       map = undefined;
     };
   });
   $effect(() => {
     if (!map || !ready) return;
+    void compact;
     // eslint-disable-next-line svelte/prefer-svelte-reactivity -- 지역 집합
     const seen = new Set<string>();
     for (const m of markers) {
@@ -122,14 +149,23 @@
       const bounds = new maplibregl.LngLatBounds();
       for (const marker of markers) bounds.extend([marker.lng, marker.lat]);
       const inset = el ? parseFloat(getComputedStyle(el).getPropertyValue('--sys-space-inset-xl')) : 0;
-      map.fitBounds(bounds, { padding: inset * 3, maxZoom: 7, duration: 0 });
+      // 아래쪽은 저작권 컨트롤 높이만큼 더 비운다(핀이 저작권 위에 놓이지 않게)
+      map.fitBounds(bounds, {
+        padding: { top: inset * 3, left: inset * 3, right: inset * 3, bottom: inset * 4 },
+        maxZoom: 7,
+        duration: 0,
+      });
     }
   });
 </script>
 
 {#if fitMarkers}
   <div class="relative h-full w-full">
-    <div bind:this={el} class="be-map fit-markers {cls}" data-ready={ready || undefined}></div>
+    <div
+      bind:this={el}
+      class="be-map fit-markers {compact ? 'pins-compact' : ''} {cls}"
+      data-ready={ready || undefined}
+    ></div>
     <svg class="map-leaders pointer-events-none absolute inset-0 h-full w-full" aria-hidden="true">
       {#each leaders as point (point.id)}
         <line x1={point.x} y1={point.y} x2={point.endX} y2={point.y} />
@@ -181,8 +217,69 @@
   .be-map.fit-markers {
     min-height: 0;
   }
+  /* 소유주 지도(fit-markers): 상태 점 + 호기 라벨을 한 알약에 — 지명 라벨과 겹쳐도 읽힌다 */
   .fit-markers :global(.be-marker) {
+    flex-direction: row;
+    gap: var(--sys-space-inline-xs);
+    min-height: max(var(--sys-size-touch-min), var(--sys-size-control-md));
+    padding: var(--sys-space-inset-xs) var(--sys-space-inset-sm) var(--sys-space-inset-xs) var(--sys-space-inset-xs);
+    border-radius: var(--sys-radius-pill);
+    background: var(--sys-color-bg-surface);
+    border: var(--sys-border-width-default) solid var(--sys-color-border-default);
+    box-shadow: var(--sys-shadow-overlay);
+    font: var(--sys-type-label-md);
+    font-weight: 600;
+  }
+  .fit-markers :global(.be-marker__dot) {
+    width: var(--sys-size-icon-md);
+    height: var(--sys-size-icon-md);
+    border-width: 0;
+    box-shadow: none;
+    font: var(--sys-type-label-sm);
+    font-weight: 700;
+  }
+  .fit-markers :global(.be-marker__label) {
+    padding: 0;
+    background: none;
+    box-shadow: none;
+  }
+  /* 좁은 지도: 호기 번호만 담은 원형 핀(상태는 색 + aria-label) */
+  .pins-compact :global(.be-marker) {
     min-width: max(var(--sys-size-touch-min), var(--sys-size-control-md));
+    padding: 0;
+    justify-content: center;
+    border-radius: var(--sys-radius-pill);
+  }
+  .pins-compact :global(.be-marker__dot) {
+    width: var(--sys-size-icon-xl);
+    height: var(--sys-size-icon-xl);
+    font: var(--sys-type-label-md);
+    font-weight: 700;
+  }
+  /* 라벨은 화면에서만 숨긴다(접근성 이름·도구의 자식 중심점 검사 유지) — 마커 중앙 1px 클립 */
+  /* 마커 자체는 MapLibre가 absolute로 배치한다 — position을 덮어쓰지 않는다(덮어쓰면 핀이 어긋난다) */
+  .pins-compact :global(.be-marker__label) {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+  /* 좁은 지도: 저작권은 아이콘만(펼친 문구가 핀을 덮지 않게) */
+  .pins-compact :global(.maplibregl-ctrl-attrib.maplibregl-compact-show .maplibregl-ctrl-attrib-inner) {
+    display: none;
+  }
+  .pins-compact :global(.maplibregl-ctrl-attrib.maplibregl-compact-show) {
+    padding: 0;
+    min-height: var(--sys-size-icon-lg);
+    min-width: var(--sys-size-icon-lg);
+  }
+  .fit-markers :global(.be-marker.is-selected) {
+    border-color: var(--sys-color-accent-border-strong);
+    background: var(--sys-color-accent-bg);
   }
   :global(.be-marker) {
     display: flex;

@@ -8,7 +8,18 @@
     app,
     url,
     interactive = true,
-  }: { devices: OwnerDevice[]; alerts: OwnerAlert[]; app: OwnerApp; url: URL; interactive?: boolean } = $props();
+    variant = 'card',
+    class: cls,
+  }: {
+    devices: OwnerDevice[];
+    alerts: OwnerAlert[];
+    app: OwnerApp;
+    url: URL;
+    interactive?: boolean;
+    /** card = 카드 한 줄 · inline = 헤더 옆 한 줄(테두리·그림자 없음) */
+    variant?: 'card' | 'inline';
+    class?: string;
+  } = $props();
   const summary = $derived(ownerSummary(devices, alerts));
   const segments = $derived([
     { key: 'deployed', label: '현장 투입', count: summary.deployed, color: 'bg-fg' },
@@ -26,7 +37,9 @@
   data-deployed={summary.deployed}
   data-stored={summary.stored}
   data-unknown={summary.unknown}
-  class="gap-inline-lg rounded-card bg-surface shadow-raised px-inset-lg py-inset-md flex min-w-0 flex-col sm:flex-row sm:items-center"
+  class="gap-inline-lg flex min-w-0 flex-col sm:flex-row sm:items-center {variant === 'card'
+    ? 'rounded-card bg-surface shadow-raised px-inset-lg py-inset-md'
+    : ''} {cls ?? ''}"
 >
   <svelte:element
     this={interactive ? 'a' : 'div'}
@@ -40,7 +53,7 @@
       <span class="text-body-sm text-fg-muted">{sites}개 현장</span>
     </span>
   </svelte:element>
-  <div class="gap-stack-sm sm:pl-inset-lg flex min-w-0 flex-1 flex-col">
+  <div class="gap-stack-xs flex min-w-0 flex-1 flex-col {variant === 'card' ? 'sm:pl-inset-lg' : ''}">
     <div
       class="gap-inline-xs h-size-indicator rounded-pill bg-surface-sunken flex overflow-hidden"
       role="img"

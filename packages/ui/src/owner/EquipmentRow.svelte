@@ -23,8 +23,11 @@
     layout = 'stacked',
     poster = null,
     location = false,
+    selected = false,
     actions,
     class: cls,
+    onmouseenter,
+    onmouseleave,
   }: {
     device: OwnerDevice;
     /** DemoClock(data.at) */
@@ -35,8 +38,11 @@
     /** 대표 스틸 URL — 없으면 IconTile */
     poster?: string | null;
     location?: boolean;
+    selected?: boolean;
     actions?: Snippet;
     class?: string;
+    onmouseenter?: () => void;
+    onmouseleave?: () => void;
   } = $props();
   const condition = $derived(equipmentCondition(device));
   const due = $derived(device.contract ? dueLabel(device.contract.to, new Date(now)) : null);
@@ -50,10 +56,13 @@
   data-device={device.id}
   data-condition={condition.tone}
   aria-label={href ? `${device.unit}호기 ${device.id} ${device.site} 상세 보기` : undefined}
+  {onmouseenter}
+  {onmouseleave}
   class={cx(
     ownerControl(),
     'gap-inline-md px-inset-md py-inset-sm grid min-w-0 items-center transition-colors',
     href && 'hover:bg-ui-hover',
+    selected && 'bg-selected',
     columns
       ? 'grid-cols-[auto_minmax(0,1fr)_auto] sm:grid-cols-[auto_minmax(0,3fr)_minmax(0,2.4fr)_minmax(0,2fr)_minmax(0,1.4fr)_auto]'
       : 'grid-cols-[auto_minmax(0,1fr)_auto]',
@@ -104,7 +113,8 @@
   {/if}
   <span
     class={cx(
-      'gap-inline-sm text-body-sm text-fg-muted col-start-2 flex min-w-0 items-center sm:col-start-auto',
+      'gap-inline-sm text-body-sm text-fg-muted col-start-2 flex min-w-0 items-center',
+      columns && 'sm:col-start-auto',
       device.connection === 'stale' && 'text-warning-fg font-medium',
     )}
   >
@@ -136,7 +146,12 @@
       {/if}
     </span>
   {/if}
-  <span class="gap-inline-sm col-start-3 row-start-1 flex shrink-0 items-center sm:col-start-auto sm:row-start-auto">
+  <span
+    class={cx(
+      'gap-inline-sm col-start-3 row-start-1 flex shrink-0 items-center',
+      columns && 'sm:col-start-auto sm:row-start-auto',
+    )}
+  >
     {#if actions}{@render actions()}{/if}
     {#if href}<ChevronRight class="text-fg-muted size-size-icon-md" aria-hidden="true" />{/if}
   </span>
