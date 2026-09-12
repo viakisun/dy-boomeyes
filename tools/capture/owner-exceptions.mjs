@@ -98,11 +98,17 @@ for (const id of requested) if (!CASES.some((scenario) => scenario.id === id)) t
 const selected = all.filter((scenario) => !requested.length || requested.includes(scenario.id));
 const requiredFrames = all.reduce((total, scenario) => total + scenario.frames.length, 0);
 const expectedFrames = selected.reduce((total, scenario) => total + scenario.frames.length, 0);
-// 시나리오 수는 CASES(이 파일의 내용) × 앱 2개에서 파생한다 — 리터럴을 두면 시나리오를
-// 늘릴 때마다 도구가 먼저 멈춘다. 프레임 수는 보고용이고 아래 출력에 그대로 실린다.
-const expectedRuns = CASES.length * 2;
-if (all.length !== expectedRuns || !requiredFrames || !selected.length)
-  throw new Error(`시나리오 실행 수가 어긋난다(${all.length} ≠ ${expectedRuns}) 또는 프레임이 없다`);
+// 지킬 값은 개수가 아니라 실체다 — all.length는 정의상 CASES.length × 앱 2개이므로
+// 그 둘을 비교하면 동어반복이다(5차 리뷰 지적). 실제로 사고가 나는 지점만 단언한다:
+//  ① 시나리오 id가 중복되면 캡처가 서로를 덮어쓴다(key = `${app}-${id}`)
+//  ② frames가 빈 시나리오는 아무것도 찍지 않고 조용히 통과한다
+const duplicated = [...new Set(CASES.map((c) => c.id))].length !== CASES.length;
+const frameless = CASES.filter((c) => !c.frames?.length).map((c) => c.id);
+if (duplicated || frameless.length || !all.length || new Set(all.map((x) => x.key)).size !== all.length)
+  throw new Error(
+    `예외 시나리오 정의 오류 — id 중복 ${duplicated} · 프레임 없는 시나리오 [${frameless.join(', ')}] · 실행 ${all.length}건`,
+  );
+if (!selected.length) throw new Error('선택된 시나리오가 없다');
 if (args.includes('--list')) {
   console.log(
     JSON.stringify(
