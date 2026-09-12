@@ -198,8 +198,9 @@ def pdf_document(output, scenes, capture, font, supplements):
     y = pdf.paragraph("고객 요구사항: 신규 사업 검토 CPB 사업 검토 자료 V5 (2026-09-08), 관제기능 시트", 55, pdf.h - 139, pdf.w - 110, 13)
     for scene in scenes:
         y = pdf.paragraph(f"{scene['label']}  |  {', '.join(scene['source_cells'])}  |  PC {scene['web']} / 휴대폰 {scene['pwa']}", 55, y - 15, pdf.w - 110, 12)
+    total = capture["actualCount"]
     evidence = [
-        "캡처 조합: PC·휴대폰 7종(운영 현황은 전국·현장·호기 3단계) × 4화면 크기 × 라이트·다크 = 144 / 144",
+        f"캡처 조합: PC·휴대폰 {len(scenes)}종(운영 현황은 전국·현장·호기 3단계) × 4화면 크기 × 라이트·다크 = {total} / {capture['requiredCount']}",
         f"캡처 시각: {capture.get('createdAt', '미기록')}",
         f"시연 기준 시각: {next(s['clock'] for s in capture['shots'] if s['view'] != 'entry')}",
         f"소스 커밋: {capture['sourceSha']}",
@@ -223,7 +224,7 @@ def html_document(output, scenes, capture, supplements):
     assumptions = "".join(f"<li>{escape(text)}</li>" for text in ASSUMPTIONS)
     rows = "".join(f'<tr><th>{escape(s["label"])}</th><td>{escape(", ".join(s["source_cells"]))}</td><td>{s["web"]} / {s["pwa"]}</td></tr>' for s in scenes)
     style = """*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;color:#172D39;background:#F0F4F4;font:17px/1.65 system-ui,sans-serif}header,main,footer{max-width:1280px;margin:auto;padding:32px}header{padding-top:56px}h1{font-size:42px;line-height:1.2}h2{font-size:29px;line-height:1.4}nav{display:flex;flex-wrap:wrap;gap:12px}a{color:#075A60}nav a{padding:12px 16px;background:white;border:1px solid #CAD5D9;border-radius:8px}section{padding:30px;background:white;border:1px solid #CAD5D9;border-radius:12px;margin:24px 0;scroll-margin-top:24px}.eyebrow{color:#0A6166;font-weight:650}.action{font-size:21px}.screens{display:grid;grid-template-columns:minmax(0,3fr) minmax(200px,1fr);gap:24px;align-items:start}figure{margin:0}figcaption{font-weight:650;margin:12px 0}img{width:100%;height:auto;border:1px solid #CAD5D9}p,li,td{overflow-wrap:anywhere}li{margin:12px 0}table{width:100%;border-collapse:collapse;font-size:15px}th,td{text-align:left;padding:12px;border-bottom:1px solid #CAD5D9}.next{font-weight:650}code{font-size:13px}footer{font-size:14px}a:focus-visible{outline:3px solid #0A6166;outline-offset:4px}@media(max-width:700px){header,main,footer{padding:20px}h1{font-size:32px}h2{font-size:25px}section{padding:20px}.screens{grid-template-columns:1fr}.screens figure:last-child{max-width:390px;margin:auto}}@media print{@page{size:A3 landscape;margin:14mm}body{background:white}nav{display:none}header,main,footer{max-width:none;padding:0}section{break-before:page;border:0;padding:0}.screens{grid-template-columns:3fr 1fr}a{color:inherit;text-decoration:none}}"""
-    html = f'<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>BoomEyes 소유주 화면 검토안</title><style>{style}</style></head><body><header><p class="eyebrow">BOOMEYES / OWNER DEMO</p><h1>내 장비를 찾고, 현장 확인까지</h1><p>소유주 화면 검토안 · 내부 검토용 초안</p><nav aria-label="검토 화면">{nav}</nav></header><main>{"".join(sections)}{expanded}<section><h2>시연 조건</h2><ol>{assumptions}</ol></section><section><h2>부록 · 원문 근거와 빌드 기록</h2><p>2026-09-08 V5 · 관제기능 시트</p><table><thead><tr><th>화면</th><th>원문 셀</th><th>검토 코드 (PC / 폰)</th></tr></thead><tbody>{rows}</tbody></table><p>전체 자동 캡처 144 / 144(운영 현황은 전국·현장·호기 3단계). 고객 확인은 아직 진행하지 않았습니다.</p><p>소스 커밋 <code>{capture["sourceSha"]}</code><br>작업 내용 해시 <code>{capture["workingTreeHash"]}</code><br>원천 해시 <code>{capture["registryHash"]}</code></p></section></main><footer>로컬 검토용 자료입니다. 화면 이미지를 선택하면 원래 크기로 열립니다.</footer></body></html>'
+    html = f'<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>BoomEyes 소유주 화면 검토안</title><style>{style}</style></head><body><header><p class="eyebrow">BOOMEYES / OWNER DEMO</p><h1>내 장비를 찾고, 현장 확인까지</h1><p>소유주 화면 검토안 · 내부 검토용 초안</p><nav aria-label="검토 화면">{nav}</nav></header><main>{"".join(sections)}{expanded}<section><h2>시연 조건</h2><ol>{assumptions}</ol></section><section><h2>부록 · 원문 근거와 빌드 기록</h2><p>2026-09-08 V5 · 관제기능 시트</p><table><thead><tr><th>화면</th><th>원문 셀</th><th>검토 코드 (PC / 폰)</th></tr></thead><tbody>{rows}</tbody></table><p>전체 자동 캡처 {capture["actualCount"]} / {capture["requiredCount"]}(운영 현황은 전국·현장·호기 3단계). 고객 확인은 아직 진행하지 않았습니다.</p><p>소스 커밋 <code>{capture["sourceSha"]}</code><br>작업 내용 해시 <code>{capture["workingTreeHash"]}</code><br>원천 해시 <code>{capture["registryHash"]}</code></p></section></main><footer>로컬 검토용 자료입니다. 화면 이미지를 선택하면 원래 크기로 열립니다.</footer></body></html>'
     (output / "owner-review.html").write_text(html, encoding="utf-8")
 
 
@@ -289,7 +290,7 @@ def main():
                   "artifacts": artifacts}
         (output / "review-manifest.json").write_text(json.dumps(record, ensure_ascii=False, indent=2) + "\n")
         CHECK.check_review(repo, manifest_path, output)
-        print(f"owner review generated: 14 actual screen captures, {len(pages)} PDF pages, 5-minute script → {output}")
+        print(f"owner review generated: {len(selected)} actual screen captures, {len(pages)} PDF pages, 5-minute script → {output}")
         print("Visual review pending. Customer review not performed. No publishing was performed.")
     except (ValueError, KeyError, OSError, json.JSONDecodeError) as error:
         parser.exit(1, f"owner review generation FAILED: {error}\n")
