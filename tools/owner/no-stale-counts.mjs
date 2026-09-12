@@ -15,27 +15,46 @@ import { fileURLToPath } from 'node:url';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 // 감시 대상 — 「현재 이렇다」를 말하는 글과 실제로 실행되는 설정
+// 소유주 파이프라인의 도구 전부 + 그 파이프라인을 서술하는 살아 있는 글 전부.
+// 새 소유주 도구·명세를 만들면 여기에 더한다 — 목록에 없으면 감시되지 않는다.
 const WATCH = [
   'docs/QA.md',
+  '.github/workflows/ci.yml',
   'tools/owner/README.md',
+  'tools/owner/views.mjs',
   'tools/owner/check.mjs',
   'tools/owner/check-review.py',
   'tools/owner/build-review.py',
+  'tools/owner/assets.py',
+  'tools/owner/performance.mjs',
   'tools/capture/owner.mjs',
   'tools/capture/owner-exceptions.mjs',
-  '.github/workflows/ci.yml',
+  'tests/e2e/owner-helpers.ts',
+  'tests/e2e/owner-flows.ts',
+  'tests/e2e/owner-content-flows.ts',
+  'tests/e2e/owner-resources-flows.ts',
   'specs/owner-experience/spec.md',
   'specs/owner-experience/design.md',
+  'specs/owner-experience/tasks.md',
   'specs/owner-contracts/spec.md',
   'specs/owner-contracts/design.md',
+  'specs/owner-contracts/tasks.md',
   'specs/owner-drivers/spec.md',
   'specs/owner-drivers/design.md',
+  'specs/owner-drivers/tasks.md',
+  'specs/owner-showcase/spec.md',
+  'specs/owner-showcase/design.md',
+  'specs/owner-showcase/tasks.md',
 ];
 // 소유주 캡처·증거가 파생하는 축의 단위어. 숫자가 앞이든 뒤든 잡는다.
 // 「장」·「쪽」은 현장·장비·ENT-01 장비처럼 다른 낱말의 일부와 부딪혀 넣지 않는다(오탐 3건 확인).
-const UNIT = '조합|과제|장면|프레임|목적|종|건|combinations?|views?|cases?|frames?';
+const UNIT = '조합|과제|프레임|목적|종|건|combinations?|views?|cases?|frames?';
+// 「장면」은 방향으로 뜻이 갈린다 — 「10장면」은 개수, 「장면 10」은 시연 장면 번호(식별자)다.
+// 그래서 숫자가 앞에 오는 형태만 본다(오탐 4건 확인).
+const UNIT_PRE = '장면';
 const HIT = new RegExp(
-  `(?<![\\d.])(\\d{2,3})\\s*(?:개|종|건|장|쌍)?\\s*(?:${UNIT})|(?:${UNIT})\\s*(?:수)?\\s*[:=]?\\s*(?<![\\d.])(\\d{2,3})(?![\\d.])`,
+  `(?<![\\d.])(\\d{2,3})\\s*(?:개|종|건|쌍)?\\s*(?:${UNIT}|${UNIT_PRE})` +
+    `|(?:${UNIT})\\s*(?:수)?\\s*[:=]?\\s*(?<![\\d.])(\\d{2,3})(?![\\d.])`,
   'i',
 );
 // 줄 끝에 이 표시가 있으면 그 줄은 통과 — 정책 상수·식별자 범위처럼 파생값이 아닌 수
