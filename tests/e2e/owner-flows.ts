@@ -181,6 +181,49 @@ export function ownerFlows(app: OwnerApp) {
     await expect(page).not.toHaveURL(/site=/);
   });
 
+  if (app === 'pwa')
+    test('[A4-07] [FR-024] [AC-O13] [AC-O16] map sheet snaps collapsed → half → expanded by button, keyboard and drag', async ({
+      page,
+    }) => {
+      await startOwner(page, app);
+      const overview = ownerHost(page, 'overview');
+      const sheet = overview.locator('[data-map-sheet]');
+      // 전국 단계는 지도가 주인공 — 시트는 접힘으로 시작
+      await expect(sheet).toHaveAttribute('data-snap', 'collapsed');
+      await expect(overview.locator('.be-map')).toHaveAttribute('data-map-ready', '', MAP);
+      // 펼치기 버튼 → half, 접기 → collapsed
+      await sheet.getByRole('button', { name: '시트 펼치기', exact: true }).last().click();
+      await expect(sheet).toHaveAttribute('data-snap', 'half');
+      await sheet.getByRole('button', { name: '시트 접기', exact: true }).last().click();
+      await expect(sheet).toHaveAttribute('data-snap', 'collapsed');
+      // 손잡이 키보드: ArrowUp ×2 → expanded, End → collapsed, Home → expanded
+      const handle = sheet.getByRole('button', { name: /시트 (펼치기|접기)/ }).first();
+      await handle.focus();
+      await page.keyboard.press('ArrowUp');
+      await expect(sheet).toHaveAttribute('data-snap', 'half');
+      await page.keyboard.press('ArrowUp');
+      await expect(sheet).toHaveAttribute('data-snap', 'expanded');
+      await expect(handle).toHaveAttribute('aria-expanded', 'true');
+      await page.keyboard.press('End');
+      await expect(sheet).toHaveAttribute('data-snap', 'collapsed');
+      await page.keyboard.press('Home');
+      await expect(sheet).toHaveAttribute('data-snap', 'expanded');
+      // 드래그: 손잡이를 아래로 60px 끌어 놓으면 한 단 내려간다
+      const box = (await handle.boundingBox())!;
+      await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+      await page.mouse.down();
+      await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2 + 60, { steps: 5 });
+      await page.mouse.up();
+      await expect(sheet).toHaveAttribute('data-snap', 'half');
+      // 접힌 시트에서 지도 마커를 고르면 시트가 half로 올라오며 현장 단계가 열린다
+      await sheet.getByRole('button', { name: '시트 접기', exact: true }).last().click();
+      await expect(sheet).toHaveAttribute('data-snap', 'collapsed');
+      await overview.getByRole('list', { name: '현장 목록', exact: true }).locator('[data-site="SITE-MAPO"]').click();
+      await expect(page).toHaveURL(/site=SITE-MAPO/);
+      await expect(sheet).toHaveAttribute('data-snap', 'half');
+      await expect(overview.locator('.be-map')).toHaveAttribute('data-map-level', 'site', MAP);
+    });
+
   test('[B1-02] [FR-024] [AC-O12] [AC-O13] unknown site or foreign unit in the URL falls back to a valid level', async ({
     page,
   }) => {

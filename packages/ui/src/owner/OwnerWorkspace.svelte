@@ -93,6 +93,7 @@
   data-owner-dataset={snapshot?.dataset}
   data-owner-clock={snapshot?.at}
   aria-busy={loading}
+  class="flex min-h-0 min-w-0 flex-1 flex-col"
 >
   {#if loading && !snapshot}
     <div role="status" class="gap-stack-lg py-stack-xl flex flex-col">

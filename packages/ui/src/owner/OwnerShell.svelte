@@ -101,7 +101,7 @@
         화면입니다.
       </Banner>
     {/if}
-    <main data-owner-scroll class="p-page-gutter w-full min-w-0 flex-1">
+    <main data-owner-scroll class="p-page-gutter flex w-full min-w-0 flex-1 flex-col">
       {@render children()}
     </main>
     <nav

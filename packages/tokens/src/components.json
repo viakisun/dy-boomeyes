@@ -961,5 +961,14 @@
     "variants": "capture(정지)/live(자동 재생)",
     "states": "default",
     "note": "호기 패널의 실시간 영상 타일 — 6초 샘플 루프(muted·loop·playsinline), '실시간 예시' 오버레이 + 시연 클립 캡션, 해제 시 pause·src 제거"
+  },
+  {
+    "name": "MapSheet",
+    "family": "Feedback",
+    "platform": "pwa",
+    "ref": "Material BottomSheet(3상태) · Apple Maps sheet",
+    "variants": "snap collapsed/half/expanded",
+    "states": "default",
+    "note": "지도 위 비모달 바텀 시트 — 손잡이 버튼(키보드 ArrowUp/Down·Home/End · 클릭 · 드래그) + 펼치기/접기 IconButton, transform 3단, 내용 스크롤, reduced-motion 무전환. 모달 BottomSheet와 구분"
   }
 ]

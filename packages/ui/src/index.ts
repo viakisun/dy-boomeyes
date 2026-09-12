@@ -26,6 +26,7 @@ export { default as Toast } from './primitives/Toast.svelte';
 export { toast, dismiss, toasts } from './primitives/toast-store.svelte';
 export { default as Dialog } from './primitives/Dialog.svelte';
 export { default as BottomSheet } from './primitives/BottomSheet.svelte';
+export { default as MapSheet, type MapSheetSnap } from './primitives/MapSheet.svelte';
 export { default as Skeleton } from './primitives/Skeleton.svelte';
 export { default as EmptyState } from './primitives/EmptyState.svelte';
 export { default as Banner } from './primitives/Banner.svelte';

@@ -15,8 +15,17 @@
     alerts,
     app,
     url,
+    wrap = true,
     class: cls,
-  }: { devices: OwnerDevice[]; alerts: OwnerAlert[]; app: OwnerApp; url: URL; class?: string } = $props();
+  }: {
+    devices: OwnerDevice[];
+    alerts: OwnerAlert[];
+    app: OwnerApp;
+    url: URL;
+    /** false = 한 줄 가로 스크롤(PWA 지도 위 띠) */
+    wrap?: boolean;
+    class?: string;
+  } = $props();
   const summary = $derived(ownerSummary(devices, alerts));
   const strip = $derived(ownerStrip(devices));
   const chips = $derived(
@@ -75,7 +84,11 @@
   data-deployed={summary.deployed}
   data-stored={summary.stored}
   data-unknown={summary.unknown}
-  class={cx('bg-surface shadow-overlay rounded-card lg:rounded-pill px-inset-xs flex flex-wrap items-center', cls)}
+  class={cx(
+    'bg-surface shadow-overlay rounded-card lg:rounded-pill px-inset-xs flex items-center',
+    wrap ? 'flex-wrap' : 'flex-nowrap overflow-x-auto overscroll-x-contain',
+    cls,
+  )}
 >
   <a
     href={ownerHref(url, 'fleet', app)}

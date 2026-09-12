@@ -86,6 +86,10 @@
     const target =
       'bounds' in camera
         ? (map.cameraForBounds(camera.bounds, { padding, maxZoom: camera.maxZoom }) ??
+          map.cameraForBounds(camera.bounds, {
+            padding: Object.fromEntries(Object.entries(padding).map(([k, v]) => [k, v / 2])) as typeof padding,
+            maxZoom: camera.maxZoom,
+          }) ??
           map.cameraForBounds(camera.bounds, { maxZoom: camera.maxZoom }))
         : { center: camera.center, zoom: camera.zoom, padding };
     if (!target) return;
@@ -254,7 +258,7 @@
     </svg>
     {#if failed}
       <div
-        class="bg-surface p-inset-lg gap-stack-sm absolute inset-0 flex flex-col items-start justify-center"
+        class="bg-surface p-inset-lg gap-stack-sm absolute inset-0 flex flex-col items-start justify-start"
         data-map-error
         role="status"
       >

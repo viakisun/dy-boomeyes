@@ -29,6 +29,11 @@ describe('[B1-02] 알약 상자 겹침 해소', () => {
     expect(off.get('a')!.y).toBeCloseTo(-18);
     expect(off.get('b')!.y).toBeCloseTo(18);
   });
+  it('옆으로 거의 나란한 두 알약은 가로로 벌어진다(세로 밀기보다 덜 움직임)', () => {
+    const off = resolveOverlaps([at('a', 100, 100), at('b', 200, 104)], { w: 112, h: 56 });
+    expect(off.get('a')).toEqual({ x: -6, y: 0 });
+    expect(off.get('b')).toEqual({ x: 6, y: 0 });
+  });
   it('가로로 충분히 떨어지면 건드리지 않고, 사슬(3개)도 세로 간격 ≥ 높이가 된다', () => {
     expect(resolveOverlaps([at('a', 0, 0), at('b', 200, 0)], { w: 112, h: 56 }).get('b')).toEqual({ x: 0, y: 0 });
     const pts = [at('a', 100, 100), at('b', 140, 130), at('c', 180, 160)];

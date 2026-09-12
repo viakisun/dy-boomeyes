@@ -10,7 +10,7 @@
 | ref(원시) | 208 |
 | sys(시맨틱) | 324 |
 | cmp(컴포넌트) | 92 |
-| 컴포넌트 카탈로그 | 107 |
+| 컴포넌트 카탈로그 | 108 |
 | 대비 검사 | 94/94 통과 |
 
 | 산출물 | 용도 |
@@ -786,7 +786,7 @@ cmp 층은 sys만 참조한다(ref 직접 참조 금지 — 검사로 강제). �
 | `cmp.table.row-selected` | #ebf1ff | #ebf1ff | {sys.color.bg.selected} |  |
 | `cmp.table.header-fg` | #616368 | #616368 | {sys.color.fg.muted} |  |
 
-## 8. 컴포넌트 카탈로그 (107)
+## 8. 컴포넌트 카탈로그 (108)
 
 이름 PascalCase · prop 어휘 고정: `variant`(형태) · `tone`(색 의도: accent/neutral/info/success/warning/danger/progress) · `size`(sm/md/lg) · 상태 boolean(`disabled` `loading` `selected` `invalid`). 플랫폼 both = 같은 Svelte 컴포넌트가 밀도 토큰으로 두 플랫폼을 소화.
 
@@ -911,6 +911,7 @@ cmp 층은 sys만 참조한다(ref 직접 참조 금지 — 검사로 강제). �
 | **Drawer** | web | Linear | side right/left · width | open | 폼·상세 편집 |
 | **Popover** | both | CE Popover | placement · arrow | open |  |
 | **Spinner** | both | — | size |  | 버튼 내 로딩은 Button loading |
+| **MapSheet** | pwa | Material BottomSheet(3상태) · Apple Maps sheet | snap collapsed/half/expanded | default | 지도 위 비모달 바텀 시트 — 손잡이 버튼(키보드 ArrowUp/Down·Home/End · 클릭 · 드래그) + 펼치기/접기 IconButton, transform 3단, 내용 스크롤, reduced-motion 무전환. 모달 BottomSheet와 구분 |
 
 ### Owner experience
 
