@@ -1053,7 +1053,7 @@ owner-experience의 현황/탐색/상세/뷰어는 목적별 구성을 적용한
 7. **밀도는 역할에서(§0-6)** — 소유주 화면은 웹도 comfortable. 웹 레이아웃이 루트 `data-density`를 전환한다.
 8. **색 예산 유지(§0-4)** — IconTile·PeriodBar의 톤은 `neutral|warning|danger`뿐(면을 채우는 자리). 상태 **글자**는 계열마다 색을 갖는다 — 고장 danger · 점검 warning(yellow 8) · 수신 지연 warning(yellow 11) · 보관 중립 · **정상 success 초록**. 점은 정상 요약 칩 하나에만(살아 움직이는 신호 LIVE·REC은 영상 타일). 6초 루프 샘플에 LIVE 표시를 붙이지 않는다.
 
-컴포넌트: IconTile · List · PeriodBar · ContactCard · ContextHeader(스크롤 시 sticky 축약 바, compact일 때만 렌더) · AlertCard · EquipmentRow(layout columns/stacked · poster) · StatusStrip · OverviewCrumbs · SiteRow · NationPanel · SitePanel · UnitPanel · OwnerLiveTile · MapSheet(비모달 3단, BottomSheet와 구분) · FleetSummary(현황에서는 StatusStrip으로 대체). 채택하지 않음: Tabs(`role=tab`) · DataTable(`<table>`) — 목록은 List + 정렬 열 행(`role=list`). 보관 대수를 가용 대수로 표시하지 않는다.
+컴포넌트: IconTile · List · PeriodBar · ContactCard · ContextHeader(스크롤 시 sticky 축약 바, compact일 때만 렌더) · AlertCard · EquipmentRow(layout columns/stacked · poster) · StatusStrip · OverviewCrumbs · SiteRow · NationPanel · SitePanel · UnitPanel · OwnerLiveTile · MapSheet(비모달 3단, BottomSheet와 구분) · FleetSummary(현황에서는 StatusStrip으로 대체). 채택하지 않음: Tabs(`role=tab`). 목록은 List + 정렬 열 행(`role=list`)이고, **DataTable(`<table>`)은 웹 보유 장비(B1-09) 한 화면만 예외**다(시안 «결정 2026-09-12» · ADR-014 — PWA는 카드 유지). 보관 대수를 가용 대수로 표시하지 않는다.
 
 ## 12. 카피 · 식별자 정책
 

@@ -16,7 +16,20 @@ const requireThat = (ok, message) => {
 };
 const read = (path) => JSON.parse(readFileSync(resolve(ROOT, path), 'utf8'));
 const source = parse(readFileSync(join(ROOT, 'ssot/screens.yaml'), 'utf8'));
-requireThat(Array.isArray(source.owner_demo) && source.owner_demo.length === 7, 'Seven owner views must exist in SSOT');
+// 구현된 소유주 화면 목적(웨이브 ≤ 4)만 증거 대상이다 — 계약·운전자는 웨이브 5라 아직 아니다.
+// 목적 수를 고정하지 않는다: 구현되면 웨이브가 내려오고 필요한 키가 저절로 늘어난다.
+const OWNER_DEMO_WAVE = 4;
+const ownerViews = (source.owner_demo ?? []).filter((v) =>
+  ['web', 'pwa'].every((app) => {
+    const w = source.screens?.find((x) => x.id === v[app])?.wave;
+    return typeof w === 'number' && w <= OWNER_DEMO_WAVE;
+  }),
+);
+requireThat(ownerViews.length > 0, 'No implemented owner views in SSOT');
+requireThat(
+  new Set(ownerViews.map((v) => v.view)).size === ownerViews.length,
+  'Implemented owner views must be unique',
+);
 requireThat(!!value('--captures') || !!value('--e2e'), 'Pass --captures and/or --e2e evidence paths');
 let captures = 0,
   tests = 0;
@@ -28,7 +41,7 @@ if (value('--captures')) {
     pwa: ['375x800', '390x800', '430x900', '768x1024'],
   };
   // 운영 현황은 드릴다운 3단계(전국 · 현장 · 호기)를 각각 캡처한다 — 9 × 2앱 × 4폭 × 2테마 = 144
-  const required = (source.owner_demo ?? []).flatMap((v) =>
+  const required = ownerViews.flatMap((v) =>
     (v.view === 'overview' ? ['', '-site', '-unit'] : ['']).flatMap((level) =>
       ['web', 'pwa'].flatMap((app) =>
         sizes[app].flatMap((size) => ['light', 'dark'].map((theme) => `${app}-${v.view}${level}-${size}-${theme}`)),
@@ -39,9 +52,11 @@ if (value('--captures')) {
     result.scope === 'full' && result.status === 'automated-capture-pass' && result.exitCode === 0,
     'Capture result must be a full successful automated run',
   );
+  // 조합 수는 구현된 화면 목적에서 파생한다 — 화면이 늘면 이 수도 함께 늘고, 수기 갱신이 필요 없다
+  const total = required.length;
   requireThat(
-    result.requiredCount === 144 && result.expectedCount === 144 && result.actualCount === 144,
-    'Expected/actual capture counts must both be 144',
+    result.requiredCount === total && result.expectedCount === total && result.actualCount === total,
+    `Expected/actual capture counts must all be ${total}`,
   );
   requireThat(
     result.registryHash ===
@@ -72,7 +87,7 @@ if (value('--captures')) {
     captures++;
     requireThat(required.includes(shot.key) && !seen.has(shot.key), `Unexpected/duplicate capture ${shot.key}`);
     seen.add(shot.key);
-    const view = source.owner_demo?.find((v) => v.view === shot.view);
+    const view = ownerViews.find((v) => v.view === shot.view);
     requireThat(view?.[shot.app] === shot.code, `Wrong screen ID ${shot.key}`);
     requireThat(shot.ok === true && shot.status === 'automated-capture-pass', `Failed capture ${shot.key}`);
     requireThat(
@@ -125,7 +140,7 @@ if (value('--captures')) {
     }
   }
   for (const key of required) requireThat(seen.has(key), `Missing required capture ${key}`);
-  requireThat(captures === 144, 'Capture manifest must contain exactly 144 rows');
+  requireThat(captures === total, `Capture manifest must contain exactly ${total} rows`);
 }
 if (value('--e2e')) {
   const report = read(value('--e2e'));

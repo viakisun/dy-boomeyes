@@ -19,14 +19,23 @@ const option = (key, fallback) => {
   return args[index + 1];
 };
 const source = parse(readFileSync(join(ROOT, 'ssot/screens.yaml'), 'utf8'));
-const views = source.owner_demo;
-const expectedViews = ['entry', 'overview', 'fleet', 'detail', 'video', 'documents', 'alerts'];
-if (
-  !Array.isArray(views) ||
-  views.length !== 7 ||
-  expectedViews.some((v) => views.filter((x) => x.view === v).length !== 1)
-)
-  throw new Error('owner_demo must declare each of the seven required views exactly once');
+// 구현된 소유주 화면만 찍는다 — 목적 수를 고정하지 않고 웨이브로 판정한다. 아직 만들지 않은
+// 화면(계약·운전자)은 웨이브 5에 있어 여기서 걸러지고, 구현되면 웨이브 4로 내려와 자동으로 편입된다.
+export const OWNER_DEMO_WAVE = 4;
+const waveOf = (id) => source.screens.find((s) => s.id === id)?.wave;
+export const ownerViews = (src) =>
+  (src.owner_demo ?? []).filter((v) =>
+    ['web', 'pwa'].every((app) => {
+      const w = src.screens.find((s) => s.id === v[app])?.wave;
+      return typeof w === 'number' && w <= OWNER_DEMO_WAVE;
+    }),
+  );
+const views = ownerViews(source);
+if (!views.length || new Set(views.map((v) => v.view)).size !== views.length)
+  throw new Error('owner_demo: 구현된 화면 목적이 없거나 중복이다');
+for (const v of views)
+  for (const app of ['web', 'pwa'])
+    if (waveOf(v[app]) === undefined) throw new Error(`owner_demo: ${v.view}/${app} 화면(${v[app]})이 없다`);
 const sizes = {
   web: [
     [1280, 842],
@@ -46,7 +55,7 @@ const all = views.flatMap((view) =>
   ['web', 'pwa'].flatMap((app) => {
     const screen = source.screens.find((s) => s.id === view[app]);
     if (!screen || !screen.roles.includes('owner')) throw new Error(`Owner screen missing or wrong role: ${view[app]}`);
-    // 운영 현황은 드릴다운 3단계(전국 · 현장 · 호기)를 각각 캡처한다 — 7종 + 2단계 = 9 × 2앱 × 4폭 × 2테마 = 144
+    // 운영 현황은 드릴다운 3단계(전국 · 현장 · 호기)를 각각 캡처한다 — 구현 7종 + 2단계 = 9 × 2앱 × 4폭 × 2테마 = 144
     const levels = view.view === 'overview' ? ['nation', 'site', 'unit'] : [undefined];
     return levels.flatMap((level) =>
       sizes[app].flatMap(([width, height]) =>

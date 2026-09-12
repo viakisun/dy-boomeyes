@@ -28,9 +28,16 @@ if (args.includes('--help')) {
 }
 const registry = parse(readFileSync(join(ROOT, 'ssot/screens.yaml'), 'utf8'));
 const fixedClock = parse(readFileSync(join(ROOT, 'ssot/meta.yaml'), 'utf8')).fixed_clock;
-const views = registry.owner_demo;
-if (!Array.isArray(views) || views.length !== 7 || new Set(views.map((view) => view.view)).size !== 7)
-  throw new Error('Expected seven unique owner_demo source views');
+// 구현된 화면만(웨이브 ≤ 4) — 계약·운전자는 웨이브 5라 아직 예외 시나리오가 없다
+const OWNER_DEMO_WAVE = 4;
+const views = (registry.owner_demo ?? []).filter((v) =>
+  ['web', 'pwa'].every((app) => {
+    const w = registry.screens.find((s) => s.id === v[app])?.wave;
+    return typeof w === 'number' && w <= OWNER_DEMO_WAVE;
+  }),
+);
+if (!views.length || new Set(views.map((view) => view.view)).size !== views.length)
+  throw new Error('owner_demo: 구현된 화면 목적이 없거나 중복이다');
 const CASES = [
   { id: 'empty-fleet', view: 'fleet', state: 'empty', frames: ['empty'], ac: ['AC-O14'] },
   { id: 'read-retry', view: 'fleet', state: 'error', frames: ['failed', 'recovered'], ac: ['AC-O14'] },

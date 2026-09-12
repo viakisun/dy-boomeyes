@@ -90,6 +90,10 @@
   });
   $effect(() => () => unsubscribe?.());
   const viewProps = $derived(snapshot ? { data: snapshot, api, app, url, navigate, refresh, capture, sim } : null);
+  // 원천에 등록됐지만 아직 만들지 않은 화면(계약·운전자 — 웨이브 5). data-stub를 붙여
+  // capture --strict가 자리 화면으로 세게 한다 — 보이지 않는 자리 화면을 남기지 않는다.
+  const BUILT = ['overview', 'fleet', 'detail', 'documents', 'alerts', 'video'] as const;
+  const stub = $derived(!(BUILT as readonly string[]).includes(view));
 </script>
 
 <section
@@ -99,6 +103,7 @@
   data-owner-dataset={snapshot?.dataset}
   data-owner-clock={snapshot?.at}
   data-owner-sim={sim ? '1' : '0'}
+  data-stub={stub ? '' : undefined}
   aria-busy={loading}
   class="flex min-h-0 min-w-0 flex-1 flex-col"
 >
@@ -126,6 +131,14 @@
     {:else if view === 'detail'}<OwnerDetail {...viewProps} {map} />
     {:else if view === 'documents'}<OwnerDocuments {...viewProps} />
     {:else if view === 'alerts'}<OwnerAlerts {...viewProps} />
-    {:else if view === 'video'}{@render video(viewProps)}{/if}
+    {:else if view === 'video'}{@render video(viewProps)}
+    {:else}
+      <!-- 원천에 등록됐지만 아직 만들지 않은 화면(계약·운전자 — 웨이브 5). 빈 본문을 내지 않는다.
+           specs/owner-contracts · specs/owner-drivers가 채우면 이 분기는 사라진다. -->
+      <EmptyState
+        title="준비 중인 화면입니다"
+        description="이 업무는 아직 데모에 들어오지 않았습니다. 운영 현황이나 보유 장비에서 계속 보실 수 있습니다."
+      />
+    {/if}
   {/if}
 </section>

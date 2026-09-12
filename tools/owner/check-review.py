@@ -20,6 +20,8 @@ from urllib.parse import parse_qs, urlparse
 from PIL import Image
 import yaml
 
+# 소유주 데모 웨이브 — 이 웨이브까지 내려온 화면만 구현된 것으로 본다
+OWNER_DEMO_WAVE = 4
 SIZES = {"web": [(1280, 842), (1024, 842), (768, 842), (390, 800)],
          "pwa": [(375, 800), (390, 800), (430, 900), (768, 1024)]}
 # 검토안 확대 페이지: 첫 화면 아래 내용 4 + 드릴다운 현장·호기 단계 3(웹 현장·웹 호기·폰 호기)
@@ -56,10 +58,16 @@ def contained_file(directory, name):
 def load_evidence(repo, manifest_path):
     registry = yaml.safe_load((repo / "ssot/screens.yaml").read_text())
     clock = yaml.safe_load((repo / "ssot/meta.yaml").read_text())["fixed_clock"]
-    views = registry.get("owner_demo", [])
-    if len(views) != 7 or len({v.get("view") for v in views}) != 7:
-        raise ValueError("owner_demo must contain exactly seven unique views")
     screens = {row["id"]: row for row in registry["screens"]}
+    # 구현된 화면 목적(웨이브 <= 4)만 증거 대상이다 — 계약·운전자는 웨이브 5라 아직 아니다.
+    # 목적 수를 고정하지 않는다: 구현되면 웨이브가 내려오고 대상이 저절로 늘어난다.
+    views = [
+        v
+        for v in registry.get("owner_demo", [])
+        if all(isinstance(screens.get(v.get(app), {}).get("wave"), int) and screens[v[app]]["wave"] <= OWNER_DEMO_WAVE for app in SIZES)
+    ]
+    if not views or len({v.get("view") for v in views}) != len(views):
+        raise ValueError("owner_demo: 구현된 화면 목적이 없거나 중복이다")
     expected = {}
     for view in views:
         if not view.get("question") or not view.get("source_cells"):
@@ -82,14 +90,15 @@ def load_evidence(repo, manifest_path):
     for key, value in fingerprint(repo).items():
         if manifest.get(key) != value:
             raise ValueError(f"Evidence {key} does not match current source")
-    if (manifest.get("requiredCount"), manifest.get("expectedCount"), manifest.get("actualCount")) != (144, 144, 144):
-        raise ValueError("All 144 required captures must be selected and executed")
+    total = len(expected)
+    if (manifest.get("requiredCount"), manifest.get("expectedCount"), manifest.get("actualCount")) != (total, total, total):
+        raise ValueError(f"All {total} required captures must be selected and executed")
     if manifest.get("scope") != "full" or manifest.get("status") != "automated-capture-pass" or manifest.get("exitCode") != 0:
         raise ValueError("Capture run is partial, failed or unfinished")
     if manifest.get("command", [])[:2] != ["node", "tools/capture/owner.mjs"]:
         raise ValueError("Evidence must come from the owner browser capture command")
     shots = manifest.get("shots", [])
-    if len(shots) != 144 or {row.get("key") for row in shots} != set(expected):
+    if len(shots) != total or {row.get("key") for row in shots} != set(expected):
         raise ValueError("Capture combinations are missing, duplicated or unexpected")
     for row in shots:
         exp = expected[row["key"]]
@@ -135,7 +144,7 @@ def check_review(repo, manifest_path, directory, require_visual=False):
     chosen = {(row["view"], row["app"]) for row in record.get("screens", [])}
     expected = {(row["view"], app) for row in views for app in SIZES}
     if chosen != expected or len(record.get("screens", [])) != len(expected):
-        raise ValueError("Review does not contain exactly seven views for both apps")
+        raise ValueError(f"Review must contain exactly {len(views)} views for both apps")
     capture_shots = {row["key"]: row for row in capture["shots"]}
     for row in record["screens"]:
         source = capture_shots.get(row.get("captureKey"))
@@ -181,10 +190,10 @@ def check_review(repo, manifest_path, directory, require_visual=False):
         raise ValueError("Review PDF must contain fourteen selected screens and all expanded views")
     html = (directory / "owner-review.html").read_text()
     images = re.findall(r'<img\b[^>]*\bsrc="([^"]+)"', html)
-    if len(images) != 14 + len(extras) or set(images) != {row["file"] for row in record["screens"] + extras}:
-        raise ValueError("Review HTML does not contain the fourteen selected actual screens")
+    if len(images) != len(record["screens"]) + len(extras) or set(images) != {row["file"] for row in record["screens"] + extras}:
+        raise ValueError("Review HTML does not contain every selected actual screen")
     script = (directory / "five-minute-demo.md").read_text()
-    if script.count("**고객의 질문:**") != 7 or "5:00" not in script:
+    if script.count("**고객의 질문:**") != len(views) or "5:00" not in script:
         raise ValueError("Five-minute script omits scenes or its final time")
     visual_path = directory / "visual-review.json"
     visual = json.loads(visual_path.read_text()) if visual_path.exists() else None
@@ -204,8 +213,12 @@ def check_review(repo, manifest_path, directory, require_visual=False):
 def self_test(repo):
     """Synthetic images exercise only rejection logic; never generate a customer artifact."""
     registry = yaml.safe_load((repo / "ssot/screens.yaml").read_text())
-    views = registry["owner_demo"]
     screens = {row["id"]: row for row in registry["screens"]}
+    views = [
+        v
+        for v in registry["owner_demo"]
+        if all(isinstance(screens.get(v.get(app), {}).get("wave"), int) and screens[v[app]]["wave"] <= OWNER_DEMO_WAVE for app in SIZES)
+    ]
     clock = yaml.safe_load((repo / "ssot/meta.yaml").read_text())["fixed_clock"]
     with tempfile.TemporaryDirectory(prefix="owner-validator-test-") as temporary:
         directory = Path(temporary)
@@ -280,10 +293,12 @@ def main():
         elif not args.manifest: parser.error("--manifest is required")
         elif args.review:
             record, visual = check_review(args.repo.resolve(), args.manifest.resolve(), args.review.resolve(), args.require_visual_review)
-            print(f"owner review check: 14 screens, {record['pageCount']} PDF pages, artifact hashes OK; visual review {'pass' if visual else 'pending'}; customer review not performed")
+            print(f"owner review check: {len(record['screens'])} screens, {record['pageCount']} PDF pages, artifact hashes OK; visual review {'pass' if visual else 'pending'}; customer review not performed")
         else:
             load_evidence(args.repo.resolve(), args.manifest.resolve())
-            print("owner review evidence: 144/144, source/registry/file hashes/owner/clock OK")
+            _, manifest = load_evidence(args.repo.resolve(), args.manifest.resolve())
+            total = manifest["actualCount"]
+            print(f"owner review evidence: {total}/{total}, source/registry/file hashes/owner/clock OK")
     except (ValueError, KeyError, OSError, json.JSONDecodeError) as error:
         parser.exit(1, f"owner review check FAILED: {error}\n")
 

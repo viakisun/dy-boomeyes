@@ -249,7 +249,8 @@ ui는 map을 import하지 않으므로 `apps/*/src/lib/OwnerPage.svelte`가 `Map
 
 Stat(전압 — 값 380 · 단위 V · 힌트 "마지막 수신 10:41" · fault면 danger) · KeyValueList(상세 dl 3곳 · 알림 상세 · 영상 캡션) · Chip 그룹(`role="group" aria-label`, 배치 필터 · 알림 종류 · 영상 용도/시점 — Tabs는 `role=tab`이라 e2e `getByRole('button')`과 충돌) · StatusPill(미디어 오버레이는 `solid tone="neutral"`, 6초 루프에 `signal` 금지) · Card interactive(상세 자료 2) · Badge(뷰어 파일 종류) · Skeleton · Banner(셸 오프라인만 — `role=status`라 보유 장비 뷰 안 금지) · EmptyState(아이콘 스니펫) · PageHeader(부제 없이 제목 + 메타 칩 + 행동) · Timeline(상세 이력) · IconButton(`min-w-size-touch-min` — `OwnerShell` `<style>`이 컨트롤 높이를 강제한다).
 
-채택하지 않음: Tabs · DataTable(`<table>`이라 `role=list "보유 장비 목록"` 단언과 충돌) · TextField/Select(셸 높이 강제와 충돌) · TelemetryGauge(부품 값이 문자열) · StatusDot.
+채택하지 않음: Tabs · TextField/Select(셸 높이 강제와 충돌) · TelemetryGauge(부품 값이 문자열) · StatusDot.
+**2026-09-12 개정** — DataTable(`<table>`)은 **웹 보유 장비(B1-09) 한 화면에서만** 쓴다. 시안이 25~30행을 열 머리 고정 표 하나로 정했고(«결정 2026-09-12» · ADR-014), 그 화면에서는 `role=table`이 계약이므로 `role=list "보유 장비 목록"` 단언을 쓰지 않는다. PWA(A4-02)는 390px에서 표를 읽을 수 없어 List + EquipmentRow 카드를 유지한다(사용자 결정). 다른 소유주 화면은 계속 List + 정렬 열 행이다.
 
 ### 5.13 라벨 · 톤 · 아이콘
 
@@ -262,7 +263,7 @@ Stat(전압 — 값 380 · 단위 V · 힌트 "마지막 수신 10:41" · fault�
 | `packages/tokens/src/components.json` | IconTile · PeriodBar(Display) · ContactCard · ContextHeader(Domain) · AlertCard(Owner experience) 등록, List · EquipmentRow 설명 갱신 → `pnpm tokens:build` |
 | `packages/tokens/src/doc/04-page.md` | §11.7 "소유주 데모 패턴": 한 화면 한 주인공 · 카드 해부도 · 아이콘 메타 행 · 설명 문장 규칙. `00-principles.md` · `06-web.md`의 중복 문단은 참조로 축약 |
 | `packages/tokens/src/sys/motion.json` · 유틸 | `motion-reduce` 변형. 선택: `sys.size.thumb.md`(96/80) — 없으면 `w-layout-field-short aspect-video` |
-| `specs/owner-experience/design.md` | 공통 패턴에 신규 컴포넌트, DataTable 대신 List + 열 행인 이유, 밀도 결정 |
+| `specs/owner-experience/design.md` | 공통 패턴에 신규 컴포넌트, 목록을 List + 열 행으로 두는 이유와 웹 보유 장비의 표 예외(2026-09-12), 밀도 결정 |
 | `tools/design/color-audit.mjs` | `--owner` 패스(현재 wave ≤ 2만 방문해 소유주 화면은 감사 밖) |
 | `tools/capture/owner.mjs` | 마커 검사 뷰별 기대값 · 320px 폭 추가 |
 | `apps/web/src/app.html` · `OwnerShell.svelte` | 소유주 웹 comfortable 전환(결정 시) |

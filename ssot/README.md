@@ -26,7 +26,7 @@ node tools/ssot/check.mjs --docs     # md 링크·ID 실존
 ## 규칙
 
 - 소문자·숫자·하이픈 세그먼트 · ID는 배열(`" · "` 문자열 금지) · 리스트-오브-맵, `id` 첫 키 · 앵커·멀티독 금지.
-- 어휘(영문 enum, 한글 라벨은 build의 라벨 맵): `phase 1|2` · 구현 상태 `reflected|phase2|structure|option|non-screen|documented|not-started|development|check|void` · FR `kind core|proposed|option` · DISC `status open|decided|dropped` + `track A|B|C` · 화면 `wave 0..7`(구현·캡처 여부는 TRACE.md가 계산).
+- 어휘(영문 enum, 한글 라벨은 build의 라벨 맵): `phase 1|2` · 구현 상태 `reflected|phase2|structure|option|non-screen|documented|not-started|development|check|void` — **구현 완료도가 아니라 어느 단계에 속하는지**를 뜻한다(`phase2` = 2단계 범위 · `reflected` = 이 시스템에 반영됨 · `not-started` = 아직 범위에 없음). 실제 구현·캡처 여부는 화면 `wave`와 TRACE.md가 계산한다 · FR `kind core|proposed|option` · DISC `status open|decided|dropped` + `track A|B|C` · 화면 `wave 0..7`(구현·캡처 여부는 TRACE.md가 계산).
 - 화면 `states[].id`는 kebab, `default`는 states 중 하나. 캡처 이름 = `${id.toLowerCase()}-${state}`(`b1-02-cam`). 구 변형 코드(A1-09·A1-10·A2-07·A2-08·A3-07)는 부모의 state + `legacy_codes`. 로그인 샷 4는 `B0-01`.
 - 파생값(DISC 범위·건수·커버리지)은 저장하지 않는다. `mgmt:` 슬롯은 관리 열(결정일·결정자·구현 상태 등) 전용.
 - ID 채번: 축의 마지막 번호 +1. 결번 재사용 금지. 화면 신설은 표면 내 다음 번호(예: A1의 마지막이 11이면 12).
