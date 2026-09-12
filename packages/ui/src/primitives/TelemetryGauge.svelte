@@ -1,5 +1,7 @@
 <script lang="ts">
-  // 소모품 도달률 게이지 — 임계 접근(caution) · 초과(danger) 색 + 텍스트, role=meter (FR-007 · DISC-013/014 기준 확정 전 0.9/1.0)
+  // 소모품 도달률 게이지 — role=meter (FR-007 · DISC-013/014 기준 확정 전 0.9/1.0).
+  // 막대는 정상일 때 중립으로 채우고 임계 접근·초과에만 색을 쓴다 — 색은 «주의가 필요하다»는 뜻이고
+  // 정상까지 채색하면 색이 계기 눈금이 된다(원칙 4 · ADR-014 · 시안의 소모품 막대도 같다).
   import { cx } from '../lib/cx';
   let {
     label,
@@ -11,7 +13,7 @@
   const pct = $derived(Math.round(value * 100));
   const level = $derived(value >= danger ? 'danger' : value >= caution ? 'warning' : 'success');
   const text = $derived(level === 'danger' ? '임계 초과' : level === 'warning' ? '임계 접근' : '정상');
-  const BAR = { success: 'bg-success', warning: 'bg-warning', danger: 'bg-danger' } as const;
+  const BAR = { success: 'bg-neutral', warning: 'bg-warning', danger: 'bg-danger' } as const;
   const FG = { success: 'text-success-fg', warning: 'text-warning-fg', danger: 'text-danger-fg' } as const;
 </script>
 

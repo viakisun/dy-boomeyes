@@ -68,4 +68,5 @@ min은 H와 함께 계속 오르지만 H 245를 넘으면 binding 제약이 teal
 ## 결과
 - 되돌리기: `brands/DY.json`·`ref/color.config.json`의 앵커와 `ramps.mjs`의 `NEUTRAL_C`를 되돌리면 원래 팔레트로 돌아간다. 캡처 기준선(`shots/`)은 다시 승인해야 한다.
 - 수기 동기 대상: `apps/pwa/src/app.html` `theme-color` · `manifest.webmanifest` `theme_color`/`background_color` · `tests/e2e/pwa-install.spec.ts` 기대값 · `tools/docs-gen/assemble.py` 문서 CSS · `pnpm brand:build` 산출물. `docs/QA.md`가 이 목록을 갖는다.
+- **계기 막대는 정상일 때 중립으로 채운다** — `TelemetryGauge`가 정상 구간을 `bg-success`로 채우고 있었다(리뷰 지적). 색은 «주의가 필요하다»는 뜻이므로 정상까지 채색하면 색이 계기 눈금이 된다. 시안의 소모품 막대도 `--ink2`로 채우고 한계 근처에서만 앰버로 바뀐다. 개정된 원칙 4(«정상은 배경 없이»)와 맞추어 `bg-neutral`로 바꿨다.
 - 남은 것: 한글 웹폰트 배송 · 시안의 «면을 채우지 않는» 상태 문법을 warning·danger까지 확장할지(소유주 화면은 §11.8이 이미 글자 우선).
