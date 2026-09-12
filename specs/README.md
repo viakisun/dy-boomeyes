@@ -2,7 +2,7 @@
 
 인덱스는 생성물 [../docs/generated/SPECS.md](../docs/generated/SPECS.md)(frontmatter에서 생성). 상태 전환은 frontmatter `status`로 하고 폴더를 옮기지 않는다.
 
-## 기능 12 (계획)
+## 기능 18 (계획)
 
 | 기능 | 화면 | 웨이브 | 상태 |
 |---|---|---|---|
@@ -21,6 +21,9 @@
 | `event-replay` | B1-08 | 2~4 | draft(W2 구조) |
 | `owner-showcase` | A4-02~05 · B1-07 · B3-02 · B3-06 | 2(B1-07)~4 | draft |
 | `notifications` | A1-02 · A2-02 · A3-02 — 로컬 알림 스텁(IF-014) | 2 | draft |
+| `owner-experience` | B0-01 · A4-01 · B1-02 · B1-05 · A4-02 · A4-07~11 · B1-09~12 | 4 | draft |
+| `owner-contracts` | B1-13 · A4-03 · B1-06 · A4-05 | 4 | draft |
+| `owner-drivers` | B1-14 · A4-04 · B1-15 · A4-06 · B1-10 · A4-08 | 4 | draft |
 
 ## 절차
 

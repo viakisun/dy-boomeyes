@@ -162,7 +162,19 @@
         "type": "object",
         "properties": {
           "view": {
-            "enum": ["entry", "overview", "fleet", "detail", "video", "documents", "alerts"]
+            "enum": [
+              "entry",
+              "overview",
+              "fleet",
+              "requests",
+              "lease",
+              "drivers",
+              "driver-docs",
+              "detail",
+              "video",
+              "documents",
+              "alerts"
+            ]
           },
           "label": {
             "type": "string"

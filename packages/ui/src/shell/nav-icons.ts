@@ -76,6 +76,9 @@ export const NAV_ICON: Record<ScrId, Component> = {
   'B1-10': Truck,
   'B1-11': Monitor,
   'B1-12': Bell,
+  'B1-13': Inbox,
+  'B1-14': Users,
+  'B1-15': FileText,
   // B2 건설사 본사
   'B2-02': MapIcon,
   'B2-03': MapPin,

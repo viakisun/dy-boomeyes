@@ -128,20 +128,21 @@ export function runChecks(d) {
   const errors = [],
     warnings = [];
   const ids = indexIds(d);
-  // 소유주 데모 원천: 7 목적 × 두 앱, 메뉴 4개. 참조 누락·중복은 생성 전에 차단한다.
+  // 소유주 데모 원천: 화면 목적 × 두 앱. 목적 수는 고정하지 않는다(시안 채택으로 늘었다 — ADR-014) —
+  // 대신 ① 목적이 서로 다르고 ② 메뉴가 1..M 연속이고 ③ 앱별 화면이 중복되지 않고
+  // ④ 소유주 PWA(A4) 화면 전부가 여기에 나타나야 한다. ④는 owner_demo에 없는 A4 라우트가
+  // 「준비 중」 자리 화면으로 떨어지는 것을 원천에서 막는다(capture --strict).
   const ownerViews = d.screens.owner_demo ?? [];
-  if (ownerViews.length !== 7 || new Set(ownerViews.map((v) => v.view)).size !== 7)
-    errors.push('owner_demo: 서로 다른 화면 목적 7개 필요');
-  if (
-    ownerViews
-      .filter((v) => v.menu > 0)
-      .map((v) => v.menu)
-      .sort()
-      .join(',') !== '1,2,3,4'
-  )
-    errors.push('owner_demo: 메뉴 순서 1~4 필요');
+  if (!ownerViews.length || new Set(ownerViews.map((v) => v.view)).size !== ownerViews.length)
+    errors.push('owner_demo: 화면 목적(view)이 서로 달라야 한다');
+  const menus = ownerViews
+    .filter((v) => v.menu > 0)
+    .map((v) => v.menu)
+    .sort((a, b) => a - b);
+  if (menus.some((m, i) => m !== i + 1))
+    errors.push(`owner_demo: 메뉴 번호는 1..${menus.length} 연속이어야 한다(현재 ${menus.join(',') || '없음'})`);
   for (const app of ['web', 'pwa']) {
-    if (new Set(ownerViews.map((v) => v[app])).size !== 7) errors.push(`owner_demo: ${app} 화면 중복`);
+    if (new Set(ownerViews.map((v) => v[app])).size !== ownerViews.length) errors.push(`owner_demo: ${app} 화면 중복`);
     for (const v of ownerViews) {
       const screen = d.screens.screens.find((s) => s.id === v[app]);
       const surface = screen && d.screens.surfaces.find((s) => s.id === screen.surface);
@@ -149,6 +150,10 @@ export function runChecks(d) {
         errors.push(`owner_demo: ${v.view}/${app} 참조·역할 오류`);
     }
   }
+  const ownerPwa = new Set(ownerViews.map((v) => v.pwa));
+  for (const s of d.screens.screens)
+    if (s.surface === 'A4' && s.roles.includes('owner') && !ownerPwa.has(s.id))
+      errors.push(`owner_demo: ${s.id}(${s.name})가 owner_demo에 없다 — 자리 화면으로 떨어진다`);
   // 1. 스키마
   for (const f of FILES) {
     const sp = join(SSOT, 'schema', `${f}.schema.json`);

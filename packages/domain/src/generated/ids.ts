@@ -47,6 +47,9 @@ export const SCR = {
   'B1-10': 'B1-10',
   'B1-11': 'B1-11',
   'B1-12': 'B1-12',
+  'B1-13': 'B1-13',
+  'B1-14': 'B1-14',
+  'B1-15': 'B1-15',
   'B2-02': 'B2-02',
   'B2-03': 'B2-03',
   'B2-04': 'B2-04',
@@ -110,6 +113,7 @@ export const FR = {
   'FR-041': 'FR-041',
   'FR-042': 'FR-042',
   'FR-043': 'FR-043',
+  'FR-044': 'FR-044',
 } as const;
 export type FrId = keyof typeof FR;
 
@@ -307,6 +311,9 @@ export const SCREENS = {
   'B1-10': { name: "호기 상세", surface: 'B1', app: 'web', route: "/b1/fleet/[device]", roles: ["owner"], phase: 2, wave: 4, default: 'owner', states: ["owner","empty","error","boundaries","large"] },
   'B1-11': { name: "영상", surface: 'B1', app: 'web', route: "/b1/fleet/[device]/video", roles: ["owner"], phase: 2, wave: 4, default: 'owner', states: ["owner","empty","error","boundaries","large"] },
   'B1-12': { name: "이상·점검", surface: 'B1', app: 'web', route: "/b1/alerts", roles: ["owner"], phase: 2, wave: 4, default: 'owner', states: ["owner","empty","error","boundaries","large"] },
+  'B1-13': { name: "투입 요청·배정", surface: 'B1', app: 'web', route: "/b1/requests", roles: ["owner"], phase: 2, wave: 4, default: 'inbox', states: ["inbox","assign","empty","none","error"] },
+  'B1-14': { name: "운전자 배치", surface: 'B1', app: 'web', route: "/b1/drivers", roles: ["owner"], phase: 2, wave: 4, default: 'drivers', states: ["drivers","expiring","empty","error"] },
+  'B1-15': { name: "운전자 서류", surface: 'B1', app: 'web', route: "/b1/drivers/docs", roles: ["owner"], phase: 2, wave: 4, default: 'docs', states: ["docs","expiring","missing","error"] },
   'B2-02': { name: "본사 지도", surface: 'B2', app: 'web', route: "/b2/map", roles: ["hq-safety"], phase: 1, wave: 2, default: 'work', states: ["work"] },
   'B2-03': { name: "현장 상세", surface: 'B2', app: 'web', route: "/b2/sites/[site]", roles: ["hq-safety"], phase: 1, wave: 2, default: 'site', states: ["site"] },
   'B2-04': { name: "보고 모드", surface: 'B2', app: 'web', route: "/b2/report", roles: ["hq-safety"], phase: 2, wave: 2, default: 'report', states: ["report"] },
@@ -361,6 +368,50 @@ export const OWNER_DEMO = [
       "I9:N25",
       "H71",
       "H77"
+    ]
+  },
+  {
+    "view": "requests",
+    "menu": 0,
+    "label": "계약",
+    "web": "B1-13",
+    "pwa": "A4-03",
+    "question": "이 기간에 낼 수 있는 장비가 있나요?",
+    "source_cells": [
+      "H60:H68"
+    ]
+  },
+  {
+    "view": "lease",
+    "menu": 0,
+    "label": "임대 계약",
+    "web": "B1-06",
+    "pwa": "A4-05",
+    "question": "배정을 확정하면 계약은 어떻게 남나요?",
+    "source_cells": [
+      "H60:H68"
+    ]
+  },
+  {
+    "view": "drivers",
+    "menu": 0,
+    "label": "운전자",
+    "web": "B1-14",
+    "pwa": "A4-04",
+    "question": "오늘 이 호기는 누가 운전하나요?",
+    "source_cells": [
+      "H36"
+    ]
+  },
+  {
+    "view": "driver-docs",
+    "menu": 0,
+    "label": "운전자 서류",
+    "web": "B1-15",
+    "pwa": "A4-06",
+    "question": "운전자 자격이 유효한가요?",
+    "source_cells": [
+      "H36"
     ]
   },
   {

@@ -1815,6 +1815,111 @@ screens:
     if:
       - IF-009
   note: V5 관제기능 H37:H38 · H60:H68 — 소유주 데모 조회·샘플. 실제 운영 규칙 및 계약 단계 확정 아님
+- id: B1-13
+  name: 투입 요청·배정
+  surface: B1
+  route: /b1/requests
+  roles:
+    - owner
+  phase: 2
+  wave: 4
+  default: inbox
+  states:
+    - id: inbox
+      name: 요청 목록(상태별)
+    - id: assign
+      name: 배정 — 요청과 후보 호기
+    - id: empty
+      name: 대기 중인 요청 없음
+    - id: none
+      name: 기간에 낼 수 있는 호기 없음
+    - id: error
+      name: 조회 실패 후 재시도
+  nav:
+    - to: B1-06
+      label: 임대 계약
+    - to: B1-09
+      label: 보유 장비
+  trace:
+    task:
+      - 4.3.9
+      - 4.3.4
+    out: OUT-009
+    rfp:
+      - RFP-021
+      - EXT-5
+    disc:
+      - DISC-026
+      - DISC-052
+    if: []
+  note: 소유주의 판단은 "이 기간에 낼 수 있는 장비가 있나" 하나 — 후보는 보관 + 계약 종료 임박에서 나온다(시안 «확정 2026-09-12»)
+- id: B1-14
+  name: 운전자 배치
+  surface: B1
+  route: /b1/drivers
+  roles:
+    - owner
+  phase: 2
+  wave: 4
+  default: drivers
+  states:
+    - id: drivers
+      name: 명단과 오늘 배정
+    - id: expiring
+      name: 자격 만료 임박
+    - id: empty
+      name: 등록된 운전자 없음
+    - id: error
+      name: 조회 실패 후 재시도
+  nav:
+    - to: B1-15
+      label: 운전자 서류
+    - to: B1-13
+      label: 투입 요청·배정
+  trace:
+    task:
+      - 4.3.9
+    out: OUT-009
+    rfp:
+      - EXT-5
+    disc:
+      - DISC-026
+      - DISC-052
+    if: []
+  note: 운전자는 소유주 소속이고 배정이 매일 바뀐다 — 차량 서류(호기)와 운전자 서류(사람)는 다른 갈래(시안 «확정 2026-09-12»)
+- id: B1-15
+  name: 운전자 서류
+  surface: B1
+  route: /b1/drivers/docs
+  roles:
+    - owner
+  phase: 2
+  wave: 4
+  default: docs
+  states:
+    - id: docs
+      name: 운전자별 서류
+    - id: expiring
+      name: 만료 임박
+    - id: missing
+      name: 미비 서류
+    - id: error
+      name: 조회 실패 후 재시도
+  nav:
+    - to: B1-14
+      label: 운전자 배치
+  trace:
+    task:
+      - 4.3.10
+    out: OUT-010
+    rfp:
+      - RFP-020
+      - EXT-5
+    disc:
+      - DISC-016
+      - DISC-052
+    if: []
+  note: 호기 서류에서 «운전자 자격증»을 빼고 이쪽으로 옮긴다(시안 «확정 2026-09-12»)
 - id: A4-11
   name: 이상·점검
   surface: A4
@@ -1851,6 +1956,10 @@ screens:
   note: V5 관제기능 H37:H38 · H60:H68 — 소유주 데모 조회·샘플. 실제 운영 규칙 및 계약 단계 확정 아님
 
 owner_demo:
+  # 목표 메뉴는 운영 현황 · 보유 장비 · 계약 셋이고 이상·점검과 장비 서류는 종 알림 패널과
+  # 호기 화면의 접기로 흡수된다(시안 «결정 2026-09-12»). 전환은 화면이 생긴 뒤에 한다 —
+  # 종 패널이 서면 이상·점검·장비 서류를 menu 0으로 내리고, 계약 화면(B1-13·A4-03)이 서면
+  # requests를 menu 3으로 올린다. 그 전에 메뉴를 바꾸면 「준비 중」 자리 화면이 생긴다.
   - view: entry
     menu: 0
     label: 소유주 데모
@@ -1879,6 +1988,38 @@ owner_demo:
       - I9:N25
       - H71
       - H77
+  - view: requests
+    menu: 0
+    label: 계약
+    web: B1-13
+    pwa: A4-03
+    question: 이 기간에 낼 수 있는 장비가 있나요?
+    source_cells:
+      - H60:H68
+  - view: lease
+    menu: 0
+    label: 임대 계약
+    web: B1-06
+    pwa: A4-05
+    question: 배정을 확정하면 계약은 어떻게 남나요?
+    source_cells:
+      - H60:H68
+  - view: drivers
+    menu: 0
+    label: 운전자
+    web: B1-14
+    pwa: A4-04
+    question: 오늘 이 호기는 누가 운전하나요?
+    source_cells:
+      - H36
+  - view: driver-docs
+    menu: 0
+    label: 운전자 서류
+    web: B1-15
+    pwa: A4-06
+    question: 운전자 자격이 유효한가요?
+    source_cells:
+      - H36
   - view: detail
     menu: 0
     label: 호기 상세
