@@ -16,7 +16,6 @@
     type OwnerViewProps,
   } from '@boomeyes/domain';
   import { fmtDateTime } from '../lib/format';
-  import PageHeader from '../primitives/PageHeader.svelte';
   import MapSheet, { type MapSheetSnap } from '../primitives/MapSheet.svelte';
   import StatusStrip from './StatusStrip.svelte';
   import OverviewCrumbs from './OverviewCrumbs.svelte';
@@ -173,24 +172,26 @@
 {/snippet}
 
 <div class="gap-stack-md flex min-h-0 min-w-0 flex-1 flex-col">
-  <div class="gap-inline-lg flex flex-wrap items-end justify-between">
-    <PageHeader title="운영 현황">
-      {#snippet meta()}<span class="gap-inline-xs text-body-sm text-fg-muted inline-flex items-center"
-          ><Clock class="size-size-icon-sm" aria-hidden="true" />{fmtDateTime(data.at)} 기준{#if sim}<span
-              class="text-label-sm text-fg-muted ml-inline-sm"
-              data-owner-sim-label>시뮬레이션 진행 중</span
-            >{/if}</span
-        >{/snippet}
-    </PageHeader>
-    <OverviewCrumbs
-      {level}
-      {region}
-      {hrefs}
-      onnavigate={(href) => {
-        region = undefined;
-        go(href);
-      }}
-    />
+  <!-- 한 줄 헤더: 제목 · 경로 · 기준 시각 — 무대(지도)가 첫 뷰포트를 차지하도록 낮게 -->
+  <div class="gap-inline-lg flex min-w-0 flex-wrap items-center justify-between">
+    <div class="gap-inline-lg flex min-w-0 flex-wrap items-center">
+      <h1 class="text-heading-md">운영 현황</h1>
+      <OverviewCrumbs
+        {level}
+        {region}
+        {hrefs}
+        onnavigate={(href) => {
+          region = undefined;
+          go(href);
+        }}
+      />
+    </div>
+    <span class="gap-inline-xs text-body-sm text-fg-muted inline-flex items-center"
+      ><Clock class="size-size-icon-sm" aria-hidden="true" />{fmtDateTime(data.at)} 기준{#if sim}<span
+          class="text-label-sm text-fg-muted ml-inline-sm"
+          data-owner-sim-label>시뮬레이션 진행 중</span
+        >{/if}</span
+    >
   </div>
   <div class="gap-stack-md flex min-h-0 min-w-0 flex-1 flex-col lg:block">
     <div

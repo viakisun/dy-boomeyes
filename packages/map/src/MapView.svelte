@@ -168,10 +168,13 @@
     });
     // 지명 라벨 언어 — 스타일의 symbol 레이어 text-field를 name:<locale> 우선으로 바꾼다(타일에 없으면 name)
     const localize = () => {
-      if (!map || !labelLocale) return;
+      if (!map) return;
       for (const layer of map.getStyle()?.layers ?? []) {
         if (layer.type !== 'symbol' || !layer.layout || !('text-field' in layer.layout)) continue;
-        map.setLayoutProperty(layer.id, 'text-field', ['coalesce', ['get', `name:${labelLocale}`], ['get', 'name']]);
+        if (labelLocale)
+          map.setLayoutProperty(layer.id, 'text-field', ['coalesce', ['get', `name:${labelLocale}`], ['get', 'name']]);
+        // 알약 지도에서는 베이스맵 지명(place_*)을 물러나게 — 마커 라벨과 부딪히지 않게
+        if (pill && /place/.test(layer.id)) map.setPaintProperty(layer.id, 'text-opacity', 0.55);
       }
     };
     map.on('load', () => {
@@ -252,6 +255,19 @@
     cameraJson = json;
     const reduced = typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches;
     moveCamera(!animate || reduced ? 0 : changed ? EASE_MS : EASE_MS / 2, changed);
+  });
+  // 스타일(라이트/다크 베이스맵) 교체 — 마커는 DOM이라 남고, style.load에서 지명 처리가 다시 돈다
+  let styleLoaded: string | undefined;
+  $effect(() => {
+    const next = styleUrl;
+    if (!map || !ready) return;
+    if (styleLoaded === undefined) {
+      styleLoaded = next;
+      return;
+    }
+    if (next === styleLoaded) return;
+    styleLoaded = next;
+    map.setStyle(next);
   });
   // 카메라는 그대로인데 단계만 바뀌는 경우(현장 → 호기) — 준비 표식은 유지하고 단계 속성만 갱신
   $effect(() => {

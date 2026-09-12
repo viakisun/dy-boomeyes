@@ -85,7 +85,7 @@
   data-stored={summary.stored}
   data-unknown={summary.unknown}
   class={cx(
-    'bg-surface shadow-overlay rounded-card lg:rounded-pill px-inset-xs flex items-center',
+    'bg-surface shadow-raised border-border-subtle rounded-card px-inset-xs flex items-center border',
     wrap ? 'flex-wrap' : 'flex-nowrap overflow-x-auto overscroll-x-contain',
     cls,
   )}

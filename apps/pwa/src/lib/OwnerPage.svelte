@@ -3,7 +3,7 @@
   import { page } from '$app/state';
   import { resolve } from '$app/paths';
   import type { OwnerApi, OwnerView } from '@boomeyes/domain';
-  import { OwnerWorkspace } from '@boomeyes/ui';
+  import { OwnerWorkspace, theme } from '@boomeyes/ui';
   import { OwnerVideo, OwnerLiveTile } from '@boomeyes/video';
   import { MapView, ownerCamera, ownerMarkers } from '@boomeyes/map';
   let {
@@ -13,6 +13,12 @@
     sim = false,
   }: { api: OwnerApi; view: OwnerView; capture?: boolean; sim?: boolean } = $props();
   const APP = 'pwa';
+  // 베이스맵은 테마를 따른다(CARTO Positron / Dark Matter — ADR-003) — 다크에서 밝은 지도 위에 검은 알약이 뜨지 않게
+  const dark = $derived(theme.value ? theme.value === 'dark' : theme.system);
+  const STYLE = {
+    light: 'https://basemaps.cartocdn.com/gl/positron-gl-style/style.json',
+    dark: 'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json',
+  } as const;
   // 같은 경로의 쿼리 교체는 replace(필터·선택), 드릴다운은 push(뒤로가기로 한 단계 위로)
   const navigate = (href: string, opts: { history?: 'push' | 'replace' } = {}) => {
     const target = new URL(href, page.url);
@@ -34,6 +40,7 @@
         camera={ownerCamera(scene)}
         animate={scene.animate}
         level={scene.level}
+        styleUrl={dark ? STYLE.dark : STYLE.light}
         labelLocale="ko"
         onselect={(id, kind) => scene.onselect?.(kind, id)}
         class="h-full"
