@@ -17,7 +17,7 @@
     OWNER_CONNECTION,
     OWNER_DEPLOYMENT,
     ownerHref,
-    type OwnerDevice,
+    type OwnerMapScene,
     type OwnerViewProps,
   } from '@boomeyes/domain';
   import { cx, OWNER_CONNECTION_TONE } from '../lib/cx';
@@ -34,7 +34,7 @@
   import List from '../primitives/List.svelte';
   import AlertCard from './AlertCard.svelte';
   import { devicePoster, equipmentCondition, fleetReturn, ownerDate, ownerLink } from './core-helpers';
-  let { data, app, url, map }: OwnerViewProps & { map?: Snippet<[OwnerDevice[], string | undefined]> } = $props();
+  let { data, app, url, map }: OwnerViewProps & { map?: Snippet<[OwnerMapScene]> } = $props();
   const deviceId = $derived.by(() => {
     try {
       return decodeURIComponent(url.pathname.split('/fleet/')[1]?.split('/')[0] ?? '');
@@ -50,6 +50,21 @@
   const back = $derived(fleetReturn(url, app));
   const context = $derived({ device: deviceId, return: url.pathname + url.search });
   const contactTitle = $derived(device?.deployment === 'stored' ? '보관 담당자' : '현장 담당자');
+  // 상세의 미니맵 — 호기 한 대를 현장 배율로(장면 카메라 · 애니메이션 없음)
+  const scene = $derived<OwnerMapScene | null>(
+    device
+      ? {
+          level: 'unit',
+          sites: data.sites,
+          devices: [device],
+          site: data.sites.find((s) => s.id === device.siteId),
+          device,
+          aggregate: false,
+          animate: false,
+          padding: { top: 0, right: 0, bottom: 0, left: 0 },
+        }
+      : null,
+  );
 </script>
 
 <div class="gap-stack-lg flex min-w-0 flex-col">
@@ -219,9 +234,9 @@
     </div>
 
     <div class="gap-stack-lg grid min-w-0 grid-cols-1 lg:grid-cols-12">
-      {#if map && device.location}
+      {#if map && device.location && scene}
         <div class="rounded-card shadow-raised h-layout-map-min flex overflow-hidden lg:col-span-6">
-          {@render map([device], device.id)}
+          {@render map(scene)}
         </div>
       {/if}
       <section

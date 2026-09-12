@@ -1,39 +1,114 @@
 <script lang="ts">
-  // 운영 현황 — 헤더(제목·기준 시각 | 운영 구성 한 줄) → 지도(lg 7/12) + 오른쪽 패널(5/12: 확인할 것 · 장비 목록, 패널 안 스크롤).
-  // 목록 hover/선택 → 지도 마커 강조(selected). 검색은 보유 장비 화면에 있다.
-  import type { Snippet } from 'svelte';
-  import ArrowRight from '@lucide/svelte/icons/arrow-right';
+  // 운영 현황 — 드릴다운 관제: 전국(현장 알약·지역 집계) → 현장(호기 핀) → 호기(패널 + 실시간 영상).
+  // 무대(지도) 위에 상태 띠(좌상)와 패널(우측, lg)이 떠 있다. 좁은 폭은 띠 → 지도 → 패널이 세로로 놓인다(PWA 시트는 다음 단계).
+  // URL이 단계를 정한다(?site= · ?device=) — 새로고침·뒤로가기가 그대로 동작한다. 목록은 보유 장비 화면에 있다.
+  import { tick, type Snippet } from 'svelte';
   import Clock from '@lucide/svelte/icons/clock';
-  import Bell from '@lucide/svelte/icons/bell';
-  import { ownerHref, ownerSummary, type OwnerDevice, type OwnerViewProps } from '@boomeyes/domain';
+  import {
+    OWNER_AGGREGATE_BELOW,
+    ownerHref,
+    ownerLevel,
+    type OwnerCamera,
+    type OwnerDevice,
+    type OwnerLevel,
+    type OwnerMapScene,
+    type OwnerRegion,
+    type OwnerSite,
+    type OwnerViewProps,
+  } from '@boomeyes/domain';
   import { fmtDateTime } from '../lib/format';
   import PageHeader from '../primitives/PageHeader.svelte';
-  import EmptyState from '../primitives/EmptyState.svelte';
-  import Button from '../primitives/Button.svelte';
-  import List from '../primitives/List.svelte';
-  import IconTile from '../primitives/IconTile.svelte';
-  import FleetSummary from './FleetSummary.svelte';
-  import EquipmentRow from './EquipmentRow.svelte';
-  import AlertCard from './AlertCard.svelte';
-  import { devicePoster } from './core-helpers';
-  let { data, app, url, map }: OwnerViewProps & { map?: Snippet<[OwnerDevice[], string | undefined]> } = $props();
-  const summary = $derived(ownerSummary(data.devices, data.alerts));
-  const alerts = $derived(
-    [
-      ...new Map(
-        data.alerts
-          .filter((alert) => data.devices.some((device) => device.id === alert.deviceId))
-          .map((alert) => [alert.id, alert]),
-      ).values(),
-    ].sort(
-      (a, b) =>
-        ({ fault: 0, inspection: 1, connection: 2 })[a.kind] - { fault: 0, inspection: 1, connection: 2 }[b.kind],
-    ),
-  );
-  const shown = $derived(alerts.slice(0, 3));
-  const devices = $derived(data.devices.slice(0, 5));
+  import StatusStrip from './StatusStrip.svelte';
+  import OverviewCrumbs from './OverviewCrumbs.svelte';
+  import NationPanel from './NationPanel.svelte';
+  import SitePanel from './SitePanel.svelte';
+  import UnitPanel from './UnitPanel.svelte';
+  let {
+    data,
+    app,
+    url,
+    navigate,
+    capture = false,
+    map,
+    live,
+  }: OwnerViewProps & { map?: Snippet<[OwnerMapScene]>; live?: Snippet<[OwnerCamera, string, boolean]> } = $props();
+  const level = $derived(ownerLevel(url, data));
+  let region = $state<OwnerRegion | undefined>();
   let focused = $state<string | undefined>();
+  // 무대·띠·패널 치수 — 카메라 여백과 집계 판정에 쓴다
+  let stage = $state<HTMLDivElement>();
+  let panel = $state<HTMLElement>();
+  let stageWidth = $state(0);
+  let stripHeight = $state(0);
+  let panelWidth = $state(0);
+  let inset = $state(0);
+  let floating = $state(false);
+  $effect(() => {
+    void stageWidth;
+    if (!stage) return;
+    inset = parseFloat(getComputedStyle(stage).getPropertyValue('--sys-space-inset-md')) || 0;
+    floating = !!panel && getComputedStyle(panel).position === 'absolute';
+  });
+  const visibleWidth = $derived(floating ? stageWidth - panelWidth - inset * 2 : stageWidth);
+  const aggregate = $derived(stageWidth > 0 && visibleWidth < OWNER_AGGREGATE_BELOW);
   const hasMap = $derived(!!map && data.devices.length > 0);
+  const siteDevices = $derived(
+    level.level === 'nation' ? data.devices : data.devices.filter((d) => d.siteId === level.site.id),
+  );
+  const hrefs = $derived({
+    nation: ownerHref(url, 'overview', app),
+    site: level.level === 'nation' ? undefined : ownerHref(url, 'overview', app, { site: level.site.id }),
+  });
+  const siteHref = (site: OwnerSite) => ownerHref(url, 'overview', app, { site: site.id });
+  const unitHref = (device: OwnerDevice) => ownerHref(url, 'overview', app, { site: device.siteId, device: device.id });
+  // 이동 뒤 포커스 — 출발 단계(from)를 기억해 두고, 단계 객체가 실제로 바뀐 렌더에서만 패널 제목(또는 호기 카드)으로 옮긴다
+  // $state.raw — 깊은 프록시가 from(단계 객체)을 감싸면 identity 비교가 늘 거짓이 된다
+  let pending = $state.raw<{ from: OwnerLevel; target: 'heading' | string } | null>(null);
+  function go(href: string, target: 'heading' | string = 'heading') {
+    pending = { from: level, target };
+    focused = undefined;
+    navigate(href, { history: 'push' });
+  }
+  $effect(() => {
+    const p = pending;
+    if (!p || level === p.from) return;
+    pending = null;
+    // 이 $effect는 같은 컴포넌트의 {#if} 블록보다 먼저 돌므로, DOM이 새 단계로 바뀐 뒤(tick) 포커스한다
+    void tick().then(() => {
+      const el =
+        p.target === 'heading'
+          ? stage?.querySelector<HTMLElement>(`[data-panel-heading="${level.level}"]`)
+          : stage?.querySelector<HTMLElement>(`[data-device="${p.target}"]`);
+      el?.focus();
+    });
+  });
+  const scene = $derived<OwnerMapScene>({
+    level: level.level,
+    sites: data.sites,
+    devices: siteDevices,
+    site: level.site,
+    device: level.device,
+    region: level.level === 'nation' ? region : undefined,
+    aggregate,
+    focused: level.level === 'unit' ? level.device.id : focused,
+    animate: !capture,
+    // 여백 = 띠·패널이 가리는 만큼 + 알약 크기(위로 50px·좌우 55px)만큼 — 가장자리 현장의 알약이 지도 밖으로 잘리지 않게
+    padding: {
+      top: (floating ? stripHeight + inset * 2 : 0) + inset * 4,
+      right: (floating ? panelWidth + inset : 0) + inset * 4,
+      bottom: inset * 4,
+      left: inset * 4,
+    },
+    onselect: (kind, id) => {
+      if (kind === 'region') region = id as OwnerRegion;
+      else if (kind === 'site') go(siteHref(data.sites.find((s) => s.id === id)!));
+      else {
+        const device = data.devices.find((d) => d.id === id);
+        if (device) go(unitHref(device));
+      }
+    },
+  });
+  const mapMode = $derived(level.level !== 'nation' ? 'units' : aggregate && !region ? 'regions' : 'sites');
 </script>
 
 <div class="gap-stack-md flex min-w-0 flex-col">
@@ -43,92 +118,86 @@
           ><Clock class="size-size-icon-sm" aria-hidden="true" />{fmtDateTime(data.at)} 기준</span
         >{/snippet}
     </PageHeader>
-    <FleetSummary
-      devices={data.devices}
-      alerts={data.alerts}
-      {app}
-      {url}
-      variant="inline"
-      class="lg:max-w-layout-form-max"
+    <OverviewCrumbs
+      {level}
+      {region}
+      {hrefs}
+      onnavigate={(href) => {
+        region = undefined;
+        go(href);
+      }}
     />
   </div>
-  <div class="gap-stack-md grid min-w-0 grid-cols-1 items-stretch lg:grid-cols-12">
-    {#if hasMap}
-      <div
-        class="rounded-card shadow-raised h-layout-panel-height flex overflow-hidden lg:col-span-7 lg:aspect-[7/6] lg:h-auto"
-      >
-        {@render map!(devices, focused)}
-      </div>
-    {/if}
-    <div class="relative min-h-0 min-w-0 {hasMap ? 'lg:col-span-5' : 'lg:col-span-12'}">
-      <div
-        class="rounded-card bg-surface shadow-raised gap-stack-md p-inset-md flex min-w-0 flex-col {hasMap
-          ? 'lg:absolute lg:inset-0 lg:overflow-y-auto'
-          : ''}"
-      >
-        <section class="gap-stack-sm flex min-w-0 flex-col" aria-labelledby="owner-attention-title">
-          <div class="gap-inline-sm flex flex-wrap items-center justify-between">
-            <h2 id="owner-attention-title" class="text-heading-sm">
-              확인이 필요한 장비 <span class="tabular-nums">{summary.attention}대</span>
-            </h2>
-            <Button variant="ghost" size="sm" href={ownerHref(url, 'alerts', app)}
-              >알림 전체 보기 <ArrowRight class="size-size-icon-sm" aria-hidden="true" /></Button
-            >
-          </div>
-          {#if shown.length > 0}
-            <List items={shown} key={(a) => a.id} label="우선 확인 알림" variant="plain">
-              {#snippet item(alert)}
-                {@const device = data.devices.find((d) => d.id === alert.deviceId)!}
-                <AlertCard
-                  {alert}
-                  {device}
-                  now={data.at}
-                  href={ownerHref(url, 'alerts', app, { alert: alert.id, device: device.id })}
-                  data-device={device.id}
-                  onmouseenter={() => (focused = device.id)}
-                  onmouseleave={() => (focused = undefined)}
-                />
-              {/snippet}
-            </List>
-            {#if summary.alerts > shown.length}
-              <p class="text-body-sm text-fg-muted">전체 알림 {summary.alerts}건 중 {shown.length}건 표시</p>
-            {/if}
+  <div class="gap-stack-md flex min-w-0 flex-col lg:block">
+    <div
+      bind:this={stage}
+      bind:clientWidth={stageWidth}
+      data-owner-stage
+      data-owner-map-mode={hasMap ? mapMode : undefined}
+      class="gap-stack-sm relative flex min-w-0 flex-col {hasMap ? 'lg:block lg:aspect-[16/9]' : ''}"
+    >
+      {#if hasMap}
+        <!-- 지도 → 상태 띠 → 패널 순서: lg에서는 DOM 순서대로 띠·패널이 지도 위에 그려진다(z 유틸리티 없이). 좁은 폭은 띠가 먼저(order-first) -->
+        <div
+          class="rounded-card shadow-raised h-layout-panel-height flex overflow-hidden lg:absolute lg:inset-0 lg:h-auto"
+        >
+          {@render map!(scene)}
+        </div>
+        <div
+          bind:clientHeight={stripHeight}
+          class="lg:top-inset-md lg:left-inset-md order-first w-fit max-w-full lg:absolute lg:order-none"
+        >
+          <StatusStrip devices={data.devices} alerts={data.alerts} {app} {url} />
+        </div>
+        <aside
+          bind:this={panel}
+          bind:clientWidth={panelWidth}
+          aria-label="현황 패널"
+          class="rounded-card bg-surface shadow-overlay gap-stack-lg p-inset-md lg:top-inset-md lg:right-inset-md lg:bottom-inset-md lg:w-layout-inspector-width flex min-w-0 flex-col lg:absolute lg:overflow-y-auto lg:overscroll-contain"
+        >
+          {#if level.level === 'nation'}
+            <NationPanel
+              {data}
+              {app}
+              {url}
+              {region}
+              {focused}
+              {siteHref}
+              onsite={(site) => go(siteHref(site))}
+              onfocus={(id) => (focused = id)}
+              onregion={(next) => (region = next)}
+            />
+          {:else if level.level === 'site'}
+            <SitePanel
+              {data}
+              {app}
+              {url}
+              site={level.site}
+              {focused}
+              {unitHref}
+              onunit={(device) => go(unitHref(device))}
+              onfocus={(id) => (focused = id)}
+            />
           {:else}
-            <EmptyState title={data.devices.length ? '확인할 알림 없음' : '등록된 장비 없음'}>
-              {#snippet icon()}<IconTile><Bell class="size-size-icon-lg" /></IconTile>{/snippet}
-            </EmptyState>
+            <UnitPanel {data} {app} {url} device={level.device} {capture} {live} />
           {/if}
-        </section>
-        <section class="gap-stack-sm flex min-w-0 flex-col" aria-labelledby="owner-location-title">
-          <div class="gap-inline-sm flex flex-wrap items-center justify-between">
-            <h2 id="owner-location-title" class="text-heading-sm">현장별 장비</h2>
-            <Button variant="ghost" size="sm" href={ownerHref(url, 'fleet', app)}
-              >전체 장비 보기 <ArrowRight class="size-size-icon-sm" aria-hidden="true" /></Button
-            >
-          </div>
-          {#if devices.length > 0}
-            <List items={devices} key={(d) => d.id} label="현장별 장비" variant="plain">
-              {#snippet item(device)}
-                <EquipmentRow
-                  {device}
-                  now={data.at}
-                  poster={devicePoster(data.cameras, device.id)}
-                  href={ownerHref(url, 'detail', app, {}, device.id)}
-                  location={!map}
-                  selected={focused === device.id}
-                  onmouseenter={() => (focused = device.id)}
-                  onmouseleave={() => (focused = undefined)}
-                />
-              {/snippet}
-            </List>
-            {#if data.devices.length > devices.length}
-              <p class="text-body-sm text-fg-muted">전체 {data.devices.length}대 중 {devices.length}대 표시</p>
-            {/if}
-          {:else}
-            <EmptyState title="표시할 현장 없음" />
-          {/if}
-        </section>
-      </div>
+        </aside>
+      {:else}
+        <div class="w-fit max-w-full"><StatusStrip devices={data.devices} alerts={data.alerts} {app} {url} /></div>
+        <div class="rounded-card bg-surface shadow-raised gap-stack-lg p-inset-md flex min-w-0 flex-col">
+          <NationPanel
+            {data}
+            {app}
+            {url}
+            {region}
+            {focused}
+            {siteHref}
+            onsite={(site) => go(siteHref(site))}
+            onfocus={(id) => (focused = id)}
+            onregion={(next) => (region = next)}
+          />
+        </div>
+      {/if}
     </div>
   </div>
 </div>

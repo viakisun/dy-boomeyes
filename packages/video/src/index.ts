@@ -4,6 +4,7 @@ export { default as CameraWall } from './CameraWall.svelte';
 export { visibleIn } from './wall';
 export { default as VideoPlayer } from './VideoPlayer.svelte';
 export { default as OwnerVideo } from './OwnerVideo.svelte';
+export { default as OwnerLiveTile } from './OwnerLiveTile.svelte';
 export { default as BboxOverlay } from './BboxOverlay.svelte';
 export { default as HealthBadge } from './HealthBadge.svelte';
 export { CAMERA_LABEL, HEALTH_LABEL, MOUNT_LABEL, SOURCE_LABEL } from './labels';

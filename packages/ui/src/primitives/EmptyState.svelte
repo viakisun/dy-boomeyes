@@ -27,6 +27,7 @@
     cls,
   )}
   data-ref={ref}
+  role={tone === 'danger' ? 'alert' : undefined}
 >
   {#if icon}<span class={cx('text-size-icon-xl', tone === 'danger' ? 'text-danger-fg' : 'text-fg-subtle')}
       >{@render icon()}</span

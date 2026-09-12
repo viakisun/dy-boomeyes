@@ -64,6 +64,14 @@ const CASES = [
   },
   { id: 'video-network', view: 'video', frames: ['failed', 'recovered'], ac: ['AC-O09', 'AC-O14'] },
   { id: 'map-network', view: 'overview', frames: ['failed', 'recovered'], ac: ['AC-O13', 'AC-O14'] },
+  { id: 'overview-site', view: 'overview', query: { site: 'SITE-MAPO' }, frames: ['site'], ac: ['AC-O13'] },
+  {
+    id: 'overview-unit',
+    view: 'overview',
+    query: { site: 'SITE-MAPO', device: 'CPB-001' },
+    frames: ['unit'],
+    ac: ['AC-O08', 'AC-O13'],
+  },
 ];
 const BASE = { web: option('--web', 'http://localhost:4173'), pwa: option('--pwa', 'http://localhost:4174') };
 const SIZES = { web: { width: 1280, height: 842 }, pwa: { width: 390, height: 800 } };
@@ -90,8 +98,8 @@ for (const id of requested) if (!CASES.some((scenario) => scenario.id === id)) t
 const selected = all.filter((scenario) => !requested.length || requested.includes(scenario.id));
 const requiredFrames = all.reduce((total, scenario) => total + scenario.frames.length, 0);
 const expectedFrames = selected.reduce((total, scenario) => total + scenario.frames.length, 0);
-if (all.length !== 26 || requiredFrames !== 34 || !selected.length)
-  throw new Error('Expected 26 case runs and 34 required frames');
+if (all.length !== 30 || requiredFrames !== 38 || !selected.length)
+  throw new Error('Expected 30 case runs and 38 required frames');
 if (args.includes('--list')) {
   console.log(
     JSON.stringify(
@@ -455,6 +463,31 @@ try {
         for (const text of ['두번째건설', '타사 담당자', '다른 회사 전용 현장'])
           await expect(host).not.toContainText(text);
         await capture('denied', { full: true });
+      } else if (scenario.id === 'overview-site') {
+        const map = host.locator('.be-map');
+        await expect(map).toHaveAttribute('data-map-level', 'site');
+        await expect(map).toHaveAttribute('data-map-ready', '');
+        await expect(map.locator('.be-marker')).toHaveCount(5);
+        await expect(host.getByRole('list', { name: '현장 호기', exact: true }).locator('[data-device]')).toHaveCount(
+          5,
+        );
+        await expect(host.getByRole('heading', { name: '마포 주상복합 신축', exact: true })).toBeVisible();
+        await capture('site', { full: true });
+      } else if (scenario.id === 'overview-unit') {
+        const map = host.locator('.be-map');
+        await expect(map).toHaveAttribute('data-map-level', 'unit');
+        await expect(map).toHaveAttribute('data-map-ready', '');
+        await expect(map.locator('.be-marker.is-selected')).toHaveCount(1);
+        const tile = host.locator('[data-live-tile] video');
+        await expect(tile).toBeVisible();
+        check(await tile.evaluate((v) => v.paused), 'Live tile must not autoplay in capture mode');
+        for (const text of ['1호기', '김현장', '380 V', '고장코드', '1호기 제작증'])
+          await expect(host).toContainText(text);
+        await capture('unit', {
+          focus: host.locator('[data-live-tile]'),
+          full: true,
+          media: await tile.evaluate((video) => ({ readyState: video.readyState, paused: video.paused })),
+        });
       } else if (scenario.id === 'document-network') {
         const viewer = host.locator('[data-document-viewer]');
         await expect(viewer.getByRole('alert')).toContainText('원문을 불러오지 못했습니다.');
@@ -489,15 +522,16 @@ try {
         await expect(host.locator('[data-map-error]')).toContainText('지도를 불러오지 못했습니다');
         check(injected.length > 0, 'Map outage was not injected');
         check((await map.boundingBox())?.height > 200, 'Map must occupy more than 200 pixels in the exception view');
-        await expect(host.getByRole('list', { name: '현장별 장비', exact: true }).locator('[data-device]')).toHaveCount(
-          5,
-        );
+        // 지도가 없어도 현장 목록(13)은 그대로 — 위치 정보는 목록에서 확인할 수 있다
+        await expect(host.getByRole('list', { name: '현장 목록', exact: true }).locator('[data-site]')).toHaveCount(13);
         await capture('failed', { focus: host.locator('[data-map-error]'), full: true });
         await page.unroute(outagePattern, outage);
         await host.getByRole('button', { name: '지도 다시 불러오기', exact: true }).click();
         await expect(host.locator('[data-map-error]')).toHaveCount(0);
-        await expect(map.locator('.be-marker')).toHaveCount(5);
+        // 넓은 지도(web 1280)는 현장 13, 좁은 지도(pwa 390)는 지역 7
+        await expect(map.locator('.be-marker')).toHaveCount(scenario.app === 'web' ? 13 : 7);
         await expect(map).toHaveAttribute('data-map-ready', '');
+        await expect(map).toHaveAttribute('data-map-level', 'nation');
         await expect
           .poll(
             () =>

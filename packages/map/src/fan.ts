@@ -23,3 +23,36 @@ export function fanOffsets(
     });
   return off;
 }
+
+/** 알약(현장·지역)처럼 폭이 넓은 마커의 상자 겹침을 세로로 밀어 푼다 — 겹치는 쌍마다 반씩 위·아래로, 결정적 반복. id → {x:0,y} 오프셋 */
+export function resolveOverlaps(
+  points: readonly { id: string; x: number; y: number }[],
+  size: { w: number; h: number },
+  iterations = 8,
+): Map<string, { x: number; y: number }> {
+  const pos = [...points]
+    .sort((a, b) => (a.id < b.id ? -1 : a.id > b.id ? 1 : 0))
+    .map((p) => ({ id: p.id, x: p.x, y0: p.y, y: p.y }));
+  for (let n = 0; n < iterations; n++) {
+    let moved = false;
+    for (let i = 0; i < pos.length; i++)
+      for (let j = i + 1; j < pos.length; j++) {
+        const a = pos[i]!;
+        const b = pos[j]!;
+        if (Math.abs(a.x - b.x) >= size.w) continue;
+        const dy = b.y - a.y;
+        if (Math.abs(dy) >= size.h) continue;
+        const push = (size.h - Math.abs(dy)) / 2;
+        if (dy >= 0) {
+          a.y -= push;
+          b.y += push;
+        } else {
+          a.y += push;
+          b.y -= push;
+        }
+        moved = true;
+      }
+    if (!moved) break;
+  }
+  return new Map(pos.map((p) => [p.id, { x: 0, y: p.y - p.y0 }]));
+}

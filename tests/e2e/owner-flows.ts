@@ -14,6 +14,8 @@ const PNG = 'apps/pwa/static/icons/icon-192.png';
 
 export function ownerFlows(app: OwnerApp) {
   const paths = OWNER_PATHS[app];
+  // 지도 준비·단계 표식은 타일 로드(현장 줌 17)를 기다린다 — 캡처 도구와 같은 20초
+  const MAP = { timeout: 20_000 } as const;
   test('[B0-01] [FR-001] [AC-O01] login form rejects wrong credentials and accepts the demo owner account', async ({
     page,
   }) => {
@@ -119,15 +121,16 @@ export function ownerFlows(app: OwnerApp) {
     await expect(alerts.locator('[data-alert="CPB-004-STALE"]')).toBeVisible();
   });
 
-  test('[B1-02] [FR-024] [AC-O07] overview shows five of 120 devices and opens the complete fleet', async ({
+  test('[B1-02] [FR-024] [AC-O07] overview lists 13 sites of 120 devices and opens the complete fleet', async ({
     page,
   }) => {
     await startOwner(page, app);
     await page.goto(`${paths.overview}?capture=1&state=large`);
     const overview = ownerHost(page, 'overview');
-    const preview = overview.getByRole('list', { name: '현장별 장비', exact: true });
-    await expect(preview.getByRole('listitem')).toHaveCount(5);
-    await expect(overview).toContainText('전체 120대 중 5대 표시');
+    const sites = overview.getByRole('list', { name: '현장 목록', exact: true });
+    await expect(sites.getByRole('listitem')).toHaveCount(13);
+    await expect(sites.locator('[data-site="SITE-MAPO"]')).toContainText('5대');
+    await expect(overview).toContainText('전체 120대 · 13개 현장');
     await overview.getByRole('link', { name: '전체 장비 보기', exact: true }).click();
     const fleet = ownerHost(page, 'fleet');
     await expect(fleet.getByRole('status')).toHaveText('전체 120대 중 120대 표시');
@@ -135,6 +138,61 @@ export function ownerFlows(app: OwnerApp) {
     await expect(devices.getByRole('listitem')).toHaveCount(120);
     await expect(devices.locator('[data-device="CPB-121"]')).toHaveCount(1);
     await expect(devices.locator('[data-device="CPB-101"]')).toHaveCount(0);
+  });
+
+  test('[B1-02] [FR-024] [AC-O08] [AC-O13] drilldown nation → site → unit plays live tile, survives reload and returns', async ({
+    page,
+  }) => {
+    await startOwner(page, app);
+    const overview = ownerHost(page, 'overview');
+    const map = overview.locator('.be-map');
+    await expect(map).toHaveAttribute('data-map-level', 'nation', MAP);
+    await expect(page.getByRole('navigation', { name: '현황 경로', exact: true })).toContainText('전국');
+    // nation → site: the site row drives the URL, the map re-arms at site level with the five Mapo units
+    await overview.getByRole('list', { name: '현장 목록', exact: true }).locator('[data-site="SITE-MAPO"]').click();
+    await expect(page).toHaveURL(/site=SITE-MAPO/);
+    await expect(map).toHaveAttribute('data-map-level', 'site', MAP);
+    await expect(map).toHaveAttribute('data-map-ready', '', MAP);
+    await expect(map.locator('.be-marker')).toHaveCount(5);
+    await expect(overview.getByRole('heading', { name: '마포 주상복합 신축', exact: true })).toBeFocused();
+    await expect(overview.getByRole('list', { name: '현장 호기', exact: true }).locator('[data-device]')).toHaveCount(
+      5,
+    );
+    // site → unit: the unit card opens the unit panel with a playing live tile
+    await overview.getByRole('list', { name: '현장 호기', exact: true }).locator('[data-device="CPB-001"]').click();
+    await expect(page).toHaveURL(/site=SITE-MAPO&device=CPB-001/);
+    await expect(map).toHaveAttribute('data-map-level', 'unit', MAP);
+    await expect(map.locator('.be-marker.is-selected')).toHaveCount(1);
+    await expect(overview.getByRole('heading', { name: '1호기', exact: true })).toBeFocused();
+    const video = overview.locator('[data-live-tile] video');
+    await expect(video).toBeVisible();
+    await expect.poll(() => video.evaluate((v) => (v as HTMLVideoElement).paused)).toBe(false);
+    for (const fact of ['김현장', '380 V', '한빛건설', '1호기 제작증']) await expect(overview).toContainText(fact);
+    // reload keeps the level from the URL
+    await page.reload();
+    await expect(ownerHost(page, 'overview').locator('.be-map')).toHaveAttribute('data-map-level', 'unit', MAP);
+    await expect(ownerHost(page, 'overview').locator('[data-live-tile] video')).toBeVisible();
+    // back returns one level and stops the tile; the crumb returns to the nation
+    await page.goBack();
+    await expect(ownerHost(page, 'overview').locator('.be-map')).toHaveAttribute('data-map-level', 'site', MAP);
+    await expect(page.locator('[data-live-tile] video')).toHaveCount(0);
+    await page.getByRole('navigation', { name: '현황 경로', exact: true }).getByRole('link', { name: '전국' }).click();
+    await expect(ownerHost(page, 'overview').locator('.be-map')).toHaveAttribute('data-map-level', 'nation', MAP);
+    await expect(page).not.toHaveURL(/site=/);
+  });
+
+  test('[B1-02] [FR-024] [AC-O12] [AC-O13] unknown site or foreign unit in the URL falls back to a valid level', async ({
+    page,
+  }) => {
+    await startOwner(page, app);
+    await page.goto(`${paths.overview}?site=SITE-NOPE&device=CPB-001`);
+    await expect(ownerHost(page, 'overview').locator('.be-map')).toHaveAttribute('data-map-level', 'nation', MAP);
+    await page.goto(`${paths.overview}?site=SITE-MAPO&device=CPB-101`);
+    const overview = ownerHost(page, 'overview');
+    await expect(overview.locator('.be-map')).toHaveAttribute('data-map-level', 'site', MAP);
+    await expect(overview.locator('[data-live-tile]')).toHaveCount(0);
+    for (const hidden of ['두번째건설', '타사 담당자', '다른 회사 전용 현장'])
+      await expect(overview).not.toContainText(hidden);
   });
 
   for (const material of ['documents', 'video'] as const) {
@@ -422,14 +480,28 @@ export function ownerFlows(app: OwnerApp) {
     await expect(ownerHost(page, 'documents')).not.toContainText('icon-192.png');
   });
 
+  const LEVELS = { 'overview-site': 'site=SITE-MAPO', 'overview-unit': 'site=SITE-MAPO&device=CPB-001' } as const;
   for (const theme of ['light', 'dark']) {
-    for (const view of ['entry', 'overview', 'fleet', 'detail', 'video', 'documents', 'alerts'] as const) {
-      test(`[B1-02] [FR-024] [AC-O13] [AC-O16] ${view} ${theme} responsive accessibility`, async ({ page }) => {
+    for (const target of [
+      'entry',
+      'overview',
+      'overview-site',
+      'overview-unit',
+      'fleet',
+      'detail',
+      'video',
+      'documents',
+      'alerts',
+    ] as const) {
+      const view = target.startsWith('overview') ? 'overview' : target;
+      test(`[B1-02] [FR-024] [AC-O13] [AC-O16] ${target} ${theme} responsive accessibility`, async ({ page }) => {
         await page.setViewportSize(app === 'web' ? { width: 390, height: 800 } : { width: 375, height: 800 });
         if (view !== 'entry') await startOwner(page, app);
         const separator = paths[view].includes('?') ? '&' : '?';
-        await page.goto(`${paths[view]}${separator}capture=1&state=owner&theme=${theme}`);
+        const level = target in LEVELS ? `&${LEVELS[target as keyof typeof LEVELS]}` : '';
+        await page.goto(`${paths[view]}${separator}capture=1&state=owner&theme=${theme}${level}`);
         await expect(ownerHost(page, view)).toBeVisible();
+        if (target in LEVELS) await expect(page.locator('.be-map')).toHaveAttribute('data-map-ready', '', MAP);
         await page.evaluate(() => document.fonts.ready);
         await page.addStyleTag({ content: '*,*::before,*::after{animation:none!important;transition:none!important}' });
         await noOverflow(page);

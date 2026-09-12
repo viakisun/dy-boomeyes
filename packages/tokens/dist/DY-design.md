@@ -10,7 +10,7 @@
 | ref(원시) | 208 |
 | sys(시맨틱) | 324 |
 | cmp(컴포넌트) | 92 |
-| 컴포넌트 카탈로그 | 100 |
+| 컴포넌트 카탈로그 | 107 |
 | 대비 검사 | 94/94 통과 |
 
 | 산출물 | 용도 |
@@ -786,7 +786,7 @@ cmp 층은 sys만 참조한다(ref 직접 참조 금지 — 검사로 강제). �
 | `cmp.table.row-selected` | #ebf1ff | #ebf1ff | {sys.color.bg.selected} |  |
 | `cmp.table.header-fg` | #616368 | #616368 | {sys.color.fg.muted} |  |
 
-## 8. 컴포넌트 카탈로그 (100)
+## 8. 컴포넌트 카탈로그 (107)
 
 이름 PascalCase · prop 어휘 고정: `variant`(형태) · `tone`(색 의도: accent/neutral/info/success/warning/danger/progress) · `size`(sm/md/lg) · 상태 boolean(`disabled` `loading` `selected` `invalid`). 플랫폼 both = 같은 Svelte 컴포넌트가 밀도 토큰으로 두 플랫폼을 소화.
 
@@ -929,6 +929,13 @@ cmp 층은 sys만 참조한다(ref 직접 참조 금지 — 검사로 강제). �
 | **OwnerDocuments** | both | V5 관제기능 · owner-experience | app web/pwa | loading/empty/error/offline/default | 장비 서류 원문·시연용 첨부 |
 | **DocumentViewer** | both | V5 관제기능 · owner-experience | app web/pwa | loading/empty/error/offline/default | 원문 이미지/PDF · 닫기·오류·복귀 |
 | **OwnerVideo** | both | V5 관제기능 · owner-experience | app web/pwa | loading/empty/error/offline/default | 목적과 시간에 따른 시연 영상·실재생 |
+| **StatusStrip** | both | Samsara Fleet Overview · V5 관제기능 | lg 지도 위 부유 · 좁은 폭 정적 | loading/empty/error/offline/default | 운영 상태 띠 — 전체(보유 장비) · 가동/고장/점검/지연/보관/미확인 칩(목록·알림 필터 링크). KPI 카드 대신 한 줄, 색은 warning·danger 숫자만 |
+| **OverviewCrumbs** | both | Hilti ON!Track Smart Map · Trackunit Sites | nation · region · site · unit | default | 현황 경로 전국 › 현장 › N호기 — 앞 단계 링크(push), 현재 단계 aria-current |
+| **SiteRow** | both | Trackunit Sites · V5 관제기능 | site/depot · selected | default/hover/selected | IconTile(가장 나쁜 상태 톤) · 현장명 · 건설사·주소 · 호기 수 · 확인 필요 배지 · 후행 |
+| **NationPanel** | both | Samsara Fleet Overview · V5 관제기능 | region 선택 | loading/empty/error/offline/default | 전국 패널 — 확인이 필요한 장비(알림 3) · 현장 목록(SiteRow) · 전체 대수·현장 수 |
+| **SitePanel** | both | Trackunit Asset card · V5 관제기능 | site/depot | loading/empty/error/offline/default | 현장 패널 — 현장명·건설사 · 주소·기간(PeriodBar) · 담당자(ContactCard) · 투입/보관 호기(EquipmentRow) · 현장 알림 |
+| **UnitPanel** | both | Samsara preview card · V5 관제기능 H71/H77 | live/미장착/미확보 | loading/empty/error/offline/default | 호기 패널 — 호기·상태·배치 · 실시간 영상 타일 · 설치·완료·임대기간 · 담당자 · 전압·단선·고장코드 · 관련 서류 · 상세 화면 |
+| **OwnerLiveTile** | both | Motive Fleet View Live · V5 관제기능 | capture(정지)/live(자동 재생) | default | 호기 패널의 실시간 영상 타일 — 6초 샘플 루프(muted·loop·playsinline), '실시간 예시' 오버레이 + 시연 클립 캡션, 해제 시 pause·src 제거 |
 
 ## 9. 플랫폼 가이드 — 웹 백오피스 (Linear 참조)
 

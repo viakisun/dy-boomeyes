@@ -51,6 +51,10 @@ const STATE_QUERY = {
   'B1-08:pinned': 'cursor=-12',
   'A1-05:pour': 'tab=parts',
   'B0-01:owner': 'demo=owner',
+  'B1-02:site': 'site=SITE-MAPO',
+  'B1-02:unit': 'site=SITE-MAPO&device=CPB-001',
+  'A4-07:site': 'site=SITE-MAPO',
+  'A4-07:unit': 'site=SITE-MAPO&device=CPB-001',
 };
 const surfaces = Object.fromEntries(ssot.screens.surfaces.map((s) => [s.id, s.app]));
 const screens = ssot.screens.screens.filter((s) => s.wave <= WAVE && (!ONLY || ONLY.includes(s.id)));
@@ -155,7 +159,7 @@ for (const s of screens) {
       await page.setViewportSize(phone ? { width: 440, height: 900 } : { width: 1280, height: 842 });
       try {
         const ownerView = ssot.screens.owner_demo?.find((item) => item[app] === s.id);
-        const ownerState = ['owner', 'empty', 'error', 'boundaries', 'large'].includes(st.id);
+        const ownerState = ['owner', 'empty', 'error', 'boundaries', 'large', 'site', 'unit'].includes(st.id);
         if (ownerView && ownerView.view !== 'entry' && ownerState) {
           await page.goto(`${BASE[app]}${app === 'web' ? '/login?demo=owner' : '/a4/login'}`);
           await page.getByRole('button', { name: '데모 계정으로 로그인', exact: true }).click();

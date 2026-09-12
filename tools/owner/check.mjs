@@ -37,8 +37,8 @@ if (value('--captures')) {
     'Capture result must be a full successful automated run',
   );
   requireThat(
-    result.requiredCount === 112 && result.expectedCount === 112 && result.actualCount === 112,
-    'Expected/actual capture counts must both be 112',
+    result.requiredCount === 144 && result.expectedCount === 144 && result.actualCount === 144,
+    'Expected/actual capture counts must both be 144',
   );
   requireThat(
     result.registryHash ===
@@ -122,7 +122,7 @@ if (value('--captures')) {
     }
   }
   for (const key of required) requireThat(seen.has(key), `Missing required capture ${key}`);
-  requireThat(captures === 112, 'Capture manifest must contain exactly 112 rows');
+  requireThat(captures === 144, 'Capture manifest must contain exactly 144 rows');
 }
 if (value('--e2e')) {
   const report = read(value('--e2e'));

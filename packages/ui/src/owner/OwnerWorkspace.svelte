@@ -5,7 +5,8 @@
     ownerScreen,
     type OwnerApi,
     type OwnerApp,
-    type OwnerDevice,
+    type OwnerCamera,
+    type OwnerMapScene,
     type OwnerSnapshot,
     type OwnerView,
     type OwnerViewProps,
@@ -26,21 +27,28 @@
     capture = false,
     video,
     map,
+    live,
   }: {
     api: OwnerApi;
     app: OwnerApp;
     view: OwnerView;
     url: URL;
-    navigate: (href: string) => void;
+    navigate: OwnerViewProps['navigate'];
     capture?: boolean;
     video: Snippet<[OwnerViewProps]>;
-    map?: Snippet<[OwnerDevice[], string | undefined]>;
+    /** 현황·상세의 지도 — 장면(OwnerMapScene)을 받아 앱이 MapView로 그린다 */
+    map?: Snippet<[OwnerMapScene]>;
+    /** 호기 패널의 실시간 영상 타일(카메라 · 접근 이름 · capture) */
+    live?: Snippet<[OwnerCamera, string, boolean]>;
   } = $props();
   let snapshot = $state<OwnerSnapshot>();
   let error = $state('');
   let loading = $state(true);
   const title = $derived(OWNER_DEMO.find((v) => v.view === view)?.label ?? '소유주 운영');
   let generation = 0;
+  // 같은 api 객체로 다시 렌더될 때(쿼리 전환·invalidateAll)는 다시 읽지 않는다 — Svelte 5는 객체 prop을 늘 "바뀜"으로 보므로 identity를 직접 비교한다.
+  // 드릴다운(?site= · ?device=)마다 로딩 화면과 지도가 다시 만들어지는 것을 막는다. 명시적 갱신은 refresh().
+  let bound: OwnerApi | undefined;
   async function refresh() {
     const current = ++generation;
     loading = true;
@@ -56,6 +64,8 @@
   }
   $effect(() => {
     const source = api;
+    if (source === bound) return;
+    bound = source;
     const current = ++generation;
     loading = true;
     error = '';
@@ -71,9 +81,7 @@
       .finally(() => {
         if (current === generation) loading = false;
       });
-    return () => {
-      generation++;
-    };
+    // cleanup으로 generation을 올리지 않는다 — 같은 api로 다시 렌더될 때 첫 스냅샷이 버려져 로딩이 멈추는 사고 방지
   });
   const viewProps = $derived(snapshot ? { data: snapshot, api, app, url, navigate, refresh, capture } : null);
 </script>
@@ -105,7 +113,7 @@
         title="등록된 보유 장비가 없습니다"
         description="장비가 등록되면 이곳에서 위치와 계약 정보를 확인할 수 있습니다."
       />
-    {:else if view === 'overview'}<OwnerOverview {...viewProps} {map} />
+    {:else if view === 'overview'}<OwnerOverview {...viewProps} {map} {live} />
     {:else if view === 'fleet'}<OwnerFleet {...viewProps} />
     {:else if view === 'detail'}<OwnerDetail {...viewProps} {map} />
     {:else if view === 'documents'}<OwnerDocuments {...viewProps} />

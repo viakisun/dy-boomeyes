@@ -5,7 +5,7 @@
   import { onMount } from 'svelte';
   import { Button } from '@boomeyes/ui';
   import type { MapViewProps } from './types';
-  import { fanOffsets, FAN_PX } from './fan';
+  import { fanOffsets, resolveOverlaps, FAN_PX } from './fan';
   let {
     markers,
     center = [127.5, 36.3],
@@ -47,12 +47,15 @@
   function relayout() {
     if (!map) return;
     const vertical = markers.some((m) => m.kind === 'site' || m.kind === 'region');
-    const off = fanOffsets(
-      markers.map((m) => ({ id: m.id, ...map!.project([m.lng, m.lat]) })),
-      pill ? (compact ? FAN_PX : vertical ? FAN_PX * 0.8 : FAN_PX * 1.75) : FAN_PX, // 알약 가로(≈ 80px) · 세로(≈ 44px) · 원형 핀(48px)
-      pill ? (compact ? FAN_PX : FAN_PX * 1.5) : 24, // 묶음 거리 ≥ 핀 폭(48) — 겹치는 핀이 반드시 펼쳐진다
-      vertical ? 'y' : 'x',
-    );
+    const points = markers.map((m) => ({ id: m.id, ...map!.project([m.lng, m.lat]) }));
+    // 현장·지역 알약(폭 ≈ 110px)은 상자 겹침을 세로로 밀어 풀고, 호기 핀은 묶음 가로 펼침
+    const off = vertical
+      ? resolveOverlaps(points, { w: FAN_PX * 2, h: FAN_PX })
+      : fanOffsets(
+          points,
+          pill ? (compact ? FAN_PX : FAN_PX * 1.75) : FAN_PX, // 알약 가로(≈ 98px) · 원형 핀(48px)
+          pill ? (compact ? FAN_PX : FAN_PX * 1.5) : 24, // 묶음 거리 ≥ 핀 폭(48) — 겹치는 핀이 반드시 펼쳐진다
+        );
     for (const [id, h] of handles) {
       const o = off.get(id) ?? { x: 0, y: 0 };
       h.setOffset([o.x, o.y]);
@@ -76,7 +79,8 @@
     });
   }
   let cameraKey: string | undefined;
-  function moveCamera(duration: number) {
+  // rearm = 단계가 바뀌는 이동만 준비 표식을 내렸다 올린다(여백 보정에는 유지 — 도구가 기다리는 표식이 깜빡이지 않게)
+  function moveCamera(duration: number, rearm = true) {
     if (!map || !camera) return;
     const padding = camera.padding ?? { top: 0, right: 0, bottom: 0, left: 0 };
     const target =
@@ -85,7 +89,7 @@
           map.cameraForBounds(camera.bounds, { maxZoom: camera.maxZoom }))
         : { center: camera.center, zoom: camera.zoom, padding };
     if (!target) return;
-    arm();
+    if (rearm) arm();
     // padding은 카메라 계산에만 쓰고 지도 상태(getPadding)에 남기지 않는다 — 다음 이동에 누적되지 않게
     map.easeTo({
       center: target.center,
@@ -115,9 +119,13 @@
               : ''
             : (GLYPH[m.state] ?? '');
     (d.querySelector('.be-marker__label') as HTMLElement).textContent = m.label;
-    const count = d.querySelector('.be-marker__count') as HTMLElement;
-    count.textContent = kind === 'site' && m.count !== undefined ? String(m.count) : '';
-    count.hidden = !count.textContent;
+    // 대수 배지는 현장 알약에만 만든다(빈 자식을 남기지 않는다 — 캡처 도구의 자식 중심 도달 검사)
+    let count = d.querySelector('.be-marker__count') as HTMLElement | null;
+    if (kind === 'site' && m.count !== undefined) {
+      if (!count)
+        count = d.appendChild(Object.assign(document.createElement('span'), { className: 'be-marker__count' }));
+      count.textContent = String(m.count);
+    } else count?.remove();
   }
   function pin(m: M) {
     const d = document.createElement('button');
@@ -126,7 +134,6 @@
     d.append(
       Object.assign(document.createElement('span'), { className: 'be-marker__dot' }),
       Object.assign(document.createElement('span'), { className: 'be-marker__label' }),
-      Object.assign(document.createElement('span'), { className: 'be-marker__count' }),
     );
     paint(d, m);
     d.addEventListener('click', () => onselect?.(m.id, m.kind ?? 'unit'));
@@ -173,7 +180,7 @@
       map.on('move', relayout);
       map.on('resize', () => {
         relayout();
-        if (camera) moveCamera(0);
+        if (camera) moveCamera(0, false);
       });
     }
     return () => {
@@ -224,7 +231,11 @@
     const changed = camera.key !== cameraKey;
     cameraKey = camera.key;
     const reduced = typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches;
-    moveCamera(!animate || reduced ? 0 : changed ? EASE_MS : EASE_MS / 2);
+    moveCamera(!animate || reduced ? 0 : changed ? EASE_MS : EASE_MS / 2, changed);
+  });
+  // 카메라는 그대로인데 단계만 바뀌는 경우(현장 → 호기) — 준비 표식은 유지하고 단계 속성만 갱신
+  $effect(() => {
+    if (level && el?.hasAttribute('data-map-ready')) el.dataset.mapLevel = level;
   });
 </script>
 

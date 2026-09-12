@@ -44,13 +44,13 @@
 | `A4-04` | 운전자 배치 | A4 | `/a4/drivers` | owner | 2 | 4 | 1 (drivers) | FR-027 | — |
 | `A4-05` | 임대 계약 | A4 | `/a4/leases` | owner | 2 | 4 | 1 (lease) | FR-025 | — |
 | `A4-06` | 운전자 서류 | A4 | `/a4/drivers/docs` | owner | 2 | 4 | 1 (docs) | FR-027 | — |
-| `A4-07` | 운영 현황 | A4 | `/a4/overview` | owner | 2 | 4 | 5 (owner empty error boundaries large) | FR-003 FR-024 FR-025 FR-039 | owner-experience |
+| `A4-07` | 운영 현황 | A4 | `/a4/overview` | owner | 2 | 4 | 7 (owner empty error boundaries large site unit) | FR-003 FR-024 FR-025 FR-039 | owner-experience |
 | `A4-08` | 호기 상세 | A4 | `/a4/fleet/[device]` | owner | 2 | 4 | 5 (owner empty error boundaries large) | FR-002 FR-007 FR-016 FR-019 FR-024 FR-025 FR-039 FR-040 FR-043 | owner-experience |
 | `A4-09` | 영상 | A4 | `/a4/fleet/[device]/video` | owner | 2 | 4 | 5 (owner empty error boundaries large) | FR-004 FR-005 FR-024 | owner-experience |
 | `A4-10` | 장비 서류 | A4 | `/a4/docs` | owner | 2 | 4 | 5 (owner empty error boundaries large) | FR-016 FR-024 | owner-experience |
 | `A4-11` | 이상·점검 | A4 | `/a4/alerts` | owner | 2 | 4 | 5 (owner empty error boundaries large) | FR-006 FR-007 FR-024 | owner-experience |
 | `B0-01` | 웹 공통 로그인 | B0 | `/login` | owner control hq-safety site-safety ops-admin maintenance | 1 | 0 | 7 (owner login-b1 login-b2 login-b3 login-b4 login-owner login-maint) | FR-001 FR-031 | owner-experience shell-auth |
-| `B1-02` | 관제 대시보드 | B1 | `/b1/dash` | control maintenance owner | 1 | 0 | 6 (owner empty error boundaries large dash) | FR-002 FR-003 FR-006 FR-024 FR-034 FR-036 FR-039 FR-040 FR-041 FR-043 | control-dashboard demo-scripts owner-experience pour-metrics |
+| `B1-02` | 관제 대시보드 | B1 | `/b1/dash` | control maintenance owner | 1 | 0 | 8 (owner empty error boundaries large site unit dash) | FR-002 FR-003 FR-006 FR-024 FR-034 FR-036 FR-039 FR-040 FR-041 FR-043 | control-dashboard demo-scripts owner-experience pour-metrics |
 | `B1-02M` | 카메라 영상 모달 | B1 | `/b1/dash?cam=[camera]` | control maintenance owner | 1 | 1 | 1 (cam) | FR-004 FR-005 FR-024 FR-028 FR-029 FR-034 FR-042 | control-dashboard video-basics |
 | `B1-03` | 수신함 | B1 | `/b1/inbox` | control maintenance owner | 1 | 1 | 2 (inbox report) | FR-017 FR-018 FR-024 FR-033 FR-038 | demo-scripts task-escalation |
 | `B1-04` | 에스컬레이션 | B1 | `/b1/escalation` | control maintenance owner | 1 | 1 | 1 (esc) | FR-010 FR-024 | demo-scripts task-escalation |

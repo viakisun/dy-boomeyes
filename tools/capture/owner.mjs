@@ -46,25 +46,33 @@ const all = views.flatMap((view) =>
   ['web', 'pwa'].flatMap((app) => {
     const screen = source.screens.find((s) => s.id === view[app]);
     if (!screen || !screen.roles.includes('owner')) throw new Error(`Owner screen missing or wrong role: ${view[app]}`);
-    return sizes[app].flatMap(([width, height]) =>
-      ['light', 'dark'].map((theme) => ({
-        view: view.view,
-        label: view.label,
-        code: screen.id,
-        app,
-        route: screen.route,
-        state: 'owner',
-        width,
-        height,
-        theme,
-        wave: screen.wave,
-        key: `${app}-${view.view}-${width}x${height}-${theme}`,
-      })),
+    // 운영 현황은 드릴다운 3단계(전국 · 현장 · 호기)를 각각 캡처한다 — 7종 + 2단계 = 9 × 2앱 × 4폭 × 2테마 = 144
+    const levels = view.view === 'overview' ? ['nation', 'site', 'unit'] : [undefined];
+    return levels.flatMap((level) =>
+      sizes[app].flatMap(([width, height]) =>
+        ['light', 'dark'].map((theme) => ({
+          view: view.view,
+          label: view.label,
+          code: screen.id,
+          app,
+          route: screen.route,
+          state: 'owner',
+          level,
+          query:
+            level === 'site' ? { site: 'SITE-MAPO' } : level === 'unit' ? { site: 'SITE-MAPO', device: 'CPB-001' } : {},
+          width,
+          height,
+          theme,
+          wave: screen.wave,
+          key: `${app}-${view.view}${level && level !== 'nation' ? `-${level}` : ''}-${width}x${height}-${theme}`,
+        })),
+      ),
     );
   }),
 );
-if (all.length !== 112 || new Set(all.map((x) => x.key)).size !== 112)
-  throw new Error('Expected exactly 112 unique combinations');
+export const OWNER_CAPTURE_COUNT = 144;
+if (all.length !== OWNER_CAPTURE_COUNT || new Set(all.map((x) => x.key)).size !== OWNER_CAPTURE_COUNT)
+  throw new Error(`Expected exactly ${OWNER_CAPTURE_COUNT} unique combinations`);
 for (const item of selection)
   if (!all.some((x) => x.view === item || x.code === item)) throw new Error(`Unknown --only target: ${item}`);
 const selected = all.filter((x) => !selection.length || selection.includes(x.view) || selection.includes(x.code));
@@ -140,6 +148,7 @@ const urlFor = (row) => {
   url.searchParams.set('capture', '1');
   url.searchParams.set('state', row.state);
   url.searchParams.set('theme', row.theme);
+  for (const [key, value] of Object.entries(row.query ?? {})) url.searchParams.set(key, value);
   return url.href;
 };
 const manifest = {
@@ -261,13 +270,29 @@ try {
       check((await page.locator('html').getAttribute('data-theme')) === row.theme, 'Theme mismatch');
       if (await page.locator('.be-map').count()) {
         const map = page.locator('.be-map');
-        await page.locator('[data-map-ready]').waitFor({ timeout: 20_000 });
+        // 준비 표식은 카메라 이동마다 다시 세워진다 — 단계 속성까지 같이 기다린다(현황 nation/site/unit · 상세 unit)
+        const mapLevel = row.level ?? (row.view === 'detail' ? 'unit' : null);
+        await page
+          .locator(mapLevel ? `[data-map-ready][data-map-level="${mapLevel}"]` : '[data-map-ready]')
+          .waitFor({ timeout: 20_000 });
         result.map = await map.evaluate((element) => {
           const box = element.getBoundingClientRect();
-          return { width: box.width, height: box.height, markers: element.querySelectorAll('.be-marker').length };
+          return {
+            width: box.width,
+            height: box.height,
+            markers: element.querySelectorAll('.be-marker').length,
+            level: element.getAttribute('data-map-level'),
+            mode: element.closest('[data-owner-stage]')?.getAttribute('data-owner-map-mode') ?? null,
+          };
         });
         check(result.map.width >= 200 && result.map.height >= 200, 'Map has no usable visible area');
-        const expectedMarkers = row.view === 'detail' ? 1 : 5;
+        // 상세 1 · 전국은 현장 13(넓은 지도) 또는 지역 7(좁은 지도) · 현장·호기 단계는 마포 호기 5
+        const expectedMarkers =
+          row.view === 'detail' ? 1 : row.level === 'nation' ? (result.map.mode === 'regions' ? 7 : 13) : 5;
+        check(
+          row.level !== 'nation' || ['sites', 'regions'].includes(result.map.mode),
+          `Nation map mode must be sites or regions (got ${result.map.mode})`,
+        );
         check(result.map.markers === expectedMarkers, `Map must show ${expectedMarkers} owned equipment marker(s)`);
         check((await page.locator('[data-map-error]').count()) === 0, 'Map tiles failed');
         await map.evaluate((element) => element.scrollIntoView({ block: 'center', inline: 'nearest' }));
@@ -280,6 +305,7 @@ try {
               height: box.height,
               reachable: [...marker.children].every((part) => {
                 const b = part.getBoundingClientRect();
+                if (b.width === 0 && b.height === 0) return true; // 렌더되지 않는 자식은 표적이 아니다
                 return marker.contains(document.elementFromPoint(b.x + b.width / 2, b.y + b.height / 2));
               }),
             };
@@ -293,6 +319,19 @@ try {
           'Map targets overlap or are too small',
         );
         await page.evaluate(() => window.scrollTo(0, 0));
+      }
+      if (row.level === 'unit') {
+        // 호기 단계: 실시간 영상 타일이 있고 캡처에서는 자동 재생하지 않는다(포스터 프레임이 결정적)
+        const tile = page.locator('[data-live-tile] video');
+        await tile.waitFor({ state: 'visible' });
+        check(
+          await tile.evaluate((v) => v.paused && !!v.poster),
+          'Live tile must stay paused on its poster in capture',
+        );
+        check(
+          (await page.locator('[data-owner-view="overview"] [data-device="CPB-001"]').count()) > 0,
+          'Unit panel missing',
+        );
       }
       if (row.view === 'documents') {
         await page.locator('[data-document-viewer] img').first().waitFor({ state: 'visible' });
@@ -326,7 +365,7 @@ try {
       result.sha256 = createHash('sha256')
         .update(readFileSync(join(OUT, result.file)))
         .digest('hex');
-      // 첫 화면 112조합과 별도로, 대표 PC/폰 라이트의 전체 내용을 남긴다.
+      // 첫 화면 144조합과 별도로, 대표 PC/폰 라이트의 전체 내용을 남긴다(현황은 3단계 모두).
       // fullPage가 WebGL을 비우는 SOP를 피하기 위해 실제 viewport 높이를 늘린다.
       if (row.theme === 'light' && row.width === (row.app === 'web' ? 1280 : 390)) {
         result.fullFile = `${row.key}-full.png`;

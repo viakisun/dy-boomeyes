@@ -891,6 +891,10 @@ screens:
     name: 미확인 정보
   - id: large
     name: 120대 탐색
+  - id: site
+    name: 현장 단계(마포)
+  - id: unit
+    name: 호기 단계(1호기)
   - id: dash
     name: dash
   nav:
@@ -1555,6 +1559,10 @@ screens:
       name: 미확인 배치·미연동·계약 미등록
     - id: large
       name: 120대 탐색
+    - id: site
+      name: 현장 단계(마포)
+    - id: unit
+      name: 호기 단계(1호기)
   nav:
     - to: A4-02
       label: 보유 장비
