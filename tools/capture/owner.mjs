@@ -42,7 +42,7 @@ const all = views.flatMap((view) =>
   ['web', 'pwa'].flatMap((app) => {
     const screen = source.screens.find((s) => s.id === view[app]);
     if (!screen || !screen.roles.includes('owner')) throw new Error(`Owner screen missing or wrong role: ${view[app]}`);
-    // 운영 현황은 드릴다운 3단계(전국 · 현장 · 호기)를 각각 캡처한다 — 구현 7종 + 2단계 = 9 × 2앱 × 4폭 × 2테마 = 144
+    // 운영 현황은 드릴다운 3단계(전국 · 현장 · 호기)를 각각 캡처한다 — 목적 수 + 2단계 × 2앱 × 4폭 × 2테마
     const levels = view.view === 'overview' ? ['nation', 'site', 'unit'] : [undefined];
     return levels.flatMap((level) =>
       sizes[app].flatMap(([width, height]) =>
@@ -362,7 +362,7 @@ try {
       result.sha256 = createHash('sha256')
         .update(readFileSync(join(OUT, result.file)))
         .digest('hex');
-      // 첫 화면 144조합과 별도로, 대표 PC/폰 라이트의 전체 내용을 남긴다(현황은 3단계 모두).
+      // 첫 화면 조합과 별도로, 대표 PC/폰 라이트의 전체 내용을 남긴다(현황은 3단계 모두).
       // fullPage가 WebGL을 비우는 SOP를 피하기 위해 실제 viewport 높이를 늘린다.
       if (row.theme === 'light' && row.width === (row.app === 'web' ? 1280 : 390)) {
         result.fullFile = `${row.key}-full.png`;

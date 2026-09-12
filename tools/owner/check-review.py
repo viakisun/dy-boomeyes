@@ -80,7 +80,7 @@ def load_evidence(repo, manifest_path):
     for view in views:
         if not view.get("question") or not view.get("source_cells"):
             raise ValueError(f"Missing customer question or source cells: {view['view']}")
-        # 운영 현황은 드릴다운 3단계(전국 · 현장 · 호기)를 각각 캡처한다 — 총 144
+        # 운영 현황은 드릴다운 3단계(전국 · 현장 · 호기)를 각각 캡처한다 — 총수는 아래 expected에서 파생
         levels = ["nation", "site", "unit"] if view["view"] == "overview" else [None]
         for app, sizes in SIZES.items():
             screen = screens.get(view.get(app))
