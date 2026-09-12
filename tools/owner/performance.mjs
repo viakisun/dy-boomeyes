@@ -171,9 +171,9 @@ try {
         { query: 'no-matching-owner-device', count: 0 },
       ];
       const filters = [
-        { filter: 'stored', count: 1 },
+        { filter: 'stored', count: 17 },
         { filter: 'all', count: 120 },
-        { filter: 'deployed', count: 119 },
+        { filter: 'deployed', count: 103 },
         { filter: 'all', count: 120 },
       ];
       for (let i = 0; i < 25; i++) {

@@ -57,7 +57,7 @@
       <div
         class="rounded-card shadow-raised h-layout-panel-height flex overflow-hidden lg:col-span-7 lg:aspect-[7/6] lg:h-auto"
       >
-        {@render map!(data.devices, focused)}
+        {@render map!(devices, focused)}
       </div>
     {/if}
     <div class="relative min-h-0 min-w-0 {hasMap ? 'lg:col-span-5' : 'lg:col-span-12'}">

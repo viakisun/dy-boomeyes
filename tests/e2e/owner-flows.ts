@@ -58,8 +58,9 @@ export function ownerFlows(app: OwnerApp) {
     const search = page.getByLabel('호기·현장 검색', { exact: true });
     await search.fill('마포');
     await page.getByLabel('배치 필터', { exact: true }).selectOption('deployed');
-    const device = ownerHost(page, 'fleet').locator('[data-device]');
-    await expect(device).toHaveCount(1);
+    const devices = ownerHost(page, 'fleet').locator('[data-device]');
+    await expect(devices).toHaveCount(5); // 마포 현장 호기 1·6·7·8·9
+    const device = devices.first();
     await expect(device).toHaveAttribute('data-device', 'CPB-001');
     await device.click();
     const detail = ownerHost(page, 'detail');
@@ -71,13 +72,13 @@ export function ownerFlows(app: OwnerApp) {
     await page.getByRole('link', { name: '장비 목록으로', exact: true }).click();
     await expect(search).toHaveValue('마포');
     await expect(page.getByLabel('배치 필터', { exact: true })).toHaveValue('deployed');
-    await expect(device).toHaveCount(1);
+    await expect(devices).toHaveCount(5);
     await page.reload();
     await expect(search).toHaveValue('마포');
     await expect(device).toHaveAttribute('data-device', 'CPB-001');
-    await search.fill('');
+    await search.fill('5호기');
     await page.getByLabel('배치 필터', { exact: true }).selectOption('stored');
-    await expect(device).toHaveCount(1);
+    await expect(devices).toHaveCount(1); // 보관 17대 중 '5호기'는 5호기뿐(85·95는 투입)
     await expect(device).toContainText('보관');
     await expect(device).toHaveAttribute('data-device', 'CPB-005');
     await expect(device).not.toContainText('즉시 투입 가능');
@@ -86,35 +87,35 @@ export function ownerFlows(app: OwnerApp) {
   test('[B1-02] [FR-024] [AC-O04] [AC-O07] inventory axes and distinct affected devices', async ({ page }) => {
     await startOwner(page, app);
     const summary = page.locator('[data-owner-summary]');
-    await expect(summary).toHaveAttribute('data-total', '5');
-    await expect(summary).toHaveAttribute('data-deployed', '4');
-    await expect(summary).toHaveAttribute('data-stored', '1');
+    await expect(summary).toHaveAttribute('data-total', '120');
+    await expect(summary).toHaveAttribute('data-deployed', '103');
+    await expect(summary).toHaveAttribute('data-stored', '17');
     await expect(summary).toHaveAttribute('data-unknown', '0');
-    await expect(ownerHost(page)).toContainText(/3대/);
+    await expect(ownerHost(page)).toContainText(/6대/);
     await page.goto(`${paths.overview}?capture=1&state=boundaries`);
-    await expect(summary).toHaveAttribute('data-total', '5');
-    await expect(summary).toHaveAttribute('data-deployed', '3');
-    await expect(summary).toHaveAttribute('data-stored', '1');
+    await expect(summary).toHaveAttribute('data-total', '120');
+    await expect(summary).toHaveAttribute('data-deployed', '102');
+    await expect(summary).toHaveAttribute('data-stored', '17');
     await expect(summary).toHaveAttribute('data-unknown', '1');
-    // CPB-002 has both voltage and inspection alerts; inventory remains five.
+    // CPB-002 has both voltage and inspection alerts; inventory remains 120.
     await page.getByRole('navigation').getByRole('link', { name: '보유 장비', exact: true }).click();
-    await expect(ownerHost(page, 'fleet').locator('[data-device]')).toHaveCount(5);
+    await expect(ownerHost(page, 'fleet').locator('[data-device]')).toHaveCount(120);
   });
 
-  test('[B1-02] [FR-024] [AC-O07] overview shows three of four alerts and opens all four', async ({ page }) => {
+  test('[B1-02] [FR-024] [AC-O07] overview shows three of seven alerts and opens all seven', async ({ page }) => {
     await startOwner(page, app);
     await page.goto(`${paths.overview}?capture=1&state=boundaries`);
     const overview = ownerHost(page, 'overview');
     const preview = overview.getByRole('list', { name: '우선 확인 알림', exact: true });
     await expect(preview.getByRole('listitem')).toHaveCount(3);
-    await expect(overview).toContainText('전체 알림 4건 중 3건 표시');
-    await expect(overview.getByRole('heading', { name: '확인이 필요한 장비 3대', exact: true })).toBeVisible();
-    // The fourth alert must remain reachable even when it falls outside the overview limit.
+    await expect(overview).toContainText('전체 알림 7건 중 3건 표시');
+    await expect(overview.getByRole('heading', { name: '확인이 필요한 장비 6대', exact: true })).toBeVisible();
+    // Connection alerts sort last, so CPB-004 must remain reachable outside the overview limit.
     await expect(preview.locator('[data-device="CPB-004"]')).toHaveCount(0);
     await overview.getByRole('link', { name: '알림 전체 보기', exact: true }).click();
     const alerts = ownerHost(page, 'alerts').getByRole('region', { name: '알림 목록', exact: true });
-    await expect(alerts).toContainText('표시 4건 / 전체 4건');
-    await expect(alerts.locator('[data-alert]')).toHaveCount(4);
+    await expect(alerts).toContainText('표시 7건 / 전체 7건');
+    await expect(alerts.locator('[data-alert]')).toHaveCount(7);
     await expect(alerts.locator('[data-alert="CPB-004-STALE"]')).toBeVisible();
   });
 
@@ -163,8 +164,8 @@ export function ownerFlows(app: OwnerApp) {
       await detail.getByRole('link', { name: '장비 목록으로', exact: true }).click();
       await expect(page.getByLabel('호기·현장 검색', { exact: true })).toHaveValue('마포');
       await expect(page.getByLabel('배치 필터', { exact: true })).toHaveValue('deployed');
-      await expect(ownerHost(page, 'fleet').locator('[data-device]')).toHaveCount(1);
-      await expect(ownerHost(page, 'fleet').locator('[data-device]')).toHaveAttribute('data-device', 'CPB-001');
+      await expect(ownerHost(page, 'fleet').locator('[data-device]')).toHaveCount(5);
+      await expect(ownerHost(page, 'fleet').locator('[data-device]').first()).toHaveAttribute('data-device', 'CPB-001');
     });
   }
 
@@ -259,7 +260,7 @@ export function ownerFlows(app: OwnerApp) {
     await expect(page.getByRole('button', { name: /다시 시도/ })).toBeVisible();
     await expect(page.locator('[data-device]')).toHaveCount(0);
     await page.getByRole('button', { name: /다시 시도/ }).click();
-    await expect(ownerHost(page, 'fleet').locator('[data-device]')).toHaveCount(5);
+    await expect(ownerHost(page, 'fleet').locator('[data-device]')).toHaveCount(120);
   });
 
   test('[B1-02] [FR-024] [AC-O06] [AC-O15] reading alert preserves fault and correct device context', async ({
@@ -333,7 +334,7 @@ export function ownerFlows(app: OwnerApp) {
   test('[B1-02] [FR-024] [AC-O15] ordinary state query does not replace live owner data', async ({ page }) => {
     await startOwner(page, app);
     await page.goto(`${paths.fleet}?state=empty`);
-    await expect(ownerHost(page, 'fleet').locator('[data-device]')).toHaveCount(5);
+    await expect(ownerHost(page, 'fleet').locator('[data-device]')).toHaveCount(120);
     await expect(ownerHost(page, 'fleet')).toHaveAttribute('data-owner-dataset', 'owner');
   });
 

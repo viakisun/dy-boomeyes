@@ -4,11 +4,30 @@ import { FIXED_CLOCK, OWNER_DEMO, SCREENS, type ScrId } from './generated/ids';
 export type OwnerView = (typeof OWNER_DEMO)[number]['view'];
 export type OwnerApp = 'web' | 'pwa';
 export type OwnerDataset = 'owner' | 'empty' | 'boundaries' | 'large';
+/** 전국 현황의 지역 집계 단위(좁은 지도에서 현장 대신 표시) */
+export const OWNER_REGIONS = ['서울', '인천·경기', '강원', '대전·충청', '광주·호남', '대구·경북', '부산·경남'] as const;
+export type OwnerRegion = (typeof OWNER_REGIONS)[number];
+/** 호기가 투입·보관된 장소. 보관소(depot)는 건설사·담당자·기간이 없다. */
+export interface OwnerSite {
+  id: string;
+  ownerId: string;
+  name: string;
+  /** 지도 알약에 들어가는 짧은 이름(2~4자) */
+  short: string;
+  kind: 'site' | 'depot';
+  company: string | null;
+  address: string;
+  region: OwnerRegion;
+  location: { lat: number; lng: number };
+  contact: { name: string; job: string; phone: string } | null;
+  period: { from: string; to: string } | null;
+}
 export interface OwnerDevice {
   id: string;
   ownerId: string;
   unit: number;
   model: string;
+  siteId: string;
   site: string;
   address: string;
   location: { lat: number; lng: number } | null;
@@ -16,7 +35,11 @@ export interface OwnerDevice {
   connection: 'current' | 'stale' | 'unintegrated' | 'detached';
   receivedAt: string | null;
   voltage: number | null;
+  /** 단선 감지 — 마지막 수신값. null = 미연동·미장착 */
+  harness: 'ok' | 'disconnected' | null;
   fault: string | null;
+  /** 제어기 고장 코드(고객 관제 요구: 전압·단선 고장코드). fault가 없으면 null */
+  errorCode: string | null;
   inspection: string | null;
   contract: { company: string; from: string; to: string; installed: string } | null;
   contact: { name: string; job: string; phone: string } | null;
@@ -61,6 +84,7 @@ export interface OwnerSnapshot {
   dataset: OwnerDataset;
   at: string;
   company: string;
+  sites: OwnerSite[];
   devices: OwnerDevice[];
   documents: OwnerDocument[];
   alerts: OwnerAlert[];
@@ -153,6 +177,56 @@ export function ownerSummary(devices: readonly OwnerDevice[], alerts: readonly O
     attention: new Set(unique.map((a) => a.deviceId)).size,
     alerts: unique.length,
   };
+}
+/** 운영 상태 띠 — 가동 중은 투입·최근 수신·이상 없음. 보관은 가동으로 더하지 않는다. */
+export function ownerStrip(devices: readonly OwnerDevice[]) {
+  const strip = { total: devices.length, running: 0, inspection: 0, fault: 0, stale: 0, stored: 0, unknown: 0 };
+  for (const d of devices) {
+    if (d.deployment === 'stored') strip.stored++;
+    else if (d.deployment === 'unknown') strip.unknown++;
+    else if (d.fault) strip.fault++;
+    else if (d.inspection) strip.inspection++;
+    else if (d.connection === 'stale') strip.stale++;
+    else if (d.connection === 'current') strip.running++;
+  }
+  return strip;
+}
+export const OWNER_SITE_WORST = ['normal', 'stale', 'inspection', 'fault'] as const;
+export type OwnerSiteWorst = (typeof OWNER_SITE_WORST)[number];
+/** 현장 한 줄 요약 — 호기 수·투입/보관·확인 필요 대수·가장 나쁜 상태 */
+export function ownerSiteSummary(site: OwnerSite, devices: readonly OwnerDevice[], alerts: readonly OwnerAlert[]) {
+  const units = devices.filter((d) => d.siteId === site.id);
+  const ids = new Set(units.map((d) => d.id));
+  const attention = new Set(alerts.filter((a) => ids.has(a.deviceId)).map((a) => a.deviceId)).size;
+  let worst: OwnerSiteWorst = 'normal';
+  for (const d of units) {
+    const state: OwnerSiteWorst = d.fault
+      ? 'fault'
+      : d.inspection
+        ? 'inspection'
+        : d.connection === 'stale'
+          ? 'stale'
+          : 'normal';
+    if (OWNER_SITE_WORST.indexOf(state) > OWNER_SITE_WORST.indexOf(worst)) worst = state;
+  }
+  return {
+    units: units.length,
+    deployed: units.filter((d) => d.deployment === 'deployed').length,
+    stored: units.filter((d) => d.deployment === 'stored').length,
+    attention,
+    worst,
+  };
+}
+export type OwnerLevel =
+  | { level: 'nation'; site?: undefined; device?: undefined }
+  | { level: 'site'; site: OwnerSite; device?: undefined }
+  | { level: 'unit'; site: OwnerSite; device: OwnerDevice };
+/** 현황 드릴다운 단계 — ?site= 가 실존해야 현장, ?device= 는 그 현장 소속일 때만 호기 */
+export function ownerLevel(url: URL, snap: Pick<OwnerSnapshot, 'sites' | 'devices'>): OwnerLevel {
+  const site = snap.sites.find((s) => s.id === url.searchParams.get('site'));
+  if (!site) return { level: 'nation' };
+  const device = snap.devices.find((d) => d.id === url.searchParams.get('device') && d.siteId === site.id);
+  return device ? { level: 'unit', site, device } : { level: 'site', site };
 }
 export const OWNER_DEPLOYMENT = { deployed: '현장 투입', stored: '보관 중', unknown: '배치 미확인' } as const;
 export const OWNER_CONNECTION = {

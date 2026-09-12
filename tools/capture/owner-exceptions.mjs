@@ -397,7 +397,7 @@ try {
         await expect(host.locator('[data-device]')).toHaveCount(0);
         await capture('failed');
         await host.getByRole('button', { name: '다시 시도', exact: true }).click();
-        await expect(host.locator('[data-device]')).toHaveCount(5);
+        await expect(host.locator('[data-device]')).toHaveCount(120);
         await capture('recovered', { full: true });
       } else if (scenario.id === 'missing-detail') {
         for (const text of ['미연동', '계약 정보 미등록', '담당자 미등록', '배치 미확인'])

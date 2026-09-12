@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { ownerMatches, ownerSummary, type Session } from '@boomeyes/domain';
+import { ownerMatches, ownerStrip, ownerSummary, type Session } from '@boomeyes/domain';
 import { createOwnerApi, seedOwner } from './owner';
 
 const A = { role: 'owner', ownerId: 'OWN-001' } as const;
@@ -30,8 +30,13 @@ describe('[FR-024] 소유주 자료 경계', () => {
     const b = make(B);
     const sa = await a.snapshot();
     const sb = await b.snapshot();
-    expect(sa.devices.map((d) => d.id)).toEqual(['CPB-001', 'CPB-002', 'CPB-003', 'CPB-004', 'CPB-005']);
+    expect(sa.devices).toHaveLength(120);
+    expect(sa.devices.slice(0, 5).map((d) => d.id)).toEqual(['CPB-001', 'CPB-002', 'CPB-003', 'CPB-004', 'CPB-005']);
+    expect(sa.devices.some((d) => d.id === 'CPB-101')).toBe(false);
+    expect(sa.devices.some((d) => d.id === 'CPB-121')).toBe(true);
+    expect(sa.sites).toHaveLength(13);
     expect(sb.devices.map((d) => d.id)).toEqual(['CPB-101']);
+    expect(sb.sites.map((s) => s.id)).toEqual(['SITE-OTHER']);
     expect(sa.documents).toHaveLength(10);
     expect(sb.documents).toHaveLength(2);
     expect(sb.alerts.map((a) => a.id)).toEqual(['CPB-101-FAULT']);
@@ -67,15 +72,24 @@ describe('[FR-024] 소유주 자료 경계', () => {
 });
 
 describe('[FR-025] 배치·이상·정보 시각의 독립성', () => {
-  it('5=4+1+0, 확인은 3대/3건이며 보관은 이상으로 더하지 않는다', async () => {
+  it('120=103+17+0, 확인은 6대/6건이며 보관은 이상으로 더하지 않는다', async () => {
     const s = await make().snapshot();
     expect(ownerSummary(s.devices, s.alerts)).toEqual({
-      total: 5,
-      deployed: 4,
-      stored: 1,
+      total: 120,
+      deployed: 103,
+      stored: 17,
       unknown: 0,
-      attention: 3,
-      alerts: 3,
+      attention: 6,
+      alerts: 6,
+    });
+    expect(ownerStrip(s.devices)).toEqual({
+      total: 120,
+      running: 97,
+      inspection: 2,
+      fault: 2,
+      stale: 2,
+      stored: 17,
+      unknown: 0,
     });
     expect(s.devices[4]!).toMatchObject({
       deployment: 'stored',
@@ -88,12 +102,12 @@ describe('[FR-025] 배치·이상·정보 시각의 독립성', () => {
   it('중복 알림과 한 호기의 여러 이상을 장비 대수에 중복 합산하지 않는다', async () => {
     const s = await make(A, 'boundaries').snapshot();
     expect(ownerSummary(s.devices, [...s.alerts, ...s.alerts])).toEqual({
-      total: 5,
-      deployed: 3,
-      stored: 1,
+      total: 120,
+      deployed: 102,
+      stored: 17,
       unknown: 1,
-      attention: 3,
-      alerts: 4,
+      attention: 6,
+      alerts: 7,
     });
     expect(s.devices[0]!).toMatchObject({
       location: null,
@@ -106,7 +120,7 @@ describe('[FR-025] 배치·이상·정보 시각의 독립성', () => {
   });
   it('정상·보관 장비도 호기와 현장으로 검색한다', async () => {
     const s = await make().snapshot();
-    expect(s.devices.filter((d) => ownerMatches(d, '마포', 'all')).map((d) => d.unit)).toEqual([1]);
+    expect(s.devices.filter((d) => ownerMatches(d, '마포', 'all')).map((d) => d.unit)).toEqual([1, 6, 7, 8, 9]);
     expect(s.devices.filter((d) => ownerMatches(d, '5호기', 'stored')).map((d) => d.unit)).toEqual([5]);
     expect(s.devices.filter((d) => ownerMatches(d, '없는 현장', 'all'))).toEqual([]);
   });
@@ -116,13 +130,32 @@ describe('[FR-025] 배치·이상·정보 시각의 독립성', () => {
     const s = await api.snapshot();
     expect(s.alerts[0]!.read).toBe(true);
     expect(s.devices[1]!.fault).toBe('공급 전압 저하');
-    expect(ownerSummary(s.devices, s.alerts).attention).toBe(3);
+    expect(ownerSummary(s.devices, s.alerts).attention).toBe(6);
   });
-  it('120대 성능 세트와 빈 세트는 기본 시드를 바꾸지 않는다', async () => {
-    expect((await make(A, 'large').snapshot()).devices).toHaveLength(120);
+  it('large는 기본 세트의 별칭이고 빈 세트는 장비·현장이 없다', async () => {
+    const owner = await make().snapshot();
+    const large = await make(A, 'large').snapshot();
+    expect(large.devices).toHaveLength(120);
+    expect({ ...large, dataset: 'owner' }).toEqual(owner);
     expect((await make(A, 'empty').snapshot()).devices).toHaveLength(0);
-    expect((await make().snapshot()).devices).toHaveLength(5);
-    expect(seedOwner().devices).toHaveLength(6);
+    expect((await make(A, 'empty').snapshot()).sites).toHaveLength(0);
+    expect(seedOwner().devices).toHaveLength(121);
+  });
+  it('모든 호기는 실존 현장에 속하고 현장 좌표 근처에 있으며 보관은 보관소에만 있다', () => {
+    const s = seedOwner();
+    const sites = new Map(s.sites.map((site) => [site.id, site]));
+    for (const d of s.devices) {
+      const site = sites.get(d.siteId)!;
+      expect(site, d.id).toBeDefined();
+      expect(d.site).toBe(site.name);
+      expect(Math.abs(d.location!.lat - site.location.lat)).toBeLessThan(0.01);
+      expect(Math.abs(d.location!.lng - site.location.lng)).toBeLessThan(0.01);
+      expect(d.deployment === 'stored').toBe(site.kind === 'depot');
+      expect(d.errorCode !== null).toBe(d.fault !== null);
+    }
+    expect(s.devices.filter((d) => d.location!.lat === 37.55 && d.location!.lng === 126.94).map((d) => d.id)).toEqual([
+      'CPB-001',
+    ]);
   });
 });
 
@@ -156,6 +189,6 @@ describe('[FR-016] 시연 첨부와 재시도', () => {
   it('조회 오류 뒤 재시도는 실제 자료를 반환한다', async () => {
     const api = createOwnerApi(A, { error: true, latencyMs: 0 });
     await expect(api.snapshot()).rejects.toThrow('불러오지');
-    expect((await api.snapshot()).devices).toHaveLength(5);
+    expect((await api.snapshot()).devices).toHaveLength(120);
   });
 });

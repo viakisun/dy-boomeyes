@@ -3,79 +3,30 @@ import {
   OWNER_UPLOAD_LIMIT,
   type OwnerApi,
   type OwnerDataset,
-  type OwnerDevice,
   type OwnerDocument,
   type OwnerSnapshot,
   type Session,
 } from '@boomeyes/domain';
 import { LOOP_MP4, LOOP_SEC, STILL } from '@boomeyes/video/assets';
 import { OWNER_ASSETS } from './assets/owner';
+import { OWNER_SITES, ownerFleet } from './owner-fleet';
 
 type Options = { dataset?: OwnerDataset; error?: boolean; latencyMs?: number; offline?: () => boolean };
 type BoundSession = Pick<Session, 'role' | 'ownerId'> | null;
 const clone = <T>(value: T): T => structuredClone(value);
 const pause = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms));
 
-/** ENT 장비·계약·서류의 시연 읽기 모델. 기존 seed와 섞지 않아 제조사 시연을 보존한다. */
+/** ENT 장비·계약·서류의 시연 읽기 모델. 기존 seed와 섞지 않아 제조사 시연을 보존한다. 기본 세트가 120대·현장 13곳(large는 별칭). */
 export function seedOwner(dataset: OwnerDataset = 'owner'): OwnerSnapshot {
-  const sites = [
-    '마포 주상복합 신축',
-    '송도 업무시설 신축',
-    '평택 물류센터',
-    '대전 공동주택',
-    '용인 장비 보관소',
-    '다른 회사 전용 현장',
-  ];
-  const devices: OwnerDevice[] = [1, 2, 3, 4, 5, 101].map((unit, i) => ({
-    id: `CPB-${String(unit).padStart(3, '0')}`,
-    ownerId: unit === 101 ? 'OWN-002' : 'OWN-001',
-    unit,
-    model: 'DY CPB 32',
-    site: sites[i]!,
-    address: ['서울 마포구', '인천 연수구', '경기 평택시', '대전 유성구', '경기 용인시', '부산 강서구'][i]!,
-    location: {
-      lat: [37.55, 37.38, 36.99, 36.35, 37.24, 35.18][i]!,
-      lng: [126.94, 126.64, 127.09, 127.35, 127.2, 128.97][i]!,
-    },
-    deployment: unit === 5 ? 'stored' : 'deployed',
-    connection: unit === 5 ? 'detached' : unit === 4 ? 'stale' : 'current',
-    receivedAt: unit === 5 ? null : unit === 4 ? '2026-07-03T08:22:00+09:00' : '2026-07-03T10:41:00+09:00',
-    voltage: unit === 5 ? null : unit === 2 || unit === 101 ? 342 : 380,
-    fault: unit === 2 || unit === 101 ? '공급 전압 저하' : null,
-    inspection: unit === 3 ? '수송관 점검 시기 도래' : null,
-    contract:
-      unit === 5
-        ? null
-        : {
-            company: unit === 101 ? '두번째건설' : ['한빛건설', '해오름건설', '새길건설', '한빛건설'][i]!,
-            from: '2026-06-01',
-            to: i === 0 ? '2026-09-30' : '2026-10-31',
-            installed: '2026-06-03',
-          },
-    contact:
-      unit === 5
-        ? null
-        : {
-            name: unit === 101 ? '타사 담당자' : ['김현장', '이현장', '박현장', '최현장'][i]!,
-            job: '현장 담당자',
-            phone: '010-0000-0000',
-          },
-    parts: [
-      {
-        name: '수송관',
-        measured: unit === 3 ? '누적 타설량 9,800 m³' : '누적 타설량 4,200 m³',
-        reference: '점검 시연 기준 9,500 m³',
-        due: unit === 3,
-      },
-      { name: '유압 필터', measured: '가동 180시간', reference: null, due: false },
-    ],
-  }));
+  const sites = OWNER_SITES.map((s) => clone(s));
+  const devices = ownerFleet();
   if (dataset === 'boundaries') {
     Object.assign(devices[0]!, {
       deployment: 'unknown',
       connection: 'unintegrated',
       receivedAt: null,
       voltage: null,
+      harness: null,
       location: null,
       contract: null,
       contact: null,
@@ -87,19 +38,6 @@ export function seedOwner(dataset: OwnerDataset = 'owner'): OwnerSnapshot {
       reference: '점검 시연 기준 9,500 m³',
       due: true,
     };
-  }
-  if (dataset === 'large') {
-    for (let unit = 6; unit <= 120; unit++) {
-      if (unit === 101) continue;
-      devices.push({
-        ...clone(devices[0]!),
-        id: `CPB-${String(unit).padStart(3, '0')}`,
-        unit,
-        site: `시연 현장 ${unit}`,
-        ownerId: 'OWN-001',
-      });
-    }
-    devices.push({ ...clone(devices[0]!), id: 'CPB-121', unit: 121, site: '성능 시연 현장', ownerId: 'OWN-001' });
   }
   const visible = dataset === 'empty' ? devices.filter((d) => d.ownerId === 'OWN-002') : devices;
   const documents: OwnerDocument[] = devices.flatMap((d) => {
@@ -137,6 +75,7 @@ export function seedOwner(dataset: OwnerDataset = 'owner'): OwnerSnapshot {
     dataset,
     at: OWNER_CLOCK,
     company: '한빛중기',
+    sites: dataset === 'empty' ? sites.filter((s) => s.ownerId === 'OWN-002') : sites,
     devices: visible,
     documents,
     alerts: devices.flatMap((d) => [
@@ -147,7 +86,10 @@ export function seedOwner(dataset: OwnerDataset = 'owner'): OwnerSnapshot {
               deviceId: d.id,
               kind: 'fault' as const,
               title: d.fault,
-              detail: '마지막 측정 342 V · 시연 기준 380 V. 현장 전원 상태를 담당자에게 확인하세요.',
+              detail:
+                d.errorCode === 'E-021'
+                  ? `마지막 측정 ${d.voltage} V · 시연 기준 380 V · 고장코드 ${d.errorCode}. 현장 전원 상태를 담당자에게 확인하세요.`
+                  : `유압 압력이 시연 기준을 벗어났습니다 · 고장코드 ${d.errorCode}. 현장 담당자에게 확인하세요.`,
               at: '2026-07-03T10:38:00+09:00',
               read: false,
             },
@@ -173,7 +115,10 @@ export function seedOwner(dataset: OwnerDataset = 'owner'): OwnerSnapshot {
               deviceId: d.id,
               kind: 'connection' as const,
               title: '수신 지연',
-              detail: '마지막 수신 이후 새 자료가 없습니다. 통신과 현장 상태를 확인하세요.',
+              detail:
+                d.harness === 'disconnected'
+                  ? '마지막 수신 이후 새 자료가 없고 단선이 감지됐습니다. 통신선과 현장 상태를 확인하세요.'
+                  : '마지막 수신 이후 새 자료가 없습니다. 통신과 현장 상태를 확인하세요.',
               at: '2026-07-03T08:22:00+09:00',
               read: false,
             },
@@ -237,6 +182,7 @@ export function createOwnerApi(
       return clone({
         ...source,
         company: owner === 'OWN-002' ? '새봄중기' : '한빛중기',
+        sites: source.sites.filter((s) => s.ownerId === owner),
         devices,
         documents: source.documents.filter((d) => ids.has(d.deviceId)),
         alerts: source.alerts.filter((a) => ids.has(a.deviceId)),
