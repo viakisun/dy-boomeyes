@@ -42,7 +42,10 @@
     offline: 'var(--sys-color-domain-equipment-offline-solid)',
     maintenance: 'var(--sys-color-domain-equipment-maintenance-solid)',
   };
-  const GLYPH: Record<string, string> = { normal: '', caution: '!', fault: '✕', offline: '·', maintenance: '⚙' };
+  const GLYPH: Record<string, string> = { normal: '', caution: '!', fault: '✕', offline: '', maintenance: '⚙' };
+  // 수신 없음은 글자 대신 wifi-off 아이콘(lucide 경로) — '·'은 읽히지 않는다
+  const OFFLINE_SVG =
+    '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h.01"/><path d="M8.5 16.4a5 5 0 0 1 7 0"/><path d="M5 12.9a10 10 0 0 1 5.2-2.7"/><path d="M19 12.9a10 10 0 0 0-2-1.5"/><path d="M2 8.8a15 15 0 0 1 4.2-2.6"/><path d="M22 8.8A15 15 0 0 0 10.7 5"/><path d="m2 2 20 20"/></svg>';
   // 겹치는 마커 펼침 — 마커 변경·줌 종료마다 화면 좌표로 다시 계산. 현장·지역 알약은 세로로 펼쳐 옆 패널에 가려지지 않게 한다.
   function relayout() {
     if (!map) return;
@@ -60,12 +63,15 @@
       const o = off.get(id) ?? { x: 0, y: 0 };
       h.setOffset([o.x, o.y]);
     }
+    // 리더선은 호기 핀의 가로 펼침에만 — 현장·지역 알약은 점 위에 그대로 서 있다(지도 위 선은 가장 시끄러운 요소)
     if (pill)
-      leaders = markers.map((marker) => {
-        const point = map!.project([marker.lng, marker.lat]);
-        const o = off.get(marker.id) ?? { x: 0, y: 0 };
-        return { id: marker.id, x: point.x, y: point.y, endX: point.x + o.x, endY: point.y + o.y };
-      });
+      leaders = vertical
+        ? []
+        : markers.map((marker) => {
+            const point = map!.project([marker.lng, marker.lat]);
+            const o = off.get(marker.id) ?? { x: 0, y: 0 };
+            return { id: marker.id, x: point.x, y: point.y, endX: point.x + o.x, endY: point.y + o.y };
+          });
   }
   // 준비 표식 — 카메라 이동마다 내렸다가 다음 idle에 다시 세운다(캡처·e2e는 단계 속성까지 기다린다)
   function arm() {
@@ -111,12 +117,18 @@
     d.setAttribute('aria-label', `${m.description ?? m.label} — ${m.state}`);
     d.dataset.state = m.state;
     d.dataset.kind = kind;
+    if (m.variant) d.dataset.variant = m.variant;
+    else delete d.dataset.variant;
+    // 대수 무게(지역·현장 알약): 20대 이상 heavy · 10대 이상 mid — 배지 크기로 드러난다
+    d.dataset.weight = (m.count ?? 0) >= 20 ? 'heavy' : (m.count ?? 0) >= 10 ? 'mid' : 'light';
     d.title = m.description ?? m.label;
     d.style.cssText = `--pin:${pill && m.state === 'normal' ? 'var(--sys-color-fg-muted)' : (COLOR[m.state] ?? COLOR.offline)}`;
-    (d.querySelector('.be-marker__dot') as HTMLElement).textContent =
-      kind === 'region'
-        ? String(m.count ?? '')
-        : compact && kind === 'unit'
+    // 상태 문법: 정상은 작은 중립 점(현장·지역) 또는 ✓(호기) · 이상은 상태색 원 + 글리프 3종(✕ · ! · 수신 없음 아이콘)
+    const dot = d.querySelector('.be-marker__dot') as HTMLElement;
+    if (m.state === 'offline' && !(compact && kind === 'unit')) dot.innerHTML = OFFLINE_SVG;
+    else
+      dot.textContent =
+        compact && kind === 'unit'
           ? m.label.replace(/호기$/, '')
           : pill && m.state === 'normal'
             ? kind === 'unit'
@@ -124,9 +136,9 @@
               : ''
             : (GLYPH[m.state] ?? '');
     (d.querySelector('.be-marker__label') as HTMLElement).textContent = m.label;
-    // 대수 배지는 현장 알약에만 만든다(빈 자식을 남기지 않는다 — 캡처 도구의 자식 중심 도달 검사)
+    // 대수 배지는 현장·지역 알약에만 만든다(빈 자식을 남기지 않는다 — 캡처 도구의 자식 중심 도달 검사)
     let count = d.querySelector('.be-marker__count') as HTMLElement | null;
-    if (kind === 'site' && m.count !== undefined) {
+    if (kind !== 'unit' && m.count !== undefined) {
       if (!count)
         count = d.appendChild(Object.assign(document.createElement('span'), { className: 'be-marker__count' }));
       count.textContent = String(m.count);
@@ -343,15 +355,33 @@
     text-align: center;
     font-variant-numeric: tabular-nums;
   }
-  /* 지역 집계: 대수를 담은 큰 원 + 지역명 */
-  .fit-markers :global(.be-marker[data-kind='region'] .be-marker__dot) {
-    width: var(--sys-size-control-lg);
-    height: var(--sys-size-control-lg);
+  /* 정상 현장·지역: 작은 중립 점 — 이상이 없는 곳이 가장 무거워 보이지 않게(무게 = 심각도) */
+  .fit-markers :global(.be-marker[data-kind='site'][data-state='normal'] .be-marker__dot),
+  .fit-markers :global(.be-marker[data-kind='region'][data-state='normal'] .be-marker__dot) {
+    width: var(--sys-size-indicator);
+    height: var(--sys-size-indicator);
+    margin-inline: calc((var(--sys-size-icon-md) - var(--sys-size-indicator)) / 2);
+    background: var(--sys-color-fg-subtle);
+  }
+  /* 보관소: 점 대신 작은 사각 표식 */
+  .fit-markers :global(.be-marker[data-variant='depot'][data-state='normal'] .be-marker__dot) {
+    border-radius: var(--sys-radius-mark);
+    background: var(--sys-color-fg-muted);
+  }
+  /* 지역 알약: 이름 label-md, 대수 배지가 무게(heavy ≥ 20 · mid ≥ 10)에 따라 커진다 */
+  .fit-markers :global(.be-marker[data-kind='region'] .be-marker__count) {
     font: var(--sys-type-label-md);
     font-weight: 700;
+    color: var(--sys-color-fg-default);
   }
-  .fit-markers :global(.be-marker[data-kind='region']) {
-    padding: var(--sys-space-inset-xs) var(--sys-space-inset-sm) var(--sys-space-inset-xs) var(--sys-space-inset-xs);
+  .fit-markers :global(.be-marker[data-weight='heavy'] .be-marker__count) {
+    font: var(--sys-type-label-lg);
+    font-weight: 700;
+    padding: 0 var(--sys-space-inline-sm);
+    background: var(--sys-color-bg-ui-active);
+  }
+  .fit-markers :global(.be-marker[data-weight='mid'] .be-marker__count) {
+    background: var(--sys-color-bg-ui-active);
   }
   /* 좁은 지도: 호기 번호만 담은 원형 핀(상태는 색 + aria-label) */
   .pins-compact :global(.be-marker) {
@@ -377,11 +407,6 @@
     width: var(--sys-size-icon-md);
     height: var(--sys-size-icon-md);
     font: var(--sys-type-label-sm);
-  }
-  .pins-compact :global(.be-marker[data-kind='region'] .be-marker__dot) {
-    width: var(--sys-size-icon-xl);
-    height: var(--sys-size-icon-xl);
-    font: var(--sys-type-label-md);
   }
   .pins-compact :global(.be-marker[data-kind='site'] .be-marker__label),
   .pins-compact :global(.be-marker[data-kind='region'] .be-marker__label) {

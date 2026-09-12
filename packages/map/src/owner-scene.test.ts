@@ -89,6 +89,7 @@ describe('[B1-02] 현황 지도 장면 → 마커', () => {
       ['SITE-DD', 'site', 'DD', 1, 'normal', false],
     ]);
     expect(sites[2]!.description).toContain('보관 1대');
+    expect(sites.map((m) => m.variant)).toEqual([undefined, undefined, 'depot']);
     const regions = ownerMarkers(nation({ aggregate: true }));
     expect(regions.map((m) => [m.id, m.kind, m.count, m.state])).toEqual([
       ['서울', 'region', 2, 'fault'],

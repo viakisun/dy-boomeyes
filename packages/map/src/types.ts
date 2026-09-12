@@ -13,6 +13,8 @@ export interface MapMarker {
   kind?: MarkerKind;
   /** site·region 알약의 대수 배지 */
   count?: number;
+  /** 보관소 현장 — 상태 점 대신 사각 표식 */
+  variant?: 'depot';
 }
 /** 카메라 지시 — key가 바뀔 때만 이동한다(같은 장면의 재렌더는 카메라를 건드리지 않는다). padding은 cameraForBounds에만 쓰고 지도에 남기지 않는다. */
 export type MapCamera = {

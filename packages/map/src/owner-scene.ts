@@ -70,6 +70,7 @@ export function ownerMarkers(scene: OwnerMapScene): MapMarker[] {
         state: worstState(units),
         label: site.short,
         count: units.length,
+        variant: site.kind === 'depot' ? ('depot' as const) : undefined,
         description: `${site.name} · ${site.kind === 'depot' ? '보관' : '투입'} ${units.length}대${site.company ? ` · ${site.company}` : ''}`,
         selected: scene.focused === site.id,
       };

@@ -272,6 +272,28 @@ export function ownerFlows(app: OwnerApp) {
     await expect(ownerHost(page, 'overview')).toHaveAttribute('data-owner-sim', '0');
   });
 
+  test('[B1-02] [FR-024] [AC-O13] nation map aggregates seven regions; a region pill zooms to its sites and the chip returns', async ({
+    page,
+  }) => {
+    await startOwner(page, app);
+    const overview = ownerHost(page, 'overview');
+    const map = overview.locator('.be-map');
+    await expect(map).toHaveAttribute('data-map-ready', '', MAP);
+    await expect(map.locator('.be-marker')).toHaveCount(7);
+    await expect(overview.locator('[data-owner-stage]')).toHaveAttribute('data-owner-map-mode', 'regions');
+    // 정상 지역은 작은 점, 이상이 있는 지역만 상태색 원 — 무게가 심각도를 따른다
+    await expect(map.locator('.be-marker[data-kind="region"][data-state="normal"]')).toHaveCount(3);
+    await map.getByRole('button', { name: /^서울 · 현장 1곳/ }).click();
+    await expect(overview.locator('[data-owner-stage]')).toHaveAttribute('data-owner-map-mode', 'sites');
+    await expect(map.locator('.be-marker[data-kind="site"]')).toHaveCount(1);
+    await expect(page.getByRole('navigation', { name: '현황 경로', exact: true })).toContainText('서울');
+    await expect(overview.getByRole('list', { name: '현장 목록', exact: true }).locator('[data-site]')).toHaveCount(1);
+    if (app === 'pwa') await overview.getByRole('button', { name: '시트 펼치기', exact: true }).last().click();
+    await overview.getByRole('button', { name: '전국으로', exact: true }).click();
+    await expect(overview.locator('[data-owner-stage]')).toHaveAttribute('data-owner-map-mode', 'regions');
+    await expect(map.locator('.be-marker')).toHaveCount(7);
+  });
+
   test('[B1-02] [FR-024] [AC-O12] [AC-O13] unknown site or foreign unit in the URL falls back to a valid level', async ({
     page,
   }) => {

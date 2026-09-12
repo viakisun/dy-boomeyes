@@ -254,8 +254,6 @@ export interface OwnerMapScene {
   padding: { top: number; right: number; bottom: number; left: number };
   onselect?: (kind: 'region' | 'site' | 'unit', id: string) => void;
 }
-/** 보이는 지도 폭(무대 − 패널)이 이 값 미만이면 전국을 지역 7개로 집계한다 — 현장 알약 13개는 웹 1280(가시 폭 ≈ 784px)에서만 겹치지 않고 놓인다 */
-export const OWNER_AGGREGATE_BELOW = 760;
 export const OWNER_DEPLOYMENT = { deployed: '현장 투입', stored: '보관 중', unknown: '배치 미확인' } as const;
 export const OWNER_CONNECTION = {
   current: '최근 수신',

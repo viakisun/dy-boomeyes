@@ -286,12 +286,11 @@ try {
           };
         });
         check(result.map.width >= 200 && result.map.height >= 200, 'Map has no usable visible area');
-        // 상세 1 · 전국은 현장 13(넓은 지도) 또는 지역 7(좁은 지도) · 현장·호기 단계는 마포 호기 5
-        const expectedMarkers =
-          row.view === 'detail' ? 1 : row.level === 'nation' ? (result.map.mode === 'regions' ? 7 : 13) : 5;
+        // 상세 1 · 전국은 지역 집계 7(어느 폭이든) · 현장·호기 단계는 마포 호기 5
+        const expectedMarkers = row.view === 'detail' ? 1 : row.level === 'nation' ? 7 : 5;
         check(
-          row.level !== 'nation' || ['sites', 'regions'].includes(result.map.mode),
-          `Nation map mode must be sites or regions (got ${result.map.mode})`,
+          row.level !== 'nation' || result.map.mode === 'regions',
+          `Nation map mode must be regions (got ${result.map.mode})`,
         );
         check(result.map.markers === expectedMarkers, `Map must show ${expectedMarkers} owned equipment marker(s)`);
         check((await page.locator('[data-map-error]').count()) === 0, 'Map tiles failed');

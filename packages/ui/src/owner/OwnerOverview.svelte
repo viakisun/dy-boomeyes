@@ -5,7 +5,6 @@
   import { tick, type Snippet } from 'svelte';
   import Clock from '@lucide/svelte/icons/clock';
   import {
-    OWNER_AGGREGATE_BELOW,
     ownerHref,
     ownerLevel,
     type OwnerCamera,
@@ -70,8 +69,8 @@
           ? stageHeight / 2
           : Math.max(0, stageHeight - insetXl),
   );
-  const visibleWidth = $derived(floating ? stageWidth - panelWidth - inset * 2 : stageWidth);
-  const aggregate = $derived(stageWidth > 0 && visibleWidth < OWNER_AGGREGATE_BELOW);
+  // 전국은 어느 폭에서든 지역 집계 7개 — 현장 13 알약은 수도권에서 세로 기둥이 된다. 지역 원을 누르면 그 지역으로 줌인하며 현장 알약으로 풀린다
+  const aggregate = true;
   const hasMap = $derived(!!map && data.devices.length > 0);
   const siteDevices = $derived(
     level.level === 'nation' ? data.devices : data.devices.filter((d) => d.siteId === level.site.id),
@@ -141,7 +140,7 @@
       }
     },
   });
-  const mapMode = $derived(level.level !== 'nation' ? 'units' : aggregate && !region ? 'regions' : 'sites');
+  const mapMode = $derived(level.level !== 'nation' ? 'units' : region ? 'sites' : 'regions');
 </script>
 
 {#snippet panels()}

@@ -528,8 +528,8 @@ try {
         await page.unroute(outagePattern, outage);
         await host.getByRole('button', { name: '지도 다시 불러오기', exact: true }).click();
         await expect(host.locator('[data-map-error]')).toHaveCount(0);
-        // 넓은 지도(web 1280)는 현장 13, 좁은 지도(pwa 390)는 지역 7
-        await expect(map.locator('.be-marker')).toHaveCount(scenario.app === 'web' ? 13 : 7);
+        // 전국은 지역 집계 7(어느 폭이든)
+        await expect(map.locator('.be-marker')).toHaveCount(7);
         await expect(map).toHaveAttribute('data-map-ready', '');
         await expect(map).toHaveAttribute('data-map-level', 'nation');
         await expect
