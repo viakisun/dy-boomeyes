@@ -6,9 +6,9 @@
 
 | 구성 | 수 |
 |---|---|
-| 토큰 전체 | 624 |
+| 토큰 전체 | 608 |
 | ref(원시) | 208 |
-| sys(시맨틱) | 324 |
+| sys(시맨틱) | 308 |
 | cmp(컴포넌트) | 92 |
 | 컴포넌트 카탈로그 | 108 |
 | 대비 검사 | 94/94 통과 |
@@ -25,7 +25,7 @@
 1. **하나의 시스템, 두 밀도.** 웹 백오피스(compact)와 현장 PWA(comfortable)는 같은 토큰·같은 컴포넌트를 쓰고 밀도 토큰만 다르다. 화면별 예외값을 만들지 않는다.
 2. **시맨틱 우선.** 화면 코드는 `sys`·`cmp` 토큰만 호출한다. `ref` 램프 직접 참조는 램프를 정의하는 곳(sys)과 차트·지도 계열에서만 허용한다.
 3. **모드는 값의 차이, 구조는 하나.** light/dark, compact/comfortable, 브랜드는 같은 토큰 경로에 다른 값을 넣는다. 다크 전용 토큰·브랜드 전용 토큰은 없다.
-4. **색 예산 — 화면당 accent · warning · danger.** 상태의 두 번째 단서는 텍스트다. 색 배경 pill은 주의가 필요한 warning·danger에만, success·info·progress·neutral 상태(정상 · 유효 · 검토 중 · 승인 · 활성)는 텍스트 라벨로(StatusPill quiet · Badge subtle은 중립). accent는 링크·탭·선택 같은 상호작용에만. 점(StatusDot)은 LIVE · REC · 촬영 중처럼 살아 움직이는 신호에만 — 장비 상태·텔레메트리 타일은 텍스트(warning·danger 값만 채색), 지도 범례 행은 두지 않는다(마커 글리프 ✓ ! ✕가 범례). 두절·수신 끊김은 warning으로 분류한다 — 관측 불능 상태를 정상처럼 보이게 하지 않는다(FR-034). Timeline 불릿은 회색 눈금(상태 점과 다른 모양). `pnpm design:audit:color`가 화면당 색상 계열을 센다(≤ 3). 브랜드 마크는 색 예산 밖이다 — 셸(사이드바·앱바·인쇄)은 단색(currentColor), 두 톤(accent.fg)은 로그인·앱 아이콘·문서 표지에만(§13). 텔레메트리의 '미수신'(수신 임계 초과)·'두절'은 warning 텍스트, '미연동'(연동 안 된 계측)은 muted 텍스트 — 옛 값을 정상처럼 두지 않는다(§12.2 · FR-034).
+4. **색 예산 — 화면당 accent · warning · danger · success.** 상태의 두 번째 단서는 텍스트다. 색 **배경** pill은 주의가 필요한 warning·danger에만, info·progress·neutral 상태(유효 · 검토 중 · 승인 · 활성)는 중립 텍스트 라벨로(StatusPill quiet · Badge subtle). **정상(success)은 배경 없이 초록 텍스트·얇은 테두리·요약 칩의 작은 점으로 쓴다**(2026-09-12 사용자 결정 · ADR-014) — 이상만 색을 갖는 화면에서는 "정상"이 읽히지 않았다. 지도 마커의 정상은 그대로 중립이다(무게 = 심각도). accent는 링크·탭·선택 같은 상호작용에만. 점(StatusDot)은 LIVE · REC · 촬영 중처럼 살아 움직이는 신호와 정상 요약 칩에만 — 장비 상태·텔레메트리 타일은 텍스트(warning·danger 값만 채색), 지도 범례 행은 두지 않는다(마커 글리프 ✓ ! ✕가 범례). 두절·수신 끊김은 warning으로 분류한다 — 관측 불능 상태를 정상처럼 보이게 하지 않는다(FR-034). Timeline 불릿은 회색 눈금(상태 점과 다른 모양). `pnpm design:audit:color`가 화면당 색상 계열을 센다(≤ 4). 브랜드 마크는 색 예산 밖이다 — 셸(사이드바·앱바·인쇄)은 단색(currentColor), 두 톤(accent.fg)은 로그인·앱 아이콘·문서 표지에만(§13). 텔레메트리의 '미수신'(수신 임계 초과)·'두절'은 warning 텍스트, '미연동'(연동 안 된 계측)은 muted 텍스트 — 옛 값을 정상처럼 두지 않는다(§12.2 · FR-034).
 5. **접근성은 게이트.** 본문 7:1, 보조 텍스트 4.5:1, 비텍스트 UI 3:1을 빌드가 검사한다. 통과하지 못한 토큰은 배포되지 않는다.
 6. **밀도는 역할에서 온다.** 관제·백오피스는 한 화면에 많은 행을 담고(Linear 밀도: 행 36 · 본문 13px), 현장 앱은 장갑 낀 손과 햇빛을 전제로 한다(터치 48 · 본문 16px).
 7. **코드가 원천.** Figma 파일은 참조였고 동기 대상이 아니다. 토큰·문서·CSS는 `packages/tokens/src`에서 생성되며, 디자인 변경은 소스 변경으로 기록된다.
@@ -101,7 +101,7 @@ owner-experience의 현황/탐색/상세/뷰어는 목적별 구성과 "텍스�
 |---|---|
 | id | DY |
 | 이름 | DY BoomEyes |
-| 액센트 색조 | navy · 앵커 #0d2877 · 고정 단계 9=#0d2877 10=#081849 11=#0d32a1 12=#050f2e |
+| 액센트 색조 | navy · 앵커 #005679 · 고정 단계 9=#005679 10=#00405c |
 | 서체 | Pretendard Variable |
 | 기본 모드 | web: light/compact · pwa: light/comfortable · wall: dark/comfortable |
 | 참조 | Figma kBZarC75huG1mzuUnIv0p7 ([DY] Crane Eyes) · DY-crane-eyes-back-office(SvelteKit) — 구조 참조 |
@@ -116,8 +116,8 @@ owner-experience의 현황/탐색/상세/뷰어는 목적별 구성과 "텍스�
 
 | 색조 | 역할 | 앵커 | H | C | light 9 | dark 9 |
 |---|---|---|---|---|---|---|
-| neutral | neutral | #0d2877 | 264.7 | 0.008 | L62 C0.008 H269 | L58 C0.008 H268 |
-| navy | accent | #0d2877 | 264.7 | 0.139 | L32 C0.139 H265 | L52 C0.139 H265 |
+| neutral | neutral | #005679 | 234.7 | 0.008 | L62 C0.026 H236 | L58 C0.026 H236 |
+| navy | accent | #005679 | 234.7 | 0.09 | L43 C0.090 H235 | L52 C0.090 H234 |
 | blue | info | #155dfc | 262.9 | 0.246 | L50 C0.245 H263 | L52 C0.246 H263 |
 | green | success | #1c6831 | 148.7 | 0.14 | L50 C0.140 H149 | L52 C0.140 H149 |
 | yellow | warning | #ffb013 | 75.8 | 0.168 | L82 C0.160 H76 | L82 C0.160 H76 |
@@ -128,11 +128,11 @@ owner-experience의 현황/탐색/상세/뷰어는 목적별 구성과 "텍스�
 
 | 색조 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | on-solid |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| neutral | #fdfdff | #f8faff | #f1f3f9 | #e8ebf1 | #e0e3e8 | #d6d9df | #bbbec3 | #9c9ea4 | #84868b | #727479 | #616368 | #191b1e | #ffffff |
-| navy (accent) | #fdfdff | #f6f9ff | #ebf1ff | #dde8ff | #cdddff | #bcd0fb | #a1baef | #6d8bcc | #0d2877 | #081849 | #0d32a1 | #050f2e | #ffffff |
+| neutral | #fcfeff | #f8fafc | #f0f4f6 | #e7ecef | #dde4e8 | #d4dade | #b5bfc6 | #92a1aa | #788994 | #647884 | #4a6879 | #071d29 | #ffffff |
+| navy (accent) | #fcfeff | #f4fafe | #e7f3fb | #d9ebf6 | #c9e1f0 | #b7d5e8 | #9ac1d8 | #6293b0 | #005679 | #00405c | #185371 | #0c2a39 | #ffffff |
 | blue | #fdfdff | #f6f9ff | #eaf1ff | #dce8ff | #ccdeff | #b8d1ff | #96baff | #4d86fa | #024deb | #0040ce | #003abc | #031e61 | #ffffff |
 | green | #fbfffb | #f4fcf4 | #e6f6e8 | #d7efda | #c7e7cb | #b4dcb9 | #97ca9e | #5c9e68 | #067831 | #006828 | #015e24 | #052f11 | #ffffff |
-| yellow | #fffdfa | #fff8ef | #fdefdb | #fae4c7 | #f5d8b1 | #eeca97 | #dfb271 | #ab7401 | #ffb32e | #eea300 | #684500 | #362200 | #191b1e |
+| yellow | #fffdfa | #fff8ef | #fdefdb | #fae4c7 | #f5d8b1 | #eeca97 | #dfb271 | #ab7401 | #ffb32e | #eea300 | #684500 | #362200 | #071d29 |
 | red | #fffdfc | #fff7f6 | #ffecea | #ffdfdb | #ffd0ca | #ffbdb5 | #ff9b91 | #e25851 | #bc0016 | #a30012 | #94000f | #500004 | #ffffff |
 | teal | #fafefe | #f2fbfa | #e4f6f2 | #d4efea | #c2e6e0 | #addbd3 | #8ec8bf | #4d9c92 | #007369 | #00635a | #005a52 | #002e29 | #ffffff |
 
@@ -140,11 +140,11 @@ owner-experience의 현황/탐색/상세/뷰어는 목적별 구성과 "텍스�
 
 | 색조 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | on-solid |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| neutral | #0c0d11 | #121417 | #1a1c20 | #222428 | #2c2e32 | #37393e | #4b4d52 | #616368 | #787a7f | #8a8c91 | #bbbec3 | #eff2f7 | #191b1e |
-| navy (accent) | #0b0f19 | #101623 | #151f33 | #1b2844 | #213156 | #293b65 | #364b7a | #425c94 | #4064b8 | #5176cc | #9ebdff | #e7efff | #ffffff |
+| neutral | #0c0d0e | #131415 | #1a1c1e | #212527 | #2a2f32 | #353a3d | #464e54 | #58666e | #6c7d88 | #7b909c | #a3c3d6 | #e4f5ff | #071d29 |
+| navy (accent) | #0a1014 | #0e171d | #12212a | #162c38 | #193747 | #214153 | #2d5266 | #37637c | #297195 | #3d83a8 | #93c6e3 | #def2fe | #ffffff |
 | blue | #070f1f | #0a152c | #0b1d42 | #0d2558 | #0d2c70 | #133682 | #1e469c | #2555bd | #0a54f3 | #286cff | #9bbeff | #e6efff | #ffffff |
 | green | #09120a | #0d1a0f | #102514 | #123019 | #143c1e | #1b4825 | #285932 | #306d3d | #147e37 | #2f9048 | #8dd198 | #dcf7df | #ffffff |
-| yellow | #160e04 | #1f1404 | #2d1b00 | #392400 | #462d00 | #543600 | #684500 | #a8751a | #ffb32e | #ffc671 | #ecb259 | #ffebd1 | #191b1e |
+| yellow | #160e04 | #1f1404 | #2d1b00 | #392400 | #462d00 | #543600 | #684500 | #a8751a | #ffb32e | #ffc671 | #ecb259 | #ffebd1 | #071d29 |
 | red | #1c0907 | #280c0a | #3a0e0c | #4d0f0e | #610e0f | #711414 | #892220 | #a62927 | #c60018 | #e30f21 | #ffa096 | #ffe9e6 | #ffffff |
 | teal | #071210 | #0a1917 | #0b2421 | #0a302b | #073b36 | #0c4741 | #1a5851 | #1e6b62 | #007a6f | #008e81 | #80cfc3 | #d8f6f1 | #ffffff |
 
@@ -154,49 +154,49 @@ owner-experience의 현황/탐색/상세/뷰어는 목적별 구성과 "텍스�
 
 | 토큰 | light | dark | 원천 | 설명 |
 |---|---|---|---|---|
-| `sys.color.bg.canvas` | #f8faff | #0c0d11 | light: {ref.color.neutral.2} · dark: {ref.color.neutral.1} | 앱 바탕(페이지 배경) |
-| `sys.color.bg.surface` | #fdfdff | #121417 | light: {ref.color.neutral.1} · dark: {ref.color.neutral.2} | 카드·패널·시트 기본면 |
-| `sys.color.bg.surface-raised` | #fdfdff | #1a1c20 | light: {ref.color.neutral.1} · dark: {ref.color.neutral.3} | 떠 있는 면(메뉴·팝오버) — shadow와 함께 |
-| `sys.color.bg.surface-sunken` | #f1f3f9 | #0c0d11 | light: {ref.color.neutral.3} · dark: {ref.color.neutral.1} | 가라앉은 면(코드·읽기 전용 영역) |
+| `sys.color.bg.canvas` | #f8fafc | #0c0d0e | light: {ref.color.neutral.2} · dark: {ref.color.neutral.1} | 앱 바탕(페이지 배경) |
+| `sys.color.bg.surface` | #fcfeff | #131415 | light: {ref.color.neutral.1} · dark: {ref.color.neutral.2} | 카드·패널·시트 기본면 |
+| `sys.color.bg.surface-raised` | #fcfeff | #1a1c1e | light: {ref.color.neutral.1} · dark: {ref.color.neutral.3} | 떠 있는 면(메뉴·팝오버) — shadow와 함께 |
+| `sys.color.bg.surface-sunken` | #f0f4f6 | #0c0d0e | light: {ref.color.neutral.3} · dark: {ref.color.neutral.1} | 가라앉은 면(코드·읽기 전용 영역) |
 | `sys.color.bg.overlay` | #00000099 | #000000cc | light: {ref.color.alpha.black-60} · dark: {ref.color.alpha.black-80} | 모달 뒤 스크림 |
-| `sys.color.bg.ui` | #f1f3f9 | #1a1c20 | {ref.color.neutral.3} | 컨트롤 기본 배경(입력·보조 버튼·칩) |
-| `sys.color.bg.ui-hover` | #e8ebf1 | #222428 | {ref.color.neutral.4} | 컨트롤 hover |
-| `sys.color.bg.ui-active` | #e0e3e8 | #2c2e32 | {ref.color.neutral.5} | 컨트롤 active·pressed |
-| `sys.color.bg.selected` | #ebf1ff | #151f33 | {ref.color.accent.3} | 선택 행·항목 |
-| `sys.color.bg.selected-hover` | #dde8ff | #1b2844 | {ref.color.accent.4} | 선택 행 hover |
-| `sys.color.bg.disabled` | #f1f3f9 | #1a1c20 | {ref.color.neutral.3} | 비활성 컨트롤 배경 |
-| `sys.color.bg.inverse` | #191b1e | #eff2f7 | {ref.color.neutral.12} | 반전 면(툴팁·토스트 다크) |
-| `sys.color.fg.default` | #191b1e | #eff2f7 | {ref.color.neutral.12} | 본문·제목(고대비) |
-| `sys.color.fg.muted` | #616368 | #bbbec3 | {ref.color.neutral.11} | 보조 텍스트·라벨(≥4.5:1) |
-| `sys.color.fg.subtle` | #727479 | #8a8c91 | {ref.color.neutral.10} | 장식·아이콘·placeholder 전용(≥3:1) — 정보 텍스트 금지(axe serious). 텍스트는 fg.muted 이상 |
-| `sys.color.fg.placeholder` | #84868b | #787a7f | {ref.color.neutral.9} | 입력 플레이스홀더 |
-| `sys.color.fg.disabled` | #9c9ea4 | #616368 | {ref.color.neutral.8} | 비활성 텍스트·아이콘 |
-| `sys.color.fg.on-inverse` | #fdfdff | #0c0d11 | {ref.color.neutral.1} | 반전 면 위 텍스트 |
+| `sys.color.bg.ui` | #f0f4f6 | #1a1c1e | {ref.color.neutral.3} | 컨트롤 기본 배경(입력·보조 버튼·칩) |
+| `sys.color.bg.ui-hover` | #e7ecef | #212527 | {ref.color.neutral.4} | 컨트롤 hover |
+| `sys.color.bg.ui-active` | #dde4e8 | #2a2f32 | {ref.color.neutral.5} | 컨트롤 active·pressed |
+| `sys.color.bg.selected` | #e7f3fb | #12212a | {ref.color.accent.3} | 선택 행·항목 |
+| `sys.color.bg.selected-hover` | #d9ebf6 | #162c38 | {ref.color.accent.4} | 선택 행 hover |
+| `sys.color.bg.disabled` | #f0f4f6 | #1a1c1e | {ref.color.neutral.3} | 비활성 컨트롤 배경 |
+| `sys.color.bg.inverse` | #071d29 | #e4f5ff | {ref.color.neutral.12} | 반전 면(툴팁·토스트 다크) |
+| `sys.color.fg.default` | #071d29 | #e4f5ff | {ref.color.neutral.12} | 본문·제목(고대비) |
+| `sys.color.fg.muted` | #4a6879 | #a3c3d6 | {ref.color.neutral.11} | 보조 텍스트·라벨(≥4.5:1) |
+| `sys.color.fg.subtle` | #647884 | #7b909c | {ref.color.neutral.10} | 장식·아이콘·placeholder 전용(≥3:1) — 정보 텍스트 금지(axe serious). 텍스트는 fg.muted 이상 |
+| `sys.color.fg.placeholder` | #788994 | #6c7d88 | {ref.color.neutral.9} | 입력 플레이스홀더 |
+| `sys.color.fg.disabled` | #92a1aa | #58666e | {ref.color.neutral.8} | 비활성 텍스트·아이콘 |
+| `sys.color.fg.on-inverse` | #fcfeff | #0c0d0e | {ref.color.neutral.1} | 반전 면 위 텍스트 |
 | `sys.color.fg.on-accent` | #ffffff | #ffffff | {ref.color.on.accent} | 액센트 solid 위 텍스트 |
-| `sys.color.fg.link` | #0d32a1 | #9ebdff | {ref.color.accent.11} | 링크·포인트 텍스트 |
-| `sys.color.fg.link-hover` | #050f2e | #e7efff | {ref.color.accent.12} | 링크 hover |
-| `sys.color.border.subtle` | #e0e3e8 | #2c2e32 | {ref.color.neutral.5} | 미묘한 분리선(표 행·리스트) |
-| `sys.color.border.default` | #d6d9df | #37393e | {ref.color.neutral.6} | 기본 테두리(카드·입력) |
-| `sys.color.border.strong` | #9c9ea4 | #616368 | {ref.color.neutral.8} | hover·강조 테두리 |
-| `sys.color.border.emphasis` | #84868b | #787a7f | {ref.color.neutral.9} | 컨트롤 윤곽(≥3:1 — 고대비 입력·체크박스) |
+| `sys.color.fg.link` | #185371 | #93c6e3 | {ref.color.accent.11} | 링크·포인트 텍스트 |
+| `sys.color.fg.link-hover` | #0c2a39 | #def2fe | {ref.color.accent.12} | 링크 hover |
+| `sys.color.border.subtle` | #dde4e8 | #2a2f32 | {ref.color.neutral.5} | 미묘한 분리선(표 행·리스트) |
+| `sys.color.border.default` | #d4dade | #353a3d | {ref.color.neutral.6} | 기본 테두리(카드·입력) |
+| `sys.color.border.strong` | #92a1aa | #58666e | {ref.color.neutral.8} | hover·강조 테두리 |
+| `sys.color.border.emphasis` | #788994 | #6c7d88 | {ref.color.neutral.9} | 컨트롤 윤곽(≥3:1 — 고대비 입력·체크박스) |
 | `sys.color.border.inverse` | #ffffff3d | #ffffff3d | {ref.color.alpha.white-24} | 반전 면 위 분리선 |
-| `sys.color.accent.solid` | #0d2877 | #4064b8 | {ref.color.accent.9} | 주 버튼·FAB·선택 표시 |
-| `sys.color.accent.solid-hover` | #081849 | #5176cc | {ref.color.accent.10} |  |
-| `sys.color.accent.solid-active` | #050f2e | #425c94 | light: {ref.color.accent.12} · dark: {ref.color.accent.8} |  |
-| `sys.color.accent.fg` | #0d32a1 | #9ebdff | {ref.color.accent.11} | 액센트 텍스트·아이콘(≥4.5:1) |
-| `sys.color.accent.fg-strong` | #050f2e | #e7efff | {ref.color.accent.12} |  |
-| `sys.color.accent.bg` | #ebf1ff | #151f33 | {ref.color.accent.3} | 액센트 tinted 배경(선택·강조 카드) |
-| `sys.color.accent.bg-hover` | #dde8ff | #1b2844 | {ref.color.accent.4} |  |
-| `sys.color.accent.bg-active` | #cdddff | #213156 | {ref.color.accent.5} |  |
-| `sys.color.accent.bg-subtle` | #f6f9ff | #101623 | {ref.color.accent.2} | 아주 옅은 브랜드 면 |
-| `sys.color.accent.border` | #a1baef | #364b7a | {ref.color.accent.7} |  |
-| `sys.color.accent.border-strong` | #6d8bcc | #425c94 | {ref.color.accent.8} |  |
+| `sys.color.accent.solid` | #005679 | #297195 | {ref.color.accent.9} | 주 버튼·FAB·선택 표시 |
+| `sys.color.accent.solid-hover` | #00405c | #3d83a8 | {ref.color.accent.10} |  |
+| `sys.color.accent.solid-active` | #0c2a39 | #37637c | light: {ref.color.accent.12} · dark: {ref.color.accent.8} |  |
+| `sys.color.accent.fg` | #185371 | #93c6e3 | {ref.color.accent.11} | 액센트 텍스트·아이콘(≥4.5:1) |
+| `sys.color.accent.fg-strong` | #0c2a39 | #def2fe | {ref.color.accent.12} |  |
+| `sys.color.accent.bg` | #e7f3fb | #12212a | {ref.color.accent.3} | 액센트 tinted 배경(선택·강조 카드) |
+| `sys.color.accent.bg-hover` | #d9ebf6 | #162c38 | {ref.color.accent.4} |  |
+| `sys.color.accent.bg-active` | #c9e1f0 | #193747 | {ref.color.accent.5} |  |
+| `sys.color.accent.bg-subtle` | #f4fafe | #0e171d | {ref.color.accent.2} | 아주 옅은 브랜드 면 |
+| `sys.color.accent.border` | #9ac1d8 | #2d5266 | {ref.color.accent.7} |  |
+| `sys.color.accent.border-strong` | #6293b0 | #37637c | {ref.color.accent.8} |  |
 | `sys.color.accent.on-solid` | #ffffff | #ffffff | {ref.color.on.accent} | solid 위 텍스트 |
-| `sys.color.focus.ring` | #0d2877 | #4064b8 | {ref.color.accent.9} | 포커스 링(2px, offset 2px) |
-| `sys.color.focus.ring-offset` | #fdfdff | #0c0d11 | light: {ref.color.neutral.1} · dark: {ref.color.neutral.1} | 포커스 링 오프셋 색 = 바탕 |
-| `sys.color.media.bg` | #191b1e | #0c0d11 | light: {ref.color.neutral.12} · dark: {ref.color.neutral.1} | 영상·월보드 바탕 — 테마와 무관하게 항상 어둡다 |
-| `sys.color.media.surface` | #616368 | #1a1c20 | light: {ref.color.neutral.11} · dark: {ref.color.neutral.3} | 미디어 위 컨트롤 면 |
-| `sys.color.media.fg` | #fdfdff | #eff2f7 | light: {ref.color.neutral.1} · dark: {ref.color.neutral.12} | 미디어 위 텍스트 — 항상 밝다 |
+| `sys.color.focus.ring` | #005679 | #297195 | {ref.color.accent.9} | 포커스 링(2px, offset 2px) |
+| `sys.color.focus.ring-offset` | #fcfeff | #0c0d0e | light: {ref.color.neutral.1} · dark: {ref.color.neutral.1} | 포커스 링 오프셋 색 = 바탕 |
+| `sys.color.media.bg` | #071d29 | #0c0d0e | light: {ref.color.neutral.12} · dark: {ref.color.neutral.1} | 영상·월보드 바탕 — 테마와 무관하게 항상 어둡다 |
+| `sys.color.media.surface` | #4a6879 | #1a1c1e | light: {ref.color.neutral.11} · dark: {ref.color.neutral.3} | 미디어 위 컨트롤 면 |
+| `sys.color.media.fg` | #fcfeff | #e4f5ff | light: {ref.color.neutral.1} · dark: {ref.color.neutral.12} | 미디어 위 텍스트 — 항상 밝다 |
 | `sys.color.media.muted` | #ffffff99 | #ffffff99 | {ref.color.alpha.white-60} | 미디어 위 보조 텍스트 |
 | `sys.color.media.scrim` | #00000099 | #00000099 | {ref.color.alpha.black-60} | 미디어 위 칩·자막 배경 |
 | `sys.color.media.border` | #ffffff29 | #ffffff29 | {ref.color.alpha.white-16} | 미디어 타일 경계 |
@@ -236,7 +236,7 @@ owner-experience의 현황/탐색/상세/뷰어는 목적별 구성과 "텍스�
 | `sys.color.status.warning.bg-subtle` | #fff8ef | #1f1404 | {ref.color.yellow.2} |
 | `sys.color.status.warning.border` | #dfb271 | #684500 | {ref.color.yellow.7} |
 | `sys.color.status.warning.border-strong` | #ab7401 | #a8751a | {ref.color.yellow.8} |
-| `sys.color.status.warning.on-solid` | #191b1e | #191b1e | {ref.color.on.yellow} |
+| `sys.color.status.warning.on-solid` | #071d29 | #071d29 | {ref.color.on.yellow} |
 | `sys.color.status.danger.solid` | #bc0016 | #c60018 | {ref.color.red.9} |
 | `sys.color.status.danger.solid-hover` | #a30012 | #e30f21 | {ref.color.red.10} |
 | `sys.color.status.danger.fg` | #94000f | #ffa096 | {ref.color.red.11} |
@@ -257,16 +257,16 @@ owner-experience의 현황/탐색/상세/뷰어는 목적별 구성과 "텍스�
 | `sys.color.status.progress.border` | #8ec8bf | #1a5851 | {ref.color.teal.7} |
 | `sys.color.status.progress.border-strong` | #4d9c92 | #1e6b62 | {ref.color.teal.8} |
 | `sys.color.status.progress.on-solid` | #ffffff | #ffffff | {ref.color.on.teal} |
-| `sys.color.status.neutral.solid` | #616368 | #bbbec3 | {ref.color.neutral.11} |
-| `sys.color.status.neutral.solid-hover` | #191b1e | #eff2f7 | {ref.color.neutral.12} |
-| `sys.color.status.neutral.fg` | #616368 | #bbbec3 | {ref.color.neutral.11} |
-| `sys.color.status.neutral.fg-strong` | #191b1e | #eff2f7 | {ref.color.neutral.12} |
-| `sys.color.status.neutral.bg` | #f1f3f9 | #1a1c20 | {ref.color.neutral.3} |
-| `sys.color.status.neutral.bg-hover` | #e8ebf1 | #222428 | {ref.color.neutral.4} |
-| `sys.color.status.neutral.bg-subtle` | #f8faff | #121417 | {ref.color.neutral.2} |
-| `sys.color.status.neutral.border` | #bbbec3 | #4b4d52 | {ref.color.neutral.7} |
-| `sys.color.status.neutral.border-strong` | #9c9ea4 | #616368 | {ref.color.neutral.8} |
-| `sys.color.status.neutral.on-solid` | #ffffff | #191b1e | {ref.color.on.neutral} |
+| `sys.color.status.neutral.solid` | #4a6879 | #a3c3d6 | {ref.color.neutral.11} |
+| `sys.color.status.neutral.solid-hover` | #071d29 | #e4f5ff | {ref.color.neutral.12} |
+| `sys.color.status.neutral.fg` | #4a6879 | #a3c3d6 | {ref.color.neutral.11} |
+| `sys.color.status.neutral.fg-strong` | #071d29 | #e4f5ff | {ref.color.neutral.12} |
+| `sys.color.status.neutral.bg` | #f0f4f6 | #1a1c1e | {ref.color.neutral.3} |
+| `sys.color.status.neutral.bg-hover` | #e7ecef | #212527 | {ref.color.neutral.4} |
+| `sys.color.status.neutral.bg-subtle` | #f8fafc | #131415 | {ref.color.neutral.2} |
+| `sys.color.status.neutral.border` | #b5bfc6 | #464e54 | {ref.color.neutral.7} |
+| `sys.color.status.neutral.border-strong` | #92a1aa | #58666e | {ref.color.neutral.8} |
+| `sys.color.status.neutral.on-solid` | #ffffff | #071d29 | {ref.color.on.neutral} |
 
 ### 3.4 도메인 (`sys.color.domain.<entity>.<state>.*`) — 제품 의미를 tone에 매핑
 
@@ -286,10 +286,10 @@ owner-experience의 현황/탐색/상세/뷰어는 목적별 구성과 "텍스�
 | `sys.color.domain.equipment.fault.fg` | {sys.color.status.danger.fg} | #94000f | #ffa096 |  |
 | `sys.color.domain.equipment.fault.bg` | {sys.color.status.danger.bg} | #ffecea | #3a0e0c |  |
 | `sys.color.domain.equipment.fault.border` | {sys.color.status.danger.border} | #ff9b91 | #892220 |  |
-| `sys.color.domain.equipment.offline.solid` | {sys.color.status.neutral.solid} | #616368 | #bbbec3 | 통신 두절 |
-| `sys.color.domain.equipment.offline.fg` | {sys.color.status.neutral.fg} | #616368 | #bbbec3 |  |
-| `sys.color.domain.equipment.offline.bg` | {sys.color.status.neutral.bg} | #f1f3f9 | #1a1c20 |  |
-| `sys.color.domain.equipment.offline.border` | {sys.color.status.neutral.border} | #bbbec3 | #4b4d52 |  |
+| `sys.color.domain.equipment.offline.solid` | {sys.color.status.neutral.solid} | #4a6879 | #a3c3d6 | 통신 두절 |
+| `sys.color.domain.equipment.offline.fg` | {sys.color.status.neutral.fg} | #4a6879 | #a3c3d6 |  |
+| `sys.color.domain.equipment.offline.bg` | {sys.color.status.neutral.bg} | #f0f4f6 | #1a1c1e |  |
+| `sys.color.domain.equipment.offline.border` | {sys.color.status.neutral.border} | #b5bfc6 | #464e54 |  |
 | `sys.color.domain.equipment.maintenance.solid` | {sys.color.status.progress.solid} | #007369 | #007a6f | 정비 중·정비소 |
 | `sys.color.domain.equipment.maintenance.fg` | {sys.color.status.progress.fg} | #005a52 | #80cfc3 |  |
 | `sys.color.domain.equipment.maintenance.bg` | {sys.color.status.progress.bg} | #e4f6f2 | #0b2421 |  |
@@ -298,10 +298,10 @@ owner-experience의 현황/탐색/상세/뷰어는 목적별 구성과 "텍스�
 | `sys.color.domain.connect.online.fg` | {sys.color.status.success.fg} | #015e24 | #8dd198 |  |
 | `sys.color.domain.connect.online.bg` | {sys.color.status.success.bg} | #e6f6e8 | #102514 |  |
 | `sys.color.domain.connect.online.border` | {sys.color.status.success.border} | #97ca9e | #285932 |  |
-| `sys.color.domain.connect.offline.solid` | {sys.color.status.neutral.solid} | #616368 | #bbbec3 | 연결 끊김 |
-| `sys.color.domain.connect.offline.fg` | {sys.color.status.neutral.fg} | #616368 | #bbbec3 |  |
-| `sys.color.domain.connect.offline.bg` | {sys.color.status.neutral.bg} | #f1f3f9 | #1a1c20 |  |
-| `sys.color.domain.connect.offline.border` | {sys.color.status.neutral.border} | #bbbec3 | #4b4d52 |  |
+| `sys.color.domain.connect.offline.solid` | {sys.color.status.neutral.solid} | #4a6879 | #a3c3d6 | 연결 끊김 |
+| `sys.color.domain.connect.offline.fg` | {sys.color.status.neutral.fg} | #4a6879 | #a3c3d6 |  |
+| `sys.color.domain.connect.offline.bg` | {sys.color.status.neutral.bg} | #f0f4f6 | #1a1c1e |  |
+| `sys.color.domain.connect.offline.border` | {sys.color.status.neutral.border} | #b5bfc6 | #464e54 |  |
 | `sys.color.domain.severity.critical.solid` | {sys.color.status.danger.solid} | #bc0016 | #c60018 | 긴급 알림 |
 | `sys.color.domain.severity.critical.fg` | {sys.color.status.danger.fg} | #94000f | #ffa096 |  |
 | `sys.color.domain.severity.critical.bg` | {sys.color.status.danger.bg} | #ffecea | #3a0e0c |  |
@@ -318,10 +318,10 @@ owner-experience의 현황/탐색/상세/뷰어는 목적별 구성과 "텍스�
 | `sys.color.domain.task.new.fg` | {sys.color.status.info.fg} | #003abc | #9bbeff |  |
 | `sys.color.domain.task.new.bg` | {sys.color.status.info.bg} | #eaf1ff | #0b1d42 |  |
 | `sys.color.domain.task.new.border` | {sys.color.status.info.border} | #96baff | #1e469c |  |
-| `sys.color.domain.task.assigned.solid` | {sys.color.accent.solid} | #0d2877 | #4064b8 | 배정됨 |
-| `sys.color.domain.task.assigned.fg` | {sys.color.accent.fg} | #0d32a1 | #9ebdff |  |
-| `sys.color.domain.task.assigned.bg` | {sys.color.accent.bg} | #ebf1ff | #151f33 |  |
-| `sys.color.domain.task.assigned.border` | {sys.color.accent.border} | #a1baef | #364b7a |  |
+| `sys.color.domain.task.assigned.solid` | {sys.color.accent.solid} | #005679 | #297195 | 배정됨 |
+| `sys.color.domain.task.assigned.fg` | {sys.color.accent.fg} | #185371 | #93c6e3 |  |
+| `sys.color.domain.task.assigned.bg` | {sys.color.accent.bg} | #e7f3fb | #12212a |  |
+| `sys.color.domain.task.assigned.border` | {sys.color.accent.border} | #9ac1d8 | #2d5266 |  |
 | `sys.color.domain.task.in-progress.solid` | {sys.color.status.progress.solid} | #007369 | #007a6f | 진행 중 |
 | `sys.color.domain.task.in-progress.fg` | {sys.color.status.progress.fg} | #005a52 | #80cfc3 |  |
 | `sys.color.domain.task.in-progress.bg` | {sys.color.status.progress.bg} | #e4f6f2 | #0b2421 |  |
@@ -350,10 +350,10 @@ owner-experience의 현황/탐색/상세/뷰어는 목적별 구성과 "텍스�
 | `sys.color.domain.doc.rejected.fg` | {sys.color.status.danger.fg} | #94000f | #ffa096 |  |
 | `sys.color.domain.doc.rejected.bg` | {sys.color.status.danger.bg} | #ffecea | #3a0e0c |  |
 | `sys.color.domain.doc.rejected.border` | {sys.color.status.danger.border} | #ff9b91 | #892220 |  |
-| `sys.color.domain.doc.incomplete.solid` | {sys.color.status.neutral.solid} | #616368 | #bbbec3 | 미완료 |
-| `sys.color.domain.doc.incomplete.fg` | {sys.color.status.neutral.fg} | #616368 | #bbbec3 |  |
-| `sys.color.domain.doc.incomplete.bg` | {sys.color.status.neutral.bg} | #f1f3f9 | #1a1c20 |  |
-| `sys.color.domain.doc.incomplete.border` | {sys.color.status.neutral.border} | #bbbec3 | #4b4d52 |  |
+| `sys.color.domain.doc.incomplete.solid` | {sys.color.status.neutral.solid} | #4a6879 | #a3c3d6 | 미완료 |
+| `sys.color.domain.doc.incomplete.fg` | {sys.color.status.neutral.fg} | #4a6879 | #a3c3d6 |  |
+| `sys.color.domain.doc.incomplete.bg` | {sys.color.status.neutral.bg} | #f0f4f6 | #1a1c1e |  |
+| `sys.color.domain.doc.incomplete.border` | {sys.color.status.neutral.border} | #b5bfc6 | #464e54 |  |
 | `sys.color.domain.video.live.solid` | {sys.color.status.danger.solid} | #bc0016 | #c60018 | 라이브 표시(REC 점) |
 | `sys.color.domain.video.live.fg` | {sys.color.status.danger.fg} | #94000f | #ffa096 |  |
 | `sys.color.domain.video.live.bg` | {sys.color.status.danger.bg} | #ffecea | #3a0e0c |  |
@@ -366,129 +366,113 @@ owner-experience의 현황/탐색/상세/뷰어는 목적별 구성과 "텍스�
 | `sys.color.domain.video.ai.fg` | {sys.color.status.warning.fg} | #684500 | #ecb259 |  |
 | `sys.color.domain.video.ai.bg` | {sys.color.status.warning.bg} | #fdefdb | #2d1b00 |  |
 | `sys.color.domain.video.ai.border` | {sys.color.status.warning.border} | #dfb271 | #684500 |  |
-| `sys.color.domain.video.offline.solid` | {sys.color.status.neutral.solid} | #616368 | #bbbec3 | 카메라 오프라인 |
-| `sys.color.domain.video.offline.fg` | {sys.color.status.neutral.fg} | #616368 | #bbbec3 |  |
-| `sys.color.domain.video.offline.bg` | {sys.color.status.neutral.bg} | #f1f3f9 | #1a1c20 |  |
-| `sys.color.domain.video.offline.border` | {sys.color.status.neutral.border} | #bbbec3 | #4b4d52 |  |
-| `sys.color.domain.map.safe.solid` | {sys.color.accent.solid} | #0d2877 | #4064b8 | 안전(현장 정상) |
-| `sys.color.domain.map.safe.fg` | {sys.color.accent.fg} | #0d32a1 | #9ebdff |  |
-| `sys.color.domain.map.safe.bg` | {sys.color.accent.bg} | #ebf1ff | #151f33 |  |
-| `sys.color.domain.map.safe.border` | {sys.color.accent.border} | #a1baef | #364b7a |  |
-| `sys.color.domain.map.warning.solid` | {sys.color.status.warning.solid} | #ffb32e | #ffb32e | 주의 현장 |
-| `sys.color.domain.map.warning.fg` | {sys.color.status.warning.fg} | #684500 | #ecb259 |  |
-| `sys.color.domain.map.warning.bg` | {sys.color.status.warning.bg} | #fdefdb | #2d1b00 |  |
-| `sys.color.domain.map.warning.border` | {sys.color.status.warning.border} | #dfb271 | #684500 |  |
-| `sys.color.domain.map.danger.solid` | {sys.color.status.danger.solid} | #bc0016 | #c60018 | 위험 현장 |
-| `sys.color.domain.map.danger.fg` | {sys.color.status.danger.fg} | #94000f | #ffa096 |  |
-| `sys.color.domain.map.danger.bg` | {sys.color.status.danger.bg} | #ffecea | #3a0e0c |  |
-| `sys.color.domain.map.danger.border` | {sys.color.status.danger.border} | #ff9b91 | #892220 |  |
-| `sys.color.domain.map.service.solid` | {sys.color.status.progress.solid} | #007369 | #007a6f | 정비소 |
-| `sys.color.domain.map.service.fg` | {sys.color.status.progress.fg} | #005a52 | #80cfc3 |  |
-| `sys.color.domain.map.service.bg` | {sys.color.status.progress.bg} | #e4f6f2 | #0b2421 |  |
-| `sys.color.domain.map.service.border` | {sys.color.status.progress.border} | #8ec8bf | #1a5851 |  |
+| `sys.color.domain.video.offline.solid` | {sys.color.status.neutral.solid} | #4a6879 | #a3c3d6 | 카메라 오프라인 |
+| `sys.color.domain.video.offline.fg` | {sys.color.status.neutral.fg} | #4a6879 | #a3c3d6 |  |
+| `sys.color.domain.video.offline.bg` | {sys.color.status.neutral.bg} | #f0f4f6 | #1a1c1e |  |
+| `sys.color.domain.video.offline.border` | {sys.color.status.neutral.border} | #b5bfc6 | #464e54 |  |
 
 ### 3.5 대비 검사 (빌드 게이트)
 
 | 테마 | 전경 | 배경 | 대비 | 기준 | 판정 |
 |---|---|---|---|---|---|
-| light | `fg.default` | `bg.canvas` | 16.53:1 | ≥7 | ✓ |
-| light | `fg.default` | `bg.surface` | 16.99:1 | ≥7 | ✓ |
-| light | `fg.default` | `bg.ui` | 15.56:1 | ≥4.5 | ✓ |
-| light | `fg.default` | `bg.selected` | 15.25:1 | ≥4.5 | ✓ |
-| light | `fg.muted` | `bg.canvas` | 5.76:1 | ≥4.5 | ✓ |
-| light | `fg.muted` | `bg.surface` | 5.92:1 | ≥4.5 | ✓ |
-| light | `fg.subtle` | `bg.canvas` | 4.48:1 | ≥3 | ✓ |
-| light | `fg.muted` | `bg.surface-sunken` | 5.42:1 | ≥4.5 | ✓ |
-| light | `fg.muted` | `bg.selected` | 5.31:1 | ≥4.5 | ✓ |
-| light | `fg.default` | `bg.selected` | 15.25:1 | ≥7 | ✓ |
-| light | `fg.link` | `bg.canvas` | 10.12:1 | ≥4.5 | ✓ |
-| light | `fg.on-inverse` | `bg.inverse` | 16.99:1 | ≥4.5 | ✓ |
-| light | `accent.fg` | `bg.canvas` | 10.12:1 | ≥4.5 | ✓ |
-| light | `accent.fg` | `accent.bg` | 9.34:1 | ≥4.5 | ✓ |
-| light | `accent.on-solid` | `accent.solid` | 13.23:1 | ≥4.5 | ✓ |
-| light | `border.emphasis` | `bg.canvas` | 3.49:1 | ≥3 | ✓ |
-| light | `focus.ring` | `bg.canvas` | 12.67:1 | ≥3 | ✓ |
-| light | `status.info.fg` | `bg.canvas` | 8.63:1 | ≥4.5 | ✓ |
-| light | `status.info.fg` | `bg.surface` | 8.87:1 | ≥4.5 | ✓ |
+| light | `fg.default` | `bg.canvas` | 16.5:1 | ≥7 | ✓ |
+| light | `fg.default` | `bg.surface` | 17.06:1 | ≥7 | ✓ |
+| light | `fg.default` | `bg.ui` | 15.6:1 | ≥4.5 | ✓ |
+| light | `fg.default` | `bg.selected` | 15.3:1 | ≥4.5 | ✓ |
+| light | `fg.muted` | `bg.canvas` | 5.66:1 | ≥4.5 | ✓ |
+| light | `fg.muted` | `bg.surface` | 5.85:1 | ≥4.5 | ✓ |
+| light | `fg.subtle` | `bg.canvas` | 4.4:1 | ≥3 | ✓ |
+| light | `fg.muted` | `bg.surface-sunken` | 5.35:1 | ≥4.5 | ✓ |
+| light | `fg.muted` | `bg.selected` | 5.25:1 | ≥4.5 | ✓ |
+| light | `fg.default` | `bg.selected` | 15.3:1 | ≥7 | ✓ |
+| light | `fg.link` | `bg.canvas` | 7.98:1 | ≥4.5 | ✓ |
+| light | `fg.on-inverse` | `bg.inverse` | 17.06:1 | ≥4.5 | ✓ |
+| light | `accent.fg` | `bg.canvas` | 7.98:1 | ≥4.5 | ✓ |
+| light | `accent.fg` | `accent.bg` | 7.4:1 | ≥4.5 | ✓ |
+| light | `accent.on-solid` | `accent.solid` | 8.05:1 | ≥4.5 | ✓ |
+| light | `border.emphasis` | `bg.canvas` | 3.46:1 | ≥3 | ✓ |
+| light | `focus.ring` | `bg.canvas` | 7.7:1 | ≥3 | ✓ |
+| light | `status.info.fg` | `bg.canvas` | 8.61:1 | ≥4.5 | ✓ |
+| light | `status.info.fg` | `bg.surface` | 8.9:1 | ≥4.5 | ✓ |
 | light | `status.info.fg` | `status.info.bg` | 7.95:1 | ≥4.5 | ✓ |
 | light | `status.info.on-solid` | `status.info.solid` | 6.43:1 | ≥4.5 | ✓ |
-| light | `status.info.solid` | `bg.canvas` | 6.16:1 | ≥3 | ✓ |
-| light | `status.success.fg` | `bg.canvas` | 7.65:1 | ≥4.5 | ✓ |
-| light | `status.success.fg` | `bg.surface` | 7.87:1 | ≥4.5 | ✓ |
+| light | `status.info.solid` | `bg.canvas` | 6.15:1 | ≥3 | ✓ |
+| light | `status.success.fg` | `bg.canvas` | 7.64:1 | ≥4.5 | ✓ |
+| light | `status.success.fg` | `bg.surface` | 7.9:1 | ≥4.5 | ✓ |
 | light | `status.success.fg` | `status.success.bg` | 7.12:1 | ≥4.5 | ✓ |
 | light | `status.success.on-solid` | `status.success.solid` | 5.62:1 | ≥4.5 | ✓ |
-| light | `status.success.solid` | `bg.canvas` | 5.38:1 | ≥3 | ✓ |
-| light | `status.warning.fg` | `bg.canvas` | 8.24:1 | ≥4.5 | ✓ |
-| light | `status.warning.fg` | `bg.surface` | 8.47:1 | ≥4.5 | ✓ |
+| light | `status.success.solid` | `bg.canvas` | 5.37:1 | ≥3 | ✓ |
+| light | `status.warning.fg` | `bg.canvas` | 8.23:1 | ≥4.5 | ✓ |
+| light | `status.warning.fg` | `bg.surface` | 8.51:1 | ≥4.5 | ✓ |
 | light | `status.warning.fg` | `status.warning.bg` | 7.6:1 | ≥4.5 | ✓ |
 | light | `status.warning.on-solid` | `status.warning.solid` | 9.65:1 | ≥4.5 | ✓ |
 | light | `status.warning.border-strong` | `bg.canvas` | 3.84:1 | ≥3 | ✓ |
-| light | `status.danger.fg` | `bg.canvas` | 8.87:1 | ≥4.5 | ✓ |
-| light | `status.danger.fg` | `bg.surface` | 9.12:1 | ≥4.5 | ✓ |
+| light | `status.danger.fg` | `bg.canvas` | 8.86:1 | ≥4.5 | ✓ |
+| light | `status.danger.fg` | `bg.surface` | 9.16:1 | ≥4.5 | ✓ |
 | light | `status.danger.fg` | `status.danger.bg` | 8.14:1 | ≥4.5 | ✓ |
 | light | `status.danger.on-solid` | `status.danger.solid` | 6.67:1 | ≥4.5 | ✓ |
-| light | `status.danger.solid` | `bg.canvas` | 6.38:1 | ≥3 | ✓ |
-| light | `status.progress.fg` | `bg.canvas` | 7.78:1 | ≥4.5 | ✓ |
-| light | `status.progress.fg` | `bg.surface` | 8:1 | ≥4.5 | ✓ |
+| light | `status.danger.solid` | `bg.canvas` | 6.37:1 | ≥3 | ✓ |
+| light | `status.progress.fg` | `bg.canvas` | 7.77:1 | ≥4.5 | ✓ |
+| light | `status.progress.fg` | `bg.surface` | 8.03:1 | ≥4.5 | ✓ |
 | light | `status.progress.fg` | `status.progress.bg` | 7.26:1 | ≥4.5 | ✓ |
 | light | `status.progress.on-solid` | `status.progress.solid` | 5.74:1 | ≥4.5 | ✓ |
-| light | `status.progress.solid` | `bg.canvas` | 5.5:1 | ≥3 | ✓ |
-| light | `status.neutral.fg` | `bg.canvas` | 5.76:1 | ≥4.5 | ✓ |
-| light | `status.neutral.fg` | `bg.surface` | 5.92:1 | ≥4.5 | ✓ |
-| light | `status.neutral.fg` | `status.neutral.bg` | 5.42:1 | ≥4.5 | ✓ |
-| light | `status.neutral.on-solid` | `status.neutral.solid` | 6.01:1 | ≥4.5 | ✓ |
-| light | `status.neutral.solid` | `bg.canvas` | 5.76:1 | ≥3 | ✓ |
-| dark | `fg.default` | `bg.canvas` | 17.31:1 | ≥7 | ✓ |
-| dark | `fg.default` | `bg.surface` | 16.44:1 | ≥7 | ✓ |
-| dark | `fg.default` | `bg.ui` | 15.2:1 | ≥4.5 | ✓ |
-| dark | `fg.default` | `bg.selected` | 14.67:1 | ≥4.5 | ✓ |
-| dark | `fg.muted` | `bg.canvas` | 10.42:1 | ≥4.5 | ✓ |
-| dark | `fg.muted` | `bg.surface` | 9.9:1 | ≥4.5 | ✓ |
-| dark | `fg.subtle` | `bg.canvas` | 5.77:1 | ≥3 | ✓ |
-| dark | `fg.muted` | `bg.surface-sunken` | 10.42:1 | ≥4.5 | ✓ |
-| dark | `fg.muted` | `bg.selected` | 8.83:1 | ≥4.5 | ✓ |
-| dark | `fg.default` | `bg.selected` | 14.67:1 | ≥7 | ✓ |
-| dark | `fg.link` | `bg.canvas` | 10.34:1 | ≥4.5 | ✓ |
-| dark | `fg.on-inverse` | `bg.inverse` | 17.31:1 | ≥4.5 | ✓ |
-| dark | `accent.fg` | `bg.canvas` | 10.34:1 | ≥4.5 | ✓ |
-| dark | `accent.fg` | `accent.bg` | 8.76:1 | ≥4.5 | ✓ |
-| dark | `accent.on-solid` | `accent.solid` | 5.63:1 | ≥4.5 | ✓ |
-| dark | `border.emphasis` | `bg.canvas` | 4.52:1 | ≥3 | ✓ |
-| dark | `focus.ring` | `bg.canvas` | 3.45:1 | ≥3 | ✓ |
-| dark | `status.info.fg` | `bg.canvas` | 10.36:1 | ≥4.5 | ✓ |
+| light | `status.progress.solid` | `bg.canvas` | 5.49:1 | ≥3 | ✓ |
+| light | `status.neutral.fg` | `bg.canvas` | 5.66:1 | ≥4.5 | ✓ |
+| light | `status.neutral.fg` | `bg.surface` | 5.85:1 | ≥4.5 | ✓ |
+| light | `status.neutral.fg` | `status.neutral.bg` | 5.35:1 | ≥4.5 | ✓ |
+| light | `status.neutral.on-solid` | `status.neutral.solid` | 5.92:1 | ≥4.5 | ✓ |
+| light | `status.neutral.solid` | `bg.canvas` | 5.66:1 | ≥3 | ✓ |
+| dark | `fg.default` | `bg.canvas` | 17.42:1 | ≥7 | ✓ |
+| dark | `fg.default` | `bg.surface` | 16.52:1 | ≥7 | ✓ |
+| dark | `fg.default` | `bg.ui` | 15.3:1 | ≥4.5 | ✓ |
+| dark | `fg.default` | `bg.selected` | 14.73:1 | ≥4.5 | ✓ |
+| dark | `fg.muted` | `bg.canvas` | 10.5:1 | ≥4.5 | ✓ |
+| dark | `fg.muted` | `bg.surface` | 9.95:1 | ≥4.5 | ✓ |
+| dark | `fg.subtle` | `bg.canvas` | 5.85:1 | ≥3 | ✓ |
+| dark | `fg.muted` | `bg.surface-sunken` | 10.5:1 | ≥4.5 | ✓ |
+| dark | `fg.muted` | `bg.selected` | 8.88:1 | ≥4.5 | ✓ |
+| dark | `fg.default` | `bg.selected` | 14.73:1 | ≥7 | ✓ |
+| dark | `fg.link` | `bg.canvas` | 10.59:1 | ≥4.5 | ✓ |
+| dark | `fg.on-inverse` | `bg.inverse` | 17.42:1 | ≥4.5 | ✓ |
+| dark | `accent.fg` | `bg.canvas` | 10.59:1 | ≥4.5 | ✓ |
+| dark | `accent.fg` | `accent.bg` | 8.95:1 | ≥4.5 | ✓ |
+| dark | `accent.on-solid` | `accent.solid` | 5.4:1 | ≥4.5 | ✓ |
+| dark | `border.emphasis` | `bg.canvas` | 4.56:1 | ≥3 | ✓ |
+| dark | `focus.ring` | `bg.canvas` | 3.6:1 | ≥3 | ✓ |
+| dark | `status.info.fg` | `bg.canvas` | 10.38:1 | ≥4.5 | ✓ |
 | dark | `status.info.fg` | `bg.surface` | 9.84:1 | ≥4.5 | ✓ |
 | dark | `status.info.fg` | `status.info.bg` | 8.83:1 | ≥4.5 | ✓ |
 | dark | `status.info.on-solid` | `status.info.solid` | 5.87:1 | ≥4.5 | ✓ |
 | dark | `status.info.solid` | `bg.canvas` | 3.31:1 | ≥3 | ✓ |
-| dark | `status.success.fg` | `bg.canvas` | 10.83:1 | ≥4.5 | ✓ |
-| dark | `status.success.fg` | `bg.surface` | 10.29:1 | ≥4.5 | ✓ |
+| dark | `status.success.fg` | `bg.canvas` | 10.84:1 | ≥4.5 | ✓ |
+| dark | `status.success.fg` | `bg.surface` | 10.28:1 | ≥4.5 | ✓ |
 | dark | `status.success.fg` | `status.success.bg` | 9.03:1 | ≥4.5 | ✓ |
 | dark | `status.success.on-solid` | `status.success.solid` | 5.16:1 | ≥4.5 | ✓ |
-| dark | `status.success.solid` | `bg.canvas` | 3.76:1 | ≥3 | ✓ |
-| dark | `status.warning.fg` | `bg.canvas` | 10.25:1 | ≥4.5 | ✓ |
+| dark | `status.success.solid` | `bg.canvas` | 3.77:1 | ≥3 | ✓ |
+| dark | `status.warning.fg` | `bg.canvas` | 10.26:1 | ≥4.5 | ✓ |
 | dark | `status.warning.fg` | `bg.surface` | 9.73:1 | ≥4.5 | ✓ |
 | dark | `status.warning.fg` | `status.warning.bg` | 8.73:1 | ≥4.5 | ✓ |
 | dark | `status.warning.on-solid` | `status.warning.solid` | 9.65:1 | ≥4.5 | ✓ |
-| dark | `status.warning.border-strong` | `bg.canvas` | 4.83:1 | ≥3 | ✓ |
-| dark | `status.danger.fg` | `bg.canvas` | 9.91:1 | ≥4.5 | ✓ |
+| dark | `status.warning.border-strong` | `bg.canvas` | 4.84:1 | ≥3 | ✓ |
+| dark | `status.danger.fg` | `bg.canvas` | 9.93:1 | ≥4.5 | ✓ |
 | dark | `status.danger.fg` | `bg.surface` | 9.42:1 | ≥4.5 | ✓ |
 | dark | `status.danger.fg` | `status.danger.bg` | 8.59:1 | ≥4.5 | ✓ |
 | dark | `status.danger.on-solid` | `status.danger.solid` | 6.15:1 | ≥4.5 | ✓ |
 | dark | `status.danger.solid` | `bg.canvas` | 3.16:1 | ≥3 | ✓ |
-| dark | `status.progress.fg` | `bg.canvas` | 10.76:1 | ≥4.5 | ✓ |
+| dark | `status.progress.fg` | `bg.canvas` | 10.77:1 | ≥4.5 | ✓ |
 | dark | `status.progress.fg` | `bg.surface` | 10.22:1 | ≥4.5 | ✓ |
 | dark | `status.progress.fg` | `status.progress.bg` | 9.03:1 | ≥4.5 | ✓ |
 | dark | `status.progress.on-solid` | `status.progress.solid` | 5.23:1 | ≥4.5 | ✓ |
-| dark | `status.progress.solid` | `bg.canvas` | 3.71:1 | ≥3 | ✓ |
-| dark | `status.neutral.fg` | `bg.canvas` | 10.42:1 | ≥4.5 | ✓ |
-| dark | `status.neutral.fg` | `bg.surface` | 9.9:1 | ≥4.5 | ✓ |
-| dark | `status.neutral.fg` | `status.neutral.bg` | 9.15:1 | ≥4.5 | ✓ |
-| dark | `status.neutral.on-solid` | `status.neutral.solid` | 9.26:1 | ≥4.5 | ✓ |
-| dark | `status.neutral.border-strong` | `bg.canvas` | 3.23:1 | ≥3 | ✓ |
+| dark | `status.progress.solid` | `bg.canvas` | 3.72:1 | ≥3 | ✓ |
+| dark | `status.neutral.fg` | `bg.canvas` | 10.5:1 | ≥4.5 | ✓ |
+| dark | `status.neutral.fg` | `bg.surface` | 9.95:1 | ≥4.5 | ✓ |
+| dark | `status.neutral.fg` | `status.neutral.bg` | 9.22:1 | ≥4.5 | ✓ |
+| dark | `status.neutral.on-solid` | `status.neutral.solid` | 9.31:1 | ≥4.5 | ✓ |
+| dark | `status.neutral.border-strong` | `bg.canvas` | 3.28:1 | ≥3 | ✓ |
 
 ## 4. 타이포그래피 (`sys.type.<role>-<size>`)
 
-서체 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif · 모노 'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace. 역할 display/heading/body/label/code × 크기 lg/md/sm(+xl/xs). 강조는 같은 역할에 굵기 600을 더한다(별도 토큰 없음). 행간은 비율, 자간은 em.
+서체 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif · 모노 'IBM Plex Mono', 'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace. 역할 display/heading/body/label/code × 크기 lg/md/sm(+xl/xs). 강조는 같은 역할에 굵기 600을 더한다(별도 토큰 없음). 행간은 비율, 자간은 em.
 
 **comfortable (PWA · 터치)**
 
@@ -713,8 +697,8 @@ cmp 층은 sys만 참조한다(ref 직접 참조 금지 — 검사로 강제). �
 | `cmp.card.padding` | 20px | 16px | {sys.space.inset.lg} | PWA 20 · 웹 16 |
 | `cmp.card.gap` | 16px | 12px | {sys.space.stack.md} | 블록 간 |
 | `cmp.card.radius` | 12px | 8px | {sys.radius.card} |  |
-| `cmp.card.bg` | #fdfdff | #fdfdff | {sys.color.bg.surface} |  |
-| `cmp.card.border` | #d6d9df | #d6d9df | {sys.color.border.default} |  |
+| `cmp.card.bg` | #fcfeff | #fcfeff | {sys.color.bg.surface} |  |
+| `cmp.card.border` | #d4dade | #d4dade | {sys.color.border.default} |  |
 | `cmp.card.shadow` | 0px 1px 2px 0px #0000000f | 0px 1px 2px 0px #0000000f | {sys.shadow.raised} | interactive hover |
 | `cmp.card.title` | 20px/1.4 600 -0.01em | 16px/1.4 600 -0.01em | {sys.type.heading-md} |  |
 | `cmp.card.meta` | 14px/1.4 400 -0.01em | 12px/1.5 400 0em | {sys.type.body-sm} |  |
@@ -722,13 +706,13 @@ cmp 층은 sys만 참조한다(ref 직접 참조 금지 — 검사로 강제). �
 | `cmp.field.height.lg` | 56px | 36px | {sys.size.control.lg} |  |
 | `cmp.field.padding-x` | 16px | 12px | {sys.space.inset.md} |  |
 | `cmp.field.radius` | 8px | 6px | {sys.radius.control} |  |
-| `cmp.field.border` | #d6d9df | #d6d9df | {sys.color.border.default} |  |
-| `cmp.field.border-hover` | #9c9ea4 | #9c9ea4 | {sys.color.border.strong} |  |
-| `cmp.field.border-focus` | #0d2877 | #0d2877 | {sys.color.focus.ring} |  |
+| `cmp.field.border` | #d4dade | #d4dade | {sys.color.border.default} |  |
+| `cmp.field.border-hover` | #92a1aa | #92a1aa | {sys.color.border.strong} |  |
+| `cmp.field.border-focus` | #005679 | #005679 | {sys.color.focus.ring} |  |
 | `cmp.field.border-invalid` | #e25851 | #e25851 | {sys.color.status.danger.border-strong} |  |
-| `cmp.field.bg` | #fdfdff | #fdfdff | {sys.color.bg.surface} |  |
-| `cmp.field.bg-disabled` | #f1f3f9 | #f1f3f9 | {sys.color.bg.disabled} |  |
-| `cmp.field.placeholder` | #84868b | #84868b | {sys.color.fg.placeholder} |  |
+| `cmp.field.bg` | #fcfeff | #fcfeff | {sys.color.bg.surface} |  |
+| `cmp.field.bg-disabled` | #f0f4f6 | #f0f4f6 | {sys.color.bg.disabled} |  |
+| `cmp.field.placeholder` | #788994 | #788994 | {sys.color.fg.placeholder} |  |
 | `cmp.field.font` | 16px/1.4 400 -0.01em | 13px/1.5 400 -0.01em | {sys.type.body-md} |  |
 | `cmp.field.label` | 13px/1.4 500 -0.01em | 12px/1.4 500 0em | {sys.type.label-md} |  |
 | `cmp.field.help` | 14px/1.4 400 -0.01em | 12px/1.5 400 0em | {sys.type.body-sm} |  |
@@ -738,24 +722,24 @@ cmp 층은 sys만 참조한다(ref 직접 참조 금지 — 검사로 강제). �
 | `cmp.nav.sidebar.item-padding-x` | 12px | 8px | {sys.space.inset.sm} |  |
 | `cmp.nav.sidebar.item-radius` | 8px | 6px | {sys.radius.control} |  |
 | `cmp.nav.sidebar.item-font` | 14px/1.4 500 -0.01em | 13px/1.4 500 0em | {sys.type.label-lg} |  |
-| `cmp.nav.sidebar.bg` | #f8faff | #f8faff | {sys.color.bg.canvas} |  |
-| `cmp.nav.sidebar.item-selected` | #ebf1ff | #ebf1ff | {sys.color.bg.selected} |  |
-| `cmp.nav.sidebar.item-hover` | #e8ebf1 | #e8ebf1 | {sys.color.bg.ui-hover} |  |
+| `cmp.nav.sidebar.bg` | #f8fafc | #f8fafc | {sys.color.bg.canvas} |  |
+| `cmp.nav.sidebar.item-selected` | #e7f3fb | #e7f3fb | {sys.color.bg.selected} |  |
+| `cmp.nav.sidebar.item-hover` | #e7ecef | #e7ecef | {sys.color.bg.ui-hover} |  |
 | `cmp.nav.topbar.height` | 48px | 48px | {sys.layout.topbar.height} |  |
-| `cmp.nav.topbar.bg` | #fdfdff | #fdfdff | {sys.color.bg.surface} |  |
-| `cmp.nav.topbar.border` | #e0e3e8 | #e0e3e8 | {sys.color.border.subtle} |  |
+| `cmp.nav.topbar.bg` | #fcfeff | #fcfeff | {sys.color.bg.surface} |  |
+| `cmp.nav.topbar.border` | #dde4e8 | #dde4e8 | {sys.color.border.subtle} |  |
 | `cmp.nav.appbar.height` | 56px | 56px | {sys.layout.appbar.height} |  |
 | `cmp.nav.appbar.title` | 20px/1.4 600 -0.01em | 16px/1.4 600 -0.01em | {sys.type.heading-md} |  |
 | `cmp.nav.appbar.icon` | 24px | 20px | {sys.size.icon.lg} |  |
 | `cmp.nav.bottomnav.height` | 56px | 56px | {sys.layout.bottomnav.height} |  |
 | `cmp.nav.bottomnav.icon` | 24px | 20px | {sys.size.icon.lg} |  |
 | `cmp.nav.bottomnav.label` | 12px/1.4 500 0em | 11px/1.3 500 0.01em | {sys.type.label-sm} |  |
-| `cmp.nav.bottomnav.active` | #0d32a1 | #0d32a1 | {sys.color.accent.fg} |  |
-| `cmp.nav.bottomnav.inactive` | #616368 | #616368 | {sys.color.fg.muted} |  |
+| `cmp.nav.bottomnav.active` | #185371 | #185371 | {sys.color.accent.fg} |  |
+| `cmp.nav.bottomnav.inactive` | #4a6879 | #4a6879 | {sys.color.fg.muted} |  |
 | `cmp.overlay.toast.width` | 360px | 360px | 360px |  |
 | `cmp.overlay.toast.radius` | 12px | 8px | {sys.radius.card} |  |
-| `cmp.overlay.toast.bg` | #191b1e | #191b1e | {sys.color.bg.inverse} |  |
-| `cmp.overlay.toast.fg` | #fdfdff | #fdfdff | {sys.color.fg.on-inverse} |  |
+| `cmp.overlay.toast.bg` | #071d29 | #071d29 | {sys.color.bg.inverse} |  |
+| `cmp.overlay.toast.fg` | #fcfeff | #fcfeff | {sys.color.fg.on-inverse} |  |
 | `cmp.overlay.toast.shadow` | 0px 6px 16px -2px #0000001f, 0px 0px 0px 1px #0000000a | 0px 6px 16px -2px #0000001f, 0px 0px 0px 1px #0000000a | {sys.shadow.popover} |  |
 | `cmp.overlay.dialog.width-sm` | 400px | 400px | 400px |  |
 | `cmp.overlay.dialog.width-md` | 560px | 560px | 560px |  |
@@ -771,9 +755,9 @@ cmp 층은 sys만 참조한다(ref 직접 참조 금지 — 검사로 강제). �
 | `cmp.overlay.popover.radius` | 16px | 12px | {sys.radius.dialog} |  |
 | `cmp.overlay.popover.padding` | 12px | 8px | {sys.space.inset.sm} |  |
 | `cmp.overlay.popover.shadow` | 0px 6px 16px -2px #0000001f, 0px 0px 0px 1px #0000000a | 0px 6px 16px -2px #0000001f, 0px 0px 0px 1px #0000000a | {sys.shadow.popover} |  |
-| `cmp.overlay.popover.bg` | #fdfdff | #fdfdff | {sys.color.bg.surface-raised} |  |
-| `cmp.overlay.tooltip.bg` | #191b1e | #191b1e | {sys.color.bg.inverse} |  |
-| `cmp.overlay.tooltip.fg` | #fdfdff | #fdfdff | {sys.color.fg.on-inverse} |  |
+| `cmp.overlay.popover.bg` | #fcfeff | #fcfeff | {sys.color.bg.surface-raised} |  |
+| `cmp.overlay.tooltip.bg` | #071d29 | #071d29 | {sys.color.bg.inverse} |  |
+| `cmp.overlay.tooltip.fg` | #fcfeff | #fcfeff | {sys.color.fg.on-inverse} |  |
 | `cmp.overlay.tooltip.font` | 13px/1.4 500 -0.01em | 12px/1.4 500 0em | {sys.type.label-md} |  |
 | `cmp.overlay.tooltip.radius` | 8px | 6px | {sys.radius.control} |  |
 | `cmp.table.row-height` | 56px | 36px | {sys.size.row.default} |  |
@@ -781,10 +765,10 @@ cmp 층은 sys만 참조한다(ref 직접 참조 금지 — 검사로 강제). �
 | `cmp.table.cell-padding-x` | 16px | 12px | {sys.space.inset.md} |  |
 | `cmp.table.font` | 16px/1.4 400 -0.01em | 13px/1.5 400 -0.01em | {sys.type.body-md} |  |
 | `cmp.table.header-font` | 13px/1.4 500 -0.01em | 12px/1.4 500 0em | {sys.type.label-md} |  |
-| `cmp.table.border` | #e0e3e8 | #e0e3e8 | {sys.color.border.subtle} |  |
-| `cmp.table.row-hover` | #f1f3f9 | #f1f3f9 | {sys.color.bg.ui} |  |
-| `cmp.table.row-selected` | #ebf1ff | #ebf1ff | {sys.color.bg.selected} |  |
-| `cmp.table.header-fg` | #616368 | #616368 | {sys.color.fg.muted} |  |
+| `cmp.table.border` | #dde4e8 | #dde4e8 | {sys.color.border.subtle} |  |
+| `cmp.table.row-hover` | #f0f4f6 | #f0f4f6 | {sys.color.bg.ui} |  |
+| `cmp.table.row-selected` | #e7f3fb | #e7f3fb | {sys.color.bg.selected} |  |
+| `cmp.table.header-fg` | #4a6879 | #4a6879 | {sys.color.fg.muted} |  |
 
 ## 8. 컴포넌트 카탈로그 (108)
 
@@ -1067,7 +1051,7 @@ owner-experience의 현황/탐색/상세/뷰어는 목적별 구성을 적용한
 5. **선 대신 여백·층** — 카드 크롬(`radius.card` · `shadow.raised` · `bg.surface`)은 List와 카드 외곽에만. 섹션은 제목 + 간격 + `bg.surface-sunken` 층. 표 머리글 텍스트 없음. 행 구분선은 `border.subtle`.
 6. **시각은 상대 + 절대** — 목록은 `relativeLabel`(DemoClock 기준) + `<time title>` 절대. 미수신은 "마지막 수신 + 절대 시각"을 warning 텍스트로(FR-034). 상세 "장비 상태" 영역은 절대 시각만(오프라인 전후 텍스트 동일).
 7. **밀도는 역할에서(§0-6)** — 소유주 화면은 웹도 comfortable. 웹 레이아웃이 루트 `data-density`를 전환한다.
-8. **색 예산 유지(§0-4)** — IconTile·PeriodBar의 톤은 `neutral|warning|danger`뿐. 점(StatusDot · signal · Badge dot)은 소유주 화면에 0. 6초 루프 샘플에 LIVE 표시를 붙이지 않는다.
+8. **색 예산 유지(§0-4)** — IconTile·PeriodBar의 톤은 `neutral|warning|danger`뿐(면을 채우는 자리). 상태 **글자**는 계열마다 색을 갖는다 — 고장 danger · 점검 warning(yellow 8) · 수신 지연 warning(yellow 11) · 보관 중립 · **정상 success 초록**. 점은 정상 요약 칩 하나에만(살아 움직이는 신호 LIVE·REC은 영상 타일). 6초 루프 샘플에 LIVE 표시를 붙이지 않는다.
 
 컴포넌트: IconTile · List · PeriodBar · ContactCard · ContextHeader(스크롤 시 sticky 축약 바, compact일 때만 렌더) · AlertCard · EquipmentRow(layout columns/stacked · poster) · StatusStrip · OverviewCrumbs · SiteRow · NationPanel · SitePanel · UnitPanel · OwnerLiveTile · MapSheet(비모달 3단, BottomSheet와 구분) · FleetSummary(현황에서는 StatusStrip으로 대체). 채택하지 않음: Tabs(`role=tab`) · DataTable(`<table>`) — 목록은 List + 정렬 열 행(`role=list`). 보관 대수를 가용 대수로 표시하지 않는다.
 
@@ -1113,8 +1097,8 @@ owner-experience의 현황/탐색/상세/뷰어는 목적별 구성을 적용한
 ### 13.2 색
 
 - **단색(셸)**: 사이드바 · PWA 앱바 · 쇼케이스 머리글 · 인쇄 머리글 — `currentColor`(`text-fg`). 브랜드 마크는 색 예산(§0-4) 밖이지만, 상태색과 나란히 놓이는 셸에서는 색을 쓰지 않는다.
-- **두 톤(브랜드 면)**: 로그인(B0-01 · A*-01) · 앱 아이콘 · favicon · README · 문서 표지 — ink `sys.color.fg.default` + 붐·"Eyes" `sys.color.accent.fg`(라이트 #0d32a1 · 다크 #9ebdff, 캔버스 대비 ≥ 10:1). `accent.solid`는 라이트에서 ink와 1.3:1이라 마크에는 쓰지 않는다.
-- **아이콘**(PWA 192/512/maskable · apple-touch): 바탕 `sys.color.accent.solid`(= manifest `theme_color`) · 마크 `sys.color.accent.on-solid` · 붐 `ref.color.accent.7`(바탕 대비 6.8:1). maskable은 마크 박스가 변의 56% 이하(안전 원 반지름 40% 안).
+- **두 톤(브랜드 면)**: 로그인(B0-01 · A*-01) · 앱 아이콘 · favicon · README · 문서 표지 — ink `sys.color.fg.default` + 붐·"Eyes" `sys.color.accent.fg`(라이트 #185371 · 다크 #93c6e3, 캔버스 대비 라이트 7.98:1 · 다크 10.59:1). `accent.solid`는 라이트에서 ink와 2.1:1이라 마크에는 쓰지 않는다.
+- **아이콘**(PWA 192/512/maskable · apple-touch): 바탕 `sys.color.accent.solid`(= manifest `theme_color`) · 마크 `sys.color.accent.on-solid` · 붐 `ref.color.accent.7`(바탕 대비 4.2:1 — 비텍스트 기준 3:1 충족). maskable은 마크 박스가 변의 56% 이하(안전 원 반지름 40% 안).
 - 새 토큰·램프는 없다 — "브랜드 전용 토큰은 없다"(§0)는 그대로 참이다. `pnpm design:audit:color`는 `fill-*`을 세지 않는다.
 
 ### 13.3 크기 · 여백
@@ -1148,8 +1132,8 @@ owner-experience의 현황/탐색/상세/뷰어는 목적별 구성을 적용한
 |---|---|---|---|
 | 명명 | `color/gray/300 (Disabled)` · `Semantic: Typogrpahy` · 대소문자 혼용 | `--bg --fg --hair` 약칭 | `<layer>.<category>.<concept>` 문법, 소문자·하이픈, 상태 접미사 |
 | 색 원천 | 수동 hex 램프(단계 수 불균일, 980 중복) | 흑백 + 불투명도 5단 | 앵커 hex → OKLCH 12단 자동 생성, 색조 7, 브랜드 앵커 고정 |
-| 브랜드 | navi 400/500/600 산발 사용 | 없음(흑백) | `accent` 램프 하나 — 9 solid(#0d2877) · 10 hover(#081849) · 11 텍스트(#0d32a1) · 12(#050f2e) |
-| 상태색 | text/bg/icon/border × 4 상태 + accent badge 12 + map pin 4 | error 1색 | tone 6(info success warning danger progress neutral) × 10속성 + 도메인 매핑 32 |
+| 브랜드 | navi 400/500/600 산발 사용 | 없음(흑백) | `accent` 램프 하나 — 9 solid(#005679) · 10 hover(#00405c) · 11 텍스트(#185371) · 12(#0c2a39) |
+| 상태색 | text/bg/icon/border × 4 상태 + accent badge 12 + map pin 4 | error 1색 | tone 6(info success warning danger progress neutral) × 10속성 + 도메인 매핑 96(equipment · connect · severity · task · doc · video) |
 | 경고 대비 | text/warning #de9300 = 2.5:1(미달) | — | warning.fg = yellow 11(≥4.5:1), solid은 어두운 텍스트 자동 선택 |
 | 다크 | 없음(모니터링 화면만 수동 다크) | 없음 | light/dark 완전 대칭, 램프 자체가 모드별 생성 |
 | 타이포 | 16 스타일(HSB40~LM12), 140% 고정 | 10 크기·6 굵기·비율 행간 | 역할×크기 14, 밀도별 2세트(웹 13 · 앱 16), Figma 코드 대응 유지 |
@@ -1158,7 +1142,7 @@ owner-experience의 현황/탐색/상세/뷰어는 목적별 구성을 적용한
 | 그림자 | 6종(normal~heavy·brandcard) | 5단 | 4단 + up, 다크에서 1px white 링 추가 |
 | 컴포넌트 | 세트 36(모바일 전용) | 셸·표·승인 모달(웹) | 카탈로그 76 — 웹 전용 17 · PWA 전용 9 · 공용 50, 도메인 19 |
 | 레이아웃 | 375×812, 여백 20 | 사이드바 240/64 · 탑바 64 | PWA 390 여백 20 · 웹 240/56 · 48 · 360 · 1400 |
-| 접근성 | 미검사 | 상수만 | 대비 검사 76쌍 빌드 게이트 |
+| 접근성 | 미검사 | 상수만 | 대비 검사 94쌍 빌드 게이트 |
 | 원천 | Figma 변수 | tokens.css | `packages/tokens/src` — Figma·코드 모두 참조로 격하 |
 
 Linear에서 취한 것: 밀도(행 36 · 13px), 중립 우선 팔레트와 절제된 액센트, 3열 셸과 인스펙터, 커맨드 메뉴, 반투명 분리선, 빠른 모션, 키보드 우선. 취하지 않은 것: 다크 기본(관제는 light 기본), 보라 액센트, 글꼴(Inter → Pretendard).

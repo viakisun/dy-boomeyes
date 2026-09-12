@@ -14,12 +14,12 @@ test('[A1-01] manifest 링크·필드(name · icons 3 · standalone · theme_col
   const m = await res.json();
   expect(m.name).toBe('BoomEyes 현장');
   expect(m.display).toBe('standalone');
-  expect(m.theme_color).toBe('#0d2877');
+  expect(m.theme_color).toBe('#005679');
   expect(m.icons).toHaveLength(3);
   for (const icon of m.icons) expect((await request.get(icon.src)).ok()).toBe(true);
   for (const href of ['/favicon.svg', '/favicon.png', '/icons/apple-touch-icon.png'])
     expect((await request.get(href)).ok()).toBe(true); // brand:build 산출물(§13) — SW addAll 은 하나라도 404면 설치 실패
-  await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute('content', '#0d2877');
+  await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute('content', '#005679');
 });
 
 test('[A2-01] 서비스 워커 등록 → 오프라인 새로고침에도 로그인 셸 렌더 [FR-001] [FR-024]', async ({ page, context }) => {

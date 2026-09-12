@@ -18,7 +18,8 @@ export function equipmentCondition(device: OwnerDevice) {
   if (device.connection === 'stale') return { label: '수신 지연', tone: 'warning' as const };
   if (device.connection === 'detached') return { label: '단말기 미장착', tone: 'neutral' as const };
   if (device.connection === 'unintegrated') return { label: '미연동', tone: 'neutral' as const };
-  return { label: '이상 신호 없음', tone: 'neutral' as const };
+  // 정상은 success — 이상만 색을 갖는 화면에서 '정상'이 읽히지 않았다(2026-09-12 결정 · ADR-014 · 원칙 4 개정)
+  return { label: '이상 신호 없음', tone: 'success' as const };
 }
 
 /** 외부·다른 앱 경로는 복귀 대상으로 사용하지 않는다. */

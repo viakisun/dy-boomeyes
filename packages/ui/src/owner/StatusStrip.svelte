@@ -1,5 +1,6 @@
 <script lang="ts">
-  // 운영 상태 띠 — 지도 위에 떠 있는 한 줄(전체 → 보유 장비, 상태별 → 목록·알림 필터). KPI 카드가 아니라 칸막이 있는 띠. 색은 warning·danger 숫자만.
+  // 운영 상태 띠 — 지도 위에 떠 있는 한 줄(전체 → 보유 장비, 상태별 → 목록·알림 필터). KPI 카드가 아니라 칸막이 있는 띠.
+  // 색은 숫자에만: 고장 danger · 점검·수신 지연 warning · 가동 중 success(ADR-014) · 보관 중립.
   import {
     ownerHref,
     ownerStrip,
@@ -35,7 +36,7 @@
         label: '가동 중',
         count: strip.running,
         href: ownerHref(url, 'fleet', app, { filter: 'deployed' }),
-        tone: '',
+        tone: 'text-success-fg',
       },
       {
         key: 'fault',

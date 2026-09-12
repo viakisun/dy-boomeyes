@@ -80,6 +80,6 @@ owner-experience의 현황/탐색/상세/뷰어는 목적별 구성을 적용한
 5. **선 대신 여백·층** — 카드 크롬(`radius.card` · `shadow.raised` · `bg.surface`)은 List와 카드 외곽에만. 섹션은 제목 + 간격 + `bg.surface-sunken` 층. 표 머리글 텍스트 없음. 행 구분선은 `border.subtle`.
 6. **시각은 상대 + 절대** — 목록은 `relativeLabel`(DemoClock 기준) + `<time title>` 절대. 미수신은 "마지막 수신 + 절대 시각"을 warning 텍스트로(FR-034). 상세 "장비 상태" 영역은 절대 시각만(오프라인 전후 텍스트 동일).
 7. **밀도는 역할에서(§0-6)** — 소유주 화면은 웹도 comfortable. 웹 레이아웃이 루트 `data-density`를 전환한다.
-8. **색 예산 유지(§0-4)** — IconTile·PeriodBar의 톤은 `neutral|warning|danger`뿐. 점(StatusDot · signal · Badge dot)은 소유주 화면에 0. 6초 루프 샘플에 LIVE 표시를 붙이지 않는다.
+8. **색 예산 유지(§0-4)** — IconTile·PeriodBar의 톤은 `neutral|warning|danger`뿐(면을 채우는 자리). 상태 **글자**는 계열마다 색을 갖는다 — 고장 danger · 점검 warning(yellow 8) · 수신 지연 warning(yellow 11) · 보관 중립 · **정상 success 초록**. 점은 정상 요약 칩 하나에만(살아 움직이는 신호 LIVE·REC은 영상 타일). 6초 루프 샘플에 LIVE 표시를 붙이지 않는다.
 
 컴포넌트: IconTile · List · PeriodBar · ContactCard · ContextHeader(스크롤 시 sticky 축약 바, compact일 때만 렌더) · AlertCard · EquipmentRow(layout columns/stacked · poster) · StatusStrip · OverviewCrumbs · SiteRow · NationPanel · SitePanel · UnitPanel · OwnerLiveTile · MapSheet(비모달 3단, BottomSheet와 구분) · FleetSummary(현황에서는 StatusStrip으로 대체). 채택하지 않음: Tabs(`role=tab`) · DataTable(`<table>`) — 목록은 List + 정렬 열 행(`role=list`). 보관 대수를 가용 대수로 표시하지 않는다.

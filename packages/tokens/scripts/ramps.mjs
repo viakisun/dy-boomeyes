@@ -16,6 +16,9 @@ const NEUTRAL_L = {
   light: [0.995, 0.985, 0.965, 0.94, 0.915, 0.885, 0.8, 0.7, 0.62, 0.56, 0.5, 0.22],
   dark: [0.16, 0.19, 0.225, 0.26, 0.3, 0.345, 0.42, 0.5, 0.58, 0.64, 0.8, 0.96],
 };
+// 중립 채도 곡선 — 바탕은 거의 무채, 글자·테두리로 갈수록 색조를 띤다(차가운 슬레이트).
+// 균일 채도는 회색으로 읽혀 강조색과 같은 색조 가족으로 보이지 않는다. chroma는 이 비율에 곱한다.
+const NEUTRAL_C = [0.25, 0.375, 0.625, 0.875, 1.125, 1.125, 1.75, 2.75, 3.25, 3.75, 5.5, 4.5];
 export const THEMES = ['light', 'dark'];
 export function buildRamps(config, brand) {
   const hues = config.hues.map((h) =>
@@ -45,7 +48,7 @@ export function buildRamps(config, brand) {
       const ramp = {};
       for (let i = 1; i <= 12; i++) {
         const L = hue.ladder?.[theme]?.[i] ?? (hue.neutral ? NEUTRAL_L[theme][i - 1] : LADDER[theme].L[i - 1]);
-        const C = hue.neutral ? Cmax : Cmax * LADDER[theme].C[i - 1];
+        const C = hue.neutral ? Cmax * NEUTRAL_C[i - 1] : Cmax * LADDER[theme].C[i - 1];
         ramp[i] = lchToHex([L, C, H]);
       }
       for (const [k, v] of Object.entries(hue.pins?.[theme] ?? {})) ramp[k] = v.toLowerCase();

@@ -13,7 +13,7 @@ from typing import Any, Dict, List, Optional
 
 CSS = """
 @page { size: 297mm 210mm; margin: 0; }
-:root { --ink:#16232a; --sub:#5c6b6e; --faint:#8fa0a4; --line:#dde3e4; --bg:#f8faff; --card:#fff; --navy:#0d2877; --navy-bg:#e8ecf7; --danger:#b42318; --danger-bg:#fdecea; --ok:#1e7e4a; --warn:#8a5a00; --warn-bg:#fff4d6; }
+:root { --ink:#16232a; --sub:#5c6b6e; --faint:#8fa0a4; --line:#dde3e4; --bg:#f8faff; --card:#fff; --navy:#005679; --navy-bg:#e7f3fb; --danger:#b42318; --danger-bg:#fdecea; --ok:#1e7e4a; --warn:#8a5a00; --warn-bg:#fff4d6; }
 * { margin:0; padding:0; box-sizing:border-box; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
 body { font-family:"Pretendard Variable","Pretendard","Noto Sans CJK KR","Apple SD Gothic Neo",sans-serif; color:var(--ink); background:#d3dadb; font-size:9.5px; line-height:1.45; }
 .page { width:297mm; height:210mm; background:#fff; margin:0 auto 6mm; padding:12mm 14mm 14mm; page-break-after:always; position:relative; overflow:hidden; }

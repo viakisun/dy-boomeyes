@@ -18,8 +18,8 @@
       },
       "mono": {
         "$type": "fontFamily",
-        "$value": ["JetBrains Mono", "SF Mono", "Menlo", "Consolas", "monospace"],
-        "$description": "코드·식별자·계기 수치"
+        "$value": ["IBM Plex Mono", "JetBrains Mono", "SF Mono", "Menlo", "Consolas", "monospace"],
+        "$description": "코드·식별자·계기 수치 — IBM Plex Mono는 라틴 서브셋을 앱이 자체 배송한다(apps/*/static/fonts)"
       }
     },
     "weight": {

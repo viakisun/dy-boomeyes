@@ -9,8 +9,8 @@
 ### 13.2 색
 
 - **단색(셸)**: 사이드바 · PWA 앱바 · 쇼케이스 머리글 · 인쇄 머리글 — `currentColor`(`text-fg`). 브랜드 마크는 색 예산(§0-4) 밖이지만, 상태색과 나란히 놓이는 셸에서는 색을 쓰지 않는다.
-- **두 톤(브랜드 면)**: 로그인(B0-01 · A*-01) · 앱 아이콘 · favicon · README · 문서 표지 — ink `sys.color.fg.default` + 붐·"Eyes" `sys.color.accent.fg`(라이트 #0d32a1 · 다크 #9ebdff, 캔버스 대비 ≥ 10:1). `accent.solid`는 라이트에서 ink와 1.3:1이라 마크에는 쓰지 않는다.
-- **아이콘**(PWA 192/512/maskable · apple-touch): 바탕 `sys.color.accent.solid`(= manifest `theme_color`) · 마크 `sys.color.accent.on-solid` · 붐 `ref.color.accent.7`(바탕 대비 6.8:1). maskable은 마크 박스가 변의 56% 이하(안전 원 반지름 40% 안).
+- **두 톤(브랜드 면)**: 로그인(B0-01 · A*-01) · 앱 아이콘 · favicon · README · 문서 표지 — ink `sys.color.fg.default` + 붐·"Eyes" `sys.color.accent.fg`(라이트 #185371 · 다크 #93c6e3, 캔버스 대비 라이트 7.98:1 · 다크 10.59:1). `accent.solid`는 라이트에서 ink와 2.1:1이라 마크에는 쓰지 않는다.
+- **아이콘**(PWA 192/512/maskable · apple-touch): 바탕 `sys.color.accent.solid`(= manifest `theme_color`) · 마크 `sys.color.accent.on-solid` · 붐 `ref.color.accent.7`(바탕 대비 4.2:1 — 비텍스트 기준 3:1 충족). maskable은 마크 박스가 변의 56% 이하(안전 원 반지름 40% 안).
 - 새 토큰·램프는 없다 — "브랜드 전용 토큰은 없다"(§0)는 그대로 참이다. `pnpm design:audit:color`는 `fill-*`을 세지 않는다.
 
 ### 13.3 크기 · 여백
