@@ -10,6 +10,7 @@ import { createRequire } from 'node:module';
 import { chromium, expect as playwrightExpect } from '@playwright/test';
 import { PNG } from 'pngjs';
 import { parse } from 'yaml';
+import { ownerViews } from '../owner/views.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const expect = playwrightExpect.configure({ timeout: 15_000 });
@@ -28,16 +29,8 @@ if (args.includes('--help')) {
 }
 const registry = parse(readFileSync(join(ROOT, 'ssot/screens.yaml'), 'utf8'));
 const fixedClock = parse(readFileSync(join(ROOT, 'ssot/meta.yaml'), 'utf8')).fixed_clock;
-// 구현된 화면만(웨이브 ≤ 4) — 계약·운전자는 웨이브 5라 아직 예외 시나리오가 없다
-const OWNER_DEMO_WAVE = 4;
-const views = (registry.owner_demo ?? []).filter((v) =>
-  ['web', 'pwa'].every((app) => {
-    const w = registry.screens.find((s) => s.id === v[app])?.wave;
-    return typeof w === 'number' && w <= OWNER_DEMO_WAVE;
-  }),
-);
-if (!views.length || new Set(views.map((view) => view.view)).size !== views.length)
-  throw new Error('owner_demo: 구현된 화면 목적이 없거나 중복이다');
+// 구현된 화면만 — 계약·운전자는 아직 예외 시나리오가 없다(tools/owner/views.mjs가 판정)
+const views = ownerViews(ROOT, registry);
 const CASES = [
   { id: 'empty-fleet', view: 'fleet', state: 'empty', frames: ['empty'], ac: ['AC-O14'] },
   { id: 'read-retry', view: 'fleet', state: 'error', frames: ['failed', 'recovered'], ac: ['AC-O14'] },

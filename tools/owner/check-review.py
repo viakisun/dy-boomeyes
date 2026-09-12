@@ -20,8 +20,6 @@ from urllib.parse import parse_qs, urlparse
 from PIL import Image
 import yaml
 
-# 소유주 데모 웨이브 — 이 웨이브까지 내려온 화면만 구현된 것으로 본다
-OWNER_DEMO_WAVE = 4
 SIZES = {"web": [(1280, 842), (1024, 842), (768, 842), (390, 800)],
          "pwa": [(375, 800), (390, 800), (430, 900), (768, 1024)]}
 # 검토안 확대 페이지: 첫 화면 아래 내용 4 + 드릴다운 현장·호기 단계 3(웹 현장·웹 호기·폰 호기)
@@ -55,19 +53,29 @@ def contained_file(directory, name):
     return path
 
 
+def owner_views(repo, registry, screens):
+    """구현된 소유주 화면 목적 — ssot/meta.yaml owner_demo_wave 이하인 것만.
+
+    목적 수를 고정하지 않는다: 계약·운전자처럼 아직 만들지 않은 화면은 더 높은 웨이브에
+    있고, 구현되면 웨이브가 내려와 저절로 편입된다. tools/owner/views.mjs와 같은 규칙이다.
+    """
+    wave = yaml.safe_load((repo / "ssot/meta.yaml").read_text()).get("owner_demo_wave")
+    if not isinstance(wave, int):
+        raise ValueError("ssot/meta.yaml: owner_demo_wave가 없다")
+    views = [
+        v
+        for v in registry.get("owner_demo", [])
+        if all(isinstance(screens.get(v.get(app), {}).get("wave"), int) and screens[v[app]]["wave"] <= wave for app in SIZES)
+    ]
+    if not views or len({v.get("view") for v in views}) != len(views):
+        raise ValueError("owner_demo: 구현된 화면 목적이 없거나 중복이다")
+    return views
+
 def load_evidence(repo, manifest_path):
     registry = yaml.safe_load((repo / "ssot/screens.yaml").read_text())
     clock = yaml.safe_load((repo / "ssot/meta.yaml").read_text())["fixed_clock"]
     screens = {row["id"]: row for row in registry["screens"]}
-    # 구현된 화면 목적(웨이브 <= 4)만 증거 대상이다 — 계약·운전자는 웨이브 5라 아직 아니다.
-    # 목적 수를 고정하지 않는다: 구현되면 웨이브가 내려오고 대상이 저절로 늘어난다.
-    views = [
-        v
-        for v in registry.get("owner_demo", [])
-        if all(isinstance(screens.get(v.get(app), {}).get("wave"), int) and screens[v[app]]["wave"] <= OWNER_DEMO_WAVE for app in SIZES)
-    ]
-    if not views or len({v.get("view") for v in views}) != len(views):
-        raise ValueError("owner_demo: 구현된 화면 목적이 없거나 중복이다")
+    views = owner_views(repo, registry, screens)
     expected = {}
     for view in views:
         if not view.get("question") or not view.get("source_cells"):
@@ -186,8 +194,8 @@ def check_review(repo, manifest_path, directory, require_visual=False):
     text = re.sub(r"\s+", "", "\n".join(page.extract_text() or "" for page in reader.pages))
     if any(re.sub(r"\s+", "", view["question"]) not in text for view in views) or "고객확인은아직진행하지않았습니다" not in text:
         raise ValueError("Required customer questions or review status missing in PDF")
-    if sum(len(page.images) for page in reader.pages) != 14 + len(extras):
-        raise ValueError("Review PDF must contain fourteen selected screens and all expanded views")
+    if sum(len(page.images) for page in reader.pages) != len(record["screens"]) + len(extras):
+        raise ValueError("Review PDF must contain every selected screen and all expanded views")
     html = (directory / "owner-review.html").read_text()
     images = re.findall(r'<img\b[^>]*\bsrc="([^"]+)"', html)
     if len(images) != len(record["screens"]) + len(extras) or set(images) != {row["file"] for row in record["screens"] + extras}:
@@ -214,11 +222,7 @@ def self_test(repo):
     """Synthetic images exercise only rejection logic; never generate a customer artifact."""
     registry = yaml.safe_load((repo / "ssot/screens.yaml").read_text())
     screens = {row["id"]: row for row in registry["screens"]}
-    views = [
-        v
-        for v in registry["owner_demo"]
-        if all(isinstance(screens.get(v.get(app), {}).get("wave"), int) and screens[v[app]]["wave"] <= OWNER_DEMO_WAVE for app in SIZES)
-    ]
+    views = owner_views(repo, registry, screens)
     clock = yaml.safe_load((repo / "ssot/meta.yaml").read_text())["fixed_clock"]
     with tempfile.TemporaryDirectory(prefix="owner-validator-test-") as temporary:
         directory = Path(temporary)

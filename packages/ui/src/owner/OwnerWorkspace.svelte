@@ -2,6 +2,8 @@
   import type { Snippet } from 'svelte';
   import {
     OWNER_DEMO,
+    OWNER_DEMO_WAVE,
+    SCREENS,
     ownerScreen,
     type OwnerApi,
     type OwnerApp,
@@ -90,10 +92,10 @@
   });
   $effect(() => () => unsubscribe?.());
   const viewProps = $derived(snapshot ? { data: snapshot, api, app, url, navigate, refresh, capture, sim } : null);
-  // 원천에 등록됐지만 아직 만들지 않은 화면(계약·운전자 — 웨이브 5). data-stub를 붙여
+  // 원천에 등록됐지만 아직 만들지 않은 화면(계약·운전자)에는 data-stub를 붙여
   // capture --strict가 자리 화면으로 세게 한다 — 보이지 않는 자리 화면을 남기지 않는다.
-  const BUILT = ['overview', 'fleet', 'detail', 'documents', 'alerts', 'video'] as const;
-  const stub = $derived(!(BUILT as readonly string[]).includes(view));
+  // 판정은 화면의 웨이브에서 나온다(수기 목록이 아니다 — 구현되면 웨이브가 내려와 저절로 풀린다).
+  const stub = $derived(SCREENS[ownerScreen(view, app)].wave > OWNER_DEMO_WAVE);
 </script>
 
 <section

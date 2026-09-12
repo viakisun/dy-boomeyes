@@ -66,6 +66,10 @@
     "current_wave": {
       "type": "integer"
     },
+    "owner_demo_wave": {
+      "type": "integer",
+      "description": "소유주 데모가 구현된 웨이브 — 소유주 캡처·증거 도구가 이 웨이브까지의 화면만 대상으로 삼는다"
+    },
     "schedule": {
       "type": "array",
       "items": {

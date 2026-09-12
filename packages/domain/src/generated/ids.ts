@@ -691,3 +691,5 @@ export const MACHINES = {
 
 export const FIXED_CLOCK = '2026-07-03T10:42:00+09:00';
 export const CURRENT_WAVE = 2;
+/** 소유주 데모가 구현된 웨이브 — 이보다 높은 웨이브의 소유주 화면은 아직 자리 화면이다 */
+export const OWNER_DEMO_WAVE = 4;

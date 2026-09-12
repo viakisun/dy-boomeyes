@@ -9,6 +9,7 @@ import { createRequire } from 'node:module';
 import { createHash } from 'node:crypto';
 import { chromium } from 'playwright';
 import { parse } from 'yaml';
+import { ownerViews } from '../owner/views.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const args = process.argv.slice(2);
@@ -19,23 +20,8 @@ const option = (key, fallback) => {
   return args[index + 1];
 };
 const source = parse(readFileSync(join(ROOT, 'ssot/screens.yaml'), 'utf8'));
-// 구현된 소유주 화면만 찍는다 — 목적 수를 고정하지 않고 웨이브로 판정한다. 아직 만들지 않은
-// 화면(계약·운전자)은 웨이브 5에 있어 여기서 걸러지고, 구현되면 웨이브 4로 내려와 자동으로 편입된다.
-export const OWNER_DEMO_WAVE = 4;
-const waveOf = (id) => source.screens.find((s) => s.id === id)?.wave;
-export const ownerViews = (src) =>
-  (src.owner_demo ?? []).filter((v) =>
-    ['web', 'pwa'].every((app) => {
-      const w = src.screens.find((s) => s.id === v[app])?.wave;
-      return typeof w === 'number' && w <= OWNER_DEMO_WAVE;
-    }),
-  );
-const views = ownerViews(source);
-if (!views.length || new Set(views.map((v) => v.view)).size !== views.length)
-  throw new Error('owner_demo: 구현된 화면 목적이 없거나 중복이다');
-for (const v of views)
-  for (const app of ['web', 'pwa'])
-    if (waveOf(v[app]) === undefined) throw new Error(`owner_demo: ${v.view}/${app} 화면(${v[app]})이 없다`);
+// 구현된 소유주 화면만 찍는다 — 목적 수는 tools/owner/views.mjs가 원천에서 판정한다
+const views = ownerViews(ROOT, source);
 const sizes = {
   web: [
     [1280, 842],

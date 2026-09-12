@@ -136,6 +136,8 @@ const ts = [
   '',
   `export const FIXED_CLOCK = '${d.meta.fixed_clock}';`,
   `export const CURRENT_WAVE = ${d.meta.current_wave};`,
+  `/** 소유주 데모가 구현된 웨이브 — 이보다 높은 웨이브의 소유주 화면은 아직 자리 화면이다 */`,
+  `export const OWNER_DEMO_WAVE = ${d.meta.owner_demo_wave};`,
   '',
 ].join('\n');
 writeFileSync(join(GEN_CODE, 'ids.ts'), ts);
@@ -144,18 +146,18 @@ writeFileSync(join(GEN_CODE, 'ids.ts'), ts);
 const surfaces = d.screens.surfaces;
 let md = HEAD('화면 레지스트리 (SCREENS)', 'screens.yaml');
 md +=
-  tbl(
-    ['표면', '앱', '화면 수', '웨이브 0', '1', '2', '4'],
-    surfaces.map((sf) => {
-      const ss = screens.filter((s) => s.surface === sf.id);
-      return [
-        sf.id,
-        `${sf.name} (${sf.app})`,
-        ss.length,
-        ...[0, 1, 2, 4].map((w) => ss.filter((s) => s.wave === w).length),
-      ];
-    }),
-  ) + '\n\n';
+  (() => {
+    // 웨이브 열은 실제로 쓰이는 웨이브 값에서 만든다 — 열거를 고정하면 새 웨이브의 화면이
+    // 열에서 빠져 화면 수와 웨이브 합계가 어긋난다(2026-09-12 웨이브 5 편입에서 드러났다).
+    const waves = [...new Set(screens.map((s) => s.wave))].sort((a, b) => a - b);
+    return tbl(
+      ['표면', '앱', '화면 수', ...waves.map((w, i) => (i === 0 ? `웨이브 ${w}` : String(w)))],
+      surfaces.map((sf) => {
+        const ss = screens.filter((s) => s.surface === sf.id);
+        return [sf.id, `${sf.name} (${sf.app})`, ss.length, ...waves.map((w) => ss.filter((s) => s.wave === w).length)];
+      }),
+    );
+  })() + '\n\n';
 md +=
   tbl(
     ['코드', '이름', '표면', '라우트', '역할', '단계', '웨이브', '상태 픽스처', 'FR', 'spec'],

@@ -6,6 +6,7 @@ import { fileURLToPath } from 'node:url';
 import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import { parse } from 'yaml';
+import { ownerViews } from './views.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const args = process.argv.slice(2);
@@ -16,20 +17,8 @@ const requireThat = (ok, message) => {
 };
 const read = (path) => JSON.parse(readFileSync(resolve(ROOT, path), 'utf8'));
 const source = parse(readFileSync(join(ROOT, 'ssot/screens.yaml'), 'utf8'));
-// 구현된 소유주 화면 목적(웨이브 ≤ 4)만 증거 대상이다 — 계약·운전자는 웨이브 5라 아직 아니다.
-// 목적 수를 고정하지 않는다: 구현되면 웨이브가 내려오고 필요한 키가 저절로 늘어난다.
-const OWNER_DEMO_WAVE = 4;
-const ownerViews = (source.owner_demo ?? []).filter((v) =>
-  ['web', 'pwa'].every((app) => {
-    const w = source.screens?.find((x) => x.id === v[app])?.wave;
-    return typeof w === 'number' && w <= OWNER_DEMO_WAVE;
-  }),
-);
-requireThat(ownerViews.length > 0, 'No implemented owner views in SSOT');
-requireThat(
-  new Set(ownerViews.map((v) => v.view)).size === ownerViews.length,
-  'Implemented owner views must be unique',
-);
+// 구현된 소유주 화면 목적만 증거 대상이다 — tools/owner/views.mjs가 원천에서 판정한다
+const views = ownerViews(ROOT, source);
 requireThat(!!value('--captures') || !!value('--e2e'), 'Pass --captures and/or --e2e evidence paths');
 let captures = 0,
   tests = 0;
@@ -41,7 +30,7 @@ if (value('--captures')) {
     pwa: ['375x800', '390x800', '430x900', '768x1024'],
   };
   // 운영 현황은 드릴다운 3단계(전국 · 현장 · 호기)를 각각 캡처한다 — 9 × 2앱 × 4폭 × 2테마 = 144
-  const required = ownerViews.flatMap((v) =>
+  const required = views.flatMap((v) =>
     (v.view === 'overview' ? ['', '-site', '-unit'] : ['']).flatMap((level) =>
       ['web', 'pwa'].flatMap((app) =>
         sizes[app].flatMap((size) => ['light', 'dark'].map((theme) => `${app}-${v.view}${level}-${size}-${theme}`)),
@@ -87,7 +76,7 @@ if (value('--captures')) {
     captures++;
     requireThat(required.includes(shot.key) && !seen.has(shot.key), `Unexpected/duplicate capture ${shot.key}`);
     seen.add(shot.key);
-    const view = ownerViews.find((v) => v.view === shot.view);
+    const view = views.find((v) => v.view === shot.view);
     requireThat(view?.[shot.app] === shot.code, `Wrong screen ID ${shot.key}`);
     requireThat(shot.ok === true && shot.status === 'automated-capture-pass', `Failed capture ${shot.key}`);
     requireThat(
