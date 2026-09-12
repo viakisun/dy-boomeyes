@@ -7,6 +7,7 @@ import {
   ownerHost,
   noOverflow,
   OWNER_PATHS,
+  OWNER_UNBUILT,
   type OwnerApp,
 } from './owner-helpers';
 
@@ -181,6 +182,27 @@ export function ownerFlows(app: OwnerApp) {
     await expect(page).not.toHaveURL(/site=/);
   });
 
+  // 원천에 등록됐지만 아직 만들지 않은 화면은 「표식이 붙은 안내 화면」이어야 한다.
+  // 표식(data-stub)만 붙여 두고 아무도 그 경로를 밟지 않으면 형식적 안전장치에 그친다 —
+  // 이 검사가 owner 세션으로 11개 목적을 전부 열어 실제로 확인한다(4차 리뷰 지적).
+  test('[B1-02] [FR-025] every registered owner view renders a real body or a marked placeholder', async ({ page }) => {
+    await startOwner(page, app);
+    const views = Object.keys(paths).filter((v) => v !== 'entry');
+    expect(views.length).toBeGreaterThan(6);
+    for (const view of views) {
+      await page.goto(paths[view as keyof typeof paths]);
+      const host = ownerHost(page);
+      await expect(host, `${view}: 소유주 화면이 떠야 한다`).toBeVisible();
+      await expect(host, `${view}: 같은 목적으로 렌더돼야 한다`).toHaveAttribute('data-owner-view', view);
+      if ((OWNER_UNBUILT as readonly string[]).includes(view)) {
+        await expect(host, `${view}: 미구현 화면은 표식을 가져야 한다`).toHaveAttribute('data-stub', '');
+        await expect(host.getByText('준비 중인 화면입니다', { exact: true })).toBeVisible();
+      } else {
+        await expect(host, `${view}: 구현된 화면에 표식이 남아 있다`).not.toHaveAttribute('data-stub', '');
+        await expect(host.getByText('준비 중인 화면입니다', { exact: true })).toHaveCount(0);
+      }
+    }
+  });
   test('[A4-07] [FR-024] [AC-O13] [AC-O16] map sheet snaps collapsed → half → expanded by button, keyboard and drag', async ({
     page,
   }) => {

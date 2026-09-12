@@ -226,8 +226,8 @@ def self_test(repo):
     clock = yaml.safe_load((repo / "ssot/meta.yaml").read_text())["fixed_clock"]
     with tempfile.TemporaryDirectory(prefix="owner-validator-test-") as temporary:
         directory = Path(temporary)
-        manifest = {**fingerprint(repo), "requiredCount": 144, "expectedCount": 144, "actualCount": 144,
-                    "scope": "full", "status": "automated-capture-pass", "exitCode": 0,
+        # 합성 매니페스트의 조합 수는 아래에서 실제로 만든 shots 수로 채운다(리터럴 금지 — 뷰가 늘면 어긋난다)
+        manifest = {**fingerprint(repo), "scope": "full", "status": "automated-capture-pass", "exitCode": 0,
                     "command": ["node", "tools/capture/owner.mjs"], "shots": []}
         for view in views:
             levels = ["nation", "site", "unit"] if view["view"] == "overview" else [None]
@@ -250,6 +250,9 @@ def self_test(repo):
                             "status": "automated-capture-pass", "pageErrors": [], "consoleErrors": [],
                             "role": "anonymous" if entry else "owner", "renderedRole": "owner",
                             "ownerId": None if entry else "OWN-001", "dataset": "owner", "clock": clock})
+        # 실제로 만든 조합 수로 세 필드를 채운다 — 뷰가 늘어도 합성 매니페스트가 스스로 맞는다
+        total = len(manifest["shots"])
+        manifest.update(requiredCount=total, expectedCount=total, actualCount=total)
         target = directory / "manifest.json"
         def run(value):
             target.write_text(json.dumps(value))

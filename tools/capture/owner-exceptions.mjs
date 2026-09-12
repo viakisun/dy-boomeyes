@@ -98,8 +98,11 @@ for (const id of requested) if (!CASES.some((scenario) => scenario.id === id)) t
 const selected = all.filter((scenario) => !requested.length || requested.includes(scenario.id));
 const requiredFrames = all.reduce((total, scenario) => total + scenario.frames.length, 0);
 const expectedFrames = selected.reduce((total, scenario) => total + scenario.frames.length, 0);
-if (all.length !== 30 || requiredFrames !== 38 || !selected.length)
-  throw new Error('Expected 30 case runs and 38 required frames');
+// 시나리오 수는 CASES(이 파일의 내용) × 앱 2개에서 파생한다 — 리터럴을 두면 시나리오를
+// 늘릴 때마다 도구가 먼저 멈춘다. 프레임 수는 보고용이고 아래 출력에 그대로 실린다.
+const expectedRuns = CASES.length * 2;
+if (all.length !== expectedRuns || !requiredFrames || !selected.length)
+  throw new Error(`시나리오 실행 수가 어긋난다(${all.length} ≠ ${expectedRuns}) 또는 프레임이 없다`);
 if (args.includes('--list')) {
   console.log(
     JSON.stringify(

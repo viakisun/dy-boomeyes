@@ -11,6 +11,10 @@ export const OWNER_PATHS = {
     video: '/b1/fleet/CPB-001/video',
     documents: '/b1/docs',
     alerts: '/b1/alerts',
+    requests: '/b1/requests',
+    lease: '/b1/leases',
+    drivers: '/b1/drivers',
+    'driver-docs': '/b1/drivers/docs',
   },
   pwa: {
     entry: '/a4/login',
@@ -20,8 +24,15 @@ export const OWNER_PATHS = {
     video: '/a4/fleet/CPB-001/video',
     documents: '/a4/docs',
     alerts: '/a4/alerts',
+    requests: '/a4/requests',
+    lease: '/a4/leases',
+    drivers: '/a4/drivers',
+    'driver-docs': '/a4/drivers/docs',
   },
 } as const;
+// owner_demo에 등록됐지만 아직 만들지 않은 화면 목적(ssot/meta.yaml owner_demo_wave 위).
+// 여기 적힌 것은 「표식이 붙은 안내 화면」이어야 하고, 나머지는 실제 본문이어야 한다.
+export const OWNER_UNBUILT = ['requests', 'lease', 'drivers', 'driver-docs'] as const;
 export const test = base.extend<{ ownerRuntime: void }>({
   ownerRuntime: [
     async ({ page }, use, testInfo) => {

@@ -1,4 +1,5 @@
-// Owner captures: actual CTA session, source registry, 112 mandatory viewport/theme combinations.
+// Owner captures: actual CTA session, source registry, every implemented owner view × viewport × theme.
+// 조합 수는 ssot/meta.yaml owner_demo_wave 이하로 구현된 화면 목적에서 파생된다(현재 144).
 // --list performs no browser/server work. --only <view,SCR> produces partial evidence (exit 2).
 // --reuse-server uses caller-owned servers and never stops them. Default refuses occupied ports.
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
@@ -65,9 +66,11 @@ const all = views.flatMap((view) =>
     );
   }),
 );
-export const OWNER_CAPTURE_COUNT = 144;
-if (all.length !== OWNER_CAPTURE_COUNT || new Set(all.map((x) => x.key)).size !== OWNER_CAPTURE_COUNT)
-  throw new Error(`Expected exactly ${OWNER_CAPTURE_COUNT} unique combinations`);
+// 조합 수는 원천(구현된 화면 목적)에서 파생된다 — 리터럴과 비교하지 않는다.
+// 실제로 지킬 값은 「키가 중복되지 않는다」 하나다(중복은 캡처가 서로를 덮어쓴다는 뜻).
+export const OWNER_CAPTURE_COUNT = all.length;
+if (!all.length || new Set(all.map((x) => x.key)).size !== all.length)
+  throw new Error(`캡처 조합 키가 비었거나 중복이다(${all.length}조합)`);
 for (const item of selection)
   if (!all.some((x) => x.view === item || x.code === item)) throw new Error(`Unknown --only target: ${item}`);
 const selected = all.filter((x) => !selection.length || selection.includes(x.view) || selection.includes(x.code));
