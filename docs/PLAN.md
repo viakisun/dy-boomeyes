@@ -30,6 +30,7 @@ W1은 9/5에 선행 완료(사용자 결정 항목만 잔여). 계획 `~/.claude
 - 우선순위: 전체 장비 찾기·계약/담당자 → 정보 시각·수신 상태 → 장비 서류 원문 → 현황·알림·영상 → 고객용 진입·전체 검증.
 - 현재 상태: **계획 초안 작성 / 제품 구현 미착수**. 기존 current_wave·계약 일정·정식 spec·SSOT는 이 계획으로 자동 변경하지 않는다.
 - 2026-09-11 후속: [디자인 언어 개선안](design/OWNER-VISUAL-LANGUAGE-2026-09-11.md)(텍스트에서 시각으로) 작성 후 C0~C3 구현 완료 — comfortable 밀도(사용자 결정) · 설명 문장 58→23 · 테두리 149→40 · 프리미티브 5→16종 · 신규 프리미티브 IconTile·List·PeriodBar·ContactCard·ContextHeader·AlertCard · 7화면 재구성. 증거 [owner-visual-2026-09-11](design/evidence/owner-visual-2026-09-11/manifest.json) 112/112 · owner e2e 88 · owner:check 0. 브랜치 체인 docs/owner-visual-language → chore/owner-copy-density → feat/owner-visual-list → feat/owner-visual-detail → feat/owner-visual-media → docs/owner-visual-evidence(미머지, reviewer 판정 대기).
+- 2026-09-12 후속: 운영 현황을 드릴다운 관제(전국 → 현장 → 호기)로 재구성 — 고객 V5 `[구현 예시]` 3장 근거, 사용자 결정(120대·현장 13 시연 기본 · KPI 카드 대신 상태 띠 · 패널 안 실시간 영상 · PWA 지도 전면 + 시트 3단 · 시뮬레이터 on/off). 체인 `feat/owner-sites-seed` → `feat/map-camera-kinds` → `feat/owner-overview-drilldown` → `feat/owner-map-sheet-pwa` → `feat/owner-sim` → `docs/owner-drilldown-evidence`(reviewer 5건 "머지 가능"). 캡처 144조합 · 예외 30건 · owner e2e 162. 문서 [디자인 언어 §10](design/OWNER-VISUAL-LANGUAGE-2026-09-11.md).
 - 다음 실행 단위: OD-00 현재 기준선·미결 대조 → OD-01 `/ssot`·`/spec` 등록과 검증 매핑. 화면별 구현은 수용 기준·상태·검증 대상이 준비된 뒤 시작한다.
 - 상세 작업 상태는 위 실행 계획과 정식 spec의 tasks에서 관리한다. 실제 고객 확인은 [소유주 모의 의견](design/OWNER-PERSONA-FEEDBACK-2026-09-11.md)과 구분한다.
 

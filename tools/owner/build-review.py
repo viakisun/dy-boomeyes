@@ -34,7 +34,7 @@ SPEC.loader.exec_module(CHECK)
 # routes and references are always read from owner_demo and capture evidence.
 NARRATION = {
     "entry": (20, "아이디와 비밀번호로 로그인합니다.", "시연에서는 데모 계정으로 로그인을 눌러 소유주 계정으로 들어갑니다."),
-    "overview": (40, "운영 구성과 우선 확인할 장비를 살펴봅니다.", "현장 투입과 보관 대수를 구분하고, 확인할 장비 목록에서 다음 행동을 선택합니다. 보관 중이라는 표시만으로 투입 가능 여부를 판단하지 않습니다."),
+    "overview": (40, "전국 지도에서 현장을 고르고, 현장의 호기를 눌러 영상과 정보를 봅니다.", "상태 띠로 가동·고장·점검·지연·보관 대수를 읽고, 현장 알약을 누르면 현장 지도와 호기 목록, 호기를 누르면 실시간 영상·계약·담당자·전압·서류가 한 패널에 옵니다. 보관 중이라는 표시만으로 투입 가능 여부를 판단하지 않습니다."),
     "fleet": (45, "호기 또는 현장명으로 검색하고 장비를 선택합니다.", "이상이 있는 장비뿐 아니라 정상 장비와 보관 장비도 같은 목록에서 찾습니다. 검색 결과 수와 선택한 장비의 현장을 함께 확인합니다."),
     "detail": (55, "계약 기간, 현장 담당자, 마지막 수신 시각을 확인합니다.", "선택한 호기를 기준으로 계약과 연락처를 확인합니다. 수신이 지연된 값은 현재 상태와 구분해서 읽고, 필요한 서류나 영상으로 이동합니다."),
     "video": (45, "타설 위치와 마스트 설치를 선택하고 가동일 저장을 재생합니다.", "영상의 용도와 시점을 따로 선택합니다. 화면의 시연 표시는 6초 샘플임을 뜻하며, 저장 영상은 끝에서 멈춥니다."),
@@ -64,7 +64,7 @@ def find_font(explicit):
 
 
 def context(views, capture):
-    shots = {(row["view"], row["app"], row["width"], row["height"], row["theme"]): row for row in capture["shots"]}
+    shots = {(row["view"], row["app"], row["width"], row["height"], row["theme"]): row for row in capture["shots"] if row.get("level") in (None, "nation")}
     result = []
     elapsed = 0
     for index, view in enumerate(views):
@@ -130,24 +130,27 @@ class ReviewPDF:
 # Reviewed crop rectangles in the canonical 1280px WEB / 390px PWA full captures.
 # Preserve actual pixels; the manifest records source file/hash and every crop.
 SUPPLEMENTS = [
-    ("web", "video", "영상의 재생과 시간 조작", (260, 175, 1260, 1012), False),
-    ("web", "documents", "1호기 제작증 원문", (260, 480, 1260, 1510), True),
-    ("pwa", "detail", "휴대폰에서 계약과 현장 담당자 확인", (20, 620, 370, 1140), True),
-    ("pwa", "documents", "휴대폰에서 제작증 원문 열람", (20, 490, 370, 1180), True),
+    ("web", "video", None, "영상의 재생과 시간 조작", (260, 175, 1260, 1012), False),
+    ("web", "documents", None, "1호기 제작증 원문", (260, 480, 1260, 1510), True),
+    ("pwa", "detail", None, "휴대폰에서 계약과 현장 담당자 확인", (20, 620, 370, 1140), True),
+    ("pwa", "documents", None, "휴대폰에서 제작증 원문 열람", (20, 490, 370, 1180), True),
+    ("web", "overview", "site", "현장 단계 — 마포 주상복합 신축의 호기 5대", (56, 160, 1280, 842), False),
+    ("web", "overview", "unit", "호기 단계 — 1호기 실시간 영상·계약·담당자", (56, 160, 1280, 842), False),
+    ("pwa", "overview", "unit", "휴대폰 호기 단계 — 시트에서 영상·계약·전압·서류", (20, 320, 370, 1700), True),
 ]
 
 def supplement_images(output, directory, capture):
     result = []
-    for app, view, title, box, tall in SUPPLEMENTS:
-        row = next(s for s in capture["shots"] if s["app"] == app and s["view"] == view and s["theme"] == "light" and s["width"] == (1280 if app == "web" else 390))
+    for app, view, level, title, box, tall in SUPPLEMENTS:
+        row = next(s for s in capture["shots"] if s["app"] == app and s["view"] == view and s.get("level") == (level or ("nation" if view == "overview" else None)) and s["theme"] == "light" and s["width"] == (1280 if app == "web" else 390))
         path = CHECK.contained_file(directory, row["fullFile"])
         if CHECK.sha256(path) != row["fullSha256"]: raise ValueError("Full capture hash mismatch")
         with Image.open(path) as source:
             if not (0 <= box[0] < box[2] <= source.width and 0 <= box[1] < box[3] <= source.height):
                 raise ValueError("Supplement crop exceeds actual capture")
-            name = f"screens/{app}-{view}-expanded.png"
+            name = f"screens/{app}-{view}{'-' + level if level else ''}-expanded.png"
             source.crop(box).save(output / name)
-        result.append({"app": app, "view": view, "title": title, "tall": tall,
+        result.append({"app": app, "view": view, "level": level, "title": title, "tall": tall,
                        "captureKey": row["key"], "sourceFile": row["fullFile"], "sourceSha256": row["fullSha256"],
                        "crop": list(box), "file": name, "sha256": CHECK.sha256(output / name)})
     return result
@@ -196,7 +199,7 @@ def pdf_document(output, scenes, capture, font, supplements):
     for scene in scenes:
         y = pdf.paragraph(f"{scene['label']}  |  {', '.join(scene['source_cells'])}  |  PC {scene['web']} / 휴대폰 {scene['pwa']}", 55, y - 15, pdf.w - 110, 12)
     evidence = [
-        "캡처 조합: PC·휴대폰 7종 × 4화면 크기 × 라이트·다크 = 112 / 112",
+        "캡처 조합: PC·휴대폰 7종(운영 현황은 전국·현장·호기 3단계) × 4화면 크기 × 라이트·다크 = 144 / 144",
         f"캡처 시각: {capture.get('createdAt', '미기록')}",
         f"시연 기준 시각: {next(s['clock'] for s in capture['shots'] if s['view'] != 'entry')}",
         f"소스 커밋: {capture['sourceSha']}",
@@ -220,7 +223,7 @@ def html_document(output, scenes, capture, supplements):
     assumptions = "".join(f"<li>{escape(text)}</li>" for text in ASSUMPTIONS)
     rows = "".join(f'<tr><th>{escape(s["label"])}</th><td>{escape(", ".join(s["source_cells"]))}</td><td>{s["web"]} / {s["pwa"]}</td></tr>' for s in scenes)
     style = """*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;color:#172D39;background:#F0F4F4;font:17px/1.65 system-ui,sans-serif}header,main,footer{max-width:1280px;margin:auto;padding:32px}header{padding-top:56px}h1{font-size:42px;line-height:1.2}h2{font-size:29px;line-height:1.4}nav{display:flex;flex-wrap:wrap;gap:12px}a{color:#075A60}nav a{padding:12px 16px;background:white;border:1px solid #CAD5D9;border-radius:8px}section{padding:30px;background:white;border:1px solid #CAD5D9;border-radius:12px;margin:24px 0;scroll-margin-top:24px}.eyebrow{color:#0A6166;font-weight:650}.action{font-size:21px}.screens{display:grid;grid-template-columns:minmax(0,3fr) minmax(200px,1fr);gap:24px;align-items:start}figure{margin:0}figcaption{font-weight:650;margin:12px 0}img{width:100%;height:auto;border:1px solid #CAD5D9}p,li,td{overflow-wrap:anywhere}li{margin:12px 0}table{width:100%;border-collapse:collapse;font-size:15px}th,td{text-align:left;padding:12px;border-bottom:1px solid #CAD5D9}.next{font-weight:650}code{font-size:13px}footer{font-size:14px}a:focus-visible{outline:3px solid #0A6166;outline-offset:4px}@media(max-width:700px){header,main,footer{padding:20px}h1{font-size:32px}h2{font-size:25px}section{padding:20px}.screens{grid-template-columns:1fr}.screens figure:last-child{max-width:390px;margin:auto}}@media print{@page{size:A3 landscape;margin:14mm}body{background:white}nav{display:none}header,main,footer{max-width:none;padding:0}section{break-before:page;border:0;padding:0}.screens{grid-template-columns:3fr 1fr}a{color:inherit;text-decoration:none}}"""
-    html = f'<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>BoomEyes 소유주 화면 검토안</title><style>{style}</style></head><body><header><p class="eyebrow">BOOMEYES / OWNER DEMO</p><h1>내 장비를 찾고, 현장 확인까지</h1><p>소유주 화면 검토안 · 내부 검토용 초안</p><nav aria-label="검토 화면">{nav}</nav></header><main>{"".join(sections)}{expanded}<section><h2>시연 조건</h2><ol>{assumptions}</ol></section><section><h2>부록 · 원문 근거와 빌드 기록</h2><p>2026-09-08 V5 · 관제기능 시트</p><table><thead><tr><th>화면</th><th>원문 셀</th><th>검토 코드 (PC / 폰)</th></tr></thead><tbody>{rows}</tbody></table><p>전체 자동 캡처 112 / 112. 고객 확인은 아직 진행하지 않았습니다.</p><p>소스 커밋 <code>{capture["sourceSha"]}</code><br>작업 내용 해시 <code>{capture["workingTreeHash"]}</code><br>원천 해시 <code>{capture["registryHash"]}</code></p></section></main><footer>로컬 검토용 자료입니다. 화면 이미지를 선택하면 원래 크기로 열립니다.</footer></body></html>'
+    html = f'<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>BoomEyes 소유주 화면 검토안</title><style>{style}</style></head><body><header><p class="eyebrow">BOOMEYES / OWNER DEMO</p><h1>내 장비를 찾고, 현장 확인까지</h1><p>소유주 화면 검토안 · 내부 검토용 초안</p><nav aria-label="검토 화면">{nav}</nav></header><main>{"".join(sections)}{expanded}<section><h2>시연 조건</h2><ol>{assumptions}</ol></section><section><h2>부록 · 원문 근거와 빌드 기록</h2><p>2026-09-08 V5 · 관제기능 시트</p><table><thead><tr><th>화면</th><th>원문 셀</th><th>검토 코드 (PC / 폰)</th></tr></thead><tbody>{rows}</tbody></table><p>전체 자동 캡처 144 / 144(운영 현황은 전국·현장·호기 3단계). 고객 확인은 아직 진행하지 않았습니다.</p><p>소스 커밋 <code>{capture["sourceSha"]}</code><br>작업 내용 해시 <code>{capture["workingTreeHash"]}</code><br>원천 해시 <code>{capture["registryHash"]}</code></p></section></main><footer>로컬 검토용 자료입니다. 화면 이미지를 선택하면 원래 크기로 열립니다.</footer></body></html>'
     (output / "owner-review.html").write_text(html, encoding="utf-8")
 
 

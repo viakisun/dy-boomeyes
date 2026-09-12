@@ -22,6 +22,9 @@ import yaml
 
 SIZES = {"web": [(1280, 842), (1024, 842), (768, 842), (390, 800)],
          "pwa": [(375, 800), (390, 800), (430, 900), (768, 1024)]}
+# 검토안 확대 페이지: 첫 화면 아래 내용 4 + 드릴다운 현장·호기 단계 3(웹 현장·웹 호기·폰 호기)
+EXPECTED_SUPPLEMENTS = {("web", "video", None), ("web", "documents", None), ("pwa", "detail", None), ("pwa", "documents", None),
+                        ("web", "overview", "site"), ("web", "overview", "unit"), ("pwa", "overview", "unit")}
 
 
 def sha256(path):
@@ -61,27 +64,32 @@ def load_evidence(repo, manifest_path):
     for view in views:
         if not view.get("question") or not view.get("source_cells"):
             raise ValueError(f"Missing customer question or source cells: {view['view']}")
+        # 운영 현황은 드릴다운 3단계(전국 · 현장 · 호기)를 각각 캡처한다 — 총 144
+        levels = ["nation", "site", "unit"] if view["view"] == "overview" else [None]
         for app, sizes in SIZES.items():
             screen = screens.get(view.get(app))
             if not screen or "owner" not in screen["roles"]:
                 raise ValueError(f"Missing owner screen: {view.get(app)}")
-            for width, height in sizes:
-                for theme in ["light", "dark"]:
-                    key = f"{app}-{view['view']}-{width}x{height}-{theme}"
-                    expected[key] = {"view": view["view"], "app": app, "code": screen["id"],
-                                     "width": width, "height": height, "theme": theme, "route": screen["route"]}
+            for level in levels:
+                suffix = f"-{level}" if level and level != "nation" else ""
+                for width, height in sizes:
+                    for theme in ["light", "dark"]:
+                        key = f"{app}-{view['view']}{suffix}-{width}x{height}-{theme}"
+                        expected[key] = {"view": view["view"], "app": app, "code": screen["id"],
+                                         "width": width, "height": height, "theme": theme, "route": screen["route"]}
+                        if level: expected[key]["level"] = level
     manifest = json.loads(manifest_path.read_text())
     for key, value in fingerprint(repo).items():
         if manifest.get(key) != value:
             raise ValueError(f"Evidence {key} does not match current source")
-    if (manifest.get("requiredCount"), manifest.get("expectedCount"), manifest.get("actualCount")) != (112, 112, 112):
-        raise ValueError("All 112 required captures must be selected and executed")
+    if (manifest.get("requiredCount"), manifest.get("expectedCount"), manifest.get("actualCount")) != (144, 144, 144):
+        raise ValueError("All 144 required captures must be selected and executed")
     if manifest.get("scope") != "full" or manifest.get("status") != "automated-capture-pass" or manifest.get("exitCode") != 0:
         raise ValueError("Capture run is partial, failed or unfinished")
     if manifest.get("command", [])[:2] != ["node", "tools/capture/owner.mjs"]:
         raise ValueError("Evidence must come from the owner browser capture command")
     shots = manifest.get("shots", [])
-    if len(shots) != 112 or {row.get("key") for row in shots} != set(expected):
+    if len(shots) != 144 or {row.get("key") for row in shots} != set(expected):
         raise ValueError("Capture combinations are missing, duplicated or unexpected")
     for row in shots:
         exp = expected[row["key"]]
@@ -138,8 +146,8 @@ def check_review(repo, manifest_path, directory, require_visual=False):
         if sha256(contained_file(directory, row["file"])) != source["sha256"]:
             raise ValueError("Review image was changed after the browser capture")
     extras = record.get("supplements", [])
-    if {(e.get("app"), e.get("view")) for e in extras} != {("web", "video"), ("web", "documents"), ("pwa", "detail"), ("pwa", "documents")} or len(extras) != 4:
-        raise ValueError("Review must expand all four below-fold tasks")
+    if {(e.get("app"), e.get("view"), e.get("level")) for e in extras} != EXPECTED_SUPPLEMENTS or len(extras) != len(EXPECTED_SUPPLEMENTS):
+        raise ValueError("Review must expand all below-fold tasks and the drilldown levels")
     for extra in extras:
         source = capture_shots.get(extra.get("captureKey"))
         if not source or extra.get("sourceFile") != source.get("fullFile") or extra.get("sourceSha256") != source.get("fullSha256"):
@@ -170,7 +178,7 @@ def check_review(repo, manifest_path, directory, require_visual=False):
     if any(re.sub(r"\s+", "", view["question"]) not in text for view in views) or "고객확인은아직진행하지않았습니다" not in text:
         raise ValueError("Required customer questions or review status missing in PDF")
     if sum(len(page.images) for page in reader.pages) != 14 + len(extras):
-        raise ValueError("Review PDF must contain fourteen selected screens and all four expanded views")
+        raise ValueError("Review PDF must contain fourteen selected screens and all expanded views")
     html = (directory / "owner-review.html").read_text()
     images = re.findall(r'<img\b[^>]*\bsrc="([^"]+)"', html)
     if len(images) != 14 + len(extras) or set(images) != {row["file"] for row in record["screens"] + extras}:
@@ -201,22 +209,25 @@ def self_test(repo):
     clock = yaml.safe_load((repo / "ssot/meta.yaml").read_text())["fixed_clock"]
     with tempfile.TemporaryDirectory(prefix="owner-validator-test-") as temporary:
         directory = Path(temporary)
-        manifest = {**fingerprint(repo), "requiredCount": 112, "expectedCount": 112, "actualCount": 112,
+        manifest = {**fingerprint(repo), "requiredCount": 144, "expectedCount": 144, "actualCount": 144,
                     "scope": "full", "status": "automated-capture-pass", "exitCode": 0,
                     "command": ["node", "tools/capture/owner.mjs"], "shots": []}
         for view in views:
+            levels = ["nation", "site", "unit"] if view["view"] == "overview" else [None]
             for app, sizes in SIZES.items():
                 screen = screens[view[app]]
-                for width, height in sizes:
+                for level in levels:
+                  suffix = f"-{level}" if level and level != "nation" else ""
+                  for width, height in sizes:
                     for theme in ["light", "dark"]:
-                        key = f"{app}-{view['view']}-{width}x{height}-{theme}"
+                        key = f"{app}-{view['view']}{suffix}-{width}x{height}-{theme}"
                         path = directory / f"{key}.png"
                         Image.new("RGB", (width, height), "white").save(path)
                         entry = view["view"] == "entry"
                         route = screen["route"]
                         url = "http://localhost:4173" + route.replace("[device]", "CPB-001") + f"?capture=1&state=owner&theme={theme}"
                         if entry and app == "web": url += "&demo=owner"
-                        manifest["shots"].append({"view": view["view"], "app": app, "code": screen["id"],
+                        manifest["shots"].append({"view": view["view"], "app": app, "code": screen["id"], **({"level": level} if level else {}),
                             "key": key, "route": route, "width": width, "height": height, "theme": theme,
                             "url": url, "file": path.name, "sha256": sha256(path), "ok": True,
                             "status": "automated-capture-pass", "pageErrors": [], "consoleErrors": [],
@@ -272,7 +283,7 @@ def main():
             print(f"owner review check: 14 screens, {record['pageCount']} PDF pages, artifact hashes OK; visual review {'pass' if visual else 'pending'}; customer review not performed")
         else:
             load_evidence(args.repo.resolve(), args.manifest.resolve())
-            print("owner review evidence: 112/112, source/registry/file hashes/owner/clock OK")
+            print("owner review evidence: 144/144, source/registry/file hashes/owner/clock OK")
     except (ValueError, KeyError, OSError, json.JSONDecodeError) as error:
         parser.exit(1, f"owner review check FAILED: {error}\n")
 

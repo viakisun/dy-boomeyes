@@ -27,9 +27,12 @@ if (value('--captures')) {
     web: ['1280x842', '1024x842', '768x842', '390x800'],
     pwa: ['375x800', '390x800', '430x900', '768x1024'],
   };
+  // 운영 현황은 드릴다운 3단계(전국 · 현장 · 호기)를 각각 캡처한다 — 9 × 2앱 × 4폭 × 2테마 = 144
   const required = (source.owner_demo ?? []).flatMap((v) =>
-    ['web', 'pwa'].flatMap((app) =>
-      sizes[app].flatMap((size) => ['light', 'dark'].map((theme) => `${app}-${v.view}-${size}-${theme}`)),
+    (v.view === 'overview' ? ['', '-site', '-unit'] : ['']).flatMap((level) =>
+      ['web', 'pwa'].flatMap((app) =>
+        sizes[app].flatMap((size) => ['light', 'dark'].map((theme) => `${app}-${v.view}${level}-${size}-${theme}`)),
+      ),
     ),
   );
   requireThat(

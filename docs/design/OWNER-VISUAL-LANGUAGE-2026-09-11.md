@@ -362,6 +362,69 @@ Stat(전압 — 값 380 · 단위 V · 힌트 "마지막 수신 10:41" · fault�
 - reviewer "머지 가능" 판정 · CI(`baseline` 기준선은 wave ≤ 2 화면만이라 소유주 화면은 비교 대상 아님) · main 병합은 사용자 지시 뒤.
 - 부록 B 별도 트랙(다국어 · 해외 규제)은 그대로.
 
+## 10. 드릴다운 관제 현황(2026-09-12)
+
+사용자 결정(2026-09-12): "고객은 UX 전문가가 아니다 — 그림은 요소 목록으로 읽고, 현장을 클릭하면 현장 지도, CPB를 고르면 상세 패널과 영상이 나오는 관제 화면으로." 고객 원문 V5 `관제기능` 시트 D82 `[구현 예시]` 3장(KPI 4 · 지역별 대수 전국 지도 · 실시간 영상 · 호기 정보(설치일·완료일·임대기간·담당자·서류·고장코드 전압/단선) · 호기 목록)과 H70/H76 "전체 CPB 운영 현황 모니터링", H71/H77 "호기 터치 → 실시간 영상·서류", H56 "100대 중 80대 운영·20대 보관", I9:N25 호기 1~120. 결정: 120대·현장 13 시연 기본 · KPI 카드 패턴 대신 상태 띠 · 호기 패널 안 실시간 영상 · PWA는 지도 전면 + 시트 3단 · MapLibre 유지 · 시뮬레이터 on/off.
+
+### 참고자료(2026-09-12 확인)
+
+| 관례 | 출처 | 우리 적용 |
+|---|---|---|
+| 지도 마커 → 미리보기 카드(카메라 스틸) → 자산 상세 | Samsara, [Monitor Your Fleet on the Fleet Overview Map](https://kb.samsara.com/hc/en-us/articles/41266933936269-Monitor-Your-Fleet-on-the-Fleet-Overview-Map) | 호기 핀 → UnitPanel(실시간 타일 + 정보) → 상세 화면 |
+| Sites 레이어 → 자산 카드 → Asset Home | Trackunit, [Using the Map](https://help.trackunit.com/en/articles/236810-using-the-map-in-trackunit-manager) · [Asset Home](https://help.trackunit.com/en/articles/141031-how-do-i-navigate-in-asset-home) | 전국 현장 알약 → SitePanel → 호기 |
+| 줌에 따라 클러스터 ↔ 개별 핀 자동 전환 | Hilti ON!Track, [What is the Smart map?](https://help.ontrack3.hilti.com/hc/en-us/articles/34399800470545-What-is-the-Smart-map) | 가시 폭 760px 미만은 지역 원 7, 이상은 현장 알약 13 |
+| 지도 선택 → 사이드 패널 상세 | Geotab, [The Map](https://support.geotab.com/help/mygeotab/fleet-activity/map/the-map) | 웹 lg 우측 부유 패널 |
+| 밀집 자동 그룹화 · Live 카메라 카드 | Motive, [Fleet View 2.0](https://helpcenter.gomotive.com/hc/en-us/articles/36088175670685-Fleet-View-2-0) | 지역 집계 · OwnerLiveTile("실시간 예시" 오버레이, 점 없음) |
+| 표준 바텀 시트 3상태(collapsed · half · expanded) | Material Design 2, [Sheets: bottom](https://m2.material.io/components/sheets-bottom) · Apple HIG, [Sheets](https://developer.apple.com/design/human-interface-guidelines/sheets)(medium/large 디텐트, Maps처럼 배경을 가리지 않는 시트) | MapSheet(비모달, 전국은 접힘 · 현장/호기는 절반) |
+| `cameraForBounds` · `easeTo` · `padding` | MapLibre GL JS, [Map](https://maplibre.org/maplibre-gl-js/docs/API/classes/Map/) · [FitBoundsOptions](https://maplibre.org/maplibre-gl-js/docs/API/type-aliases/FitBoundsOptions/) | `cameraForBounds(bounds,{padding,maxZoom})` → `easeTo`(여백을 지도 상태에 남기지 않음, 과다 여백은 절반으로 재시도) |
+| 비텍스트 대비 3:1 · 표적 24px 최소 | WCAG 2.2, [1.4.11 Non-text Contrast](https://www.w3.org/WAI/WCAG22/Understanding/non-text-contrast.html) · [2.5.8 Target Size (Minimum)](https://www.w3.org/WAI/WCAG22/Understanding/target-size-minimum.html) | 마커 44/48px · 캡처 도구가 자식 중심 도달을 검사 |
+| 줌 16 ≈ 2.4 m/px · 17 ≈ 1.2 m/px | OpenStreetMap wiki, [Zoom levels](https://wiki.openstreetmap.org/wiki/Zoom_levels) | 현장 maxZoom 17(호기 격자 78 m가 130px 간격) · 1대 16 |
+
+CARTO Positron 벡터 타일은 줌 15~18 오버줌에서 오류 이벤트 0(S0 실측, 2026-09-12). 다크 관제 톤은 표준이 아니다(Samsara·Geotab 라이트 기본) — 라이트 유지.
+
+### 구조
+
+- **데이터** — `OwnerSite`(현장/보관소 · 지역 7 · 좌표 · 담당자 · 기간) · `OwnerDevice.siteId/harness/errorCode` · `ownerLevel(url)`(실존 현장, 그 현장 소속 호기만) · `ownerStrip`(가동 97 · 점검 2 · 고장 2 · 지연 2 · 보관 17) · 시드 `packages/mock/src/owner-fleet.ts`(121대: 1~120, 101 제외, +121 · 현장 14 · 결정적 격자 좌표 · 페르소나 001~005 사실 보존 · 확인 필요 6대).
+- **지도** — `MapView` `camera`(key가 바뀔 때만 이동 · `data-map-ready` 재무장 · `data-map-level`) · 마커 `kind` unit/site/region · `owner-scene.ts`(`ownerMarkers`/`ownerCamera`: 전국 7 · 지역 10 · 현장 17 · 1대 16) · `resolveOverlaps`(알약 상자 겹침을 덜 밀어도 되는 축으로) · 오류 오버레이는 스타일·소스 실패만.
+- **화면** — `OwnerOverview`(무대 = 지도 + StatusStrip + 패널/시트 · URL이 단계 · push · 이동 뒤 패널 제목 포커스) · `NationPanel`(확인 필요 알림 3 · SiteRow 13) · `SitePanel` · `UnitPanel`(OwnerLiveTile · PeriodBar · ContactCard · 전압/단선/고장코드 · 관련 서류) · `OverviewCrumbs` · `MapSheet`.
+- **시뮬레이터** — `owner-sim.ts`(mulberry32 seed 고정 · 틱 5초 · 첫 틱과 매 3틱째는 반드시 한 건 · 보관↔투입 미전환 · 페르소나 보존) · `OwnerApi.subscribe` · 셸 토글(`boomeyes.owner.sim` + `?sim=`) · 캡처·장면·e2e 기본 off(계획의 "라이브 기본 on" 대신 — 시연자가 한 번 켜면 유지된다).
+
+### 명세와 다르게 한 것
+
+- 전국 현장 13 알약은 웹 1280(가시 폭 ≈ 784px)에서만 — 1024·768·PWA는 지역 원 7(`OWNER_AGGREGATE_BELOW = 760`). 768px 폭에서 13개가 세로로 쌓이면 상단 띠에 가려졌다.
+- PWA 전국 단계의 시트는 접힘(계획: 절반) — 절반 시트와 상단 띠 사이 약 200px에는 지역 원 7개가 들어가지 않았다. 현장·호기 단계는 절반, 접힌 시트에서 고르면 절반으로, 전국으로 돌아오면 다시 접힘.
+- `z-*` 유틸리티는 빌드 CSS에 없다 — 띠·패널은 DOM 순서(지도 → 띠 → 패널)로 위에 그린다.
+- `EmptyState` danger 톤에 `role=alert`(서류 원문 없음 등 오류 상태 — 예외 도구 계약).
+- Svelte 5: 객체 prop은 늘 "바뀜"이라 `OwnerWorkspace`가 내비게이션마다 스냅샷을 다시 읽고 지도를 재생성했다 → api identity 가드. 사용자 `$effect`는 `{#if}`보다 먼저 돌아 포커스는 `tick()` 뒤에, 비교용 객체는 `$state.raw`.
+
+### 증거(2026-09-12)
+
+[owner-drilldown-2026-09-12](evidence/owner-drilldown-2026-09-12/manifest.json) — 144/144(운영 현황 전국·현장·호기 3단계 × 2앱 × 4폭 × 2테마) · 예외 [exceptions](evidence/owner-drilldown-2026-09-12/exceptions/manifest.json) 30/30 · 38/38 · owner e2e 162 · `owner:check` 0 · 검토안 [owner-review.html](evidence/owner-drilldown-2026-09-12/review/owner-review.html)(확대 7: 영상 · 서류 · 폰 계약 · 폰 서류 · 웹 현장 단계 · 웹 호기 단계 · 폰 호기 단계).
+
+| 단계 | 웹 1280×842 | PWA 390×800 |
+|---|---|---|
+| 전국 | ![전국 웹](evidence/owner-drilldown-2026-09-12/web-overview-1280x842-light.png) | ![전국 PWA](evidence/owner-drilldown-2026-09-12/pwa-overview-390x800-light.png) |
+| 현장(마포) | ![현장 웹](evidence/owner-drilldown-2026-09-12/web-overview-site-1280x842-light.png) | ![현장 PWA](evidence/owner-drilldown-2026-09-12/pwa-overview-site-390x800-light.png) |
+| 호기(1호기) | ![호기 웹](evidence/owner-drilldown-2026-09-12/web-overview-unit-1280x842-light.png) | ![호기 PWA](evidence/owner-drilldown-2026-09-12/pwa-overview-unit-390x800-light.png) |
+
+### 게이트 기록
+
+| PR | verify | build | owner e2e | capture:owner | exceptions | reviewer |
+|---|---|---|---|---|---|---|
+| PR1 `4fa750a` 시드 | 0 | 0 | 103 | overview/fleet/detail 48/48 · performance p95 search 40 ms | — | 머지 가능 |
+| PR2 `ed6c93c` 지도 | 0 | 0 | 108(+dashboard·a11y·leases) | — | — | 머지 가능 |
+| PR3 `443290a` 드릴다운 | 0 | 0 | 161 | overview·detail 64/64 | 30/30 | 머지 가능 |
+| PR4 `0c2da6a` PWA 시트 | 0 | 0 | 162 | 64/64 | 30/30 | 머지 가능 |
+| PR5 `76754b7` 시뮬레이터 | 0 | 0 | 162 | overview 48/48 | — | 머지 가능 |
+| PR6(이 문서) | — | — | 162(JSON) | 144/144 · owner:check 0 · review | 30/30 | 증거 커밋 |
+
+### 남은 것
+
+- `FleetSummary`는 현황에서 빠졌다(StatusStrip). 카탈로그에는 남아 있다 — 다른 쓰임이 없으면 제거.
+- 지역 원의 danger 필(고장 1대가 있으면 지역 46대가 빨강)이 과한지 시연 뒤 판단.
+- Esri 위성 타일 · 고객 표 회사명(G/S건설·포스코·대림·한화)을 페르소나 외 호기에 쓴 것 — DY 확인 사항(DISC 후보).
+- `ContextHeader`의 `z-sticky`도 무효(빌드 CSS 없음) — 별도 정리.
+
 ## 부록 A — 측정 스크립트
 
 ```python
