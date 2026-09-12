@@ -79,6 +79,7 @@
     });
   }
   let cameraKey: string | undefined;
+  let cameraJson = '';
   // rearm = 단계가 바뀌는 이동만 준비 표식을 내렸다 올린다(여백 보정에는 유지 — 도구가 기다리는 표식이 깜빡이지 않게)
   function moveCamera(duration: number, rearm = true) {
     if (!map || !camera) return;
@@ -233,7 +234,10 @@
   $effect(() => {
     if (!map || !ready || !camera) return;
     const changed = camera.key !== cameraKey;
+    const json = JSON.stringify(camera);
+    if (!changed && json === cameraJson) return; // 같은 장면의 재렌더(시뮬레이터 틱)는 카메라를 건드리지 않는다
     cameraKey = camera.key;
+    cameraJson = json;
     const reduced = typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches;
     moveCamera(!animate || reduced ? 0 : changed ? EASE_MS : EASE_MS / 2, changed);
   });

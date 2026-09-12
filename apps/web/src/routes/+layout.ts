@@ -1,6 +1,14 @@
 // 정적 SPA — 서버 렌더 없음 (ADR-001 · ADR-007). 화면 진입마다 mock 부트(?state= · ?capture=1) + 역할 가드
 import { redirect } from '@sveltejs/kit';
-import { SCREENS, ownerViewOf, canAccess, screenForPath, type RoleId, type ScrId } from '@boomeyes/domain';
+import {
+  SCREENS,
+  OWNER_SIM_KEY,
+  ownerViewOf,
+  canAccess,
+  screenForPath,
+  type RoleId,
+  type ScrId,
+} from '@boomeyes/domain';
 import {
   bootMock,
   bootOwner,
@@ -51,6 +59,13 @@ export const load: LayoutLoad = ({ url }) => {
     (ownerEntry || (session.user?.role === 'owner' && !!requestedOwnerView && requestedOwnerView !== 'entry'));
   const ownerView = ownerActive ? requestedOwnerView : undefined;
   const ownerState = opts.capture ? opts.state : null;
+  // 활동 시뮬레이션: ?sim=1|0 이 우선, 없으면 localStorage(셸 토글). 캡처·장면에서는 항상 off(결정성)
+  const simParam = url.searchParams.get('sim');
+  const ownerSim =
+    !opts.capture &&
+    !scene &&
+    (simParam === '1' ||
+      (simParam !== '0' && typeof localStorage !== 'undefined' && localStorage.getItem(OWNER_SIM_KEY) === '1'));
   const dataset =
     ownerState === 'empty' || ownerState === 'boundaries' || ownerState === 'large' ? ownerState : 'owner';
   const ownerApi =
@@ -58,6 +73,7 @@ export const load: LayoutLoad = ({ url }) => {
       ? bootOwner(session.user, {
           dataset,
           error: ownerState === 'error',
+          sim: ownerSim,
           latencyMs: opts.capture ? 0 : 120,
           offline: () => typeof navigator !== 'undefined' && !navigator.onLine,
         })
@@ -79,6 +95,7 @@ export const load: LayoutLoad = ({ url }) => {
     api,
     ownerView,
     ownerApi,
+    ownerSim,
     resetOwner,
     clock,
     realtime,

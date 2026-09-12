@@ -8,6 +8,7 @@
   import Sun from '@lucide/svelte/icons/sun';
   import LogOut from '@lucide/svelte/icons/log-out';
   import WifiOff from '@lucide/svelte/icons/wifi-off';
+  import Activity from '@lucide/svelte/icons/activity';
   import { NAV_ICON } from '../shell/nav-icons';
   import { theme, toggleTheme } from '../lib/theme.svelte';
   import { ownerControl } from './core-helpers';
@@ -17,8 +18,19 @@
     view,
     url,
     onlogout,
+    sim = false,
+    onsim,
     children,
-  }: { app: OwnerApp; view: OwnerView; url: URL; onlogout: () => void; children: Snippet } = $props();
+  }: {
+    app: OwnerApp;
+    view: OwnerView;
+    url: URL;
+    onlogout: () => void;
+    /** 활동 시뮬레이션 상태·토글(시연자용 — 함대가 시간에 따라 움직인다) */
+    sim?: boolean;
+    onsim?: (on: boolean) => void;
+    children: Snippet;
+  } = $props();
   const items = $derived(OWNER_MENU.map((v) => OWNER_DEMO.find((x) => x.view === v)!));
   const active = $derived(view === 'detail' || view === 'video' ? 'fleet' : view);
   const dark = $derived(theme.value ? theme.value === 'dark' : theme.system);
@@ -79,6 +91,16 @@
         <span class="text-label-lg font-semibold">소유주 운영</span>
       </div>
       <div class="gap-inline-xs flex">
+        {#if onsim}
+          <IconButton
+            variant="ghost"
+            tone="neutral"
+            label={sim ? '활동 시뮬레이션 끄기' : '활동 시뮬레이션 켜기'}
+            aria-pressed={sim}
+            class="min-w-size-touch-min {sim ? 'text-accent-fg bg-selected' : ''}"
+            onclick={() => onsim(!sim)}><Activity class="size-size-icon-md" aria-hidden="true" /></IconButton
+          >
+        {/if}
         <IconButton
           variant="ghost"
           tone="neutral"

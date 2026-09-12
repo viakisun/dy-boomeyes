@@ -106,7 +106,11 @@ export interface OwnerApi {
   alert(id: string): Promise<OwnerAlert>;
   markRead(id: string): Promise<void>;
   attach(deviceId: string, file: OwnerAttachment): Promise<OwnerDocument>;
+  /** 원천이 바뀌면 알린다(시뮬레이터 틱). 반환값은 해제. 실 API에서는 실시간 채널이 맡는다 */
+  subscribe?(handler: () => void): () => void;
 }
+/** 활동 시뮬레이션 on/off — 기본 off(캡처·e2e 결정성), 셸 토글 또는 ?sim=1로 켠다. localStorage 키 */
+export const OWNER_SIM_KEY = 'boomeyes.owner.sim';
 export const OWNER_CLOCK = FIXED_CLOCK;
 /** 소유주 데모 계정 — 실인증(IdP) 전 mock 검증(DISC-020). 화면에는 ID를 표시하지 않고 "데모 계정으로 로그인"이 채워 넣는다 */
 export const OWNER_DEMO_LOGIN = { userId: 'owner01', password: 'boomeyes' } as const;
@@ -132,7 +136,7 @@ export function ownerHref(
   device?: string,
 ) {
   const target = new URL(ownerPath(view, app, device), url.origin);
-  for (const key of ['capture', 'state', 'scene', 'theme']) {
+  for (const key of ['capture', 'state', 'scene', 'theme', 'sim']) {
     const value = url.searchParams.get(key);
     if (value) target.searchParams.set(key, value);
   }
@@ -149,6 +153,8 @@ export interface OwnerViewProps {
   navigate: (href: string, opts?: { history?: 'push' | 'replace' }) => void;
   refresh: () => Promise<void>;
   capture?: boolean;
+  /** 활동 시뮬레이션이 켜져 있다(화면에 "시뮬레이션 진행 중" 표시) */
+  sim?: boolean;
 }
 
 /** 뷰어에서 같은 호기의 상세로 복귀한다. 외부 주소·다른 호기는 복귀 경로가 될 수 없다. */

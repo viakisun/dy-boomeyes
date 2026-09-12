@@ -224,6 +224,47 @@ export function ownerFlows(app: OwnerApp) {
       await expect(overview.locator('.be-map')).toHaveAttribute('data-map-level', 'site', MAP);
     });
 
+  test('[B1-02] [FR-024] [AC-O15] activity simulation is off by default, runs with ?sim=1, and the shell toggle remembers it', async ({
+    page,
+  }) => {
+    await startOwner(page, app);
+    const host = ownerHost(page, 'overview');
+    // 기본 off: 6.5초(틱 5초) 동안 기준 시각·확인 필요 대수가 그대로
+    await expect(host).toHaveAttribute('data-owner-sim', '0');
+    await expect(host).toHaveAttribute('data-owner-clock', /\d{4}-/); // 스냅샷이 실린 뒤에 기준 시각을 읽는다
+    const clock = await host.getAttribute('data-owner-clock');
+    await page.waitForTimeout(6500);
+    expect(await host.getAttribute('data-owner-clock')).toBe(clock);
+    await expect(host.getByRole('heading', { name: '확인이 필요한 장비 6대', exact: true })).toBeVisible();
+    await expect(page.getByRole('button', { name: '활동 시뮬레이션 켜기', exact: true })).toHaveAttribute(
+      'aria-pressed',
+      'false',
+    );
+    // ?sim=1: 첫 틱(5초)에 반드시 알림 한 건 → 확인 필요 대수가 6에서 바뀌고 기준 시각이 전진한다
+    await page.goto(`${paths.overview}?sim=1`);
+    await expect(ownerHost(page, 'overview')).toHaveAttribute('data-owner-sim', '1');
+    await expect(ownerHost(page, 'overview')).toContainText('시뮬레이션 진행 중');
+    await expect(
+      ownerHost(page, 'overview').getByRole('heading', { name: /확인이 필요한 장비 (?!6대)\d+대/ }),
+    ).toBeVisible({
+      timeout: 15_000,
+    });
+    expect(await ownerHost(page, 'overview').getAttribute('data-owner-clock')).not.toBe(clock);
+    // 셸 토글: 끄면 ?sim=0 + localStorage, 켜면 다시 1 — 이동해도 유지된다
+    await page.getByRole('button', { name: '활동 시뮬레이션 끄기', exact: true }).click();
+    await expect(page).toHaveURL(/sim=0/);
+    await expect(ownerHost(page, 'overview')).toHaveAttribute('data-owner-sim', '0');
+    expect(await page.evaluate(() => localStorage.getItem('boomeyes.owner.sim'))).toBe('0');
+    await page.getByRole('button', { name: '활동 시뮬레이션 켜기', exact: true }).click();
+    await expect(page).toHaveURL(/sim=1/);
+    expect(await page.evaluate(() => localStorage.getItem('boomeyes.owner.sim'))).toBe('1');
+    await page.getByRole('navigation').getByRole('link', { name: '보유 장비', exact: true }).click();
+    await expect(ownerHost(page, 'fleet')).toHaveAttribute('data-owner-sim', '1');
+    // 캡처 모드는 항상 off
+    await page.goto(`${paths.overview}?capture=1&state=owner&sim=1`);
+    await expect(ownerHost(page, 'overview')).toHaveAttribute('data-owner-sim', '0');
+  });
+
   test('[B1-02] [FR-024] [AC-O12] [AC-O13] unknown site or foreign unit in the URL falls back to a valid level', async ({
     page,
   }) => {

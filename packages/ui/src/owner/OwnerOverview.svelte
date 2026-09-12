@@ -30,6 +30,7 @@
     url,
     navigate,
     capture = false,
+    sim = false,
     map,
     live,
   }: OwnerViewProps & { map?: Snippet<[OwnerMapScene]>; live?: Snippet<[OwnerCamera, string, boolean]> } = $props();
@@ -90,6 +91,10 @@
     if (sheet && snap === 'collapsed') snap = 'half'; // 접힌 시트 위에서 고르면 패널이 보이게
     navigate(href, { history: 'push' });
   }
+  // 전국으로 돌아오면(크럼·뒤로가기) 시트를 다시 접는다 — 전국 단계의 기본과 같게
+  $effect(() => {
+    if (sheet && level.level === 'nation') snap = 'collapsed';
+  });
   $effect(() => {
     const p = pending;
     if (!p || level === p.from) return;
@@ -172,7 +177,10 @@
   <div class="gap-inline-lg flex flex-wrap items-end justify-between">
     <PageHeader title="운영 현황">
       {#snippet meta()}<span class="gap-inline-xs text-body-sm text-fg-muted inline-flex items-center"
-          ><Clock class="size-size-icon-sm" aria-hidden="true" />{fmtDateTime(data.at)} 기준</span
+          ><Clock class="size-size-icon-sm" aria-hidden="true" />{fmtDateTime(data.at)} 기준{#if sim}<span
+              class="text-label-sm text-fg-muted ml-inline-sm"
+              data-owner-sim-label>시뮬레이션 진행 중</span
+            >{/if}</span
         >{/snippet}
     </PageHeader>
     <OverviewCrumbs

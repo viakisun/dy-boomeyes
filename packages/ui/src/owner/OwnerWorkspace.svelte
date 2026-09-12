@@ -25,6 +25,7 @@
     url,
     navigate,
     capture = false,
+    sim = false,
     video,
     map,
     live,
@@ -35,6 +36,7 @@
     url: URL;
     navigate: OwnerViewProps['navigate'];
     capture?: boolean;
+    sim?: boolean;
     video: Snippet<[OwnerViewProps]>;
     /** 현황·상세의 지도 — 장면(OwnerMapScene)을 받아 앱이 MapView로 그린다 */
     map?: Snippet<[OwnerMapScene]>;
@@ -49,6 +51,7 @@
   // 같은 api 객체로 다시 렌더될 때(쿼리 전환·invalidateAll)는 다시 읽지 않는다 — Svelte 5는 객체 prop을 늘 "바뀜"으로 보므로 identity를 직접 비교한다.
   // 드릴다운(?site= · ?device=)마다 로딩 화면과 지도가 다시 만들어지는 것을 막는다. 명시적 갱신은 refresh().
   let bound: OwnerApi | undefined;
+  let unsubscribe: (() => void) | undefined;
   async function refresh() {
     const current = ++generation;
     loading = true;
@@ -66,6 +69,8 @@
     const source = api;
     if (source === bound) return;
     bound = source;
+    unsubscribe?.();
+    unsubscribe = source.subscribe?.(() => void refresh()); // 시뮬레이터 틱 → 다시 읽기(structuredClone 복사본)
     const current = ++generation;
     loading = true;
     error = '';
@@ -83,7 +88,8 @@
       });
     // cleanup으로 generation을 올리지 않는다 — 같은 api로 다시 렌더될 때 첫 스냅샷이 버려져 로딩이 멈추는 사고 방지
   });
-  const viewProps = $derived(snapshot ? { data: snapshot, api, app, url, navigate, refresh, capture } : null);
+  $effect(() => () => unsubscribe?.());
+  const viewProps = $derived(snapshot ? { data: snapshot, api, app, url, navigate, refresh, capture, sim } : null);
 </script>
 
 <section
@@ -92,6 +98,7 @@
   data-owner-role="owner"
   data-owner-dataset={snapshot?.dataset}
   data-owner-clock={snapshot?.at}
+  data-owner-sim={sim ? '1' : '0'}
   aria-busy={loading}
   class="flex min-h-0 min-w-0 flex-1 flex-col"
 >

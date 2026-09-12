@@ -3,7 +3,7 @@
   import { page } from '$app/state';
   import OwnerPage from '$lib/OwnerPage.svelte';
   import { OwnerEntry, OwnerShell } from '@boomeyes/ui';
-  import { ownerPath, OWNER_DEMO_LOGIN } from '@boomeyes/domain';
+  import { OWNER_SIM_KEY, ownerPath, OWNER_DEMO_LOGIN } from '@boomeyes/domain';
   import { goto, invalidateAll } from '$app/navigation';
   import { env } from '$env/dynamic/public';
   import { resolve } from '$app/paths';
@@ -122,6 +122,17 @@
     data.resetOwner();
     void goto(resolve(ownerPath('entry', 'pwa') as '/'));
   }
+  // 활동 시뮬레이션 토글 — 선택을 기억하고(localStorage) 같은 화면을 ?sim= 으로 다시 읽는다(새 api → 다시 로드)
+  function ownerSim(on: boolean) {
+    try {
+      localStorage.setItem(OWNER_SIM_KEY, on ? '1' : '0');
+    } catch {
+      /* 저장 불가 환경 — URL 파라미터만으로 동작 */
+    }
+    const next = new URL(page.url);
+    next.searchParams.set('sim', on ? '1' : '0');
+    void goto(resolve((next.pathname + next.search) as '/'), { invalidateAll: true, noScroll: true });
+  }
 </script>
 
 <svelte:head>
@@ -131,8 +142,15 @@
 {#if data.ownerView === 'entry'}
   <OwnerEntry app="pwa" screen={data.screen ?? ''} onlogin={ownerLogin} />
 {:else if data.ownerView && data.ownerApi && !data.forbidden}
-  <OwnerShell app="pwa" view={data.ownerView} url={page.url} onlogout={ownerExit}>
-    <OwnerPage api={data.ownerApi} view={data.ownerView} capture={data.capture} />
+  <OwnerShell
+    app="pwa"
+    view={data.ownerView}
+    url={page.url}
+    onlogout={ownerExit}
+    sim={data.ownerSim}
+    onsim={data.capture ? undefined : ownerSim}
+  >
+    <OwnerPage api={data.ownerApi} view={data.ownerView} capture={data.capture} sim={data.ownerSim} />
   </OwnerShell>
 {:else if isLogin || !session.user}
   {@render children()}

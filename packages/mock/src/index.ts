@@ -14,6 +14,7 @@ export { createMockMedia } from './media';
 export { createMockApi } from './api';
 export { FIXTURES, applyState } from './states';
 export { bootOwner, createOwnerApi, seedOwner, resetOwner } from './owner';
+export { createOwnerSim, SIM_TICK_MS, SIM_SEED, type OwnerSim } from './owner-sim';
 import { sceneOf } from './demo';
 export { SCENES, sceneOf, SCENE_FIXTURES, createSceneRealtime, type DemoScene } from './demo';
 

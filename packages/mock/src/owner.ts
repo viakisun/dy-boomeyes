@@ -10,8 +10,16 @@ import {
 import { LOOP_MP4, LOOP_SEC, STILL } from '@boomeyes/video/assets';
 import { OWNER_ASSETS } from './assets/owner';
 import { OWNER_SITES, ownerFleet } from './owner-fleet';
+import { createOwnerSim, type OwnerSim } from './owner-sim';
 
-type Options = { dataset?: OwnerDataset; error?: boolean; latencyMs?: number; offline?: () => boolean };
+type Options = {
+  dataset?: OwnerDataset;
+  error?: boolean;
+  latencyMs?: number;
+  offline?: () => boolean;
+  /** 활동 시뮬레이터(틱마다 원천을 바꾸고 subscribe 핸들러에 알린다) */
+  sim?: boolean;
+};
 type BoundSession = Pick<Session, 'role' | 'ownerId'> | null;
 const clone = <T>(value: T): T => structuredClone(value);
 const pause = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms));
@@ -166,6 +174,8 @@ export function createOwnerApi(
     device(item.deviceId);
     return item;
   };
+  // eslint-disable-next-line svelte/prefer-svelte-reactivity -- 비반응 핸들러 집합
+  const handlers = new Set<() => void>();
   const wait = async () => {
     guard();
     await pause(options.latencyMs ?? 100);
@@ -236,11 +246,20 @@ export function createOwnerApi(
       source.documents.push(doc);
       return clone(doc);
     },
+    subscribe(handler) {
+      handlers.add(handler);
+      return () => {
+        handlers.delete(handler);
+      };
+    },
+    // 내부: 시뮬레이터가 틱마다 부른다
+    ...({ notify: () => handlers.forEach((h) => h()) } as object),
   };
 }
 
-let cached: { key: string; api: OwnerApi; source: OwnerSnapshot } | null = null;
+let cached: { key: string; api: OwnerApi; source: OwnerSnapshot; sim?: OwnerSim } | null = null;
 export function resetOwner() {
+  cached?.sim?.stop();
   for (const doc of cached?.source.documents ?? [])
     if (doc.sessionOnly && doc.url.startsWith('blob:')) URL.revokeObjectURL(doc.url);
   for (const doc of cached?.source.documents ?? [])
@@ -249,11 +268,15 @@ export function resetOwner() {
 }
 /** 화면 ID가 cache key에 들어가지 않는다. 탐색·쿼리 전환으로 읽음/첨부가 사라지지 않는다. */
 export function bootOwner(session: BoundSession, options: Options = {}): OwnerApi {
-  const key = `${session?.role}|${session?.ownerId}|${options.dataset ?? 'owner'}|${!!options.error}`;
+  const key = `${session?.role}|${session?.ownerId}|${options.dataset ?? 'owner'}|${!!options.error}|${!!options.sim}`;
   if (cached?.key === key) return cached.api;
   resetOwner();
   const source = seedOwner(options.dataset);
   const api = createOwnerApi(session, options, source);
-  cached = { key, source, api };
+  const sim = options.sim
+    ? createOwnerSim(source, () => (api as unknown as { notify: () => void }).notify())
+    : undefined;
+  sim?.start();
+  cached = { key, source, api, sim };
   return api;
 }
