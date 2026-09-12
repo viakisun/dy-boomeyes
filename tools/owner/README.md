@@ -20,7 +20,7 @@ python3 tools/owner/check-review.py --manifest docs/design/evidence/owner-local/
 
 각 PDF 페이지를 렌더해 검수하고 생성기의 시각 검수 기록 형식으로 판정을 남긴다. 실제 고객 확인은 별도로 기록한다. 이 명령은 로컬 검토 초안을 생성하며 외부 공개·고객 전달을 수행하지 않는다.
 
-예외·복구 26과제(34장면)와 120대 로컬 성능은 같은 preview 서버를 순서대로 사용한다. 두 명령 모두 서버를 실행/종료하지 않는다.
+예외·복구 시나리오와 120대 로컬 성능은 같은 preview 서버를 순서대로 사용한다(과제·장면 수는 `--list`가 알려 준다). 두 명령 모두 서버를 실행/종료하지 않는다.
 
 ```sh
 node tools/capture/owner-exceptions.mjs --output docs/design/evidence/owner-local/exceptions

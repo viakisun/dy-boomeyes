@@ -1,5 +1,5 @@
 // Owner captures: actual CTA session, source registry, every implemented owner view × viewport × theme.
-// 조합 수는 ssot/meta.yaml owner_demo_wave 이하로 구현된 화면 목적에서 파생된다(현재 144).
+// 조합 수는 ssot/meta.yaml owner_demo_wave 이하로 구현된 화면 목적에서 파생된다 — 여기에 수를 적지 않는다(--list가 알려 준다).
 // --list performs no browser/server work. --only <view,SCR> produces partial evidence (exit 2).
 // --reuse-server uses caller-owned servers and never stops them. Default refuses occupied ports.
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
