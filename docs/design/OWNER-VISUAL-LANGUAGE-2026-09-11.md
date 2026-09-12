@@ -399,7 +399,7 @@ CARTO Positron 벡터 타일은 줌 15~18 오버줌에서 오류 이벤트 0(S0 
 
 ### 증거(2026-09-12)
 
-[owner-drilldown-2026-09-12](evidence/owner-drilldown-2026-09-12/manifest.json) — 144/144(운영 현황 전국·현장·호기 3단계 × 2앱 × 4폭 × 2테마) · 예외 [exceptions](evidence/owner-drilldown-2026-09-12/exceptions/manifest.json) 30/30 · 38/38 · owner e2e 162 · `owner:check` 0 · 검토안 [owner-review.html](evidence/owner-drilldown-2026-09-12/review/owner-review.html)(확대 7: 영상 · 서류 · 폰 계약 · 폰 서류 · 웹 현장 단계 · 웹 호기 단계 · 폰 호기 단계).
+[owner-drilldown-2026-09-12](evidence/owner-drilldown-2026-09-12/manifest.json) — 144/144(운영 현황 전국·현장·호기 3단계 × 2앱 × 4폭 × 2테마) · 예외 [exceptions](evidence/owner-drilldown-2026-09-12/exceptions/manifest.json) 30/30 · 38/38 · owner e2e 106(web 53 · pwa 53, JSON) · `owner:check` 0 · 검토안 [owner-review.html](evidence/owner-drilldown-2026-09-12/review/owner-review.html)(확대 7: 영상 · 서류 · 폰 계약 · 폰 서류 · 웹 현장 단계 · 웹 호기 단계 · 폰 호기 단계).
 
 | 단계 | 웹 1280×842 | PWA 390×800 |
 |---|---|---|
@@ -416,7 +416,7 @@ CARTO Positron 벡터 타일은 줌 15~18 오버줌에서 오류 이벤트 0(S0 
 | PR3 `443290a` 드릴다운 | 0 | 0 | 161 | overview·detail 64/64 | 30/30 | 머지 가능 |
 | PR4 `0c2da6a` PWA 시트 | 0 | 0 | 162 | 64/64 | 30/30 | 머지 가능 |
 | PR5 `76754b7` 시뮬레이터 | 0 | 0 | 162 | overview 48/48 | — | 머지 가능 |
-| PR6(이 문서) | — | — | 162(JSON) | 144/144 · owner:check 0 · review | 30/30 | 증거 커밋 |
+| PR6(이 문서) | — | — | 106(JSON) | 144/144 · owner:check 0 · review | 30/30 | 증거 커밋 |
 
 ### 남은 것
 

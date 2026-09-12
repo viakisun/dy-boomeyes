@@ -136,7 +136,7 @@ SUPPLEMENTS = [
     ("pwa", "documents", None, "휴대폰에서 제작증 원문 열람", (20, 490, 370, 1180), True),
     ("web", "overview", "site", "현장 단계 — 마포 주상복합 신축의 호기 5대", (56, 160, 1280, 842), False),
     ("web", "overview", "unit", "호기 단계 — 1호기 실시간 영상·계약·담당자", (56, 160, 1280, 842), False),
-    ("pwa", "overview", "unit", "휴대폰 호기 단계 — 시트에서 영상·계약·전압·서류", (20, 320, 370, 1700), True),
+    ("pwa", "overview", "unit", "휴대폰 호기 단계 — 지도 위 시트에서 호기 영상", (20, 300, 370, 800), True),
 ]
 
 def supplement_images(output, directory, capture):

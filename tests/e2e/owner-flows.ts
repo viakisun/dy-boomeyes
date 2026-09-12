@@ -181,13 +181,19 @@ export function ownerFlows(app: OwnerApp) {
     await expect(page).not.toHaveURL(/site=/);
   });
 
-  if (app === 'pwa')
-    test('[A4-07] [FR-024] [AC-O13] [AC-O16] map sheet snaps collapsed → half → expanded by button, keyboard and drag', async ({
-      page,
-    }) => {
-      await startOwner(page, app);
-      const overview = ownerHost(page, 'overview');
-      const sheet = overview.locator('[data-map-sheet]');
+  test('[A4-07] [FR-024] [AC-O13] [AC-O16] map sheet snaps collapsed → half → expanded by button, keyboard and drag', async ({
+    page,
+  }) => {
+    await startOwner(page, app);
+    const overview = ownerHost(page, 'overview');
+    const sheet = overview.locator('[data-map-sheet]');
+    if (app === 'web') {
+      // 웹은 시트 없이 부유 패널 — 같은 제목의 검사는 "시트가 없다"까지(web/pwa 패리티 계약)
+      await expect(sheet).toHaveCount(0);
+      await expect(overview.getByRole('complementary', { name: '현황 패널', exact: true })).toBeVisible();
+      return;
+    }
+    {
       // 전국 단계는 지도가 주인공 — 시트는 접힘으로 시작
       await expect(sheet).toHaveAttribute('data-snap', 'collapsed');
       await expect(overview.locator('.be-map')).toHaveAttribute('data-map-ready', '', MAP);
@@ -222,7 +228,8 @@ export function ownerFlows(app: OwnerApp) {
       await expect(page).toHaveURL(/site=SITE-MAPO/);
       await expect(sheet).toHaveAttribute('data-snap', 'half');
       await expect(overview.locator('.be-map')).toHaveAttribute('data-map-level', 'site', MAP);
-    });
+    }
+  });
 
   test('[B1-02] [FR-024] [AC-O15] activity simulation is off by default, runs with ?sim=1, and the shell toggle remembers it', async ({
     page,
