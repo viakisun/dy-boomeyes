@@ -95,7 +95,10 @@
   // 원천에 등록됐지만 아직 만들지 않은 화면(계약·운전자)에는 data-stub를 붙여
   // capture --strict가 자리 화면으로 세게 한다 — 보이지 않는 자리 화면을 남기지 않는다.
   // 판정은 화면의 웨이브에서 나온다(수기 목록이 아니다 — 구현되면 웨이브가 내려와 저절로 풀린다).
-  const stub = $derived(SCREENS[ownerScreen(view, app)].wave > OWNER_DEMO_WAVE);
+  // 한 앱만 웨이브 안이면(lease: web B1-06 웨이브 2 · pwa A4-05 웨이브 5) 그 뷰는 아직 미구현이다 —
+  // tools/owner/views.mjs가 「web·pwa 양쪽이 웨이브 이하」를 요구하는 것과 같은 규칙으로 판정한다.
+  const built = $derived((['web', 'pwa'] as const).every((a) => SCREENS[ownerScreen(view, a)].wave <= OWNER_DEMO_WAVE));
+  const stub = $derived(!built);
 </script>
 
 <section
