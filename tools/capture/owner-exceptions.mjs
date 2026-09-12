@@ -100,13 +100,38 @@ const requiredFrames = all.reduce((total, scenario) => total + scenario.frames.l
 const expectedFrames = selected.reduce((total, scenario) => total + scenario.frames.length, 0);
 // 지킬 값은 개수가 아니라 실체다 — all.length는 정의상 CASES.length × 앱 2개이므로
 // 그 둘을 비교하면 동어반복이다(5차 리뷰 지적). 실제로 사고가 나는 지점만 단언한다:
-//  ① 시나리오 id가 중복되면 캡처가 서로를 덮어쓴다(key = `${app}-${id}`)
-//  ② frames가 빈 시나리오는 아무것도 찍지 않고 조용히 통과한다
+//  ① 시나리오 id 중복 — 캡처 키(`${app}-${id}`)가 겹쳐 서로를 덮어쓴다
+//  ② frames가 빈 시나리오 — 아무것도 찍지 않고 조용히 통과한다
+//  ③ 프레임 이름 중복 — 같은 파일명을 두 번 써서 한 장이 사라진다
+//  ④ 수용 기준 누락 — 시나리오를 지우면 그 AC의 예외 증거가 조용히 없어진다.
+//     REQUIRED_AC는 개수가 아니라 의미 목록이므로, 시나리오를 지울 때 여기도 의식적으로 고쳐야 한다.
+const REQUIRED_AC = [
+  'AC-O05',
+  'AC-O06',
+  'AC-O07',
+  'AC-O08',
+  'AC-O09',
+  'AC-O10',
+  'AC-O11',
+  'AC-O12',
+  'AC-O13',
+  'AC-O14',
+];
 const duplicated = [...new Set(CASES.map((c) => c.id))].length !== CASES.length;
 const frameless = CASES.filter((c) => !c.frames?.length).map((c) => c.id);
-if (duplicated || frameless.length || !all.length || new Set(all.map((x) => x.key)).size !== all.length)
+const dupFrames = CASES.filter((c) => new Set(c.frames ?? []).size !== (c.frames ?? []).length).map((c) => c.id);
+const covered = new Set(CASES.flatMap((c) => c.ac ?? []));
+const uncovered = REQUIRED_AC.filter((ac) => !covered.has(ac));
+if (
+  duplicated ||
+  frameless.length ||
+  dupFrames.length ||
+  uncovered.length ||
+  !all.length ||
+  new Set(all.map((x) => x.key)).size !== all.length
+)
   throw new Error(
-    `예외 시나리오 정의 오류 — id 중복 ${duplicated} · 프레임 없는 시나리오 [${frameless.join(', ')}] · 실행 ${all.length}건`,
+    `예외 시나리오 정의 오류 — id 중복 ${duplicated} · 프레임 없음 [${frameless.join(', ')}] · 프레임 중복 [${dupFrames.join(', ')}] · 증거 없는 수용 기준 [${uncovered.join(', ')}] · 실행 ${all.length}건`,
   );
 if (!selected.length) throw new Error('선택된 시나리오가 없다');
 if (args.includes('--list')) {
