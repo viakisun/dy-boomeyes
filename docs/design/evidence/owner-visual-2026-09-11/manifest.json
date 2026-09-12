@@ -5,7 +5,7 @@
     "AC-O16",
     "AC-O18"
   ],
-  "sourceSha": "d0f93c6144157b19e50d58bb3c69dd3f65e2322c",
+  "sourceSha": "7ca5850f3e6f63c7f51b1ba1c6e85ade0c6bf544",
   "workingTreeHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
   "registryHash": "5f7afd017b41ae6d9a31f98db3537817bb10a4b465dfb119cc9544a9cdd09c87",
   "command": [
@@ -14,7 +14,7 @@
     "--output",
     "docs/design/evidence/owner-visual-2026-09-11"
   ],
-  "createdAt": "2026-09-11T23:43:08.707Z",
+  "createdAt": "2026-09-12T00:15:25.110Z",
   "environment": {
     "platform": "darwin",
     "node": "v24.9.0",
@@ -574,37 +574,37 @@
       "renderedRole": "owner",
       "clock": "2026-07-03T10:42:00+09:00",
       "map": {
-        "width": 658.65625,
-        "height": 420,
+        "width": 683.984375,
+        "height": 586.28125,
         "markers": 5,
         "targets": [
           {
             "label": "✓1호기",
-            "width": 48,
+            "width": 74.4375,
             "height": 48,
             "reachable": true
           },
           {
             "label": "✕2호기",
-            "width": 48,
+            "width": 76.3125,
             "height": 48,
             "reachable": true
           },
           {
             "label": "!3호기",
-            "width": 48,
+            "width": 76.6875,
             "height": 48,
             "reachable": true
           },
           {
             "label": "·4호기",
-            "width": 48,
+            "width": 76.875,
             "height": 48,
             "reachable": true
           },
           {
             "label": "·5호기",
-            "width": 48,
+            "width": 76.5,
             "height": 48,
             "reachable": true
           }
@@ -613,13 +613,13 @@
       "geometry": {
         "width": 1280,
         "documentWidth": 1280,
-        "mainWidth": 1040,
-        "mainScrollWidth": 1040
+        "mainWidth": 1224,
+        "mainScrollWidth": 1224
       },
-      "sha256": "d60c76082b15d6168d9ab7acd433053fb2121388559296452d9f3d48e1989873",
+      "sha256": "d2e38ae26af361854936191496090757033cf756a9064a2663d07fb5c360cbac",
       "fullFile": "web-overview-1280x842-light-full.png",
-      "fullHeight": 1566,
-      "fullSha256": "c94bca438ba2129516825443342967666d60a7ba6827b9e6559b624e0c0814e7",
+      "fullHeight": 842,
+      "fullSha256": "d2e38ae26af361854936191496090757033cf756a9064a2663d07fb5c360cbac",
       "status": "automated-capture-pass"
     },
     {
@@ -646,37 +646,37 @@
       "renderedRole": "owner",
       "clock": "2026-07-03T10:42:00+09:00",
       "map": {
-        "width": 658.65625,
-        "height": 420,
+        "width": 683.984375,
+        "height": 586.28125,
         "markers": 5,
         "targets": [
           {
             "label": "✓1호기",
-            "width": 48,
+            "width": 74.4375,
             "height": 48,
             "reachable": true
           },
           {
             "label": "✕2호기",
-            "width": 48,
+            "width": 76.3125,
             "height": 48,
             "reachable": true
           },
           {
             "label": "!3호기",
-            "width": 48,
+            "width": 76.6875,
             "height": 48,
             "reachable": true
           },
           {
             "label": "·4호기",
-            "width": 48,
+            "width": 76.875,
             "height": 48,
             "reachable": true
           },
           {
             "label": "·5호기",
-            "width": 48,
+            "width": 76.5,
             "height": 48,
             "reachable": true
           }
@@ -685,10 +685,10 @@
       "geometry": {
         "width": 1280,
         "documentWidth": 1280,
-        "mainWidth": 1040,
-        "mainScrollWidth": 1040
+        "mainWidth": 1224,
+        "mainScrollWidth": 1224
       },
-      "sha256": "3966c35898fab62836894a94ca17a96cf63536ffb340ed82d30c5c612b89da73",
+      "sha256": "c066fdf8e11fee44c668855e42c551cec75b011afee392dcd94c977e5ed252b0",
       "status": "automated-capture-pass"
     },
     {
@@ -715,37 +715,37 @@
       "renderedRole": "owner",
       "clock": "2026-07-03T10:42:00+09:00",
       "map": {
-        "width": 744,
-        "height": 240,
+        "width": 534.640625,
+        "height": 458.265625,
         "markers": 5,
         "targets": [
           {
             "label": "✓1호기",
-            "width": 48,
+            "width": 74.4375,
             "height": 48,
             "reachable": true
           },
           {
             "label": "✕2호기",
-            "width": 48,
+            "width": 76.3125,
             "height": 48,
             "reachable": true
           },
           {
             "label": "!3호기",
-            "width": 48,
+            "width": 76.6875,
             "height": 48,
             "reachable": true
           },
           {
             "label": "·4호기",
-            "width": 48,
+            "width": 76.875,
             "height": 48,
             "reachable": true
           },
           {
             "label": "·5호기",
-            "width": 48,
+            "width": 76.5,
             "height": 48,
             "reachable": true
           }
@@ -754,10 +754,10 @@
       "geometry": {
         "width": 1024,
         "documentWidth": 1024,
-        "mainWidth": 784,
-        "mainScrollWidth": 784
+        "mainWidth": 968,
+        "mainScrollWidth": 968
       },
-      "sha256": "da3185e4c1202a567d42ea18af7b30d29e129f10902367914b59bb250299ef82",
+      "sha256": "5f78932d2a30d1e65c3575dc2ff05774467623d3905557c7eb66d89f484fb4ca",
       "status": "automated-capture-pass"
     },
     {
@@ -784,37 +784,37 @@
       "renderedRole": "owner",
       "clock": "2026-07-03T10:42:00+09:00",
       "map": {
-        "width": 744,
-        "height": 240,
+        "width": 534.640625,
+        "height": 458.265625,
         "markers": 5,
         "targets": [
           {
             "label": "✓1호기",
-            "width": 48,
+            "width": 74.4375,
             "height": 48,
             "reachable": true
           },
           {
             "label": "✕2호기",
-            "width": 48,
+            "width": 76.3125,
             "height": 48,
             "reachable": true
           },
           {
             "label": "!3호기",
-            "width": 48,
+            "width": 76.6875,
             "height": 48,
             "reachable": true
           },
           {
             "label": "·4호기",
-            "width": 48,
+            "width": 76.875,
             "height": 48,
             "reachable": true
           },
           {
             "label": "·5호기",
-            "width": 48,
+            "width": 76.5,
             "height": 48,
             "reachable": true
           }
@@ -823,10 +823,10 @@
       "geometry": {
         "width": 1024,
         "documentWidth": 1024,
-        "mainWidth": 784,
-        "mainScrollWidth": 784
+        "mainWidth": 968,
+        "mainScrollWidth": 968
       },
-      "sha256": "ab14b0c445c0a0548f681f8ba0b1bc1743f8f8c06d183a92e276bf7dfcc469bd",
+      "sha256": "cedc86d616b13ca8aaa20f0733a3d448233820a6803756375184b4ee91d6b25c",
       "status": "automated-capture-pass"
     },
     {
@@ -854,36 +854,36 @@
       "clock": "2026-07-03T10:42:00+09:00",
       "map": {
         "width": 728,
-        "height": 240,
+        "height": 420,
         "markers": 5,
         "targets": [
           {
             "label": "✓1호기",
-            "width": 48,
+            "width": 74.4375,
             "height": 48,
             "reachable": true
           },
           {
             "label": "✕2호기",
-            "width": 48,
+            "width": 76.3125,
             "height": 48,
             "reachable": true
           },
           {
             "label": "!3호기",
-            "width": 48,
+            "width": 76.6875,
             "height": 48,
             "reachable": true
           },
           {
             "label": "·4호기",
-            "width": 48,
+            "width": 76.875,
             "height": 48,
             "reachable": true
           },
           {
             "label": "·5호기",
-            "width": 48,
+            "width": 76.5,
             "height": 48,
             "reachable": true
           }
@@ -895,7 +895,7 @@
         "mainWidth": 768,
         "mainScrollWidth": 768
       },
-      "sha256": "fb82c1a6b2b7273ae68baa69ee4761e4f3b07fdfc54fec7b910e73058900f55b",
+      "sha256": "40084ce7744dd38a4e02d5015e06325a150f8e5ba5074809e47c210f4f3571ea",
       "status": "automated-capture-pass"
     },
     {
@@ -923,36 +923,36 @@
       "clock": "2026-07-03T10:42:00+09:00",
       "map": {
         "width": 728,
-        "height": 240,
+        "height": 420,
         "markers": 5,
         "targets": [
           {
             "label": "✓1호기",
-            "width": 48,
+            "width": 74.4375,
             "height": 48,
             "reachable": true
           },
           {
             "label": "✕2호기",
-            "width": 48,
+            "width": 76.3125,
             "height": 48,
             "reachable": true
           },
           {
             "label": "!3호기",
-            "width": 48,
+            "width": 76.6875,
             "height": 48,
             "reachable": true
           },
           {
             "label": "·4호기",
-            "width": 48,
+            "width": 76.875,
             "height": 48,
             "reachable": true
           },
           {
             "label": "·5호기",
-            "width": 48,
+            "width": 76.5,
             "height": 48,
             "reachable": true
           }
@@ -964,7 +964,7 @@
         "mainWidth": 768,
         "mainScrollWidth": 768
       },
-      "sha256": "6078c53124d877a16a6b4f9f6d510d4f5798d8cbbe98128d6cf219803317783f",
+      "sha256": "bd74f43254289019f64cc69535030dd96ef24c1f28dcdfcf246e7d6969882ea1",
       "status": "automated-capture-pass"
     },
     {
@@ -992,35 +992,35 @@
       "clock": "2026-07-03T10:42:00+09:00",
       "map": {
         "width": 350,
-        "height": 240,
+        "height": 420,
         "markers": 5,
         "targets": [
           {
-            "label": "✓1호기",
+            "label": "11호기",
             "width": 48,
             "height": 48,
             "reachable": true
           },
           {
-            "label": "✕2호기",
+            "label": "22호기",
             "width": 48,
             "height": 48,
             "reachable": true
           },
           {
-            "label": "!3호기",
+            "label": "33호기",
             "width": 48,
             "height": 48,
             "reachable": true
           },
           {
-            "label": "·4호기",
+            "label": "44호기",
             "width": 48,
             "height": 48,
             "reachable": true
           },
           {
-            "label": "·5호기",
+            "label": "55호기",
             "width": 48,
             "height": 48,
             "reachable": true
@@ -1033,7 +1033,7 @@
         "mainWidth": 390,
         "mainScrollWidth": 390
       },
-      "sha256": "853fac99e43b720ef6a8846f9c60b7982d36f19a6bcaee70155b468a18ce5a2a",
+      "sha256": "1479396e7f5b3b7a41d14a0daf195ac2813a0c114a49e7bdb6c2c3de8246bfaa",
       "status": "automated-capture-pass"
     },
     {
@@ -1061,35 +1061,35 @@
       "clock": "2026-07-03T10:42:00+09:00",
       "map": {
         "width": 350,
-        "height": 240,
+        "height": 420,
         "markers": 5,
         "targets": [
           {
-            "label": "✓1호기",
+            "label": "11호기",
             "width": 48,
             "height": 48,
             "reachable": true
           },
           {
-            "label": "✕2호기",
+            "label": "22호기",
             "width": 48,
             "height": 48,
             "reachable": true
           },
           {
-            "label": "!3호기",
+            "label": "33호기",
             "width": 48,
             "height": 48,
             "reachable": true
           },
           {
-            "label": "·4호기",
+            "label": "44호기",
             "width": 48,
             "height": 48,
             "reachable": true
           },
           {
-            "label": "·5호기",
+            "label": "55호기",
             "width": 48,
             "height": 48,
             "reachable": true
@@ -1102,7 +1102,7 @@
         "mainWidth": 390,
         "mainScrollWidth": 390
       },
-      "sha256": "b5c7bd94f7436230754088bd1135ca8fa59c7314bda8ef716f10b2d3d1d7931f",
+      "sha256": "48b5c973111ca5b9775c922ec44794caac4c241d09a61eb5f19f5203c75de7b7",
       "status": "automated-capture-pass"
     },
     {
@@ -1130,35 +1130,35 @@
       "clock": "2026-07-03T10:42:00+09:00",
       "map": {
         "width": 335,
-        "height": 240,
+        "height": 420,
         "markers": 5,
         "targets": [
           {
-            "label": "✓1호기",
+            "label": "11호기",
             "width": 48,
             "height": 48,
             "reachable": true
           },
           {
-            "label": "✕2호기",
+            "label": "22호기",
             "width": 48,
             "height": 48,
             "reachable": true
           },
           {
-            "label": "!3호기",
+            "label": "33호기",
             "width": 48,
             "height": 48,
             "reachable": true
           },
           {
-            "label": "·4호기",
+            "label": "44호기",
             "width": 48,
             "height": 48,
             "reachable": true
           },
           {
-            "label": "·5호기",
+            "label": "55호기",
             "width": 48,
             "height": 48,
             "reachable": true
@@ -1171,7 +1171,7 @@
         "mainWidth": 375,
         "mainScrollWidth": 375
       },
-      "sha256": "6ceb560efda3930cf30ddb97c85db82ac82653ec2c2504733c73f9fda40b298d",
+      "sha256": "3356529a009cb23eb3df62b815c9d377cbe41533e81f1c0c4a6fecff051e1f13",
       "status": "automated-capture-pass"
     },
     {
@@ -1199,35 +1199,35 @@
       "clock": "2026-07-03T10:42:00+09:00",
       "map": {
         "width": 335,
-        "height": 240,
+        "height": 420,
         "markers": 5,
         "targets": [
           {
-            "label": "✓1호기",
+            "label": "11호기",
             "width": 48,
             "height": 48,
             "reachable": true
           },
           {
-            "label": "✕2호기",
+            "label": "22호기",
             "width": 48,
             "height": 48,
             "reachable": true
           },
           {
-            "label": "!3호기",
+            "label": "33호기",
             "width": 48,
             "height": 48,
             "reachable": true
           },
           {
-            "label": "·4호기",
+            "label": "44호기",
             "width": 48,
             "height": 48,
             "reachable": true
           },
           {
-            "label": "·5호기",
+            "label": "55호기",
             "width": 48,
             "height": 48,
             "reachable": true
@@ -1240,7 +1240,7 @@
         "mainWidth": 375,
         "mainScrollWidth": 375
       },
-      "sha256": "e96409ef8f067b295689f50d0f549ec6f119059a9261de35d9e1ae3162166f1d",
+      "sha256": "b1540dafa4a695a342ca4bbfdfc66f49d368425b211d034942164ee8c12ff72a",
       "status": "automated-capture-pass"
     },
     {
@@ -1268,35 +1268,35 @@
       "clock": "2026-07-03T10:42:00+09:00",
       "map": {
         "width": 350,
-        "height": 240,
+        "height": 420,
         "markers": 5,
         "targets": [
           {
-            "label": "✓1호기",
+            "label": "11호기",
             "width": 48,
             "height": 48,
             "reachable": true
           },
           {
-            "label": "✕2호기",
+            "label": "22호기",
             "width": 48,
             "height": 48,
             "reachable": true
           },
           {
-            "label": "!3호기",
+            "label": "33호기",
             "width": 48,
             "height": 48,
             "reachable": true
           },
           {
-            "label": "·4호기",
+            "label": "44호기",
             "width": 48,
             "height": 48,
             "reachable": true
           },
           {
-            "label": "·5호기",
+            "label": "55호기",
             "width": 48,
             "height": 48,
             "reachable": true
@@ -1309,10 +1309,10 @@
         "mainWidth": 390,
         "mainScrollWidth": 390
       },
-      "sha256": "853fac99e43b720ef6a8846f9c60b7982d36f19a6bcaee70155b468a18ce5a2a",
+      "sha256": "1479396e7f5b3b7a41d14a0daf195ac2813a0c114a49e7bdb6c2c3de8246bfaa",
       "fullFile": "pwa-overview-390x800-light-full.png",
-      "fullHeight": 1953,
-      "fullSha256": "2afeaf3627a33afd113a634dcace56d5e2e31ab0b3c1efeeee34b1440abedc88",
+      "fullHeight": 2051,
+      "fullSha256": "72be8d697c71221691469ff74095289d351f59bf1ede88e98b8feec9cab85448",
       "status": "automated-capture-pass"
     },
     {
@@ -1340,35 +1340,35 @@
       "clock": "2026-07-03T10:42:00+09:00",
       "map": {
         "width": 350,
-        "height": 240,
+        "height": 420,
         "markers": 5,
         "targets": [
           {
-            "label": "✓1호기",
+            "label": "11호기",
             "width": 48,
             "height": 48,
             "reachable": true
           },
           {
-            "label": "✕2호기",
+            "label": "22호기",
             "width": 48,
             "height": 48,
             "reachable": true
           },
           {
-            "label": "!3호기",
+            "label": "33호기",
             "width": 48,
             "height": 48,
             "reachable": true
           },
           {
-            "label": "·4호기",
+            "label": "44호기",
             "width": 48,
             "height": 48,
             "reachable": true
           },
           {
-            "label": "·5호기",
+            "label": "55호기",
             "width": 48,
             "height": 48,
             "reachable": true
@@ -1381,7 +1381,7 @@
         "mainWidth": 390,
         "mainScrollWidth": 390
       },
-      "sha256": "b5c7bd94f7436230754088bd1135ca8fa59c7314bda8ef716f10b2d3d1d7931f",
+      "sha256": "48b5c973111ca5b9775c922ec44794caac4c241d09a61eb5f19f5203c75de7b7",
       "status": "automated-capture-pass"
     },
     {
@@ -1409,35 +1409,35 @@
       "clock": "2026-07-03T10:42:00+09:00",
       "map": {
         "width": 390,
-        "height": 240,
+        "height": 420,
         "markers": 5,
         "targets": [
           {
-            "label": "✓1호기",
+            "label": "11호기",
             "width": 48,
             "height": 48,
             "reachable": true
           },
           {
-            "label": "✕2호기",
+            "label": "22호기",
             "width": 48,
             "height": 48,
             "reachable": true
           },
           {
-            "label": "!3호기",
+            "label": "33호기",
             "width": 48,
             "height": 48,
             "reachable": true
           },
           {
-            "label": "·4호기",
+            "label": "44호기",
             "width": 48,
             "height": 48,
             "reachable": true
           },
           {
-            "label": "·5호기",
+            "label": "55호기",
             "width": 48,
             "height": 48,
             "reachable": true
@@ -1450,7 +1450,7 @@
         "mainWidth": 430,
         "mainScrollWidth": 430
       },
-      "sha256": "5f998390e97c8fc0e2431ed3094694cab31c4852da50e88e4a859fc428b7a9d8",
+      "sha256": "19cfd2ebd31887c3d18b7578c474aa456127f43c4350a275e397c66c5c6ac20f",
       "status": "automated-capture-pass"
     },
     {
@@ -1478,35 +1478,35 @@
       "clock": "2026-07-03T10:42:00+09:00",
       "map": {
         "width": 390,
-        "height": 240,
+        "height": 420,
         "markers": 5,
         "targets": [
           {
-            "label": "✓1호기",
+            "label": "11호기",
             "width": 48,
             "height": 48,
             "reachable": true
           },
           {
-            "label": "✕2호기",
+            "label": "22호기",
             "width": 48,
             "height": 48,
             "reachable": true
           },
           {
-            "label": "!3호기",
+            "label": "33호기",
             "width": 48,
             "height": 48,
             "reachable": true
           },
           {
-            "label": "·4호기",
+            "label": "44호기",
             "width": 48,
             "height": 48,
             "reachable": true
           },
           {
-            "label": "·5호기",
+            "label": "55호기",
             "width": 48,
             "height": 48,
             "reachable": true
@@ -1519,7 +1519,7 @@
         "mainWidth": 430,
         "mainScrollWidth": 430
       },
-      "sha256": "4a96c3920a8fb2c0288b8a96127ad70753be7fd7bfead52d757b3c6fcc56d3b4",
+      "sha256": "32c29834a04959ce7835ce71ea3db45a9bbb7280970c3a0090dfb671976d64cf",
       "status": "automated-capture-pass"
     },
     {
@@ -1547,36 +1547,36 @@
       "clock": "2026-07-03T10:42:00+09:00",
       "map": {
         "width": 728,
-        "height": 240,
+        "height": 420,
         "markers": 5,
         "targets": [
           {
             "label": "✓1호기",
-            "width": 48,
+            "width": 74.4375,
             "height": 48,
             "reachable": true
           },
           {
             "label": "✕2호기",
-            "width": 48,
+            "width": 76.3125,
             "height": 48,
             "reachable": true
           },
           {
             "label": "!3호기",
-            "width": 48,
+            "width": 76.6875,
             "height": 48,
             "reachable": true
           },
           {
             "label": "·4호기",
-            "width": 48,
+            "width": 76.875,
             "height": 48,
             "reachable": true
           },
           {
             "label": "·5호기",
-            "width": 48,
+            "width": 76.5,
             "height": 48,
             "reachable": true
           }
@@ -1588,7 +1588,7 @@
         "mainWidth": 768,
         "mainScrollWidth": 768
       },
-      "sha256": "04cbdc7bffff6a503f3eb676aa36a7368f3b9cf8f5fb8a02efe6bfa87c9a929e",
+      "sha256": "eb6c98505a04d69719ea669bc1aed085975f382a629e6063902ba87a2295da65",
       "status": "automated-capture-pass"
     },
     {
@@ -1616,36 +1616,36 @@
       "clock": "2026-07-03T10:42:00+09:00",
       "map": {
         "width": 728,
-        "height": 240,
+        "height": 420,
         "markers": 5,
         "targets": [
           {
             "label": "✓1호기",
-            "width": 48,
+            "width": 74.4375,
             "height": 48,
             "reachable": true
           },
           {
             "label": "✕2호기",
-            "width": 48,
+            "width": 76.3125,
             "height": 48,
             "reachable": true
           },
           {
             "label": "!3호기",
-            "width": 48,
+            "width": 76.6875,
             "height": 48,
             "reachable": true
           },
           {
             "label": "·4호기",
-            "width": 48,
+            "width": 76.875,
             "height": 48,
             "reachable": true
           },
           {
             "label": "·5호기",
-            "width": 48,
+            "width": 76.5,
             "height": 48,
             "reachable": true
           }
@@ -1657,7 +1657,7 @@
         "mainWidth": 768,
         "mainScrollWidth": 768
       },
-      "sha256": "111ea926fc3878272d5d4c58d5e23378bff6ba2327c1e25778e8bb99f3623c86",
+      "sha256": "af7b8bbddc1b4967fd7dc0bc22ec46afa0aa8d5f89c7c3d69670384df17d8d97",
       "status": "automated-capture-pass"
     },
     {
@@ -1686,13 +1686,13 @@
       "geometry": {
         "width": 1280,
         "documentWidth": 1280,
-        "mainWidth": 1040,
-        "mainScrollWidth": 1040
+        "mainWidth": 1224,
+        "mainScrollWidth": 1224
       },
-      "sha256": "5c5e20ecb06be5851ab003248d0e18f5d85c6ce53b5c3aa73ef6aecc33b3c1d5",
+      "sha256": "f702a14a94747eb78b113fb3930870f7f4bf0c46bdc0e918c8485c3240e34ace",
       "fullFile": "web-fleet-1280x842-light-full.png",
       "fullHeight": 842,
-      "fullSha256": "5c5e20ecb06be5851ab003248d0e18f5d85c6ce53b5c3aa73ef6aecc33b3c1d5",
+      "fullSha256": "f702a14a94747eb78b113fb3930870f7f4bf0c46bdc0e918c8485c3240e34ace",
       "status": "automated-capture-pass"
     },
     {
@@ -1721,10 +1721,10 @@
       "geometry": {
         "width": 1280,
         "documentWidth": 1280,
-        "mainWidth": 1040,
-        "mainScrollWidth": 1040
+        "mainWidth": 1224,
+        "mainScrollWidth": 1224
       },
-      "sha256": "2e18caab9c79cc1652ab1bc2f22ef1de488ffcc3d916a71f92c4ddc52a2f6991",
+      "sha256": "ac7dd856a94dffda94d595572a15056887c13bc1564e4068b50801b91c9bd379",
       "status": "automated-capture-pass"
     },
     {
@@ -1753,10 +1753,10 @@
       "geometry": {
         "width": 1024,
         "documentWidth": 1024,
-        "mainWidth": 784,
-        "mainScrollWidth": 784
+        "mainWidth": 968,
+        "mainScrollWidth": 968
       },
-      "sha256": "4d7e0dda9b9c00e19d16579bfc9306522538e138a42db90e5111bc1cfcff9a36",
+      "sha256": "aa9c7b3360ee1cc17a1eab328f2e4b749144f7697d4d84d5a9df2f663640ccf4",
       "status": "automated-capture-pass"
     },
     {
@@ -1785,10 +1785,10 @@
       "geometry": {
         "width": 1024,
         "documentWidth": 1024,
-        "mainWidth": 784,
-        "mainScrollWidth": 784
+        "mainWidth": 968,
+        "mainScrollWidth": 968
       },
-      "sha256": "ebe9781c4694840820b206cc7e146a59949625e609beee6e753e3a4e3f2fd0b2",
+      "sha256": "8e2165e3c5a17c93e7b3ba1908527942f595346edd3cccdb0c2f313fa3f93368",
       "status": "automated-capture-pass"
     },
     {
@@ -1948,7 +1948,7 @@
         "mainWidth": 375,
         "mainScrollWidth": 375
       },
-      "sha256": "b24ce41d3b58786503d6b5a80f8cec5a2ead3e20423f061c7530efa1d4ec2cc4",
+      "sha256": "eca050235ffab5ed06ec068661de4af56b505fa64a481bbbe0953106cc362dd1",
       "status": "automated-capture-pass"
     },
     {
@@ -2012,7 +2012,7 @@
         "mainWidth": 390,
         "mainScrollWidth": 390
       },
-      "sha256": "1d0a9d97efacbe20dd31c302d43c4e1b878990f3138a28c607a5d0d8f8853436",
+      "sha256": "d178c0023cb8fb3dc496af0dd146e5a63b5827e5fc2e16e023561993f95c2eb3",
       "fullFile": "pwa-fleet-390x800-light-full.png",
       "fullHeight": 1350,
       "fullSha256": "d324ce6ec62d0b4527019d6aeeadd977a55c79d4608cb9b4bfdb13efcfc4d0a5",
@@ -2202,13 +2202,13 @@
       "renderedRole": "owner",
       "clock": "2026-07-03T10:42:00+09:00",
       "map": {
-        "width": 488,
+        "width": 580,
         "height": 240,
         "markers": 1,
         "targets": [
           {
             "label": "✓1호기",
-            "width": 48,
+            "width": 74.4375,
             "height": 48,
             "reachable": true
           }
@@ -2217,13 +2217,13 @@
       "geometry": {
         "width": 1280,
         "documentWidth": 1280,
-        "mainWidth": 1040,
-        "mainScrollWidth": 1040
+        "mainWidth": 1224,
+        "mainScrollWidth": 1224
       },
-      "sha256": "09bc7fedf52b669d8f7b9ba14884b94b0d33a8116b215ba6263025f0d4875f13",
+      "sha256": "0ff2ab12803c2e220c881e9bb30a4af013a55bed03897b3fe4208318efd4b5ed",
       "fullFile": "web-detail-1280x842-light-full.png",
-      "fullHeight": 936,
-      "fullSha256": "aaf80e713cbf5a48c17849f6a5a1bfeea34081683ef62fcd875644bdd51d2a6b",
+      "fullHeight": 979,
+      "fullSha256": "fce97d314e1a0a2ce172e7129ae7cd248aa1debfbd1c26a14f0156c4c5474fe1",
       "status": "automated-capture-pass"
     },
     {
@@ -2250,13 +2250,13 @@
       "renderedRole": "owner",
       "clock": "2026-07-03T10:42:00+09:00",
       "map": {
-        "width": 488,
+        "width": 580,
         "height": 240,
         "markers": 1,
         "targets": [
           {
             "label": "✓1호기",
-            "width": 48,
+            "width": 74.4375,
             "height": 48,
             "reachable": true
           }
@@ -2265,10 +2265,10 @@
       "geometry": {
         "width": 1280,
         "documentWidth": 1280,
-        "mainWidth": 1040,
-        "mainScrollWidth": 1040
+        "mainWidth": 1224,
+        "mainScrollWidth": 1224
       },
-      "sha256": "887c56b28acb9c35c801da5cb883a076c0363de4bb2636c79de612f13267adca",
+      "sha256": "83322867f02431a0a944826539bc472340b2c298b75d6effe9414eaf1d03a2bc",
       "status": "automated-capture-pass"
     },
     {
@@ -2295,12 +2295,12 @@
       "renderedRole": "owner",
       "clock": "2026-07-03T10:42:00+09:00",
       "map": {
-        "width": 360,
+        "width": 452,
         "height": 240,
         "markers": 1,
         "targets": [
           {
-            "label": "✓1호기",
+            "label": "11호기",
             "width": 48,
             "height": 48,
             "reachable": true
@@ -2310,10 +2310,10 @@
       "geometry": {
         "width": 1024,
         "documentWidth": 1024,
-        "mainWidth": 784,
-        "mainScrollWidth": 784
+        "mainWidth": 968,
+        "mainScrollWidth": 968
       },
-      "sha256": "a39c0b21e0fa8a6c07710d06d078fee7aa57028ef7a462f2d1b0c962ba84fcf0",
+      "sha256": "03444b090bf29b061b10557c5b72023580e0050adafa2bea6d7d0c8ec8ab7a71",
       "status": "automated-capture-pass"
     },
     {
@@ -2340,12 +2340,12 @@
       "renderedRole": "owner",
       "clock": "2026-07-03T10:42:00+09:00",
       "map": {
-        "width": 360,
+        "width": 452,
         "height": 240,
         "markers": 1,
         "targets": [
           {
-            "label": "✓1호기",
+            "label": "11호기",
             "width": 48,
             "height": 48,
             "reachable": true
@@ -2355,10 +2355,10 @@
       "geometry": {
         "width": 1024,
         "documentWidth": 1024,
-        "mainWidth": 784,
-        "mainScrollWidth": 784
+        "mainWidth": 968,
+        "mainScrollWidth": 968
       },
-      "sha256": "0f60b8905366cbc5822fd16958fca52e2e7000e5fc790b82c2428c7381846c9d",
+      "sha256": "3c9470507811671bfb58390334d5c9520ef39896797ca8443d7555b4583df1a1",
       "status": "automated-capture-pass"
     },
     {
@@ -2391,7 +2391,7 @@
         "targets": [
           {
             "label": "✓1호기",
-            "width": 48,
+            "width": 74.4375,
             "height": 48,
             "reachable": true
           }
@@ -2436,7 +2436,7 @@
         "targets": [
           {
             "label": "✓1호기",
-            "width": 48,
+            "width": 74.4375,
             "height": 48,
             "reachable": true
           }
@@ -2480,7 +2480,7 @@
         "markers": 1,
         "targets": [
           {
-            "label": "✓1호기",
+            "label": "11호기",
             "width": 48,
             "height": 48,
             "reachable": true
@@ -2525,7 +2525,7 @@
         "markers": 1,
         "targets": [
           {
-            "label": "✓1호기",
+            "label": "11호기",
             "width": 48,
             "height": 48,
             "reachable": true
@@ -2570,7 +2570,7 @@
         "markers": 1,
         "targets": [
           {
-            "label": "✓1호기",
+            "label": "11호기",
             "width": 48,
             "height": 48,
             "reachable": true
@@ -2615,7 +2615,7 @@
         "markers": 1,
         "targets": [
           {
-            "label": "✓1호기",
+            "label": "11호기",
             "width": 48,
             "height": 48,
             "reachable": true
@@ -2660,7 +2660,7 @@
         "markers": 1,
         "targets": [
           {
-            "label": "✓1호기",
+            "label": "11호기",
             "width": 48,
             "height": 48,
             "reachable": true
@@ -2676,7 +2676,7 @@
       "sha256": "249b77e6934eb7def0926c27fa31e314ce746dadf92d0c585f22d5b78858225b",
       "fullFile": "pwa-detail-390x800-light-full.png",
       "fullHeight": 1971,
-      "fullSha256": "4e3df080b25a71f4d27bc27d6dd718ba99a02a143a883027372a1a33c3bdf6df",
+      "fullSha256": "ab280e5034e96c6b95c4ecd2e123c946be3ee23a8cccc669bfaca19faa64b2d4",
       "status": "automated-capture-pass"
     },
     {
@@ -2708,7 +2708,7 @@
         "markers": 1,
         "targets": [
           {
-            "label": "✓1호기",
+            "label": "11호기",
             "width": 48,
             "height": 48,
             "reachable": true
@@ -2753,7 +2753,7 @@
         "markers": 1,
         "targets": [
           {
-            "label": "✓1호기",
+            "label": "11호기",
             "width": 48,
             "height": 48,
             "reachable": true
@@ -2798,7 +2798,7 @@
         "markers": 1,
         "targets": [
           {
-            "label": "✓1호기",
+            "label": "11호기",
             "width": 48,
             "height": 48,
             "reachable": true
@@ -2844,7 +2844,7 @@
         "targets": [
           {
             "label": "✓1호기",
-            "width": 48,
+            "width": 74.4375,
             "height": 48,
             "reachable": true
           }
@@ -2889,7 +2889,7 @@
         "targets": [
           {
             "label": "✓1호기",
-            "width": 48,
+            "width": 74.4375,
             "height": 48,
             "reachable": true
           }
@@ -2935,13 +2935,13 @@
       "geometry": {
         "width": 1280,
         "documentWidth": 1280,
-        "mainWidth": 1040,
-        "mainScrollWidth": 1040
+        "mainWidth": 1224,
+        "mainScrollWidth": 1224
       },
-      "sha256": "0aec465166e28c36ad9628821928bf85c73c227ae9c6c56a28316633498cd5b1",
+      "sha256": "bdb2bb8e52fce2f375a85b07f29c9c14d2e3c24cf79805902a934fbe295bae87",
       "fullFile": "web-video-1280x842-light-full.png",
-      "fullHeight": 1012,
-      "fullSha256": "1631562a5b00bfb58497a4b39f36a3043de07eb2f7fd2e274d6c8cf36757fbfc",
+      "fullHeight": 1116,
+      "fullSha256": "110ef9653f3d1d6eabed4c6de36ca7966a6ead86ca02585fd28b59f413233563",
       "status": "automated-capture-pass"
     },
     {
@@ -2975,10 +2975,10 @@
       "geometry": {
         "width": 1280,
         "documentWidth": 1280,
-        "mainWidth": 1040,
-        "mainScrollWidth": 1040
+        "mainWidth": 1224,
+        "mainScrollWidth": 1224
       },
-      "sha256": "8acce46d8e1b6271e6928aa9667fdc58c3ea85379b82246b95c215a30a843401",
+      "sha256": "da80407399cf11b569c34108dd0fcec8a290b3db1768728f031440bf6246272d",
       "status": "automated-capture-pass"
     },
     {
@@ -3012,10 +3012,10 @@
       "geometry": {
         "width": 1024,
         "documentWidth": 1024,
-        "mainWidth": 784,
-        "mainScrollWidth": 784
+        "mainWidth": 968,
+        "mainScrollWidth": 968
       },
-      "sha256": "ea985e018f99d1e03cf72af8ea865b3784477df81ecd622a38d62b92bf7bdbe0",
+      "sha256": "154468a222b173ebe71d223c7647f7560a7408fa8068740d4ced13b48498b4e0",
       "status": "automated-capture-pass"
     },
     {
@@ -3049,10 +3049,10 @@
       "geometry": {
         "width": 1024,
         "documentWidth": 1024,
-        "mainWidth": 784,
-        "mainScrollWidth": 784
+        "mainWidth": 968,
+        "mainScrollWidth": 968
       },
-      "sha256": "07022f0d1f91d58ce17137da0a53a32d28e7f504e020ef8e40a35d44009a559d",
+      "sha256": "4921a0170243b689ae61ecf658e37433c5fe8acd55086b86d3809ef073a1260f",
       "status": "automated-capture-pass"
     },
     {
@@ -3388,7 +3388,7 @@
         "mainWidth": 430,
         "mainScrollWidth": 430
       },
-      "sha256": "f16791eaa0c260726554f5408760c9e6c403ca638c40972191dd93c98afa7d9b",
+      "sha256": "5de1620c6888d5c6a929d329ba3180b5cbbd97a7e07989c9abd0d005a78fabe8",
       "status": "automated-capture-pass"
     },
     {
@@ -3425,7 +3425,7 @@
         "mainWidth": 430,
         "mainScrollWidth": 430
       },
-      "sha256": "c5b377dafee2bc9a1dc489a175eec88bcfd64ffc5ef4e2bf2b749a402157c5e0",
+      "sha256": "54232ccd93d7d14d28e3dad65ddff915f0d03179756d7450cb5c2989f8d2fa5f",
       "status": "automated-capture-pass"
     },
     {
@@ -3528,13 +3528,13 @@
       "geometry": {
         "width": 1280,
         "documentWidth": 1280,
-        "mainWidth": 1040,
-        "mainScrollWidth": 1040
+        "mainWidth": 1224,
+        "mainScrollWidth": 1224
       },
-      "sha256": "f4cb5ca30e57b51b05dae10e6347e2a461255c24535ec801c3b695f7d3658355",
+      "sha256": "d96abce5580c9d566a5322d150aa9039379a230402f7b6f45ed9a23b64166ac6",
       "fullFile": "web-documents-1280x842-light-full.png",
       "fullHeight": 1722,
-      "fullSha256": "462df41cdfc65d46c7733141b4c065277dda10e20043d5fe05d7105fe59c787c",
+      "fullSha256": "1d51212ae684c0e3584097cfa5d154c5e4b97797482f6851f35bc80c118f2b3d",
       "status": "automated-capture-pass"
     },
     {
@@ -3563,10 +3563,10 @@
       "geometry": {
         "width": 1280,
         "documentWidth": 1280,
-        "mainWidth": 1040,
-        "mainScrollWidth": 1040
+        "mainWidth": 1224,
+        "mainScrollWidth": 1224
       },
-      "sha256": "9caaca4db5da012a2866665e12393666ab620dca074026482e50e1f0759fd61f",
+      "sha256": "36d5df048002742c79d0200b50d70d480557f22b72a6b8f81d3250505a3ec0f8",
       "status": "automated-capture-pass"
     },
     {
@@ -3595,10 +3595,10 @@
       "geometry": {
         "width": 1024,
         "documentWidth": 1024,
-        "mainWidth": 784,
-        "mainScrollWidth": 784
+        "mainWidth": 968,
+        "mainScrollWidth": 968
       },
-      "sha256": "fa91345464bb65f3ace9f8bca56388d9d65a0603c951c064b5ec053c5c33d1dc",
+      "sha256": "5639d79bee5cdfa409923fdf9b8aa30f53c83e330129c163f15da1e70aac455f",
       "status": "automated-capture-pass"
     },
     {
@@ -3627,10 +3627,10 @@
       "geometry": {
         "width": 1024,
         "documentWidth": 1024,
-        "mainWidth": 784,
-        "mainScrollWidth": 784
+        "mainWidth": 968,
+        "mainScrollWidth": 968
       },
-      "sha256": "5cb564310570ab4f5f94e6bcb39e8baf03d54d334666828b38e4390973311891",
+      "sha256": "6deff58f4f864b5a40deebcc0ba4ee366b8d372f8ec608f2b83e939e17587fbc",
       "status": "automated-capture-pass"
     },
     {
@@ -4046,13 +4046,13 @@
       "geometry": {
         "width": 1280,
         "documentWidth": 1280,
-        "mainWidth": 1040,
-        "mainScrollWidth": 1040
+        "mainWidth": 1224,
+        "mainScrollWidth": 1224
       },
-      "sha256": "d73beb5bebb0b8caf62541f4d73771cbf18ebe6706613962ff0f3603201e1f71",
+      "sha256": "8d1f7432a0b6aca8ea300a17df131b17dc8dc5ea31a39bb5d44171c97e4dca81",
       "fullFile": "web-alerts-1280x842-light-full.png",
       "fullHeight": 842,
-      "fullSha256": "d73beb5bebb0b8caf62541f4d73771cbf18ebe6706613962ff0f3603201e1f71",
+      "fullSha256": "8d1f7432a0b6aca8ea300a17df131b17dc8dc5ea31a39bb5d44171c97e4dca81",
       "status": "automated-capture-pass"
     },
     {
@@ -4081,10 +4081,10 @@
       "geometry": {
         "width": 1280,
         "documentWidth": 1280,
-        "mainWidth": 1040,
-        "mainScrollWidth": 1040
+        "mainWidth": 1224,
+        "mainScrollWidth": 1224
       },
-      "sha256": "3c2e42633bb9c653c8d5fbb6378a81cabfbcf363694af4f3aab767510e14314f",
+      "sha256": "ee325edcc8cd9afe9e26a2a3a3baf58481c17072c04779ef28e9522cfa30709a",
       "status": "automated-capture-pass"
     },
     {
@@ -4113,10 +4113,10 @@
       "geometry": {
         "width": 1024,
         "documentWidth": 1024,
-        "mainWidth": 784,
-        "mainScrollWidth": 784
+        "mainWidth": 968,
+        "mainScrollWidth": 968
       },
-      "sha256": "c06333ba48cd215f4744aaf92333c7e23d611f96baf9344de5e3a17a691e56eb",
+      "sha256": "5f305314a09ba21869507a92586ef3f970ca87747c7dbdf8a4253a99432b088d",
       "status": "automated-capture-pass"
     },
     {
@@ -4145,10 +4145,10 @@
       "geometry": {
         "width": 1024,
         "documentWidth": 1024,
-        "mainWidth": 784,
-        "mainScrollWidth": 784
+        "mainWidth": 968,
+        "mainScrollWidth": 968
       },
-      "sha256": "373d416629fe29053c433df85ce2982eaa03dad0dcd3251d7a6fd27bcd59b37e",
+      "sha256": "123206cfb5fc047a3971b23f6fdf5b0cdcf95f6e98abd421ea29ea9e6919b777",
       "status": "automated-capture-pass"
     },
     {
@@ -4540,5 +4540,5 @@
     }
   ],
   "exitCode": 0,
-  "finishedAt": "2026-09-11T23:44:37.057Z"
+  "finishedAt": "2026-09-12T00:16:54.088Z"
 }
