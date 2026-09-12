@@ -228,6 +228,27 @@ export function ownerLevel(url: URL, snap: Pick<OwnerSnapshot, 'sites' | 'device
   const device = snap.devices.find((d) => d.id === url.searchParams.get('device') && d.siteId === site.id);
   return device ? { level: 'unit', site, device } : { level: 'site', site };
 }
+/** 현황 지도 장면 — ui가 앱 스니펫(map)에 넘기고, 앱이 MapView 마커·카메라로 옮긴다(ui는 map을 import하지 않는다). */
+export interface OwnerMapScene {
+  level: OwnerLevel['level'];
+  sites: readonly OwnerSite[];
+  /** 그릴 호기 — nation: 대수 집계용 전체, site·unit: 그 현장 호기 */
+  devices: readonly OwnerDevice[];
+  site?: OwnerSite;
+  device?: OwnerDevice;
+  /** nation에서 한 지역만 펼쳐 볼 때 */
+  region?: OwnerRegion;
+  /** true면 nation을 지역 7개로 집계(좁은 지도) */
+  aggregate: boolean;
+  /** 목록 hover 등으로 강조할 현장·호기 id */
+  focused?: string;
+  animate: boolean;
+  /** 상태 띠·패널·시트가 가리는 픽셀 — 카메라가 비워 둘 여백 */
+  padding: { top: number; right: number; bottom: number; left: number };
+  onselect?: (kind: 'region' | 'site' | 'unit', id: string) => void;
+}
+/** 보이는 지도 폭(무대 − 패널)이 이 값 미만이면 전국을 지역으로 집계한다 */
+export const OWNER_AGGREGATE_BELOW = 720;
 export const OWNER_DEPLOYMENT = { deployed: '현장 투입', stored: '보관 중', unknown: '배치 미확인' } as const;
 export const OWNER_CONNECTION = {
   current: '최근 수신',

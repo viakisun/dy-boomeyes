@@ -13,6 +13,10 @@
     styleUrl = 'https://basemaps.cartocdn.com/gl/positron-gl-style/style.json',
     interactive = true,
     fitMarkers = false,
+    camera,
+    animate = false,
+    pins = 'auto',
+    level,
     onselect,
     labelLocale,
     class: cls = '',
@@ -23,10 +27,14 @@
   const handles = new Map<string, Marker>();
   let ready = $state(false);
   let failed = $state(false);
-  let leaders = $state<{ id: string; x: number; y: number; endX: number }[]>([]);
+  let leaders = $state<{ id: string; x: number; y: number; endX: number; endY: number }[]>([]);
   // 좁은 지도(< 480px)에서는 호기 번호만 담은 원형 핀 — 알약이 펼쳐져 화면 밖으로 나가지 않게
-  let compact = $state(false);
+  let narrow = $state(false);
+  const compact = $derived(pins === 'compact' || (pins === 'auto' && narrow));
+  // 알약 지도 = fitMarkers(자동 맞춤) 또는 camera(장면 카메라)
+  const pill = $derived(fitMarkers || !!camera);
   const COMPACT_BELOW = 480;
+  const EASE_MS = 700;
   const COLOR: Record<string, string> = {
     normal: 'var(--sys-color-domain-equipment-normal-solid)',
     caution: 'var(--sys-color-domain-equipment-caution-solid)',
@@ -35,34 +43,81 @@
     maintenance: 'var(--sys-color-domain-equipment-maintenance-solid)',
   };
   const GLYPH: Record<string, string> = { normal: '', caution: '!', fault: '✕', offline: '·', maintenance: '⚙' };
-  // 겹치는 마커 펼침 — 마커 변경·줌 종료마다 화면 좌표로 다시 계산
+  // 겹치는 마커 펼침 — 마커 변경·줌 종료마다 화면 좌표로 다시 계산. 현장·지역 알약은 세로로 펼쳐 옆 패널에 가려지지 않게 한다.
   function relayout() {
     if (!map) return;
+    const vertical = markers.some((m) => m.kind === 'site' || m.kind === 'region');
     const off = fanOffsets(
       markers.map((m) => ({ id: m.id, ...map!.project([m.lng, m.lat]) })),
-      fitMarkers ? (compact ? FAN_PX : FAN_PX * 1.75) : FAN_PX, // fit-markers 알약(≈ 80px) · 좁은 지도 원형 핀(48px)
-      fitMarkers ? (compact ? FAN_PX : FAN_PX * 1.5) : 24, // 묶음 거리 ≥ 핀 폭(48) — 겹치는 핀이 반드시 펼쳐진다
+      pill ? (compact ? FAN_PX : vertical ? FAN_PX * 0.8 : FAN_PX * 1.75) : FAN_PX, // 알약 가로(≈ 80px) · 세로(≈ 44px) · 원형 핀(48px)
+      pill ? (compact ? FAN_PX : FAN_PX * 1.5) : 24, // 묶음 거리 ≥ 핀 폭(48) — 겹치는 핀이 반드시 펼쳐진다
+      vertical ? 'y' : 'x',
     );
-    for (const [id, h] of handles) h.setOffset([off.get(id) ?? 0, 0]);
-    if (fitMarkers)
+    for (const [id, h] of handles) {
+      const o = off.get(id) ?? { x: 0, y: 0 };
+      h.setOffset([o.x, o.y]);
+    }
+    if (pill)
       leaders = markers.map((marker) => {
         const point = map!.project([marker.lng, marker.lat]);
-        return { id: marker.id, x: point.x, y: point.y, endX: point.x + (off.get(marker.id) ?? 0) };
+        const o = off.get(marker.id) ?? { x: 0, y: 0 };
+        return { id: marker.id, x: point.x, y: point.y, endX: point.x + o.x, endY: point.y + o.y };
       });
+  }
+  // 준비 표식 — 카메라 이동마다 내렸다가 다음 idle에 다시 세운다(캡처·e2e는 단계 속성까지 기다린다)
+  function arm() {
+    if (!map || !el) return;
+    el.removeAttribute('data-map-ready');
+    map.once('idle', () => {
+      if (!el) return;
+      el.setAttribute('data-map-ready', '');
+      if (level) el.dataset.mapLevel = level;
+      el.dataset.mapMarkers = String(markers.length);
+    });
+  }
+  let cameraKey: string | undefined;
+  function moveCamera(duration: number) {
+    if (!map || !camera) return;
+    const padding = camera.padding ?? { top: 0, right: 0, bottom: 0, left: 0 };
+    const target =
+      'bounds' in camera
+        ? (map.cameraForBounds(camera.bounds, { padding, maxZoom: camera.maxZoom }) ??
+          map.cameraForBounds(camera.bounds, { maxZoom: camera.maxZoom }))
+        : { center: camera.center, zoom: camera.zoom, padding };
+    if (!target) return;
+    arm();
+    // padding은 카메라 계산에만 쓰고 지도 상태(getPadding)에 남기지 않는다 — 다음 이동에 누적되지 않게
+    map.easeTo({
+      center: target.center,
+      zoom: target.zoom,
+      padding: { top: 0, right: 0, bottom: 0, left: 0 },
+      duration,
+      essential: true,
+    });
   }
   type M = MapViewProps['markers'][number];
   // 생성·갱신 공용 — 색·글리프·라벨·aria-label을 한 번에 (상태 변경 시 글리프가 남는 사고 방지)
   function paint(d: HTMLElement, m: M) {
+    const kind = m.kind ?? 'unit';
     d.setAttribute('aria-label', `${m.description ?? m.label} — ${m.state}`);
     d.dataset.state = m.state;
+    d.dataset.kind = kind;
     d.title = m.description ?? m.label;
-    d.style.cssText = `--pin:${fitMarkers && m.state === 'normal' ? 'var(--sys-color-fg-muted)' : (COLOR[m.state] ?? COLOR.offline)}`;
-    (d.querySelector('.be-marker__dot') as HTMLElement).textContent = compact
-      ? m.label.replace(/호기$/, '')
-      : fitMarkers && m.state === 'normal'
-        ? '✓'
-        : (GLYPH[m.state] ?? '');
+    d.style.cssText = `--pin:${pill && m.state === 'normal' ? 'var(--sys-color-fg-muted)' : (COLOR[m.state] ?? COLOR.offline)}`;
+    (d.querySelector('.be-marker__dot') as HTMLElement).textContent =
+      kind === 'region'
+        ? String(m.count ?? '')
+        : compact && kind === 'unit'
+          ? m.label.replace(/호기$/, '')
+          : pill && m.state === 'normal'
+            ? kind === 'unit'
+              ? '✓'
+              : ''
+            : (GLYPH[m.state] ?? '');
     (d.querySelector('.be-marker__label') as HTMLElement).textContent = m.label;
+    const count = d.querySelector('.be-marker__count') as HTMLElement;
+    count.textContent = kind === 'site' && m.count !== undefined ? String(m.count) : '';
+    count.hidden = !count.textContent;
   }
   function pin(m: M) {
     const d = document.createElement('button');
@@ -71,9 +126,10 @@
     d.append(
       Object.assign(document.createElement('span'), { className: 'be-marker__dot' }),
       Object.assign(document.createElement('span'), { className: 'be-marker__label' }),
+      Object.assign(document.createElement('span'), { className: 'be-marker__count' }),
     );
     paint(d, m);
-    d.addEventListener('click', () => onselect?.(m.id));
+    d.addEventListener('click', () => onselect?.(m.id, m.kind ?? 'unit'));
     return d;
   }
   onMount(() => {
@@ -99,22 +155,26 @@
       ready = true;
     });
     map.on('style.load', localize);
-    map.on('error', () => {
-      if (fitMarkers) failed = true;
+    // 스타일·소스 로드 실패만 오버레이 — 개별 타일 오류(e.tile)는 깊은 줌에서 흔하고 지도는 계속 쓸 수 있다
+    map.on('error', (e) => {
+      if (pill && !(e as { tile?: unknown }).tile) failed = true;
     });
-    map.once('idle', () => el?.setAttribute('data-map-ready', ''));
+    if (!camera) map.once('idle', () => el?.setAttribute('data-map-ready', ''));
     const ro =
-      fitMarkers && typeof ResizeObserver !== 'undefined'
+      pill && typeof ResizeObserver !== 'undefined'
         ? new ResizeObserver(() => {
-            compact = (el?.clientWidth ?? 0) < COMPACT_BELOW;
+            narrow = (el?.clientWidth ?? 0) < COMPACT_BELOW;
           })
         : undefined;
     ro?.observe(el);
-    compact = fitMarkers && el.clientWidth < COMPACT_BELOW;
+    narrow = pill && el.clientWidth < COMPACT_BELOW;
     map.on('zoomend', relayout);
-    if (fitMarkers) {
+    if (pill) {
       map.on('move', relayout);
-      map.on('resize', relayout);
+      map.on('resize', () => {
+        relayout();
+        if (camera) moveCamera(0);
+      });
     }
     return () => {
       ro?.disconnect();
@@ -145,6 +205,7 @@
         handles.delete(id);
       }
     relayout();
+    if (camera) return; // 장면 카메라는 아래 $effect가 맡는다
     if (fitMarkers && markers.length) {
       const bounds = new maplibregl.LngLatBounds();
       for (const marker of markers) bounds.extend([marker.lng, marker.lat]);
@@ -157,9 +218,17 @@
       });
     }
   });
+  // 장면 카메라 — key가 바뀌면 이동(애니메이션은 animate && motion 허용일 때만), 여백만 바뀌면 짧게 보정
+  $effect(() => {
+    if (!map || !ready || !camera) return;
+    const changed = camera.key !== cameraKey;
+    cameraKey = camera.key;
+    const reduced = typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches;
+    moveCamera(!animate || reduced ? 0 : changed ? EASE_MS : EASE_MS / 2);
+  });
 </script>
 
-{#if fitMarkers}
+{#if pill}
   <div class="relative h-full w-full">
     <div
       bind:this={el}
@@ -168,7 +237,7 @@
     ></div>
     <svg class="map-leaders pointer-events-none absolute inset-0 h-full w-full" aria-hidden="true">
       {#each leaders as point (point.id)}
-        <line x1={point.x} y1={point.y} x2={point.endX} y2={point.y} />
+        <line x1={point.x} y1={point.y} x2={point.endX} y2={point.endY} />
         <circle cx={point.x} cy={point.y} />
       {/each}
     </svg>
@@ -243,6 +312,28 @@
     background: none;
     box-shadow: none;
   }
+  /* 현장 알약: 대수 배지(텍스트 색만 — 색 예산은 상태 점이 쓴다) */
+  .fit-markers :global(.be-marker__count) {
+    min-width: var(--sys-size-icon-md);
+    padding: 0 var(--sys-space-inline-xs);
+    border-radius: var(--sys-radius-pill);
+    background: var(--sys-color-bg-surface-sunken);
+    color: var(--sys-color-fg-muted);
+    font: var(--sys-type-label-sm);
+    font-weight: 700;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+  }
+  /* 지역 집계: 대수를 담은 큰 원 + 지역명 */
+  .fit-markers :global(.be-marker[data-kind='region'] .be-marker__dot) {
+    width: var(--sys-size-control-lg);
+    height: var(--sys-size-control-lg);
+    font: var(--sys-type-label-md);
+    font-weight: 700;
+  }
+  .fit-markers :global(.be-marker[data-kind='region']) {
+    padding: var(--sys-space-inset-xs) var(--sys-space-inset-sm) var(--sys-space-inset-xs) var(--sys-space-inset-xs);
+  }
   /* 좁은 지도: 호기 번호만 담은 원형 핀(상태는 색 + aria-label) */
   .pins-compact :global(.be-marker) {
     min-width: max(var(--sys-size-touch-min), var(--sys-size-control-md));
@@ -255,6 +346,31 @@
     height: var(--sys-size-icon-xl);
     font: var(--sys-type-label-md);
     font-weight: 700;
+  }
+  /* 좁은 지도에서 현장 알약은 그대로 둔다(이름이 곧 식별자) — 원형 축약은 호기 핀만 */
+  .pins-compact :global(.be-marker[data-kind='site']),
+  .pins-compact :global(.be-marker[data-kind='region']) {
+    padding: var(--sys-space-inset-xs) var(--sys-space-inset-sm) var(--sys-space-inset-xs) var(--sys-space-inset-xs);
+    justify-content: flex-start;
+  }
+  .pins-compact :global(.be-marker[data-kind='site'] .be-marker__dot),
+  .pins-compact :global(.be-marker[data-kind='region'] .be-marker__dot) {
+    width: var(--sys-size-icon-md);
+    height: var(--sys-size-icon-md);
+    font: var(--sys-type-label-sm);
+  }
+  .pins-compact :global(.be-marker[data-kind='region'] .be-marker__dot) {
+    width: var(--sys-size-icon-xl);
+    height: var(--sys-size-icon-xl);
+    font: var(--sys-type-label-md);
+  }
+  .pins-compact :global(.be-marker[data-kind='site'] .be-marker__label),
+  .pins-compact :global(.be-marker[data-kind='region'] .be-marker__label) {
+    position: static;
+    width: auto;
+    height: auto;
+    clip-path: none;
+    overflow: visible;
   }
   /* 라벨은 화면에서만 숨긴다(접근성 이름·도구의 자식 중심점 검사 유지) — 마커 중앙 1px 클립 */
   /* 마커 자체는 MapLibre가 absolute로 배치한다 — position을 덮어쓰지 않는다(덮어쓰면 핀이 어긋난다) */
