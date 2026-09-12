@@ -1,6 +1,6 @@
 # 소유주 데모 검증·검토안
 
-원천은 `ssot/screens.yaml`의 `owner_demo`와 `specs/owner-experience`다. `current_wave`를 올리지 않고 WEB/PWA의 7개 목적을 명시적으로 검증한다.
+원천은 `ssot/screens.yaml`의 `owner_demo`와 `specs/owner-experience`다. `current_wave`를 올리지 않고, 구현된 화면 목적(`ssot/meta.yaml owner_demo_wave` 이하 — 판정은 `tools/owner/views.mjs`)을 WEB/PWA 양쪽으로 명시적으로 검증한다.
 
 ```sh
 pnpm build

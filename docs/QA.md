@@ -66,7 +66,7 @@
 
 [실행 계획 §8–10](plans/owner-demo-implementation-plan.md)에 소유주 데모의 데이터·세션·과제·반응형·미디어·회귀·문서 검증을 정의했다. 기본 WEB 캡처나 `capture=1` 가드 우회 결과만으로 소유주 데이터 격리·A4 PWA·다른 폭의 사용성을 입증하지 않는다.
 
-`pnpm capture:owner --output <새 증거 폴더>`는 `ssot/screens.yaml owner_demo` 중 **구현된 화면 목적**(web·pwa 양쪽이 `ssot/meta.yaml owner_demo_wave` 이하 — 판정은 `tools/owner/views.mjs` 한 곳, 현재 7종)을 WEB/PWA·4폭·2테마로 검사한다. 운영 현황은 전국·현장·호기 3단계라 현재 총 144조합이며, 이 수는 도구가 파생한다(계약·운전자가 구현되면 함께 늘어난다). 대표 WEB 1280/PWA 390 라이트 18개는 전체 내용도 별도 캡처한다. 실제 로그인(데모 계정)의 owner 세션, 자료 시각, 지도 영역과 단계별 마커 수(전국 현장 13 또는 좁은 지도 지역 7 · 현장/호기 5 · 상세 1), 호기 단계의 영상 타일(캡처에서는 정지), 원문·영상 표시, 가로 넘침, 콘솔 오류를 기록한다. `--only`는 부분 증거이며 exit 2다.
+`pnpm capture:owner --output <새 증거 폴더>`는 `ssot/screens.yaml owner_demo` 중 **구현된 화면 목적**(web·pwa 양쪽이 `ssot/meta.yaml owner_demo_wave` 이하 — 판정은 `tools/owner/views.mjs` 한 곳)을 WEB/PWA·4폭·2테마로 검사한다. 운영 현황은 전국·현장·호기 3단계라 목적 수보다 조합이 많다. 목적 수와 조합 수는 도구가 파생하며 `--list`가 알려 준다(계약·운전자가 구현되면 함께 늘어난다). 대표 WEB 1280/PWA 390 라이트는 전체 내용도 별도 캡처한다. 실제 로그인(데모 계정)의 owner 세션, 자료 시각, 지도 영역과 단계별 마커 수(전국 현장 13 또는 좁은 지도 지역 7 · 현장/호기 5 · 상세 1), 호기 단계의 영상 타일(캡처에서는 정지), 원문·영상 표시, 가로 넘침, 콘솔 오류를 기록한다. `--only`는 부분 증거이며 exit 2다.
 
 `pnpm exec playwright test 'web-owner.*spec.ts' 'pwa-owner.*spec.ts' --reporter=json > /tmp/owner-e2e.json`으로 일반 세션 과제·경계·실제 파일/영상·확대 검사를 실행한다. `pnpm owner:check --captures <폴더>/manifest.json --e2e /tmp/owner-e2e.json`은 현재 테스트 discovery와 실행 건수·AC, 전체 캡처 목록, 파일 해시, 소스 SHA/변경 해시를 대조한다. 누락·skip·flaky·오래된 증거는 실패한다. CI의 `owner-demo` 잡에서 이 순서를 실행한다.
 

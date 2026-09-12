@@ -184,7 +184,7 @@ export function ownerFlows(app: OwnerApp) {
 
   // 원천에 등록됐지만 아직 만들지 않은 화면은 「표식이 붙은 안내 화면」이어야 한다.
   // 표식(data-stub)만 붙여 두고 아무도 그 경로를 밟지 않으면 형식적 안전장치에 그친다 —
-  // 이 검사가 owner 세션으로 11개 목적을 전부 열어 실제로 확인한다(4차 리뷰 지적).
+  // 이 검사가 owner 세션으로 등록된 화면 목적을 전부 열어 실제로 확인한다(4차 리뷰 지적).
   test('[B1-02] [FR-025] every registered owner view renders a real body or a marked placeholder', async ({ page }) => {
     await startOwner(page, app);
     const views = Object.keys(paths).filter((v) => v !== 'entry');
