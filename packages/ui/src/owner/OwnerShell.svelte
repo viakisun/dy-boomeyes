@@ -55,14 +55,15 @@
       href={ownerHref(url, item.view, app)}
       aria-current={active === item.view ? 'page' : undefined}
       aria-describedby={badgeOf(item.view) > 0 ? `owner-nav-badge-bar-${item.view}` : undefined}
-      class="owner-nav-link gap-inline-sm rounded-control px-inset-md py-inset-sm text-label-md flex min-w-0 items-center font-semibold {active ===
+      class="owner-nav-link gap-inline-sm rounded-control px-inset-md py-inset-sm text-label-md relative flex min-w-0 items-center font-semibold {active ===
       item.view
         ? 'bg-selected text-accent-fg'
         : 'text-fg-muted hover:bg-ui-hover'}"
     >
       <Icon class="size-size-icon-lg shrink-0" aria-hidden="true" /><span>{item.label}</span>
+      <!-- 배지는 흐름 밖에 둔다 — 하단 바의 링크는 세로 스택이라 흐름에 두면 그 칸만 높아진다 -->
       {#if badgeOf(item.view) > 0}
-        <span data-owner-nav-badge aria-hidden="true" class="shrink-0"
+        <span data-owner-nav-badge aria-hidden="true" class="top-inset-xs right-inset-xs absolute"
           ><Badge tone="danger" variant="solid" count={badgeOf(item.view)} /></span
         >
       {/if}
