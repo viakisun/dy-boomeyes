@@ -104,6 +104,16 @@ export function ownerFlows(app: OwnerApp) {
     await expect(screen.locator('[data-request]')).toHaveCount(6);
     // 현장 둘째 줄은 지역이 먼저다(시안) — 어디로 보내는 일인지가 누가 맡는지보다 먼저 읽힌다
     await expect(screen).toContainText('서울 성동구 · 대성건설 · 윤안전');
+    // 레일의 「계약」 배지는 아직 배정하지 않은 요청 수다.
+    // 링크 이름은 「계약」 그대로고 수는 설명(aria-describedby)으로 붙는다 — 메뉴 이름이 수에 흔들리지 않게.
+    const contract = page.getByRole('navigation').getByRole('link', { name: '계약', exact: true }).first();
+    const want = await screen.locator('[data-request]').filter({ hasText: '요청 접수' }).count();
+    expect(want).toBeGreaterThan(0);
+    await expect(contract.locator('[data-owner-nav-badge]')).toContainText(String(want));
+    // 배지는 장식이고 수를 읽어 주는 것은 링크 밖의 설명이다
+    const describedBy = await contract.getAttribute('aria-describedby');
+    expect(describedBy).toBeTruthy();
+    await expect(page.locator(`#${describedBy}`)).toHaveText(`새 요청 ${want}건`);
     // 낼 수 있는 호기가 없는 요청 — 보유 기종이 32m뿐이라 40m 사양은 후보가 0이다
     await screen.locator('[data-request="REQ-006"]').click();
     await expect(page).toHaveURL(/request=REQ-006/);

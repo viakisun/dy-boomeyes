@@ -14,12 +14,15 @@ export interface OwnerBell {
   devices: Pick<OwnerDevice, 'id' | 'unit' | 'site'>[];
   /** DemoClock 기준 시각 — 상대 시각 표시에 쓴다 */
   now: string;
+  /** 아직 배정하지 않은 투입 요청 수 — 레일의 「계약」 배지(시안 «확정 2026-09-12»).
+   *  같은 스냅샷에서 나와야 헤더의 종과 수가 갈리지 않으므로 이 통로를 같이 쓴다. */
+  newRequests: number;
 }
 const KEY = Symbol('owner-bell');
 
 /** 셸에서 한 번 부른다. 워크스페이스가 채우기 전에는 빈 상태다. */
 export function provideBell(): OwnerBell {
-  const value = $state<OwnerBell>({ alerts: [], devices: [], now: '' });
+  const value = $state<OwnerBell>({ alerts: [], devices: [], now: '', newRequests: 0 });
   setContext(KEY, value);
   return value;
 }

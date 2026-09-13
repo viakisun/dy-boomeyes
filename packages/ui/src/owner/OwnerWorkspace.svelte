@@ -105,6 +105,8 @@
     bell.alerts = snapshot?.alerts ?? [];
     bell.devices = snapshot?.devices ?? [];
     bell.now = snapshot?.at ?? '';
+    // 수는 도메인 상태에서 파생한다 — 화면이나 시험이 리터럴을 들고 있지 않게
+    bell.newRequests = snapshot?.requests.filter((r) => r.state === 'new').length ?? 0;
   });
   // 원천에 등록됐지만 아직 만들지 않은 화면(계약·운전자)에는 data-stub를 붙여
   // capture --strict가 자리 화면으로 세게 한다 — 보이지 않는 자리 화면을 남기지 않는다.

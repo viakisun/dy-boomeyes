@@ -14,6 +14,7 @@
   import { ownerControl } from './core-helpers';
   import { connectivity } from '../lib/connectivity.svelte';
   import AlertBell from './AlertBell.svelte';
+  import Badge from '../primitives/Badge.svelte';
   import { provideBell } from './bell.svelte';
   let {
     app,
@@ -39,6 +40,12 @@
   const dark = $derived(theme.value ? theme.value === 'dark' : theme.system);
   // 알림 자료 통로 — 워크스페이스가 읽은 스냅샷을 헤더의 종으로 올린다
   const bell = provideBell();
+  // 레일의 「계약」에 새 요청 배지(시안 «확정 2026-09-12») — 아직 배정하지 않은 요청이 있다는 신호다.
+  // 수는 링크의 *설명*(aria-describedby)으로 붙인다. 이름에 섞으면 「계약」이 「계약 새 요청 3건」이
+  // 되어 내비 링크를 exact로 찾는 시험이 깨지고, 메뉴 이름 자체가 수에 따라 흔들린다.
+  // 그래서 설명 문구는 링크 **밖**에 둔다 — 링크 안에 있으면 aria-hidden이 아닌 한 이름에 섞이고,
+  // aria-hidden이면 aria-describedby가 가리켜도 읽히지 않는다. 배지 자체는 장식(aria-hidden)이다.
+  const badgeOf = (view: OwnerView) => (view === 'requests' && bell.newRequests > 0 ? bell.newRequests : 0);
 </script>
 
 {#snippet navigation()}
@@ -47,13 +54,22 @@
     <a
       href={ownerHref(url, item.view, app)}
       aria-current={active === item.view ? 'page' : undefined}
+      aria-describedby={badgeOf(item.view) > 0 ? `owner-nav-badge-bar-${item.view}` : undefined}
       class="owner-nav-link gap-inline-sm rounded-control px-inset-md py-inset-sm text-label-md flex min-w-0 items-center font-semibold {active ===
       item.view
         ? 'bg-selected text-accent-fg'
         : 'text-fg-muted hover:bg-ui-hover'}"
     >
       <Icon class="size-size-icon-lg shrink-0" aria-hidden="true" /><span>{item.label}</span>
+      {#if badgeOf(item.view) > 0}
+        <span data-owner-nav-badge aria-hidden="true" class="shrink-0"
+          ><Badge tone="danger" variant="solid" count={badgeOf(item.view)} /></span
+        >
+      {/if}
     </a>
+    {#if badgeOf(item.view) > 0}
+      <span id="owner-nav-badge-bar-{item.view}" class="sr-only">새 요청 {badgeOf(item.view)}건</span>
+    {/if}
   {/each}
 {/snippet}
 
@@ -74,15 +90,24 @@
           <a
             href={ownerHref(url, item.view, app)}
             aria-current={active === item.view ? 'page' : undefined}
-            title={item.label}
-            class="owner-nav-link gap-stack-xs rounded-control py-inset-xs text-label-sm mx-inset-xs flex flex-col items-center justify-center text-center {active ===
+            aria-describedby={badgeOf(item.view) > 0 ? `owner-nav-badge-rail-${item.view}` : undefined}
+            title={badgeOf(item.view) > 0 ? `${item.label} · 새 요청 ${badgeOf(item.view)}건` : item.label}
+            class="owner-nav-link gap-stack-xs rounded-control py-inset-xs text-label-sm mx-inset-xs relative flex flex-col items-center justify-center text-center {active ===
             item.view
               ? 'bg-selected text-accent-fg'
               : 'text-fg-muted hover:bg-ui-hover'}"
           >
             <Icon class="size-size-icon-lg shrink-0" aria-hidden="true" />
             <span class="truncate">{item.label}</span>
+            {#if badgeOf(item.view) > 0}
+              <span data-owner-nav-badge aria-hidden="true" class="top-inset-xs right-inset-xs absolute"
+                ><Badge tone="danger" variant="solid" count={badgeOf(item.view)} /></span
+              >
+            {/if}
           </a>
+          {#if badgeOf(item.view) > 0}
+            <span id="owner-nav-badge-rail-{item.view}" class="sr-only">새 요청 {badgeOf(item.view)}건</span>
+          {/if}
         {/each}
       </nav>
     </aside>
