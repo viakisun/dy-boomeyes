@@ -1,15 +1,15 @@
 {
   "task": "OD-13",
-  "sourceSha": "76b0dbc7482f3a672b683c2010c0690be13b5b16",
+  "sourceSha": "78d3e5ee86a0cdc939983627f83777fd599d5711",
   "workingTreeHash": "d2f59403ae774772909cf2cdefb0ac2f9dc83e7986e81bc91c7e5e7f5a9e19c8",
   "registryHash": "a85bfe8c3d89f71e23183796386de050e5d031620c1dad72f9b2731c8701e167",
   "command": [
     "node",
     "tools/capture/owner-exceptions.mjs",
     "--output",
-    "docs/design/evidence/owner-implementation-76b0dbc7-2026-09-13T09-58-47.564Z/exceptions"
+    "docs/design/evidence/owner-implementation-78d3e5ee-2026-09-13T10-15-32.113Z/exceptions"
   ],
-  "createdAt": "2026-09-13T10:01:12.917Z",
+  "createdAt": "2026-09-13T10:17:57.259Z",
   "scope": "full",
   "requiredCases": 38,
   "expectedCases": 38,
@@ -377,7 +377,7 @@
         {
           "url": "http://localhost:4173/_app/immutable/assets/cpb-001-certificate.KaRYkWeN.png",
           "status": 503,
-          "at": "2026-09-13T10:01:19.404Z"
+          "at": "2026-09-13T10:18:03.581Z"
         }
       ],
       "status": "automated-capture-pass",
@@ -434,7 +434,7 @@
         {
           "url": "http://localhost:4173/_app/immutable/assets/front.D7bkNziN.mp4",
           "status": 503,
-          "at": "2026-09-13T10:01:20.268Z"
+          "at": "2026-09-13T10:18:04.432Z"
         }
       ],
       "status": "automated-capture-pass",
@@ -491,7 +491,7 @@
         {
           "url": "https://basemaps.cartocdn.com/gl/positron-gl-style/style.json",
           "status": 503,
-          "at": "2026-09-13T10:01:21.481Z"
+          "at": "2026-09-13T10:18:05.663Z"
         }
       ],
       "status": "automated-capture-pass",
@@ -1008,7 +1008,7 @@
         {
           "url": "http://localhost:4174/_app/immutable/assets/cpb-001-certificate.KaRYkWeN.png",
           "status": 503,
-          "at": "2026-09-13T10:01:33.655Z"
+          "at": "2026-09-13T10:18:17.717Z"
         }
       ],
       "status": "automated-capture-pass",
@@ -1065,7 +1065,7 @@
         {
           "url": "http://localhost:4174/_app/immutable/assets/front.D7bkNziN.mp4",
           "status": 503,
-          "at": "2026-09-13T10:01:34.460Z"
+          "at": "2026-09-13T10:18:18.522Z"
         }
       ],
       "status": "automated-capture-pass",
@@ -1122,7 +1122,7 @@
         {
           "url": "https://basemaps.cartocdn.com/gl/positron-gl-style/style.json",
           "status": 503,
-          "at": "2026-09-13T10:01:35.496Z"
+          "at": "2026-09-13T10:18:19.566Z"
         }
       ],
       "status": "automated-capture-pass",
@@ -1970,7 +1970,7 @@
       },
       "media": {
         "duration": 6,
-        "currentTime": 0.381409,
+        "currentTime": 0.378033,
         "readyState": 4,
         "paused": true
       },
@@ -2509,7 +2509,7 @@
       "clock": "2026-07-03T10:42:00+09:00",
       "url": "http://localhost:4174/a4/fleet/CPB-004?capture=1&state=owner&theme=light",
       "file": "pwa-stale-detail-stale.png",
-      "sha256": "74128fb77d02ee69780b0641477461d4f6bddca2b269b57d0cd728493ecf5a04",
+      "sha256": "d9cf087f5a7f983f873ea6b732492522893422792ce3becd6680407a9d2929e5",
       "geometry": {
         "width": 390,
         "height": 800,
@@ -2551,7 +2551,7 @@
       "clock": "2026-07-03T10:42:00+09:00",
       "url": "http://localhost:4174/a4/fleet/CPB-005?capture=1&state=owner&theme=light",
       "file": "pwa-detached-detail-detached.png",
-      "sha256": "e43f721238c9ccb99ebde80a0c9fefc21232a2879e7a08b18d4a925e71a8a0e2",
+      "sha256": "b303edc8ec734708b403834851119b027596080cb92e959fe03b67235074c306",
       "geometry": {
         "width": 390,
         "height": 800,
@@ -2647,53 +2647,9 @@
         "scrollY": 964
       },
       "diagnostics": {
-        "expectedConsoleErrors": [
-          {
-            "text": "Failed to load resource: net::ERR_INTERNET_DISCONNECTED",
-            "location": {
-              "url": "https://tiles.basemaps.cartocdn.com/vector/carto.streets/v1/tiles.json",
-              "line": 0,
-              "column": 0,
-              "lineNumber": 0,
-              "columnNumber": 0
-            }
-          },
-          {
-            "text": "Failed to load resource: net::ERR_INTERNET_DISCONNECTED",
-            "location": {
-              "url": "https://tiles.basemaps.cartocdn.com/gl/positron-gl-style/sprite.json",
-              "line": 0,
-              "column": 0,
-              "lineNumber": 0,
-              "columnNumber": 0
-            }
-          },
-          {
-            "text": "Failed to load resource: net::ERR_INTERNET_DISCONNECTED",
-            "location": {
-              "url": "https://tiles.basemaps.cartocdn.com/gl/positron-gl-style/sprite.png",
-              "line": 0,
-              "column": 0,
-              "lineNumber": 0,
-              "columnNumber": 0
-            }
-          }
-        ],
+        "expectedConsoleErrors": [],
         "unexpectedConsoleErrors": [],
-        "expectedRequestFailures": [
-          {
-            "url": "https://tiles.basemaps.cartocdn.com/vector/carto.streets/v1/tiles.json",
-            "error": "net::ERR_INTERNET_DISCONNECTED"
-          },
-          {
-            "url": "https://tiles.basemaps.cartocdn.com/gl/positron-gl-style/sprite.json",
-            "error": "net::ERR_INTERNET_DISCONNECTED"
-          },
-          {
-            "url": "https://tiles.basemaps.cartocdn.com/gl/positron-gl-style/sprite.png",
-            "error": "net::ERR_INTERNET_DISCONNECTED"
-          }
-        ],
+        "expectedRequestFailures": [],
         "unexpectedRequestFailures": []
       },
       "ok": true,
@@ -3006,7 +2962,7 @@
       },
       "media": {
         "duration": 6,
-        "currentTime": 0.380275,
+        "currentTime": 0.384144,
         "readyState": 4,
         "paused": true
       },
@@ -3394,5 +3350,5 @@
     }
   ],
   "exitCode": 0,
-  "finishedAt": "2026-09-13T10:01:41.494Z"
+  "finishedAt": "2026-09-13T10:18:25.330Z"
 }

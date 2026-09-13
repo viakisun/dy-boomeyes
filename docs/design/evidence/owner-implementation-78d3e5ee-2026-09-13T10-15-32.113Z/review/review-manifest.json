@@ -1,10 +1,10 @@
 {
-  "sourceSha": "76b0dbc7482f3a672b683c2010c0690be13b5b16",
+  "sourceSha": "78d3e5ee86a0cdc939983627f83777fd599d5711",
   "workingTreeHash": "d2f59403ae774772909cf2cdefb0ac2f9dc83e7986e81bc91c7e5e7f5a9e19c8",
   "registryHash": "a85bfe8c3d89f71e23183796386de050e5d031620c1dad72f9b2731c8701e167",
-  "captureManifestSha256": "3a4c93f7baaf1f2cebdfe98402a24672420eaa08c925d6c930eba7000ece5b31",
-  "captureManifest": "/Users/adminvia/devwork/_DY/boomeyes/docs/design/evidence/owner-implementation-76b0dbc7-2026-09-13T09-58-47.564Z/manifest.json",
-  "generatedAt": "2026-09-13T10:03:41.120513+00:00",
+  "captureManifestSha256": "f091400ffa9f34c806569bd223860ea1e928deb5a7cf9a25fd7b115d434cfcf5",
+  "captureManifest": "/Users/adminvia/devwork/_DY/boomeyes/docs/design/evidence/owner-implementation-78d3e5ee-2026-09-13T10-15-32.113Z/manifest.json",
+  "generatedAt": "2026-09-13T10:20:27.997102+00:00",
   "status": "generated-awaiting-visual-review",
   "customerReview": "not-performed",
   "visualReview": "pending",
@@ -505,7 +505,7 @@
     {
       "page": 25,
       "file": "rendered-pages/page-25.png",
-      "sha256": "b59172933c88d8e81432e0c76661a1132fb9fbc848c9c76c3a43ca42dcb09189"
+      "sha256": "4df1046b7fcb0211ba169ab812a3ecf5b9c377e63a2176b04a125758f90ce60a"
     }
   ],
   "fontSha256": "876af2cd4854644e7f3e7feb2f688997fdb3343c6df6693611209c9dfb47ccec",
@@ -516,11 +516,11 @@
     },
     {
       "file": "owner-review.html",
-      "sha256": "160c55fdbfcb63225e25ced262fb2694a79d3a675042aed254b7c1ab98524d9e"
+      "sha256": "a27abc87ab960b58a3f5d67438f795d0eb01917c434cbff7773157fa147be807"
     },
     {
       "file": "owner-review.pdf",
-      "sha256": "bec4137c2b976acbc7d66bcfd4d10a889fb2cc84743d9bdf0c2bbbaf55970917"
+      "sha256": "5795be39d119c7b44d8092e2ba1a1d8e10718de5d6c9f977810da8c5963d0f6f"
     },
     {
       "file": "rendered-pages/index.html",
@@ -624,7 +624,7 @@
     },
     {
       "file": "rendered-pages/page-25.png",
-      "sha256": "b59172933c88d8e81432e0c76661a1132fb9fbc848c9c76c3a43ca42dcb09189"
+      "sha256": "4df1046b7fcb0211ba169ab812a3ecf5b9c377e63a2176b04a125758f90ce60a"
     },
     {
       "file": "screens/pwa-alerts-390x800-light.png",

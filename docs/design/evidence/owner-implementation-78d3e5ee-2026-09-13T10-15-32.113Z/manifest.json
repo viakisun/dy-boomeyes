@@ -5,14 +5,14 @@
     "AC-O16",
     "AC-O18"
   ],
-  "sourceSha": "76b0dbc7482f3a672b683c2010c0690be13b5b16",
+  "sourceSha": "78d3e5ee86a0cdc939983627f83777fd599d5711",
   "workingTreeHash": "d2f59403ae774772909cf2cdefb0ac2f9dc83e7986e81bc91c7e5e7f5a9e19c8",
   "registryHash": "a85bfe8c3d89f71e23183796386de050e5d031620c1dad72f9b2731c8701e167",
   "command": [
     "node",
     "tools/capture/owner.mjs"
   ],
-  "createdAt": "2026-09-13T09:58:47.564Z",
+  "createdAt": "2026-09-13T10:15:32.113Z",
   "environment": {
     "platform": "darwin",
     "node": "v24.9.0",
@@ -1926,15 +1926,7 @@
       "consoleErrors": [],
       "failedRequests": [
         {
-          "url": "http://localhost:4173/_app/immutable/assets/front.D7bkNziN.mp4",
-          "error": "net::ERR_ABORTED"
-        },
-        {
           "url": "http://localhost:4173/_app/immutable/assets/boom.BS2Cnj7b.mp4",
-          "error": "net::ERR_ABORTED"
-        },
-        {
-          "url": "http://localhost:4173/_app/immutable/assets/front.D7bkNziN.mp4",
           "error": "net::ERR_ABORTED"
         },
         {
@@ -1986,14 +1978,6 @@
         {
           "url": "http://localhost:4173/_app/immutable/assets/front.D7bkNziN.mp4",
           "error": "net::ERR_ABORTED"
-        },
-        {
-          "url": "http://localhost:4173/_app/immutable/assets/front.D7bkNziN.mp4",
-          "error": "net::ERR_ABORTED"
-        },
-        {
-          "url": "http://localhost:4173/_app/immutable/assets/front.D7bkNziN.mp4",
-          "error": "net::ERR_ABORTED"
         }
       ],
       "renderedRole": "owner",
@@ -2033,10 +2017,6 @@
       "pageErrors": [],
       "consoleErrors": [],
       "failedRequests": [
-        {
-          "url": "http://localhost:4173/_app/immutable/assets/front.D7bkNziN.mp4",
-          "error": "net::ERR_ABORTED"
-        },
         {
           "url": "http://localhost:4173/_app/immutable/assets/boom.BS2Cnj7b.mp4",
           "error": "net::ERR_ABORTED"
@@ -2084,10 +2064,6 @@
       "consoleErrors": [],
       "failedRequests": [
         {
-          "url": "http://localhost:4173/_app/immutable/assets/front.D7bkNziN.mp4",
-          "error": "net::ERR_ABORTED"
-        },
-        {
           "url": "http://localhost:4173/_app/immutable/assets/boom.BS2Cnj7b.mp4",
           "error": "net::ERR_ABORTED"
         },
@@ -2133,10 +2109,6 @@
       "pageErrors": [],
       "consoleErrors": [],
       "failedRequests": [
-        {
-          "url": "http://localhost:4173/_app/immutable/assets/front.D7bkNziN.mp4",
-          "error": "net::ERR_ABORTED"
-        },
         {
           "url": "http://localhost:4173/_app/immutable/assets/boom.BS2Cnj7b.mp4",
           "error": "net::ERR_ABORTED"
@@ -2190,10 +2162,6 @@
         {
           "url": "http://localhost:4173/_app/immutable/assets/front.D7bkNziN.mp4",
           "error": "net::ERR_ABORTED"
-        },
-        {
-          "url": "http://localhost:4173/_app/immutable/assets/front.D7bkNziN.mp4",
-          "error": "net::ERR_ABORTED"
         }
       ],
       "renderedRole": "owner",
@@ -2233,10 +2201,6 @@
       "pageErrors": [],
       "consoleErrors": [],
       "failedRequests": [
-        {
-          "url": "http://localhost:4173/_app/immutable/assets/front.D7bkNziN.mp4",
-          "error": "net::ERR_ABORTED"
-        },
         {
           "url": "http://localhost:4173/_app/immutable/assets/boom.BS2Cnj7b.mp4",
           "error": "net::ERR_ABORTED"
@@ -3662,15 +3626,7 @@
       "consoleErrors": [],
       "failedRequests": [
         {
-          "url": "http://localhost:4174/_app/immutable/assets/front.D7bkNziN.mp4",
-          "error": "net::ERR_ABORTED"
-        },
-        {
           "url": "http://localhost:4174/_app/immutable/assets/boom.BS2Cnj7b.mp4",
-          "error": "net::ERR_ABORTED"
-        },
-        {
-          "url": "http://localhost:4174/_app/immutable/assets/front.D7bkNziN.mp4",
           "error": "net::ERR_ABORTED"
         },
         {
@@ -3719,11 +3675,11 @@
       "consoleErrors": [],
       "failedRequests": [
         {
-          "url": "http://localhost:4174/_app/immutable/assets/boom.BS2Cnj7b.mp4",
+          "url": "http://localhost:4174/_app/immutable/assets/front.D7bkNziN.mp4",
           "error": "net::ERR_ABORTED"
         },
         {
-          "url": "http://localhost:4174/_app/immutable/assets/front.D7bkNziN.mp4",
+          "url": "http://localhost:4174/_app/immutable/assets/boom.BS2Cnj7b.mp4",
           "error": "net::ERR_ABORTED"
         }
       ],
@@ -3766,10 +3722,6 @@
       "failedRequests": [
         {
           "url": "http://localhost:4174/_app/immutable/assets/boom.BS2Cnj7b.mp4",
-          "error": "net::ERR_ABORTED"
-        },
-        {
-          "url": "http://localhost:4174/_app/immutable/assets/front.D7bkNziN.mp4",
           "error": "net::ERR_ABORTED"
         },
         {
@@ -3821,10 +3773,6 @@
         {
           "url": "http://localhost:4174/_app/immutable/assets/front.D7bkNziN.mp4",
           "error": "net::ERR_ABORTED"
-        },
-        {
-          "url": "http://localhost:4174/_app/immutable/assets/front.D7bkNziN.mp4",
-          "error": "net::ERR_ABORTED"
         }
       ],
       "renderedRole": "owner",
@@ -3871,10 +3819,6 @@
         {
           "url": "http://localhost:4174/_app/immutable/assets/boom.BS2Cnj7b.mp4",
           "error": "net::ERR_ABORTED"
-        },
-        {
-          "url": "http://localhost:4174/_app/immutable/assets/front.D7bkNziN.mp4",
-          "error": "net::ERR_ABORTED"
         }
       ],
       "renderedRole": "owner",
@@ -3916,10 +3860,6 @@
       "failedRequests": [
         {
           "url": "http://localhost:4174/_app/immutable/assets/boom.BS2Cnj7b.mp4",
-          "error": "net::ERR_ABORTED"
-        },
-        {
-          "url": "http://localhost:4174/_app/immutable/assets/front.D7bkNziN.mp4",
           "error": "net::ERR_ABORTED"
         },
         {
@@ -7076,7 +7016,7 @@
         "mainWidth": 768,
         "mainScrollWidth": 768
       },
-      "sha256": "42b9b9a29912c7db435cfc1831baaf5ff8d6b4ce81c377e4cd75151fbf762ad0",
+      "sha256": "08a898457eac36be9213bbf75d45f807e808910a23f299e89688886204de9b00",
       "status": "automated-capture-pass"
     },
     {
@@ -7459,7 +7399,7 @@
         "mainWidth": 768,
         "mainScrollWidth": 768
       },
-      "sha256": "13ef3c625744b11915f54373689d7eeaabbc4f19b07e13e1fcce4c3012d8df41",
+      "sha256": "e86150d5a2d86a72eca06fa5f0e4022251b7b7c927bbdacc4bf0f210f8079c8c",
       "status": "automated-capture-pass"
     },
     {
@@ -8532,5 +8472,5 @@
     }
   ],
   "exitCode": 0,
-  "finishedAt": "2026-09-13T10:00:58.798Z"
+  "finishedAt": "2026-09-13T10:17:42.778Z"
 }
