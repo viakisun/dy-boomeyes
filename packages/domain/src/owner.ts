@@ -43,8 +43,48 @@ export interface OwnerDevice {
   inspection: string | null;
   contract: { company: string; from: string; to: string; installed: string } | null;
   contact: { name: string; job: string; phone: string } | null;
-  parts: { name: string; measured: string; reference: string | null; due: boolean }[];
+  parts: OwnerPart[];
+  /** 호기 실시간 지표(FR-044 · FR-039 · FR-040). 연동 전 값은 null — 「미연동」으로 보인다(FR-034) */
+  telemetry: OwnerTelemetry;
+  /** 오늘 배정된 운전자(FR-027). 소유주 소속이고 배정이 매일 바뀐다 — 없으면 「배정 없음」 */
+  driver: { id: string; name: string; phone: string } | null;
 }
+/** 마모·교체 부품 — 시안은 마모율(%)과 교체까지 남은 일수 두 축을 함께 보인다.
+ *  measured·reference는 사람이 읽는 근거 문장이고, kind·value·limit은 막대가 읽는 수다. */
+export interface OwnerPart {
+  name: string;
+  /** wear = 마모율(%) · days = 교체까지 남은 일수 */
+  kind: 'wear' | 'days';
+  value: number;
+  /** wear의 한계치(%). days는 한계 개념이 없어 null */
+  limit: number | null;
+  measured: string;
+  reference: string | null;
+  due: boolean;
+}
+/** 호기 지표 6 — 전압은 FR-040, 오늘 타설은 FR-039, 나머지 넷은 FR-044.
+ *  값의 출처·주기는 IF-001(DISC-008 미결)에 달렸고, 확정 전에는 시연 시드다. */
+export interface OwnerTelemetry {
+  /** 공급 전압 V — device.voltage와 같은 값을 지표 축에서도 읽는다 */
+  voltageV: number | null;
+  hydraulicBar: number | null;
+  oilTempC: number | null;
+  /** 붐 선회각 ° */
+  boomAngleDeg: number | null;
+  /** 오늘 타설량 m³ */
+  pouredTodayM3: number | null;
+  /** 장비 단위 누적 가동 시간 h */
+  runHours: number | null;
+}
+/** 지표 한 줄의 표시 규칙 — 값이 null이면 「미연동」(원칙 4 · FR-034) */
+export const OWNER_METRICS = [
+  { key: 'voltageV', label: '공급 전압', unit: 'V' },
+  { key: 'hydraulicBar', label: '유압', unit: 'bar' },
+  { key: 'oilTempC', label: '유온', unit: '°C' },
+  { key: 'boomAngleDeg', label: '붐 선회각', unit: '°' },
+  { key: 'pouredTodayM3', label: '오늘 타설', unit: 'm³' },
+  { key: 'runHours', label: '가동 시간', unit: 'h' },
+] as const satisfies readonly { key: keyof OwnerTelemetry; label: string; unit: string }[];
 export interface OwnerDocument {
   id: string;
   deviceId: string;

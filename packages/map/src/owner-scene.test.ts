@@ -47,6 +47,8 @@ const device = (
   contract: null,
   contact: null,
   parts: [],
+  telemetry: { voltageV: 380, hydraulicBar: 210, oilTempC: 58, boomAngleDeg: 12, pouredTodayM3: 18, runHours: 1200 },
+  driver: null,
   ...patch,
 });
 const A = site('SITE-AA', '서울', 37.55, 126.94);

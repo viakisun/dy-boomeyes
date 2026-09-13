@@ -1,6 +1,6 @@
 // 소유주 시연 함대 — 현장 14곳(한빛중기 13 + 타사 1) · 호기 121대(1~120, 101 제외 + 121). 고객 V5 관제기능 시트의 규모(120대, 경기·대전·강원·부산)를 따른다.
 // 좌표는 현장 위치 + 결정적 격자(Math.random 금지) — 캡처·e2e가 같은 그림을 본다.
-import type { OwnerDevice, OwnerSite } from '@boomeyes/domain';
+import type { OwnerDevice, OwnerPart, OwnerSite, OwnerTelemetry } from '@boomeyes/domain';
 
 const PHONE = '010-0000-0000';
 const contact = (name: string) => ({ name, job: '현장 담당자', phone: PHONE });
@@ -239,6 +239,8 @@ export function ownerFleet(): OwnerDevice[] {
       const stale = STALE.has(unit);
       const fault = FAULT[unit];
       const inspection = INSPECTION.has(unit);
+      // 전압은 한 번만 정한다 — 장비 축과 지표 축이 따로 계산하면 화면이 서로 다른 수를 보인다
+      const voltage = stored ? null : (fault?.voltage ?? 380);
       devices.push({
         id: `CPB-${String(unit).padStart(3, '0')}`,
         ownerId: site.ownerId,
@@ -251,7 +253,7 @@ export function ownerFleet(): OwnerDevice[] {
         deployment: stored ? 'stored' : 'deployed',
         connection: stored ? 'detached' : stale ? 'stale' : 'current',
         receivedAt: stored ? null : stale ? STALE_AT : RECEIVED,
-        voltage: stored ? null : (fault?.voltage ?? 380),
+        voltage: voltage,
         harness: stored ? null : unit === 33 ? 'disconnected' : 'ok',
         fault: fault?.fault ?? null,
         errorCode: fault?.errorCode ?? null,
@@ -266,20 +268,84 @@ export function ownerFleet(): OwnerDevice[] {
               }
             : null,
         contact: site.contact ? { ...site.contact } : null,
-        parts: [
-          {
-            name: '수송관',
-            measured: inspection ? '누적 타설량 9,800 m³' : '누적 타설량 4,200 m³',
-            reference: '점검 시연 기준 9,500 m³',
-            due: inspection,
-          },
-          { name: '유압 필터', measured: '가동 180시간', reference: null, due: false },
-        ],
+        parts: ownerParts(unit, inspection),
+        // 보관·수신 지연 장비는 지금 값을 갖지 않는다 — 옛 값을 정상처럼 두지 않는다(FR-034)
+        telemetry: ownerTelemetry(unit, stored || stale, voltage),
+        driver: stored ? null : DRIVER_ROSTER[unit % DRIVER_ROSTER.length]!,
       });
     });
   }
   return devices.sort((a, b) => a.unit - b.unit);
 }
+/** 마모·교체 부품 6종 — 시안이 정한 축(마모율 % / 잔여일)과 페르소나 사실(수송관 점검 임박)을 함께 지킨다.
+ *  호기 번호로만 흔들어 결정적이다(같은 시드면 같은 값). */
+const PART_SPEC = [
+  { name: '수송관', kind: 'wear', limit: 80, base: 62 },
+  { name: '엘보', kind: 'wear', limit: 80, base: 41 },
+  { name: '고무 호스', kind: 'wear', limit: 80, base: 24 },
+  { name: 'S밸브 웨어링', kind: 'wear', limit: 80, base: 55 },
+  { name: '유압유', kind: 'days', limit: null, base: 38 },
+  { name: '유압 필터', kind: 'days', limit: null, base: 71 },
+] as const;
+function ownerParts(unit: number, inspection: boolean): OwnerPart[] {
+  return PART_SPEC.map((spec, i) => {
+    const shift = ((unit * 7 + i * 13) % 17) - 8;
+    if (spec.kind === 'wear') {
+      // 점검 대상 호기의 수송관은 한계에 붙는다 — 페르소나 사실(누적 타설량 9,800 m³)을 유지한다
+      const value = inspection && i === 0 ? 78 : Math.max(8, Math.min(76, spec.base + shift));
+      return {
+        name: spec.name,
+        kind: 'wear' as const,
+        value,
+        limit: spec.limit,
+        measured: i === 0 ? (inspection ? '누적 타설량 9,800 m³' : '누적 타설량 4,200 m³') : `마모율 ${value}%`,
+        reference: i === 0 ? '점검 시연 기준 9,500 m³' : `교체 기준 ${spec.limit}%`,
+        due: value >= (spec.limit ?? Infinity),
+      };
+    }
+    const days = Math.max(3, spec.base + shift);
+    return {
+      name: spec.name,
+      kind: 'days' as const,
+      value: days,
+      limit: null,
+      measured: `교체까지 ${days}일`,
+      reference: null,
+      due: days <= 14,
+    };
+  });
+}
+/** 호기 지표 6 — 보관·수신 지연은 null(「미연동」으로 보인다 · FR-034).
+ *  전압은 장비 축에서 정한 값을 그대로 받는다(두 번 계산하지 않는다). */
+function ownerTelemetry(unit: number, offline: boolean, voltage: number | null): OwnerTelemetry {
+  if (offline)
+    return {
+      voltageV: null,
+      hydraulicBar: null,
+      oilTempC: null,
+      boomAngleDeg: null,
+      pouredTodayM3: null,
+      runHours: null,
+    };
+  const jitter = (span: number, offset: number) => ((unit * 31 + offset) % span) - Math.floor(span / 2);
+  return {
+    voltageV: voltage,
+    hydraulicBar: voltage !== null && voltage < 360 ? 41 : 210 + jitter(21, 11),
+    oilTempC: 58 + jitter(13, 5),
+    boomAngleDeg: 12 + jitter(61, 7),
+    pouredTodayM3: 18 + jitter(37, 17),
+    runHours: 1200 + unit * 7,
+  };
+}
+/** 오늘 운전자 — 소유주 소속이고 배정이 매일 바뀐다(FR-027). 명단은 P8에서 화면이 된다. */
+const DRIVER_ROSTER = [
+  { id: 'DRV-001', name: '김운전', phone: '010-0000-0001' },
+  { id: 'DRV-002', name: '이운전', phone: '010-0000-0002' },
+  { id: 'DRV-003', name: '박운전', phone: '010-0000-0003' },
+  { id: 'DRV-004', name: '최운전', phone: '010-0000-0004' },
+  { id: 'DRV-005', name: '정운전', phone: '010-0000-0005' },
+  { id: 'DRV-006', name: '조운전', phone: '010-0000-0006' },
+] as const;
 /** 설치일 = 계약 시작 + 2일(페르소나 06-01 → 06-03 유지) */
 function installedOn(from: string) {
   const [y, m, d] = from.split('-').map(Number) as [number, number, number];

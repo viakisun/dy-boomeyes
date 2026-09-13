@@ -60,6 +60,11 @@ export function createOwnerSim(
     for (const d of live) {
       d.receivedAt = now;
       if (d.voltage !== null && !d.fault) d.voltage = 380 + Math.round((rand() - 0.5) * 6);
+      // 지표도 함께 움직인다 — 전압은 장비 축의 값을 그대로 읽는다(두 곳이 갈리지 않게)
+      d.telemetry.voltageV = d.voltage;
+      if (d.telemetry.hydraulicBar !== null) d.telemetry.hydraulicBar = 210 + Math.round((rand() - 0.5) * 20);
+      if (d.telemetry.oilTempC !== null) d.telemetry.oilTempC = 58 + Math.round((rand() - 0.5) * 10);
+      if (d.telemetry.boomAngleDeg !== null) d.telemetry.boomAngleDeg = Math.round(rand() * 90) - 30;
     }
     source.at = now;
     // 첫 틱과 매 3틱째는 반드시 한 건 — 시연에서 5초 안에 무언가가 보인다

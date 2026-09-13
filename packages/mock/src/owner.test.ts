@@ -118,6 +118,53 @@ describe('[FR-025] 배치·이상·정보 시각의 독립성', () => {
     });
     expect(s.devices[1]!.parts[0]).toMatchObject({ due: true, measured: '누적 타설량 9,800 m³' });
   });
+  it('소모품 6종은 마모율과 잔여일 두 축을 갖고 점검 호기의 수송관만 한계에 붙는다', async () => {
+    const s = await make().snapshot();
+    for (const d of s.devices) {
+      expect(d.parts.map((p) => p.name)).toEqual([
+        '수송관',
+        '엘보',
+        '고무 호스',
+        'S밸브 웨어링',
+        '유압유',
+        '유압 필터',
+      ]);
+      for (const part of d.parts) {
+        if (part.kind === 'wear') {
+          expect(part.limit).toBe(80);
+          expect(part.value).toBeGreaterThan(0);
+          expect(part.value).toBeLessThanOrEqual(80);
+        } else {
+          expect(part.limit).toBeNull();
+          expect(part.value).toBeGreaterThan(0);
+        }
+      }
+    }
+    // 점검 대상(CPB-003)의 수송관은 한계 근처, 그 밖은 여유가 있다
+    const inspected = s.devices.find((d) => d.inspection)!;
+    expect(inspected.parts[0]!.value).toBeGreaterThanOrEqual(76);
+    const normal = s.devices.find((d) => !d.inspection && d.deployment === 'deployed')!;
+    expect(normal.parts[0]!.value).toBeLessThan(76);
+  });
+  it('호기 지표 6은 수신 중일 때만 값을 갖고 보관·지연은 미연동이다', async () => {
+    const s = await make().snapshot();
+    const keys = ['voltageV', 'hydraulicBar', 'oilTempC', 'boomAngleDeg', 'pouredTodayM3', 'runHours'] as const;
+    const live = s.devices.find((d) => d.deployment === 'deployed' && d.connection === 'current' && !d.fault)!;
+    for (const k of keys) expect(live.telemetry[k]).not.toBeNull();
+    // 전압 지표는 장비 전압과 같은 값을 읽는다 — 두 곳이 갈리면 화면이 서로 다른 수를 보인다
+    expect(live.telemetry.voltageV).toBe(live.voltage);
+    for (const d of s.devices.filter((x) => x.deployment === 'stored' || x.connection === 'stale'))
+      for (const k of keys) expect(d.telemetry[k]).toBeNull();
+    // 전압 저하 고장(CPB-003 계열)은 지표에도 같은 값으로 나타난다
+    const low = s.devices.find((d) => d.errorCode === 'E-021');
+    if (low) expect(low.telemetry.voltageV).toBe(low.voltage);
+  });
+  it('오늘 운전자는 투입 장비에만 배정된다', async () => {
+    const s = await make().snapshot();
+    for (const d of s.devices)
+      if (d.deployment === 'stored') expect(d.driver).toBeNull();
+      else expect(d.driver).toMatchObject({ id: expect.stringMatching(/^DRV-\d{3}$/), name: expect.any(String) });
+  });
   it('정상·보관 장비도 호기와 현장으로 검색한다', async () => {
     const s = await make().snapshot();
     expect(s.devices.filter((d) => ownerMatches(d, '마포', 'all')).map((d) => d.unit)).toEqual([1, 6, 7, 8, 9]);

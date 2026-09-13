@@ -34,6 +34,8 @@ const device = (id: string, siteId: string, patch: Partial<OwnerDevice> = {}): O
   contract: null,
   contact: null,
   parts: [],
+  telemetry: { voltageV: 380, hydraulicBar: 210, oilTempC: 58, boomAngleDeg: 12, pouredTodayM3: 18, runHours: 1200 },
+  driver: null,
   ...patch,
 });
 const alert = (deviceId: string, kind: OwnerAlert['kind']): OwnerAlert => ({

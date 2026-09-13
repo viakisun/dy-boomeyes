@@ -42,6 +42,9 @@ export function seedOwner(dataset: OwnerDataset = 'owner'): OwnerSnapshot {
     devices[1]!.inspection = '수송관 점검 시기 도래';
     devices[1]!.parts[0] = {
       name: '수송관',
+      kind: 'wear',
+      value: 78,
+      limit: 80,
       measured: '누적 타설량 9,800 m³',
       reference: '점검 시연 기준 9,500 m³',
       due: true,
