@@ -3,7 +3,9 @@
   import type { Snippet } from 'svelte';
   import ArrowRight from '@lucide/svelte/icons/arrow-right';
   import Check from '@lucide/svelte/icons/check';
+  import ChevronLeft from '@lucide/svelte/icons/chevron-left';
   import FileText from '@lucide/svelte/icons/file-text';
+  import Video from '@lucide/svelte/icons/video';
   import VideoOff from '@lucide/svelte/icons/video-off';
   import UserRound from '@lucide/svelte/icons/user-round';
   import TriangleAlert from '@lucide/svelte/icons/triangle-alert';
@@ -20,6 +22,7 @@
   } from '@boomeyes/domain';
   import { cx, OWNER_CONNECTION_TONE } from '../lib/cx';
   import { fmtDateTime } from '../lib/format';
+  import AlertCard from './AlertCard.svelte';
   import Badge from '../primitives/Badge.svelte';
   import Banner from '../primitives/Banner.svelte';
   import Fold from '../primitives/Fold.svelte';
@@ -31,7 +34,7 @@
   import List from '../primitives/List.svelte';
   import PeriodBar from '../primitives/PeriodBar.svelte';
   import StatusPill from '../primitives/StatusPill.svelte';
-  import { equipmentCondition, ownerDate } from './core-helpers';
+  import { equipmentCondition, fleetReturn, ownerDate, ownerLink } from './core-helpers';
   let {
     data,
     app,
@@ -78,11 +81,20 @@
     { label: '마지막 수신', value: device.receivedAt ? fmtDateTime(device.receivedAt) : '수신 기록 없음' },
   ]);
   const aiEvents = $derived(data.aiEvents.filter((e) => e.deviceId === device.id));
+  const alerts = $derived(data.alerts.filter((a) => a.deviceId === device.id));
   const parts = $derived(device.parts);
   const dueParts = $derived(parts.filter((x) => x.due).length);
+  // 보유 장비 목록에서 들어왔을 때만 뒤로 링크 — 드릴다운으로 왔으면 크럼(전국›현장›호기)이 이미 길을 보인다.
+  // `?return=`은 ownerHref가 옮겨 주지 않으므로(capture·state·scene·theme·sim만) 목록이 실어 준 것뿐이다.
+  const listBack = $derived(url.searchParams.get('return') ? fleetReturn(url, app) : null);
 </script>
 
 <section class="gap-stack-md flex min-w-0 flex-col" aria-labelledby="owner-unit-title" data-device={device.id}>
+  {#if listBack}
+    <a href={listBack} class="{ownerLink()} w-fit self-start" data-unit-back
+      ><ChevronLeft class="size-size-icon-sm" aria-hidden="true" />보유 장비 목록으로</a
+    >
+  {/if}
   <div class="gap-stack-xs flex min-w-0 flex-col">
     <span class="text-code-sm text-fg-muted">{device.id} · {device.model}</span>
     <div class="gap-inline-sm flex flex-wrap items-center">
@@ -171,6 +183,22 @@
     </div>
     <KeyValueList items={metrics} />
     <KeyValueList items={state} />
+    <!-- 수신이 끊긴 호기의 지표는 위에서 전부 「미연동」이다(옛 값을 지금 값처럼 보이지 않게 · FR-034).
+         그래서 마지막으로 받은 전압은 여기서 「마지막 수신값」이라고 이름을 붙여 따로 보인다 —
+         이름 없이 숫자만 두면 지금 값으로 읽히고, 아예 없애면 오프라인에서 볼 것이 사라진다. -->
+    {#if device.connection !== 'current'}
+      <p class={cx('text-body-sm', device.connection === 'stale' ? 'text-warning-fg' : 'text-fg-muted')}>
+        현재 상태를 확인할 수 없습니다.
+      </p>
+      {#if device.voltage !== null}
+        <div class="gap-stack-xs flex flex-col">
+          <span class="text-label-md text-fg-muted">공급 전압 · 마지막 수신값</span>
+          <span class={cx('text-heading-sm tabular-nums', device.fault ? 'text-danger-fg' : 'text-warning-fg')}
+            >{device.voltage}<span class="text-body-sm text-fg-muted ml-inline-xs">V</span></span
+          >
+        </div>
+      {/if}
+    {/if}
     {#if device.fault}<p class={cx('text-body-sm', 'text-danger-fg')}>{device.fault}</p>{/if}
   </section>
   <!-- 소모품·서류는 접어 둔다 — 지표와 경고가 먼저 읽혀야 한다(시안의 호기 화면) -->
@@ -187,6 +215,22 @@
       <p class="text-body-sm text-fg-muted">등록된 부품 없음</p>
     {/if}
   </Fold>
+  <!-- 이상·점검 이력 — 그 호기에 붙은 알림 전부. 옛 「호기 상세」에만 있던 것을 이 화면으로 옮겼다
+       (호기 화면은 하나다 · 시안 «확정 2026-09-12»). 접어 두는 것은 부품·AI 이벤트와 같은 규칙이다. -->
+  {#if alerts.length > 0}
+    <Fold title="이상·점검 이력" meta={`${alerts.length}건`}>
+      <List items={alerts} key={(a) => a.id} label="{device.unit}호기 알림 이력" variant="plain">
+        {#snippet item(alert)}
+          <AlertCard
+            {alert}
+            now={data.at}
+            data-alert={alert.id}
+            href={ownerHref(url, 'alerts', app, { ...context, alert: alert.id })}
+          />
+        {/snippet}
+      </List>
+    </Fold>
+  {/if}
   {#if aiEvents.length > 0}
     <Fold title="AI 이벤트" meta={`${aiEvents.length}건`}>
       <List items={aiEvents} key={(e) => e.id} label="AI 이벤트" variant="plain">
@@ -235,6 +279,10 @@
       >
     {/if}
   </section>
+  <!-- 저장 영상은 카메라 벽(실시간)과 다른 화면이다 — 가동일을 골라 되감아 본다 -->
+  <Button variant="outline" tone="neutral" href={ownerHref(url, 'video', app, context, device.id)}>
+    <Video class="size-size-icon-sm" aria-hidden="true" />현장 영상
+  </Button>
   <Button
     variant="outline"
     tone="neutral"

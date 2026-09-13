@@ -383,6 +383,50 @@ export function ownerFlows(app: OwnerApp) {
     await expect(page).not.toHaveURL(/site=/);
   });
 
+  // 호기 화면은 하나다(시안 «확정 2026-09-12») — 옛 「호기 상세」에만 있던 것이 이 화면에 있어야 한다.
+  test('[B1-02] [FR-024] [FR-034] [AC-O05] [AC-O15] unit screen carries the stale last value, the alert history and the recorded video', async ({
+    page,
+  }) => {
+    await startOwner(page, app);
+    // 수신이 끊긴 호기 — 지표는 「미연동」이지만 마지막으로 받은 값은 이름을 달고 남는다
+    await page.goto(`${paths.overview}?site=SITE-DAEJEON&device=CPB-004`);
+    const overview = ownerHost(page, 'overview');
+    const status = overview.getByRole('region', { name: '장비 상태', exact: true });
+    await expect(status).toContainText('수신 지연');
+    await expect(status).toContainText('현재 상태를 확인할 수 없습니다.');
+    await expect(status).toContainText('공급 전압 · 마지막 수신값');
+    await expect(status).toContainText('380');
+    await expect(status).toContainText(/마지막 수신.*08:22|마지막 수신.*8:22/);
+    // 지금 값은 없다 — 옛 값을 현재처럼 보이지 않게 한다(FR-034)
+    await expect(status).toContainText('미연동');
+    await expect(status).not.toContainText('0 V');
+    // 이상·점검 이력 — 그 호기의 알림 전부
+    const history = overview.locator('[data-fold="이상·점검 이력"]');
+    await expect(history).toBeVisible();
+    await history.locator('summary').click();
+    const rows = history.getByRole('list', { name: '4호기 알림 이력', exact: true }).locator('[data-alert]');
+    expect(await rows.count()).toBeGreaterThan(0);
+    // 저장 영상 — 카메라 벽(실시간)과 다른 화면으로 나가는 유일한 길
+    await overview.getByRole('link', { name: '현장 영상', exact: true }).click();
+    await expect(ownerHost(page, 'video')).toBeVisible();
+  });
+
+  // 목록에서 들어오면 되돌아갈 길이 있어야 한다 — 드릴다운으로 왔을 때는 크럼이 그 일을 한다
+  test('[B1-02] [FR-025] [AC-O03] unit screen shows the list back link only when the list sent it', async ({
+    page,
+  }) => {
+    await startOwner(page, app);
+    const unit = `${paths.overview}?site=SITE-MAPO&device=CPB-001`;
+    await page.goto(unit);
+    await expect(ownerHost(page, 'overview').locator('[data-unit-back]')).toHaveCount(0);
+    await page.goto(`${unit}&return=${encodeURIComponent(`${paths.fleet}?q=마포`)}`);
+    const back = ownerHost(page, 'overview').locator('[data-unit-back]');
+    await expect(back).toHaveText('보유 장비 목록으로');
+    await back.click();
+    await expect(page).toHaveURL(/q=%EB%A7%88%ED%8F%AC|q=마포/);
+    await expect(ownerHost(page, 'fleet').getByRole('status')).toHaveText('전체 120대 중 5대 표시');
+  });
+
   // 타일을 누르면 전체 화면(시안 «확정 2026-09-12» · PWA 사용자 결정 «탭하면 전체 화면»)
   test('[B1-02] [FR-042] [AC-O08] camera tile opens the full-screen viewer and returns focus', async ({ page }) => {
     await startOwner(page, app);
