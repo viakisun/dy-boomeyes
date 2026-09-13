@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { OwnerDevice, OwnerMapScene, OwnerSite } from '@boomeyes/domain';
-import { deviceState, ownerCamera, ownerMarkers, worstState } from './owner-scene';
+import { deviceState, ownerBasemap, ownerCamera, ownerMarkers, worstState } from './owner-scene';
 
 const site = (
   id: string,
@@ -156,6 +156,19 @@ describe('[B1-02] 현황 지도 장면 → 카메라', () => {
         [126.1, 34.3],
         [129.6, 38.3],
       ],
+    });
+  });
+});
+
+describe('[B1-02] 현황 지도 장면 → 베이스맵', () => {
+  it('전국만 타일 없는 국경 · 지역과 현장은 회색조 타일', () => {
+    expect(ownerBasemap(nation())).toEqual({ basemap: 'outline', muted: false });
+    // 지역 하나를 펼치면 줌 10 — 국경선만으로는 아무 지형도 남지 않는다
+    expect(ownerBasemap(nation({ region: '서울' }))).toEqual({ basemap: 'tiles', muted: true });
+    expect(ownerBasemap({ ...nation(), level: 'site', site: A })).toEqual({ basemap: 'tiles', muted: true });
+    expect(ownerBasemap({ ...nation(), level: 'unit', site: A, device: devices[0] })).toEqual({
+      basemap: 'tiles',
+      muted: true,
     });
   });
 });

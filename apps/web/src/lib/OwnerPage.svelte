@@ -5,7 +5,7 @@
   import type { OwnerApi, OwnerView } from '@boomeyes/domain';
   import { OwnerWorkspace, theme } from '@boomeyes/ui';
   import { OwnerVideo, OwnerLiveTile } from '@boomeyes/video';
-  import { MapView, ownerCamera, ownerMarkers } from '@boomeyes/map';
+  import { MapView, ownerBasemap, ownerCamera, ownerMarkers } from '@boomeyes/map';
   let {
     api,
     view,
@@ -38,6 +38,7 @@
       <MapView
         markers={ownerMarkers(scene)}
         camera={ownerCamera(scene)}
+        {...ownerBasemap(scene)}
         animate={scene.animate}
         level={scene.level}
         styleUrl={dark ? STYLE.dark : STYLE.light}

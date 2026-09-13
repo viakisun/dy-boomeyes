@@ -108,6 +108,15 @@ const KOREA: [[number, number], [number, number]] = [
   [126.1, 34.3],
   [129.6, 38.3],
 ];
+/**
+ * 단계별 베이스맵(시안 «확정 2026-09-12») — 전국은 타일 없는 국경, 그 아래는 회색조 타일.
+ * 지역 하나를 펼친 화면은 줌 10이라 국경만으로는 아무 지형도 남지 않는다 — 타일을 쓴다.
+ */
+export function ownerBasemap(scene: OwnerMapScene): { basemap: 'tiles' | 'outline'; muted: boolean } {
+  const outline = scene.level === 'nation' && !scene.region;
+  return { basemap: outline ? 'outline' : 'tiles', muted: !outline };
+}
+
 export function ownerCamera(scene: OwnerMapScene): MapCamera {
   const { padding } = scene;
   if (scene.level === 'nation') {

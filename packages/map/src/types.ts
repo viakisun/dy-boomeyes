@@ -26,6 +26,10 @@ export interface MapViewProps {
   center?: [number, number];
   zoom?: number;
   styleUrl?: string;
+  /** tiles = 베이스맵 타일(styleUrl) · outline = 타일 없이 국경만(전국 단계 — 시안 «확정 2026-09-12») */
+  basemap?: 'tiles' | 'outline';
+  /** 타일을 회색조로 물린다 — 현장 단계. 마커는 DOM이라 영향받지 않는다. */
+  muted?: boolean;
   interactive?: boolean;
   /** 작은 배치 지도에서 표시한 호기 범위를 자동으로 맞춘다. 기존 관제는 기본 배율 유지. */
   fitMarkers?: boolean;

@@ -19,3 +19,6 @@ shots/
 test-results/
 playwright-report/
 docs/design/evidence/
+
+# 지도 경계선 원천(tools/map/outline.mjs 생성) — 좌표를 줄바꿈하면 36 KB가 1 MB를 넘는다.
+packages/map/src/korea-region.json

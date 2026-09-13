@@ -309,7 +309,10 @@ export function ownerFlows(app: OwnerApp) {
       await expect(sheet).toHaveAttribute('data-snap', 'collapsed');
       await page.keyboard.press('Home');
       await expect(sheet).toHaveAttribute('data-snap', 'expanded');
-      // 드래그: 손잡이를 아래로 60px 끌어 놓으면 한 단 내려간다
+      // 드래그: 손잡이를 아래로 60px 끌어 놓으면 한 단 내려간다.
+      // mouse.*는 기다리지 않는다 — Home으로 올라간 시트가 아직 움직이는 동안 잰 상자는 이미 틀린 좌표다.
+      // hover는 요소가 멈출 때까지 기다린다(그 다음에 재야 손잡이를 실제로 잡는다).
+      await handle.hover();
       const box = (await handle.boundingBox())!;
       await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
       await page.mouse.down();

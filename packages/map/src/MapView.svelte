@@ -6,11 +6,14 @@
   import { Button } from '@boomeyes/ui';
   import type { MapViewProps } from './types';
   import { fanOffsets, resolveOverlaps, FAN_PX } from './fan';
+  import { outlineStyle } from './outline';
   let {
     markers,
     center = [127.5, 36.3],
     zoom = 6.5,
     styleUrl = 'https://basemaps.cartocdn.com/gl/positron-gl-style/style.json',
+    basemap = 'tiles',
+    muted = false,
     interactive = true,
     fitMarkers = false,
     camera,
@@ -34,6 +37,8 @@
   // 알약 지도 = fitMarkers(자동 맞춤) 또는 camera(장면 카메라)
   const pill = $derived(fitMarkers || !!camera);
   const COMPACT_BELOW = 480;
+  // 타일 베이스맵은 URL, 경계선 베이스맵은 그 자리에서 만든 스타일 객체(토큰 계산값을 읽으므로 테마마다 다시 만든다)
+  const styleSpec = () => (basemap === 'outline' && el ? outlineStyle(el) : styleUrl);
   const EASE_MS = 700;
   const COLOR: Record<string, string> = {
     normal: 'var(--sys-color-domain-equipment-normal-solid)',
@@ -160,7 +165,7 @@
     if (!el) return;
     map = new maplibregl.Map({
       container: el,
-      style: styleUrl,
+      style: styleSpec(),
       center,
       zoom,
       interactive,
@@ -256,10 +261,10 @@
     const reduced = typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches;
     moveCamera(!animate || reduced ? 0 : changed ? EASE_MS : EASE_MS / 2, changed);
   });
-  // 스타일(라이트/다크 베이스맵) 교체 — 마커는 DOM이라 남고, style.load에서 지명 처리가 다시 돈다
+  // 스타일(라이트/다크 베이스맵 · 타일↔경계선) 교체 — 마커는 DOM이라 남고, style.load에서 지명 처리가 다시 돈다
   let styleLoaded: string | undefined;
   $effect(() => {
-    const next = styleUrl;
+    const next = `${basemap}|${styleUrl}`;
     if (!map || !ready) return;
     if (styleLoaded === undefined) {
       styleLoaded = next;
@@ -267,7 +272,7 @@
     }
     if (next === styleLoaded) return;
     styleLoaded = next;
-    map.setStyle(next);
+    map.setStyle(styleSpec());
   });
   // 카메라는 그대로인데 단계만 바뀌는 경우(현장 → 호기) — 준비 표식은 유지하고 단계 속성만 갱신
   $effect(() => {
@@ -279,7 +284,7 @@
   <div class="relative h-full w-full">
     <div
       bind:this={el}
-      class="be-map fit-markers {compact ? 'pins-compact' : ''} {cls}"
+      class="be-map fit-markers {compact ? 'pins-compact' : ''} {muted ? 'muted' : ''} {cls}"
       data-ready={ready || undefined}
     ></div>
     <svg class="map-leaders pointer-events-none absolute inset-0 h-full w-full" aria-hidden="true">
@@ -301,14 +306,14 @@
           tone="neutral"
           onclick={() => {
             failed = false;
-            map?.setStyle(styleUrl);
+            map?.setStyle(styleSpec());
           }}>지도 다시 불러오기</Button
         >
       </div>
     {/if}
   </div>
 {:else}
-  <div bind:this={el} class="be-map {cls}" data-ready={ready || undefined}></div>
+  <div bind:this={el} class="be-map {muted ? 'muted' : ''} {cls}" data-ready={ready || undefined}></div>
 {/if}
 
 <style>
@@ -332,6 +337,11 @@
   }
   .be-map.fit-markers {
     min-height: 0;
+  }
+  /* 현장 단계의 회색조 타일(시안 «확정 2026-09-12») — 캔버스에만 걸린다.
+     마커는 DOM이라 상태 색이 그대로 살아 있고, 도로·공원 색만 물러난다. */
+  .be-map.muted :global(.maplibregl-canvas) {
+    filter: grayscale(0.7) saturate(0.7);
   }
   /* 소유주 지도(fit-markers): 상태 점 + 호기 라벨을 한 알약에 — 지명 라벨과 겹쳐도 읽힌다 */
   .fit-markers :global(.be-marker) {
