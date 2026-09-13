@@ -140,9 +140,11 @@
         }
       : {
           top: (floating ? stripHeight + inset * 2 : 0) + inset * 4,
-          right: (floating ? panelWidth + inset : 0) + inset * 4,
+          right: inset * 4,
           bottom: inset * 4,
-          left: inset * 4,
+          // 패널은 좌측이다(시안 «확정 2026-09-12») — 이 여백을 반대쪽에 두면 카메라가 마커를
+          // 패널 밑으로 밀어 넣고 캡처의 마커 도달 검사에서 늦게 터진다
+          left: (floating ? panelWidth + inset : 0) + inset * 4,
         },
     onselect: (kind, id) => {
       if (kind === 'region') region = id as OwnerRegion;
@@ -250,7 +252,7 @@
             class="min-w-0 flex-1"
           />
           <div
-            class="bg-surface rounded-card shadow-raised border-border-subtle p-inset-md lg:max-h-layout-panel-height lg:w-layout-inspector-width min-w-0 shrink-0 overflow-y-auto border"
+            class="bg-surface rounded-card shadow-raised border-border-subtle p-inset-md lg:max-h-layout-panel-height lg:w-layout-inspector-width min-w-0 shrink-0 overflow-y-auto border lg:order-first"
           >
             {@render panels()}
           </div>
@@ -267,26 +269,31 @@
           {@render panels()}
         </MapSheet>
       {:else if hasMap}
-        <!-- 웹: 지도 → 상태 띠 → 패널 순서. lg에서는 DOM 순서대로 띠·패널이 지도 위에 그려진다(z 유틸리티 없이). 좁은 폭은 띠가 먼저(order-first) -->
+        <!-- 웹: 지도 → 좌측 기둥(띠 위 · 패널 아래). lg에서는 DOM 순서대로 기둥이 지도 위에 그려진다
+             (z 유틸리티 없이). 시안도 카드가 띠 아래 좌측이다(«확정 2026-09-12»).
+             좁은 폭은 세로 스택이라 기둥이 먼저 오고(order-first) 지도가 그 아래다. -->
         <div
           class="rounded-card shadow-raised h-layout-panel-height flex overflow-hidden lg:absolute lg:inset-0 lg:h-auto"
         >
           {@render map!(scene)}
         </div>
+        <!-- 기둥 자체는 포인터를 통과시킨다 — 띠·카드보다 넓은 투명 상자가 지도를 덮으면
+             마커를 누를 수 없고 캡처의 도달 검사가 「마커가 겹친다」로 떨어진다 -->
         <div
-          bind:clientHeight={stripHeight}
-          class="lg:top-inset-md lg:left-inset-md order-first w-fit max-w-full lg:absolute lg:order-none"
-        >
-          <StatusStrip devices={data.devices} alerts={data.alerts} {app} {url} />
-        </div>
-        <aside
           bind:this={panel}
-          bind:clientWidth={panelWidth}
-          aria-label="현황 패널"
-          class="rounded-card bg-surface shadow-overlay gap-stack-lg p-inset-md lg:top-inset-md lg:right-inset-md lg:bottom-inset-md lg:w-layout-inspector-width flex min-w-0 flex-col lg:absolute lg:overflow-y-auto lg:overscroll-contain"
+          class="gap-stack-sm lg:top-inset-md lg:bottom-inset-md lg:left-inset-md order-first flex min-h-0 min-w-0 flex-col lg:pointer-events-none lg:absolute lg:order-none lg:items-start"
         >
-          {@render panels()}
-        </aside>
+          <div bind:clientHeight={stripHeight} class="pointer-events-auto w-fit max-w-full">
+            <StatusStrip devices={data.devices} alerts={data.alerts} {app} {url} />
+          </div>
+          <aside
+            bind:clientWidth={panelWidth}
+            aria-label="현황 패널"
+            class="rounded-card bg-surface shadow-overlay gap-stack-lg p-inset-md lg:w-layout-inspector-width pointer-events-auto flex min-h-0 min-w-0 flex-col lg:overflow-y-auto lg:overscroll-contain"
+          >
+            {@render panels()}
+          </aside>
+        </div>
       {:else}
         <div class="w-fit max-w-full"><StatusStrip devices={data.devices} alerts={data.alerts} {app} {url} /></div>
         <div class="rounded-card bg-surface shadow-raised gap-stack-lg p-inset-md flex min-w-0 flex-col">

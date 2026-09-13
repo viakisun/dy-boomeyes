@@ -105,8 +105,10 @@
       class={cx(ownerControl(), item, 'border-border-subtle rounded-pill hover:bg-ui-hover border-l')}
       aria-label="{chip.label} {chip.count}대 보기"
     >
-      <span class="text-label-md text-fg-muted">{chip.label}</span>
+      <!-- 숫자가 먼저다(시안 «확정 2026-09-12») — 띠는 「몇 대인가」를 먼저 읽히게 한다.
+           접근 이름은 aria-label이 따로 정한다(시각 순서와 별개) -->
       <strong class={cx('text-label-md tabular-nums', chip.count > 0 && chip.tone)}>{chip.count}</strong>
+      <span class="text-label-md text-fg-muted">{chip.label}</span>
     </a>
   {/each}
 </section>
