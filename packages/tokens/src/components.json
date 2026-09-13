@@ -972,6 +972,15 @@
     "note": "호기 단계에서 지도 자리를 대신한다(시안 «확정 2026-09-12»). 타일은 앱이 넘긴 live 스니펫이 그린다 — ui는 video를 import하지 않는다."
   },
   {
+    "name": "CameraViewer",
+    "family": "Owner experience",
+    "platform": "both",
+    "ref": "시안 «운영 현황 목업» 전체 화면 · Motive Fleet View Live",
+    "variants": "단일 카메라 + 필름 띠",
+    "states": "닫힘/열림",
+    "note": "카메라 타일을 누르면 열리는 전체 화면(«확정 2026-09-12»). <dialog> 모달이라 Esc·포커스 가둠·최상위 레이어가 딸려 온다 — z 유틸리티를 쓰지 않는다. ←·→로 카메라를 옮긴다."
+  },
+  {
     "name": "UnitPanel",
     "family": "Owner experience",
     "platform": "both",
@@ -985,9 +994,9 @@
     "family": "Owner experience",
     "platform": "both",
     "ref": "Motive Fleet View Live · V5 관제기능",
-    "variants": "capture(정지)/live(자동 재생)",
+    "variants": "capture(정지)/live(자동 재생) · fill(전체 화면)",
     "states": "default",
-    "note": "호기 패널의 실시간 영상 타일 — 6초 샘플 루프(muted·loop·playsinline), '실시간 예시' 오버레이 + 시연 클립 캡션, 해제 시 pause·src 제거"
+    "note": "호기 패널·카메라 벽의 실시간 영상 타일 — 6초 샘플 루프(muted·loop·playsinline), 시연 클립 캡션, 해제 시 pause·src 제거. fill이면 영역을 채우고(전체 화면) 영상은 레터박스 · 안내를 길게 밝힌다."
   },
   {
     "name": "MapSheet",

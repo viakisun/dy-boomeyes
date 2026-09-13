@@ -48,7 +48,7 @@
       />
     </div>
   {/snippet}
-  {#snippet live(camera, label, capture)}
-    <OwnerLiveTile {camera} {label} {capture} />
+  {#snippet live(camera, label, capture, fill)}
+    <OwnerLiveTile {camera} {label} {capture} {fill} />
   {/snippet}
 </OwnerWorkspace>

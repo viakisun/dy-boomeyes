@@ -32,7 +32,10 @@
     sim = false,
     map,
     live,
-  }: OwnerViewProps & { map?: Snippet<[OwnerMapScene]>; live?: Snippet<[OwnerCamera, string, boolean]> } = $props();
+  }: OwnerViewProps & {
+    map?: Snippet<[OwnerMapScene]>;
+    live?: Snippet<[OwnerCamera, string, boolean, boolean]>;
+  } = $props();
   const level = $derived(ownerLevel(url, data));
   let region = $state<OwnerRegion | undefined>();
   let focused = $state<string | undefined>();
@@ -217,12 +220,13 @@
             : ''}"
     >
       {#if wall && sheet}
-        <!-- PWA 호기: 카메라 2×3 전면 → 상태 띠 → 시트(정보). 지도와 같은 문법을 잇는다 -->
-        <div class="absolute inset-0 overflow-y-auto">
-          <UnitCameras device={wall.device} cameras={wall.cameras} {app} {capture} live={live!} class="h-full" />
-        </div>
-        <div bind:clientHeight={stripHeight} class="top-inset-sm inset-x-inset-sm absolute">
+        <!-- PWA 호기: 상태 띠 → 카메라 2×3 → 시트(정보).
+             지도 단계와 달리 띠를 띄우지 않는다 — 지도는 띠 아래로 이어지지만 타일은 가려지면 그만큼 사라진다. -->
+        <div bind:clientHeight={stripHeight} class="shrink-0">
           <StatusStrip devices={data.devices} alerts={data.alerts} {app} {url} wrap={false} class="w-full" />
+        </div>
+        <div class="min-h-0 flex-1 overflow-y-auto">
+          <UnitCameras device={wall.device} cameras={wall.cameras} {app} {capture} live={live!} class="h-full" />
         </div>
         <MapSheet bind:snap label="현황 패널">
           {@render panels()}
@@ -231,7 +235,9 @@
         <!-- 웹 호기: 카메라 3×2와 정보 패널을 나란히 둔다. 지도 단계처럼 겹치지 않는다 —
              영상 위에 글을 얹으면 배경이 매 프레임 바뀌어 아무것도 읽히지 않는다. -->
         <StatusStrip devices={data.devices} alerts={data.alerts} {app} {url} />
-        <div class="gap-stack-md flex min-h-0 min-w-0 flex-1 flex-col lg:flex-row">
+        <!-- 벽은 자기 비율만큼(3×2 = 8:3), 패널은 정해진 높이 안에서 스크롤한다.
+             늘여 맞추면 둘 중 하나가 화면 밖으로 밀린다 — 패널 내용이 벽보다 훨씬 길다. -->
+        <div class="gap-stack-md flex min-h-0 min-w-0 flex-1 flex-col lg:flex-row lg:items-start">
           <UnitCameras
             device={wall.device}
             cameras={wall.cameras}
@@ -241,7 +247,7 @@
             class="min-w-0 flex-1"
           />
           <div
-            class="bg-surface rounded-card shadow-raised border-border-subtle p-inset-md lg:w-layout-inspector-width min-w-0 shrink-0 overflow-y-auto border"
+            class="bg-surface rounded-card shadow-raised border-border-subtle p-inset-md lg:max-h-layout-panel-height lg:w-layout-inspector-width min-w-0 shrink-0 overflow-y-auto border"
           >
             {@render panels()}
           </div>

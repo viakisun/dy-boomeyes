@@ -190,6 +190,36 @@ export function ownerFlows(app: OwnerApp) {
     await expect(page).not.toHaveURL(/site=/);
   });
 
+  // 타일을 누르면 전체 화면(시안 «확정 2026-09-12» · PWA 사용자 결정 «탭하면 전체 화면»)
+  test('[B1-02] [FR-042] [AC-O05] camera tile opens the full-screen viewer and returns focus', async ({ page }) => {
+    await startOwner(page, app);
+    await page.goto(`${paths.overview}?site=SITE-MAPO&device=CPB-001`);
+    const opener = page.getByRole('button', { name: '1호기 바디캠 A 전체 화면', exact: true });
+    await expect(opener).toBeVisible();
+    await opener.click();
+    const viewer = page.locator('[data-camera-viewer="CPB-001"]');
+    await expect(viewer).toBeVisible();
+    await expect(viewer.getByRole('heading', { name: '1호기 바디캠 A', exact: true })).toBeVisible();
+    // 필름 띠는 여섯 대를 모두 담고 현재 카메라를 표시한다
+    const strip = viewer.getByRole('list', { name: '카메라 목록', exact: true }).getByRole('button');
+    await expect(strip).toHaveCount(6);
+    await expect(strip.first()).toHaveAttribute('aria-current', 'true');
+    // ← → 로 카메라를 옮긴다(맨 앞에서 ←는 맨 뒤로 감긴다)
+    await page.keyboard.press('ArrowRight');
+    await expect(viewer.getByRole('heading', { name: '1호기 바디캠 B', exact: true })).toBeVisible();
+    await page.keyboard.press('ArrowLeft');
+    await page.keyboard.press('ArrowLeft');
+    await expect(viewer.getByRole('heading', { name: '1호기 AI CCTV', exact: true })).toBeVisible();
+    await expect(strip.last()).toHaveAttribute('aria-current', 'true');
+    // 띠에서 직접 고른다
+    await strip.nth(3).click();
+    await expect(viewer.getByRole('heading', { name: '1호기 CCTV 1', exact: true })).toBeVisible();
+    // Esc로 닫히고(모달 <dialog>) 연 타일로 포커스가 돌아온다
+    await page.keyboard.press('Escape');
+    await expect(page.locator('[data-camera-viewer]')).toHaveCount(0);
+    await expect(opener).toBeFocused();
+  });
+
   // 시안의 호기 화면 — 상태 · 오늘 운전자 · AI 경고 · 지표 6 · 접기(«확정 2026-09-12»)
   test('[B1-02] [FR-044] [AC-O05] unit panel shows driver, AI warning, six metrics and folded groups', async ({
     page,

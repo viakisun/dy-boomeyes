@@ -45,7 +45,7 @@
     url: URL;
     device: OwnerDevice;
     capture?: boolean;
-    live?: Snippet<[OwnerCamera, string, boolean]>;
+    live?: Snippet<[OwnerCamera, string, boolean, boolean]>;
     /** 지도 자리에 카메라 벽이 있는 화면 — 패널은 영상을 그리지 않는다 */
     cameraWall?: boolean;
   } = $props();
@@ -112,7 +112,7 @@
   {#if cameraWall}
     <!-- 카메라는 지도 자리의 벽이 보인다 — 패널이 같은 영상을 한 번 더 그리지 않는다 -->
   {:else if live && camera?.available}
-    {@render live(camera, `${device.unit}호기 ${camera.label} 실시간 예시`, capture)}
+    {@render live(camera, `${device.unit}호기 ${camera.label} 실시간 예시`, capture, false)}
   {:else}
     <EmptyState
       title={device.connection === 'detached' ? '단말기 미장착' : '영상 미확보'}

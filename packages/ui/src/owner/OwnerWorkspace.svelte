@@ -44,7 +44,7 @@
     /** 현황·상세의 지도 — 장면(OwnerMapScene)을 받아 앱이 MapView로 그린다 */
     map?: Snippet<[OwnerMapScene]>;
     /** 호기 패널의 실시간 영상 타일(카메라 · 접근 이름 · capture) */
-    live?: Snippet<[OwnerCamera, string, boolean]>;
+    live?: Snippet<[OwnerCamera, string, boolean, boolean]>;
   } = $props();
   let snapshot = $state<OwnerSnapshot>();
   let error = $state('');
