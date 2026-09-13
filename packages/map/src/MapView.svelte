@@ -37,7 +37,10 @@
   // 알약 지도 = fitMarkers(자동 맞춤) 또는 camera(장면 카메라)
   const pill = $derived(fitMarkers || !!camera);
   const COMPACT_BELOW = 480;
-  // 타일 베이스맵은 URL, 경계선 베이스맵은 그 자리에서 만든 스타일 객체(토큰 계산값을 읽으므로 테마마다 다시 만든다)
+  // 타일 베이스맵은 URL, 경계선 베이스맵은 그 자리에서 만든 스타일 객체(토큰 계산값을 읽는다).
+  // 경계선 스타일은 styleUrl을 쓰지 않지만 테마 신호로 삼는다 — 앱이 테마마다 다른 URL을 넘기므로
+  // (OwnerPage의 STYLE.light/dark) 그 변화가 아래 $effect를 깨워 토큰 값을 다시 읽게 한다.
+  // styleUrl을 테마와 분리하게 되면 이 교체도 함께 끊긴다.
   const styleSpec = () => (basemap === 'outline' && el ? outlineStyle(el) : styleUrl);
   const EASE_MS = 700;
   const COLOR: Record<string, string> = {

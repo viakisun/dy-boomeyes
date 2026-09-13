@@ -93,10 +93,9 @@ export function ownerFlows(app: OwnerApp) {
     await expect(device).not.toContainText('즉시 투입 가능');
   });
 
-  // 시안의 계약 — 요청을 받아 후보(보관 + 종료 임박)에서 호기를 배정한다(«확정 2026-09-12» · FR-026)
-  test('[B1-02] [FR-026] [AC-O07] request assignment fills N/N and writes the lease onto the unit', async ({
-    page,
-  }) => {
+  // 시안의 계약 — 요청을 받아 후보(보관 + 종료 임박)에서 호기를 배정한다(«확정 2026-09-12»).
+  // 수용 기준은 owner-contracts AC-2·AC-3이다 — AC-Onn은 owner-experience의 증거 코드라 여기엔 없다.
+  test('[B1-02] [FR-026] request assignment fills N/N and writes the lease onto the unit', async ({ page }) => {
     await startOwner(page, app);
     await page.getByRole('navigation').getByRole('link', { name: '계약', exact: true }).click();
     const screen = page.locator('[data-owner-requests]');
@@ -134,8 +133,9 @@ export function ownerFlows(app: OwnerApp) {
     for (const id of picks) await expect(fleet.locator(`[data-device="${id}"]`)).toHaveCount(1);
   });
 
-  // 시안의 운전자 — 소유주 소속이고 배정이 매일 바뀐다. 서류는 사람 4종(«확정 2026-09-12» · FR-027)
-  test('[B1-02] [FR-027] [AC-O07] driver roster shows today assignment and driver documents are a separate axis', async ({
+  // 시안의 운전자 — 소유주 소속이고 배정이 매일 바뀐다. 서류는 사람 4종(«확정 2026-09-12»).
+  // 수용 기준은 owner-drivers AC-1·AC-3이다(AC-Onn 없음).
+  test('[B1-02] [FR-027] driver roster shows today assignment and driver documents are a separate axis', async ({
     page,
   }) => {
     await startOwner(page, app);
@@ -175,7 +175,7 @@ export function ownerFlows(app: OwnerApp) {
   });
 
   // 시안의 보유 장비 — 표 하나 · 검색 1 · 필터 3축 · 현장별 묶어 보기(«확정 2026-09-12»)
-  test('[B1-02] [FR-025] [AC-O07] fleet sorts by header, filters on three axes and groups by site', async ({
+  test('[B1-02] [FR-025] [AC-O02] fleet sorts by header, filters on three axes and groups by site', async ({
     page,
   }) => {
     await startOwner(page, app);
@@ -334,7 +334,7 @@ export function ownerFlows(app: OwnerApp) {
   });
 
   // 타일을 누르면 전체 화면(시안 «확정 2026-09-12» · PWA 사용자 결정 «탭하면 전체 화면»)
-  test('[B1-02] [FR-042] [AC-O05] camera tile opens the full-screen viewer and returns focus', async ({ page }) => {
+  test('[B1-02] [FR-042] [AC-O08] camera tile opens the full-screen viewer and returns focus', async ({ page }) => {
     await startOwner(page, app);
     await page.goto(`${paths.overview}?site=SITE-MAPO&device=CPB-001`);
     const opener = page.getByRole('button', { name: '1호기 바디캠 A 전체 화면', exact: true });
