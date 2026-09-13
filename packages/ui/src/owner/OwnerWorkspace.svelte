@@ -19,6 +19,7 @@
   import OwnerDocuments from './OwnerDocuments.svelte';
   import OwnerAlerts from './OwnerAlerts.svelte';
   import Button from '../primitives/Button.svelte';
+  import { bellSlot } from './bell.svelte';
   import EmptyState from '../primitives/EmptyState.svelte';
   let {
     api,
@@ -92,6 +93,14 @@
   });
   $effect(() => () => unsubscribe?.());
   const viewProps = $derived(snapshot ? { data: snapshot, api, app, url, navigate, refresh, capture, sim } : null);
+  // 헤더의 종 알림 패널에 같은 스냅샷을 올린다 — 셸이 따로 불러오면 시뮬레이션 중 시각이 갈린다
+  const bell = bellSlot();
+  $effect(() => {
+    if (!bell) return;
+    bell.alerts = snapshot?.alerts ?? [];
+    bell.devices = snapshot?.devices ?? [];
+    bell.now = snapshot?.at ?? '';
+  });
   // 원천에 등록됐지만 아직 만들지 않은 화면(계약·운전자)에는 data-stub를 붙여
   // capture --strict가 자리 화면으로 세게 한다 — 보이지 않는 자리 화면을 남기지 않는다.
   // 판정은 화면의 웨이브에서 나온다(수기 목록이 아니다 — 구현되면 웨이브가 내려와 저절로 풀린다).

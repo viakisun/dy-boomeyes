@@ -185,6 +185,9 @@ export function ownerSummary(devices: readonly OwnerDevice[], alerts: readonly O
     alerts: unique.length,
   };
 }
+/** 가동 중 — 투입·최근 수신·이상 없음. 상태 띠의 수와 목록 필터가 같은 술어를 써야 «97대»를 눌렀을 때 97대가 나온다. */
+export const ownerRunning = (d: OwnerDevice) =>
+  d.deployment === 'deployed' && d.connection === 'current' && !d.fault && !d.inspection;
 /** 운영 상태 띠 — 가동 중은 투입·최근 수신·이상 없음. 보관은 가동으로 더하지 않는다. */
 export function ownerStrip(devices: readonly OwnerDevice[]) {
   const strip = { total: devices.length, running: 0, inspection: 0, fault: 0, stale: 0, stored: 0, unknown: 0 };
@@ -194,7 +197,7 @@ export function ownerStrip(devices: readonly OwnerDevice[]) {
     else if (d.fault) strip.fault++;
     else if (d.inspection) strip.inspection++;
     else if (d.connection === 'stale') strip.stale++;
-    else if (d.connection === 'current') strip.running++;
+    else if (ownerRunning(d)) strip.running++;
   }
   return strip;
 }
@@ -270,6 +273,7 @@ export function ownerMatches(device: OwnerDevice, query: string, filter: string)
     (!q || text.includes(q)) &&
     (filter === 'all' ||
       filter === device.deployment ||
+      (filter === 'running' && ownerRunning(device)) ||
       (filter === 'attention' && !!(device.fault || device.inspection || device.connection === 'stale')))
   );
 }

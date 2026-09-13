@@ -33,6 +33,22 @@ export const OWNER_PATHS = {
 // owner_demo에 등록됐지만 아직 만들지 않은 화면 목적(ssot/meta.yaml owner_demo_wave 위).
 // 여기 적힌 것은 「표식이 붙은 안내 화면」이어야 하고, 나머지는 실제 본문이어야 한다.
 export const OWNER_UNBUILT = ['requests', 'lease', 'drivers', 'driver-docs'] as const;
+
+/** 알림은 좌측 메뉴에서 내려와 헤더의 종으로 들어왔다(시안 «결정 2026-09-12»). */
+export async function openAlerts(page: Page) {
+  await page.getByRole('button', { name: /^알림/ }).click();
+  await page.locator('[data-owner-bell]').getByRole('link', { name: '알림 전체 보기' }).click();
+}
+/** 장비 서류도 메뉴에서 내려왔다 — 서류는 호기에 속하므로 보유 장비 → 호기 → 서류로 연다.
+ *  goto는 전체 새로고침이라 메모리에 있는 시연 첨부가 사라진다 — 실제 사용자 경로를 그대로 따른다. */
+export async function openDocuments(page: Page, device = 'CPB-001') {
+  await page.getByRole('navigation').getByRole('link', { name: '보유 장비', exact: true }).click();
+  await page.locator(`[data-device="${device}"]`).first().click();
+  await page
+    .getByRole('link', { name: /장비 서류/ })
+    .first()
+    .click();
+}
 export const test = base.extend<{ ownerRuntime: void }>({
   ownerRuntime: [
     async ({ page }, use, testInfo) => {

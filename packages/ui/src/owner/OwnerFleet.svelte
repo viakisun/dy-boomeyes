@@ -12,7 +12,7 @@
   let { data, app, url, navigate }: OwnerViewProps = $props();
   let query = $state('');
   let filter = $state('all');
-  const filters = ['all', 'deployed', 'stored', 'unknown', 'attention'];
+  const filters = ['all', 'deployed', 'running', 'stored', 'unknown', 'attention'];
   const matches = $derived(data.devices.filter((device) => ownerMatches(device, query, filter)));
   $effect(() => {
     query = url.searchParams.get('q') ?? '';
@@ -85,6 +85,7 @@
         >
           <option value="all">전체 장비</option>
           <option value="deployed">현장 투입</option>
+          <option value="running">가동 중</option>
           <option value="stored">보관 중</option>
           <option value="unknown">배치 미확인</option>
           <option value="attention">확인 필요</option>

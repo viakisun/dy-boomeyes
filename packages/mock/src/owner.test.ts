@@ -124,6 +124,17 @@ describe('[FR-025] 배치·이상·정보 시각의 독립성', () => {
     expect(s.devices.filter((d) => ownerMatches(d, '5호기', 'stored')).map((d) => d.unit)).toEqual([5]);
     expect(s.devices.filter((d) => ownerMatches(d, '없는 현장', 'all'))).toEqual([]);
   });
+  it('상태 띠의 «가동 중» 수와 목록의 running 필터 결과가 같다', async () => {
+    // 띠의 숫자를 눌러 목록으로 가면 그만큼 나와야 한다 — 예전에는 띠가 분류 잔여값을 세고
+    // 링크는 투입 전체로 가서 어긋났다(97 vs 101).
+    const s = await make().snapshot();
+    const strip = ownerStrip(s.devices);
+    const listed = s.devices.filter((d) => ownerMatches(d, '', 'running'));
+    expect(listed).toHaveLength(strip.running);
+    expect(listed.every((d) => d.deployment === 'deployed' && !d.fault && !d.inspection)).toBe(true);
+    // 투입 전체는 가동 중보다 많다 — 두 필터가 다른 것을 뜻한다
+    expect(s.devices.filter((d) => ownerMatches(d, '', 'deployed')).length).toBeGreaterThan(strip.running);
+  });
   it('읽음 처리는 이상·점검·집계를 해소하지 않는다', async () => {
     const api = make();
     await api.markRead('CPB-002-FAULT');

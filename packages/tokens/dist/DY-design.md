@@ -10,7 +10,7 @@
 | ref(원시) | 208 |
 | sys(시맨틱) | 308 |
 | cmp(컴포넌트) | 92 |
-| 컴포넌트 카탈로그 | 108 |
+| 컴포넌트 카탈로그 | 109 |
 | 대비 검사 | 94/94 통과 |
 
 | 산출물 | 용도 |
@@ -770,7 +770,7 @@ cmp 층은 sys만 참조한다(ref 직접 참조 금지 — 검사로 강제). �
 | `cmp.table.row-selected` | #e7f3fb | #e7f3fb | {sys.color.bg.selected} |  |
 | `cmp.table.header-fg` | #4a6879 | #4a6879 | {sys.color.fg.muted} |  |
 
-## 8. 컴포넌트 카탈로그 (108)
+## 8. 컴포넌트 카탈로그 (109)
 
 이름 PascalCase · prop 어휘 고정: `variant`(형태) · `tone`(색 의도: accent/neutral/info/success/warning/danger/progress) · `size`(sm/md/lg) · 상태 boolean(`disabled` `loading` `selected` `invalid`). 플랫폼 both = 같은 Svelte 컴포넌트가 밀도 토큰으로 두 플랫폼을 소화.
 
@@ -908,6 +908,7 @@ cmp 층은 sys만 참조한다(ref 직접 참조 금지 — 검사로 강제). �
 | **OwnerFleet** | both | V5 관제기능 · owner-experience | app web/pwa | loading/empty/error/offline/default | 보유 전체 장비 검색·필터·상세 이동 |
 | **OwnerDetail** | both | V5 관제기능 · owner-experience | app web/pwa | loading/empty/error/offline/default | 호기 식별·계약·담당자·수신 정보 |
 | **EquipmentRow** | both | V5 관제기능 · owner-experience | layout columns/stacked · poster | loading/empty/error/offline/default | 미디어 · 식별 · 배치 Badge · 조건 StatusPill · 수신 · 계약 D-n · 빠른 행동 |
+| **AlertBell** | both | Samsara Alerts bell · Material menu dismiss | web 드롭다운 / PWA 전체 폭 시트 | empty/default · 미확인 배지 | 알림이 좌측 메뉴에서 내려와 헤더 종으로 들어온다(시안 «결정 2026-09-12») · 비모달 · pointerdown 바깥닫기 · Esc · 포커스 복귀 |
 | **AlertCard** | both | Trackunit Attention · Samsara Alerts | href/onclick · selected | loading/empty/error/offline/default | IconTile(종류 톤) · 제목(미확인 semibold) · 호기·현장 · 상대 시각 · 미확인 배지 |
 | **FleetSummary** | both | V5 관제기능 · owner-experience | app web/pwa | loading/empty/error/offline/default | 전체 대수와 배치 분포 · 이상 집계 분리 |
 | **OwnerAlerts** | both | V5 관제기능 · owner-experience | app web/pwa | loading/empty/error/offline/default | 장비별 이상·점검 선택·읽음·담당자 |

@@ -35,7 +35,7 @@
         key: 'running',
         label: '가동 중',
         count: strip.running,
-        href: ownerHref(url, 'fleet', app, { filter: 'deployed' }),
+        href: ownerHref(url, 'fleet', app, { filter: 'running' }),
         tone: 'text-success-fg',
       },
       {

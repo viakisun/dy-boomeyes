@@ -846,6 +846,15 @@
     "note": "미디어 · 식별 · 배치 Badge · 조건 StatusPill · 수신 · 계약 D-n · 빠른 행동"
   },
   {
+    "name": "AlertBell",
+    "family": "Owner experience",
+    "platform": "both",
+    "ref": "Samsara Alerts bell · Material menu dismiss",
+    "variants": "web 드롭다운 / PWA 전체 폭 시트",
+    "states": "empty/default · 미확인 배지",
+    "note": "알림이 좌측 메뉴에서 내려와 헤더 종으로 들어온다(시안 «결정 2026-09-12») · 비모달 · pointerdown 바깥닫기 · Esc · 포커스 복귀"
+  },
+  {
     "name": "AlertCard",
     "family": "Owner experience",
     "platform": "both",

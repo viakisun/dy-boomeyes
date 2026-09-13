@@ -175,7 +175,7 @@ test('[B1-02] 소유주 KPI 첫 줄 — 보유 호기 5대 · 가동률 67% · �
   await expect(fleet).toContainText('5대 평균');
 });
 
-test('[B1-02] 소유주 owner01 일반 세션 — 운영 현황 · 보유 장비 120대 · 소유주 메뉴 4개 [FR-001] [FR-002]', async ({
+test('[B1-02] 소유주 owner01 일반 세션 — 운영 현황 · 보유 장비 120대 · 소유주 메뉴 2개 + 알림 종 [FR-001] [FR-002]', async ({
   page,
 }) => {
   await page.goto('/login');
@@ -186,7 +186,9 @@ test('[B1-02] 소유주 owner01 일반 세션 — 운영 현황 · 보유 장비
   await expect(page.getByRole('region', { name: '장비 운영 구성', exact: true })).toHaveAttribute('data-total', '120');
   await expect(page.getByRole('link', { name: '전체 장비 120대 보기', exact: true })).toBeVisible();
   const navigation = page.getByRole('navigation', { name: '소유주 메뉴', exact: true });
-  await expect(navigation.getByRole('link')).toHaveCount(4);
-  for (const label of ['운영 현황', '보유 장비', '이상·점검', '장비 서류'])
+  // 메뉴는 운영 현황 · 보유 장비 둘 — 이상·점검과 장비 서류는 헤더 종과 호기 화면으로 내려갔다(시안 «결정 2026-09-12»)
+  await expect(navigation.getByRole('link')).toHaveCount(2);
+  for (const label of ['운영 현황', '보유 장비'])
     await expect(navigation.getByRole('link', { name: label, exact: true })).toBeVisible();
+  await expect(page.getByRole('button', { name: /^알림/ })).toBeVisible();
 });

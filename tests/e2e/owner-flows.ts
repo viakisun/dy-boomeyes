@@ -8,6 +8,8 @@ import {
   noOverflow,
   OWNER_PATHS,
   OWNER_UNBUILT,
+  openAlerts,
+  openDocuments,
   type OwnerApp,
 } from './owner-helpers';
 
@@ -32,22 +34,25 @@ export function ownerFlows(app: OwnerApp) {
     await expect(page).toHaveURL(new RegExp(`${paths.overview.replaceAll('/', '\\/')}(?:\\?|$)`));
     await expect(ownerHost(page, 'overview')).toHaveAttribute('data-owner-role', 'owner');
   });
-  test('[B1-02] [FR-024] [AC-O01] actual owner entry and four working menus', async ({ page }) => {
+  test('[B1-02] [FR-024] [AC-O01] actual owner entry, working menus and the alert bell', async ({ page }) => {
     await page.goto(paths.entry);
     await expect(page.getByRole('button', { name: '데모 계정으로 로그인', exact: true })).toBeVisible();
     for (const account of ['control01', 'ops01', 'maint01', 'owner01'])
       await expect(page.getByText(account, { exact: true })).toHaveCount(0);
     await startOwner(page, app);
+    // 메뉴는 운영 현황 · 보유 장비 둘이다 — 이상·점검과 장비 서류는 종 패널과 호기 화면으로 내려갔다
     const expected = [
       ['보유 장비', 'fleet'],
-      ['이상·점검', 'alerts'],
-      ['장비 서류', 'documents'],
       ['운영 현황', 'overview'],
     ] as const;
     for (const [label, view] of expected) {
       await page.getByRole('navigation').getByRole('link', { name: label, exact: true }).click();
       await expect(ownerHost(page, view)).toBeVisible();
     }
+    await openAlerts(page);
+    await expect(ownerHost(page, 'alerts')).toBeVisible();
+    await openDocuments(page);
+    await expect(ownerHost(page, 'documents')).toBeVisible();
     await page.getByRole('button', { name: '로그아웃', exact: true }).click();
     await expect(page.getByRole('button', { name: '데모 계정으로 로그인', exact: true })).toBeVisible();
     expect(await page.evaluate(() => localStorage.getItem('boomeyes.session'))).toBeNull();
@@ -180,6 +185,34 @@ export function ownerFlows(app: OwnerApp) {
     await page.getByRole('navigation', { name: '현황 경로', exact: true }).getByRole('link', { name: '전국' }).click();
     await expect(ownerHost(page, 'overview').locator('.be-map')).toHaveAttribute('data-map-level', 'nation', MAP);
     await expect(page).not.toHaveURL(/site=/);
+  });
+
+  // 알림은 좌측 메뉴에서 내려와 헤더의 종으로 들어왔다(시안 «결정 2026-09-12»).
+  // 메뉴에 이상·점검이 남아 있으면 두 자리에 같은 것이 생긴다 — 그것까지 함께 막는다.
+  test('[B1-02] [FR-006] [AC-O06] header bell opens alerts, closes by Escape and returns focus', async ({ page }) => {
+    await startOwner(page, app);
+    const nav = page.getByRole('navigation', { name: '소유주 메뉴' });
+    await expect(nav.getByRole('link', { name: '이상·점검' })).toHaveCount(0);
+    await expect(nav.getByRole('link', { name: '장비 서류' })).toHaveCount(0);
+
+    const bell = page.getByRole('button', { name: /^알림/ });
+    await expect(bell).toHaveAttribute('aria-expanded', 'false');
+    const panel = page.locator('[data-owner-bell]');
+    await expect(panel).toHaveCount(0);
+
+    await bell.click();
+    await expect(bell).toHaveAttribute('aria-expanded', 'true');
+    await expect(panel).toBeVisible();
+    // 미확인 수가 제목과 배지에 같게 나온다
+    await expect(panel.getByRole('heading', { name: '알림', exact: true })).toBeVisible();
+    // 스냅샷은 셸이 뜬 뒤에 도착한다 — 한 번 읽는 count()는 경합한다(재시도하는 단언을 쓴다)
+    const cards = panel.locator('[data-alert]');
+    await expect(cards.first()).toBeVisible();
+    await expect(panel.getByRole('link', { name: '알림 전체 보기' })).toBeVisible();
+
+    await page.keyboard.press('Escape');
+    await expect(panel).toHaveCount(0);
+    await expect(bell).toBeFocused();
   });
 
   // 원천에 등록됐지만 아직 만들지 않은 화면은 「표식이 붙은 안내 화면」이어야 한다.
@@ -460,7 +493,7 @@ export function ownerFlows(app: OwnerApp) {
     page,
   }) => {
     await startOwner(page, app);
-    await page.getByRole('navigation').getByRole('link', { name: '이상·점검', exact: true }).click();
+    await openAlerts(page);
     await page.locator('[data-alert="CPB-002-FAULT"]').click();
     await expect(ownerHost(page, 'alerts')).toContainText('공급 전압 저하');
     await expect(ownerHost(page, 'alerts')).toContainText('이현장');
@@ -609,7 +642,7 @@ export function ownerFlows(app: OwnerApp) {
     await expect(page.getByRole('status').filter({ hasText: '시연 파일을 첨부했습니다' })).toBeVisible();
     await expect(ownerHost(page, 'documents')).toContainText('icon-192.png');
     await page.getByRole('navigation').getByRole('link', { name: '보유 장비', exact: true }).click();
-    await page.getByRole('navigation').getByRole('link', { name: '장비 서류', exact: true }).click();
+    await openDocuments(page);
     await expect(ownerHost(page, 'documents')).toContainText('icon-192.png');
     await page.reload();
     await expect(ownerHost(page, 'documents')).not.toContainText('icon-192.png');

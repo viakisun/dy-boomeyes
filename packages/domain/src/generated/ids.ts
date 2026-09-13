@@ -442,7 +442,7 @@ export const OWNER_DEMO = [
   },
   {
     "view": "documents",
-    "menu": 4,
+    "menu": 0,
     "label": "장비 서류",
     "web": "B1-05",
     "pwa": "A4-10",
@@ -455,7 +455,7 @@ export const OWNER_DEMO = [
   },
   {
     "view": "alerts",
-    "menu": 3,
+    "menu": 0,
     "label": "이상·점검",
     "web": "B1-12",
     "pwa": "A4-11",

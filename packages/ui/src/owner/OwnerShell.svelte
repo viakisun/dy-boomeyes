@@ -13,6 +13,8 @@
   import { theme, toggleTheme } from '../lib/theme.svelte';
   import { ownerControl } from './core-helpers';
   import { connectivity } from '../lib/connectivity.svelte';
+  import AlertBell from './AlertBell.svelte';
+  import { provideBell } from './bell.svelte';
   let {
     app,
     view,
@@ -31,9 +33,12 @@
     onsim?: (on: boolean) => void;
     children: Snippet;
   } = $props();
+  // 메뉴 항목은 원천(owner_demo menu > 0)에서 온다 — 하단 내비의 열 수도 여기서 파생한다(고정 4칸 금지)
   const items = $derived(OWNER_MENU.map((v) => OWNER_DEMO.find((x) => x.view === v)!));
   const active = $derived(view === 'detail' || view === 'video' ? 'fleet' : view);
   const dark = $derived(theme.value ? theme.value === 'dark' : theme.system);
+  // 알림 자료 통로 — 워크스페이스가 읽은 스냅샷을 헤더의 종으로 올린다
+  const bell = provideBell();
 </script>
 
 {#snippet navigation()}
@@ -90,7 +95,10 @@
         <Logo variant="glyph" class="size-size-avatar-sm" />
         <span class="text-label-lg font-semibold">소유주 운영</span>
       </div>
-      <div class="gap-inline-xs flex">
+      <!-- 종이 늘면서 200% 확대에서 아이콘 줄이 넘쳤다 — 줄바꿈을 허용한다 -->
+      <div class="gap-inline-xs flex flex-wrap justify-end">
+        <!-- 알림은 메뉴에서 내려와 헤더의 종으로 들어온다(시안 «결정 2026-09-12») -->
+        <AlertBell alerts={bell.alerts} devices={bell.devices} now={bell.now} {app} {url} />
         {#if onsim}
           <IconButton
             variant="ghost"
@@ -128,7 +136,8 @@
     </main>
     <nav
       aria-label="소유주 메뉴"
-      class="owner-mobile-nav border-border-subtle bg-surface gap-inline-xs p-inset-xs sticky bottom-0 grid grid-cols-4 border-t {app ===
+      style="grid-template-columns: repeat({items.length}, minmax(0, 1fr))"
+      class="owner-mobile-nav border-border-subtle bg-surface gap-inline-xs p-inset-xs sticky bottom-0 grid border-t {app ===
       'web'
         ? 'lg:hidden'
         : ''}"

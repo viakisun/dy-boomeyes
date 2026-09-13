@@ -1,4 +1,4 @@
-import { test, expect, startOwner, ownerHost, type OwnerApp } from './owner-helpers';
+import { test, expect, startOwner, ownerHost, openDocuments, type OwnerApp } from './owner-helpers';
 
 interface ResourceAudit {
   instance: string;
@@ -51,7 +51,7 @@ export function ownerResourcesFlows(app: OwnerApp) {
       });
     });
     await startOwner(page, app);
-    await page.getByRole('navigation').getByRole('link', { name: '장비 서류', exact: true }).click();
+    await openDocuments(page);
     const host = ownerHost(page, 'documents');
     const documents = host.locator('button[data-doc]');
     await expect(documents).toHaveCount(2);
@@ -128,7 +128,7 @@ export function ownerResourcesFlows(app: OwnerApp) {
     // Navigate away and back so the second click cannot be hidden by a transient render.
     await page.getByRole('navigation').getByRole('link', { name: '보유 장비', exact: true }).click();
     await expect(ownerHost(page, 'fleet')).toBeVisible();
-    await page.getByRole('navigation').getByRole('link', { name: '장비 서류', exact: true }).click();
+    await openDocuments(page);
     await expect(documents).toHaveCount(3);
     await expect(documents.filter({ hasText: 'cpb-001-certificate.pdf' })).toHaveCount(1);
     await page.getByRole('button', { name: '로그아웃', exact: true }).click();
