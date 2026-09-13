@@ -189,8 +189,9 @@ def pdf_document(output, scenes, capture, font, supplements):
     pdf.start("내 장비를 찾고, 현장 확인까지", "소유주를 위한 PC·휴대폰 데모 화면")
     y = pdf.paragraph("보유 장비의 현장과 상태를 찾고, 계약·담당자·서류·영상으로 이어지는 흐름을 살펴봅니다.", 58, pdf.h - 168, 780, 25)
     y = pdf.paragraph("같은 호기를 기준으로 PC와 휴대폰에서 필요한 정보를 확인합니다.", 58, y - 26, 780, 17, MUTED)
+    # 장면이 늘면 표지가 빡빡해진다 — 줄 간격을 줄여 각주 자리를 남긴다(가드가 넘침을 잡는다)
     for scene in scenes:
-        y = pdf.paragraph(f"{scene['number']:02}  {scene['label']}  /  {scene['question']}", 58, y - 20, pdf.w - 116, 15)
+        y = pdf.paragraph(f"{scene['number']:02}  {scene['label']}  /  {scene['question']}", 58, y - 14, pdf.w - 116, 15)
     # 표지의 각주는 장면 목록 **아래**에 붙인다 — 고정 y에 두면 장면이 늘 때 마지막 줄에 겹쳐 찍힌다
     pdf.paragraph("고객 확인은 아직 진행하지 않았습니다. 이 자료는 검토를 위한 로컬 초안입니다.", 58, y - 30, pdf.w - 116, 12, MUTED)
     for scene in scenes:
