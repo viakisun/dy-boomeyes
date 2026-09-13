@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url';
 import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import { parse } from 'yaml';
-import { ownerViews } from './views.mjs';
+import { levelSuffix, ownerLevels, ownerViews } from './views.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const args = process.argv.slice(2);
@@ -29,13 +29,15 @@ if (value('--captures')) {
     web: ['1280x842', '1024x842', '768x842', '390x800'],
     pwa: ['375x800', '390x800', '430x900', '768x1024'],
   };
-  // 운영 현황은 드릴다운 3단계(전국 · 현장 · 호기)를 각각 캡처한다 — (목적 + 2단계) × 2앱 × 4폭 × 2테마
+  // 단계 목록은 tools/owner/views.mjs가 정한다 — 캡처 도구와 같은 원천을 읽는다
   const required = views.flatMap((v) =>
-    (v.view === 'overview' ? ['', '-site', '-unit'] : ['']).flatMap((level) =>
-      ['web', 'pwa'].flatMap((app) =>
-        sizes[app].flatMap((size) => ['light', 'dark'].map((theme) => `${app}-${v.view}${level}-${size}-${theme}`)),
+    ownerLevels(v.view)
+      .map(levelSuffix)
+      .flatMap((level) =>
+        ['web', 'pwa'].flatMap((app) =>
+          sizes[app].flatMap((size) => ['light', 'dark'].map((theme) => `${app}-${v.view}${level}-${size}-${theme}`)),
+        ),
       ),
-    ),
   );
   requireThat(
     result.scope === 'full' && result.status === 'automated-capture-pass' && result.exitCode === 0,

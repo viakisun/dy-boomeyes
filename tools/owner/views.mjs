@@ -21,3 +21,14 @@ export function ownerViews(root, screensSource) {
       if (waveOf(v[app]) === undefined) throw new Error(`owner_demo: ${v.view}/${app} 화면(${v[app]})이 없다`);
   return views;
 }
+
+/**
+ * 한 화면 목적이 주소로 갖는 단계 — 캡처와 증거 검사가 같은 곳에서 읽는다.
+ * 두 도구가 따로 적어 두면 단계를 더할 때 한쪽만 늘어 「예상에 없는 캡처」로 갈라진다.
+ * 첫 값은 기본 화면이다(키에 접미사가 붙지 않는다).
+ */
+export const ownerLevels = (view) =>
+  view === 'overview' ? ['nation', 'site', 'unit'] : view === 'requests' ? [undefined, 'assign'] : [undefined];
+
+/** 캡처 키의 단계 접미사 — 기본 화면은 빈 문자열 */
+export const levelSuffix = (level) => (level && level !== 'nation' ? `-${level}` : '');

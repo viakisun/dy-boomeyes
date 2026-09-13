@@ -10,7 +10,7 @@ import { createRequire } from 'node:module';
 import { createHash } from 'node:crypto';
 import { chromium } from 'playwright';
 import { parse } from 'yaml';
-import { ownerViews } from '../owner/views.mjs';
+import { ownerLevels, ownerViews } from '../owner/views.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const args = process.argv.slice(2);
@@ -42,14 +42,9 @@ const all = views.flatMap((view) =>
   ['web', 'pwa'].flatMap((app) => {
     const screen = source.screens.find((s) => s.id === view[app]);
     if (!screen || !screen.roles.includes('owner')) throw new Error(`Owner screen missing or wrong role: ${view[app]}`);
-    // 운영 현황은 드릴다운 3단계(전국 · 현장 · 호기)를, 계약은 목록과 배정 두 단계를 각각 캡처한다 —
+    // 단계 목록은 tools/owner/views.mjs가 정한다(증거 검사와 같은 원천) —
     // 화면 하나가 주소로 두 가지 일을 하면 한쪽만 찍힌 증거는 그 화면을 본 것이 아니다.
-    const levels =
-      view.view === 'overview'
-        ? ['nation', 'site', 'unit']
-        : view.view === 'requests'
-          ? [undefined, 'assign']
-          : [undefined];
+    const levels = ownerLevels(view.view);
     return levels.flatMap((level) =>
       sizes[app].flatMap(([width, height]) =>
         ['light', 'dark'].map((theme) => ({
