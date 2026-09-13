@@ -1,9 +1,9 @@
 <script lang="ts">
-  // 전국 패널 — 확인이 필요한 장비(알림 3) · 현장 목록(13). hover → 지도 강조, 클릭 → 현장 단계.
+  // 전국 패널 — 확인이 필요한 현장부터(시안 «확정 2026-09-12»). 행은 현장 단위이고 둘째 줄이
+  // 상태·사유다. hover → 지도 강조, 클릭 → 현장 단계.
+  // 알림은 헤더의 종이 맡는다 — 같은 것을 두 자리에 두지 않는다.
   import ArrowRight from '@lucide/svelte/icons/arrow-right';
-  import Bell from '@lucide/svelte/icons/bell';
   import {
-    OWNER_ALERT_KINDS,
     ownerHref,
     ownerSummary,
     type OwnerApp,
@@ -14,10 +14,9 @@
   import Button from '../primitives/Button.svelte';
   import Chip from '../primitives/Chip.svelte';
   import EmptyState from '../primitives/EmptyState.svelte';
-  import IconTile from '../primitives/IconTile.svelte';
   import List from '../primitives/List.svelte';
-  import AlertCard from './AlertCard.svelte';
   import SiteRow from './SiteRow.svelte';
+  import { ownerControl, siteCondition } from './core-helpers';
   let {
     data,
     app,
@@ -40,64 +39,29 @@
     onregion: (region?: OwnerRegion) => void;
   } = $props();
   const summary = $derived(ownerSummary(data.devices, data.alerts));
-  const alerts = $derived(
-    // 종류 순서는 원천(OWNER_ALERT_KINDS)이 정한다 — 종류가 늘 때 여기 표를 고치는 것을 잊지 않게
-    [...new Map(data.alerts.map((alert) => [alert.id, alert])).values()].sort(
-      (a, b) => OWNER_ALERT_KINDS.indexOf(a.kind) - OWNER_ALERT_KINDS.indexOf(b.kind),
-    ),
-  );
-  const shown = $derived(alerts.slice(0, 3));
   const sites = $derived(region ? data.sites.filter((s) => s.region === region) : data.sites);
+  // 확인할 것이 있는 현장 — 행의 둘째 줄과 같은 판정을 쓴다(두 곳이 갈리면 머리 수와 목록이 어긋난다)
+  const attention = $derived(sites.filter((site) => siteCondition(site, data.devices)));
+  let all = $state(false);
+  // 확인할 현장이 없으면 접을 것이 없다 — 그럴 땐 전체를 보인다
+  const rows = $derived(all || attention.length === 0 ? sites : attention);
 </script>
 
 <section class="gap-stack-sm flex min-w-0 flex-col" aria-labelledby="owner-attention-title">
   <div class="gap-inline-sm flex flex-wrap items-center justify-between">
     <h2 id="owner-attention-title" class="text-heading-sm" tabindex="-1" data-panel-heading="nation">
-      확인이 필요한 장비 <span class="tabular-nums">{summary.attention}대</span>
-    </h2>
-    <Button variant="ghost" size="sm" href={ownerHref(url, 'alerts', app)}
-      >알림 전체 보기 <ArrowRight class="size-size-icon-sm" aria-hidden="true" /></Button
-    >
-  </div>
-  {#if shown.length > 0}
-    <List items={shown} key={(a) => a.id} label="우선 확인 알림" variant="plain">
-      {#snippet item(alert)}
-        {@const device = data.devices.find((d) => d.id === alert.deviceId)!}
-        <AlertCard
-          {alert}
-          {device}
-          now={data.at}
-          href={ownerHref(url, 'alerts', app, { alert: alert.id, device: device.id })}
-          data-device={device.id}
-          onmouseenter={() => onfocus(device.siteId)}
-          onmouseleave={() => onfocus(undefined)}
-        />
-      {/snippet}
-    </List>
-    {#if summary.alerts > shown.length}
-      <p class="text-body-sm text-fg-muted">전체 알림 {summary.alerts}건 중 {shown.length}건 표시</p>
-    {/if}
-  {:else}
-    <EmptyState title="확인할 알림 없음">
-      {#snippet icon()}<IconTile><Bell class="size-size-icon-lg" /></IconTile>{/snippet}
-    </EmptyState>
-  {/if}
-</section>
-<section class="gap-stack-sm flex min-w-0 flex-col" aria-labelledby="owner-sites-title">
-  <div class="gap-inline-sm flex flex-wrap items-center justify-between">
-    <h2 id="owner-sites-title" class="text-heading-sm">
-      {region ? `${region} 현장` : '현장 목록'} <span class="text-fg-muted tabular-nums">{sites.length}</span>
+      확인 필요 <span class="tabular-nums">{attention.length}개 현장 · {summary.attention}대</span>
     </h2>
     {#if region}
       <Chip size="md" onclick={() => onregion(undefined)}>전국으로</Chip>
-    {:else}
-      <Button variant="ghost" size="sm" href={ownerHref(url, 'fleet', app)}
-        >전체 장비 보기 <ArrowRight class="size-size-icon-sm" aria-hidden="true" /></Button
-      >
+    {:else if attention.length > 0}
+      <button type="button" class="{ownerControl()} text-body-sm text-accent-fg" onclick={() => (all = !all)}>
+        {all ? '확인 필요만 보기' : `전체 ${sites.length}개 현장`}
+      </button>
     {/if}
   </div>
-  {#if sites.length > 0}
-    <List items={sites} key={(s) => s.id} label="현장 목록" variant="plain">
+  {#if rows.length > 0}
+    <List items={rows} key={(s) => s.id} label="현장 목록" variant="plain">
       {#snippet item(site)}
         <SiteRow
           {site}
@@ -111,7 +75,12 @@
         />
       {/snippet}
     </List>
-    <p class="text-body-sm text-fg-muted">전체 {data.devices.length}대 · {data.sites.length}개 현장</p>
+    <div class="gap-inline-sm flex flex-wrap items-center justify-between">
+      <p class="text-body-sm text-fg-muted">전체 {data.devices.length}대 · {data.sites.length}개 현장</p>
+      <Button variant="ghost" size="sm" href={ownerHref(url, 'fleet', app)}
+        >전체 장비 보기 <ArrowRight class="size-size-icon-sm" aria-hidden="true" /></Button
+      >
+    </div>
   {:else}
     <EmptyState title="표시할 현장 없음" />
   {/if}

@@ -39,6 +39,12 @@ export async function openAlerts(page: Page) {
   await page.getByRole('button', { name: /^알림/ }).click();
   await page.locator('[data-owner-bell]').getByRole('link', { name: '알림 전체 보기' }).click();
 }
+/** 전국 카드는 확인이 필요한 현장부터 보인다(시안 «확정 2026-09-12») — 정상 현장에 닿으려면 펼친다. */
+export async function openAllSites(page: Page) {
+  const all = page.getByRole('button', { name: /^전체 \d+개 현장$/ });
+  if (await all.count()) await all.first().click();
+}
+
 /** 장비 서류도 메뉴에서 내려왔다 — 서류는 호기에 속하므로 보유 장비 → 호기 → 서류로 연다.
  *  goto는 전체 새로고침이라 메모리에 있는 시연 첨부가 사라진다 — 실제 사용자 경로를 그대로 따른다. */
 export async function openDocuments(page: Page, device = 'CPB-001') {

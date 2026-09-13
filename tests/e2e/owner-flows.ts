@@ -9,6 +9,7 @@ import {
   OWNER_PATHS,
   OWNER_UNBUILT,
   openAlerts,
+  openAllSites,
   openDocuments,
   type OwnerApp,
 } from './owner-helpers';
@@ -246,23 +247,25 @@ export function ownerFlows(app: OwnerApp) {
     await expect(ownerHost(page, 'fleet').locator('[data-device]')).toHaveCount(120);
   });
 
-  test('[B1-02] [FR-024] [AC-O07] overview shows three of all alerts and opens the rest', async ({ page }) => {
+  test('[B1-02] [FR-024] [AC-O07] the bell carries every alert kind and the panel counts sites', async ({ page }) => {
     await startOwner(page, app);
     await page.goto(`${paths.overview}?capture=1&state=boundaries`);
     const overview = ownerHost(page, 'overview');
-    const preview = overview.getByRole('list', { name: '우선 확인 알림', exact: true });
-    await expect(preview.getByRole('listitem')).toHaveCount(3);
-    // 전체 건수는 알림 종류가 늘면 함께 는다 — 리터럴 대신 미리보기와 전체 목록이 같은 수를 말하는지 본다
-    const shown = await overview.getByText(/전체 알림 \d+건 중 3건 표시/).innerText();
-    const total = Number(shown.match(/전체 알림 (\d+)건/)![1]);
-    expect(total).toBeGreaterThan(3);
-    // 「확인이 필요한 장비」는 장비 상태(고장·점검·지연)에서 나온다 — 알림 종류가 늘어도 그대로다
-    await expect(overview.getByRole('heading', { name: '확인이 필요한 장비 6대', exact: true })).toBeVisible();
-    // 수신 지연은 고장·점검 뒤로 밀린다 — 미리보기 밖이지만 전체 목록에서는 닿는다
-    await expect(preview.locator('[data-device="CPB-004"]')).toHaveCount(0);
-    await overview.getByRole('link', { name: '알림 전체 보기', exact: true }).click();
+    // 전국 카드는 알림이 아니라 현장을 센다(시안 «확정 2026-09-12») — 같은 것을 두 자리에 두지 않는다
+    await expect(overview.getByRole('list', { name: '우선 확인 알림', exact: true })).toHaveCount(0);
+    const head = overview.getByRole('heading', { name: /^확인 필요 \d+개 현장 · \d+대$/ });
+    await expect(head).toBeVisible();
+    // 머리의 두 수는 목록과 같은 판정에서 나온다 — 현장 수는 보이는 행 수와 같다
+    const sites = Number((await head.innerText()).match(/(\d+)개 현장/)![1]);
+    await expect(overview.getByRole('list', { name: '현장 목록', exact: true }).locator('[data-site]')).toHaveCount(
+      sites,
+    );
+    // 알림은 헤더의 종이 맡는다
+    await openAlerts(page);
     const alerts = ownerHost(page, 'alerts').getByRole('region', { name: '알림 목록', exact: true });
-    await expect(alerts).toContainText(`표시 ${total}건 / 전체 ${total}건`);
+    const shown = await alerts.getByText(/표시 \d+건 \/ 전체 \d+건/).innerText();
+    const total = Number(shown.match(/전체 (\d+)건/)![1]);
+    expect(total).toBeGreaterThan(sites);
     await expect(alerts.locator('[data-alert]')).toHaveCount(total);
     await expect(alerts.locator('[data-alert="CPB-004-STALE"]')).toBeVisible();
     // 시안의 종 패널은 고장·지연·점검 말고도 계약 종료 임박·소모품 한계·자격 만료를 담는다
@@ -277,6 +280,9 @@ export function ownerFlows(app: OwnerApp) {
     await page.goto(`${paths.overview}?capture=1&state=large`);
     const overview = ownerHost(page, 'overview');
     const sites = overview.getByRole('list', { name: '현장 목록', exact: true });
+    // 카드는 확인이 필요한 현장부터 보인다 — 전체는 펼쳐야 나온다(시안 «확정 2026-09-12»)
+    await expect(sites.getByRole('listitem')).toHaveCount(6);
+    await openAllSites(page);
     await expect(sites.getByRole('listitem')).toHaveCount(13);
     await expect(sites.locator('[data-site="SITE-MAPO"]')).toContainText('5대');
     await expect(overview).toContainText('전체 120대 · 13개 현장');
@@ -298,6 +304,7 @@ export function ownerFlows(app: OwnerApp) {
     await expect(map).toHaveAttribute('data-map-level', 'nation', MAP);
     await expect(page.getByRole('navigation', { name: '현황 경로', exact: true })).toContainText('전국');
     // nation → site: the site row drives the URL, the map re-arms at site level with the five Mapo units
+    await openAllSites(page);
     await overview.getByRole('list', { name: '현장 목록', exact: true }).locator('[data-site="SITE-MAPO"]').click();
     await expect(page).toHaveURL(/site=SITE-MAPO/);
     await expect(map).toHaveAttribute('data-map-level', 'site', MAP);
@@ -508,6 +515,7 @@ export function ownerFlows(app: OwnerApp) {
       // 접힌 시트에서 지도 마커를 고르면 시트가 half로 올라오며 현장 단계가 열린다
       await sheet.getByRole('button', { name: '시트 접기', exact: true }).last().click();
       await expect(sheet).toHaveAttribute('data-snap', 'collapsed');
+      await openAllSites(page);
       await overview.getByRole('list', { name: '현장 목록', exact: true }).locator('[data-site="SITE-MAPO"]').click();
       await expect(page).toHaveURL(/site=SITE-MAPO/);
       await expect(sheet).toHaveAttribute('data-snap', 'half');
@@ -526,7 +534,7 @@ export function ownerFlows(app: OwnerApp) {
     const clock = await host.getAttribute('data-owner-clock');
     await page.waitForTimeout(6500);
     expect(await host.getAttribute('data-owner-clock')).toBe(clock);
-    await expect(host.getByRole('heading', { name: '확인이 필요한 장비 6대', exact: true })).toBeVisible();
+    await expect(host.getByRole('heading', { name: '확인 필요 6개 현장 · 6대', exact: true })).toBeVisible();
     await expect(page.getByRole('button', { name: '활동 시뮬레이션 켜기', exact: true })).toHaveAttribute(
       'aria-pressed',
       'false',
@@ -536,7 +544,7 @@ export function ownerFlows(app: OwnerApp) {
     await expect(ownerHost(page, 'overview')).toHaveAttribute('data-owner-sim', '1');
     await expect(ownerHost(page, 'overview')).toContainText('시뮬레이션 진행 중');
     await expect(
-      ownerHost(page, 'overview').getByRole('heading', { name: /확인이 필요한 장비 (?!6대)\d+대/ }),
+      ownerHost(page, 'overview').getByRole('heading', { name: /확인 필요 \d+개 현장 · (?!6대)\d+대/ }),
     ).toBeVisible({
       timeout: 15_000,
     });

@@ -1,5 +1,16 @@
-import { ownerHref, ownerPath, type OwnerApp, type OwnerDevice } from '@boomeyes/domain';
+import {
+  OWNER_CONNECTION,
+  OWNER_FLEET_STATE_LABEL,
+  ownerAttentionRank,
+  ownerFleetState,
+  ownerHref,
+  ownerPath,
+  type OwnerApp,
+  type OwnerDevice,
+  type OwnerSite,
+} from '@boomeyes/domain';
 import { FOCUS } from '../lib/cx';
+import { fmtDateTime } from '../lib/format';
 
 export const ownerControl = () => `${FOCUS} min-h-size-touch-min min-h-size-control-md`;
 export const ownerLink = () =>
@@ -27,6 +38,32 @@ export function equipmentCondition(device: OwnerDevice) {
   if (device.connection === 'unintegrated') return { label: '미연동', tone: 'neutral' as const };
   // 정상은 success — 이상만 색을 갖는 화면에서 '정상'이 읽히지 않았다(2026-09-12 결정 · ADR-014 · 원칙 4 개정)
   return { label: '이상 신호 없음', tone: 'success' as const };
+}
+
+/**
+ * 현장 한 줄 상태 — 그 현장에서 가장 나쁜 호기의 상태와 사유(시안 «확정 2026-09-12»).
+ * 확인할 것이 없으면 null이고, 그럴 때 행은 건설사·주소를 보인다.
+ * 순서는 `ownerAttentionRank`가 정한다 — 여기서 다시 매기면 표·띠와 갈라진다.
+ */
+export function siteCondition(site: OwnerSite, devices: readonly OwnerDevice[]) {
+  const worst = devices
+    .filter((d) => d.siteId === site.id)
+    .reduce<OwnerDevice | null>((a, b) => (a && ownerAttentionRank(a) <= ownerAttentionRank(b) ? a : b), null);
+  if (!worst) return null;
+  const state = ownerFleetState(worst);
+  if (state === 'running' || state === 'stored' || state === 'unknown') return null;
+  const detail =
+    worst.fault ??
+    worst.inspection ??
+    (state === 'stale' && worst.receivedAt
+      ? `마지막 수신 ${fmtDateTime(worst.receivedAt)}`
+      : OWNER_CONNECTION[worst.connection]);
+  return {
+    label: OWNER_FLEET_STATE_LABEL[state],
+    tone:
+      state === 'fault' ? ('danger' as const) : state === 'unintegrated' ? ('neutral' as const) : ('warning' as const),
+    detail: `${worst.unit}호기 ${detail}`,
+  };
 }
 
 /** 외부·다른 앱 경로는 복귀 대상으로 사용하지 않는다. */
