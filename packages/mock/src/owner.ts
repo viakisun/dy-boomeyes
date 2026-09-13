@@ -17,7 +17,7 @@ import {
   type OwnerSnapshot,
   type Session,
 } from '@boomeyes/domain';
-import { LOOP_MP4, LOOP_SEC, STILL, STILL_BBOX } from '@boomeyes/video/assets';
+import { LOOP_MP4, LOOP_SEC, STILL, STILL_BBOX, STILL_ZONE } from '@boomeyes/video/assets';
 import { OWNER_ASSETS } from './assets/owner';
 import { DRIVER_ROSTER, OWNER_SITES, ownerFleet } from './owner-fleet';
 import { createOwnerSim, type OwnerSim } from './owner-sim';
@@ -433,6 +433,7 @@ function ownerAiEvents(d: OwnerDevice): OwnerAiEvent[] {
       detail: '붐 끝 반경 안에서 작업자가 확인됐습니다. 경광등·알람이 울렸고 제어는 하지 않습니다.',
       driver: d.driver ? { id: d.driver.id, name: d.driver.name } : null,
       bbox: STILL_BBOX['boom-person'],
+      zone: STILL_ZONE['boom-person'],
     },
   ];
 }

@@ -10,7 +10,7 @@
 | ref(원시) | 208 |
 | sys(시맨틱) | 309 |
 | cmp(컴포넌트) | 92 |
-| 컴포넌트 카탈로그 | 114 |
+| 컴포넌트 카탈로그 | 115 |
 | 대비 검사 | 94/94 통과 |
 
 | 산출물 | 용도 |
@@ -771,7 +771,7 @@ cmp 층은 sys만 참조한다(ref 직접 참조 금지 — 검사로 강제). �
 | `cmp.table.row-selected` | #e7f3fb | #e7f3fb | {sys.color.bg.selected} |  |
 | `cmp.table.header-fg` | #4a6879 | #4a6879 | {sys.color.fg.muted} |  |
 
-## 8. 컴포넌트 카탈로그 (114)
+## 8. 컴포넌트 카탈로그 (115)
 
 이름 PascalCase · prop 어휘 고정: `variant`(형태) · `tone`(색 의도: accent/neutral/info/success/warning/danger/progress) · `size`(sm/md/lg) · 상태 boolean(`disabled` `loading` `selected` `invalid`). 플랫폼 both = 같은 Svelte 컴포넌트가 밀도 토큰으로 두 플랫폼을 소화.
 
@@ -855,7 +855,7 @@ cmp 층은 sys만 참조한다(ref 직접 참조 금지 — 검사로 강제). �
 | **ProtocolUploader** | web | new | yaml/json · validation table |  | 프로토콜 업로드·오류 판정 |
 | **RuleThresholdRow** | web | new | metric · operator · value · tone |  | 알림 기준 편집 |
 | **WeatherStrip** | pwa | CE weather | hours 6 · wind |  | 홈 기상 요약 |
-| **BboxOverlay** | both | — | boxes[] 정규화 좌표 · label · tone warning/danger | hidden/visible | AI 채널 클립·스냅샷 위 SVG 오버레이. 텍스트 대체 필수(사람 1 — 호스 주변) |
+| **BboxOverlay** | both | — | object(탐지) · zone(접근 주의 구역 — 파선·옅은 면) | hidden/visible | AI 채널 클립·스냅샷 위 SVG 오버레이. 텍스트 대체 필수(사람 1 — 호스 주변) |
 | **HealthBadge** | both | — | state live/snapshot/recording/offline/ai-unavailable · size sm/md | — | camera 상태기계 값 그대로 표시(labels.ts). 장애 채널을 정상으로 표시하지 않는다(FR-034) |
 
 ### Layout
@@ -903,6 +903,12 @@ cmp 층은 sys만 참조한다(ref 직접 참조 금지 — 검사로 강제). �
 | **Popover** | both | CE Popover | placement · arrow | open |  |
 | **Spinner** | both | — | size |  | 버튼 내 로딩은 Button loading |
 | **MapSheet** | pwa | Material BottomSheet(3상태) · Apple Maps sheet | snap collapsed/half/expanded | default | 지도 위 비모달 바텀 시트 — 손잡이 버튼(키보드 ArrowUp/Down·Home/End · 클릭 · 드래그) + 펼치기/접기 IconButton, transform 3단, 내용 스크롤, reduced-motion 무전환. 모달 BottomSheet와 구분 |
+
+### Video
+
+| 컴포넌트 | 플랫폼 | 참조 | 변형(prop) | 상태 | 비고 |
+|---|---|---|---|---|---|
+| **AiEventShot** | both | 시안 «운영 현황 목업» 호기 AI 오버레이 · Samsara AI event | 탐지 상자 + 접근 주의 구역 | default | AI 경고가 난 그 프레임에 탐지 상자와 붐 하부 접근 주의 구역을 얹는다(FR-028 · «확정 2026-09-12»). 실시간 타일에 그리지 않는다 — 구역은 이 스틸 좌표로 잰 보정값이고 AI 카메라의 클립은 다른 크롭이다. |
 
 ### Owner experience
 

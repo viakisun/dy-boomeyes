@@ -13,6 +13,7 @@
     OWNER_METRICS,
     ownerHref,
     type OwnerApp,
+    type OwnerAiEvent,
     type OwnerCamera,
     type OwnerDevice,
     type OwnerSnapshot,
@@ -38,6 +39,7 @@
     device,
     capture = false,
     live,
+    aiShot,
     cameraWall = false,
   }: {
     data: OwnerSnapshot;
@@ -46,6 +48,8 @@
     device: OwnerDevice;
     capture?: boolean;
     live?: Snippet<[OwnerCamera, string, boolean, boolean]>;
+    /** AI 이벤트 스냅샷(탐지 상자 + 접근 주의 구역) — 앱이 넘긴다(ui는 video를 import하지 않는다) */
+    aiShot?: Snippet<[OwnerAiEvent]>;
     /** 지도 자리에 카메라 벽이 있는 화면 — 패널은 영상을 그리지 않는다 */
     cameraWall?: boolean;
   } = $props();
@@ -187,14 +191,16 @@
     <Fold title="AI 이벤트" meta={`${aiEvents.length}건`}>
       <List items={aiEvents} key={(e) => e.id} label="AI 이벤트" variant="plain">
         {#snippet item(event)}
-          <p class="gap-stack-xs py-inset-xs flex min-w-0 flex-col">
+          <div class="gap-stack-xs py-inset-xs flex min-w-0 flex-col">
             <span class="text-body-md font-semibold">{event.title}</span>
             <span class="text-body-sm text-fg-muted"
               >{fmtDateTime(event.at)}{#if event.driver}
                 · 운전자 {event.driver.name}{/if}</span
             >
             <span class="text-body-sm">{event.detail}</span>
-          </p>
+            <!-- 판단 근거 — 그 순간의 화면에 탐지 상자와 접근 주의 구역을 얹는다(FR-028) -->
+            {@render aiShot?.(event)}
+          </div>
         {/snippet}
       </List>
     </Fold>

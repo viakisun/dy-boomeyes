@@ -4,7 +4,7 @@
   import { resolve } from '$app/paths';
   import type { OwnerApi, OwnerView } from '@boomeyes/domain';
   import { OwnerWorkspace, theme } from '@boomeyes/ui';
-  import { OwnerVideo, OwnerLiveTile } from '@boomeyes/video';
+  import { AiEventShot, OwnerVideo, OwnerLiveTile } from '@boomeyes/video';
   import { MapView, ownerBasemap, ownerCamera, ownerMarkers } from '@boomeyes/map';
   let {
     api,
@@ -51,4 +51,5 @@
   {#snippet live(camera, label, capture, fill)}
     <OwnerLiveTile {camera} {label} {capture} {fill} />
   {/snippet}
+  {#snippet aiShot(event)}<AiEventShot {event} />{/snippet}
 </OwnerWorkspace>

@@ -213,6 +213,9 @@ export interface OwnerAiEvent {
   driver: { id: string; name: string } | null;
   /** 스틸 위에 그릴 상자(0~1 비율). 없으면 상자 없이 문장만 */
   bbox: { x: number; y: number; w: number; h: number } | null;
+  /** 붐 하부 접근 주의 구역 — 카메라 보정값이라 사람과 달리 프레임마다 움직이지 않는다.
+   *  사람이 이 안에 들어온 것이 경고의 근거다(FR-028 · 시안 «확정 2026-09-12»). */
+  zone: { x: number; y: number; w: number; h: number } | null;
 }
 export interface OwnerSnapshot {
   dataset: OwnerDataset;

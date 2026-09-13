@@ -26,6 +26,14 @@ export const isStillId = (x: string | undefined): x is StillId => !!x && x in ST
 /** 채널 평시 스틸 — 알람 그래픽 없는 프레임 */
 export const idleStill = (c: { kind: 'general' | 'ai' }): StillId => (c.kind === 'ai' ? 'boom' : 'front');
 
+/**
+ * 붐 하부 접근 주의 구역 — 카메라 보정값(스틸 프레임의 정규화 좌표).
+ * `STILL_BBOX`와 달리 build.py가 만들지 않는다: 원천 삽화에 구워진 도형이 아니라 이 스틸 위에서
+ * 붐 끝이 닿는 타설 구역을 손으로 잰 값이다. 그 프레임에서만 참이므로 다른 스틸에는 쓰지 않는다.
+ */
+export const STILL_ZONE = {
+  'boom-person': { x: 0.26, y: 0.62, w: 0.5, h: 0.31 },
+} as const;
 // STILL_BBOX:begin — tools/media/build.py가 sources.json의 bbox_px를 크롭 안에서 정규화해 쓴다. seed·realtime이 그대로 소비(리터럴 금지)
 export const STILL_BBOX = {
   'boom-person': { x: 0.585, y: 0.474, w: 0.125, h: 0.423 },

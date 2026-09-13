@@ -7,6 +7,7 @@
   import {
     ownerHref,
     ownerLevel,
+    type OwnerAiEvent,
     type OwnerCamera,
     type OwnerDevice,
     type OwnerLevel,
@@ -32,9 +33,11 @@
     sim = false,
     map,
     live,
+    aiShot,
   }: OwnerViewProps & {
     map?: Snippet<[OwnerMapScene]>;
     live?: Snippet<[OwnerCamera, string, boolean, boolean]>;
+    aiShot?: Snippet<[OwnerAiEvent]>;
   } = $props();
   const level = $derived(ownerLevel(url, data));
   let region = $state<OwnerRegion | undefined>();
@@ -178,7 +181,7 @@
       onfocus={(id) => (focused = id)}
     />
   {:else}
-    <UnitPanel {data} {app} {url} device={level.device} {capture} {live} cameraWall={!!wall} />
+    <UnitPanel {data} {app} {url} device={level.device} {capture} {live} {aiShot} cameraWall={!!wall} />
   {/if}
 {/snippet}
 

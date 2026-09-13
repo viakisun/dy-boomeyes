@@ -6,6 +6,7 @@ export { default as VideoPlayer } from './VideoPlayer.svelte';
 export { default as OwnerVideo } from './OwnerVideo.svelte';
 export { default as OwnerLiveTile } from './OwnerLiveTile.svelte';
 export { default as BboxOverlay } from './BboxOverlay.svelte';
+export { default as AiEventShot } from './AiEventShot.svelte';
 export { default as HealthBadge } from './HealthBadge.svelte';
 export { CAMERA_LABEL, HEALTH_LABEL, MOUNT_LABEL, SOURCE_LABEL } from './labels';
-export { LOOP_MP4, LOOP_SEC, STILL, STILL_BBOX, idleStill, isStillId, type StillId } from './assets';
+export { LOOP_MP4, LOOP_SEC, STILL, STILL_BBOX, STILL_ZONE, idleStill, isStillId, type StillId } from './assets';

@@ -398,6 +398,19 @@ export function ownerFlows(app: OwnerApp) {
     await expect(parts.getByText('수송관', { exact: true })).toBeHidden();
     await parts.getByRole('group').or(parts.locator('summary')).first().click();
     await expect(parts.getByText('수송관', { exact: true })).toBeVisible();
+
+    // AI 이벤트 접기 — 판단 근거는 그 순간의 화면이다. 탐지 상자와 접근 주의 구역을 함께 보인다(FR-028)
+    const events = panel.locator('[data-fold="AI 이벤트"]');
+    await expect(events).toHaveCount(1);
+    await expect(events.locator('[data-ai-shot]')).toBeHidden();
+    await events.locator('summary').first().click();
+    const shot = events.locator('[data-ai-shot]').first();
+    await expect(shot).toBeVisible();
+    await expect(shot.locator('[data-box="zone"]')).toHaveCount(1);
+    await expect(shot.locator('[data-box="object"]')).toHaveCount(1);
+    await expect(shot.getByText('접근 주의 구역', { exact: true })).toBeVisible();
+    // 실시간 타일에는 구역을 그리지 않는다 — 구역은 이 스틸 좌표로 잰 보정값이고 클립은 다른 크롭이다
+    await expect(panel.locator('[data-live-tile] [data-box]')).toHaveCount(0);
   });
 
   // 알림은 좌측 메뉴에서 내려와 헤더의 종으로 들어왔다(시안 «결정 2026-09-12»).

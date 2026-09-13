@@ -778,9 +778,18 @@
     "family": "Domain",
     "platform": "both",
     "ref": "—",
-    "variants": "boxes[] 정규화 좌표 · label · tone warning/danger",
+    "variants": "object(탐지) · zone(접근 주의 구역 — 파선·옅은 면)",
     "states": "hidden/visible",
     "note": "AI 채널 클립·스냅샷 위 SVG 오버레이. 텍스트 대체 필수(사람 1 — 호스 주변)"
+  },
+  {
+    "name": "AiEventShot",
+    "family": "Video",
+    "platform": "both",
+    "ref": "시안 «운영 현황 목업» 호기 AI 오버레이 · Samsara AI event",
+    "variants": "탐지 상자 + 접근 주의 구역",
+    "states": "default",
+    "note": "AI 경고가 난 그 프레임에 탐지 상자와 붐 하부 접근 주의 구역을 얹는다(FR-028 · «확정 2026-09-12»). 실시간 타일에 그리지 않는다 — 구역은 이 스틸 좌표로 잰 보정값이고 AI 카메라의 클립은 다른 크롭이다."
   },
   {
     "name": "HealthBadge",

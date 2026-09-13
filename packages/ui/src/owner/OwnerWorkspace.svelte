@@ -7,6 +7,7 @@
     ownerScreen,
     type OwnerApi,
     type OwnerApp,
+    type OwnerAiEvent,
     type OwnerCamera,
     type OwnerMapScene,
     type OwnerSnapshot,
@@ -34,6 +35,7 @@
     video,
     map,
     live,
+    aiShot,
   }: {
     api: OwnerApi;
     app: OwnerApp;
@@ -47,6 +49,7 @@
     map?: Snippet<[OwnerMapScene]>;
     /** 호기 패널의 실시간 영상 타일(카메라 · 접근 이름 · capture) */
     live?: Snippet<[OwnerCamera, string, boolean, boolean]>;
+    aiShot?: Snippet<[OwnerAiEvent]>;
   } = $props();
   let snapshot = $state<OwnerSnapshot>();
   let error = $state('');
@@ -144,7 +147,7 @@
         title="등록된 보유 장비가 없습니다"
         description="장비가 등록되면 이곳에서 위치와 계약 정보를 확인할 수 있습니다."
       />
-    {:else if view === 'overview'}<OwnerOverview {...viewProps} {map} {live} />
+    {:else if view === 'overview'}<OwnerOverview {...viewProps} {map} {live} {aiShot} />
     {:else if view === 'fleet'}<OwnerFleet {...viewProps} />
     {:else if view === 'requests'}<OwnerRequests {...viewProps} />
     {:else if view === 'drivers' || view === 'driver-docs'}<OwnerDrivers {...viewProps} {view} />

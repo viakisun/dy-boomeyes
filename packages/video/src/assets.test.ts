@@ -1,6 +1,6 @@
 // [FR-004] 목업 카메라 자산 — 스틸 3 · 루프 2 · bbox 정규화 범위 (tools/media/build.py 산출, specs/video-basics W2.6)
 import { describe, expect, it } from 'vitest';
-import { LOOP_MP4, LOOP_SEC, STILL, STILL_BBOX } from './assets';
+import { LOOP_MP4, LOOP_SEC, STILL, STILL_BBOX, STILL_ZONE } from './assets';
 import manifest from './assets/manifest.json';
 
 describe('[FR-004] 목업 카메라 자산', () => {
@@ -22,5 +22,21 @@ describe('[FR-004] 목업 카메라 자산', () => {
     expect(b.y + b.h).toBeLessThanOrEqual(1);
     expect(b.w).toBeGreaterThan(0.05); // 사람 크기 — 0에 가까우면 검출·크롭이 어긋난 것
     expect(b.h).toBeGreaterThan(0.2);
+  });
+  it('[FR-028] 접근 주의 구역은 스틸 안의 바닥 영역이고 사람 상자와 겹친다', () => {
+    const z = STILL_ZONE['boom-person'];
+    const b = STILL_BBOX['boom-person'];
+    expect(z.x).toBeGreaterThanOrEqual(0);
+    expect(z.y).toBeGreaterThanOrEqual(0);
+    expect(z.x + z.w).toBeLessThanOrEqual(1);
+    expect(z.y + z.h).toBeLessThanOrEqual(1);
+    // 바닥 영역 — 프레임 아래쪽에 있고 사람 상자보다 넓다(구역은 사람이 아니라 자리를 가리킨다)
+    expect(z.y).toBeGreaterThan(0.5);
+    expect(z.w).toBeGreaterThan(b.w * 2);
+    // 경고의 근거는 「사람이 구역 안에 있다」이다 — 두 사각형이 겹치지 않으면 문장이 거짓이 된다
+    const overlap =
+      Math.min(z.x + z.w, b.x + b.w) - Math.max(z.x, b.x) > 0 &&
+      Math.min(z.y + z.h, b.y + b.h) - Math.max(z.y, b.y) > 0;
+    expect(overlap).toBe(true);
   });
 });
