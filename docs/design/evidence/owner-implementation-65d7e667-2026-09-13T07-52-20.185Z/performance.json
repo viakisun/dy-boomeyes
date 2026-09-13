@@ -1,0 +1,339 @@
+{
+  "task": "OD-13",
+  "verification": "VT-10",
+  "sourceSha": "65d7e6672fa44172c292c8c9cb1994e120cdf7a3",
+  "command": [
+    "node",
+    "tools/owner/performance.mjs",
+    "--output",
+    "docs/design/evidence/owner-implementation-65d7e667-2026-09-13T07-52-20.185Z/performance.json"
+  ],
+  "startedAt": "2026-09-13T07:55:31.589Z",
+  "environment": {
+    "os": "darwin",
+    "release": "25.3.0",
+    "node": "v24.9.0",
+    "cpu": "Apple M1 Pro",
+    "cores": 8,
+    "totalMemoryBytes": 17179869184,
+    "playwright": "1.62.1",
+    "timezone": "Asia/Seoul",
+    "locale": "ko-KR",
+    "dpr": 1,
+    "chromium": "151.0.7922.34"
+  },
+  "conditions": {
+    "dataset": "large",
+    "expectedDevices": 120,
+    "capture": true,
+    "warmups": 5,
+    "measured": 20,
+    "searchFilterBudgetMs": 300,
+    "detailBudgetMs": 1000,
+    "measurement": "Browser input/change/click event to matching DOM plus next animation frame",
+    "networkExcluded": "External map tiles and real device/media transport",
+    "sort": "No sort UI exists; search and deployment-filter measured separately",
+    "resourceRepeat": "Not repeated here; actual playback/end and removed-player pause are covered by owner e2e"
+  },
+  "status": "passed",
+  "apps": {
+    "web": {
+      "viewport": {
+        "width": 1280,
+        "height": 842
+      },
+      "base": "http://localhost:4173",
+      "dataset": "large",
+      "pageErrors": [],
+      "failedRequests": [
+        {
+          "url": "https://basemaps.cartocdn.com/gl/positron-gl-style/style.json",
+          "reason": "net::ERR_ABORTED"
+        },
+        {
+          "url": "https://tiles-c.basemaps.cartocdn.com/vectortiles/carto.streets/v1/6/54/24.mvt",
+          "reason": "net::ERR_ABORTED"
+        },
+        {
+          "url": "https://tiles-d.basemaps.cartocdn.com/vectortiles/carto.streets/v1/6/55/24.mvt",
+          "reason": "net::ERR_ABORTED"
+        },
+        {
+          "url": "https://tiles-d.basemaps.cartocdn.com/vectortiles/carto.streets/v1/6/54/25.mvt",
+          "reason": "net::ERR_ABORTED"
+        },
+        {
+          "url": "https://tiles-a.basemaps.cartocdn.com/vectortiles/carto.streets/v1/6/55/25.mvt",
+          "reason": "net::ERR_ABORTED"
+        },
+        {
+          "url": "https://tiles-c.basemaps.cartocdn.com/vectortiles/carto.streets/v1/14/13969/6345.mvt",
+          "reason": "net::ERR_ABORTED"
+        }
+      ],
+      "warmups": {
+        "search": [
+          6.300000190734863,
+          24.09999990463257,
+          5.5,
+          2.9000000953674316,
+          8.099999904632568
+        ],
+        "filter": [
+          5.700000286102295,
+          18.100000381469727,
+          6.899999618530273,
+          9.799999713897705,
+          3.8000001907348633
+        ],
+        "detail": [
+          29.5,
+          18.40000009536743,
+          17.5,
+          17.5,
+          18
+        ]
+      },
+      "samples": {
+        "search": [
+          22.200000286102295,
+          7.400000095367432,
+          4.099999904632568,
+          6.099999904632568,
+          21.90000009536743,
+          4.099999904632568,
+          6.5,
+          2.700000286102295,
+          22.199999809265137,
+          4.800000190734863,
+          1.9000000953674316,
+          2.8000001907348633,
+          18.300000190734863,
+          4.399999618530273,
+          1.799999713897705,
+          7.800000190734863,
+          18.800000190734863,
+          3.6000003814697266,
+          7.799999713897705,
+          2.5999999046325684
+        ],
+        "filter": [
+          16.5,
+          8.800000190734863,
+          5.099999904632568,
+          5.399999618530273,
+          16.899999618530273,
+          7.099999904632568,
+          5.199999809265137,
+          5.300000190734863,
+          18.299999713897705,
+          5.299999713897705,
+          7.599999904632568,
+          5,
+          17.40000009536743,
+          5.400000095367432,
+          5.399999618530273,
+          6.700000286102295,
+          18.5,
+          8.5,
+          7.199999809265137,
+          3.6000003814697266
+        ],
+        "detail": [
+          17.299999713897705,
+          17.90000009536743,
+          18.199999809265137,
+          17.699999809265137,
+          17.700000286102295,
+          17.09999990463257,
+          18.299999713897705,
+          17.90000009536743,
+          16.5,
+          16.40000009536743,
+          16.5,
+          17.90000009536743,
+          18.800000190734863,
+          17.40000009536743,
+          17,
+          18,
+          16.600000381469727,
+          16.899999618530273,
+          17.300000190734863,
+          16.5
+        ]
+      },
+      "summary": {
+        "search": {
+          "count": 20,
+          "p50": 4.800000190734863,
+          "p95": 22.199999809265137,
+          "budgetMs": 300,
+          "pass": true
+        },
+        "filter": {
+          "count": 20,
+          "p50": 6.700000286102295,
+          "p95": 18.299999713897705,
+          "budgetMs": 300,
+          "pass": true
+        },
+        "detail": {
+          "count": 20,
+          "p50": 17.300000190734863,
+          "p95": 18.299999713897705,
+          "budgetMs": 1000,
+          "pass": true
+        }
+      },
+      "status": "passed"
+    },
+    "pwa": {
+      "viewport": {
+        "width": 390,
+        "height": 800
+      },
+      "base": "http://localhost:4174",
+      "dataset": "large",
+      "pageErrors": [],
+      "failedRequests": [
+        {
+          "url": "https://basemaps.cartocdn.com/gl/positron-gl-style/style.json",
+          "reason": "net::ERR_ABORTED"
+        },
+        {
+          "url": "https://tiles-c.basemaps.cartocdn.com/vectortiles/carto.streets/v1/6/54/24.mvt",
+          "reason": "net::ERR_ABORTED"
+        },
+        {
+          "url": "https://tiles-d.basemaps.cartocdn.com/vectortiles/carto.streets/v1/6/54/25.mvt",
+          "reason": "net::ERR_ABORTED"
+        },
+        {
+          "url": "https://tiles-c.basemaps.cartocdn.com/vectortiles/carto.streets/v1/6/54/24.mvt",
+          "reason": "net::ERR_ABORTED"
+        },
+        {
+          "url": "https://tiles-d.basemaps.cartocdn.com/vectortiles/carto.streets/v1/6/54/25.mvt",
+          "reason": "net::ERR_ABORTED"
+        }
+      ],
+      "warmups": {
+        "search": [
+          11.5,
+          59,
+          7.800000190734863,
+          5.800000190734863,
+          7.800000190734863
+        ],
+        "filter": [
+          10.600000381469727,
+          44.90000009536743,
+          12.699999809265137,
+          17.100000381469727,
+          9.900000095367432
+        ],
+        "detail": [
+          31.40000009536743,
+          18.199999809265137,
+          16.5,
+          16.200000286102295,
+          16.100000381469727
+        ]
+      },
+      "samples": {
+        "search": [
+          49.19999980926514,
+          8.900000095367432,
+          8.099999904632568,
+          4.300000190734863,
+          56,
+          8,
+          9.199999809265137,
+          2.4000000953674316,
+          54.700000286102295,
+          8.900000095367432,
+          2.5,
+          3.8000001907348633,
+          53.19999980926514,
+          7.099999904632568,
+          5.5,
+          2.6999998092651367,
+          48.40000009536743,
+          7.400000095367432,
+          6.699999809265137,
+          2.5
+        ],
+        "filter": [
+          41.40000009536743,
+          13.099999904632568,
+          19.59999990463257,
+          9.699999809265137,
+          44.799999713897705,
+          13.400000095367432,
+          19.40000009536743,
+          11.299999713897705,
+          42.59999990463257,
+          11.099999904632568,
+          18.800000190734863,
+          9.700000286102295,
+          39.40000009536743,
+          13.699999809265137,
+          19.800000190734863,
+          9.700000286102295,
+          39.40000009536743,
+          12.900000095367432,
+          16.300000190734863,
+          8.700000286102295
+        ],
+        "detail": [
+          18,
+          16.199999809265137,
+          16.5,
+          12.799999713897705,
+          17.09999990463257,
+          17.40000009536743,
+          16.300000190734863,
+          17.09999990463257,
+          17,
+          16.700000286102295,
+          16.5,
+          15.800000190734863,
+          17.300000190734863,
+          14.300000190734863,
+          17.199999809265137,
+          16.5,
+          16.800000190734863,
+          17.299999713897705,
+          15.300000190734863,
+          17.40000009536743
+        ]
+      },
+      "summary": {
+        "search": {
+          "count": 20,
+          "p50": 7.400000095367432,
+          "p95": 54.700000286102295,
+          "budgetMs": 300,
+          "pass": true
+        },
+        "filter": {
+          "count": 20,
+          "p50": 13.699999809265137,
+          "p95": 42.59999990463257,
+          "budgetMs": 300,
+          "pass": true
+        },
+        "detail": {
+          "count": 20,
+          "p50": 16.700000286102295,
+          "p95": 17.40000009536743,
+          "budgetMs": 1000,
+          "pass": true
+        }
+      },
+      "status": "passed"
+    }
+  },
+  "finishedAt": "2026-09-13T07:55:45.513Z",
+  "exitCode": 0
+}
