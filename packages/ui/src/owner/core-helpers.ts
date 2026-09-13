@@ -5,6 +5,13 @@ export const ownerControl = () => `${FOCUS} min-h-size-touch-min min-h-size-cont
 export const ownerLink = () =>
   `${ownerControl()} inline-flex items-center justify-center gap-inline-sm rounded-control px-inset-md py-inset-sm text-body-md text-accent-fg hover:bg-accent-bg`;
 
+/** 계약·운전자는 한 갈래다 — 메뉴는 셋뿐이므로 명단은 계약 화면 옆에서 연다(시안 «확정 2026-09-12»). */
+export const OWNER_CONTRACT_TABS = [
+  { view: 'requests', label: '요청' },
+  { view: 'drivers', label: '운전자' },
+  { view: 'driver-docs', label: '운전자 서류' },
+] as const;
+
 export function ownerDate(value: string) {
   const date = new Date(value);
   return Number.isNaN(date.getTime())

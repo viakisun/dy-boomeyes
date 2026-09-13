@@ -9,6 +9,7 @@
     OWNER_REQUEST_STATES,
     ownerCandidates,
     ownerExpiryDays,
+    ownerHref,
     type OwnerCandidate,
     type OwnerDevice,
     type OwnerRequest,
@@ -23,7 +24,7 @@
   import EmptyState from '../primitives/EmptyState.svelte';
   import Button from '../primitives/Button.svelte';
   import StatusPill from '../primitives/StatusPill.svelte';
-  import { ownerControl, ownerDate } from './core-helpers';
+  import { OWNER_CONTRACT_TABS, ownerControl, ownerDate } from './core-helpers';
   let { data, api, app, url, navigate, refresh }: OwnerViewProps = $props();
   const web = $derived(app === 'web');
   const ORDER = Object.fromEntries(OWNER_REQUEST_STATES.map((s, i) => [s, i]));
@@ -251,6 +252,19 @@
     </div>
   {:else}
     <PageHeader title="계약" description="현장 안전관리자가 보낸 CPB 투입 요청을 받아 호기를 배정합니다" />
+    <nav aria-label="계약·운전자" class="gap-inline-sm flex flex-wrap">
+      {#each OWNER_CONTRACT_TABS as tab (tab.view)}
+        <a
+          href={ownerHref(url, tab.view, app)}
+          aria-current={tab.view === 'requests' ? 'page' : undefined}
+          class={cx(
+            ownerControl(),
+            'rounded-pill px-inset-md text-label-md inline-flex items-center',
+            tab.view === 'requests' ? 'bg-accent text-accent-on-solid' : 'bg-surface-sunken text-fg-muted',
+          )}>{tab.label}</a
+        >
+      {/each}
+    </nav>
     <p class="text-body-md" role="status">
       새 요청 <strong>{summary.fresh}건</strong> · 배정 중 <strong>{summary.assigning}건</strong> · 보관 가용
       <strong>{summary.stored}대</strong> · 90일 내 종료 <strong>{summary.ending}대</strong>

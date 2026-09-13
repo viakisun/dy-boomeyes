@@ -54,6 +54,7 @@
     data.cameras.find((c) => c.deviceId === device.id && c.purpose === 'pour') ??
       data.cameras.find((c) => c.deviceId === device.id),
   );
+  const driverDocs = $derived(data.driverDocs.filter((x) => x.driverId === device.driver?.id).length);
   const documents = $derived(data.documents.filter((d) => d.deviceId === device.id));
   const context = $derived({ device: device.id, return: url.pathname + url.search });
   // 지표 6(시안) — 값이 없으면 「미연동」으로 둔다. 옛 값을 정상처럼 보이지 않게(FR-034)
@@ -199,7 +200,7 @@
     </Fold>
   {/if}
   <section class="gap-stack-sm flex min-w-0 flex-col" aria-labelledby="owner-unit-docs-title">
-    <h3 id="owner-unit-docs-title" class="text-label-md text-fg-muted">관련 서류</h3>
+    <h3 id="owner-unit-docs-title" class="text-label-md text-fg-muted">차량 서류</h3>
     {#if documents.length > 0}
       <List items={documents} key={(d) => d.id} label="관련 서류" variant="plain">
         {#snippet item(doc)}
@@ -214,6 +215,18 @@
       </List>
     {:else}
       <p class="text-body-sm text-fg-muted">등록된 서류 없음</p>
+    {/if}
+    <!-- 서류는 두 갈래다 — 차량은 호기에, 자격은 사람에 속한다(시안 «확정 2026-09-12» · FR-027).
+         호기 화면에 운전자 자격증을 넣은 것이 잘못이었고 운전자 쪽으로 옮겼다. -->
+    {#if device.driver}
+      <a
+        href={ownerHref(url, 'driver-docs', app)}
+        class="gap-inline-sm py-inset-xs text-body-md hover:text-accent-fg min-h-size-touch-min flex items-center"
+        data-driver-docs-link
+        ><UserRound class="size-size-icon-md text-fg-muted shrink-0" aria-hidden="true" /><span class="min-w-0"
+          >{device.driver.name} 운전자 서류 {driverDocs}종</span
+        ></a
+      >
     {/if}
   </section>
   <Button

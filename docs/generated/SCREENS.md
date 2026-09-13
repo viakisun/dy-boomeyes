@@ -7,9 +7,9 @@
 | A1 | 현장 안전관리자 APP (pwa) | 9 | 0 | 5 | 4 | 0 | 0 |
 | A2 | 운전자 APP (pwa) | 7 | 0 | 4 | 3 | 0 | 0 |
 | A3 | 본사 안전관리자 APP (pwa) | 6 | 0 | 0 | 6 | 0 | 0 |
-| A4 | 사업주 PWA (pwa) | 11 | 0 | 0 | 0 | 8 | 3 |
+| A4 | 사업주 PWA (pwa) | 11 | 0 | 0 | 0 | 10 | 1 |
 | B0 | 웹 공통 로그인 (web) | 1 | 1 | 0 | 0 | 0 | 0 |
-| B1 | 소유주 운영 WEB (web) | 15 | 1 | 3 | 4 | 5 | 2 |
+| B1 | 소유주 운영 WEB (web) | 15 | 1 | 3 | 4 | 7 | 0 |
 | B2 | 건설사 본사 관리 WEB (web) | 3 | 0 | 0 | 3 | 0 | 0 |
 | B3 | 현장 안전관리자 WEB (web) | 6 | 0 | 0 | 0 | 6 | 0 |
 | B4 | 관리자 WEB 백오피스 (web) | 7 | 0 | 2 | 5 | 0 | 0 |
@@ -41,9 +41,9 @@
 | `A4-01` | 로그인 | A4 | `/a4/login` | owner | 2 | 4 | 6 (owner empty error boundaries large login) | FR-001 | owner-experience shell-auth |
 | `A4-02` | 보유 장비 | A4 | `/a4/fleet` | owner | 2 | 4 | 6 (owner empty error boundaries large fleet) | FR-025 FR-043 | owner-experience |
 | `A4-03` | 투입 요청·배정 | A4 | `/a4/requests` | owner | 2 | 4 | 1 (inbox) | FR-026 | owner-contracts |
-| `A4-04` | 운전자 배치 | A4 | `/a4/drivers` | owner | 2 | 5 | 1 (drivers) | FR-027 | owner-drivers |
+| `A4-04` | 운전자 배치 | A4 | `/a4/drivers` | owner | 2 | 4 | 1 (drivers) | FR-027 | owner-drivers |
 | `A4-05` | 임대 계약 | A4 | `/a4/leases` | owner | 2 | 5 | 1 (lease) | FR-025 FR-026 | owner-contracts |
-| `A4-06` | 운전자 서류 | A4 | `/a4/drivers/docs` | owner | 2 | 5 | 1 (docs) | FR-027 | owner-drivers |
+| `A4-06` | 운전자 서류 | A4 | `/a4/drivers/docs` | owner | 2 | 4 | 1 (docs) | FR-027 | owner-drivers |
 | `A4-07` | 운영 현황 | A4 | `/a4/overview` | owner | 2 | 4 | 7 (owner empty error boundaries large site unit) | FR-003 FR-024 FR-025 FR-028 FR-039 FR-042 FR-044 | owner-experience |
 | `A4-08` | 호기 상세 | A4 | `/a4/fleet/[device]` | owner | 2 | 4 | 5 (owner empty error boundaries large) | FR-002 FR-007 FR-016 FR-019 FR-024 FR-025 FR-027 FR-028 FR-039 FR-040 FR-042 FR-043 FR-044 | owner-drivers owner-experience |
 | `A4-09` | 영상 | A4 | `/a4/fleet/[device]/video` | owner | 2 | 4 | 5 (owner empty error boundaries large) | FR-004 FR-005 FR-024 | owner-experience |
@@ -63,8 +63,8 @@
 | `B1-11` | 영상 | B1 | `/b1/fleet/[device]/video` | owner | 2 | 4 | 5 (owner empty error boundaries large) | FR-004 FR-005 FR-024 | owner-experience |
 | `B1-12` | 이상·점검 | B1 | `/b1/alerts` | owner | 2 | 4 | 5 (owner empty error boundaries large) | FR-006 FR-007 FR-024 | owner-experience |
 | `B1-13` | 투입 요청·배정 | B1 | `/b1/requests` | owner | 2 | 4 | 5 (inbox assign empty none error) | FR-026 | owner-contracts |
-| `B1-14` | 운전자 배치 | B1 | `/b1/drivers` | owner | 2 | 5 | 4 (drivers expiring empty error) | FR-027 | owner-drivers |
-| `B1-15` | 운전자 서류 | B1 | `/b1/drivers/docs` | owner | 2 | 5 | 4 (docs expiring missing error) | FR-027 | owner-drivers |
+| `B1-14` | 운전자 배치 | B1 | `/b1/drivers` | owner | 2 | 4 | 4 (drivers expiring empty error) | FR-027 | owner-drivers |
+| `B1-15` | 운전자 서류 | B1 | `/b1/drivers/docs` | owner | 2 | 4 | 4 (docs expiring missing error) | FR-027 | owner-drivers |
 | `B2-02` | 본사 지도 | B2 | `/b2/map` | hq-safety | 1 | 2 | 1 (work) | FR-003 FR-022 FR-024 | sites-assets-leases |
 | `B2-03` | 현장 상세 | B2 | `/b2/sites/[site]` | hq-safety | 1 | 2 | 1 (site) | FR-004 FR-022 FR-024 | video-basics |
 | `B2-04` | 보고 모드 | B2 | `/b2/report` | hq-safety | 2 | 2 | 1 (report) | FR-022 FR-023 FR-024 | records-reports |

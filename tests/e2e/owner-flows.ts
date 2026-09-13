@@ -134,6 +134,46 @@ export function ownerFlows(app: OwnerApp) {
     for (const id of picks) await expect(fleet.locator(`[data-device="${id}"]`)).toHaveCount(1);
   });
 
+  // 시안의 운전자 — 소유주 소속이고 배정이 매일 바뀐다. 서류는 사람 4종(«확정 2026-09-12» · FR-027)
+  test('[B1-02] [FR-027] [AC-O07] driver roster shows today assignment and driver documents are a separate axis', async ({
+    page,
+  }) => {
+    await startOwner(page, app);
+    // 새 메뉴를 만들지 않는다 — 명단은 계약 화면 옆에서 연다
+    await expect(page.getByRole('navigation', { name: '소유주 메뉴', exact: true }).getByRole('link')).toHaveCount(3);
+    await page.getByRole('navigation').getByRole('link', { name: '계약', exact: true }).click();
+    await page
+      .getByRole('navigation', { name: '계약·운전자', exact: true })
+      .getByRole('link', { name: '운전자', exact: true })
+      .click();
+    const roster = page.locator('[data-owner-drivers="drivers"]');
+    await expect(roster).toBeVisible();
+    await expect(roster.locator('[data-driver]')).toHaveCount(6);
+    // 오늘 배정은 호기 축과 같은 사람이다 — 명단의 링크가 그 호기로 간다
+    const first = roster.locator('[data-driver="DRV-001"]');
+    await expect(first).toContainText('김운전');
+    await expect(first.getByRole('link', { name: /호기/ })).toBeVisible();
+    // 자격 만료 임박이 명단에 드러난다
+    await expect(roster.locator('[data-driver="DRV-004"]')).toContainText(/D-\d+/);
+    // 서류는 사람 4종 — 한 명은 미비, 한 건은 만료 임박
+    await page
+      .getByRole('navigation', { name: '계약·운전자', exact: true })
+      .getByRole('link', { name: '운전자 서류', exact: true })
+      .click();
+    const docs = page.locator('[data-owner-drivers="driver-docs"]');
+    await expect(docs).toBeVisible();
+    await expect(docs.locator('[data-doc-state="missing"]')).toHaveCount(1);
+    await expect(docs.locator('[data-doc-state="expiring"]')).toHaveCount(2);
+    for (const kind of ['건설기계조종사 면허', '안전보건교육 이수증', '건강검진 결과', '고용·보험 확인서'])
+      await expect(docs).toContainText(kind);
+    // 호기 화면의 서류는 차량 쪽이고, 운전자 서류는 링크로 사람 쪽에 있다
+    await page.goto(`${paths.overview}?site=SITE-MAPO&device=CPB-001`);
+    const panel = page.locator('[data-device="CPB-001"]').first();
+    await expect(panel).toContainText('차량 서류');
+    await panel.locator('[data-driver-docs-link]').click();
+    await expect(page.locator('[data-owner-drivers="driver-docs"]')).toBeVisible();
+  });
+
   // 시안의 보유 장비 — 표 하나 · 검색 1 · 필터 3축 · 현장별 묶어 보기(«확정 2026-09-12»)
   test('[B1-02] [FR-025] [AC-O07] fleet sorts by header, filters on three axes and groups by site', async ({
     page,

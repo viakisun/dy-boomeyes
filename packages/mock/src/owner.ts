@@ -11,6 +11,8 @@ import {
   type OwnerDevice,
   type OwnerDocument,
   type OwnerDriver,
+  type OwnerDriverDoc,
+  OWNER_DRIVER_DOC_KINDS,
   type OwnerRequest,
   type OwnerSnapshot,
   type Session,
@@ -162,6 +164,7 @@ export function seedOwner(dataset: OwnerDataset = 'owner'): OwnerSnapshot {
     aiEvents: devices.flatMap((d) => ownerAiEvents(d)),
     requests: dataset === 'empty' ? [] : OWNER_REQUESTS,
     drivers: dataset === 'empty' ? [] : ownerDrivers(devices),
+    driverDocs: dataset === 'empty' ? [] : ownerDriverDocs(ownerDrivers(devices)),
   };
 }
 /** 투입 요청 5건 — 상태 5단계가 한 번씩 나오게 둔다(시안 «확정 2026-09-12» · FR-026).
@@ -269,6 +272,34 @@ const OWNER_REQUESTS: OwnerRequest[] = [
     receivedAt: '2026-07-03T08:05:00+09:00',
   },
 ];
+/** 운전자 서류 4종 — 사람마다 한 벌. 면허 만료는 명단의 licenseTo와 같은 값이어야 한다(두 곳이 갈리면 명단과 서류가 다른 날을 말한다).
+ *  한 명은 건강검진이 빠져 있고(미비) 한 명은 교육 이수증이 곧 만료된다 — 화면의 «만료 임박»·«미비»가 실제 자료에서 나온다. */
+function ownerDriverDocs(drivers: OwnerDriver[]): OwnerDriverDoc[] {
+  const out: OwnerDriverDoc[] = [];
+  for (const person of drivers) {
+    for (const kind of OWNER_DRIVER_DOC_KINDS) {
+      if (person.id === 'DRV-003' && kind === '건강검진 결과') continue; // 미비
+      const expires =
+        kind === '건설기계조종사 면허'
+          ? person.licenseTo
+          : kind === '안전보건교육 이수증'
+            ? person.id === 'DRV-002'
+              ? '2026-07-18'
+              : '2027-03-31'
+            : kind === '건강검진 결과'
+              ? '2027-02-28'
+              : null;
+      out.push({
+        id: `${person.id}-${OWNER_DRIVER_DOC_KINDS.indexOf(kind) + 1}`,
+        driverId: person.id,
+        kind,
+        issuedAt: expires ? `${Number(expires.slice(0, 4)) - 1}${expires.slice(4)}` : '2026-01-15',
+        expiresAt: expires,
+      });
+    }
+  }
+  return out;
+}
 /** 운전자 6명 — 오늘 배정은 장비 축(device.driver)이 원천이고 여기서 되읽는다.
  *  두 곳이 따로 정하면 호기 화면과 명단이 다른 사람을 보인다. */
 function ownerDrivers(devices: OwnerDevice[]): OwnerDriver[] {
@@ -417,6 +448,7 @@ export function createOwnerApi(
     async snapshot() {
       await wait();
       const devices = source.devices.filter((d) => d.ownerId === owner);
+      const driverIds = new Set(source.drivers.filter((v) => v.ownerId === owner).map((v) => v.id));
       const ids = new Set(devices.map((d) => d.id));
       return clone({
         ...source,
@@ -430,6 +462,7 @@ export function createOwnerApi(
         aiEvents: source.aiEvents.filter((e) => ids.has(e.deviceId)),
         requests: source.requests.filter((r) => r.ownerId === owner),
         drivers: source.drivers.filter((v) => v.ownerId === owner),
+        driverDocs: source.driverDocs.filter((d) => driverIds.has(d.driverId)),
       });
     },
     async device(id) {

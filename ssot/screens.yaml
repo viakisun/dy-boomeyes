@@ -753,7 +753,7 @@ screens:
   route: /a4/drivers
   roles: *id004
   phase: 2
-  wave: 5
+  wave: 4
   default: drivers
   states:
   - id: drivers
@@ -798,7 +798,7 @@ screens:
   route: /a4/drivers/docs
   roles: *id004
   phase: 2
-  wave: 5
+  wave: 4
   default: docs
   states:
   - id: docs
@@ -1860,7 +1860,7 @@ screens:
   roles:
     - owner
   phase: 2
-  wave: 5
+  wave: 4
   default: drivers
   states:
     - id: drivers
@@ -1894,7 +1894,7 @@ screens:
   roles:
     - owner
   phase: 2
-  wave: 5
+  wave: 4
   default: docs
   states:
     - id: docs

@@ -846,6 +846,15 @@
     "note": "투입 요청을 받아 호기를 배정한다(FR-026 · «확정 2026-09-12»). 후보는 보관 + 종료 임박이고 N/N을 채우면 배정 확정·회신이 계약 기간을 호기에 남긴다. 웹은 한 화면, PWA는 두 단계(사용자 결정)."
   },
   {
+    "name": "OwnerDrivers",
+    "family": "Owner experience",
+    "platform": "both",
+    "ref": "시안 «소유주 업무 기획» 운전자 · Trackunit Operators",
+    "variants": "명단 · 서류(같은 화면의 두 갈래)",
+    "states": "default/empty/expiring(자격 만료 임박)/missing(서류 미비)",
+    "note": "운전자는 소유주 소속이고 배정이 매일 바뀐다(FR-027 · «확정 2026-09-12»). 서류는 사람 4종 — 차량 6종과 다른 갈래다. 새 메뉴를 만들지 않고 계약 옆에서 연다."
+  },
+  {
     "name": "OwnerDetail",
     "family": "Owner experience",
     "platform": "both",

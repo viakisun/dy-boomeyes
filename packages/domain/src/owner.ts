@@ -144,6 +144,23 @@ export interface OwnerRequest {
 }
 /** 운전자 — 소유주 소속이고 배정이 매일 바뀐다(FR-027).
  *  차량 서류(호기)와 달리 운전자 서류는 사람에 속한다. */
+/** 운전자 서류 4종(사람) — 차량 서류 6종(호기)과 다른 갈래다(시안 «확정 2026-09-12» · FR-027).
+ *  호기 화면에 운전자 자격증을 넣은 것이 잘못이었고, 운전자 쪽으로 옮겼다. */
+export const OWNER_DRIVER_DOC_KINDS = [
+  '건설기계조종사 면허',
+  '안전보건교육 이수증',
+  '건강검진 결과',
+  '고용·보험 확인서',
+] as const;
+export type OwnerDriverDocKind = (typeof OWNER_DRIVER_DOC_KINDS)[number];
+export interface OwnerDriverDoc {
+  id: string;
+  driverId: string;
+  kind: OwnerDriverDocKind;
+  issuedAt: string;
+  /** 만료가 있는 서류만 — 없으면 null */
+  expiresAt: string | null;
+}
 export interface OwnerDriver {
   id: string;
   ownerId: string;
@@ -205,6 +222,7 @@ export interface OwnerSnapshot {
   aiEvents: OwnerAiEvent[];
   requests: OwnerRequest[];
   drivers: OwnerDriver[];
+  driverDocs: OwnerDriverDoc[];
 }
 export interface OwnerAttachment {
   name: string;

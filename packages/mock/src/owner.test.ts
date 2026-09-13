@@ -274,6 +274,28 @@ describe('[FR-025] 배치·이상·정보 시각의 독립성', () => {
     await expect(make().assign(b.requests[0]!.id, [])).rejects.toThrow(/조회할 수 없습니다/);
     expect(mine.requests.some((r) => r.id === b.requests[0]!.id)).toBe(false);
   });
+  it('운전자 서류는 사람마다 4종이고 면허 만료는 명단과 같은 날이다', async () => {
+    const s = await make().snapshot();
+    const ids = new Set(s.drivers.map((v) => v.id));
+    expect(s.driverDocs.length).toBeGreaterThan(0);
+    expect(s.driverDocs.every((d) => ids.has(d.driverId))).toBe(true);
+    for (const person of s.drivers) {
+      const mine = s.driverDocs.filter((d) => d.driverId === person.id);
+      const license = mine.find((d) => d.kind === '건설기계조종사 면허')!;
+      // 두 곳이 따로 정하면 명단과 서류가 다른 만료일을 말한다
+      expect(license.expiresAt).toBe(person.licenseTo);
+      expect(mine).toHaveLength(person.id === 'DRV-003' ? 3 : 4); // 미비 한 명
+    }
+    // 만료 임박 한 건 — 화면의 «만료 임박»이 실제 자료에서 나온다
+    expect(s.driverDocs.some((d) => d.expiresAt !== null && d.expiresAt < '2026-08-01')).toBe(true);
+  });
+  it('남의 운전자 서류는 보이지 않는다', async () => {
+    const sa = await make().snapshot();
+    const sb = await make(B).snapshot();
+    expect(sb.driverDocs.length).toBeGreaterThan(0);
+    expect(sa.driverDocs.some((d) => sb.driverDocs.some((x) => x.id === d.id))).toBe(false);
+    expect(sb.driverDocs.every((d) => d.driverId === 'DRV-101')).toBe(true);
+  });
   it('운전자 명단의 오늘 배정은 호기 축과 같은 사람을 가리킨다', async () => {
     const s = await make().snapshot();
     expect(s.drivers).toHaveLength(6);
