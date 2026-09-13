@@ -131,6 +131,7 @@ export function createOwnerSim(
         d.fault = null;
         d.errorCode = null;
         d.voltage = 380;
+        d.telemetry.voltageV = d.voltage; // 지표는 장비 축을 따라간다 — 한 틱이라도 갈리지 않게
         changed.push(d.id);
       }
     }

@@ -4705,7 +4705,7 @@
         ],
         "store": "RDS",
         "phase": 1,
-        "note": "B1-03 수신함·A1-07 신청 폼(FR-017) — 상태기계 request"
+        "note": "B1-03 수신함·A1-07 신청 폼(FR-017) — 상태기계 request(현장 승인 축) · assignment(소유주 배정 축 · FR-026)"
       }
     ],
     "machines": {

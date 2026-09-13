@@ -50,6 +50,15 @@ describe('[FR-024] 소유주 자료 경계', () => {
     expect(sa.documents.every((doc) => idsA.has(doc.deviceId))).toBe(true);
     expect(new Set(sb.documents.map((doc) => doc.deviceId))).toEqual(new Set(['CPB-101']));
     expect(sb.alerts.map((a) => a.id)).toEqual(['CPB-101-FAULT']);
+    // 새 축도 같은 경계를 지나야 한다 — 계약 요청·운전자 명단은 이름·연락처를 담는다
+    expect(sa.requests.length).toBeGreaterThan(0);
+    expect(sa.requests.every((r) => r.ownerId === 'OWN-001')).toBe(true);
+    expect(sb.requests).toEqual([]);
+    expect(sa.drivers.length).toBeGreaterThan(0);
+    expect(sa.drivers.every((v) => v.ownerId === 'OWN-001')).toBe(true);
+    expect(sb.drivers).toEqual([]);
+    expect(sa.aiEvents.every((e) => idsA.has(e.deviceId))).toBe(true);
+    expect(sb.aiEvents.every((e) => e.deviceId === 'CPB-101')).toBe(true);
     for (const [api, prefix] of [
       [a, 'CPB-101'],
       [b, 'CPB-002'],

@@ -73,7 +73,12 @@
   {:else}
     {#key `${record.id}-${revision}`}
       <div class="bg-surface-sunken p-inset-sm overflow-auto" class:max-h-layout-panel-height={compact}>
-        {#if record.previewUrl || record.type !== 'application/pdf'}
+        {#if !record.url && !record.previewUrl}
+          <!-- 원문이 등록되지 않은 서류 — 빈 상자를 그리지 않는다(발급일·만료일은 위 머리글에 있다) -->
+          <p class="p-inset-xl text-body-md text-fg-muted text-center">
+            이 서류는 목록에만 있습니다. 원문 파일이 등록되면 여기에서 열람할 수 있습니다.
+          </p>
+        {:else if record.previewUrl || record.type !== 'application/pdf'}
           <img
             src={record.previewUrl ?? record.url}
             alt="{record.deviceId} {record.title} 원문"

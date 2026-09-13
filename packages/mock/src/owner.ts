@@ -372,6 +372,10 @@ export function createOwnerApi(
         documents: source.documents.filter((d) => ids.has(d.deviceId)),
         alerts: source.alerts.filter((a) => ids.has(a.deviceId)),
         cameras: source.cameras.filter((c) => ids.has(c.deviceId)),
+        // 새 축도 같은 경계를 지난다 — 빠뜨리면 남의 계약·연락처·명단이 그대로 보인다(FR-024 · AC-12)
+        aiEvents: source.aiEvents.filter((e) => ids.has(e.deviceId)),
+        requests: source.requests.filter((r) => r.ownerId === owner),
+        drivers: source.drivers.filter((v) => v.ownerId === owner),
       });
     },
     async device(id) {
