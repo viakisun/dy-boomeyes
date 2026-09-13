@@ -29,6 +29,7 @@ export { default as BottomSheet } from './primitives/BottomSheet.svelte';
 export { default as MapSheet, type MapSheetSnap } from './primitives/MapSheet.svelte';
 export { default as Skeleton } from './primitives/Skeleton.svelte';
 export { default as EmptyState } from './primitives/EmptyState.svelte';
+export { default as Fold } from './primitives/Fold.svelte';
 export { default as Banner } from './primitives/Banner.svelte';
 export { default as Stat } from './primitives/Stat.svelte';
 export { default as StatGroup } from './primitives/StatGroup.svelte';

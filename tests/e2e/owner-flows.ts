@@ -187,6 +187,43 @@ export function ownerFlows(app: OwnerApp) {
     await expect(page).not.toHaveURL(/site=/);
   });
 
+  // 시안의 호기 화면 — 상태 · 오늘 운전자 · AI 경고 · 지표 6 · 접기(«확정 2026-09-12»)
+  test('[B1-02] [FR-044] [AC-O05] unit panel shows driver, AI warning, six metrics and folded groups', async ({
+    page,
+  }) => {
+    await startOwner(page, app);
+    await page.goto(`${paths.overview}?site=SITE-MAPO&device=CPB-001`);
+    const panel = page.locator('[data-device="CPB-001"]').first();
+    await expect(panel).toBeVisible();
+
+    // 오늘 운전자 한 줄 — 이름과 전화(현장 담당자 전화와 섞이지 않게 그 줄 안에서 찾는다)
+    const driverLine = panel
+      .locator('p')
+      .filter({ hasText: /오늘 운전자/ })
+      .first();
+    await expect(driverLine).toBeVisible();
+    await expect(driverLine.getByRole('link', { name: /^010-/ })).toBeVisible();
+
+    // AI 경고 배너는 그 시각 배정 운전자를 함께 보인다
+    const warning = panel
+      .getByRole('status')
+      .filter({ hasText: /붐 하부 인원 감지/ })
+      .first();
+    await expect(warning).toBeVisible();
+    await expect(warning).toContainText('운전자');
+
+    // 지표 6 — 값이 있거나 「미연동」이다
+    for (const label of ['공급 전압', '유압', '유온', '붐 선회각', '오늘 타설', '가동 시간'])
+      await expect(panel.getByText(label, { exact: true })).toBeVisible();
+
+    // 접기는 눌러야 열린다 — 지표와 경고가 먼저 읽혀야 한다
+    const parts = panel.locator('[data-fold="마모·교체 부품"]');
+    await expect(parts).toHaveCount(1);
+    await expect(parts.getByText('수송관', { exact: true })).toBeHidden();
+    await parts.getByRole('group').or(parts.locator('summary')).first().click();
+    await expect(parts.getByText('수송관', { exact: true })).toBeVisible();
+  });
+
   // 알림은 좌측 메뉴에서 내려와 헤더의 종으로 들어왔다(시안 «결정 2026-09-12»).
   // 메뉴에 이상·점검이 남아 있으면 두 자리에 같은 것이 생긴다 — 그것까지 함께 막는다.
   test('[B1-02] [FR-006] [AC-O06] header bell opens alerts, closes by Escape and returns focus', async ({ page }) => {

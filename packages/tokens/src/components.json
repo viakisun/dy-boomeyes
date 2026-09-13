@@ -324,6 +324,15 @@
     "note": "업무 이력·에스컬레이션"
   },
   {
+    "name": "Fold",
+    "family": "Primitives",
+    "platform": "both",
+    "ref": "HTML details/summary · Material expansion panel",
+    "variants": "open 초기 상태 · meta 보조 정보",
+    "states": "default/open",
+    "note": "접기 — 시안의 호기 화면이 지표 아래 묶음을 접어 둔다. Tabs와 다르다(여럿이 동시에 열린다). details라 스크립트 없이 동작하고 검색 내 찾기가 연다."
+  },
+  {
     "name": "EmptyState",
     "family": "Display",
     "platform": "both",

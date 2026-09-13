@@ -10,7 +10,7 @@
 | ref(원시) | 208 |
 | sys(시맨틱) | 308 |
 | cmp(컴포넌트) | 92 |
-| 컴포넌트 카탈로그 | 109 |
+| 컴포넌트 카탈로그 | 110 |
 | 대비 검사 | 94/94 통과 |
 
 | 산출물 | 용도 |
@@ -770,7 +770,7 @@ cmp 층은 sys만 참조한다(ref 직접 참조 금지 — 검사로 강제). �
 | `cmp.table.row-selected` | #e7f3fb | #e7f3fb | {sys.color.bg.selected} |  |
 | `cmp.table.header-fg` | #4a6879 | #4a6879 | {sys.color.fg.muted} |  |
 
-## 8. 컴포넌트 카탈로그 (109)
+## 8. 컴포넌트 카탈로그 (110)
 
 이름 PascalCase · prop 어휘 고정: `variant`(형태) · `tone`(색 의도: accent/neutral/info/success/warning/danger/progress) · `size`(sm/md/lg) · 상태 boolean(`disabled` `loading` `selected` `invalid`). 플랫폼 both = 같은 Svelte 컴포넌트가 밀도 토큰으로 두 플랫폼을 소화.
 
@@ -867,6 +867,12 @@ cmp 층은 sys만 참조한다(ref 직접 참조 금지 — 검사로 강제). �
 | **PageHeader** | both | Linear | title · description · actions · tabs |  |  |
 | **Section** | both | — | title · action · divider |  |  |
 | **Grid** | both | — | cols · gap(sys.space) |  |  |
+
+### Primitives
+
+| 컴포넌트 | 플랫폼 | 참조 | 변형(prop) | 상태 | 비고 |
+|---|---|---|---|---|---|
+| **Fold** | both | HTML details/summary · Material expansion panel | open 초기 상태 · meta 보조 정보 | default/open | 접기 — 시안의 호기 화면이 지표 아래 묶음을 접어 둔다. Tabs와 다르다(여럿이 동시에 열린다). details라 스크립트 없이 동작하고 검색 내 찾기가 연다. |
 
 ### Navigation
 
