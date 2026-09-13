@@ -167,7 +167,8 @@ def pdf_document(output, scenes, capture, font, supplements):
     y = pdf.paragraph("같은 호기를 기준으로 PC와 휴대폰에서 필요한 정보를 확인합니다.", 58, y - 26, 780, 17, MUTED)
     for scene in scenes:
         y = pdf.paragraph(f"{scene['number']:02}  {scene['label']}  /  {scene['question']}", 58, y - 20, pdf.w - 116, 15)
-    pdf.paragraph("고객 확인은 아직 진행하지 않았습니다. 이 자료는 검토를 위한 로컬 초안입니다.", 58, 134, pdf.w - 116, 12, MUTED)
+    # 표지의 각주는 장면 목록 **아래**에 붙인다 — 고정 y에 두면 장면이 늘 때 마지막 줄에 겹쳐 찍힌다
+    pdf.paragraph("고객 확인은 아직 진행하지 않았습니다. 이 자료는 검토를 위한 로컬 초안입니다.", 58, y - 30, pdf.w - 116, 12, MUTED)
     for scene in scenes:
         pdf.start(f"{scene['number']:02}  {scene['label']}", "PC 첫 화면 · 영상·서류의 하단 내용은 뒤의 확대 페이지에서 확인")
         image_width = 808
