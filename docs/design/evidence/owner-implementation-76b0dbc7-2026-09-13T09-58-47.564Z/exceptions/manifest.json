@@ -1,15 +1,15 @@
 {
   "task": "OD-13",
-  "sourceSha": "65d7e6672fa44172c292c8c9cb1994e120cdf7a3",
+  "sourceSha": "76b0dbc7482f3a672b683c2010c0690be13b5b16",
   "workingTreeHash": "d2f59403ae774772909cf2cdefb0ac2f9dc83e7986e81bc91c7e5e7f5a9e19c8",
   "registryHash": "a85bfe8c3d89f71e23183796386de050e5d031620c1dad72f9b2731c8701e167",
   "command": [
     "node",
     "tools/capture/owner-exceptions.mjs",
     "--output",
-    "docs/design/evidence/owner-implementation-65d7e667-2026-09-13T07-52-20.185Z/exceptions"
+    "docs/design/evidence/owner-implementation-76b0dbc7-2026-09-13T09-58-47.564Z/exceptions"
   ],
-  "createdAt": "2026-09-13T07:55:00.219Z",
+  "createdAt": "2026-09-13T10:01:12.917Z",
   "scope": "full",
   "requiredCases": 38,
   "expectedCases": 38,
@@ -377,7 +377,7 @@
         {
           "url": "http://localhost:4173/_app/immutable/assets/cpb-001-certificate.KaRYkWeN.png",
           "status": 503,
-          "at": "2026-09-13T07:55:07.272Z"
+          "at": "2026-09-13T10:01:19.404Z"
         }
       ],
       "status": "automated-capture-pass",
@@ -434,7 +434,7 @@
         {
           "url": "http://localhost:4173/_app/immutable/assets/front.D7bkNziN.mp4",
           "status": 503,
-          "at": "2026-09-13T07:55:08.134Z"
+          "at": "2026-09-13T10:01:20.268Z"
         }
       ],
       "status": "automated-capture-pass",
@@ -491,7 +491,7 @@
         {
           "url": "https://basemaps.cartocdn.com/gl/positron-gl-style/style.json",
           "status": 503,
-          "at": "2026-09-13T07:55:09.372Z"
+          "at": "2026-09-13T10:01:21.481Z"
         }
       ],
       "status": "automated-capture-pass",
@@ -1008,7 +1008,7 @@
         {
           "url": "http://localhost:4174/_app/immutable/assets/cpb-001-certificate.KaRYkWeN.png",
           "status": 503,
-          "at": "2026-09-13T07:55:23.000Z"
+          "at": "2026-09-13T10:01:33.655Z"
         }
       ],
       "status": "automated-capture-pass",
@@ -1065,7 +1065,7 @@
         {
           "url": "http://localhost:4174/_app/immutable/assets/front.D7bkNziN.mp4",
           "status": 503,
-          "at": "2026-09-13T07:55:23.736Z"
+          "at": "2026-09-13T10:01:34.460Z"
         }
       ],
       "status": "automated-capture-pass",
@@ -1122,7 +1122,7 @@
         {
           "url": "https://basemaps.cartocdn.com/gl/positron-gl-style/style.json",
           "status": 503,
-          "at": "2026-09-13T07:55:24.868Z"
+          "at": "2026-09-13T10:01:35.496Z"
         }
       ],
       "status": "automated-capture-pass",
@@ -1270,6 +1270,10 @@
       "consoleErrors": [],
       "failedRequests": [
         {
+          "url": "http://localhost:4174/_app/immutable/assets/front.D7bkNziN.mp4",
+          "error": "net::ERR_ABORTED"
+        },
+        {
           "url": "http://localhost:4174/_app/immutable/assets/boom.BS2Cnj7b.mp4",
           "error": "net::ERR_ABORTED"
         },
@@ -1283,6 +1287,10 @@
       "expectedConsoleErrors": [],
       "unexpectedConsoleErrors": [],
       "expectedRequestFailures": [
+        {
+          "url": "http://localhost:4174/_app/immutable/assets/front.D7bkNziN.mp4",
+          "error": "net::ERR_ABORTED"
+        },
         {
           "url": "http://localhost:4174/_app/immutable/assets/boom.BS2Cnj7b.mp4",
           "error": "net::ERR_ABORTED"
@@ -1849,7 +1857,7 @@
       "clock": "2026-07-03T10:42:00+09:00",
       "url": "http://localhost:4173/b1/docs?capture=1&state=owner&theme=light&device=CPB-001&doc=CPB-001-CERT",
       "file": "web-document-network-recovered.png",
-      "sha256": "5cd19fcf9b5516b914fca4776d58c1bd70794e34af3f59a6dc7153ddab52fe41",
+      "sha256": "79a67edcec08449eb5888408c0d50524b520b7a71f9c63e9ad1d302038e244c6",
       "geometry": {
         "width": 1280,
         "height": 842,
@@ -1882,7 +1890,7 @@
         "width": 1280,
         "height": 2087
       },
-      "fullSha256": "bb3d176129c2edb76b5ddd13a4fadd6008f27992abca2cc461357595e9ce1159"
+      "fullSha256": "78b2abd3d4a3b627e5d4d7411550b27d8f31d831c9c361edf78a5e2be960ecc8"
     },
     {
       "key": "web-video-network-failed",
@@ -1962,7 +1970,7 @@
       },
       "media": {
         "duration": 6,
-        "currentTime": 0.366338,
+        "currentTime": 0.381409,
         "readyState": 4,
         "paused": true
       },
@@ -2501,7 +2509,7 @@
       "clock": "2026-07-03T10:42:00+09:00",
       "url": "http://localhost:4174/a4/fleet/CPB-004?capture=1&state=owner&theme=light",
       "file": "pwa-stale-detail-stale.png",
-      "sha256": "5ec0d4e16353b8f61092816a8e6561b30e741bb3a8fe2556fff71a71c6f67f27",
+      "sha256": "74128fb77d02ee69780b0641477461d4f6bddca2b269b57d0cd728493ecf5a04",
       "geometry": {
         "width": 390,
         "height": 800,
@@ -2998,7 +3006,7 @@
       },
       "media": {
         "duration": 6,
-        "currentTime": 0.372929,
+        "currentTime": 0.380275,
         "readyState": 4,
         "paused": true
       },
@@ -3367,6 +3375,10 @@
         "unexpectedConsoleErrors": [],
         "expectedRequestFailures": [
           {
+            "url": "http://localhost:4174/_app/immutable/assets/front.D7bkNziN.mp4",
+            "error": "net::ERR_ABORTED"
+          },
+          {
             "url": "http://localhost:4174/_app/immutable/assets/boom.BS2Cnj7b.mp4",
             "error": "net::ERR_ABORTED"
           },
@@ -3382,5 +3394,5 @@
     }
   ],
   "exitCode": 0,
-  "finishedAt": "2026-09-13T07:55:31.249Z"
+  "finishedAt": "2026-09-13T10:01:41.494Z"
 }

@@ -5,14 +5,14 @@
     "AC-O16",
     "AC-O18"
   ],
-  "sourceSha": "65d7e6672fa44172c292c8c9cb1994e120cdf7a3",
+  "sourceSha": "76b0dbc7482f3a672b683c2010c0690be13b5b16",
   "workingTreeHash": "d2f59403ae774772909cf2cdefb0ac2f9dc83e7986e81bc91c7e5e7f5a9e19c8",
   "registryHash": "a85bfe8c3d89f71e23183796386de050e5d031620c1dad72f9b2731c8701e167",
   "command": [
     "node",
     "tools/capture/owner.mjs"
   ],
-  "createdAt": "2026-09-13T07:52:20.185Z",
+  "createdAt": "2026-09-13T09:58:47.564Z",
   "environment": {
     "platform": "darwin",
     "node": "v24.9.0",
@@ -1926,6 +1926,10 @@
       "consoleErrors": [],
       "failedRequests": [
         {
+          "url": "http://localhost:4173/_app/immutable/assets/front.D7bkNziN.mp4",
+          "error": "net::ERR_ABORTED"
+        },
+        {
           "url": "http://localhost:4173/_app/immutable/assets/boom.BS2Cnj7b.mp4",
           "error": "net::ERR_ABORTED"
         },
@@ -1976,15 +1980,11 @@
       "consoleErrors": [],
       "failedRequests": [
         {
-          "url": "http://localhost:4173/_app/immutable/assets/front.D7bkNziN.mp4",
-          "error": "net::ERR_ABORTED"
-        },
-        {
-          "url": "http://localhost:4173/_app/immutable/assets/front.D7bkNziN.mp4",
-          "error": "net::ERR_ABORTED"
-        },
-        {
           "url": "http://localhost:4173/_app/immutable/assets/boom.BS2Cnj7b.mp4",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "url": "http://localhost:4173/_app/immutable/assets/front.D7bkNziN.mp4",
           "error": "net::ERR_ABORTED"
         },
         {
@@ -2044,10 +2044,6 @@
         {
           "url": "http://localhost:4173/_app/immutable/assets/front.D7bkNziN.mp4",
           "error": "net::ERR_ABORTED"
-        },
-        {
-          "url": "http://localhost:4173/_app/immutable/assets/front.D7bkNziN.mp4",
-          "error": "net::ERR_ABORTED"
         }
       ],
       "renderedRole": "owner",
@@ -2087,6 +2083,10 @@
       "pageErrors": [],
       "consoleErrors": [],
       "failedRequests": [
+        {
+          "url": "http://localhost:4173/_app/immutable/assets/front.D7bkNziN.mp4",
+          "error": "net::ERR_ABORTED"
+        },
         {
           "url": "http://localhost:4173/_app/immutable/assets/boom.BS2Cnj7b.mp4",
           "error": "net::ERR_ABORTED"
@@ -2134,6 +2134,10 @@
       "consoleErrors": [],
       "failedRequests": [
         {
+          "url": "http://localhost:4173/_app/immutable/assets/front.D7bkNziN.mp4",
+          "error": "net::ERR_ABORTED"
+        },
+        {
           "url": "http://localhost:4173/_app/immutable/assets/boom.BS2Cnj7b.mp4",
           "error": "net::ERR_ABORTED"
         },
@@ -2179,10 +2183,6 @@
       "pageErrors": [],
       "consoleErrors": [],
       "failedRequests": [
-        {
-          "url": "http://localhost:4173/_app/immutable/assets/front.D7bkNziN.mp4",
-          "error": "net::ERR_ABORTED"
-        },
         {
           "url": "http://localhost:4173/_app/immutable/assets/boom.BS2Cnj7b.mp4",
           "error": "net::ERR_ABORTED"
@@ -2233,6 +2233,10 @@
       "pageErrors": [],
       "consoleErrors": [],
       "failedRequests": [
+        {
+          "url": "http://localhost:4173/_app/immutable/assets/front.D7bkNziN.mp4",
+          "error": "net::ERR_ABORTED"
+        },
         {
           "url": "http://localhost:4173/_app/immutable/assets/boom.BS2Cnj7b.mp4",
           "error": "net::ERR_ABORTED"
@@ -3572,10 +3576,6 @@
         {
           "url": "http://localhost:4174/_app/immutable/assets/boom.BS2Cnj7b.mp4",
           "error": "net::ERR_ABORTED"
-        },
-        {
-          "url": "http://localhost:4174/_app/immutable/assets/front.D7bkNziN.mp4",
-          "error": "net::ERR_ABORTED"
         }
       ],
       "renderedRole": "owner",
@@ -3662,7 +3662,15 @@
       "consoleErrors": [],
       "failedRequests": [
         {
+          "url": "http://localhost:4174/_app/immutable/assets/front.D7bkNziN.mp4",
+          "error": "net::ERR_ABORTED"
+        },
+        {
           "url": "http://localhost:4174/_app/immutable/assets/boom.BS2Cnj7b.mp4",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "url": "http://localhost:4174/_app/immutable/assets/front.D7bkNziN.mp4",
           "error": "net::ERR_ABORTED"
         },
         {
@@ -3757,11 +3765,15 @@
       "consoleErrors": [],
       "failedRequests": [
         {
+          "url": "http://localhost:4174/_app/immutable/assets/boom.BS2Cnj7b.mp4",
+          "error": "net::ERR_ABORTED"
+        },
+        {
           "url": "http://localhost:4174/_app/immutable/assets/front.D7bkNziN.mp4",
           "error": "net::ERR_ABORTED"
         },
         {
-          "url": "http://localhost:4174/_app/immutable/assets/boom.BS2Cnj7b.mp4",
+          "url": "http://localhost:4174/_app/immutable/assets/front.D7bkNziN.mp4",
           "error": "net::ERR_ABORTED"
         }
       ],
@@ -3809,6 +3821,10 @@
         {
           "url": "http://localhost:4174/_app/immutable/assets/front.D7bkNziN.mp4",
           "error": "net::ERR_ABORTED"
+        },
+        {
+          "url": "http://localhost:4174/_app/immutable/assets/front.D7bkNziN.mp4",
+          "error": "net::ERR_ABORTED"
         }
       ],
       "renderedRole": "owner",
@@ -3848,6 +3864,10 @@
       "pageErrors": [],
       "consoleErrors": [],
       "failedRequests": [
+        {
+          "url": "http://localhost:4174/_app/immutable/assets/front.D7bkNziN.mp4",
+          "error": "net::ERR_ABORTED"
+        },
         {
           "url": "http://localhost:4174/_app/immutable/assets/boom.BS2Cnj7b.mp4",
           "error": "net::ERR_ABORTED"
@@ -3896,6 +3916,10 @@
       "failedRequests": [
         {
           "url": "http://localhost:4174/_app/immutable/assets/boom.BS2Cnj7b.mp4",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "url": "http://localhost:4174/_app/immutable/assets/front.D7bkNziN.mp4",
           "error": "net::ERR_ABORTED"
         },
         {
@@ -7052,7 +7076,7 @@
         "mainWidth": 768,
         "mainScrollWidth": 768
       },
-      "sha256": "08a898457eac36be9213bbf75d45f807e808910a23f299e89688886204de9b00",
+      "sha256": "42b9b9a29912c7db435cfc1831baaf5ff8d6b4ce81c377e4cd75151fbf762ad0",
       "status": "automated-capture-pass"
     },
     {
@@ -7166,7 +7190,7 @@
         "mainWidth": 375,
         "mainScrollWidth": 375
       },
-      "sha256": "8872987d506f8928fa1841da0370be9d18937dddd602c67853c7802d174af7d3",
+      "sha256": "2b71fcb6fbeee9d14bed862bc2fbed3f57aa3be7607a7b8e4cff404cc3035a4a",
       "status": "automated-capture-pass"
     },
     {
@@ -7204,7 +7228,7 @@
         "mainWidth": 375,
         "mainScrollWidth": 375
       },
-      "sha256": "27dff4504b8ecfd092bf26658b74d3a0527fb8d4015fced8c928779ae714f8d0",
+      "sha256": "55fbb5fb52f04f3f70eeff7fe762d3bae1afdf15b37de8a3aba25b0a066954ad",
       "status": "automated-capture-pass"
     },
     {
@@ -7242,10 +7266,10 @@
         "mainWidth": 390,
         "mainScrollWidth": 390
       },
-      "sha256": "6f1c3184cea2b3d2fa5dcae84352401bb0e125a81a0f16cd2f095b9148396518",
+      "sha256": "8b9390dc313afa183685c7558365110ffe9bbd714374ee01ed04eef0882323ec",
       "fullFile": "pwa-video-390x800-light-full.png",
       "fullHeight": 800,
-      "fullSha256": "6f1c3184cea2b3d2fa5dcae84352401bb0e125a81a0f16cd2f095b9148396518",
+      "fullSha256": "8b9390dc313afa183685c7558365110ffe9bbd714374ee01ed04eef0882323ec",
       "status": "automated-capture-pass"
     },
     {
@@ -7283,7 +7307,7 @@
         "mainWidth": 390,
         "mainScrollWidth": 390
       },
-      "sha256": "7071f852cfad042b91e4fe4c6f4218a3f2d12d99b795fe46d5b6367d8ce66011",
+      "sha256": "4edad747f1731d542124caeb594faaeb6e3cad468dc54f6be75d035599cedaba",
       "status": "automated-capture-pass"
     },
     {
@@ -7321,7 +7345,7 @@
         "mainWidth": 430,
         "mainScrollWidth": 430
       },
-      "sha256": "f8b0db55fccd40ea839982b7026a043a6908917f905ab63dc54335bfb1f0b89a",
+      "sha256": "e268cd82a15c4dea129a53cbdbaa9cde81c9c746935ddabdb5a7f765d04cbd66",
       "status": "automated-capture-pass"
     },
     {
@@ -8508,5 +8532,5 @@
     }
   ],
   "exitCode": 0,
-  "finishedAt": "2026-09-13T07:54:46.131Z"
+  "finishedAt": "2026-09-13T10:00:58.798Z"
 }

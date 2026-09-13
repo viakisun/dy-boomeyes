@@ -1,10 +1,10 @@
 {
-  "sourceSha": "65d7e6672fa44172c292c8c9cb1994e120cdf7a3",
+  "sourceSha": "76b0dbc7482f3a672b683c2010c0690be13b5b16",
   "workingTreeHash": "d2f59403ae774772909cf2cdefb0ac2f9dc83e7986e81bc91c7e5e7f5a9e19c8",
   "registryHash": "a85bfe8c3d89f71e23183796386de050e5d031620c1dad72f9b2731c8701e167",
-  "captureManifestSha256": "2bc7538f06b806d338ba05f52ea95962160fb9b682cb629956a94358df466244",
-  "captureManifest": "/Users/adminvia/devwork/_DY/boomeyes/docs/design/evidence/owner-implementation-65d7e667-2026-09-13T07-52-20.185Z/manifest.json",
-  "generatedAt": "2026-09-13T07:57:55.730073+00:00",
+  "captureManifestSha256": "3a4c93f7baaf1f2cebdfe98402a24672420eaa08c925d6c930eba7000ece5b31",
+  "captureManifest": "/Users/adminvia/devwork/_DY/boomeyes/docs/design/evidence/owner-implementation-76b0dbc7-2026-09-13T09-58-47.564Z/manifest.json",
+  "generatedAt": "2026-09-13T10:03:41.120513+00:00",
   "status": "generated-awaiting-visual-review",
   "customerReview": "not-performed",
   "visualReview": "pending",
@@ -222,7 +222,7 @@
       "app": "pwa",
       "captureKey": "pwa-video-390x800-light",
       "file": "screens/pwa-video-390x800-light.png",
-      "sha256": "6f1c3184cea2b3d2fa5dcae84352401bb0e125a81a0f16cd2f095b9148396518"
+      "sha256": "8b9390dc313afa183685c7558365110ffe9bbd714374ee01ed04eef0882323ec"
     },
     {
       "view": "documents",
@@ -455,7 +455,7 @@
     {
       "page": 15,
       "file": "rendered-pages/page-15.png",
-      "sha256": "83b252e59ebc020e6f5c67e182f42cdc91e7d8b2e43c46013b3ecaebef121292"
+      "sha256": "5982f5760ada7d825828127fa2c5c607e4c915b7d8dcb3cc9d5b46948e5f1361"
     },
     {
       "page": 16,
@@ -505,7 +505,7 @@
     {
       "page": 25,
       "file": "rendered-pages/page-25.png",
-      "sha256": "8d4e99238fd469f910e7133b52472effa4f13e0352a19cebb379fc1e132456c7"
+      "sha256": "b59172933c88d8e81432e0c76661a1132fb9fbc848c9c76c3a43ca42dcb09189"
     }
   ],
   "fontSha256": "876af2cd4854644e7f3e7feb2f688997fdb3343c6df6693611209c9dfb47ccec",
@@ -516,11 +516,11 @@
     },
     {
       "file": "owner-review.html",
-      "sha256": "fa34bc99ef46944646cb92930a8b89959b25a2b4046efcd5398a3a58724ac4de"
+      "sha256": "160c55fdbfcb63225e25ced262fb2694a79d3a675042aed254b7c1ab98524d9e"
     },
     {
       "file": "owner-review.pdf",
-      "sha256": "027e9fd14a366f37348ccdacea761b2d092bfcc78b8984089941df1c7c1a19b3"
+      "sha256": "bec4137c2b976acbc7d66bcfd4d10a889fb2cc84743d9bdf0c2bbbaf55970917"
     },
     {
       "file": "rendered-pages/index.html",
@@ -584,7 +584,7 @@
     },
     {
       "file": "rendered-pages/page-15.png",
-      "sha256": "83b252e59ebc020e6f5c67e182f42cdc91e7d8b2e43c46013b3ecaebef121292"
+      "sha256": "5982f5760ada7d825828127fa2c5c607e4c915b7d8dcb3cc9d5b46948e5f1361"
     },
     {
       "file": "rendered-pages/page-16.png",
@@ -624,7 +624,7 @@
     },
     {
       "file": "rendered-pages/page-25.png",
-      "sha256": "8d4e99238fd469f910e7133b52472effa4f13e0352a19cebb379fc1e132456c7"
+      "sha256": "b59172933c88d8e81432e0c76661a1132fb9fbc848c9c76c3a43ca42dcb09189"
     },
     {
       "file": "screens/pwa-alerts-390x800-light.png",
@@ -676,7 +676,7 @@
     },
     {
       "file": "screens/pwa-video-390x800-light.png",
-      "sha256": "6f1c3184cea2b3d2fa5dcae84352401bb0e125a81a0f16cd2f095b9148396518"
+      "sha256": "8b9390dc313afa183685c7558365110ffe9bbd714374ee01ed04eef0882323ec"
     },
     {
       "file": "screens/web-alerts-1280x842-light.png",
