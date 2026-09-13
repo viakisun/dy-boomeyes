@@ -222,6 +222,8 @@ export interface OwnerApi {
   alert(id: string): Promise<OwnerAlert>;
   markRead(id: string): Promise<void>;
   attach(deviceId: string, file: OwnerAttachment): Promise<OwnerDocument>;
+  /** 투입 요청에 호기를 배정한다(FR-026). N/N을 채우면 「배정 확정·회신」이 되어 계약 기간이 호기에 남는다. */
+  assign(requestId: string, deviceIds: string[]): Promise<OwnerRequest>;
   /** 원천이 바뀌면 알린다(시뮬레이터 틱). 반환값은 해제. 실 API에서는 실시간 채널이 맡는다 */
   subscribe?(handler: () => void): () => void;
 }
@@ -485,4 +487,55 @@ export function ownerFleetRows(devices: readonly OwnerDevice[], query: OwnerFlee
                 : (ownerAttentionRank(a) - ownerAttentionRank(b)) * dir;
       return by || a.unit - b.unit;
     });
+}
+
+// ── 계약 — 요청 · 후보 · 배정(시안 «확정 2026-09-12» · FR-026) ─────────────────────────
+/** 사양의 최소 붐 길이(m) — 'CPB 32m 이상' → 32. 숫자가 없으면 제한 없음(null). */
+export const ownerSpecMeters = (spec: string) => {
+  const m = /(\d+)\s*m/i.exec(spec);
+  return m ? Number(m[1]) : null;
+};
+/** 장비의 붐 길이 — 'DY CPB 32' → 32. */
+export const ownerBoomMeters = (model: string) => {
+  const m = /(\d+)\s*$/.exec(model.trim());
+  return m ? Number(m[1]) : null;
+};
+export interface OwnerCandidate {
+  device: OwnerDevice;
+  /** stored = 지금 보관 중 · expiring = 요청 시작 전에 계약이 끝난다 */
+  reason: 'stored' | 'expiring';
+  /** 비는 날 — 보관 중이면 null(지금 낼 수 있다) */
+  freeAt: string | null;
+}
+/**
+ * 「이 기간에 낼 수 있는 장비가 있나」의 답 — 보관 + 종료 임박(시안).
+ * 사양(최소 붐 길이)을 못 맞추는 장비는 후보가 아니다. 고장·점검 중인 장비도 뺀다.
+ */
+export function ownerCandidates(devices: readonly OwnerDevice[], request: OwnerRequest): OwnerCandidate[] {
+  const need = ownerSpecMeters(request.spec);
+  const start = Date.parse(request.from);
+  const out: OwnerCandidate[] = [];
+  for (const device of devices) {
+    if (device.fault || device.inspection) continue;
+    const boom = ownerBoomMeters(device.model);
+    if (need !== null && (boom === null || boom < need)) continue;
+    if (request.assigned.includes(device.id)) {
+      out.push({ device, reason: 'stored', freeAt: null });
+      continue;
+    }
+    if (device.deployment === 'stored') out.push({ device, reason: 'stored', freeAt: null });
+    else if (device.contract && Date.parse(device.contract.to) <= start)
+      out.push({ device, reason: 'expiring', freeAt: device.contract.to });
+  }
+  return out.sort((a, b) => (a.freeAt ?? '').localeCompare(b.freeAt ?? '') || a.device.unit - b.device.unit);
+}
+/**
+ * 고른 호기 수에 따른 다음 상태 — 하나라도 고르면 「후보 확인 시작」(new → assign),
+ * 필요 대수를 채우면 「배정 확정·회신」(assign → ship). 전이는 ssot machines.assignment가 정한다.
+ * new에서 한 번에 채우면 두 전이를 차례로 밟는다 — new → ship은 상태기계에 없다.
+ */
+export function ownerAssignNext(request: OwnerRequest, picked: readonly string[]): OwnerRequestState {
+  if (request.state !== 'new' && request.state !== 'assign') return request.state;
+  if (picked.length === 0) return 'new'; // 후보 부족으로 보류(assign → new) · new면 그대로
+  return picked.length >= request.count ? 'ship' : 'assign';
 }

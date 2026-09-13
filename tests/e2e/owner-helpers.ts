@@ -32,7 +32,7 @@ export const OWNER_PATHS = {
 } as const;
 // owner_demo에 등록됐지만 아직 만들지 않은 화면 목적(ssot/meta.yaml owner_demo_wave 위).
 // 여기 적힌 것은 「표식이 붙은 안내 화면」이어야 하고, 나머지는 실제 본문이어야 한다.
-export const OWNER_UNBUILT = ['requests', 'lease', 'drivers', 'driver-docs'] as const;
+export const OWNER_UNBUILT = ['lease', 'drivers', 'driver-docs'] as const;
 
 /** 알림은 좌측 메뉴에서 내려와 헤더의 종으로 들어왔다(시안 «결정 2026-09-12»). */
 export async function openAlerts(page: Page) {

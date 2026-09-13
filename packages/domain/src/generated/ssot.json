@@ -6322,7 +6322,7 @@
           "owner"
         ],
         "phase": 2,
-        "wave": 5,
+        "wave": 4,
         "default": "inbox",
         "states": [
           {
@@ -8043,7 +8043,7 @@
           "owner"
         ],
         "phase": 2,
-        "wave": 5,
+        "wave": 4,
         "default": "inbox",
         "states": [
           {
@@ -8299,7 +8299,7 @@
       },
       {
         "view": "requests",
-        "menu": 0,
+        "menu": 3,
         "label": "계약",
         "web": "B1-13",
         "pwa": "A4-03",

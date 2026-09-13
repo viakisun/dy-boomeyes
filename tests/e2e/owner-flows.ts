@@ -93,6 +93,47 @@ export function ownerFlows(app: OwnerApp) {
     await expect(device).not.toContainText('즉시 투입 가능');
   });
 
+  // 시안의 계약 — 요청을 받아 후보(보관 + 종료 임박)에서 호기를 배정한다(«확정 2026-09-12» · FR-026)
+  test('[B1-02] [FR-026] [AC-O07] request assignment fills N/N and writes the lease onto the unit', async ({
+    page,
+  }) => {
+    await startOwner(page, app);
+    await page.getByRole('navigation').getByRole('link', { name: '계약', exact: true }).click();
+    const screen = page.locator('[data-owner-requests]');
+    await expect(screen).toBeVisible();
+    await expect(screen.locator('[data-request]')).toHaveCount(6);
+    // 낼 수 있는 호기가 없는 요청 — 보유 기종이 32m뿐이라 40m 사양은 후보가 0이다
+    await screen.locator('[data-request="REQ-006"]').click();
+    await expect(page).toHaveURL(/request=REQ-006/);
+    await expect(screen.locator('[data-candidate]')).toHaveCount(0);
+    await expect(screen).toContainText('이 기간에 낼 수 있는 호기가 없습니다');
+    await screen.getByRole('button', { name: '요청 목록', exact: true }).click();
+    // 접수된 요청 — 후보는 보관 + 종료 임박에서 나오고 N/N을 채워야 확정할 수 있다
+    await screen.locator('[data-request="REQ-001"]').click();
+    await expect(screen.locator('[data-assign-count]')).toHaveText('0 / 3대');
+    const confirm = screen.getByRole('button', { name: '배정 확정 · 회신', exact: true });
+    await expect(confirm).toBeDisabled();
+    const candidates = screen.locator('[data-candidate]');
+    await expect(candidates.first()).toBeVisible();
+    const picks: string[] = [];
+    for (let i = 0; i < 3; i++) {
+      const row = candidates.nth(i);
+      picks.push((await row.getAttribute('data-candidate'))!);
+      await row.getByRole('button', { name: '배정', exact: true }).click();
+    }
+    await expect(screen.locator('[data-assign-count]')).toHaveText('3 / 3대');
+    await expect(confirm).toBeEnabled();
+    await confirm.click();
+    await expect(page.getByRole('status').filter({ hasText: '배정을 회신했습니다' })).toBeVisible();
+    // 확정은 요청 상태와 호기 계약을 함께 바꾼다 — 보유 장비가 같은 자료를 읽는다
+    await screen.getByRole('button', { name: '요청 목록', exact: true }).click();
+    await expect(screen.locator('[data-request="REQ-001"]')).toContainText('운송·설치');
+    await page.getByRole('navigation').getByRole('link', { name: '보유 장비', exact: true }).click();
+    await page.getByLabel('호기·현장 검색', { exact: true }).fill('대성건설');
+    const fleet = ownerHost(page, 'fleet');
+    for (const id of picks) await expect(fleet.locator(`[data-device="${id}"]`)).toHaveCount(1);
+  });
+
   // 시안의 보유 장비 — 표 하나 · 검색 1 · 필터 3축 · 현장별 묶어 보기(«확정 2026-09-12»)
   test('[B1-02] [FR-025] [AC-O07] fleet sorts by header, filters on three axes and groups by site', async ({
     page,

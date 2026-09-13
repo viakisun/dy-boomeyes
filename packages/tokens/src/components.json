@@ -837,6 +837,15 @@
     "note": "보유 전체 장비 검색·필터·상세 이동"
   },
   {
+    "name": "OwnerRequests",
+    "family": "Owner experience",
+    "platform": "both",
+    "ref": "시안 «소유주 업무 기획» 계약 · Trackunit Requests",
+    "variants": "요청 목록 · 배정(좌 요청 / 우 후보)",
+    "states": "default/empty(대기 요청 없음)/none(낼 수 있는 호기 없음)",
+    "note": "투입 요청을 받아 호기를 배정한다(FR-026 · «확정 2026-09-12»). 후보는 보관 + 종료 임박이고 N/N을 채우면 배정 확정·회신이 계약 기간을 호기에 남긴다. 웹은 한 화면, PWA는 두 단계(사용자 결정)."
+  },
+  {
     "name": "OwnerDetail",
     "family": "Owner experience",
     "platform": "both",

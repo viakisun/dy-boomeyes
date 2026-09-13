@@ -10,7 +10,7 @@
 | ref(원시) | 208 |
 | sys(시맨틱) | 309 |
 | cmp(컴포넌트) | 92 |
-| 컴포넌트 카탈로그 | 112 |
+| 컴포넌트 카탈로그 | 113 |
 | 대비 검사 | 94/94 통과 |
 
 | 산출물 | 용도 |
@@ -771,7 +771,7 @@ cmp 층은 sys만 참조한다(ref 직접 참조 금지 — 검사로 강제). �
 | `cmp.table.row-selected` | #e7f3fb | #e7f3fb | {sys.color.bg.selected} |  |
 | `cmp.table.header-fg` | #4a6879 | #4a6879 | {sys.color.fg.muted} |  |
 
-## 8. 컴포넌트 카탈로그 (112)
+## 8. 컴포넌트 카탈로그 (113)
 
 이름 PascalCase · prop 어휘 고정: `variant`(형태) · `tone`(색 의도: accent/neutral/info/success/warning/danger/progress) · `size`(sm/md/lg) · 상태 boolean(`disabled` `loading` `selected` `invalid`). 플랫폼 both = 같은 Svelte 컴포넌트가 밀도 토큰으로 두 플랫폼을 소화.
 
@@ -913,6 +913,7 @@ cmp 층은 sys만 참조한다(ref 직접 참조 금지 — 검사로 강제). �
 | **OwnerWorkspace** | both | V5 관제기능 · owner-experience | app web/pwa | loading/empty/error/offline/default | 역할·조회 상태와 목적별 화면 합성 |
 | **OwnerOverview** | both | V5 관제기능 · owner-experience | app web/pwa | loading/empty/error/offline/default | 배치 분포와 확인할 장비 |
 | **OwnerFleet** | both | V5 관제기능 · owner-experience | app web/pwa | loading/empty/error/offline/default | 보유 전체 장비 검색·필터·상세 이동 |
+| **OwnerRequests** | both | 시안 «소유주 업무 기획» 계약 · Trackunit Requests | 요청 목록 · 배정(좌 요청 / 우 후보) | default/empty(대기 요청 없음)/none(낼 수 있는 호기 없음) | 투입 요청을 받아 호기를 배정한다(FR-026 · «확정 2026-09-12»). 후보는 보관 + 종료 임박이고 N/N을 채우면 배정 확정·회신이 계약 기간을 호기에 남긴다. 웹은 한 화면, PWA는 두 단계(사용자 결정). |
 | **OwnerDetail** | both | V5 관제기능 · owner-experience | app web/pwa | loading/empty/error/offline/default | 호기 식별·계약·담당자·수신 정보 |
 | **EquipmentRow** | both | V5 관제기능 · owner-experience | layout columns/stacked · poster | loading/empty/error/offline/default | 미디어 · 식별 · 배치 Badge · 조건 StatusPill · 수신 · 계약 D-n · 빠른 행동 |
 | **AlertBell** | both | Samsara Alerts bell · Material menu dismiss | web 드롭다운 / PWA 전체 폭 시트 | empty/default · 미확인 배지 | 알림이 좌측 메뉴에서 내려와 헤더 종으로 들어온다(시안 «결정 2026-09-12») · 비모달 · pointerdown 바깥닫기 · Esc · 포커스 복귀 |

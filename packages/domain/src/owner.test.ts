@@ -1,6 +1,9 @@
 import { describe, expect, it } from 'vitest';
+import { canTransition } from './machines';
 import {
   OWNER_FLEET_DEFAULT,
+  ownerAssignNext,
+  ownerCandidates,
   ownerExpiryDays,
   ownerFleetRows,
   ownerFleetState,
@@ -10,6 +13,7 @@ import {
   type OwnerAlert,
   type OwnerDevice,
   type OwnerFleetQuery,
+  type OwnerRequest,
   type OwnerSite,
 } from './owner';
 
@@ -171,5 +175,59 @@ describe('[FR-025] 보유 장비 표 — 세 축 · 정렬', () => {
     expect(ids(q({ q: 'cpb-005' }))).toEqual(['CPB-005']);
     expect(ids(q({ q: '2호기' }))).toEqual(['CPB-002']);
     expect(ids(q({ q: '건설사' }))).toEqual(['CPB-002', 'CPB-001']);
+  });
+});
+
+describe('[FR-026] 계약 — 후보와 배정', () => {
+  const lease = (to: string) => ({ company: '건설사', from: '2026-01-01', to, installed: '2026-01-03' });
+  const request = (patch: Partial<OwnerRequest> = {}): OwnerRequest => ({
+    id: 'REQ-001',
+    ownerId: 'OWN-001',
+    siteName: '성수 2공구',
+    builder: '대성건설',
+    manager: { name: '윤안전', phone: '010-0000-0101' },
+    from: '2026-08-01',
+    to: '2026-11-30',
+    count: 2,
+    spec: 'CPB 32m 이상',
+    state: 'new',
+    assigned: [],
+    receivedAt: '2026-07-03T09:10:00+09:00',
+    ...patch,
+  });
+  const fleet = [
+    device('CPB-001', 'SITE-A', { contract: lease('2026-12-31') }), // 기간이 겹친다
+    device('CPB-002', 'SITE-D', { deployment: 'stored', connection: 'detached' }), // 보관
+    device('CPB-003', 'SITE-A', { contract: lease('2026-07-25') }), // 요청 시작 전에 끝난다
+    device('CPB-004', 'SITE-D', { deployment: 'stored', fault: '유압 이상' }), // 보관이지만 고장
+    device('CPB-005', 'SITE-D', { deployment: 'stored', model: 'DY CPB 28' }), // 사양 미달
+  ];
+  it('후보는 보관 + 종료 임박이고 고장·사양 미달은 빠진다', () => {
+    expect(ownerCandidates(fleet, request()).map((c) => [c.device.id, c.reason])).toEqual([
+      ['CPB-002', 'stored'],
+      ['CPB-003', 'expiring'],
+    ]);
+    // 사양 제한이 없으면 28m도 후보다
+    expect(ownerCandidates(fleet, request({ spec: 'CPB 전 기종' })).map((c) => c.device.id)).toEqual([
+      'CPB-002',
+      'CPB-005',
+      'CPB-003',
+    ]);
+    // 낼 수 있는 장비가 없는 요청(시안의 «기간에 낼 수 있는 호기 없음»)
+    expect(ownerCandidates(fleet, request({ spec: 'CPB 40m 이상' }))).toEqual([]);
+  });
+  it('고른 수가 다음 상태를 정하고 그 전이는 ssot machines.assignment에 있다', () => {
+    const r = request();
+    expect(ownerAssignNext(r, [])).toBe('new');
+    expect(ownerAssignNext(r, ['CPB-002'])).toBe('assign');
+    expect(ownerAssignNext(r, ['CPB-002', 'CPB-003'])).toBe('ship');
+    // 확정된 뒤에는 이 화면이 상태를 되돌리지 않는다
+    expect(ownerAssignNext(request({ state: 'ship' }), [])).toBe('ship');
+    expect(ownerAssignNext(request({ state: 'done' }), ['CPB-002'])).toBe('done');
+    // 나오는 전이는 모두 상태기계에 실존해야 한다
+    expect(canTransition('assignment', 'new', 'assign')).toBe(true);
+    expect(canTransition('assignment', 'assign', 'ship')).toBe(true);
+    expect(canTransition('assignment', 'assign', 'new')).toBe(true);
+    expect(canTransition('assignment', 'new', 'ship')).toBe(false);
   });
 });

@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+  ownerCandidates,
   OWNER_DOC_KINDS,
   OWNER_REQUEST_STATES,
   ownerMatches,
@@ -222,9 +223,14 @@ describe('[FR-025] 배치·이상·정보 시각의 독립성', () => {
       expect(ev.bbox).not.toBeNull();
     }
   });
-  it('투입 요청은 5단계가 한 번씩 나오고 배정 확정 전에는 호기가 비어 있다', async () => {
+  it('투입 요청은 5단계가 모두 나오고 배정 확정 전에는 호기가 비어 있다', async () => {
     const s = await make().snapshot();
-    expect(s.requests.map((r) => r.state)).toEqual([...OWNER_REQUEST_STATES]);
+    expect(s.requests.slice(0, 5).map((r) => r.state)).toEqual([...OWNER_REQUEST_STATES]);
+    expect(new Set(s.requests.map((r) => r.state))).toEqual(new Set(OWNER_REQUEST_STATES));
+    // 낼 수 있는 호기가 없는 요청이 하나 있다 — 화면의 «기간에 낼 수 있는 호기 없음»이 실제 자료에서 나온다
+    const none = s.requests.find((r) => r.id === 'REQ-006')!;
+    expect(ownerCandidates(s.devices, none)).toEqual([]);
+    expect(ownerCandidates(s.devices, { ...none, spec: 'CPB 32m 이상' }).length).toBeGreaterThan(0);
     for (const r of s.requests) {
       expect(r.count).toBeGreaterThan(0);
       expect(r.manager.phone).toMatch(/^010-/);
@@ -234,6 +240,39 @@ describe('[FR-025] 배치·이상·정보 시각의 독립성', () => {
       if (r.state === 'run' || r.state === 'done') expect(r.assigned).toHaveLength(r.count);
       for (const id of r.assigned) expect(s.devices.some((d) => d.id === id)).toBe(true);
     }
+  });
+  it('배정은 후보 안에서만 되고 N/N을 채우면 계약 기간이 호기에 남는다', async () => {
+    const api = make();
+    const before = await api.snapshot();
+    const target = before.requests.find((r) => r.state === 'new')!;
+    const pool = ownerCandidates(before.devices, target);
+    expect(pool.length).toBeGreaterThanOrEqual(target.count);
+    // 후보가 아닌 호기는 배정되지 않는다 — 투입 중이고 계약이 남은 장비
+    const busy = before.devices.find((d) => !pool.some((c) => c.device.id === d.id))!;
+    await expect(api.assign(target.id, [busy.id])).rejects.toThrow(/후보가 아닌/);
+    // 하나만 고르면 「후보 확인 시작」 — 아직 확정이 아니라 계약은 비어 있다
+    const picked = pool.slice(0, target.count).map((c) => c.device.id);
+    const partial = await api.assign(target.id, picked.slice(0, 1));
+    expect(partial.state).toBe('assign');
+    expect((await api.device(picked[0]!)).contract).toBeNull();
+    // 필요 대수를 채우면 확정되고 그 기간이 호기에 남는다(보유 장비·운영 현황이 같은 자료를 읽는다)
+    const done = await api.assign(target.id, picked);
+    expect(done.state).toBe('ship');
+    expect(done.assigned).toEqual(picked);
+    for (const id of picked)
+      expect((await api.device(id)).contract).toMatchObject({ company: target.builder, to: target.to });
+    // 필요 대수를 넘겨 고를 수 없다
+    await expect(
+      api.assign(target.id, [...picked, ...pool.slice(target.count, target.count + 1).map((c) => c.device.id)]),
+    ).rejects.toThrow(/필요 대수/);
+  });
+  it('남의 요청에는 배정할 수 없다', async () => {
+    const b = await make(B).snapshot();
+    const mine = await make().snapshot();
+    expect(b.requests.length).toBeGreaterThan(0);
+    // A 계정으로 B의 요청 id를 부르면 조회 자체가 막힌다(id를 알아도 소용없다)
+    await expect(make().assign(b.requests[0]!.id, [])).rejects.toThrow(/조회할 수 없습니다/);
+    expect(mine.requests.some((r) => r.id === b.requests[0]!.id)).toBe(false);
   });
   it('운전자 명단의 오늘 배정은 호기 축과 같은 사람을 가리킨다', async () => {
     const s = await make().snapshot();

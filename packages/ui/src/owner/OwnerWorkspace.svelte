@@ -15,6 +15,7 @@
   } from '@boomeyes/domain';
   import OwnerOverview from './OwnerOverview.svelte';
   import OwnerFleet from './OwnerFleet.svelte';
+  import OwnerRequests from './OwnerRequests.svelte';
   import OwnerDetail from './OwnerDetail.svelte';
   import OwnerDocuments from './OwnerDocuments.svelte';
   import OwnerAlerts from './OwnerAlerts.svelte';
@@ -142,6 +143,7 @@
       />
     {:else if view === 'overview'}<OwnerOverview {...viewProps} {map} {live} />
     {:else if view === 'fleet'}<OwnerFleet {...viewProps} />
+    {:else if view === 'requests'}<OwnerRequests {...viewProps} />
     {:else if view === 'detail'}<OwnerDetail {...viewProps} {map} />
     {:else if view === 'documents'}<OwnerDocuments {...viewProps} />
     {:else if view === 'alerts'}<OwnerAlerts {...viewProps} />

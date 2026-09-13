@@ -1,6 +1,9 @@
 import {
   OWNER_CLOCK,
   OWNER_UPLOAD_LIMIT,
+  ownerAssignNext,
+  ownerCandidates,
+  transition,
   type OwnerAiEvent,
   type OwnerApi,
   type OwnerCamera,
@@ -249,6 +252,22 @@ const OWNER_REQUESTS: OwnerRequest[] = [
     assigned: ['CPB-082'],
     receivedAt: '2026-02-14T13:30:00+09:00',
   },
+  {
+    // 낼 수 있는 호기가 없는 요청 — 보유 기종이 32m뿐이라 40m 사양을 아무도 못 맞춘다.
+    // 시안의 «기간에 낼 수 있는 호기 없음»을 화면이 실제로 보이려면 이런 요청이 하나 있어야 한다.
+    id: 'REQ-006',
+    ownerId: 'OWN-001',
+    siteName: '김포 데이터센터',
+    builder: '새길건설',
+    manager: { name: '정현장', phone: '010-0000-0005' },
+    from: '2026-09-01',
+    to: '2027-03-31',
+    count: 2,
+    spec: 'CPB 40m 이상',
+    state: 'new',
+    assigned: [],
+    receivedAt: '2026-07-03T08:05:00+09:00',
+  },
 ];
 /** 운전자 6명 — 오늘 배정은 장비 축(device.driver)이 원천이고 여기서 되읽는다.
  *  두 곳이 따로 정하면 호기 화면과 명단이 다른 사람을 보인다. */
@@ -377,6 +396,13 @@ export function createOwnerApi(
     device(item.deviceId);
     return item;
   };
+  // 요청은 장비가 아니라 소유주에 매인다 — related(deviceId 경유)로는 경계를 지킬 수 없다
+  const ownedRequest = (id: string) => {
+    guard();
+    const found = source.requests.find((r) => r.id === id && r.ownerId === owner);
+    if (!found) throw new Error('요청한 자료를 조회할 수 없습니다.');
+    return found;
+  };
   // eslint-disable-next-line svelte/prefer-svelte-reactivity -- 비반응 핸들러 집합
   const handlers = new Set<() => void>();
   const wait = async () => {
@@ -452,6 +478,32 @@ export function createOwnerApi(
       };
       source.documents.push(doc);
       return clone(doc);
+    },
+    async assign(requestId, deviceIds) {
+      await wait();
+      const request = ownedRequest(requestId);
+      if (options.offline?.()) throw new Error('오프라인에서는 배정할 수 없습니다. 연결 후 다시 시도해 주세요.');
+      const mine = source.devices.filter((d) => d.ownerId === owner);
+      const pool = new Set(ownerCandidates(mine, request).map((c) => c.device.id));
+      const picked = deviceIds.filter((id) => pool.has(id));
+      if (picked.length !== deviceIds.length) throw new Error('후보가 아닌 호기는 배정할 수 없습니다.');
+      if (picked.length > request.count) throw new Error(`필요 대수는 ${request.count}대입니다.`);
+      request.assigned = picked;
+      // new에서 바로 확정되면 「후보 확인 시작 → 배정 확정」 두 전이를 차례로 밟는다 —
+      // ssot machines.assignment에 new → ship은 없다(transition이 어긋난 경로를 막는다)
+      const next = ownerAssignNext(request, picked);
+      for (const step of next === 'ship' && request.state === 'new' ? (['assign', 'ship'] as const) : [next])
+        request.state = transition('assignment', request.state, step);
+      // 확정되면 계약 기간이 호기에 남는다 — 보유 장비·운영 현황이 같은 자료를 읽는다(시안)
+      if (request.state === 'ship')
+        for (const id of picked)
+          device(id).contract = {
+            company: request.builder,
+            from: request.from,
+            to: request.to,
+            installed: request.from,
+          };
+      return clone(request);
     },
     subscribe(handler) {
       handlers.add(handler);

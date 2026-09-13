@@ -728,7 +728,7 @@ screens:
   route: /a4/requests
   roles: *id004
   phase: 2
-  wave: 5
+  wave: 4
   default: inbox
   states:
   - id: inbox
@@ -1822,7 +1822,7 @@ screens:
   roles:
     - owner
   phase: 2
-  wave: 5
+  wave: 4
   default: inbox
   states:
     - id: inbox
@@ -1959,8 +1959,7 @@ owner_demo:
   # 메뉴는 운영 현황 · 보유 장비 · 계약 셋이 목표다(시안 «결정 2026-09-12»).
   # 이상·점검은 헤더의 종 알림 패널(AlertBell)이 서면서 menu 0으로 내려왔고, 장비 서류도
   # 함께 내려왔다 — 화면 자체는 남아 종 패널·호기 화면에서 도달한다.
-  # 계약(requests)은 화면(B1-13·A4-03)이 구현되면 menu 3으로 올린다. 그 전에 올리면
-  # 「준비 중」 자리 화면이 메뉴에 걸린다.
+  # 계약(requests)은 B1-13·A4-03을 만들면서 웨이브 4로 내려와 menu 3이 됐다(2026-09-13).
   - view: entry
     menu: 0
     label: 소유주 데모
@@ -1990,7 +1989,7 @@ owner_demo:
       - H71
       - H77
   - view: requests
-    menu: 0
+    menu: 3
     label: 계약
     web: B1-13
     pwa: A4-03

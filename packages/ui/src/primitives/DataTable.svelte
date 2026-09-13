@@ -19,6 +19,7 @@
     onsort,
     stickyHead = false,
     rowAttrs,
+    isSelected,
     class: cls,
   }: {
     columns: Column[];
@@ -37,6 +38,8 @@
     stickyHead?: boolean;
     /** 행에 붙일 데이터 속성 — 표와 카드가 같은 선택자로 잡히게(e2e·캡처) */
     rowAttrs?: (row: T) => Record<string, string>;
+    /** 여러 행을 고르는 표(배정 후보)에서 선택 여부 — 없으면 selectedKey 하나만 본다 */
+    isSelected?: (row: T) => boolean;
     class?: string;
   } = $props();
   const KIND: Record<ColumnKind, { th: string; td: string }> = {
@@ -110,10 +113,10 @@
             'border-border-subtle border-b last:border-b-0',
             dense ? 'h-size-row-dense' : 'h-size-row-default',
             onselect && cx('hover:bg-ui cursor-pointer', FOCUS),
-            selectedKey === rowKey(row) && 'bg-selected',
+            (isSelected ? isSelected(row) : selectedKey === rowKey(row)) && 'bg-selected',
           )}
           tabindex={onselect ? 0 : undefined}
-          aria-selected={onselect ? selectedKey === rowKey(row) : undefined}
+          aria-selected={isSelected ? isSelected(row) : onselect ? selectedKey === rowKey(row) : undefined}
           onclick={() => pick(row)}
           onkeydown={(e) => onkey(e, row)}
           {...rowAttrs?.(row)}
