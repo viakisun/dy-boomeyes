@@ -71,6 +71,12 @@ def find_font(explicit):
 
 # 단계가 있는 화면 목적은 단계마다 본문 한 쪽을 갖는다 — 라벨 뒤에 붙일 이름(없으면 목적 라벨 그대로)
 LEVEL_LABEL = {"nation": "전국", "site": "현장", "unit": "호기"}
+# 첫 단계는 원천(owner_demo)의 질문을 쓰고, 더 들어간 단계는 그 단계에서 새로 생기는 질문을 쓴다.
+# 세 쪽에 같은 질문을 세 번 적으면 단계가 나뉜 뜻이 사라진다.
+LEVEL_QUESTION = {
+    ("overview", "site"): "이 현장의 호기는 어디에 어떤 상태로 있나요?",
+    ("overview", "unit"): "이 호기는 지금 어떤 상태이고 누가 맡고 있나요?",
+}
 
 
 def context(repo, views, capture):
@@ -99,6 +105,7 @@ def context(repo, views, capture):
         next_label = (f"{next_step[0]['label']} — {LEVEL_LABEL[next_step[1]]}"
                       if (next_step[0]["view"], next_step[1]) in NARRATION else next_step[0]["label"])
         result.append({**view, "level": level, "label": label, "number": index + 1, "action": action, "talk": talk,
+                       "question": LEVEL_QUESTION.get((view["view"], level), view["question"]),
                        "next": f"다음 화면: {next_label}", "seconds": seconds,
                        "start": elapsed, "end": elapsed + seconds,
                        "web_shot": shots[(view["view"], level, "web", 1280, 842, "light")],
