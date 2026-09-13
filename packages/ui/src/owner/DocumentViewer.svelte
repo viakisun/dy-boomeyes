@@ -47,9 +47,14 @@
       </div>
     </div>
     <div class="gap-inline-sm flex flex-wrap">
-      <Button variant="outline" tone="neutral" href={record.url} target="_blank" rel="noopener noreferrer"
-        >원문 새 창 열기 <ExternalLink class="size-size-icon-sm" aria-hidden="true" /></Button
-      >
+      <!-- 원문이 없는 서류는 목록·만료만 있고 파일이 없다 — 열 수 없는 버튼을 보이지 않는다 -->
+      {#if record.url}
+        <Button variant="outline" tone="neutral" href={record.url} target="_blank" rel="noopener noreferrer"
+          >원문 새 창 열기 <ExternalLink class="size-size-icon-sm" aria-hidden="true" /></Button
+        >
+      {:else}
+        <p class="text-body-sm text-fg-muted">원문이 등록되지 않았습니다. 발급일과 만료일만 확인할 수 있습니다.</p>
+      {/if}
       {#if onclose}<Button variant="ghost" tone="neutral" onclick={onclose}>서류 목록으로</Button>{/if}
     </div>
   </div>

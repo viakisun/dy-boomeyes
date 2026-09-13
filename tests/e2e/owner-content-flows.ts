@@ -64,7 +64,10 @@ export function ownerContentFlows(app: OwnerApp) {
     await page.goto(`${paths.documents}?device=CPB-001`);
     const host = ownerHost(page, 'documents');
     const documents = host.locator('button[data-doc]');
-    await expect(documents).toHaveCount(2);
+    // 차량 서류 종류가 늘어도 흔들리지 않게, 총수가 아니라 「세션 첨부」 유무로 본다
+    const attached = host.locator('button[data-doc^="CPB-001-SESSION-"]');
+    await expect(documents.first()).toBeVisible();
+    await expect(attached).toHaveCount(0);
     await page.getByLabel('시연 파일 선택', { exact: true }).setInputFiles(CERTIFICATE);
     const dialog = page.getByRole('dialog', { name: '첨부 미리보기', exact: true });
     await expect(dialog).toBeVisible();
@@ -74,7 +77,7 @@ export function ownerContentFlows(app: OwnerApp) {
     expect(await preview.getAttribute('src')).toMatch(/^blob:/);
     await dialog.getByRole('button', { name: '첨부 확정', exact: true }).click();
     await expect(dialog).toHaveCount(0);
-    await expect(documents).toHaveCount(3);
+    await expect(attached).toHaveCount(1);
     await expect(page.getByRole('status').filter({ hasText: '시연 파일을 첨부했습니다' })).toBeVisible();
     const viewer = host.locator('[data-document-viewer]');
     await expect(viewer).toHaveAttribute('data-doc', /^CPB-001-SESSION-/);
@@ -107,7 +110,7 @@ export function ownerContentFlows(app: OwnerApp) {
     await expect(page.getByRole('alert').filter({ hasText: '원문을 읽을 수 없습니다' })).toBeVisible();
     await expect(page.getByRole('dialog', { name: '첨부 미리보기', exact: true })).toHaveCount(0);
     await expect(page.getByRole('button', { name: '첨부 확정', exact: true })).toHaveCount(0);
-    await expect(host.locator('button[data-doc]')).toHaveCount(2);
+    await expect(host.locator('button[data-doc*="-SESSION-"]')).toHaveCount(0);
     await expect(page.getByRole('status').filter({ hasText: '시연 파일을 첨부했습니다' })).toHaveCount(0);
     // A usable file can be selected after the rejection; the error does not strand the form.
     await input.setInputFiles(CERTIFICATE);
@@ -115,7 +118,7 @@ export function ownerContentFlows(app: OwnerApp) {
     await expect(dialog).toBeVisible();
     await loadedOriginal(dialog.getByRole('img'));
     await dialog.getByRole('button', { name: '취소', exact: true }).click();
-    await expect(host.locator('button[data-doc]')).toHaveCount(2);
+    await expect(host.locator('button[data-doc*="-SESSION-"]')).toHaveCount(0);
   });
 
   test('[FR-016] [AC-O10] [AC-O14] failed original image request has an honest error and retries the same document', async ({

@@ -54,7 +54,10 @@ export function ownerResourcesFlows(app: OwnerApp) {
     await openDocuments(page);
     const host = ownerHost(page, 'documents');
     const documents = host.locator('button[data-doc]');
-    await expect(documents).toHaveCount(2);
+    // 차량 서류 종류가 늘어도 흔들리지 않게 세션 첨부 유무로 본다
+    const attached = host.locator('button[data-doc*="-SESSION-"]');
+    await expect(documents.first()).toBeVisible();
+    await expect(attached).toHaveCount(0);
     await expect
       .poll(() =>
         host.locator('[data-document-viewer] img').evaluate((image) => (image as HTMLImageElement).naturalWidth),
@@ -104,7 +107,7 @@ export function ownerResourcesFlows(app: OwnerApp) {
       await expect(dialog).toHaveCount(0);
       await expect.poll(async () => (await resources()).activeUrls).toEqual([]);
       await expect.poll(async () => (await resources()).activeWorkers).toEqual([]);
-      await expect(documents).toHaveCount(2);
+      await expect(attached).toHaveCount(0);
       observations.push({ visit, state: await resources() });
     }
     await input.setInputFiles('packages/mock/src/assets/owner/cpb-001-certificate.pdf');
@@ -116,7 +119,7 @@ export function ownerResourcesFlows(app: OwnerApp) {
     expect(pending.activeUrls.length).toBeGreaterThanOrEqual(2);
     await dialog.getByRole('button', { name: '첨부 확정', exact: true }).dblclick();
     await expect(dialog).toHaveCount(0);
-    await expect(documents).toHaveCount(3);
+    await expect(attached).toHaveCount(1);
     await expect(documents.filter({ hasText: 'cpb-001-certificate.pdf' })).toHaveCount(1);
     const original = host.locator('[data-document-viewer] img');
     await expect
@@ -129,7 +132,7 @@ export function ownerResourcesFlows(app: OwnerApp) {
     await page.getByRole('navigation').getByRole('link', { name: '보유 장비', exact: true }).click();
     await expect(ownerHost(page, 'fleet')).toBeVisible();
     await openDocuments(page);
-    await expect(documents).toHaveCount(3);
+    await expect(attached).toHaveCount(1);
     await expect(documents.filter({ hasText: 'cpb-001-certificate.pdf' })).toHaveCount(1);
     await page.getByRole('button', { name: '로그아웃', exact: true }).click();
     await expect(page.getByRole('button', { name: '데모 계정으로 로그인', exact: true })).toBeVisible();

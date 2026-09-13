@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { ownerMatches, ownerStrip, ownerSummary, type Session } from '@boomeyes/domain';
+import { OWNER_DOC_KINDS, ownerMatches, ownerStrip, ownerSummary, type Session } from '@boomeyes/domain';
 import { createOwnerApi, seedOwner } from './owner';
 
 const A = { role: 'owner', ownerId: 'OWN-001' } as const;
@@ -37,8 +37,11 @@ describe('[FR-024] 소유주 자료 경계', () => {
     expect(sa.sites).toHaveLength(13);
     expect(sb.devices.map((d) => d.id)).toEqual(['CPB-101']);
     expect(sb.sites.map((s) => s.id)).toEqual(['SITE-OTHER']);
-    expect(sa.documents).toHaveLength(10);
-    expect(sb.documents).toHaveLength(2);
+    // 서류 수는 종류가 늘면 바뀐다 — 지킬 값은 「내 장비의 것만 보인다」는 경계다
+    const idsA = new Set(sa.devices.map((d) => d.id));
+    expect(sa.documents.length).toBeGreaterThan(0);
+    expect(sa.documents.every((doc) => idsA.has(doc.deviceId))).toBe(true);
+    expect(new Set(sb.documents.map((doc) => doc.deviceId))).toEqual(new Set(['CPB-101']));
     expect(sb.alerts.map((a) => a.id)).toEqual(['CPB-101-FAULT']);
     for (const [api, prefix] of [
       [a, 'CPB-101'],
@@ -67,7 +70,7 @@ describe('[FR-024] 소유주 자료 경계', () => {
     first.documents.length = 0;
     const next = await api.snapshot();
     expect(next.devices[0]!.site).toBe('마포 주상복합 신축');
-    expect(next.documents).toHaveLength(10);
+    expect(next.documents.every((doc) => doc.deviceId.startsWith('CPB-'))).toBe(true);
   });
 });
 
@@ -159,6 +162,44 @@ describe('[FR-025] 배치·이상·정보 시각의 독립성', () => {
     const low = s.devices.find((d) => d.errorCode === 'E-021');
     if (low) expect(low.telemetry.voltageV).toBe(low.voltage);
   });
+  it('호기 카메라는 6대(바디캠 3 · CCTV 2 · AI 1)이고 전부 시연 클립임을 밝힌다', async () => {
+    const s = await make().snapshot();
+    const d = s.devices.find((x) => x.connection === 'current')!;
+    const cams = s.cameras.filter((c) => c.deviceId === d.id);
+    expect(cams.map((c) => c.label)).toEqual(['바디캠 A', '바디캠 B', '바디캠 C', 'CCTV 1', 'CCTV 2', 'AI CCTV']);
+    expect(cams.filter((c) => c.kind === 'body')).toHaveLength(3);
+    expect(cams.filter((c) => c.kind === 'cctv')).toHaveLength(2);
+    expect(cams.filter((c) => c.kind === 'ai')).toHaveLength(1);
+    // 실 스트림인 척하지 않는다 — 소스가 둘뿐이라 여섯 타일이 같은 클립을 돈다
+    expect(cams.every((c) => c.sample)).toBe(true);
+    expect(new Set(cams.map((c) => c.url)).size).toBe(2);
+    // 보관·두절 장비의 카메라는 가용하지 않다
+    const stored = s.devices.find((x) => x.deployment === 'stored')!;
+    expect(s.cameras.filter((c) => c.deviceId === stored.id).every((c) => !c.available)).toBe(true);
+  });
+  it('차량 서류는 7종이고 원문 없는 것은 목록·만료만 갖는다', async () => {
+    const s = await make().snapshot();
+    const docs = s.documents.filter((d) => d.deviceId === 'CPB-001' && !d.sessionOnly);
+    expect(docs.map((d) => d.kind)).toEqual([...OWNER_DOC_KINDS]);
+    // 실 파일이 있는 둘만 원문을 갖고 나머지는 null — 없는 파일을 지어내지 않는다
+    expect(docs.filter((d) => d.url !== null).map((d) => d.kind)).toEqual(['제작증', '비파괴 검사 성적서']);
+    for (const doc of docs.filter((d) => d.url === null)) expect(doc.issuedAt).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+    // 운전자 자격증은 호기 서류가 아니다 — 사람 축으로 옮겼다(시안 «확정 2026-09-12»)
+    expect(docs.some((d) => String(d.kind).includes('자격'))).toBe(false);
+  });
+  it('AI 경고는 그 시각 배정 운전자를 함께 기록한다', async () => {
+    const s = await make().snapshot();
+    expect(s.aiEvents.length).toBeGreaterThan(0);
+    for (const ev of s.aiEvents) {
+      const device = s.devices.find((d) => d.id === ev.deviceId)!;
+      expect(device.connection).toBe('current');
+      // 사람 문제이므로 운전자를 남긴다(FR-027 · 시안 «확정 2026-09-12»)
+      expect(ev.driver).toEqual(device.driver ? { id: device.driver.id, name: device.driver.name } : null);
+      expect(ev.driver).not.toBeNull();
+      expect(s.cameras.some((c) => c.id === ev.cameraId && c.kind === 'ai')).toBe(true);
+      expect(ev.bbox).not.toBeNull();
+    }
+  });
   it('오늘 운전자는 투입 장비에만 배정된다', async () => {
     const s = await make().snapshot();
     for (const d of s.devices)
@@ -232,8 +273,9 @@ describe('[FR-016] 시연 첨부와 재시도', () => {
       previewUrl: 'blob:preview',
       sessionOnly: true,
     });
-    expect((await api.snapshot()).documents).toHaveLength(11);
-    expect((await make().snapshot()).documents).toHaveLength(10);
+    // 첨부는 그 세션에만 한 건 늘어난다 — 총수가 아니라 증가분과 격리를 본다
+    const base = (await make().snapshot()).documents.length;
+    expect((await api.snapshot()).documents).toHaveLength(base + 1);
   });
   it('오프라인·크기 초과·원문 주소 부적합은 성공으로 기록하지 않는다', async () => {
     const offline = createOwnerApi(A, { latencyMs: 0, offline: () => true });
@@ -242,7 +284,8 @@ describe('[FR-016] 시연 첨부와 재시도', () => {
     const api = make();
     await expect(api.attach('CPB-001', { ...file, size: 11 * 1024 * 1024 })).rejects.toThrow();
     await expect(api.attach('CPB-001', { ...file, url: 'https://example.invalid' })).rejects.toThrow();
-    expect((await api.snapshot()).documents).toHaveLength(10);
+    // 실패한 첨부는 한 건도 남기지 않는다
+    expect((await api.snapshot()).documents.filter((doc) => doc.sessionOnly)).toEqual([]);
   });
   it('조회 오류 뒤 재시도는 실제 자료를 반환한다', async () => {
     const api = createOwnerApi(A, { error: true, latencyMs: 0 });

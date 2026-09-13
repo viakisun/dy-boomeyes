@@ -1,13 +1,16 @@
 import {
   OWNER_CLOCK,
   OWNER_UPLOAD_LIMIT,
+  type OwnerAiEvent,
   type OwnerApi,
+  type OwnerCamera,
   type OwnerDataset,
+  type OwnerDevice,
   type OwnerDocument,
   type OwnerSnapshot,
   type Session,
 } from '@boomeyes/domain';
-import { LOOP_MP4, LOOP_SEC, STILL } from '@boomeyes/video/assets';
+import { LOOP_MP4, LOOP_SEC, STILL, STILL_BBOX } from '@boomeyes/video/assets';
 import { OWNER_ASSETS } from './assets/owner';
 import { OWNER_SITES, ownerFleet } from './owner-fleet';
 import { createOwnerSim, type OwnerSim } from './owner-sim';
@@ -80,6 +83,20 @@ export function seedOwner(dataset: OwnerDataset = 'owner'): OwnerSnapshot {
         expiresAt: '2027-06-20',
         sessionOnly: false,
       },
+      // 나머지 5종은 시연 세트에 실 파일이 없다 — 목록·만료는 보이되 원문은 「미등록」으로 남긴다.
+      // 없는 파일을 지어내지 않는다(원본 없는 원문을 고객에게 보이지 않는다).
+      ...PAPER_ONLY.map((paper) => ({
+        id: `${d.id}-${paper.slug}`,
+        deviceId: d.id,
+        title: `${d.unit}호기 ${paper.kind}`,
+        filename: `${d.id}-${paper.slug}.pdf`,
+        kind: paper.kind,
+        type: 'application/pdf' as const,
+        url: null,
+        issuedAt: paper.issuedAt,
+        expiresAt: paper.expiresAt(d.unit),
+        sessionOnly: false,
+      })),
     ];
   });
   return {
@@ -136,22 +153,82 @@ export function seedOwner(dataset: OwnerDataset = 'owner'): OwnerSnapshot {
           ]
         : []),
     ]),
-    cameras: devices.flatMap((d) =>
-      (['pour', 'install'] as const).map((purpose) => ({
-        id: `${d.id}-${purpose}`,
-        deviceId: d.id,
-        purpose,
-        label: purpose === 'pour' ? '타설 위치' : '마스트 설치',
-        available: d.connection === 'current',
-        url: LOOP_MP4.front,
-        poster: STILL.front,
-        durationSec: LOOP_SEC,
-        operatingDay: '2026-07-03',
-        recordedAt: '2026-07-03T09:30:00+09:00',
-      })),
-    ),
+    cameras: devices.flatMap((d) => ownerCameras(d)),
+    aiEvents: devices.flatMap((d) => ownerAiEvents(d)),
   };
 }
+/** 호기 카메라 6 — 바디캠 A·B·C · CCTV 1·2 · AI CCTV(시안 «확정 2026-09-12» · FR-042 · DISC-004).
+ *  시연 영상 소스는 front·boom 둘뿐이라 여섯 타일이 같은 클립을 돌린다 — sample로 그 사실을 남기고
+ *  화면이 「실시간 예시 · 시연 클립」으로 밝힌다(실 스트림인 척하지 않는다). */
+const CAMERA_SPEC = [
+  { slot: 'body-a', kind: 'body', label: '바디캠 A', purpose: 'install' },
+  { slot: 'body-b', kind: 'body', label: '바디캠 B', purpose: 'install' },
+  { slot: 'body-c', kind: 'body', label: '바디캠 C', purpose: 'install' },
+  { slot: 'cctv-1', kind: 'cctv', label: 'CCTV 1', purpose: 'pour' },
+  { slot: 'cctv-2', kind: 'cctv', label: 'CCTV 2', purpose: 'pour' },
+  { slot: 'ai', kind: 'ai', label: 'AI CCTV', purpose: 'pour' },
+] as const;
+function ownerCameras(d: OwnerDevice): OwnerCamera[] {
+  const person = AI_EVENT_UNITS.has(d.unit);
+  return CAMERA_SPEC.map((spec) => ({
+    id: `${d.id}-${spec.slot}`,
+    deviceId: d.id,
+    purpose: spec.purpose,
+    kind: spec.kind,
+    label: spec.label,
+    available: d.connection === 'current',
+    url: spec.kind === 'ai' ? LOOP_MP4.boom : LOOP_MP4.front,
+    poster: spec.kind === 'ai' ? (person ? STILL['boom-person'] : STILL.boom) : STILL.front,
+    sample: true,
+    durationSec: LOOP_SEC,
+    operatingDay: '2026-07-03',
+    recordedAt: '2026-07-03T09:30:00+09:00',
+  }));
+}
+/** AI 경고는 몇 호기에만 둔다 — 모든 호기가 경고를 내면 시연에서 무엇을 봐야 할지 알 수 없다 */
+const AI_EVENT_UNITS = new Set([1, 62]);
+function ownerAiEvents(d: OwnerDevice): OwnerAiEvent[] {
+  if (!AI_EVENT_UNITS.has(d.unit) || d.connection !== 'current') return [];
+  return [
+    {
+      id: `${d.id}-AI-1`,
+      deviceId: d.id,
+      cameraId: `${d.id}-ai`,
+      at: '2026-07-03T10:18:00+09:00',
+      kind: 'person',
+      title: '붐 하부 인원 감지',
+      detail: '붐 끝 반경 안에서 작업자가 확인됐습니다. 경광등·알람이 울렸고 제어는 하지 않습니다.',
+      driver: d.driver ? { id: d.driver.id, name: d.driver.name } : null,
+      bbox: STILL_BBOX['boom-person'],
+    },
+  ];
+}
+
+/** 차량 서류 중 시연 세트에 실 파일이 없는 5종. 만료일은 호기 번호로만 흔들어 결정적이다 —
+ *  일부 호기는 만료가 임박해 보유 장비의 주의 칩과 종 알림의 근거가 된다(FR-016). */
+const PAPER_ONLY = [
+  {
+    slug: 'SAFETY',
+    kind: '안전검사 합격증' as const,
+    issuedAt: '2026-05-14',
+    expiresAt: (u: number) => iso(2027, 5, 14 + (u % 9)),
+  },
+  {
+    slug: 'INSURANCE',
+    kind: '보험 증서' as const,
+    issuedAt: '2026-01-08',
+    expiresAt: (u: number) => iso(2027, 1, 8 + (u % 5)),
+  },
+  { slug: 'INSTALL', kind: '설치 확인서' as const, issuedAt: '2026-06-03', expiresAt: () => null },
+  {
+    slug: 'CHECKUP',
+    kind: '정기점검 기록' as const,
+    issuedAt: '2026-08-21',
+    expiresAt: (u: number) => iso(2026, 8, 21 + (u % 40)),
+  },
+  { slug: 'PIPE', kind: '수송관 교체 이력' as const, issuedAt: '2026-07-11', expiresAt: () => null },
+];
+const iso = (y: number, m: number, d: number) => new Date(Date.UTC(y, m - 1, d)).toISOString().slice(0, 10);
 
 export function createOwnerApi(
   session: BoundSession,
@@ -264,7 +341,7 @@ let cached: { key: string; api: OwnerApi; source: OwnerSnapshot; sim?: OwnerSim 
 export function resetOwner() {
   cached?.sim?.stop();
   for (const doc of cached?.source.documents ?? [])
-    if (doc.sessionOnly && doc.url.startsWith('blob:')) URL.revokeObjectURL(doc.url);
+    if (doc.sessionOnly && doc.url?.startsWith('blob:')) URL.revokeObjectURL(doc.url);
   for (const doc of cached?.source.documents ?? [])
     if (doc.sessionOnly && doc.previewUrl?.startsWith('blob:')) URL.revokeObjectURL(doc.previewUrl);
   cached = null;

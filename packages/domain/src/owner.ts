@@ -85,14 +85,27 @@ export const OWNER_METRICS = [
   { key: 'pouredTodayM3', label: '오늘 타설', unit: 'm³' },
   { key: 'runHours', label: '가동 시간', unit: 'h' },
 ] as const satisfies readonly { key: keyof OwnerTelemetry; label: string; unit: string }[];
+/** 차량 서류 7종(시안 «확정 2026-09-12») — 운전자 서류(사람)는 별도 축이다(FR-027 · specs/owner-drivers).
+ *  호기 화면의 서류 목록에 「운전자 자격증」을 넣지 않는다. */
+export const OWNER_DOC_KINDS = [
+  '제작증',
+  '비파괴 검사 성적서',
+  '안전검사 합격증',
+  '보험 증서',
+  '설치 확인서',
+  '정기점검 기록',
+  '수송관 교체 이력',
+] as const;
+export type OwnerDocKind = (typeof OWNER_DOC_KINDS)[number] | '시연용 첨부';
 export interface OwnerDocument {
   id: string;
   deviceId: string;
   title: string;
   filename: string;
-  kind: '제작증' | '비파괴 검사 성적서' | '시연용 첨부';
+  kind: OwnerDocKind;
   type: 'application/pdf' | 'image/png' | 'image/jpeg';
-  url: string;
+  /** 원문 파일. null = 목록에는 있으나 원문이 등록되지 않았다(시연 세트에 실 파일이 없는 종류) */
+  url: string | null;
   /** 모바일에서도 식별 가능한 원문 이미지. PDF와 동일 내용의 파생본. */
   previewUrl?: string;
   issuedAt: string;
@@ -112,13 +125,31 @@ export interface OwnerCamera {
   id: string;
   deviceId: string;
   purpose: 'pour' | 'install';
+  /** 장치 종류 — 시안의 호기 화면은 바디캠 3 · CCTV 2 · AI CCTV 1을 한 벽에 놓는다(FR-042 · DISC-004) */
+  kind: 'body' | 'cctv' | 'ai';
   label: string;
   available: boolean;
   url: string;
   poster: string;
+  /** 실 스트림이 아니라 시연 클립이다 — 화면이 이 사실을 숨기지 않게 표시 문구의 근거로 쓴다 */
+  sample: boolean;
   durationSec: number;
   operatingDay: string;
   recordedAt: string;
+}
+/** AI 카메라가 올린 판단(FR-028) — 붐 하부 인원 감지.
+ *  사람 문제이므로 그 시각 배정된 운전자를 함께 기록한다(FR-027 · 시안 «확정 2026-09-12»). */
+export interface OwnerAiEvent {
+  id: string;
+  deviceId: string;
+  cameraId: string;
+  at: string;
+  kind: 'person';
+  title: string;
+  detail: string;
+  driver: { id: string; name: string } | null;
+  /** 스틸 위에 그릴 상자(0~1 비율). 없으면 상자 없이 문장만 */
+  bbox: { x: number; y: number; w: number; h: number } | null;
 }
 export interface OwnerSnapshot {
   dataset: OwnerDataset;
@@ -129,6 +160,7 @@ export interface OwnerSnapshot {
   documents: OwnerDocument[];
   alerts: OwnerAlert[];
   cameras: OwnerCamera[];
+  aiEvents: OwnerAiEvent[];
 }
 export interface OwnerAttachment {
   name: string;

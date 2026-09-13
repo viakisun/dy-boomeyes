@@ -382,8 +382,8 @@ export function ownerFlows(app: OwnerApp) {
       } else {
         await page.getByRole('button', { name: '마스트 설치', exact: true }).click();
         await page.getByRole('button', { name: '가동일 저장', exact: true }).click();
-        await expect(page.locator('[data-camera="CPB-001-install"]')).toHaveAttribute('data-mode', 'recorded');
-        await expect(page.locator('[data-camera="CPB-001-install"] video')).toBeVisible();
+        await expect(page.locator('[data-camera="CPB-001-body-a"]')).toHaveAttribute('data-mode', 'recorded');
+        await expect(page.locator('[data-camera="CPB-001-body-a"] video')).toBeVisible();
       }
       await page.getByRole('button', { name: '장비 상세로', exact: true }).click();
       await expect(detail).toContainText('CPB-001');
@@ -399,10 +399,10 @@ export function ownerFlows(app: OwnerApp) {
     page,
   }) => {
     await startOwner(page, app);
-    await page.goto(`${paths.video}?purpose=pour&camera=CPB-001-install`);
+    await page.goto(`${paths.video}?purpose=pour&camera=CPB-001-body-a`);
     await expect(ownerHost(page, 'video').getByRole('alert')).toBeVisible();
     await expect(ownerHost(page, 'video').locator('video')).toHaveCount(0);
-    await expect(ownerHost(page, 'video').locator('[data-camera="CPB-001-install"]')).toHaveCount(0);
+    await expect(ownerHost(page, 'video').locator('[data-camera="CPB-001-body-a"]')).toHaveCount(0);
     await page.goto(`${paths.alerts}?device=CPB-002&alert=CPB-003-INSP-DUE`);
     await expect(ownerHost(page, 'alerts')).toBeVisible();
     await expect(ownerHost(page, 'alerts').locator('[data-alert="CPB-002-FAULT"]')).toBeVisible();
@@ -436,7 +436,7 @@ export function ownerFlows(app: OwnerApp) {
       paths.fleet,
       paths.detail.replace('CPB-001', 'CPB-101'),
       `${paths.documents}?device=CPB-101&doc=CPB-101-CERT`,
-      `${paths.video}?camera=CPB-101-pour`,
+      `${paths.video}?camera=CPB-101-cctv-1`,
       `${paths.alerts}?alert=CPB-101-FAULT`,
     ]) {
       await page.goto(path);
@@ -446,7 +446,7 @@ export function ownerFlows(app: OwnerApp) {
         await expect(host).not.toContainText(hidden);
       await expect(
         host.locator(
-          '[data-device="CPB-101"], [data-doc="CPB-101-CERT"], [data-camera="CPB-101-pour"], [data-alert="CPB-101-FAULT"]',
+          '[data-device="CPB-101"], [data-doc="CPB-101-CERT"], [data-camera="CPB-101-cctv-1"], [data-alert="CPB-101-FAULT"]',
         ),
       ).toHaveCount(0);
     }
