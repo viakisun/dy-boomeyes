@@ -1,10 +1,11 @@
 # 소유주 페르소나 의견 — 데모 화면 모의 검토
+> 증거 세트 `owner-demo-2026-09-11`·`owner-final-2026-09-11`은 이후 재생성 과정에서 정리됐다. 그 세트를 가리키던 링크는 문장으로 남겼다(2026-09-13).
 
 2026-09-11 · 내부 검토용 · 실제 고객 인터뷰 아님
 
 ## 1. 검토 방법과 페르소나
 
-사용자 요청에 따라 별도 AI 검토자가 **CPB 보유·임대 회사의 소유주 1명**을 가정해 의견을 냈다. [진입 시안](proposals/owner-demo-2026-09-11/01-owner-entry.png)·[운영 요약 시안](proposals/owner-demo-2026-09-11/02-owner-summary.png), 현재 앱의 [현황](evidence/owner-demo-2026-09-11/02-owner-dashboard.png)·[서류](evidence/owner-demo-2026-09-11/04-owner-documents.png)·[영상](evidence/owner-demo-2026-09-11/03-owner-video.png) 캡처를 직접 보고, [화면 정의서](../plans/owner-demo-screen-review.md)와 [디자인 개선안](OWNER-DEMO-DESIGN-REVIEW-2026-09-11.md)을 검토했다.
+사용자 요청에 따라 별도 AI 검토자가 **CPB 보유·임대 회사의 소유주 1명**을 가정해 의견을 냈다. [진입 시안](proposals/owner-demo-2026-09-11/01-owner-entry.png)·[운영 요약 시안](proposals/owner-demo-2026-09-11/02-owner-summary.png), 현재 앱의 현황·서류·영상 캡처를 직접 보고, [화면 정의서](../plans/owner-demo-screen-review.md)와 [디자인 개선안](OWNER-DEMO-DESIGN-REVIEW-2026-09-11.md)을 검토했다.
 
 이하 인용문은 모두 **합성 페르소나의 가상 발언**이다. 실제 고객에게 연락하거나 인터뷰하지 않았고, 검토자가 앱을 클릭해 과제를 수행한 것도 아니다. 의견 수렴·승인·사용성 검증이 끝났다는 근거로 사용하지 않는다.
 

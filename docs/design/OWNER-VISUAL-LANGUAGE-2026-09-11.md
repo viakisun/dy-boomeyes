@@ -1,6 +1,7 @@
 # 소유주 화면 디자인 언어 개선안 — 텍스트에서 시각으로
+> 증거 세트 `owner-demo-2026-09-11`·`owner-final-2026-09-11`은 이후 재생성 과정에서 정리됐다. 그 세트를 가리키던 링크는 문장으로 남겼다(2026-09-13).
 
-2026-09-11 · 내부 검토용 · [디자인 진단 v3](OWNER-DEMO-DESIGN-REVIEW-2026-09-11.md)(정보 위계)와 [소유주 모의 의견](OWNER-PERSONA-FEEDBACK-2026-09-11.md)의 후속. 구현 기준 `feat/owner-foundation` `5c59540`, 검토 캡처 [owner-final-2026-09-11/review](evidence/owner-final-2026-09-11/review/owner-review.html).
+2026-09-11 · 내부 검토용 · [디자인 진단 v3](OWNER-DEMO-DESIGN-REVIEW-2026-09-11.md)(정보 위계)와 [소유주 모의 의견](OWNER-PERSONA-FEEDBACK-2026-09-11.md)의 후속. 구현 기준 `feat/owner-foundation` `5c59540`, 검토 캡처 owner-final-2026-09-11/review.
 
 ## 0. 판단
 
@@ -75,7 +76,7 @@
 | 카드가 라벨 목록 — 계약 "설치일" 행, 담당자 "현장 담당자" 라벨, 진입 미리보기 `<dl>` | [OwnerDetail.svelte:74](../../packages/ui/src/owner/OwnerDetail.svelte#L74) · [OwnerDetail.svelte:91](../../packages/ui/src/owner/OwnerDetail.svelte#L91) · [OwnerEntry.svelte:79](../../packages/ui/src/owner/OwnerEntry.svelte#L79) |
 | 표 머리글 텍스트 "호기 · 현장 / 장비 상태 · 수신 시각" | [OwnerFleet.svelte:120](../../packages/ui/src/owner/OwnerFleet.svelte#L120) |
 | 제품 표면의 "시연" 칩 · "예시" 라벨 | [OwnerShell.svelte:64](../../packages/ui/src/owner/OwnerShell.svelte#L64) · [OwnerEntry.svelte:58](../../packages/ui/src/owner/OwnerEntry.svelte#L58) |
-| 주인공이 작다 — 웹 운영 현황 지도 약 482×237(첫 뷰포트 1280×842의 약 11%) | [web-overview](evidence/owner-final-2026-09-11/review/screens/web-overview-1280x842-light.png) |
+| 주인공이 작다 — 웹 운영 현황 지도 약 482×237(첫 뷰포트 1280×842의 약 11%) | web-overview |
 
 ## 3. 규칙 8개
 
@@ -107,9 +108,9 @@
 
 | 전 | 후 |
 |---|---|
-| [운영 현황 웹](evidence/owner-final-2026-09-11/review/screens/web-overview-1280x842-light.png) | ![운영 현황 웹 시안](proposals/owner-visual-2026-09-11/01-overview-web-after.png) |
-| [호기 상세 웹](evidence/owner-final-2026-09-11/review/screens/web-detail-1280x842-light.png) | ![호기 상세 웹 시안](proposals/owner-visual-2026-09-11/02-detail-web-after.png) |
-| [보유 장비 PWA](evidence/owner-final-2026-09-11/review/screens/pwa-fleet-390x800-light.png) | ![보유 장비 PWA 시안](proposals/owner-visual-2026-09-11/03-fleet-pwa-after.png) |
+| 운영 현황 웹 | ![운영 현황 웹 시안](proposals/owner-visual-2026-09-11/01-overview-web-after.png) |
+| 호기 상세 웹 | ![호기 상세 웹 시안](proposals/owner-visual-2026-09-11/02-detail-web-after.png) |
+| 보유 장비 PWA | ![보유 장비 PWA 시안](proposals/owner-visual-2026-09-11/03-fleet-pwa-after.png) |
 
 ![컴포넌트 시트](proposals/owner-visual-2026-09-11/04-components.png)
 
@@ -430,6 +431,55 @@ CARTO Positron 벡터 타일은 줌 15~18 오버줌에서 오류 이벤트 0(S0 
 - `OwnerMapScene.aggregate`는 전국 = 항상 집계가 되면서 사실상 상수다 — 정리.
 - Esri 위성 타일 · 고객 표 회사명(G/S건설·포스코·대림·한화)을 페르소나 외 호기에 쓴 것 — DY 확인 사항(DISC 후보).
 - `ContextHeader`의 `z-sticky`도 무효(빌드 CSS 없음) — 별도 정리.
+
+## 11. 시안 채택(2026-09-13)
+
+사용자가 Claude Design에서 소유주 앱 전체를 다시 그렸다(«운영 현황 목업» 동작 프로토타입 · «소유주 업무 기획» · «보유 장비 기획» · «소유주 화면 검토안»). 사용자 지시: 시안을 새 기준으로, 토큰 전면 전환, 지도 개선안과 충돌하면 시안만. 기획 문서의 «확정 2026-09-12»는 사용자 결정이다.
+
+### 시안이 정한 것과 우리가 한 것
+
+| 시안 | 구현 |
+|---|---|
+| 좌측 메뉴 셋 — 운영 현황 · 보유 장비 · 계약 | `owner_demo`의 menu 1·2·3. 이상·점검과 장비 서류는 메뉴에서 내려와 헤더 종과 호기 화면으로 들어갔다 |
+| 알림은 상단 종 패널 — 고장·지연·점검·AI 경고·소모품 한계·계약 종료 임박을 시간순 | `AlertBell`(웹 드롭다운 / PWA 전체 폭 시트) · 알림 종류 일곱(자격 만료 포함, FR-027). 모두 이미 있는 축에서 나온다 |
+| 호기 화면은 어디서 들어와도 같은 화면 하나 | 현황의 호기 단계가 그 화면이다. 지도 자리를 카메라 6분할이 대신한다 |
+| 전국은 타일 없는 벡터 국경 · 현장은 회색조 타일 | `MapView`의 `basemap="outline"`(저장소 안 Natural Earth 국경) · `muted`(캔버스 회색조). ADR-003 §후속 |
+| 보유 장비는 표 하나 — 검색 1 · 필터 3축 · 정렬 · 현장별 묶어 보기 | `DataTable`에 머리글 정렬(aria-sort)·머리 고정을 더했다. 기본 정렬은 확인 필요 우선 |
+| 계약 — 요청 접수 → 후보 확인 → 배정 확정·회신 | `ownerCandidates`(보관 + 종료 임박) · `machines.assignment` 5단계 · 확정이 계약 기간을 호기에 남긴다 |
+| 운전자 — 소속이고 배정이 매일 바뀐다 · 서류는 사람 4종 | 명단·서류 화면과 호기 화면의 「오늘 운전자」 한 줄. 차량 서류에서 자격증을 뺐다 |
+| 정상은 초록(텍스트·테두리·상태 점) | 원칙 4 개정 · ADR-014. 지도 마커는 시안이 ink로 그리므로 그대로 뒀다 |
+
+### 채택하지 않은 것
+
+- **Leaflet · unpkg/jsdelivr · OSM.de 타일** — ADR-003(MapLibre + CARTO)을 유지한다. 시안의 «타일 없는 국경»·«회색조 타일»은 표현이고, 그 표현을 MapLibre로 구현했다.
+- **시안의 시드(현장 이름·건설사)** — 페르소나 사실(CPB-001~005 · 마포 한빛건설 · 김현장)과 e2e·캡처 계약을 깬다. 현재 시드를 유지하고 시안이 더한 축만 얹었다.
+- **레이아웃 변형 A/B/C 토글** — 시안의 탐색 장치다.
+- **AI 구역(접근 주의 구역) 오버레이** — 보류. 시연 스틸에는 사람 인식 상자가 이미 구워져 있어 같은 상자를 한 번 더 그리면 두 개가 된다. 구역은 카메라 보정 자료가 있어야 정직하게 그릴 수 있고 지금은 그 자료가 없다. 붐 하부 인원 감지 자체는 호기 화면의 AI 경고 배너와 이벤트 접기로 보인다.
+
+### 모바일(PWA) 기준
+
+시안에 모바일 화면이 없어 여기서 정했다(사용자 결정 2026-09-12). 앱별 화면을 새로 만들지 않는다 — 같은 컴포넌트가 폭에 반응한다.
+
+| 화면 | 웹 | PWA |
+|---|---|---|
+| 보유 장비 | 표(열 7 · 머리 고정 · 머리글 정렬) | 카드 리스트 유지 · 정렬은 선택 상자 · 같은 URL·같은 상태 |
+| 호기 카메라 | 3×2 | 2×3 · 상태 띠는 벽 위에 쌓는다(띄우면 타일을 가린다) |
+| 카메라 전체 화면 | `<dialog>` 모달 · 필름 띠 6칸 | 같은 모달 · 띠는 3열 두 줄(6칸은 한 칸이 55px이라 라벨이 죽는다) |
+| 계약 | 한 화면(좌 요청 / 우 후보) | 두 단계(목록 → 요청 상세 + 후보) · 같은 `?request=` 주소 |
+| 운전자 | 표 | 카드 리스트 |
+
+지도는 전국·현장 모두 지도 전면 + `MapSheet` 3단을 유지하고, 호기 단계에서는 카메라 벽이 지도 자리를 대신한다(시트는 half로 연다).
+
+### 이번 라운드에서 드러난 결함
+
+증거를 새로 만들면서 잡은 것. 모두 이 라운드가 만든 결함이다.
+
+- 웹 호기 화면에서 정보 패널이 행 높이를 1367px까지 끌어올려 카메라 둘째 줄이 뷰포트 밖으로 나갔다 — 3×2라고 말해 놓고 셋만 보였다.
+- PWA 호기 화면에서 상태 띠가 벽 위에 떠서 첫 줄을 가렸다.
+- 현장 단계 타일 장애 뒤 전국으로 올라가면 국경 지도는 그려지는데 오류 안내만 남았다(스타일 교체가 `ready`를 기다렸고, 늦게 온 타일 오류가 다시 실패를 씌웠다).
+- 장비가 0인 세트에서 계약·운전자까지 「등록된 보유 장비가 없습니다」로 덮였다.
+- 알림 종류를 넓히자 「확인이 필요한 장비」가 6대에서 30대로 뛰었다 — 알림 수가 아니라 장비 상태로 세도록 고쳤다.
+- 계약 종료·자격 만료 알림이 호기마다 한 건씩 울려 패널이 같은 말로 찼다(35건) — 사실의 단위(현장·사람)대로 한 건씩으로 줄였다.
 
 ## 부록 A — 측정 스크립트
 
