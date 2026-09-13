@@ -1,0 +1,169 @@
+{
+  "reviewer": "Claude Opus 5 (메인 세션) — 에이전트 페이지 검수",
+  "reviewedAt": "2026-09-14T00:10:38+09:00",
+  "scope": "렌더된 26쪽을 한 장씩 열어 잘림·겹침·빈 영역·본문과 해설의 불일치를 확인했다. 고객 확인과 사람 디자이너의 승인은 아니다(customerReview는 별도로 남는다).",
+  "method": "review/rendered-pages/page-01..26.png",
+  "pdfSha256": "8553d2fcd39a05ed2fd38261c3b32bd089f206c14a4c6424703ac5b494dd6535",
+  "pages": [
+    {
+      "page": 1,
+      "title": "내 장비를 찾고, 현장 확인까지",
+      "status": "pass",
+      "issues": []
+    },
+    {
+      "page": 2,
+      "title": "01  소유주 데모",
+      "status": "pass",
+      "issues": []
+    },
+    {
+      "page": 3,
+      "title": "02  운영 현황",
+      "status": "pass",
+      "issues": []
+    },
+    {
+      "page": 4,
+      "title": "03  보유 장비",
+      "status": "pass",
+      "issues": []
+    },
+    {
+      "page": 5,
+      "title": "04  계약",
+      "status": "pass",
+      "issues": []
+    },
+    {
+      "page": 6,
+      "title": "05  운전자",
+      "status": "pass",
+      "issues": []
+    },
+    {
+      "page": 7,
+      "title": "06  운전자 서류",
+      "status": "pass",
+      "issues": []
+    },
+    {
+      "page": 8,
+      "title": "07  호기 상세",
+      "status": "pass",
+      "issues": []
+    },
+    {
+      "page": 9,
+      "title": "08  영상",
+      "status": "pass",
+      "issues": []
+    },
+    {
+      "page": 10,
+      "title": "09  장비 서류",
+      "status": "pass",
+      "issues": []
+    },
+    {
+      "page": 11,
+      "title": "10  이상·점검",
+      "status": "pass",
+      "issues": []
+    },
+    {
+      "page": 12,
+      "title": "휴대폰에서 이어서 확인하기",
+      "status": "pass",
+      "issues": []
+    },
+    {
+      "page": 13,
+      "title": "휴대폰에서 이어서 확인하기",
+      "status": "pass",
+      "issues": []
+    },
+    {
+      "page": 14,
+      "title": "휴대폰에서 이어서 확인하기",
+      "status": "pass",
+      "issues": []
+    },
+    {
+      "page": 15,
+      "title": "휴대폰에서 이어서 확인하기",
+      "status": "pass",
+      "issues": []
+    },
+    {
+      "page": 16,
+      "title": "휴대폰에서 이어서 확인하기",
+      "status": "pass",
+      "issues": []
+    },
+    {
+      "page": 17,
+      "title": "영상의 재생과 시간 조작",
+      "status": "pass",
+      "issues": []
+    },
+    {
+      "page": 18,
+      "title": "1호기 제작증 원문",
+      "status": "pass",
+      "issues": []
+    },
+    {
+      "page": 19,
+      "title": "휴대폰에서 계약과 현장 담당자 확인",
+      "status": "pass",
+      "issues": []
+    },
+    {
+      "page": 20,
+      "title": "휴대폰에서 제작증 원문 열람",
+      "status": "pass",
+      "issues": []
+    },
+    {
+      "page": 21,
+      "title": "현장 단계 — 마포 주상복합 신축의 호기 5대",
+      "status": "pass",
+      "issues": []
+    },
+    {
+      "page": 22,
+      "title": "호기 단계 — 카메라 6분할과 호기 정보",
+      "status": "pass",
+      "issues": []
+    },
+    {
+      "page": 23,
+      "title": "계약 배정 — 요청과 후보 호기",
+      "status": "pass",
+      "issues": []
+    },
+    {
+      "page": 24,
+      "title": "휴대폰 호기 단계 — 지도 위 시트에서 호기 영상",
+      "status": "pass",
+      "issues": []
+    },
+    {
+      "page": 25,
+      "title": "검토 전에 알아둘 시연 조건",
+      "status": "pass",
+      "issues": []
+    },
+    {
+      "page": 26,
+      "title": "원문 근거와 빌드 기록",
+      "status": "pass",
+      "issues": []
+    }
+  ],
+  "fixedDuringReview": [
+    "표지 각주가 마지막 장면 줄에 겹쳐 찍혔다 — 목록 아래로 옮겼다(078fc90).",
+    "영상·서류 확대 페이지의 왼쪽이 본문을 잘라 냈다 — 크롭 시작을 본문 시작(x=76)으로 옮겼다(7bf66c8)."
+  ]
+}
