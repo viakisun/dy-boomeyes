@@ -133,8 +133,10 @@ class ReviewPDF:
 # Reviewed crop rectangles in the canonical 1280px WEB / 390px PWA full captures.
 # Preserve actual pixels; the manifest records source file/hash and every crop.
 SUPPLEMENTS = [
-    ("web", "video", None, "영상의 재생과 시간 조작", (260, 175, 1260, 1012), False),
-    ("web", "documents", None, "1호기 제작증 원문", (260, 480, 1260, 1510), True),
+    # 웹 확대 크롭의 왼쪽은 본문 시작(x=76)이다 — 그보다 안쪽에서 자르면 칩·서류 제목이 반만 남는다
+    ("web", "video", None, "영상의 재생과 시간 조작", (76, 150, 1264, 1080), False),
+    # 목록 첫 행(y≈316) 바로 위에서 자른다 — 중간에서 자르면 맨 윗줄이 반만 남는다
+    ("web", "documents", None, "1호기 제작증 원문", (76, 300, 1264, 1560), True),
     ("pwa", "detail", None, "휴대폰에서 계약과 현장 담당자 확인", (20, 620, 370, 1140), True),
     ("pwa", "documents", None, "휴대폰에서 제작증 원문 열람", (20, 490, 370, 1180), True),
     ("web", "overview", "site", "현장 단계 — 마포 주상복합 신축의 호기 5대", (56, 160, 1280, 842), False),
