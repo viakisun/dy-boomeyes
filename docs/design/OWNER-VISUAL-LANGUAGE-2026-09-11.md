@@ -375,7 +375,7 @@ Stat(전압 — 값 380 · 단위 V · 힌트 "마지막 수신 10:41" · fault�
 | 지도 마커 → 미리보기 카드(카메라 스틸) → 자산 상세 | Samsara, [Monitor Your Fleet on the Fleet Overview Map](https://kb.samsara.com/hc/en-us/articles/41266933936269-Monitor-Your-Fleet-on-the-Fleet-Overview-Map) | 호기 핀 → UnitPanel(실시간 타일 + 정보) → 상세 화면 |
 | Sites 레이어 → 자산 카드 → Asset Home | Trackunit, [Using the Map](https://help.trackunit.com/en/articles/236810-using-the-map-in-trackunit-manager) · [Asset Home](https://help.trackunit.com/en/articles/141031-how-do-i-navigate-in-asset-home) | 전국 현장 알약 → SitePanel → 호기 |
 | 줌에 따라 클러스터 ↔ 개별 핀 자동 전환 | Hilti ON!Track, [What is the Smart map?](https://help.ontrack3.hilti.com/hc/en-us/articles/34399800470545-What-is-the-Smart-map) | 가시 폭 760px 미만은 지역 원 7, 이상은 현장 알약 13 |
-| 지도 선택 → 사이드 패널 상세 | Geotab, [The Map](https://support.geotab.com/help/mygeotab/fleet-activity/map/the-map) | 웹 lg 우측 부유 패널 |
+| 지도 선택 → 사이드 패널 상세 | Geotab, [The Map](https://support.geotab.com/help/mygeotab/fleet-activity/map/the-map) | 웹 lg 좌측 부유 패널(2026-09-13 시안 채택 전에는 우측) |
 | 밀집 자동 그룹화 · Live 카메라 카드 | Motive, [Fleet View 2.0](https://helpcenter.gomotive.com/hc/en-us/articles/36088175670685-Fleet-View-2-0) | ~~지역 집계~~(2026-09-13 폐기 · §11) · OwnerLiveTile("실시간 예시" 오버레이, 점 없음) |
 | 표준 바텀 시트 3상태(collapsed · half · expanded) | Material Design 2, [Sheets: bottom](https://m2.material.io/components/sheets-bottom) · Apple HIG, [Sheets](https://developer.apple.com/design/human-interface-guidelines/sheets)(medium/large 디텐트, Maps처럼 배경을 가리지 않는 시트) | MapSheet(비모달, 전국은 접힘 · 현장/호기는 절반) |
 | `cameraForBounds` · `easeTo` · `padding` | MapLibre GL JS, [Map](https://maplibre.org/maplibre-gl-js/docs/API/classes/Map/) · [FitBoundsOptions](https://maplibre.org/maplibre-gl-js/docs/API/type-aliases/FitBoundsOptions/) | `cameraForBounds(bounds,{padding,maxZoom})` → `easeTo`(여백을 지도 상태에 남기지 않음, 과다 여백은 절반으로 재시도) |
@@ -426,7 +426,6 @@ CARTO Positron 벡터 타일은 줌 15~18 오버줌에서 오류 이벤트 0(S0 
 
 ### 남은 것
 
-- `FleetSummary`는 현황에서 빠졌다(StatusStrip). 카탈로그에는 남아 있다 — 다른 쓰임이 없으면 제거.
 - Esri 위성 타일 · 고객 표 회사명(G/S건설·포스코·대림·한화)을 페르소나 외 호기에 쓴 것 — DY 확인 사항(DISC 후보).
 - `ContextHeader`의 `z-sticky`도 무효(빌드 CSS 없음) — 별도 정리.
 
@@ -447,6 +446,12 @@ CARTO Positron 벡터 타일은 줌 15~18 오버줌에서 오류 이벤트 0(S0 
 | 운전자 — 소속이고 배정이 매일 바뀐다 · 서류는 사람 4종 | 명단·서류 화면과 호기 화면의 「오늘 운전자」 한 줄. 차량 서류에서 자격증을 뺐다 |
 | 정상은 초록(텍스트·테두리·상태 점) | 원칙 4 개정 · ADR-014. 지도 마커는 시안이 ink로 그리므로 그대로 뒀다 |
 | 전국 지도는 현장마다 원 하나 — 원 안에 대수, 이름표는 빈자리를 찾아 붙고 없으면 숨는다 | `spreadCircles`(중심 거리 밀어내기 + 5% 되당김 · 결정적) · 이름표 후보 여섯(아래·우·좌·위·우하·좌하) · 배치 순서는 이상 › 정상 › 보관 · 6px 넘게 밀린 원은 실제 좌표에 점과 리더선. 밀어내기 간격과 이름표 금지 구역은 히트 영역(웹 44 · PWA 48)이다 — 원이 작아도 서로 누를 수 있어야 한다 |
+| 정보 카드는 전국·현장·호기 세 단계 모두 **좌측** | 웹 lg의 좌측 기둥(띠 위 · 패널 아래). 기둥 자체는 포인터를 통과시킨다 — 투명 상자가 지도를 덮으면 마커를 누를 수 없다. `scene.padding`의 좌우도 함께 뒤집었다 |
+| 전국 카드는 현장 단위 행 — 「확인 필요 N개 현장 · M대」 + 「전체 N개 현장」 | `NationPanel` 한 섹션 · `SiteRow` 둘째 줄이 상태·사유(`siteCondition`). 알림 미리보기는 헤더의 종이 대신한다 |
+| 상태 띠는 숫자 먼저(「97 가동 중」) | `StatusStrip`의 칩 순서만 뒤집었다 — `aria-label`은 시각 순서와 별개로 둔다 |
+| 보유 장비 표 위 오른쪽에 상태 요약 · 표는 여섯 열 · 현장은 두 줄 | `OwnerFleet`의 `[data-fleet-tally]`(투입·고장·점검·수신 지연·보관 — 누르면 이 화면의 필터). 건설사 열을 지우고 현장 칸 둘째 줄로 내렸다. 묶어 보기에서는 묶음 제목이 그 값을 받는다 |
+| 좌측 레일 「계약」에 새 요청 배지 | 종 컨텍스트(`bell.svelte.ts`)에 `newRequests` 한 필드. 배지는 장식이고 수는 링크 밖 `sr-only` + `aria-describedby` — 메뉴 이름은 「계약」 그대로여야 한다 |
+| 계약 목록 현장 둘째 줄에 지역 | `OwnerRequest.region`(요청 현장은 `OwnerSite`와 겹치지 않아 조인할 곳이 없다 — 값을 직접 둔다) |
 
 ### 채택하지 않은 것
 
@@ -479,6 +484,16 @@ CARTO Positron 벡터 타일은 줌 15~18 오버줌에서 오류 이벤트 0(S0 
 - 장비가 0인 세트에서 계약·운전자까지 「등록된 보유 장비가 없습니다」로 덮였다.
 - 알림 종류를 넓히자 「확인이 필요한 장비」가 6대에서 30대로 뛰었다 — 알림 수가 아니라 장비 상태로 세도록 고쳤다.
 - 계약 종료·자격 만료 알림이 호기마다 한 건씩 울려 패널이 같은 말로 찼다(35건) — 사실의 단위(현장·사람)대로 한 건씩으로 줄였다.
+
+### 시안 대조 라운드(2026-09-13)에서 드러난 결함
+
+구현과 시안을 화면별로 대조해 여덟 곳을 맞추는 동안 잡은 것. 모두 이 라운드가 만든 결함이다.
+
+- 웹 1024 현장 단계에서 캡처가 「마커가 겹친다」로 떨어졌다 — 패널을 좌로 옮기며 만든 **투명한 기둥**이 지도를 덮어 `elementFromPoint`를 가로챘다(`lg:pointer-events-none` + 자식 `pointer-events-auto`).
+- 현장 마커에 `position: relative`를 준 순간 MapLibre의 배치가 무너져 마커가 좌표를 떠났다. 파일 머리에 「position을 덮어쓰지 않는다」가 이미 적혀 있었다.
+- 이름표를 숨기는 `display:none` 규칙이 이름표 규칙보다 **덜 구체적**이라 조용히 져서, 숨긴 이름표가 계속 그려졌다(캡처의 자식 도달 검사에서 드러났다).
+- 이름표가 바텀 시트 밑으로 들어가 PWA 전국 8장이 전부 떨어졌다 — 놓을 자리를 지도 전체가 아니라 **카메라 여백 안쪽**으로 제한했다.
+- 레일 배지의 수를 `aria-label`에 실었더니 내비 링크를 `exact`로 찾는 시험 넷이 깨졌고, 설명 문구를 링크 **안**으로 옮기자 이름 계산에 다시 섞였다. 메뉴 이름은 수에 흔들리지 않아야 한다.
 
 ## 부록 A — 측정 스크립트
 

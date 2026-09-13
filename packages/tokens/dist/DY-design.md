@@ -10,7 +10,7 @@
 | ref(원시) | 208 |
 | sys(시맨틱) | 309 |
 | cmp(컴포넌트) | 92 |
-| 컴포넌트 카탈로그 | 115 |
+| 컴포넌트 카탈로그 | 114 |
 | 대비 검사 | 94/94 통과 |
 
 | 산출물 | 용도 |
@@ -35,7 +35,7 @@
 
 ### 소유주 데모 패턴
 
-owner-experience의 현황/탐색/상세/뷰어는 목적별 구성과 "텍스트에서 시각으로" 규칙(§11.7)을 따른다. FleetSummary는 전체와 배치 분포를 묶고, 이상·점검 수는 별도 행동 목록으로 표현한다. 보관 대수를 가용 대수로 표시하지 않는다. 모든 색·타입·간격은 기존 토큰을 사용하며 대비·터치·포커스 기준은 동일하다.
+owner-experience의 현황/탐색/상세/뷰어는 목적별 구성과 "텍스트에서 시각으로" 규칙(§11.7)을 따른다. 전체와 배치 분포는 StatusStrip이 한 줄로 묶고, 이상·점검 수는 별도 행동 목록으로 표현한다. 보관 대수를 가용 대수로 표시하지 않는다. 모든 색·타입·간격은 기존 토큰을 사용하며 대비·터치·포커스 기준은 동일하다.
 
 ## 1. 명명 규칙
 
@@ -771,7 +771,7 @@ cmp 층은 sys만 참조한다(ref 직접 참조 금지 — 검사로 강제). �
 | `cmp.table.row-selected` | #e7f3fb | #e7f3fb | {sys.color.bg.selected} |  |
 | `cmp.table.header-fg` | #4a6879 | #4a6879 | {sys.color.fg.muted} |  |
 
-## 8. 컴포넌트 카탈로그 (115)
+## 8. 컴포넌트 카탈로그 (114)
 
 이름 PascalCase · prop 어휘 고정: `variant`(형태) · `tone`(색 의도: accent/neutral/info/success/warning/danger/progress) · `size`(sm/md/lg) · 상태 boolean(`disabled` `loading` `selected` `invalid`). 플랫폼 both = 같은 Svelte 컴포넌트가 밀도 토큰으로 두 플랫폼을 소화.
 
@@ -925,7 +925,6 @@ cmp 층은 sys만 참조한다(ref 직접 참조 금지 — 검사로 강제). �
 | **EquipmentRow** | both | V5 관제기능 · owner-experience | layout columns/stacked · poster | loading/empty/error/offline/default | 미디어 · 식별 · 배치 Badge · 조건 StatusPill · 수신 · 계약 D-n · 빠른 행동 |
 | **AlertBell** | both | Samsara Alerts bell · Material menu dismiss | web 드롭다운 / PWA 전체 폭 시트 | empty/default · 미확인 배지 | 알림이 좌측 메뉴에서 내려와 헤더 종으로 들어온다(시안 «결정 2026-09-12») · 비모달 · pointerdown 바깥닫기 · Esc · 포커스 복귀 |
 | **AlertCard** | both | Trackunit Attention · Samsara Alerts | href/onclick · selected | loading/empty/error/offline/default | IconTile(종류 톤) · 제목(미확인 semibold) · 호기·현장 · 상대 시각 · 미확인 배지 |
-| **FleetSummary** | both | V5 관제기능 · owner-experience | app web/pwa | loading/empty/error/offline/default | 전체 대수와 배치 분포 · 이상 집계 분리 |
 | **OwnerAlerts** | both | V5 관제기능 · owner-experience | app web/pwa | loading/empty/error/offline/default | 장비별 이상·점검 선택·읽음·담당자 |
 | **OwnerDocuments** | both | V5 관제기능 · owner-experience | app web/pwa | loading/empty/error/offline/default | 장비 서류 원문·시연용 첨부 |
 | **DocumentViewer** | both | V5 관제기능 · owner-experience | app web/pwa | loading/empty/error/offline/default | 원문 이미지/PDF · 닫기·오류·복귀 |
@@ -1061,17 +1060,17 @@ PageHeader  제목 heading-xl · 부제 1줄(body-sm muted, ≤ 60자) · 메타
 
 owner-experience의 현황/탐색/상세/뷰어는 목적별 구성을 적용한다(§0-10). 근거와 측정은 `docs/design/OWNER-VISUAL-LANGUAGE-2026-09-11.md`.
 
-1. **한 화면 한 주인공** — 현황 = 지도 무대(웹 lg 16:9 전면 · 좌상 상태 띠 · 우측 `layout.inspector.width` 부유 패널 · PWA는 지도 전면 + MapSheet 3단 · 사이드바는 아이콘 레일 `layout.sidebar.collapsed`), 보유 = 장비 행/카드, 상세 = 장비 히어로(display 호기 · 스틸 · 조건 pill · 배치 배지 · 주 행동), 영상 = 플레이어, 서류 = 원문, 알림 = 선택한 알림. 주인공이 첫 뷰포트의 절반 이상.
+1. **한 화면 한 주인공** — 현황 = 지도 무대(웹 lg 16:9 전면 · 좌측 기둥 = 상태 띠 위 · `layout.inspector.width` 부유 패널 아래 · PWA는 지도 전면 + MapSheet 3단 · 사이드바는 아이콘 레일 `layout.sidebar.collapsed`), 보유 = 장비 행/카드, 상세 = 장비 히어로(display 호기 · 스틸 · 조건 pill · 배치 배지 · 주 행동), 영상 = 플레이어, 서류 = 원문, 알림 = 선택한 알림. 주인공이 첫 뷰포트의 절반 이상.
 2. **설명하지 않고 보여준다** — 지시 부제·각주·상태 설명 문장을 두지 않는다. 문장은 빈·오류·오프라인 상태에만. 상태는 아이콘 + 2~4어 라벨(StatusPill · Badge). "시연" 칩·"기준 시각" 문장·푸터는 화면에 두지 않는다(DemoBar).
 3. **큰 숫자, 작은 라벨** — 값 `display` + 라벨 `label-md` muted + 단위 `body-sm`. `·`로 메타를 이어 붙이지 않고 아이콘 메타 행(줄당 아이콘 ≤ 1: map-pin 현장 · building-2 건설사 · clock 수신 · calendar 계약 · wifi-off 미수신) 또는 KeyValueList.
-4. **시각 인코딩** — 계약 기간 = PeriodBar(양끝 time · 오늘 마커 `radius.mark` · 종료까지 D-n, ≤ 30일 warning), 보유 구성 = FleetSummary 분포 막대(`role=img`), 담당자 = ContactCard(이니셜 아바타 · tel: 링크 · 복사), 장비 = 카메라 poster 스틸 또는 IconTile, 서류 = previewUrl 썸네일 또는 IconTile, 위치 = 지도 스니펫(장면 카메라 `camera` — 전국 maxZoom 7 · 현장 17 · 상세 1대 16, 지명은 `labelLocale="ko"`, 마커 문법: 현장 = 대수를 품은 원 하나(정상은 흰 배경 + 진한 테두리 · 보관소는 회색 · 이상은 상태색으로 채운다) + 이름표(현장명 / 상태 한 줄)가 후보 여섯 자리 중 빈 곳에 붙고 자리가 없으면 숨는다 · 호기 핀은 ✓/글리프 3종(✕ · ! · 수신 없음 아이콘), 480px 미만은 번호 원형 · 현장 원의 겹침은 `spreadCircles`(중심 거리 밀어내기 + 되당김)로 풀고 6px 넘게 밀리면 실제 좌표에 점과 리더선을 남긴다 · 베이스맵은 테마를 따르고(Positron/Dark Matter) 알약 지도에서는 지명을 감쇠한다).
+4. **시각 인코딩** — 계약 기간 = PeriodBar(양끝 time · 오늘 마커 `radius.mark` · 종료까지 D-n, ≤ 30일 warning), 보유 구성 = StatusStrip 칩 한 줄(수 먼저 · 누르면 목록·알림 필터), 담당자 = ContactCard(이니셜 아바타 · tel: 링크 · 복사), 장비 = 카메라 poster 스틸 또는 IconTile, 서류 = previewUrl 썸네일 또는 IconTile, 위치 = 지도 스니펫(장면 카메라 `camera` — 전국 maxZoom 7 · 현장 17 · 상세 1대 16, 지명은 `labelLocale="ko"`, 마커 문법: 현장 = 대수를 품은 원 하나(정상은 흰 배경 + 진한 테두리 · 보관소는 회색 · 이상은 상태색으로 채운다) + 이름표(현장명 / 상태 한 줄)가 후보 여섯 자리 중 빈 곳에 붙고 자리가 없으면 숨는다 · 호기 핀은 ✓/글리프 3종(✕ · ! · 수신 없음 아이콘), 480px 미만은 번호 원형 · 현장 원의 겹침은 `spreadCircles`(중심 거리 밀어내기 + 되당김)로 풀고 6px 넘게 밀리면 실제 좌표에 점과 리더선을 남긴다 · 베이스맵은 테마를 따르고(Positron/Dark Matter) 알약 지도에서는 지명을 감쇠한다).
    **드릴다운(현황)** — 전국(현장 원) → 현장(호기 핀) → 호기(패널: 실시간 영상 타일 · 설치/완료/임대기간 · 담당자 · 전압/단선/고장코드 · 관련 서류 · 상세). URL(`?site=`·`?device=`)이 단계, 경로는 OverviewCrumbs, 상태 띠(StatusStrip)는 KPI 카드가 아니라 칩 한 줄. 활동 시뮬레이터(셸 토글 · `?sim=`)는 기본 off.
 5. **선 대신 여백·층** — 카드 크롬(`radius.card` · `shadow.raised` · `bg.surface`)은 List와 카드 외곽에만. 섹션은 제목 + 간격 + `bg.surface-sunken` 층. 표 머리글 텍스트 없음. 행 구분선은 `border.subtle`.
 6. **시각은 상대 + 절대** — 목록은 `relativeLabel`(DemoClock 기준) + `<time title>` 절대. 미수신은 "마지막 수신 + 절대 시각"을 warning 텍스트로(FR-034). 상세 "장비 상태" 영역은 절대 시각만(오프라인 전후 텍스트 동일).
 7. **밀도는 역할에서(§0-6)** — 소유주 화면은 웹도 comfortable. 웹 레이아웃이 루트 `data-density`를 전환한다.
 8. **색 예산 유지(§0-4)** — IconTile·PeriodBar의 톤은 `neutral|warning|danger`뿐(면을 채우는 자리). 상태 **글자**는 계열마다 색을 갖는다 — 고장 danger · 점검 warning(yellow 8) · 수신 지연 warning(yellow 11) · 보관 중립 · **정상 success 초록**. 점은 정상 요약 칩 하나에만(살아 움직이는 신호 LIVE·REC은 영상 타일). 6초 루프 샘플에 LIVE 표시를 붙이지 않는다.
 
-컴포넌트: IconTile · List · PeriodBar · ContactCard · ContextHeader(스크롤 시 sticky 축약 바, compact일 때만 렌더) · AlertCard · EquipmentRow(layout columns/stacked · poster) · StatusStrip · OverviewCrumbs · SiteRow · NationPanel · SitePanel · UnitPanel · OwnerLiveTile · MapSheet(비모달 3단, BottomSheet와 구분) · FleetSummary(현황에서는 StatusStrip으로 대체). 채택하지 않음: Tabs(`role=tab`). 목록은 List + 정렬 열 행(`role=list`)이고, **DataTable(`<table>`)은 웹 보유 장비(B1-09) 한 화면만 예외**다(시안 «결정 2026-09-12» · ADR-014 — PWA는 카드 유지). 보관 대수를 가용 대수로 표시하지 않는다.
+컴포넌트: IconTile · List · PeriodBar · ContactCard · ContextHeader(스크롤 시 sticky 축약 바, compact일 때만 렌더) · AlertCard · EquipmentRow(layout columns/stacked · poster) · StatusStrip · OverviewCrumbs · SiteRow · NationPanel · SitePanel · UnitPanel · OwnerLiveTile · MapSheet(비모달 3단, BottomSheet와 구분). 채택하지 않음: Tabs(`role=tab`). 목록은 List + 정렬 열 행(`role=list`)이고, **DataTable(`<table>`)은 웹 보유 장비(B1-09) 한 화면만 예외**다(시안 «결정 2026-09-12» · ADR-014 — PWA는 카드 유지). 보관 대수를 가용 대수로 표시하지 않는다.
 
 ## 12. 카피 · 식별자 정책
 

@@ -900,15 +900,6 @@
     "note": "IconTile(종류 톤) · 제목(미확인 semibold) · 호기·현장 · 상대 시각 · 미확인 배지"
   },
   {
-    "name": "FleetSummary",
-    "family": "Owner experience",
-    "platform": "both",
-    "ref": "V5 관제기능 · owner-experience",
-    "variants": "app web/pwa",
-    "states": "loading/empty/error/offline/default",
-    "note": "전체 대수와 배치 분포 · 이상 집계 분리"
-  },
-  {
     "name": "OwnerAlerts",
     "family": "Owner experience",
     "platform": "both",
