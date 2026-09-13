@@ -42,8 +42,14 @@ const all = views.flatMap((view) =>
   ['web', 'pwa'].flatMap((app) => {
     const screen = source.screens.find((s) => s.id === view[app]);
     if (!screen || !screen.roles.includes('owner')) throw new Error(`Owner screen missing or wrong role: ${view[app]}`);
-    // 운영 현황은 드릴다운 3단계(전국 · 현장 · 호기)를 각각 캡처한다 — 목적 수 + 2단계 × 2앱 × 4폭 × 2테마
-    const levels = view.view === 'overview' ? ['nation', 'site', 'unit'] : [undefined];
+    // 운영 현황은 드릴다운 3단계(전국 · 현장 · 호기)를, 계약은 목록과 배정 두 단계를 각각 캡처한다 —
+    // 화면 하나가 주소로 두 가지 일을 하면 한쪽만 찍힌 증거는 그 화면을 본 것이 아니다.
+    const levels =
+      view.view === 'overview'
+        ? ['nation', 'site', 'unit']
+        : view.view === 'requests'
+          ? [undefined, 'assign']
+          : [undefined];
     return levels.flatMap((level) =>
       sizes[app].flatMap(([width, height]) =>
         ['light', 'dark'].map((theme) => ({
@@ -55,7 +61,13 @@ const all = views.flatMap((view) =>
           state: 'owner',
           level,
           query:
-            level === 'site' ? { site: 'SITE-MAPO' } : level === 'unit' ? { site: 'SITE-MAPO', device: 'CPB-001' } : {},
+            level === 'site'
+              ? { site: 'SITE-MAPO' }
+              : level === 'unit'
+                ? { site: 'SITE-MAPO', device: 'CPB-001' }
+                : level === 'assign'
+                  ? { request: 'REQ-001' }
+                  : {},
           width,
           height,
           theme,
@@ -316,6 +328,18 @@ try {
           'Map targets overlap or are too small',
         );
         await page.evaluate(() => window.scrollTo(0, 0));
+      }
+      if (row.level === 'assign') {
+        // 배정 단계: 요청 하나와 후보 호기가 함께 보인다(시안 «확정 2026-09-12» · FR-026)
+        const screen = page.locator('[data-owner-requests]');
+        await screen.locator('[data-assign-count]').waitFor({ state: 'visible', timeout: 20_000 });
+        const candidates = await screen.locator('[data-candidate]').count();
+        // 후보 수는 시드가 정한다 — 여기서 수를 박지 않고 「낼 수 있는 호기가 실제로 있다」만 본다
+        check(candidates > 0, 'Assignment step must list candidate units');
+        check(
+          (await screen.getByRole('button', { name: '배정 확정 · 회신', exact: true }).count()) === 1,
+          'Assignment step must offer the confirm action',
+        );
       }
       if (row.level === 'unit') {
         // 호기 단계: 지도 자리에 카메라 6분할이 들어간다(시안 «확정 2026-09-12») — 이 단계에는 지도가 없다
