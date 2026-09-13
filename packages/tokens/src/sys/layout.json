@@ -122,6 +122,13 @@
         "$description": "지도 행·알림 피드 패널 기본 높이"
       }
     },
+    "table": {
+      "scroll": {
+        "$type": "dimension",
+        "$value": "560px",
+        "$description": "머리글을 고정하는 표의 스크롤 높이 — 이 높이를 넘으면 표 안에서 스크롤한다"
+      }
+    },
     "menu": {
       "min": {
         "$type": "dimension",

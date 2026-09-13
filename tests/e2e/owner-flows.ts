@@ -65,7 +65,8 @@ export function ownerFlows(app: OwnerApp) {
     await page.getByRole('navigation').getByRole('link', { name: '보유 장비', exact: true }).click();
     const search = page.getByLabel('호기·현장 검색', { exact: true });
     await search.fill('마포');
-    await page.getByLabel('배치 필터', { exact: true }).selectOption('deployed');
+    await page.getByLabel('상태', { exact: true }).selectOption('deployed');
+    // 웹은 표의 행, PWA는 카드 — 둘 다 data-device를 지닌다
     const devices = ownerHost(page, 'fleet').locator('[data-device]');
     await expect(devices).toHaveCount(5); // 마포 현장 호기 1·6·7·8·9
     const device = devices.first();
@@ -79,17 +80,71 @@ export function ownerFlows(app: OwnerApp) {
     await expect(detail).toContainText(/2026[.\-/년 ]+0?9/);
     await page.getByRole('link', { name: '장비 목록으로', exact: true }).click();
     await expect(search).toHaveValue('마포');
-    await expect(page.getByLabel('배치 필터', { exact: true })).toHaveValue('deployed');
+    await expect(page.getByLabel('상태', { exact: true })).toHaveValue('deployed');
     await expect(devices).toHaveCount(5);
     await page.reload();
     await expect(search).toHaveValue('마포');
     await expect(device).toHaveAttribute('data-device', 'CPB-001');
     await search.fill('5호기');
-    await page.getByLabel('배치 필터', { exact: true }).selectOption('stored');
+    await page.getByLabel('상태', { exact: true }).selectOption('stored');
     await expect(devices).toHaveCount(1); // 보관 17대 중 '5호기'는 5호기뿐(85·95는 투입)
     await expect(device).toContainText('보관');
     await expect(device).toHaveAttribute('data-device', 'CPB-005');
     await expect(device).not.toContainText('즉시 투입 가능');
+  });
+
+  // 시안의 보유 장비 — 표 하나 · 검색 1 · 필터 3축 · 현장별 묶어 보기(«확정 2026-09-12»)
+  test('[B1-02] [FR-025] [AC-O07] fleet sorts by header, filters on three axes and groups by site', async ({
+    page,
+  }) => {
+    await startOwner(page, app);
+    await page.getByRole('navigation').getByRole('link', { name: '보유 장비', exact: true }).click();
+    const fleet = ownerHost(page, 'fleet');
+    const rows = fleet.locator('[data-device]');
+    const table = fleet.getByRole('table');
+    // 기본 정렬은 확인 필요 우선 — 고장이 맨 위다(호기 번호가 아니다)
+    await expect(rows.first()).toHaveAttribute('data-device', 'CPB-002');
+    if (app === 'web') {
+      // 웹은 표 · 머리글을 눌러 정렬한다
+      await expect(table).toHaveCount(1);
+      await expect(page.getByLabel('정렬', { exact: true })).toHaveCount(0);
+      const unit = table.getByRole('columnheader', { name: '호기' });
+      await unit.getByRole('button').click();
+      await expect(unit).toHaveAttribute('aria-sort', 'ascending');
+      await expect(rows.first()).toHaveAttribute('data-device', 'CPB-001');
+      await unit.getByRole('button').click();
+      await expect(unit).toHaveAttribute('aria-sort', 'descending');
+      await expect(rows.first()).toHaveAttribute('data-device', 'CPB-121');
+    } else {
+      // PWA는 카드 리스트를 유지한다(사용자 결정) — 표를 쓰지 않고 정렬은 선택 상자다
+      await expect(table).toHaveCount(0);
+      await page.getByLabel('정렬', { exact: true }).selectOption('unit');
+      await expect(rows.first()).toHaveAttribute('data-device', 'CPB-001');
+    }
+    // 세 축 — 현장 · 계약 종료 · 상태. 축은 함께 걸린다
+    await page.getByLabel('현장', { exact: true }).selectOption({ label: '마포 주상복합 신축' });
+    await expect(rows).toHaveCount(5);
+    await expect(fleet.getByRole('status')).toHaveText('전체 120대 중 5대 표시');
+    await page.getByLabel('현장', { exact: true }).selectOption('all');
+    await page.getByLabel('계약 종료', { exact: true }).selectOption('30');
+    const soon = await rows.count();
+    expect(soon).toBeGreaterThan(0);
+    // 30일 안에 끝나는 계약만 남았다 — 남은 일수 표시(웹은 주의 칩, PWA는 카드의 D-n)와 필터가 같은 값을 쓴다
+    for (const row of await rows.all()) await expect(row).toContainText(/D[-+]\d+|오늘|종료됨/);
+    await page.getByLabel('계약 종료', { exact: true }).selectOption('90');
+    expect(await rows.count()).toBeGreaterThanOrEqual(soon);
+    await page.getByLabel('상태', { exact: true }).selectOption('stored');
+    await expect(rows).toHaveCount(0); // 보관 장비에는 진행 중인 계약이 없다
+    await expect(fleet.getByRole('status')).toHaveText('전체 120대 중 0대 표시');
+    // 초기화 → 묶어 보기
+    await page.getByRole('button', { name: '검색·필터 초기화', exact: true }).click();
+    await expect(rows).toHaveCount(120);
+    await page.getByRole('switch', { name: '현장별 묶어 보기', exact: true }).click();
+    await expect(page).toHaveURL(/group=1/);
+    const groups = fleet.locator('[data-fleet-group]');
+    await expect(groups).toHaveCount(13);
+    await expect(groups.first()).toContainText('대');
+    await expect(rows).toHaveCount(120);
   });
 
   test('[B1-02] [FR-024] [AC-O04] [AC-O07] inventory axes and distinct affected devices', async ({ page }) => {
@@ -140,10 +195,10 @@ export function ownerFlows(app: OwnerApp) {
     await overview.getByRole('link', { name: '전체 장비 보기', exact: true }).click();
     const fleet = ownerHost(page, 'fleet');
     await expect(fleet.getByRole('status')).toHaveText('전체 120대 중 120대 표시');
-    const devices = fleet.getByRole('list', { name: '보유 장비 목록', exact: true });
-    await expect(devices.getByRole('listitem')).toHaveCount(120);
-    await expect(devices.locator('[data-device="CPB-121"]')).toHaveCount(1);
-    await expect(devices.locator('[data-device="CPB-101"]')).toHaveCount(0);
+    const devices = fleet.locator('[data-device]');
+    await expect(devices).toHaveCount(120);
+    await expect(fleet.locator('[data-device="CPB-121"]')).toHaveCount(1);
+    await expect(fleet.locator('[data-device="CPB-101"]')).toHaveCount(0);
   });
 
   test('[B1-02] [FR-024] [AC-O08] [AC-O13] drilldown nation → site → unit plays live tile, survives reload and returns', async ({
@@ -443,7 +498,7 @@ export function ownerFlows(app: OwnerApp) {
       await startOwner(page, app);
       await page.getByRole('navigation').getByRole('link', { name: '보유 장비', exact: true }).click();
       await page.getByLabel('호기·현장 검색', { exact: true }).fill('마포');
-      await page.getByLabel('배치 필터', { exact: true }).selectOption('deployed');
+      await page.getByLabel('상태', { exact: true }).selectOption('deployed');
       await ownerHost(page, 'fleet').locator('[data-device="CPB-001"]').click();
       const detail = ownerHost(page, 'detail');
       await expect(detail).toContainText('CPB-001');
@@ -462,7 +517,7 @@ export function ownerFlows(app: OwnerApp) {
       await expect(detail).toContainText('CPB-001');
       await detail.getByRole('link', { name: '장비 목록으로', exact: true }).click();
       await expect(page.getByLabel('호기·현장 검색', { exact: true })).toHaveValue('마포');
-      await expect(page.getByLabel('배치 필터', { exact: true })).toHaveValue('deployed');
+      await expect(page.getByLabel('상태', { exact: true })).toHaveValue('deployed');
       await expect(ownerHost(page, 'fleet').locator('[data-device]')).toHaveCount(5);
       await expect(ownerHost(page, 'fleet').locator('[data-device]').first()).toHaveAttribute('data-device', 'CPB-001');
     });

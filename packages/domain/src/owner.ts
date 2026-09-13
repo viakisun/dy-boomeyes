@@ -306,14 +306,11 @@ export const ownerRunning = (d: OwnerDevice) =>
   d.deployment === 'deployed' && d.connection === 'current' && !d.fault && !d.inspection;
 /** 운영 상태 띠 — 가동 중은 투입·최근 수신·이상 없음. 보관은 가동으로 더하지 않는다. */
 export function ownerStrip(devices: readonly OwnerDevice[]) {
+  // 분류는 ownerFleetState 하나뿐 — 띠의 수와 표의 필터가 갈라지지 않게(미연동은 띠에 칸이 없다)
   const strip = { total: devices.length, running: 0, inspection: 0, fault: 0, stale: 0, stored: 0, unknown: 0 };
   for (const d of devices) {
-    if (d.deployment === 'stored') strip.stored++;
-    else if (d.deployment === 'unknown') strip.unknown++;
-    else if (d.fault) strip.fault++;
-    else if (d.inspection) strip.inspection++;
-    else if (d.connection === 'stale') strip.stale++;
-    else if (ownerRunning(d)) strip.running++;
+    const state = ownerFleetState(d);
+    if (state !== 'unintegrated') strip[state]++;
   }
   return strip;
 }
@@ -381,15 +378,111 @@ export const OWNER_CONNECTION = {
   detached: '단말기 미장착',
 } as const;
 export function ownerMatches(device: OwnerDevice, query: string, filter: string) {
+  return ownerSearchHit(device, query) && ownerStateHit(device, filter);
+}
+
+// ── 보유 장비 표 — 검색 1 · 필터 3축 · 정렬(시안 «확정 2026-09-12») ──────────────────────
+/** 표의 상태 축 — 배치(보관·미확인)와 이상(고장·점검·지연)을 한 축으로 합친다. 소유주는 둘을 함께 고른다.
+ *  한 호기는 정확히 하나에 든다 — 띠(ownerStrip)와 표가 같은 분류를 쓰지 않으면 수가 어긋난다. */
+export const OWNER_FLEET_STATES = [
+  'fault',
+  'inspection',
+  'stale',
+  'unintegrated',
+  'running',
+  'unknown',
+  'stored',
+] as const;
+export type OwnerFleetState = (typeof OWNER_FLEET_STATES)[number];
+export const OWNER_FLEET_STATE_LABEL: Record<OwnerFleetState, string> = {
+  fault: '고장',
+  inspection: '점검',
+  stale: '수신 지연',
+  unintegrated: '미연동',
+  running: '가동 중',
+  unknown: '배치 미확인',
+  stored: '보관',
+};
+/** 한 호기의 표 상태. 배치를 먼저 본다 — 보관 중인 장비에 남은 고장 기록이 현장 고장으로 세어지지 않게. */
+export function ownerFleetState(d: OwnerDevice): OwnerFleetState {
+  if (d.deployment === 'stored') return 'stored';
+  if (d.deployment === 'unknown') return 'unknown';
+  if (d.fault) return 'fault';
+  if (d.inspection) return 'inspection';
+  if (d.connection === 'stale') return 'stale';
+  return ownerRunning(d) ? 'running' : 'unintegrated';
+}
+/** 「확인 필요 우선」 정렬 — 고장 › 점검 › 지연 › 미연동 › 가동 중 › 배치 미확인 › 보관(시안). */
+export const ownerAttentionRank = (d: OwnerDevice) => OWNER_FLEET_STATES.indexOf(ownerFleetState(d));
+/** 검색어 — 호기·코드·현장·건설사를 본다. */
+export function ownerSearchHit(d: OwnerDevice, query: string) {
   const q = query.trim().toLocaleLowerCase('ko');
-  const text = `${device.unit}호기 ${device.id} ${device.site} ${device.contract?.company ?? ''}`.toLocaleLowerCase(
-    'ko',
-  );
-  return (
-    (!q || text.includes(q)) &&
-    (filter === 'all' ||
-      filter === device.deployment ||
-      (filter === 'running' && ownerRunning(device)) ||
-      (filter === 'attention' && !!(device.fault || device.inspection || device.connection === 'stale')))
-  );
+  if (!q) return true;
+  return `${d.unit}호기 ${d.id} ${d.site} ${d.contract?.company ?? ''}`.toLocaleLowerCase('ko').includes(q);
+}
+/** 상태 축 — 상태 하나, 또는 여러 상태를 묶은 deployed·attention(띠·구성 막대의 링크가 쓴다). */
+export function ownerStateHit(d: OwnerDevice, filter: string) {
+  if (filter === 'all') return true;
+  if (filter === 'deployed') return d.deployment === 'deployed';
+  if (filter === 'attention') return ownerAttentionRank(d) <= OWNER_FLEET_STATES.indexOf('stale');
+  return ownerFleetState(d) === filter;
+}
+/** 계약 종료까지 남은 일수. 계약이 없으면 null · 이미 끝났으면 음수. */
+export function ownerExpiryDays(d: OwnerDevice, now: string): number | null {
+  if (!d.contract) return null;
+  return Math.round((Date.parse(d.contract.to) - Date.parse(now)) / 86_400_000);
+}
+export const OWNER_FLEET_EXPIRY = ['all', '30', '60', '90'] as const;
+export type OwnerFleetExpiry = (typeof OWNER_FLEET_EXPIRY)[number];
+export const OWNER_FLEET_SORTS = ['attention', 'unit', 'site', 'received', 'expiry'] as const;
+export type OwnerFleetSort = (typeof OWNER_FLEET_SORTS)[number];
+export interface OwnerFleetQuery {
+  q: string;
+  /** 상태 축 — 'all' · OwnerFleetState · 'deployed' · 'attention' */
+  filter: string;
+  site: string;
+  expiry: OwnerFleetExpiry;
+  sort: OwnerFleetSort;
+  dir: 'asc' | 'desc';
+}
+export const OWNER_FLEET_DEFAULT: OwnerFleetQuery = {
+  q: '',
+  filter: 'all',
+  site: 'all',
+  expiry: 'all',
+  sort: 'attention',
+  dir: 'asc',
+};
+/** 세 축 + 검색어. 계약 종료 축은 「N일 안에 끝난다」이고 이미 끝난 계약도 포함한다(더 급한 쪽이다). */
+export function ownerFleetMatches(d: OwnerDevice, query: OwnerFleetQuery, now: string) {
+  if (!ownerSearchHit(d, query.q) || !ownerStateHit(d, query.filter)) return false;
+  if (query.site !== 'all' && d.siteId !== query.site) return false;
+  if (query.expiry !== 'all') {
+    const days = ownerExpiryDays(d, now);
+    if (days === null || days > Number(query.expiry)) return false;
+  }
+  return true;
+}
+/** 값이 없는 행은 방향과 상관없이 뒤로 보낸다 — 「수신 없음」이 먼저 오면 표가 쓸모없다. */
+const nullsLast = (a: number | null, b: number | null, dir: 1 | -1) =>
+  a === null ? (b === null ? 0 : 1) : b === null ? -1 : (a - b) * dir;
+/** 필터 → 정렬. 같은 값이면 호기 번호가 마지막 기준이다(정렬이 흔들리지 않게). */
+export function ownerFleetRows(devices: readonly OwnerDevice[], query: OwnerFleetQuery, now: string): OwnerDevice[] {
+  const dir = query.dir === 'desc' ? -1 : 1;
+  const time = (at: string | null) => (at ? Date.parse(at) : null);
+  return devices
+    .filter((d) => ownerFleetMatches(d, query, now))
+    .sort((a, b) => {
+      const by =
+        query.sort === 'unit'
+          ? (a.unit - b.unit) * dir
+          : query.sort === 'site'
+            ? a.site.localeCompare(b.site, 'ko') * dir
+            : query.sort === 'received'
+              ? nullsLast(time(a.receivedAt), time(b.receivedAt), dir)
+              : query.sort === 'expiry'
+                ? nullsLast(ownerExpiryDays(a, now), ownerExpiryDays(b, now), dir)
+                : (ownerAttentionRank(a) - ownerAttentionRank(b)) * dir;
+      return by || a.unit - b.unit;
+    });
 }

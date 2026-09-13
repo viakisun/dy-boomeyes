@@ -6,9 +6,9 @@
 
 | 구성 | 수 |
 |---|---|
-| 토큰 전체 | 608 |
+| 토큰 전체 | 609 |
 | ref(원시) | 208 |
-| sys(시맨틱) | 308 |
+| sys(시맨틱) | 309 |
 | cmp(컴포넌트) | 92 |
 | 컴포넌트 카탈로그 | 112 |
 | 대비 검사 | 94/94 통과 |
@@ -602,6 +602,7 @@ owner-experience의 현황/탐색/상세/뷰어는 목적별 구성과 "텍스�
 | `sys.layout.breakpoint.2xl` | 1536px | 1536px |  |
 | `sys.layout.map.min` | 240px | 240px | 지도 컴포넌트 최소 높이 |
 | `sys.layout.panel.height` | 420px | 420px | 지도 행·알림 피드 패널 기본 높이 |
+| `sys.layout.table.scroll` | 560px | 560px | 머리글을 고정하는 표의 스크롤 높이 — 이 높이를 넘으면 표 안에서 스크롤한다 |
 | `sys.layout.menu.min` | 192px | 192px | 드롭다운 메뉴 최소 폭 |
 | `sys.layout.field.short` | 96px | 96px | 짧은 입력(숫자·등급 select) 폭 |
 | `sys.layout.stat.width` | 240px | 240px | 요약 지표(Stat) 열 폭 — 늘려 채우지 않는다(§11.4) |

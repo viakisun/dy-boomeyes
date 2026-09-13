@@ -7,6 +7,8 @@ export interface Column {
   kind?: ColumnKind;
   /** text 열을 줄바꿈·잘림 없이(짧은 이름·복합 셀) */
   nowrap?: boolean;
+  /** 머리글을 눌러 정렬할 수 있는 열 — DataTable이 aria-sort와 버튼을 붙인다 */
+  sortable?: boolean;
   /** @deprecated kind: 'num'을 쓴다 */
   align?: 'left' | 'right';
 }

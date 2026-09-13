@@ -384,6 +384,7 @@
   --spacing-layout-frame-mobile: var(--sys-layout-frame-mobile);
   --spacing-layout-map-min: var(--sys-layout-map-min);
   --spacing-layout-panel-height: var(--sys-layout-panel-height);
+  --spacing-layout-table-scroll: var(--sys-layout-table-scroll);
   --spacing-layout-menu-min: var(--sys-layout-menu-min);
   --spacing-layout-field-short: var(--sys-layout-field-short);
   --spacing-layout-stat-width: var(--sys-layout-stat-width);

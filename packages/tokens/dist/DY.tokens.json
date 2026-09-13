@@ -535,6 +535,7 @@
       "sys.layout.breakpoint.2xl": "1536px",
       "sys.layout.map.min": "240px",
       "sys.layout.panel.height": "420px",
+      "sys.layout.table.scroll": "560px",
       "sys.layout.menu.min": "192px",
       "sys.layout.field.short": "96px",
       "sys.layout.stat.width": "240px",
@@ -1843,6 +1844,7 @@
       "sys.layout.breakpoint.2xl": "1536px",
       "sys.layout.map.min": "240px",
       "sys.layout.panel.height": "420px",
+      "sys.layout.table.scroll": "560px",
       "sys.layout.menu.min": "192px",
       "sys.layout.field.short": "96px",
       "sys.layout.stat.width": "240px",
@@ -3165,6 +3167,7 @@
       "sys.layout.breakpoint.2xl": "1536px",
       "sys.layout.map.min": "240px",
       "sys.layout.panel.height": "420px",
+      "sys.layout.table.scroll": "560px",
       "sys.layout.menu.min": "192px",
       "sys.layout.field.short": "96px",
       "sys.layout.stat.width": "240px",
@@ -4515,6 +4518,7 @@
       "sys.layout.breakpoint.2xl": "1536px",
       "sys.layout.map.min": "240px",
       "sys.layout.panel.height": "420px",
+      "sys.layout.table.scroll": "560px",
       "sys.layout.menu.min": "192px",
       "sys.layout.field.short": "96px",
       "sys.layout.stat.width": "240px",
@@ -8848,6 +8852,13 @@
       "$value": "420px",
       "css": "--sys-layout-panel-height",
       "tailwind": "--spacing-layout-panel-height"
+    },
+    "sys.layout.table.scroll": {
+      "$type": "dimension",
+      "$description": "머리글을 고정하는 표의 스크롤 높이 — 이 높이를 넘으면 표 안에서 스크롤한다",
+      "$value": "560px",
+      "css": "--sys-layout-table-scroll",
+      "tailwind": "--spacing-layout-table-scroll"
     },
     "sys.layout.menu.min": {
       "$type": "dimension",

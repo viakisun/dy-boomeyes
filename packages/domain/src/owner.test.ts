@@ -1,5 +1,17 @@
 import { describe, expect, it } from 'vitest';
-import { ownerLevel, ownerSiteSummary, ownerStrip, type OwnerAlert, type OwnerDevice, type OwnerSite } from './owner';
+import {
+  OWNER_FLEET_DEFAULT,
+  ownerExpiryDays,
+  ownerFleetRows,
+  ownerFleetState,
+  ownerLevel,
+  ownerSiteSummary,
+  ownerStrip,
+  type OwnerAlert,
+  type OwnerDevice,
+  type OwnerFleetQuery,
+  type OwnerSite,
+} from './owner';
 
 const site = (id: string, kind: OwnerSite['kind'] = 'site'): OwnerSite => ({
   id,
@@ -104,5 +116,60 @@ describe('[FR-024] 현황 드릴다운 단계', () => {
     expect(at('?site=SITE-A&device=CPB-001')).toMatchObject({ level: 'unit', device: { id: 'CPB-001' } });
     expect(at('?site=SITE-D&device=CPB-001')).toMatchObject({ level: 'site', site: { id: 'SITE-D' } });
     expect(at('?site=SITE-A&device=CPB-999')).toMatchObject({ level: 'site' });
+  });
+});
+
+describe('[FR-025] 보유 장비 표 — 세 축 · 정렬', () => {
+  const NOW = '2026-07-03T10:42:00+09:00';
+  const lease = (to: string) => ({ company: '건설사', from: '2026-01-01', to, installed: '2026-01-03' });
+  const fleet = [
+    device('CPB-001', 'SITE-A', { site: '마포', contract: lease('2026-09-30T00:00:00+09:00') }),
+    device('CPB-002', 'SITE-A', { site: '마포', fault: '유압 이상', contract: lease('2026-07-20T00:00:00+09:00') }),
+    device('CPB-003', 'SITE-B', { site: '판교', inspection: '수송관 점검' }),
+    device('CPB-004', 'SITE-B', { site: '판교', connection: 'stale', receivedAt: '2026-07-01T08:00:00+09:00' }),
+    device('CPB-005', 'SITE-D', { site: '보관소', deployment: 'stored', connection: 'detached', receivedAt: null }),
+  ];
+  const q = (patch: Partial<OwnerFleetQuery> = {}): OwnerFleetQuery => ({ ...OWNER_FLEET_DEFAULT, ...patch });
+  const ids = (query: OwnerFleetQuery) => ownerFleetRows(fleet, query, NOW).map((d) => d.id);
+
+  it('상태는 고장 › 점검 › 지연 › 보관 › 정상 순으로 가려낸다', () => {
+    expect(fleet.map(ownerFleetState)).toEqual(['running', 'fault', 'inspection', 'stale', 'stored']);
+    // 배치가 먼저다 — 보관 장비에 남은 고장 기록이 현장 고장으로 세어지면 띠와 표가 갈라진다
+    expect(ownerFleetState({ ...fleet[4]!, fault: 'E-107' })).toBe('stored');
+    // 투입됐는데 수신이 없는 장비는 「가동 중」이 아니다(FR-034)
+    expect(ownerFleetState({ ...fleet[0]!, connection: 'unintegrated' })).toBe('unintegrated');
+  });
+  it('띠와 표가 같은 분류를 쓴다', () => {
+    const strip = ownerStrip(fleet);
+    expect(strip).toMatchObject({ total: 5, fault: 1, inspection: 1, stale: 1, stored: 1, running: 1 });
+    for (const key of ['fault', 'inspection', 'stale', 'stored', 'running'] as const)
+      expect(ownerFleetRows(fleet, q({ filter: key }), NOW)).toHaveLength(strip[key]);
+  });
+  it('기본 정렬은 확인 필요 우선이고 보관은 정상보다 뒤다', () => {
+    expect(ids(q())).toEqual(['CPB-002', 'CPB-003', 'CPB-004', 'CPB-001', 'CPB-005']);
+    expect(ids(q({ dir: 'desc' }))).toEqual(['CPB-005', 'CPB-001', 'CPB-004', 'CPB-003', 'CPB-002']);
+    // 확인 필요 = 고장·점검·지연 셋(띠·구성 막대의 링크)
+    expect(ids(q({ filter: 'attention' }))).toEqual(['CPB-002', 'CPB-003', 'CPB-004']);
+  });
+  it('값이 없는 행은 방향과 상관없이 뒤로 간다', () => {
+    // 보관 장비는 수신도 계약도 없다 — 오름·내림 어느 쪽에서도 맨 뒤여야 한다
+    expect(ids(q({ sort: 'received' })).at(-1)).toBe('CPB-005');
+    expect(ids(q({ sort: 'received', dir: 'desc' })).at(-1)).toBe('CPB-005');
+    expect(ids(q({ sort: 'expiry' }))).toEqual(['CPB-002', 'CPB-001', 'CPB-003', 'CPB-004', 'CPB-005']);
+  });
+  it('세 축은 함께 걸린다', () => {
+    expect(ids(q({ filter: 'fault' }))).toEqual(['CPB-002']);
+    expect(ids(q({ site: 'SITE-B' }))).toEqual(['CPB-003', 'CPB-004']);
+    expect(ids(q({ site: 'SITE-B', filter: 'stale' }))).toEqual(['CPB-004']);
+    // 계약 종료 30일 = 「30일 안에 끝난다」 — 계약이 없는 장비는 걸리지 않는다
+    expect(ownerExpiryDays(fleet[1]!, NOW)).toBe(17);
+    expect(ids(q({ expiry: '30' }))).toEqual(['CPB-002']);
+    expect(ids(q({ expiry: '90' }))).toEqual(['CPB-002', 'CPB-001']);
+  });
+  it('검색은 호기·코드·현장·건설사를 본다', () => {
+    expect(ids(q({ q: '판교' }))).toEqual(['CPB-003', 'CPB-004']);
+    expect(ids(q({ q: 'cpb-005' }))).toEqual(['CPB-005']);
+    expect(ids(q({ q: '2호기' }))).toEqual(['CPB-002']);
+    expect(ids(q({ q: '건설사' }))).toEqual(['CPB-002', 'CPB-001']);
   });
 });

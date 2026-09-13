@@ -139,8 +139,9 @@ export const OWNER_SITES: readonly OwnerSite[] = [
     region: '광주·호남',
     location: { lat: 35.16, lng: 126.85 },
     contact: contact('서현장'),
-    period: period('2026-05-20', '2026-12-20'),
-    progress: progressOf(period('2026-05-20', '2026-12-20')),
+    // 종료 임박 둘 — 소유주의 판단(「이 기간에 낼 수 있는 장비가 있나」)은 보관 + 종료 임박으로 답한다(시안)
+    period: period('2025-12-20', '2026-07-20'),
+    progress: progressOf(period('2025-12-20', '2026-07-20')),
   },
   {
     id: 'SITE-DAEGU',
@@ -153,8 +154,8 @@ export const OWNER_SITES: readonly OwnerSite[] = [
     region: '대구·경북',
     location: { lat: 35.87, lng: 128.6 },
     contact: contact('강현장'),
-    period: period('2026-04-01', '2026-11-15'),
-    progress: progressOf(period('2026-04-01', '2026-11-15')),
+    period: period('2026-04-01', '2026-08-15'),
+    progress: progressOf(period('2026-04-01', '2026-08-15')),
   },
   {
     id: 'SITE-CHANGWON',
