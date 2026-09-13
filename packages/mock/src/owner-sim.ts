@@ -93,6 +93,9 @@ export function createOwnerSim(
           d.fault = FAULTS[code];
           d.errorCode = code;
           if (code === 'E-021') d.voltage = 342;
+          // 정상 동기화 루프는 !d.fault일 때만 돌아, 여기서 맞추지 않으면 고장 내내 두 값이 갈린다
+          d.telemetry.voltageV = d.voltage;
+          if (code === 'E-107') d.telemetry.hydraulicBar = 41;
           source.alerts.unshift(
             alert(
               d,

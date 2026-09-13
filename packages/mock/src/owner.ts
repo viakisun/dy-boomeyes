@@ -220,6 +220,21 @@ const OWNER_REQUESTS: OwnerRequest[] = [
     assigned: ['CPB-003', 'CPB-004'],
     receivedAt: '2026-05-20T10:00:00+09:00',
   },
+  // 다른 소유주의 요청 — 교차 조회 시험이 「데이터가 없어 통과」하지 않게 한다
+  {
+    id: 'REQ-101',
+    ownerId: 'OWN-002',
+    siteName: '김포 창고 신축',
+    builder: '새봄건설',
+    manager: { name: '한안전', phone: '010-0000-0201' },
+    from: '2026-08-10',
+    to: '2026-12-10',
+    count: 1,
+    spec: 'CPB 32m',
+    state: 'assign',
+    assigned: [],
+    receivedAt: '2026-07-01T09:00:00+09:00',
+  },
   {
     id: 'REQ-005',
     ownerId: 'OWN-001',
@@ -246,11 +261,23 @@ function ownerDrivers(devices: OwnerDevice[]): OwnerDriver[] {
     { id: 'DRV-005', name: '정운전', license: '건설기계조종사 1종', licenseTo: '2027-09-01', phone: '010-0000-0005' },
     { id: 'DRV-006', name: '조운전', license: '건설기계조종사 1종', licenseTo: '2027-11-19', phone: '010-0000-0006' },
   ];
-  return roster.map((person) => ({
-    ...person,
-    ownerId: 'OWN-001',
-    assignedTo: devices.find((d) => d.driver?.id === person.id)?.id ?? null,
-  }));
+  return [
+    ...roster.map((person) => ({
+      ...person,
+      ownerId: 'OWN-001',
+      assignedTo: devices.find((d) => d.driver?.id === person.id)?.id ?? null,
+    })),
+    // 다른 소유주의 운전자 — 교차 조회 시험이 「데이터가 없어 통과」하지 않게 한다
+    {
+      id: 'DRV-101',
+      ownerId: 'OWN-002',
+      name: '한운전',
+      license: '건설기계조종사 1종',
+      licenseTo: '2027-03-03',
+      phone: '010-0000-0201',
+      assignedTo: devices.find((d) => d.ownerId === 'OWN-002' && d.driver)?.id ?? null,
+    },
+  ];
 }
 /** 호기 카메라 6 — 바디캠 A·B·C · CCTV 1·2 · AI CCTV(시안 «확정 2026-09-12» · FR-042 · DISC-004).
  *  시연 영상 소스는 front·boom 둘뿐이라 여섯 타일이 같은 클립을 돌린다 — sample로 그 사실을 남기고
@@ -280,8 +307,9 @@ function ownerCameras(d: OwnerDevice): OwnerCamera[] {
     recordedAt: '2026-07-03T09:30:00+09:00',
   }));
 }
-/** AI 경고는 몇 호기에만 둔다 — 모든 호기가 경고를 내면 시연에서 무엇을 봐야 할지 알 수 없다 */
-const AI_EVENT_UNITS = new Set([1, 62]);
+/** AI 경고는 몇 호기에만 둔다 — 모든 호기가 경고를 내면 시연에서 무엇을 봐야 할지 알 수 없다.
+ *  101(다른 소유주)을 포함해 교차 조회 시험이 공허해지지 않게 한다. */
+const AI_EVENT_UNITS = new Set([1, 62, 101]);
 function ownerAiEvents(d: OwnerDevice): OwnerAiEvent[] {
   if (!AI_EVENT_UNITS.has(d.unit) || d.connection !== 'current') return [];
   return [
