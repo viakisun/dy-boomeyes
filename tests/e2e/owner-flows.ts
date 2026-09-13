@@ -364,7 +364,7 @@ export function ownerFlows(app: OwnerApp) {
   });
 
   // 시안의 호기 화면 — 상태 · 오늘 운전자 · AI 경고 · 지표 6 · 접기(«확정 2026-09-12»)
-  test('[B1-02] [FR-044] [AC-O05] unit panel shows driver, AI warning, six metrics and folded groups', async ({
+  test('[B1-02] [FR-044] [FR-028] [AC-O05] unit panel shows driver, AI warning, six metrics and folded groups', async ({
     page,
   }) => {
     await startOwner(page, app);

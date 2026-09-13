@@ -26,6 +26,9 @@
     toneOf(b) === 'danger' ? 'bg-danger text-danger-on-solid' : 'bg-warning text-warning-on-solid';
   const zoneOf = (b: Box) => b.kind === 'zone';
   const text = (b: Box) => `${b.label ?? '객체'}${b.score !== undefined ? ` ${b.score.toFixed(2)}` : ''}`;
+  // 상자가 프레임 위쪽에 붙어 있으면 이름표를 위에 둘 자리가 없다 — 그럴 땐 상자 안쪽으로 넣는다
+  // (구 SVG는 y를 4%로 클램프해 프레임 안에 두었다. 같은 보호를 유지한다.)
+  const inside = (b: Box) => zoneOf(b) || b.y * 100 < 6;
 </script>
 
 {#if boxes.length}
@@ -60,8 +63,8 @@
         aria-hidden="true"
         class="rounded-control px-inset-xs text-label-sm absolute whitespace-nowrap {chip(b)}"
         style:left="{b.x * 100}%"
-        style:top="{zoneOf(b) ? b.y * 100 : Math.max(0, b.y * 100)}%"
-        style:transform={zoneOf(b) ? 'translateY(2%)' : 'translateY(-110%)'}>{text(b)}</span
+        style:top="{b.y * 100}%"
+        style:transform={inside(b) ? 'translateY(2%)' : 'translateY(-110%)'}>{text(b)}</span
       >
     {/each}
   </div>
