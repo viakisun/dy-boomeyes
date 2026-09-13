@@ -1,0 +1,3422 @@
+{
+  "task": "OD-13",
+  "sourceSha": "db8af1c76d5cb7ba191e32380e9732d2c36b17be",
+  "workingTreeHash": "d2f59403ae774772909cf2cdefb0ac2f9dc83e7986e81bc91c7e5e7f5a9e19c8",
+  "registryHash": "a85bfe8c3d89f71e23183796386de050e5d031620c1dad72f9b2731c8701e167",
+  "command": [
+    "node",
+    "tools/capture/owner-exceptions.mjs",
+    "--output",
+    "docs/design/evidence/owner-implementation-db8af1c7-2026-09-13T07-28-53.734Z/exceptions"
+  ],
+  "createdAt": "2026-09-13T07:31:31.172Z",
+  "scope": "full",
+  "requiredCases": 38,
+  "expectedCases": 38,
+  "actualCases": 38,
+  "requiredCount": 46,
+  "expectedCount": 46,
+  "actualCount": 46,
+  "theme": "light",
+  "status": "automated-capture-pass",
+  "visualReview": "pending",
+  "customerReview": "not-performed",
+  "environment": {
+    "node": "v24.9.0",
+    "platform": "darwin",
+    "playwright": "1.62.1",
+    "locale": "ko-KR",
+    "timezone": "Asia/Seoul",
+    "dpr": 1,
+    "serviceWorkers": "block",
+    "chromium": "151.0.7922.34"
+  },
+  "cases": [
+    {
+      "key": "web-empty-fleet",
+      "app": "web",
+      "scenario": "empty-fleet",
+      "ac": [
+        "AC-O14"
+      ],
+      "code": "B1-09",
+      "state": "empty",
+      "frames": [
+        "empty"
+      ],
+      "pageErrors": [],
+      "consoleErrors": [],
+      "failedRequests": [],
+      "injectedRequests": [],
+      "status": "automated-capture-pass",
+      "expectedConsoleErrors": [],
+      "unexpectedConsoleErrors": [],
+      "expectedRequestFailures": [],
+      "unexpectedRequestFailures": []
+    },
+    {
+      "key": "web-read-retry",
+      "app": "web",
+      "scenario": "read-retry",
+      "ac": [
+        "AC-O14"
+      ],
+      "code": "B1-09",
+      "state": "error",
+      "frames": [
+        "failed",
+        "recovered"
+      ],
+      "pageErrors": [],
+      "consoleErrors": [],
+      "failedRequests": [],
+      "injectedRequests": [],
+      "status": "automated-capture-pass",
+      "expectedConsoleErrors": [],
+      "unexpectedConsoleErrors": [],
+      "expectedRequestFailures": [],
+      "unexpectedRequestFailures": []
+    },
+    {
+      "key": "web-missing-detail",
+      "app": "web",
+      "scenario": "missing-detail",
+      "ac": [
+        "AC-O05",
+        "AC-O14"
+      ],
+      "code": "B1-10",
+      "state": "boundaries",
+      "frames": [
+        "missing"
+      ],
+      "pageErrors": [],
+      "consoleErrors": [],
+      "failedRequests": [],
+      "injectedRequests": [],
+      "status": "automated-capture-pass",
+      "expectedConsoleErrors": [],
+      "unexpectedConsoleErrors": [],
+      "expectedRequestFailures": [],
+      "unexpectedRequestFailures": []
+    },
+    {
+      "key": "web-stale-detail",
+      "app": "web",
+      "scenario": "stale-detail",
+      "ac": [
+        "AC-O05"
+      ],
+      "code": "B1-10",
+      "state": "owner",
+      "frames": [
+        "stale"
+      ],
+      "pageErrors": [],
+      "consoleErrors": [],
+      "failedRequests": [],
+      "injectedRequests": [],
+      "status": "automated-capture-pass",
+      "expectedConsoleErrors": [],
+      "unexpectedConsoleErrors": [],
+      "expectedRequestFailures": [],
+      "unexpectedRequestFailures": []
+    },
+    {
+      "key": "web-detached-detail",
+      "app": "web",
+      "scenario": "detached-detail",
+      "ac": [
+        "AC-O05"
+      ],
+      "code": "B1-10",
+      "state": "owner",
+      "frames": [
+        "detached"
+      ],
+      "pageErrors": [],
+      "consoleErrors": [],
+      "failedRequests": [],
+      "injectedRequests": [],
+      "status": "automated-capture-pass",
+      "expectedConsoleErrors": [],
+      "unexpectedConsoleErrors": [],
+      "expectedRequestFailures": [],
+      "unexpectedRequestFailures": []
+    },
+    {
+      "key": "web-multiple-alerts",
+      "app": "web",
+      "scenario": "multiple-alerts",
+      "ac": [
+        "AC-O06",
+        "AC-O07"
+      ],
+      "code": "B1-12",
+      "state": "boundaries",
+      "frames": [
+        "multiple"
+      ],
+      "pageErrors": [],
+      "consoleErrors": [],
+      "failedRequests": [],
+      "injectedRequests": [],
+      "status": "automated-capture-pass",
+      "expectedConsoleErrors": [],
+      "unexpectedConsoleErrors": [],
+      "expectedRequestFailures": [],
+      "unexpectedRequestFailures": []
+    },
+    {
+      "key": "web-offline-detail",
+      "app": "web",
+      "scenario": "offline-detail",
+      "ac": [
+        "AC-O05",
+        "AC-O14"
+      ],
+      "code": "B1-10",
+      "state": "owner",
+      "frames": [
+        "offline"
+      ],
+      "pageErrors": [],
+      "consoleErrors": [
+        {
+          "text": "Failed to load resource: net::ERR_INTERNET_DISCONNECTED",
+          "location": {
+            "url": "https://tiles.basemaps.cartocdn.com/vector/carto.streets/v1/tiles.json",
+            "line": 0,
+            "column": 0,
+            "lineNumber": 0,
+            "columnNumber": 0
+          }
+        },
+        {
+          "text": "Failed to load resource: net::ERR_INTERNET_DISCONNECTED",
+          "location": {
+            "url": "https://tiles.basemaps.cartocdn.com/gl/positron-gl-style/sprite.json",
+            "line": 0,
+            "column": 0,
+            "lineNumber": 0,
+            "columnNumber": 0
+          }
+        },
+        {
+          "text": "Failed to load resource: net::ERR_INTERNET_DISCONNECTED",
+          "location": {
+            "url": "https://tiles.basemaps.cartocdn.com/gl/positron-gl-style/sprite.png",
+            "line": 0,
+            "column": 0,
+            "lineNumber": 0,
+            "columnNumber": 0
+          }
+        }
+      ],
+      "failedRequests": [
+        {
+          "url": "https://tiles.basemaps.cartocdn.com/vector/carto.streets/v1/tiles.json",
+          "error": "net::ERR_INTERNET_DISCONNECTED"
+        },
+        {
+          "url": "https://tiles.basemaps.cartocdn.com/gl/positron-gl-style/sprite.json",
+          "error": "net::ERR_INTERNET_DISCONNECTED"
+        },
+        {
+          "url": "https://tiles.basemaps.cartocdn.com/gl/positron-gl-style/sprite.png",
+          "error": "net::ERR_INTERNET_DISCONNECTED"
+        }
+      ],
+      "injectedRequests": [],
+      "status": "automated-capture-pass",
+      "expectedConsoleErrors": [
+        {
+          "text": "Failed to load resource: net::ERR_INTERNET_DISCONNECTED",
+          "location": {
+            "url": "https://tiles.basemaps.cartocdn.com/vector/carto.streets/v1/tiles.json",
+            "line": 0,
+            "column": 0,
+            "lineNumber": 0,
+            "columnNumber": 0
+          }
+        },
+        {
+          "text": "Failed to load resource: net::ERR_INTERNET_DISCONNECTED",
+          "location": {
+            "url": "https://tiles.basemaps.cartocdn.com/gl/positron-gl-style/sprite.json",
+            "line": 0,
+            "column": 0,
+            "lineNumber": 0,
+            "columnNumber": 0
+          }
+        },
+        {
+          "text": "Failed to load resource: net::ERR_INTERNET_DISCONNECTED",
+          "location": {
+            "url": "https://tiles.basemaps.cartocdn.com/gl/positron-gl-style/sprite.png",
+            "line": 0,
+            "column": 0,
+            "lineNumber": 0,
+            "columnNumber": 0
+          }
+        }
+      ],
+      "unexpectedConsoleErrors": [],
+      "expectedRequestFailures": [
+        {
+          "url": "https://tiles.basemaps.cartocdn.com/vector/carto.streets/v1/tiles.json",
+          "error": "net::ERR_INTERNET_DISCONNECTED"
+        },
+        {
+          "url": "https://tiles.basemaps.cartocdn.com/gl/positron-gl-style/sprite.json",
+          "error": "net::ERR_INTERNET_DISCONNECTED"
+        },
+        {
+          "url": "https://tiles.basemaps.cartocdn.com/gl/positron-gl-style/sprite.png",
+          "error": "net::ERR_INTERNET_DISCONNECTED"
+        }
+      ],
+      "unexpectedRequestFailures": []
+    },
+    {
+      "key": "web-pdf-preview",
+      "app": "web",
+      "scenario": "pdf-preview",
+      "ac": [
+        "AC-O10",
+        "AC-O11"
+      ],
+      "code": "B1-05",
+      "state": "owner",
+      "frames": [
+        "dialog"
+      ],
+      "pageErrors": [],
+      "consoleErrors": [],
+      "failedRequests": [],
+      "injectedRequests": [],
+      "status": "automated-capture-pass",
+      "expectedConsoleErrors": [],
+      "unexpectedConsoleErrors": [],
+      "expectedRequestFailures": [],
+      "unexpectedRequestFailures": []
+    },
+    {
+      "key": "web-foreign-document",
+      "app": "web",
+      "scenario": "foreign-document",
+      "ac": [
+        "AC-O12"
+      ],
+      "code": "B1-05",
+      "state": "owner",
+      "frames": [
+        "denied"
+      ],
+      "pageErrors": [],
+      "consoleErrors": [],
+      "failedRequests": [],
+      "injectedRequests": [],
+      "status": "automated-capture-pass",
+      "expectedConsoleErrors": [],
+      "unexpectedConsoleErrors": [],
+      "expectedRequestFailures": [],
+      "unexpectedRequestFailures": []
+    },
+    {
+      "key": "web-foreign-camera",
+      "app": "web",
+      "scenario": "foreign-camera",
+      "ac": [
+        "AC-O12"
+      ],
+      "code": "B1-11",
+      "state": "owner",
+      "frames": [
+        "denied"
+      ],
+      "pageErrors": [],
+      "consoleErrors": [],
+      "failedRequests": [],
+      "injectedRequests": [],
+      "status": "automated-capture-pass",
+      "expectedConsoleErrors": [],
+      "unexpectedConsoleErrors": [],
+      "expectedRequestFailures": [],
+      "unexpectedRequestFailures": []
+    },
+    {
+      "key": "web-document-network",
+      "app": "web",
+      "scenario": "document-network",
+      "ac": [
+        "AC-O10",
+        "AC-O14"
+      ],
+      "code": "B1-05",
+      "state": "owner",
+      "frames": [
+        "failed",
+        "recovered"
+      ],
+      "pageErrors": [],
+      "consoleErrors": [
+        {
+          "text": "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+          "location": {
+            "url": "http://localhost:4173/_app/immutable/assets/cpb-001-certificate.KaRYkWeN.png",
+            "line": 0,
+            "column": 0,
+            "lineNumber": 0,
+            "columnNumber": 0
+          }
+        }
+      ],
+      "failedRequests": [],
+      "injectedRequests": [
+        {
+          "url": "http://localhost:4173/_app/immutable/assets/cpb-001-certificate.KaRYkWeN.png",
+          "status": 503,
+          "at": "2026-09-13T07:31:38.304Z"
+        }
+      ],
+      "status": "automated-capture-pass",
+      "expectedConsoleErrors": [
+        {
+          "text": "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+          "location": {
+            "url": "http://localhost:4173/_app/immutable/assets/cpb-001-certificate.KaRYkWeN.png",
+            "line": 0,
+            "column": 0,
+            "lineNumber": 0,
+            "columnNumber": 0
+          }
+        }
+      ],
+      "unexpectedConsoleErrors": [],
+      "expectedRequestFailures": [],
+      "unexpectedRequestFailures": []
+    },
+    {
+      "key": "web-video-network",
+      "app": "web",
+      "scenario": "video-network",
+      "ac": [
+        "AC-O09",
+        "AC-O14"
+      ],
+      "code": "B1-11",
+      "state": "owner",
+      "frames": [
+        "failed",
+        "recovered"
+      ],
+      "pageErrors": [],
+      "consoleErrors": [
+        {
+          "text": "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+          "location": {
+            "url": "http://localhost:4173/_app/immutable/assets/front.D7bkNziN.mp4",
+            "line": 0,
+            "column": 0,
+            "lineNumber": 0,
+            "columnNumber": 0
+          }
+        }
+      ],
+      "failedRequests": [
+        {
+          "url": "http://localhost:4173/_app/immutable/assets/front.D7bkNziN.mp4",
+          "error": "net::ERR_ABORTED"
+        }
+      ],
+      "injectedRequests": [
+        {
+          "url": "http://localhost:4173/_app/immutable/assets/front.D7bkNziN.mp4",
+          "status": 503,
+          "at": "2026-09-13T07:31:39.108Z"
+        }
+      ],
+      "status": "automated-capture-pass",
+      "expectedConsoleErrors": [
+        {
+          "text": "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+          "location": {
+            "url": "http://localhost:4173/_app/immutable/assets/front.D7bkNziN.mp4",
+            "line": 0,
+            "column": 0,
+            "lineNumber": 0,
+            "columnNumber": 0
+          }
+        }
+      ],
+      "unexpectedConsoleErrors": [],
+      "expectedRequestFailures": [
+        {
+          "url": "http://localhost:4173/_app/immutable/assets/front.D7bkNziN.mp4",
+          "error": "net::ERR_ABORTED"
+        }
+      ],
+      "unexpectedRequestFailures": []
+    },
+    {
+      "key": "web-map-network",
+      "app": "web",
+      "scenario": "map-network",
+      "ac": [
+        "AC-O13",
+        "AC-O14"
+      ],
+      "code": "B1-02",
+      "state": "owner",
+      "frames": [
+        "failed",
+        "recovered"
+      ],
+      "pageErrors": [],
+      "consoleErrors": [
+        {
+          "text": "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+          "location": {
+            "url": "https://basemaps.cartocdn.com/gl/positron-gl-style/style.json",
+            "line": 0,
+            "column": 0,
+            "lineNumber": 0,
+            "columnNumber": 0
+          }
+        }
+      ],
+      "failedRequests": [],
+      "injectedRequests": [
+        {
+          "url": "https://basemaps.cartocdn.com/gl/positron-gl-style/style.json",
+          "status": 503,
+          "at": "2026-09-13T07:31:40.332Z"
+        }
+      ],
+      "status": "automated-capture-pass",
+      "expectedConsoleErrors": [
+        {
+          "text": "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+          "location": {
+            "url": "https://basemaps.cartocdn.com/gl/positron-gl-style/style.json",
+            "line": 0,
+            "column": 0,
+            "lineNumber": 0,
+            "columnNumber": 0
+          }
+        }
+      ],
+      "unexpectedConsoleErrors": [],
+      "expectedRequestFailures": [],
+      "unexpectedRequestFailures": []
+    },
+    {
+      "key": "web-overview-site",
+      "app": "web",
+      "scenario": "overview-site",
+      "ac": [
+        "AC-O13"
+      ],
+      "code": "B1-02",
+      "state": "owner",
+      "frames": [
+        "site"
+      ],
+      "pageErrors": [],
+      "consoleErrors": [],
+      "failedRequests": [],
+      "injectedRequests": [],
+      "status": "automated-capture-pass",
+      "expectedConsoleErrors": [],
+      "unexpectedConsoleErrors": [],
+      "expectedRequestFailures": [],
+      "unexpectedRequestFailures": []
+    },
+    {
+      "key": "web-empty-requests",
+      "app": "web",
+      "scenario": "empty-requests",
+      "ac": [
+        "AC-O14"
+      ],
+      "code": "B1-13",
+      "state": "empty",
+      "frames": [
+        "empty"
+      ],
+      "pageErrors": [],
+      "consoleErrors": [],
+      "failedRequests": [],
+      "injectedRequests": [],
+      "status": "automated-capture-pass",
+      "expectedConsoleErrors": [],
+      "unexpectedConsoleErrors": [],
+      "expectedRequestFailures": [],
+      "unexpectedRequestFailures": []
+    },
+    {
+      "key": "web-no-candidates",
+      "app": "web",
+      "scenario": "no-candidates",
+      "ac": [
+        "AC-O07",
+        "AC-O14"
+      ],
+      "code": "B1-13",
+      "state": "owner",
+      "frames": [
+        "none"
+      ],
+      "pageErrors": [],
+      "consoleErrors": [],
+      "failedRequests": [],
+      "injectedRequests": [],
+      "status": "automated-capture-pass",
+      "expectedConsoleErrors": [],
+      "unexpectedConsoleErrors": [],
+      "expectedRequestFailures": [],
+      "unexpectedRequestFailures": []
+    },
+    {
+      "key": "web-driver-expiring",
+      "app": "web",
+      "scenario": "driver-expiring",
+      "ac": [
+        "AC-O07"
+      ],
+      "code": "B1-14",
+      "state": "owner",
+      "frames": [
+        "expiring"
+      ],
+      "pageErrors": [],
+      "consoleErrors": [],
+      "failedRequests": [],
+      "injectedRequests": [],
+      "status": "automated-capture-pass",
+      "expectedConsoleErrors": [],
+      "unexpectedConsoleErrors": [],
+      "expectedRequestFailures": [],
+      "unexpectedRequestFailures": []
+    },
+    {
+      "key": "web-driver-docs-missing",
+      "app": "web",
+      "scenario": "driver-docs-missing",
+      "ac": [
+        "AC-O07"
+      ],
+      "code": "B1-15",
+      "state": "owner",
+      "frames": [
+        "missing"
+      ],
+      "pageErrors": [],
+      "consoleErrors": [],
+      "failedRequests": [],
+      "injectedRequests": [],
+      "status": "automated-capture-pass",
+      "expectedConsoleErrors": [],
+      "unexpectedConsoleErrors": [],
+      "expectedRequestFailures": [],
+      "unexpectedRequestFailures": []
+    },
+    {
+      "key": "web-overview-unit",
+      "app": "web",
+      "scenario": "overview-unit",
+      "ac": [
+        "AC-O08",
+        "AC-O13"
+      ],
+      "code": "B1-02",
+      "state": "owner",
+      "frames": [
+        "unit"
+      ],
+      "pageErrors": [],
+      "consoleErrors": [],
+      "failedRequests": [
+        {
+          "url": "http://localhost:4173/_app/immutable/assets/front.D7bkNziN.mp4",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "url": "http://localhost:4173/_app/immutable/assets/front.D7bkNziN.mp4",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "url": "http://localhost:4173/_app/immutable/assets/boom.BS2Cnj7b.mp4",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "url": "http://localhost:4173/_app/immutable/assets/front.D7bkNziN.mp4",
+          "error": "net::ERR_ABORTED"
+        }
+      ],
+      "injectedRequests": [],
+      "status": "automated-capture-pass",
+      "expectedConsoleErrors": [],
+      "unexpectedConsoleErrors": [],
+      "expectedRequestFailures": [
+        {
+          "url": "http://localhost:4173/_app/immutable/assets/front.D7bkNziN.mp4",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "url": "http://localhost:4173/_app/immutable/assets/front.D7bkNziN.mp4",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "url": "http://localhost:4173/_app/immutable/assets/boom.BS2Cnj7b.mp4",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "url": "http://localhost:4173/_app/immutable/assets/front.D7bkNziN.mp4",
+          "error": "net::ERR_ABORTED"
+        }
+      ],
+      "unexpectedRequestFailures": []
+    },
+    {
+      "key": "pwa-empty-fleet",
+      "app": "pwa",
+      "scenario": "empty-fleet",
+      "ac": [
+        "AC-O14"
+      ],
+      "code": "A4-02",
+      "state": "empty",
+      "frames": [
+        "empty"
+      ],
+      "pageErrors": [],
+      "consoleErrors": [],
+      "failedRequests": [],
+      "injectedRequests": [],
+      "status": "automated-capture-pass",
+      "expectedConsoleErrors": [],
+      "unexpectedConsoleErrors": [],
+      "expectedRequestFailures": [],
+      "unexpectedRequestFailures": []
+    },
+    {
+      "key": "pwa-read-retry",
+      "app": "pwa",
+      "scenario": "read-retry",
+      "ac": [
+        "AC-O14"
+      ],
+      "code": "A4-02",
+      "state": "error",
+      "frames": [
+        "failed",
+        "recovered"
+      ],
+      "pageErrors": [],
+      "consoleErrors": [],
+      "failedRequests": [],
+      "injectedRequests": [],
+      "status": "automated-capture-pass",
+      "expectedConsoleErrors": [],
+      "unexpectedConsoleErrors": [],
+      "expectedRequestFailures": [],
+      "unexpectedRequestFailures": []
+    },
+    {
+      "key": "pwa-missing-detail",
+      "app": "pwa",
+      "scenario": "missing-detail",
+      "ac": [
+        "AC-O05",
+        "AC-O14"
+      ],
+      "code": "A4-08",
+      "state": "boundaries",
+      "frames": [
+        "missing"
+      ],
+      "pageErrors": [],
+      "consoleErrors": [],
+      "failedRequests": [],
+      "injectedRequests": [],
+      "status": "automated-capture-pass",
+      "expectedConsoleErrors": [],
+      "unexpectedConsoleErrors": [],
+      "expectedRequestFailures": [],
+      "unexpectedRequestFailures": []
+    },
+    {
+      "key": "pwa-stale-detail",
+      "app": "pwa",
+      "scenario": "stale-detail",
+      "ac": [
+        "AC-O05"
+      ],
+      "code": "A4-08",
+      "state": "owner",
+      "frames": [
+        "stale"
+      ],
+      "pageErrors": [],
+      "consoleErrors": [],
+      "failedRequests": [],
+      "injectedRequests": [],
+      "status": "automated-capture-pass",
+      "expectedConsoleErrors": [],
+      "unexpectedConsoleErrors": [],
+      "expectedRequestFailures": [],
+      "unexpectedRequestFailures": []
+    },
+    {
+      "key": "pwa-detached-detail",
+      "app": "pwa",
+      "scenario": "detached-detail",
+      "ac": [
+        "AC-O05"
+      ],
+      "code": "A4-08",
+      "state": "owner",
+      "frames": [
+        "detached"
+      ],
+      "pageErrors": [],
+      "consoleErrors": [],
+      "failedRequests": [],
+      "injectedRequests": [],
+      "status": "automated-capture-pass",
+      "expectedConsoleErrors": [],
+      "unexpectedConsoleErrors": [],
+      "expectedRequestFailures": [],
+      "unexpectedRequestFailures": []
+    },
+    {
+      "key": "pwa-multiple-alerts",
+      "app": "pwa",
+      "scenario": "multiple-alerts",
+      "ac": [
+        "AC-O06",
+        "AC-O07"
+      ],
+      "code": "A4-11",
+      "state": "boundaries",
+      "frames": [
+        "multiple"
+      ],
+      "pageErrors": [],
+      "consoleErrors": [],
+      "failedRequests": [],
+      "injectedRequests": [],
+      "status": "automated-capture-pass",
+      "expectedConsoleErrors": [],
+      "unexpectedConsoleErrors": [],
+      "expectedRequestFailures": [],
+      "unexpectedRequestFailures": []
+    },
+    {
+      "key": "pwa-offline-detail",
+      "app": "pwa",
+      "scenario": "offline-detail",
+      "ac": [
+        "AC-O05",
+        "AC-O14"
+      ],
+      "code": "A4-08",
+      "state": "owner",
+      "frames": [
+        "offline"
+      ],
+      "pageErrors": [],
+      "consoleErrors": [
+        {
+          "text": "Failed to load resource: net::ERR_INTERNET_DISCONNECTED",
+          "location": {
+            "url": "https://tiles.basemaps.cartocdn.com/vector/carto.streets/v1/tiles.json",
+            "line": 0,
+            "column": 0,
+            "lineNumber": 0,
+            "columnNumber": 0
+          }
+        },
+        {
+          "text": "Failed to load resource: net::ERR_INTERNET_DISCONNECTED",
+          "location": {
+            "url": "https://tiles.basemaps.cartocdn.com/gl/positron-gl-style/sprite.json",
+            "line": 0,
+            "column": 0,
+            "lineNumber": 0,
+            "columnNumber": 0
+          }
+        },
+        {
+          "text": "Failed to load resource: net::ERR_INTERNET_DISCONNECTED",
+          "location": {
+            "url": "https://tiles.basemaps.cartocdn.com/gl/positron-gl-style/sprite.png",
+            "line": 0,
+            "column": 0,
+            "lineNumber": 0,
+            "columnNumber": 0
+          }
+        }
+      ],
+      "failedRequests": [
+        {
+          "url": "https://tiles.basemaps.cartocdn.com/vector/carto.streets/v1/tiles.json",
+          "error": "net::ERR_INTERNET_DISCONNECTED"
+        },
+        {
+          "url": "https://tiles.basemaps.cartocdn.com/gl/positron-gl-style/sprite.json",
+          "error": "net::ERR_INTERNET_DISCONNECTED"
+        },
+        {
+          "url": "https://tiles.basemaps.cartocdn.com/gl/positron-gl-style/sprite.png",
+          "error": "net::ERR_INTERNET_DISCONNECTED"
+        }
+      ],
+      "injectedRequests": [],
+      "status": "automated-capture-pass",
+      "expectedConsoleErrors": [
+        {
+          "text": "Failed to load resource: net::ERR_INTERNET_DISCONNECTED",
+          "location": {
+            "url": "https://tiles.basemaps.cartocdn.com/vector/carto.streets/v1/tiles.json",
+            "line": 0,
+            "column": 0,
+            "lineNumber": 0,
+            "columnNumber": 0
+          }
+        },
+        {
+          "text": "Failed to load resource: net::ERR_INTERNET_DISCONNECTED",
+          "location": {
+            "url": "https://tiles.basemaps.cartocdn.com/gl/positron-gl-style/sprite.json",
+            "line": 0,
+            "column": 0,
+            "lineNumber": 0,
+            "columnNumber": 0
+          }
+        },
+        {
+          "text": "Failed to load resource: net::ERR_INTERNET_DISCONNECTED",
+          "location": {
+            "url": "https://tiles.basemaps.cartocdn.com/gl/positron-gl-style/sprite.png",
+            "line": 0,
+            "column": 0,
+            "lineNumber": 0,
+            "columnNumber": 0
+          }
+        }
+      ],
+      "unexpectedConsoleErrors": [],
+      "expectedRequestFailures": [
+        {
+          "url": "https://tiles.basemaps.cartocdn.com/vector/carto.streets/v1/tiles.json",
+          "error": "net::ERR_INTERNET_DISCONNECTED"
+        },
+        {
+          "url": "https://tiles.basemaps.cartocdn.com/gl/positron-gl-style/sprite.json",
+          "error": "net::ERR_INTERNET_DISCONNECTED"
+        },
+        {
+          "url": "https://tiles.basemaps.cartocdn.com/gl/positron-gl-style/sprite.png",
+          "error": "net::ERR_INTERNET_DISCONNECTED"
+        }
+      ],
+      "unexpectedRequestFailures": []
+    },
+    {
+      "key": "pwa-pdf-preview",
+      "app": "pwa",
+      "scenario": "pdf-preview",
+      "ac": [
+        "AC-O10",
+        "AC-O11"
+      ],
+      "code": "A4-10",
+      "state": "owner",
+      "frames": [
+        "dialog"
+      ],
+      "pageErrors": [],
+      "consoleErrors": [],
+      "failedRequests": [],
+      "injectedRequests": [],
+      "status": "automated-capture-pass",
+      "expectedConsoleErrors": [],
+      "unexpectedConsoleErrors": [],
+      "expectedRequestFailures": [],
+      "unexpectedRequestFailures": []
+    },
+    {
+      "key": "pwa-foreign-document",
+      "app": "pwa",
+      "scenario": "foreign-document",
+      "ac": [
+        "AC-O12"
+      ],
+      "code": "A4-10",
+      "state": "owner",
+      "frames": [
+        "denied"
+      ],
+      "pageErrors": [],
+      "consoleErrors": [],
+      "failedRequests": [],
+      "injectedRequests": [],
+      "status": "automated-capture-pass",
+      "expectedConsoleErrors": [],
+      "unexpectedConsoleErrors": [],
+      "expectedRequestFailures": [],
+      "unexpectedRequestFailures": []
+    },
+    {
+      "key": "pwa-foreign-camera",
+      "app": "pwa",
+      "scenario": "foreign-camera",
+      "ac": [
+        "AC-O12"
+      ],
+      "code": "A4-09",
+      "state": "owner",
+      "frames": [
+        "denied"
+      ],
+      "pageErrors": [],
+      "consoleErrors": [],
+      "failedRequests": [],
+      "injectedRequests": [],
+      "status": "automated-capture-pass",
+      "expectedConsoleErrors": [],
+      "unexpectedConsoleErrors": [],
+      "expectedRequestFailures": [],
+      "unexpectedRequestFailures": []
+    },
+    {
+      "key": "pwa-document-network",
+      "app": "pwa",
+      "scenario": "document-network",
+      "ac": [
+        "AC-O10",
+        "AC-O14"
+      ],
+      "code": "A4-10",
+      "state": "owner",
+      "frames": [
+        "failed",
+        "recovered"
+      ],
+      "pageErrors": [],
+      "consoleErrors": [
+        {
+          "text": "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+          "location": {
+            "url": "http://localhost:4174/_app/immutable/assets/cpb-001-certificate.KaRYkWeN.png",
+            "line": 0,
+            "column": 0,
+            "lineNumber": 0,
+            "columnNumber": 0
+          }
+        }
+      ],
+      "failedRequests": [],
+      "injectedRequests": [
+        {
+          "url": "http://localhost:4174/_app/immutable/assets/cpb-001-certificate.KaRYkWeN.png",
+          "status": 503,
+          "at": "2026-09-13T07:31:53.319Z"
+        }
+      ],
+      "status": "automated-capture-pass",
+      "expectedConsoleErrors": [
+        {
+          "text": "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+          "location": {
+            "url": "http://localhost:4174/_app/immutable/assets/cpb-001-certificate.KaRYkWeN.png",
+            "line": 0,
+            "column": 0,
+            "lineNumber": 0,
+            "columnNumber": 0
+          }
+        }
+      ],
+      "unexpectedConsoleErrors": [],
+      "expectedRequestFailures": [],
+      "unexpectedRequestFailures": []
+    },
+    {
+      "key": "pwa-video-network",
+      "app": "pwa",
+      "scenario": "video-network",
+      "ac": [
+        "AC-O09",
+        "AC-O14"
+      ],
+      "code": "A4-09",
+      "state": "owner",
+      "frames": [
+        "failed",
+        "recovered"
+      ],
+      "pageErrors": [],
+      "consoleErrors": [
+        {
+          "text": "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+          "location": {
+            "url": "http://localhost:4174/_app/immutable/assets/front.D7bkNziN.mp4",
+            "line": 0,
+            "column": 0,
+            "lineNumber": 0,
+            "columnNumber": 0
+          }
+        }
+      ],
+      "failedRequests": [
+        {
+          "url": "http://localhost:4174/_app/immutable/assets/front.D7bkNziN.mp4",
+          "error": "net::ERR_ABORTED"
+        }
+      ],
+      "injectedRequests": [
+        {
+          "url": "http://localhost:4174/_app/immutable/assets/front.D7bkNziN.mp4",
+          "status": 503,
+          "at": "2026-09-13T07:31:54.184Z"
+        }
+      ],
+      "status": "automated-capture-pass",
+      "expectedConsoleErrors": [
+        {
+          "text": "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+          "location": {
+            "url": "http://localhost:4174/_app/immutable/assets/front.D7bkNziN.mp4",
+            "line": 0,
+            "column": 0,
+            "lineNumber": 0,
+            "columnNumber": 0
+          }
+        }
+      ],
+      "unexpectedConsoleErrors": [],
+      "expectedRequestFailures": [
+        {
+          "url": "http://localhost:4174/_app/immutable/assets/front.D7bkNziN.mp4",
+          "error": "net::ERR_ABORTED"
+        }
+      ],
+      "unexpectedRequestFailures": []
+    },
+    {
+      "key": "pwa-map-network",
+      "app": "pwa",
+      "scenario": "map-network",
+      "ac": [
+        "AC-O13",
+        "AC-O14"
+      ],
+      "code": "A4-07",
+      "state": "owner",
+      "frames": [
+        "failed",
+        "recovered"
+      ],
+      "pageErrors": [],
+      "consoleErrors": [
+        {
+          "text": "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+          "location": {
+            "url": "https://basemaps.cartocdn.com/gl/positron-gl-style/style.json",
+            "line": 0,
+            "column": 0,
+            "lineNumber": 0,
+            "columnNumber": 0
+          }
+        }
+      ],
+      "failedRequests": [],
+      "injectedRequests": [
+        {
+          "url": "https://basemaps.cartocdn.com/gl/positron-gl-style/style.json",
+          "status": 503,
+          "at": "2026-09-13T07:31:55.276Z"
+        }
+      ],
+      "status": "automated-capture-pass",
+      "expectedConsoleErrors": [
+        {
+          "text": "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+          "location": {
+            "url": "https://basemaps.cartocdn.com/gl/positron-gl-style/style.json",
+            "line": 0,
+            "column": 0,
+            "lineNumber": 0,
+            "columnNumber": 0
+          }
+        }
+      ],
+      "unexpectedConsoleErrors": [],
+      "expectedRequestFailures": [],
+      "unexpectedRequestFailures": []
+    },
+    {
+      "key": "pwa-overview-site",
+      "app": "pwa",
+      "scenario": "overview-site",
+      "ac": [
+        "AC-O13"
+      ],
+      "code": "A4-07",
+      "state": "owner",
+      "frames": [
+        "site"
+      ],
+      "pageErrors": [],
+      "consoleErrors": [],
+      "failedRequests": [],
+      "injectedRequests": [],
+      "status": "automated-capture-pass",
+      "expectedConsoleErrors": [],
+      "unexpectedConsoleErrors": [],
+      "expectedRequestFailures": [],
+      "unexpectedRequestFailures": []
+    },
+    {
+      "key": "pwa-empty-requests",
+      "app": "pwa",
+      "scenario": "empty-requests",
+      "ac": [
+        "AC-O14"
+      ],
+      "code": "A4-03",
+      "state": "empty",
+      "frames": [
+        "empty"
+      ],
+      "pageErrors": [],
+      "consoleErrors": [],
+      "failedRequests": [],
+      "injectedRequests": [],
+      "status": "automated-capture-pass",
+      "expectedConsoleErrors": [],
+      "unexpectedConsoleErrors": [],
+      "expectedRequestFailures": [],
+      "unexpectedRequestFailures": []
+    },
+    {
+      "key": "pwa-no-candidates",
+      "app": "pwa",
+      "scenario": "no-candidates",
+      "ac": [
+        "AC-O07",
+        "AC-O14"
+      ],
+      "code": "A4-03",
+      "state": "owner",
+      "frames": [
+        "none"
+      ],
+      "pageErrors": [],
+      "consoleErrors": [],
+      "failedRequests": [],
+      "injectedRequests": [],
+      "status": "automated-capture-pass",
+      "expectedConsoleErrors": [],
+      "unexpectedConsoleErrors": [],
+      "expectedRequestFailures": [],
+      "unexpectedRequestFailures": []
+    },
+    {
+      "key": "pwa-driver-expiring",
+      "app": "pwa",
+      "scenario": "driver-expiring",
+      "ac": [
+        "AC-O07"
+      ],
+      "code": "A4-04",
+      "state": "owner",
+      "frames": [
+        "expiring"
+      ],
+      "pageErrors": [],
+      "consoleErrors": [],
+      "failedRequests": [],
+      "injectedRequests": [],
+      "status": "automated-capture-pass",
+      "expectedConsoleErrors": [],
+      "unexpectedConsoleErrors": [],
+      "expectedRequestFailures": [],
+      "unexpectedRequestFailures": []
+    },
+    {
+      "key": "pwa-driver-docs-missing",
+      "app": "pwa",
+      "scenario": "driver-docs-missing",
+      "ac": [
+        "AC-O07"
+      ],
+      "code": "A4-06",
+      "state": "owner",
+      "frames": [
+        "missing"
+      ],
+      "pageErrors": [],
+      "consoleErrors": [],
+      "failedRequests": [],
+      "injectedRequests": [],
+      "status": "automated-capture-pass",
+      "expectedConsoleErrors": [],
+      "unexpectedConsoleErrors": [],
+      "expectedRequestFailures": [],
+      "unexpectedRequestFailures": []
+    },
+    {
+      "key": "pwa-overview-unit",
+      "app": "pwa",
+      "scenario": "overview-unit",
+      "ac": [
+        "AC-O08",
+        "AC-O13"
+      ],
+      "code": "A4-07",
+      "state": "owner",
+      "frames": [
+        "unit"
+      ],
+      "pageErrors": [],
+      "consoleErrors": [],
+      "failedRequests": [
+        {
+          "url": "http://localhost:4174/_app/immutable/assets/front.D7bkNziN.mp4",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "url": "http://localhost:4174/_app/immutable/assets/boom.BS2Cnj7b.mp4",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "url": "http://localhost:4174/_app/immutable/assets/front.D7bkNziN.mp4",
+          "error": "net::ERR_ABORTED"
+        }
+      ],
+      "injectedRequests": [],
+      "status": "automated-capture-pass",
+      "expectedConsoleErrors": [],
+      "unexpectedConsoleErrors": [],
+      "expectedRequestFailures": [
+        {
+          "url": "http://localhost:4174/_app/immutable/assets/front.D7bkNziN.mp4",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "url": "http://localhost:4174/_app/immutable/assets/boom.BS2Cnj7b.mp4",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "url": "http://localhost:4174/_app/immutable/assets/front.D7bkNziN.mp4",
+          "error": "net::ERR_ABORTED"
+        }
+      ],
+      "unexpectedRequestFailures": []
+    }
+  ],
+  "shots": [
+    {
+      "key": "web-empty-fleet-empty",
+      "scenario": "empty-fleet",
+      "phase": "empty",
+      "view": "fleet",
+      "app": "web",
+      "code": "B1-09",
+      "ac": [
+        "AC-O14"
+      ],
+      "state": "empty",
+      "theme": "light",
+      "role": "owner",
+      "ownerId": "OWN-001",
+      "dataset": "empty",
+      "clock": "2026-07-03T10:42:00+09:00",
+      "url": "http://localhost:4173/b1/fleet?capture=1&state=empty&theme=light",
+      "file": "web-empty-fleet-empty.png",
+      "sha256": "d0cdae7e1f7fa298aecdb85fee458574a4bfbd0d2fb440da23a20671731a12c9",
+      "geometry": {
+        "width": 1280,
+        "height": 842,
+        "pageWidth": 1280,
+        "mainWidth": 1224,
+        "mainScrollWidth": 1224,
+        "scrollY": 0
+      },
+      "diagnostics": {
+        "expectedConsoleErrors": [],
+        "unexpectedConsoleErrors": [],
+        "expectedRequestFailures": [],
+        "unexpectedRequestFailures": []
+      },
+      "ok": true,
+      "status": "automated-capture-pass"
+    },
+    {
+      "key": "web-read-retry-failed",
+      "scenario": "read-retry",
+      "phase": "failed",
+      "view": "fleet",
+      "app": "web",
+      "code": "B1-09",
+      "ac": [
+        "AC-O14"
+      ],
+      "state": "error",
+      "theme": "light",
+      "role": "owner",
+      "ownerId": "OWN-001",
+      "dataset": null,
+      "clock": null,
+      "url": "http://localhost:4173/b1/fleet?capture=1&state=error&theme=light",
+      "file": "web-read-retry-failed.png",
+      "sha256": "35eee45bde30e2bbc88cf249bbd0452329f2fd3a24a414cbf1607596186169f9",
+      "geometry": {
+        "width": 1280,
+        "height": 842,
+        "pageWidth": 1280,
+        "mainWidth": 1224,
+        "mainScrollWidth": 1224,
+        "scrollY": 0
+      },
+      "diagnostics": {
+        "expectedConsoleErrors": [],
+        "unexpectedConsoleErrors": [],
+        "expectedRequestFailures": [],
+        "unexpectedRequestFailures": []
+      },
+      "ok": true,
+      "status": "automated-capture-pass"
+    },
+    {
+      "key": "web-read-retry-recovered",
+      "scenario": "read-retry",
+      "phase": "recovered",
+      "view": "fleet",
+      "app": "web",
+      "code": "B1-09",
+      "ac": [
+        "AC-O14"
+      ],
+      "state": "error",
+      "theme": "light",
+      "role": "owner",
+      "ownerId": "OWN-001",
+      "dataset": "owner",
+      "clock": "2026-07-03T10:42:00+09:00",
+      "url": "http://localhost:4173/b1/fleet?capture=1&state=error&theme=light",
+      "file": "web-read-retry-recovered.png",
+      "sha256": "0e668180ec434103055c296db65548f408fcd15c32472a3daba441eb6664e8aa",
+      "geometry": {
+        "width": 1280,
+        "height": 842,
+        "pageWidth": 1280,
+        "mainWidth": 1224,
+        "mainScrollWidth": 1224,
+        "scrollY": 0
+      },
+      "diagnostics": {
+        "expectedConsoleErrors": [],
+        "unexpectedConsoleErrors": [],
+        "expectedRequestFailures": [],
+        "unexpectedRequestFailures": []
+      },
+      "ok": true,
+      "status": "automated-capture-pass",
+      "fullFile": "web-read-retry-recovered-full.png",
+      "fullViewport": {
+        "width": 1280,
+        "height": 950
+      },
+      "fullSha256": "ce4f973e752d64b139788d246a93794b35111ecbfbbce1bc3d5adde8e9b99b74"
+    },
+    {
+      "key": "web-missing-detail-missing",
+      "scenario": "missing-detail",
+      "phase": "missing",
+      "view": "detail",
+      "app": "web",
+      "code": "B1-10",
+      "ac": [
+        "AC-O05",
+        "AC-O14"
+      ],
+      "state": "boundaries",
+      "theme": "light",
+      "role": "owner",
+      "ownerId": "OWN-001",
+      "dataset": "boundaries",
+      "clock": "2026-07-03T10:42:00+09:00",
+      "url": "http://localhost:4173/b1/fleet/CPB-001?capture=1&state=boundaries&theme=light",
+      "file": "web-missing-detail-missing.png",
+      "sha256": "fafcf63fe841e7612b38fd325e3bcae0818cb1d9ca4a5bddb36f312b6801833f",
+      "geometry": {
+        "width": 1280,
+        "height": 842,
+        "pageWidth": 1280,
+        "mainWidth": 1224,
+        "mainScrollWidth": 1224,
+        "scrollY": 0
+      },
+      "diagnostics": {
+        "expectedConsoleErrors": [],
+        "unexpectedConsoleErrors": [],
+        "expectedRequestFailures": [],
+        "unexpectedRequestFailures": []
+      },
+      "ok": true,
+      "status": "automated-capture-pass",
+      "fullFile": "web-missing-detail-missing-full.png",
+      "fullViewport": {
+        "width": 1280,
+        "height": 1231
+      },
+      "fullSha256": "488571c428baccdfcbdc30f5cdca12cc16a5296ceb6297571834233187a993d9"
+    },
+    {
+      "key": "web-stale-detail-stale",
+      "scenario": "stale-detail",
+      "phase": "stale",
+      "view": "detail",
+      "app": "web",
+      "code": "B1-10",
+      "ac": [
+        "AC-O05"
+      ],
+      "state": "owner",
+      "theme": "light",
+      "role": "owner",
+      "ownerId": "OWN-001",
+      "dataset": "owner",
+      "clock": "2026-07-03T10:42:00+09:00",
+      "url": "http://localhost:4173/b1/fleet/CPB-004?capture=1&state=owner&theme=light",
+      "file": "web-stale-detail-stale.png",
+      "sha256": "38775771c5a4eaf113ce6efa148a98aeffd065aed0408091cd6b7ab003dd8541",
+      "geometry": {
+        "width": 1280,
+        "height": 842,
+        "pageWidth": 1280,
+        "mainWidth": 1224,
+        "mainScrollWidth": 1224,
+        "scrollY": 0
+      },
+      "diagnostics": {
+        "expectedConsoleErrors": [],
+        "unexpectedConsoleErrors": [],
+        "expectedRequestFailures": [],
+        "unexpectedRequestFailures": []
+      },
+      "ok": true,
+      "status": "automated-capture-pass",
+      "fullFile": "web-stale-detail-stale-full.png",
+      "fullViewport": {
+        "width": 1280,
+        "height": 1444
+      },
+      "fullSha256": "87bb287604d40faecc7d1ffacebd69a75ef1c1d4149cc8e8ad5e098a92777af1"
+    },
+    {
+      "key": "web-detached-detail-detached",
+      "scenario": "detached-detail",
+      "phase": "detached",
+      "view": "detail",
+      "app": "web",
+      "code": "B1-10",
+      "ac": [
+        "AC-O05"
+      ],
+      "state": "owner",
+      "theme": "light",
+      "role": "owner",
+      "ownerId": "OWN-001",
+      "dataset": "owner",
+      "clock": "2026-07-03T10:42:00+09:00",
+      "url": "http://localhost:4173/b1/fleet/CPB-005?capture=1&state=owner&theme=light",
+      "file": "web-detached-detail-detached.png",
+      "sha256": "acd83fe2433f79be69afb51a630993971125ed8a6a08bd46e3fd1bb8d7461675",
+      "geometry": {
+        "width": 1280,
+        "height": 842,
+        "pageWidth": 1280,
+        "mainWidth": 1224,
+        "mainScrollWidth": 1224,
+        "scrollY": 0
+      },
+      "diagnostics": {
+        "expectedConsoleErrors": [],
+        "unexpectedConsoleErrors": [],
+        "expectedRequestFailures": [],
+        "unexpectedRequestFailures": []
+      },
+      "ok": true,
+      "status": "automated-capture-pass",
+      "fullFile": "web-detached-detail-detached-full.png",
+      "fullViewport": {
+        "width": 1280,
+        "height": 1231
+      },
+      "fullSha256": "6d7978ddf3153fe6b2bbe138ca74054f2b5cb65162854ca2d5a92589cfdb2de3"
+    },
+    {
+      "key": "web-multiple-alerts-multiple",
+      "scenario": "multiple-alerts",
+      "phase": "multiple",
+      "view": "alerts",
+      "app": "web",
+      "code": "B1-12",
+      "ac": [
+        "AC-O06",
+        "AC-O07"
+      ],
+      "state": "boundaries",
+      "theme": "light",
+      "role": "owner",
+      "ownerId": "OWN-001",
+      "dataset": "boundaries",
+      "clock": "2026-07-03T10:42:00+09:00",
+      "url": "http://localhost:4173/b1/alerts?capture=1&state=boundaries&theme=light&device=CPB-002&alert=CPB-002-FAULT",
+      "file": "web-multiple-alerts-multiple.png",
+      "sha256": "65416f0760b719e3e3d5d7eb48e14a17a4cea78fbf0f00a70a1c2f3491bd1e9e",
+      "geometry": {
+        "width": 1280,
+        "height": 842,
+        "pageWidth": 1280,
+        "mainWidth": 1224,
+        "mainScrollWidth": 1224,
+        "scrollY": 0
+      },
+      "diagnostics": {
+        "expectedConsoleErrors": [],
+        "unexpectedConsoleErrors": [],
+        "expectedRequestFailures": [],
+        "unexpectedRequestFailures": []
+      },
+      "ok": true,
+      "status": "automated-capture-pass"
+    },
+    {
+      "key": "web-offline-detail-offline",
+      "scenario": "offline-detail",
+      "phase": "offline",
+      "view": "detail",
+      "app": "web",
+      "code": "B1-10",
+      "ac": [
+        "AC-O05",
+        "AC-O14"
+      ],
+      "state": "owner",
+      "theme": "light",
+      "role": "owner",
+      "ownerId": "OWN-001",
+      "dataset": "owner",
+      "clock": "2026-07-03T10:42:00+09:00",
+      "url": "http://localhost:4173/b1/fleet/CPB-004?capture=1&state=owner&theme=light",
+      "file": "web-offline-detail-offline.png",
+      "sha256": "18a801d04097acdd1c6d3331a46cc18b3965cd5ab1a48c1e3e62a0215701c1de",
+      "geometry": {
+        "width": 1280,
+        "height": 842,
+        "pageWidth": 1280,
+        "mainWidth": 1224,
+        "mainScrollWidth": 1224,
+        "scrollY": 0
+      },
+      "diagnostics": {
+        "expectedConsoleErrors": [
+          {
+            "text": "Failed to load resource: net::ERR_INTERNET_DISCONNECTED",
+            "location": {
+              "url": "https://tiles.basemaps.cartocdn.com/vector/carto.streets/v1/tiles.json",
+              "line": 0,
+              "column": 0,
+              "lineNumber": 0,
+              "columnNumber": 0
+            }
+          },
+          {
+            "text": "Failed to load resource: net::ERR_INTERNET_DISCONNECTED",
+            "location": {
+              "url": "https://tiles.basemaps.cartocdn.com/gl/positron-gl-style/sprite.json",
+              "line": 0,
+              "column": 0,
+              "lineNumber": 0,
+              "columnNumber": 0
+            }
+          },
+          {
+            "text": "Failed to load resource: net::ERR_INTERNET_DISCONNECTED",
+            "location": {
+              "url": "https://tiles.basemaps.cartocdn.com/gl/positron-gl-style/sprite.png",
+              "line": 0,
+              "column": 0,
+              "lineNumber": 0,
+              "columnNumber": 0
+            }
+          }
+        ],
+        "unexpectedConsoleErrors": [],
+        "expectedRequestFailures": [
+          {
+            "url": "https://tiles.basemaps.cartocdn.com/vector/carto.streets/v1/tiles.json",
+            "error": "net::ERR_INTERNET_DISCONNECTED"
+          },
+          {
+            "url": "https://tiles.basemaps.cartocdn.com/gl/positron-gl-style/sprite.json",
+            "error": "net::ERR_INTERNET_DISCONNECTED"
+          },
+          {
+            "url": "https://tiles.basemaps.cartocdn.com/gl/positron-gl-style/sprite.png",
+            "error": "net::ERR_INTERNET_DISCONNECTED"
+          }
+        ],
+        "unexpectedRequestFailures": []
+      },
+      "ok": true,
+      "status": "automated-capture-pass",
+      "fullFile": "web-offline-detail-offline-full.png",
+      "fullViewport": {
+        "width": 1280,
+        "height": 1504
+      },
+      "fullSha256": "22ae0c6d904da972fcb3de4e00e2272105220405bceedc14743fba96a53b751c"
+    },
+    {
+      "key": "web-pdf-preview-dialog",
+      "scenario": "pdf-preview",
+      "phase": "dialog",
+      "view": "documents",
+      "app": "web",
+      "code": "B1-05",
+      "ac": [
+        "AC-O10",
+        "AC-O11"
+      ],
+      "state": "owner",
+      "theme": "light",
+      "role": "owner",
+      "ownerId": "OWN-001",
+      "dataset": "owner",
+      "clock": "2026-07-03T10:42:00+09:00",
+      "url": "http://localhost:4173/b1/docs?capture=1&state=owner&theme=light&device=CPB-001",
+      "file": "web-pdf-preview-dialog.png",
+      "sha256": "8f2833bde9079355df4ddc73b2849548fa417b7459355678ca3d8677672aec80",
+      "geometry": {
+        "width": 1280,
+        "height": 842,
+        "pageWidth": 1280,
+        "mainWidth": 1224,
+        "mainScrollWidth": 1224,
+        "scrollY": 0
+      },
+      "diagnostics": {
+        "expectedConsoleErrors": [],
+        "unexpectedConsoleErrors": [],
+        "expectedRequestFailures": [],
+        "unexpectedRequestFailures": []
+      },
+      "ok": true,
+      "status": "automated-capture-pass"
+    },
+    {
+      "key": "web-foreign-document-denied",
+      "scenario": "foreign-document",
+      "phase": "denied",
+      "view": "documents",
+      "app": "web",
+      "code": "B1-05",
+      "ac": [
+        "AC-O12"
+      ],
+      "state": "owner",
+      "theme": "light",
+      "role": "owner",
+      "ownerId": "OWN-001",
+      "dataset": "owner",
+      "clock": "2026-07-03T10:42:00+09:00",
+      "url": "http://localhost:4173/b1/docs?capture=1&state=owner&theme=light&device=CPB-001&doc=CPB-101-CERT",
+      "file": "web-foreign-document-denied.png",
+      "sha256": "ef08cc5b9898bf8c9c814498b7c6f171f74bea77237731ed36ff5f6c6446267b",
+      "geometry": {
+        "width": 1280,
+        "height": 842,
+        "pageWidth": 1280,
+        "mainWidth": 1224,
+        "mainScrollWidth": 1224,
+        "scrollY": 0
+      },
+      "diagnostics": {
+        "expectedConsoleErrors": [],
+        "unexpectedConsoleErrors": [],
+        "expectedRequestFailures": [],
+        "unexpectedRequestFailures": []
+      },
+      "ok": true,
+      "status": "automated-capture-pass",
+      "fullFile": "web-foreign-document-denied-full.png",
+      "fullViewport": {
+        "width": 1280,
+        "height": 1207
+      },
+      "fullSha256": "9027262ffa00178a00d34e76296f6faf36990953a1561c73335fef278335fcc7"
+    },
+    {
+      "key": "web-foreign-camera-denied",
+      "scenario": "foreign-camera",
+      "phase": "denied",
+      "view": "video",
+      "app": "web",
+      "code": "B1-11",
+      "ac": [
+        "AC-O12"
+      ],
+      "state": "owner",
+      "theme": "light",
+      "role": "owner",
+      "ownerId": "OWN-001",
+      "dataset": "owner",
+      "clock": "2026-07-03T10:42:00+09:00",
+      "url": "http://localhost:4173/b1/fleet/CPB-001/video?capture=1&state=owner&theme=light&camera=CPB-101-pour",
+      "file": "web-foreign-camera-denied.png",
+      "sha256": "b6fca918181596e24b2777dc2ac085718520c21cfa9882846a684c8941c297dd",
+      "geometry": {
+        "width": 1280,
+        "height": 842,
+        "pageWidth": 1280,
+        "mainWidth": 1224,
+        "mainScrollWidth": 1224,
+        "scrollY": 0
+      },
+      "diagnostics": {
+        "expectedConsoleErrors": [],
+        "unexpectedConsoleErrors": [],
+        "expectedRequestFailures": [],
+        "unexpectedRequestFailures": []
+      },
+      "ok": true,
+      "status": "automated-capture-pass"
+    },
+    {
+      "key": "web-document-network-failed",
+      "scenario": "document-network",
+      "phase": "failed",
+      "view": "documents",
+      "app": "web",
+      "code": "B1-05",
+      "ac": [
+        "AC-O10",
+        "AC-O14"
+      ],
+      "state": "owner",
+      "theme": "light",
+      "role": "owner",
+      "ownerId": "OWN-001",
+      "dataset": "owner",
+      "clock": "2026-07-03T10:42:00+09:00",
+      "url": "http://localhost:4173/b1/docs?capture=1&state=owner&theme=light&device=CPB-001&doc=CPB-001-CERT",
+      "file": "web-document-network-failed.png",
+      "sha256": "7938adfbe0285e71d195bf0242fed558205cbc9b6edba48c01fbe2d525bb32eb",
+      "geometry": {
+        "width": 1280,
+        "height": 842,
+        "pageWidth": 1280,
+        "mainWidth": 1224,
+        "mainScrollWidth": 1224,
+        "scrollY": 486
+      },
+      "diagnostics": {
+        "expectedConsoleErrors": [
+          {
+            "text": "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+            "location": {
+              "url": "http://localhost:4173/_app/immutable/assets/cpb-001-certificate.KaRYkWeN.png",
+              "line": 0,
+              "column": 0,
+              "lineNumber": 0,
+              "columnNumber": 0
+            }
+          }
+        ],
+        "unexpectedConsoleErrors": [],
+        "expectedRequestFailures": [],
+        "unexpectedRequestFailures": []
+      },
+      "ok": true,
+      "status": "automated-capture-pass",
+      "fullFile": "web-document-network-failed-full.png",
+      "fullViewport": {
+        "width": 1280,
+        "height": 1328
+      },
+      "fullSha256": "48bba46413d506179d90c55c56fd2b38644a14f0cf57f19b0e709be79ba10e8a"
+    },
+    {
+      "key": "web-document-network-recovered",
+      "scenario": "document-network",
+      "phase": "recovered",
+      "view": "documents",
+      "app": "web",
+      "code": "B1-05",
+      "ac": [
+        "AC-O10",
+        "AC-O14"
+      ],
+      "state": "owner",
+      "theme": "light",
+      "role": "owner",
+      "ownerId": "OWN-001",
+      "dataset": "owner",
+      "clock": "2026-07-03T10:42:00+09:00",
+      "url": "http://localhost:4173/b1/docs?capture=1&state=owner&theme=light&device=CPB-001&doc=CPB-001-CERT",
+      "file": "web-document-network-recovered.png",
+      "sha256": "79a67edcec08449eb5888408c0d50524b520b7a71f9c63e9ad1d302038e244c6",
+      "geometry": {
+        "width": 1280,
+        "height": 842,
+        "pageWidth": 1280,
+        "mainWidth": 1224,
+        "mainScrollWidth": 1224,
+        "scrollY": 851
+      },
+      "diagnostics": {
+        "expectedConsoleErrors": [
+          {
+            "text": "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+            "location": {
+              "url": "http://localhost:4173/_app/immutable/assets/cpb-001-certificate.KaRYkWeN.png",
+              "line": 0,
+              "column": 0,
+              "lineNumber": 0,
+              "columnNumber": 0
+            }
+          }
+        ],
+        "unexpectedConsoleErrors": [],
+        "expectedRequestFailures": [],
+        "unexpectedRequestFailures": []
+      },
+      "ok": true,
+      "status": "automated-capture-pass",
+      "fullFile": "web-document-network-recovered-full.png",
+      "fullViewport": {
+        "width": 1280,
+        "height": 2087
+      },
+      "fullSha256": "78b2abd3d4a3b627e5d4d7411550b27d8f31d831c9c361edf78a5e2be960ecc8"
+    },
+    {
+      "key": "web-video-network-failed",
+      "scenario": "video-network",
+      "phase": "failed",
+      "view": "video",
+      "app": "web",
+      "code": "B1-11",
+      "ac": [
+        "AC-O09",
+        "AC-O14"
+      ],
+      "state": "owner",
+      "theme": "light",
+      "role": "owner",
+      "ownerId": "OWN-001",
+      "dataset": "owner",
+      "clock": "2026-07-03T10:42:00+09:00",
+      "url": "http://localhost:4173/b1/fleet/CPB-001/video?capture=1&state=owner&theme=light",
+      "file": "web-video-network-failed.png",
+      "sha256": "e1ea9086d3df6edcf7893578a087770fef93b7011474663e037782303955c19b",
+      "geometry": {
+        "width": 1280,
+        "height": 842,
+        "pageWidth": 1280,
+        "mainWidth": 1224,
+        "mainScrollWidth": 1224,
+        "scrollY": 0
+      },
+      "diagnostics": {
+        "expectedConsoleErrors": [
+          {
+            "text": "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+            "location": {
+              "url": "http://localhost:4173/_app/immutable/assets/front.D7bkNziN.mp4",
+              "line": 0,
+              "column": 0,
+              "lineNumber": 0,
+              "columnNumber": 0
+            }
+          }
+        ],
+        "unexpectedConsoleErrors": [],
+        "expectedRequestFailures": [],
+        "unexpectedRequestFailures": []
+      },
+      "ok": true,
+      "status": "automated-capture-pass"
+    },
+    {
+      "key": "web-video-network-recovered",
+      "scenario": "video-network",
+      "phase": "recovered",
+      "view": "video",
+      "app": "web",
+      "code": "B1-11",
+      "ac": [
+        "AC-O09",
+        "AC-O14"
+      ],
+      "state": "owner",
+      "theme": "light",
+      "role": "owner",
+      "ownerId": "OWN-001",
+      "dataset": "owner",
+      "clock": "2026-07-03T10:42:00+09:00",
+      "url": "http://localhost:4173/b1/fleet/CPB-001/video?capture=1&state=owner&theme=light",
+      "file": "web-video-network-recovered.png",
+      "sha256": "6b14dda88ae5647f70c8ebafefc17b9ea23d76486a253691313ca0571d7b75ed",
+      "geometry": {
+        "width": 1280,
+        "height": 842,
+        "pageWidth": 1280,
+        "mainWidth": 1224,
+        "mainScrollWidth": 1224,
+        "scrollY": 260
+      },
+      "media": {
+        "duration": 6,
+        "currentTime": 0.368476,
+        "readyState": 4,
+        "paused": true
+      },
+      "diagnostics": {
+        "expectedConsoleErrors": [
+          {
+            "text": "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+            "location": {
+              "url": "http://localhost:4173/_app/immutable/assets/front.D7bkNziN.mp4",
+              "line": 0,
+              "column": 0,
+              "lineNumber": 0,
+              "columnNumber": 0
+            }
+          }
+        ],
+        "unexpectedConsoleErrors": [],
+        "expectedRequestFailures": [
+          {
+            "url": "http://localhost:4173/_app/immutable/assets/front.D7bkNziN.mp4",
+            "error": "net::ERR_ABORTED"
+          }
+        ],
+        "unexpectedRequestFailures": []
+      },
+      "ok": true,
+      "status": "automated-capture-pass",
+      "fullFile": "web-video-network-recovered-full.png",
+      "fullViewport": {
+        "width": 1280,
+        "height": 1116
+      },
+      "fullSha256": "0f9eb31deae6b3fadb438fdec71471ae4eca5b1abd84ae188c284dd7f7999cb1"
+    },
+    {
+      "key": "web-map-network-failed",
+      "scenario": "map-network",
+      "phase": "failed",
+      "view": "overview",
+      "app": "web",
+      "code": "B1-02",
+      "ac": [
+        "AC-O13",
+        "AC-O14"
+      ],
+      "state": "owner",
+      "theme": "light",
+      "role": "owner",
+      "ownerId": "OWN-001",
+      "dataset": "owner",
+      "clock": "2026-07-03T10:42:00+09:00",
+      "url": "http://localhost:4173/b1/dash?capture=1&state=owner&theme=light&site=SITE-MAPO",
+      "file": "web-map-network-failed.png",
+      "sha256": "d2834bc01a159739c85339bb906d1789bfe99750ec7ce637919abfef2e8a1d89",
+      "geometry": {
+        "width": 1280,
+        "height": 842,
+        "pageWidth": 1280,
+        "mainWidth": 1224,
+        "mainScrollWidth": 1224,
+        "scrollY": 0
+      },
+      "diagnostics": {
+        "expectedConsoleErrors": [
+          {
+            "text": "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+            "location": {
+              "url": "https://basemaps.cartocdn.com/gl/positron-gl-style/style.json",
+              "line": 0,
+              "column": 0,
+              "lineNumber": 0,
+              "columnNumber": 0
+            }
+          }
+        ],
+        "unexpectedConsoleErrors": [],
+        "expectedRequestFailures": [],
+        "unexpectedRequestFailures": []
+      },
+      "ok": true,
+      "status": "automated-capture-pass"
+    },
+    {
+      "key": "web-map-network-recovered",
+      "scenario": "map-network",
+      "phase": "recovered",
+      "view": "overview",
+      "app": "web",
+      "code": "B1-02",
+      "ac": [
+        "AC-O13",
+        "AC-O14"
+      ],
+      "state": "owner",
+      "theme": "light",
+      "role": "owner",
+      "ownerId": "OWN-001",
+      "dataset": "owner",
+      "clock": "2026-07-03T10:42:00+09:00",
+      "url": "http://localhost:4173/b1/dash?capture=1&state=owner&theme=light&site=SITE-MAPO",
+      "file": "web-map-network-recovered.png",
+      "sha256": "9468b9213b06436600fdecfc35ea1d3a645f80548f3494fd846d603a14880135",
+      "geometry": {
+        "width": 1280,
+        "height": 842,
+        "pageWidth": 1280,
+        "mainWidth": 1224,
+        "mainScrollWidth": 1224,
+        "scrollY": 0
+      },
+      "media": {
+        "markerCount": 5,
+        "mapHeight": 666,
+        "mapFile": "web-map-network-tiles.png",
+        "mapSha256": "6236bfe18d1cd8355bf3b5dd78e2cb3475f3e293f952305a76cdfd7d3d0913b3",
+        "pixelStandardDeviation": 23.74195065120755,
+        "successfulTileRequests": 4
+      },
+      "diagnostics": {
+        "expectedConsoleErrors": [
+          {
+            "text": "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+            "location": {
+              "url": "https://basemaps.cartocdn.com/gl/positron-gl-style/style.json",
+              "line": 0,
+              "column": 0,
+              "lineNumber": 0,
+              "columnNumber": 0
+            }
+          }
+        ],
+        "unexpectedConsoleErrors": [],
+        "expectedRequestFailures": [],
+        "unexpectedRequestFailures": []
+      },
+      "ok": true,
+      "status": "automated-capture-pass"
+    },
+    {
+      "key": "web-overview-site-site",
+      "scenario": "overview-site",
+      "phase": "site",
+      "view": "overview",
+      "app": "web",
+      "code": "B1-02",
+      "ac": [
+        "AC-O13"
+      ],
+      "state": "owner",
+      "theme": "light",
+      "role": "owner",
+      "ownerId": "OWN-001",
+      "dataset": "owner",
+      "clock": "2026-07-03T10:42:00+09:00",
+      "url": "http://localhost:4173/b1/dash?capture=1&state=owner&theme=light&site=SITE-MAPO",
+      "file": "web-overview-site-site.png",
+      "sha256": "e2d0c38bf2360d4c07ce77d753451bfa34b5a3abb05010a0519ee1d6b3fd20dd",
+      "geometry": {
+        "width": 1280,
+        "height": 842,
+        "pageWidth": 1280,
+        "mainWidth": 1224,
+        "mainScrollWidth": 1224,
+        "scrollY": 0
+      },
+      "diagnostics": {
+        "expectedConsoleErrors": [],
+        "unexpectedConsoleErrors": [],
+        "expectedRequestFailures": [],
+        "unexpectedRequestFailures": []
+      },
+      "ok": true,
+      "status": "automated-capture-pass"
+    },
+    {
+      "key": "web-empty-requests-empty",
+      "scenario": "empty-requests",
+      "phase": "empty",
+      "view": "requests",
+      "app": "web",
+      "code": "B1-13",
+      "ac": [
+        "AC-O14"
+      ],
+      "state": "empty",
+      "theme": "light",
+      "role": "owner",
+      "ownerId": "OWN-001",
+      "dataset": "empty",
+      "clock": "2026-07-03T10:42:00+09:00",
+      "url": "http://localhost:4173/b1/requests?capture=1&state=empty&theme=light",
+      "file": "web-empty-requests-empty.png",
+      "sha256": "18d6c0244857a4f2470a3f230ab123eccbbaf416f3eaa76cb23e28a55f8befaf",
+      "geometry": {
+        "width": 1280,
+        "height": 842,
+        "pageWidth": 1280,
+        "mainWidth": 1224,
+        "mainScrollWidth": 1224,
+        "scrollY": 0
+      },
+      "diagnostics": {
+        "expectedConsoleErrors": [],
+        "unexpectedConsoleErrors": [],
+        "expectedRequestFailures": [],
+        "unexpectedRequestFailures": []
+      },
+      "ok": true,
+      "status": "automated-capture-pass"
+    },
+    {
+      "key": "web-no-candidates-none",
+      "scenario": "no-candidates",
+      "phase": "none",
+      "view": "requests",
+      "app": "web",
+      "code": "B1-13",
+      "ac": [
+        "AC-O07",
+        "AC-O14"
+      ],
+      "state": "owner",
+      "theme": "light",
+      "role": "owner",
+      "ownerId": "OWN-001",
+      "dataset": "owner",
+      "clock": "2026-07-03T10:42:00+09:00",
+      "url": "http://localhost:4173/b1/requests?capture=1&state=owner&theme=light&request=REQ-006",
+      "file": "web-no-candidates-none.png",
+      "sha256": "6937c93091535d859f1b610bc2e8d41693634e31f9ccc78dc82ada93e3274ed9",
+      "geometry": {
+        "width": 1280,
+        "height": 842,
+        "pageWidth": 1280,
+        "mainWidth": 1224,
+        "mainScrollWidth": 1224,
+        "scrollY": 0
+      },
+      "diagnostics": {
+        "expectedConsoleErrors": [],
+        "unexpectedConsoleErrors": [],
+        "expectedRequestFailures": [],
+        "unexpectedRequestFailures": []
+      },
+      "ok": true,
+      "status": "automated-capture-pass"
+    },
+    {
+      "key": "web-driver-expiring-expiring",
+      "scenario": "driver-expiring",
+      "phase": "expiring",
+      "view": "drivers",
+      "app": "web",
+      "code": "B1-14",
+      "ac": [
+        "AC-O07"
+      ],
+      "state": "owner",
+      "theme": "light",
+      "role": "owner",
+      "ownerId": "OWN-001",
+      "dataset": "owner",
+      "clock": "2026-07-03T10:42:00+09:00",
+      "url": "http://localhost:4173/b1/drivers?capture=1&state=owner&theme=light",
+      "file": "web-driver-expiring-expiring.png",
+      "sha256": "e2c9b478364ec02fe9063f3e369b312ba4dc33c7362c43555ecb2163e8ec914f",
+      "geometry": {
+        "width": 1280,
+        "height": 842,
+        "pageWidth": 1280,
+        "mainWidth": 1224,
+        "mainScrollWidth": 1224,
+        "scrollY": 0
+      },
+      "diagnostics": {
+        "expectedConsoleErrors": [],
+        "unexpectedConsoleErrors": [],
+        "expectedRequestFailures": [],
+        "unexpectedRequestFailures": []
+      },
+      "ok": true,
+      "status": "automated-capture-pass"
+    },
+    {
+      "key": "web-driver-docs-missing-missing",
+      "scenario": "driver-docs-missing",
+      "phase": "missing",
+      "view": "driver-docs",
+      "app": "web",
+      "code": "B1-15",
+      "ac": [
+        "AC-O07"
+      ],
+      "state": "owner",
+      "theme": "light",
+      "role": "owner",
+      "ownerId": "OWN-001",
+      "dataset": "owner",
+      "clock": "2026-07-03T10:42:00+09:00",
+      "url": "http://localhost:4173/b1/drivers/docs?capture=1&state=owner&theme=light",
+      "file": "web-driver-docs-missing-missing.png",
+      "sha256": "d2a6e4450effa909c449f20821f986fab769ce02d0fa3c86ea090cfb7789fd04",
+      "geometry": {
+        "width": 1280,
+        "height": 842,
+        "pageWidth": 1280,
+        "mainWidth": 1224,
+        "mainScrollWidth": 1224,
+        "scrollY": 0
+      },
+      "diagnostics": {
+        "expectedConsoleErrors": [],
+        "unexpectedConsoleErrors": [],
+        "expectedRequestFailures": [],
+        "unexpectedRequestFailures": []
+      },
+      "ok": true,
+      "status": "automated-capture-pass"
+    },
+    {
+      "key": "web-overview-unit-unit",
+      "scenario": "overview-unit",
+      "phase": "unit",
+      "view": "overview",
+      "app": "web",
+      "code": "B1-02",
+      "ac": [
+        "AC-O08",
+        "AC-O13"
+      ],
+      "state": "owner",
+      "theme": "light",
+      "role": "owner",
+      "ownerId": "OWN-001",
+      "dataset": "owner",
+      "clock": "2026-07-03T10:42:00+09:00",
+      "url": "http://localhost:4173/b1/dash?capture=1&state=owner&theme=light&site=SITE-MAPO&device=CPB-001",
+      "file": "web-overview-unit-unit.png",
+      "sha256": "2a3ca0a856f820a7551d96a4b2e41be5b86c5a8865b53ee5ab23c0166fc145a1",
+      "geometry": {
+        "width": 1280,
+        "height": 842,
+        "pageWidth": 1280,
+        "mainWidth": 1224,
+        "mainScrollWidth": 1224,
+        "scrollY": 0
+      },
+      "media": {
+        "readyState": 4,
+        "paused": true
+      },
+      "diagnostics": {
+        "expectedConsoleErrors": [],
+        "unexpectedConsoleErrors": [],
+        "expectedRequestFailures": [
+          {
+            "url": "http://localhost:4173/_app/immutable/assets/front.D7bkNziN.mp4",
+            "error": "net::ERR_ABORTED"
+          },
+          {
+            "url": "http://localhost:4173/_app/immutable/assets/front.D7bkNziN.mp4",
+            "error": "net::ERR_ABORTED"
+          },
+          {
+            "url": "http://localhost:4173/_app/immutable/assets/boom.BS2Cnj7b.mp4",
+            "error": "net::ERR_ABORTED"
+          },
+          {
+            "url": "http://localhost:4173/_app/immutable/assets/front.D7bkNziN.mp4",
+            "error": "net::ERR_ABORTED"
+          }
+        ],
+        "unexpectedRequestFailures": []
+      },
+      "ok": true,
+      "status": "automated-capture-pass"
+    },
+    {
+      "key": "pwa-empty-fleet-empty",
+      "scenario": "empty-fleet",
+      "phase": "empty",
+      "view": "fleet",
+      "app": "pwa",
+      "code": "A4-02",
+      "ac": [
+        "AC-O14"
+      ],
+      "state": "empty",
+      "theme": "light",
+      "role": "owner",
+      "ownerId": "OWN-001",
+      "dataset": "empty",
+      "clock": "2026-07-03T10:42:00+09:00",
+      "url": "http://localhost:4174/a4/fleet?capture=1&state=empty&theme=light",
+      "file": "pwa-empty-fleet-empty.png",
+      "sha256": "6d7e013f1d09427c27e2f3df111f36dfcd43e174c9ddc2d06af1ea37f861e050",
+      "geometry": {
+        "width": 390,
+        "height": 800,
+        "pageWidth": 390,
+        "mainWidth": 390,
+        "mainScrollWidth": 390,
+        "scrollY": 0
+      },
+      "diagnostics": {
+        "expectedConsoleErrors": [],
+        "unexpectedConsoleErrors": [],
+        "expectedRequestFailures": [],
+        "unexpectedRequestFailures": []
+      },
+      "ok": true,
+      "status": "automated-capture-pass"
+    },
+    {
+      "key": "pwa-read-retry-failed",
+      "scenario": "read-retry",
+      "phase": "failed",
+      "view": "fleet",
+      "app": "pwa",
+      "code": "A4-02",
+      "ac": [
+        "AC-O14"
+      ],
+      "state": "error",
+      "theme": "light",
+      "role": "owner",
+      "ownerId": "OWN-001",
+      "dataset": null,
+      "clock": null,
+      "url": "http://localhost:4174/a4/fleet?capture=1&state=error&theme=light",
+      "file": "pwa-read-retry-failed.png",
+      "sha256": "d92235a7b0674baab12f17e0724f5d422a3cb6390183d4ee16460a2d71466be9",
+      "geometry": {
+        "width": 390,
+        "height": 800,
+        "pageWidth": 390,
+        "mainWidth": 390,
+        "mainScrollWidth": 390,
+        "scrollY": 0
+      },
+      "diagnostics": {
+        "expectedConsoleErrors": [],
+        "unexpectedConsoleErrors": [],
+        "expectedRequestFailures": [],
+        "unexpectedRequestFailures": []
+      },
+      "ok": true,
+      "status": "automated-capture-pass"
+    },
+    {
+      "key": "pwa-read-retry-recovered",
+      "scenario": "read-retry",
+      "phase": "recovered",
+      "view": "fleet",
+      "app": "pwa",
+      "code": "A4-02",
+      "ac": [
+        "AC-O14"
+      ],
+      "state": "error",
+      "theme": "light",
+      "role": "owner",
+      "ownerId": "OWN-001",
+      "dataset": "owner",
+      "clock": "2026-07-03T10:42:00+09:00",
+      "url": "http://localhost:4174/a4/fleet?capture=1&state=error&theme=light",
+      "file": "pwa-read-retry-recovered.png",
+      "sha256": "03dbf3fae9dc531b71a24201aab98c98e6da4a6d3bec721bbcf0b75151219782",
+      "geometry": {
+        "width": 390,
+        "height": 800,
+        "pageWidth": 390,
+        "mainWidth": 390,
+        "mainScrollWidth": 390,
+        "scrollY": 0
+      },
+      "diagnostics": {
+        "expectedConsoleErrors": [],
+        "unexpectedConsoleErrors": [],
+        "expectedRequestFailures": [],
+        "unexpectedRequestFailures": []
+      },
+      "ok": true,
+      "status": "automated-capture-pass"
+    },
+    {
+      "key": "pwa-missing-detail-missing",
+      "scenario": "missing-detail",
+      "phase": "missing",
+      "view": "detail",
+      "app": "pwa",
+      "code": "A4-08",
+      "ac": [
+        "AC-O05",
+        "AC-O14"
+      ],
+      "state": "boundaries",
+      "theme": "light",
+      "role": "owner",
+      "ownerId": "OWN-001",
+      "dataset": "boundaries",
+      "clock": "2026-07-03T10:42:00+09:00",
+      "url": "http://localhost:4174/a4/fleet/CPB-001?capture=1&state=boundaries&theme=light",
+      "file": "pwa-missing-detail-missing.png",
+      "sha256": "4582eb629510b6179c6c73bd72ff4300f5edf5fc488a43750559161e77653a1a",
+      "geometry": {
+        "width": 390,
+        "height": 800,
+        "pageWidth": 390,
+        "mainWidth": 390,
+        "mainScrollWidth": 390,
+        "scrollY": 542
+      },
+      "diagnostics": {
+        "expectedConsoleErrors": [],
+        "unexpectedConsoleErrors": [],
+        "expectedRequestFailures": [],
+        "unexpectedRequestFailures": []
+      },
+      "ok": true,
+      "status": "automated-capture-pass",
+      "fullFile": "pwa-missing-detail-missing-full.png",
+      "fullViewport": {
+        "width": 390,
+        "height": 1707
+      },
+      "fullSha256": "0653c8c9f0fcc288f945ab8fea4efda6ede5f2c43e65c7069745ea67e165678f"
+    },
+    {
+      "key": "pwa-stale-detail-stale",
+      "scenario": "stale-detail",
+      "phase": "stale",
+      "view": "detail",
+      "app": "pwa",
+      "code": "A4-08",
+      "ac": [
+        "AC-O05"
+      ],
+      "state": "owner",
+      "theme": "light",
+      "role": "owner",
+      "ownerId": "OWN-001",
+      "dataset": "owner",
+      "clock": "2026-07-03T10:42:00+09:00",
+      "url": "http://localhost:4174/a4/fleet/CPB-004?capture=1&state=owner&theme=light",
+      "file": "pwa-stale-detail-stale.png",
+      "sha256": "5ec0d4e16353b8f61092816a8e6561b30e741bb3a8fe2556fff71a71c6f67f27",
+      "geometry": {
+        "width": 390,
+        "height": 800,
+        "pageWidth": 390,
+        "mainWidth": 390,
+        "mainScrollWidth": 390,
+        "scrollY": 903
+      },
+      "diagnostics": {
+        "expectedConsoleErrors": [],
+        "unexpectedConsoleErrors": [],
+        "expectedRequestFailures": [],
+        "unexpectedRequestFailures": []
+      },
+      "ok": true,
+      "status": "automated-capture-pass",
+      "fullFile": "pwa-stale-detail-stale-full.png",
+      "fullViewport": {
+        "width": 390,
+        "height": 2503
+      },
+      "fullSha256": "666603d51f109ec91746586e4d84e0073f929c3b97c881442c33e1362c3f4b41"
+    },
+    {
+      "key": "pwa-detached-detail-detached",
+      "scenario": "detached-detail",
+      "phase": "detached",
+      "view": "detail",
+      "app": "pwa",
+      "code": "A4-08",
+      "ac": [
+        "AC-O05"
+      ],
+      "state": "owner",
+      "theme": "light",
+      "role": "owner",
+      "ownerId": "OWN-001",
+      "dataset": "owner",
+      "clock": "2026-07-03T10:42:00+09:00",
+      "url": "http://localhost:4174/a4/fleet/CPB-005?capture=1&state=owner&theme=light",
+      "file": "pwa-detached-detail-detached.png",
+      "sha256": "02bde340e91d33358d8f09f6072cd057d1445b44e5e234f8b79e07b915c600bf",
+      "geometry": {
+        "width": 390,
+        "height": 800,
+        "pageWidth": 390,
+        "mainWidth": 390,
+        "mainScrollWidth": 390,
+        "scrollY": 542
+      },
+      "diagnostics": {
+        "expectedConsoleErrors": [],
+        "unexpectedConsoleErrors": [],
+        "expectedRequestFailures": [],
+        "unexpectedRequestFailures": []
+      },
+      "ok": true,
+      "status": "automated-capture-pass",
+      "fullFile": "pwa-detached-detail-detached-full.png",
+      "fullViewport": {
+        "width": 390,
+        "height": 1971
+      },
+      "fullSha256": "181a45b101455cbe58cdf655b3e796ede3ca11789776efeb288146555126dc4d"
+    },
+    {
+      "key": "pwa-multiple-alerts-multiple",
+      "scenario": "multiple-alerts",
+      "phase": "multiple",
+      "view": "alerts",
+      "app": "pwa",
+      "code": "A4-11",
+      "ac": [
+        "AC-O06",
+        "AC-O07"
+      ],
+      "state": "boundaries",
+      "theme": "light",
+      "role": "owner",
+      "ownerId": "OWN-001",
+      "dataset": "boundaries",
+      "clock": "2026-07-03T10:42:00+09:00",
+      "url": "http://localhost:4174/a4/alerts?capture=1&state=boundaries&theme=light&device=CPB-002&alert=CPB-002-FAULT",
+      "file": "pwa-multiple-alerts-multiple.png",
+      "sha256": "cbe4580ff7f8ff0f787e31aa48a81d373f2fedca01e84914aa666e481af888d1",
+      "geometry": {
+        "width": 390,
+        "height": 800,
+        "pageWidth": 390,
+        "mainWidth": 390,
+        "mainScrollWidth": 390,
+        "scrollY": 0
+      },
+      "diagnostics": {
+        "expectedConsoleErrors": [],
+        "unexpectedConsoleErrors": [],
+        "expectedRequestFailures": [],
+        "unexpectedRequestFailures": []
+      },
+      "ok": true,
+      "status": "automated-capture-pass",
+      "fullFile": "pwa-multiple-alerts-multiple-full.png",
+      "fullViewport": {
+        "width": 390,
+        "height": 1242
+      },
+      "fullSha256": "0455ddd5b9ccc87d1629615b01f923353aca4ce91e6aada45c08ae0537f29b29"
+    },
+    {
+      "key": "pwa-offline-detail-offline",
+      "scenario": "offline-detail",
+      "phase": "offline",
+      "view": "detail",
+      "app": "pwa",
+      "code": "A4-08",
+      "ac": [
+        "AC-O05",
+        "AC-O14"
+      ],
+      "state": "owner",
+      "theme": "light",
+      "role": "owner",
+      "ownerId": "OWN-001",
+      "dataset": "owner",
+      "clock": "2026-07-03T10:42:00+09:00",
+      "url": "http://localhost:4174/a4/fleet/CPB-004?capture=1&state=owner&theme=light",
+      "file": "pwa-offline-detail-offline.png",
+      "sha256": "f252e7e1beb7229eddc0e2242957bba3b745a76c0a2e4be3fdb9c46abc27c040",
+      "geometry": {
+        "width": 390,
+        "height": 800,
+        "pageWidth": 390,
+        "mainWidth": 390,
+        "mainScrollWidth": 390,
+        "scrollY": 964
+      },
+      "diagnostics": {
+        "expectedConsoleErrors": [
+          {
+            "text": "Failed to load resource: net::ERR_INTERNET_DISCONNECTED",
+            "location": {
+              "url": "https://tiles.basemaps.cartocdn.com/vector/carto.streets/v1/tiles.json",
+              "line": 0,
+              "column": 0,
+              "lineNumber": 0,
+              "columnNumber": 0
+            }
+          },
+          {
+            "text": "Failed to load resource: net::ERR_INTERNET_DISCONNECTED",
+            "location": {
+              "url": "https://tiles.basemaps.cartocdn.com/gl/positron-gl-style/sprite.json",
+              "line": 0,
+              "column": 0,
+              "lineNumber": 0,
+              "columnNumber": 0
+            }
+          },
+          {
+            "text": "Failed to load resource: net::ERR_INTERNET_DISCONNECTED",
+            "location": {
+              "url": "https://tiles.basemaps.cartocdn.com/gl/positron-gl-style/sprite.png",
+              "line": 0,
+              "column": 0,
+              "lineNumber": 0,
+              "columnNumber": 0
+            }
+          }
+        ],
+        "unexpectedConsoleErrors": [],
+        "expectedRequestFailures": [
+          {
+            "url": "https://tiles.basemaps.cartocdn.com/vector/carto.streets/v1/tiles.json",
+            "error": "net::ERR_INTERNET_DISCONNECTED"
+          },
+          {
+            "url": "https://tiles.basemaps.cartocdn.com/gl/positron-gl-style/sprite.json",
+            "error": "net::ERR_INTERNET_DISCONNECTED"
+          },
+          {
+            "url": "https://tiles.basemaps.cartocdn.com/gl/positron-gl-style/sprite.png",
+            "error": "net::ERR_INTERNET_DISCONNECTED"
+          }
+        ],
+        "unexpectedRequestFailures": []
+      },
+      "ok": true,
+      "status": "automated-capture-pass",
+      "fullFile": "pwa-offline-detail-offline-full.png",
+      "fullViewport": {
+        "width": 390,
+        "height": 2564
+      },
+      "fullSha256": "61fb80e75e882f6d763f056c9d86f2bcb2180f7fe7486d06b72ae99ed424fbd4"
+    },
+    {
+      "key": "pwa-pdf-preview-dialog",
+      "scenario": "pdf-preview",
+      "phase": "dialog",
+      "view": "documents",
+      "app": "pwa",
+      "code": "A4-10",
+      "ac": [
+        "AC-O10",
+        "AC-O11"
+      ],
+      "state": "owner",
+      "theme": "light",
+      "role": "owner",
+      "ownerId": "OWN-001",
+      "dataset": "owner",
+      "clock": "2026-07-03T10:42:00+09:00",
+      "url": "http://localhost:4174/a4/docs?capture=1&state=owner&theme=light&device=CPB-001",
+      "file": "pwa-pdf-preview-dialog.png",
+      "sha256": "1770063a3b9cdc9f0f1d19a95363ed4020b2ff1d8b5d39582e1862d20f2171b4",
+      "geometry": {
+        "width": 390,
+        "height": 800,
+        "pageWidth": 390,
+        "mainWidth": 390,
+        "mainScrollWidth": 390,
+        "scrollY": 0
+      },
+      "diagnostics": {
+        "expectedConsoleErrors": [],
+        "unexpectedConsoleErrors": [],
+        "expectedRequestFailures": [],
+        "unexpectedRequestFailures": []
+      },
+      "ok": true,
+      "status": "automated-capture-pass"
+    },
+    {
+      "key": "pwa-foreign-document-denied",
+      "scenario": "foreign-document",
+      "phase": "denied",
+      "view": "documents",
+      "app": "pwa",
+      "code": "A4-10",
+      "ac": [
+        "AC-O12"
+      ],
+      "state": "owner",
+      "theme": "light",
+      "role": "owner",
+      "ownerId": "OWN-001",
+      "dataset": "owner",
+      "clock": "2026-07-03T10:42:00+09:00",
+      "url": "http://localhost:4174/a4/docs?capture=1&state=owner&theme=light&device=CPB-001&doc=CPB-101-CERT",
+      "file": "pwa-foreign-document-denied.png",
+      "sha256": "58ad08985154647647ee2e33d297e6d79f9c47bc73bbe3e180f3b3a4880d8713",
+      "geometry": {
+        "width": 390,
+        "height": 800,
+        "pageWidth": 390,
+        "mainWidth": 390,
+        "mainScrollWidth": 390,
+        "scrollY": 0
+      },
+      "diagnostics": {
+        "expectedConsoleErrors": [],
+        "unexpectedConsoleErrors": [],
+        "expectedRequestFailures": [],
+        "unexpectedRequestFailures": []
+      },
+      "ok": true,
+      "status": "automated-capture-pass",
+      "fullFile": "pwa-foreign-document-denied-full.png",
+      "fullViewport": {
+        "width": 390,
+        "height": 1364
+      },
+      "fullSha256": "0445bae9a72541a0c22f24ed83a43cca90a23ed285f8656da0f0ee306fa2db41"
+    },
+    {
+      "key": "pwa-foreign-camera-denied",
+      "scenario": "foreign-camera",
+      "phase": "denied",
+      "view": "video",
+      "app": "pwa",
+      "code": "A4-09",
+      "ac": [
+        "AC-O12"
+      ],
+      "state": "owner",
+      "theme": "light",
+      "role": "owner",
+      "ownerId": "OWN-001",
+      "dataset": "owner",
+      "clock": "2026-07-03T10:42:00+09:00",
+      "url": "http://localhost:4174/a4/fleet/CPB-001/video?capture=1&state=owner&theme=light&camera=CPB-101-pour",
+      "file": "pwa-foreign-camera-denied.png",
+      "sha256": "a5ace8d5285c0283585fb9114f97fd2248fb37593c907d697cd5b343a2c6e3ea",
+      "geometry": {
+        "width": 390,
+        "height": 800,
+        "pageWidth": 390,
+        "mainWidth": 390,
+        "mainScrollWidth": 390,
+        "scrollY": 0
+      },
+      "diagnostics": {
+        "expectedConsoleErrors": [],
+        "unexpectedConsoleErrors": [],
+        "expectedRequestFailures": [],
+        "unexpectedRequestFailures": []
+      },
+      "ok": true,
+      "status": "automated-capture-pass"
+    },
+    {
+      "key": "pwa-document-network-failed",
+      "scenario": "document-network",
+      "phase": "failed",
+      "view": "documents",
+      "app": "pwa",
+      "code": "A4-10",
+      "ac": [
+        "AC-O10",
+        "AC-O14"
+      ],
+      "state": "owner",
+      "theme": "light",
+      "role": "owner",
+      "ownerId": "OWN-001",
+      "dataset": "owner",
+      "clock": "2026-07-03T10:42:00+09:00",
+      "url": "http://localhost:4174/a4/docs?capture=1&state=owner&theme=light&device=CPB-001&doc=CPB-001-CERT",
+      "file": "pwa-document-network-failed.png",
+      "sha256": "da4761763f13e480f9e34fb056536c44b465f0d1802a09643542867af885877b",
+      "geometry": {
+        "width": 390,
+        "height": 800,
+        "pageWidth": 390,
+        "mainWidth": 390,
+        "mainScrollWidth": 390,
+        "scrollY": 679
+      },
+      "diagnostics": {
+        "expectedConsoleErrors": [
+          {
+            "text": "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+            "location": {
+              "url": "http://localhost:4174/_app/immutable/assets/cpb-001-certificate.KaRYkWeN.png",
+              "line": 0,
+              "column": 0,
+              "lineNumber": 0,
+              "columnNumber": 0
+            }
+          }
+        ],
+        "unexpectedConsoleErrors": [],
+        "expectedRequestFailures": [],
+        "unexpectedRequestFailures": []
+      },
+      "ok": true,
+      "status": "automated-capture-pass",
+      "fullFile": "pwa-document-network-failed-full.png",
+      "fullViewport": {
+        "width": 390,
+        "height": 1545
+      },
+      "fullSha256": "35c56e20c6bb347f6a12872fbbed7ac02cbe84953a70fd4d87ffbf9e48d491f4"
+    },
+    {
+      "key": "pwa-document-network-recovered",
+      "scenario": "document-network",
+      "phase": "recovered",
+      "view": "documents",
+      "app": "pwa",
+      "code": "A4-10",
+      "ac": [
+        "AC-O10",
+        "AC-O14"
+      ],
+      "state": "owner",
+      "theme": "light",
+      "role": "owner",
+      "ownerId": "OWN-001",
+      "dataset": "owner",
+      "clock": "2026-07-03T10:42:00+09:00",
+      "url": "http://localhost:4174/a4/docs?capture=1&state=owner&theme=light&device=CPB-001&doc=CPB-001-CERT",
+      "file": "pwa-document-network-recovered.png",
+      "sha256": "1b4a5d8996e130c9ad425160af6d808222cb443196fba1595e9d504af387eaa1",
+      "geometry": {
+        "width": 390,
+        "height": 800,
+        "pageWidth": 390,
+        "mainWidth": 390,
+        "mainScrollWidth": 390,
+        "scrollY": 753
+      },
+      "diagnostics": {
+        "expectedConsoleErrors": [
+          {
+            "text": "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+            "location": {
+              "url": "http://localhost:4174/_app/immutable/assets/cpb-001-certificate.KaRYkWeN.png",
+              "line": 0,
+              "column": 0,
+              "lineNumber": 0,
+              "columnNumber": 0
+            }
+          }
+        ],
+        "unexpectedConsoleErrors": [],
+        "expectedRequestFailures": [],
+        "unexpectedRequestFailures": []
+      },
+      "ok": true,
+      "status": "automated-capture-pass",
+      "fullFile": "pwa-document-network-recovered-full.png",
+      "fullViewport": {
+        "width": 390,
+        "height": 1860
+      },
+      "fullSha256": "b68c6dd6ded7f1c50d18ffb9becd7edb20850e0a0bbb7e627b764d0de92a0b11"
+    },
+    {
+      "key": "pwa-video-network-failed",
+      "scenario": "video-network",
+      "phase": "failed",
+      "view": "video",
+      "app": "pwa",
+      "code": "A4-09",
+      "ac": [
+        "AC-O09",
+        "AC-O14"
+      ],
+      "state": "owner",
+      "theme": "light",
+      "role": "owner",
+      "ownerId": "OWN-001",
+      "dataset": "owner",
+      "clock": "2026-07-03T10:42:00+09:00",
+      "url": "http://localhost:4174/a4/fleet/CPB-001/video?capture=1&state=owner&theme=light",
+      "file": "pwa-video-network-failed.png",
+      "sha256": "95251ff40adf77487484759ddb773a6b27d5d897ee2660989335226b8fdbbb0d",
+      "geometry": {
+        "width": 390,
+        "height": 800,
+        "pageWidth": 390,
+        "mainWidth": 390,
+        "mainScrollWidth": 390,
+        "scrollY": 0
+      },
+      "diagnostics": {
+        "expectedConsoleErrors": [
+          {
+            "text": "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+            "location": {
+              "url": "http://localhost:4174/_app/immutable/assets/front.D7bkNziN.mp4",
+              "line": 0,
+              "column": 0,
+              "lineNumber": 0,
+              "columnNumber": 0
+            }
+          }
+        ],
+        "unexpectedConsoleErrors": [],
+        "expectedRequestFailures": [],
+        "unexpectedRequestFailures": []
+      },
+      "ok": true,
+      "status": "automated-capture-pass"
+    },
+    {
+      "key": "pwa-video-network-recovered",
+      "scenario": "video-network",
+      "phase": "recovered",
+      "view": "video",
+      "app": "pwa",
+      "code": "A4-09",
+      "ac": [
+        "AC-O09",
+        "AC-O14"
+      ],
+      "state": "owner",
+      "theme": "light",
+      "role": "owner",
+      "ownerId": "OWN-001",
+      "dataset": "owner",
+      "clock": "2026-07-03T10:42:00+09:00",
+      "url": "http://localhost:4174/a4/fleet/CPB-001/video?capture=1&state=owner&theme=light",
+      "file": "pwa-video-network-recovered.png",
+      "sha256": "4b7ad39d100fd1a9673d128ef619d430a181b895fe7437d48115a696986d5410",
+      "geometry": {
+        "width": 390,
+        "height": 800,
+        "pageWidth": 390,
+        "mainWidth": 390,
+        "mainScrollWidth": 390,
+        "scrollY": 0
+      },
+      "media": {
+        "duration": 6,
+        "currentTime": 0.381785,
+        "readyState": 4,
+        "paused": true
+      },
+      "diagnostics": {
+        "expectedConsoleErrors": [
+          {
+            "text": "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+            "location": {
+              "url": "http://localhost:4174/_app/immutable/assets/front.D7bkNziN.mp4",
+              "line": 0,
+              "column": 0,
+              "lineNumber": 0,
+              "columnNumber": 0
+            }
+          }
+        ],
+        "unexpectedConsoleErrors": [],
+        "expectedRequestFailures": [
+          {
+            "url": "http://localhost:4174/_app/immutable/assets/front.D7bkNziN.mp4",
+            "error": "net::ERR_ABORTED"
+          }
+        ],
+        "unexpectedRequestFailures": []
+      },
+      "ok": true,
+      "status": "automated-capture-pass"
+    },
+    {
+      "key": "pwa-map-network-failed",
+      "scenario": "map-network",
+      "phase": "failed",
+      "view": "overview",
+      "app": "pwa",
+      "code": "A4-07",
+      "ac": [
+        "AC-O13",
+        "AC-O14"
+      ],
+      "state": "owner",
+      "theme": "light",
+      "role": "owner",
+      "ownerId": "OWN-001",
+      "dataset": "owner",
+      "clock": "2026-07-03T10:42:00+09:00",
+      "url": "http://localhost:4174/a4/overview?capture=1&state=owner&theme=light&site=SITE-MAPO",
+      "file": "pwa-map-network-failed.png",
+      "sha256": "5d8e2b22d4bd521ccbfae7f1eeede0220f9d3316fadb433027c7c755bcd0c35d",
+      "geometry": {
+        "width": 390,
+        "height": 800,
+        "pageWidth": 390,
+        "mainWidth": 390,
+        "mainScrollWidth": 390,
+        "scrollY": 0
+      },
+      "diagnostics": {
+        "expectedConsoleErrors": [
+          {
+            "text": "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+            "location": {
+              "url": "https://basemaps.cartocdn.com/gl/positron-gl-style/style.json",
+              "line": 0,
+              "column": 0,
+              "lineNumber": 0,
+              "columnNumber": 0
+            }
+          }
+        ],
+        "unexpectedConsoleErrors": [],
+        "expectedRequestFailures": [],
+        "unexpectedRequestFailures": []
+      },
+      "ok": true,
+      "status": "automated-capture-pass"
+    },
+    {
+      "key": "pwa-map-network-recovered",
+      "scenario": "map-network",
+      "phase": "recovered",
+      "view": "overview",
+      "app": "pwa",
+      "code": "A4-07",
+      "ac": [
+        "AC-O13",
+        "AC-O14"
+      ],
+      "state": "owner",
+      "theme": "light",
+      "role": "owner",
+      "ownerId": "OWN-001",
+      "dataset": "owner",
+      "clock": "2026-07-03T10:42:00+09:00",
+      "url": "http://localhost:4174/a4/overview?capture=1&state=owner&theme=light&site=SITE-MAPO",
+      "file": "pwa-map-network-recovered.png",
+      "sha256": "7bcc93f811916bb15b5aa42e72af5081414cdc637bdd0b9f3d98f6b0e51cca48",
+      "geometry": {
+        "width": 390,
+        "height": 800,
+        "pageWidth": 390,
+        "mainWidth": 390,
+        "mainScrollWidth": 390,
+        "scrollY": 0
+      },
+      "media": {
+        "markerCount": 5,
+        "mapHeight": 504.21875,
+        "mapFile": "pwa-map-network-tiles.png",
+        "mapSha256": "d365dd6f7b55ea1ba42a68a6b9cb26ea73ab72c5edc1c8cc25a0d90a3f76dfbc",
+        "pixelStandardDeviation": 37.1011129686267,
+        "successfulTileRequests": 4
+      },
+      "diagnostics": {
+        "expectedConsoleErrors": [
+          {
+            "text": "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+            "location": {
+              "url": "https://basemaps.cartocdn.com/gl/positron-gl-style/style.json",
+              "line": 0,
+              "column": 0,
+              "lineNumber": 0,
+              "columnNumber": 0
+            }
+          }
+        ],
+        "unexpectedConsoleErrors": [],
+        "expectedRequestFailures": [],
+        "unexpectedRequestFailures": []
+      },
+      "ok": true,
+      "status": "automated-capture-pass"
+    },
+    {
+      "key": "pwa-overview-site-site",
+      "scenario": "overview-site",
+      "phase": "site",
+      "view": "overview",
+      "app": "pwa",
+      "code": "A4-07",
+      "ac": [
+        "AC-O13"
+      ],
+      "state": "owner",
+      "theme": "light",
+      "role": "owner",
+      "ownerId": "OWN-001",
+      "dataset": "owner",
+      "clock": "2026-07-03T10:42:00+09:00",
+      "url": "http://localhost:4174/a4/overview?capture=1&state=owner&theme=light&site=SITE-MAPO",
+      "file": "pwa-overview-site-site.png",
+      "sha256": "7bcc93f811916bb15b5aa42e72af5081414cdc637bdd0b9f3d98f6b0e51cca48",
+      "geometry": {
+        "width": 390,
+        "height": 800,
+        "pageWidth": 390,
+        "mainWidth": 390,
+        "mainScrollWidth": 390,
+        "scrollY": 0
+      },
+      "diagnostics": {
+        "expectedConsoleErrors": [],
+        "unexpectedConsoleErrors": [],
+        "expectedRequestFailures": [],
+        "unexpectedRequestFailures": []
+      },
+      "ok": true,
+      "status": "automated-capture-pass"
+    },
+    {
+      "key": "pwa-empty-requests-empty",
+      "scenario": "empty-requests",
+      "phase": "empty",
+      "view": "requests",
+      "app": "pwa",
+      "code": "A4-03",
+      "ac": [
+        "AC-O14"
+      ],
+      "state": "empty",
+      "theme": "light",
+      "role": "owner",
+      "ownerId": "OWN-001",
+      "dataset": "empty",
+      "clock": "2026-07-03T10:42:00+09:00",
+      "url": "http://localhost:4174/a4/requests?capture=1&state=empty&theme=light",
+      "file": "pwa-empty-requests-empty.png",
+      "sha256": "4ba43c47efbd9ceef647c049408465fad97b63aac63dc0ef11c5f70293dc5f60",
+      "geometry": {
+        "width": 390,
+        "height": 800,
+        "pageWidth": 390,
+        "mainWidth": 390,
+        "mainScrollWidth": 390,
+        "scrollY": 0
+      },
+      "diagnostics": {
+        "expectedConsoleErrors": [],
+        "unexpectedConsoleErrors": [],
+        "expectedRequestFailures": [],
+        "unexpectedRequestFailures": []
+      },
+      "ok": true,
+      "status": "automated-capture-pass"
+    },
+    {
+      "key": "pwa-no-candidates-none",
+      "scenario": "no-candidates",
+      "phase": "none",
+      "view": "requests",
+      "app": "pwa",
+      "code": "A4-03",
+      "ac": [
+        "AC-O07",
+        "AC-O14"
+      ],
+      "state": "owner",
+      "theme": "light",
+      "role": "owner",
+      "ownerId": "OWN-001",
+      "dataset": "owner",
+      "clock": "2026-07-03T10:42:00+09:00",
+      "url": "http://localhost:4174/a4/requests?capture=1&state=owner&theme=light&request=REQ-006",
+      "file": "pwa-no-candidates-none.png",
+      "sha256": "06e472593c86caa9d42dc683abaab1c4b73d3a15f8e48bc36a28a0ec8f4ca5b3",
+      "geometry": {
+        "width": 390,
+        "height": 800,
+        "pageWidth": 390,
+        "mainWidth": 390,
+        "mainScrollWidth": 390,
+        "scrollY": 0
+      },
+      "diagnostics": {
+        "expectedConsoleErrors": [],
+        "unexpectedConsoleErrors": [],
+        "expectedRequestFailures": [],
+        "unexpectedRequestFailures": []
+      },
+      "ok": true,
+      "status": "automated-capture-pass",
+      "fullFile": "pwa-no-candidates-none-full.png",
+      "fullViewport": {
+        "width": 390,
+        "height": 898
+      },
+      "fullSha256": "d44ee84caf7177eead94402bd9c007b598600d700e1f9b866c5308c40e3a6175"
+    },
+    {
+      "key": "pwa-driver-expiring-expiring",
+      "scenario": "driver-expiring",
+      "phase": "expiring",
+      "view": "drivers",
+      "app": "pwa",
+      "code": "A4-04",
+      "ac": [
+        "AC-O07"
+      ],
+      "state": "owner",
+      "theme": "light",
+      "role": "owner",
+      "ownerId": "OWN-001",
+      "dataset": "owner",
+      "clock": "2026-07-03T10:42:00+09:00",
+      "url": "http://localhost:4174/a4/drivers?capture=1&state=owner&theme=light",
+      "file": "pwa-driver-expiring-expiring.png",
+      "sha256": "1c1bfe9e27b17470450729872fa2f193d502e6aba9370af241b00a989ccc8444",
+      "geometry": {
+        "width": 390,
+        "height": 800,
+        "pageWidth": 390,
+        "mainWidth": 390,
+        "mainScrollWidth": 390,
+        "scrollY": 0
+      },
+      "diagnostics": {
+        "expectedConsoleErrors": [],
+        "unexpectedConsoleErrors": [],
+        "expectedRequestFailures": [],
+        "unexpectedRequestFailures": []
+      },
+      "ok": true,
+      "status": "automated-capture-pass",
+      "fullFile": "pwa-driver-expiring-expiring-full.png",
+      "fullViewport": {
+        "width": 390,
+        "height": 1225
+      },
+      "fullSha256": "5a40041fa1dd801b355a2479d363561563439a62390dad5d9937d220e24dfa16"
+    },
+    {
+      "key": "pwa-driver-docs-missing-missing",
+      "scenario": "driver-docs-missing",
+      "phase": "missing",
+      "view": "driver-docs",
+      "app": "pwa",
+      "code": "A4-06",
+      "ac": [
+        "AC-O07"
+      ],
+      "state": "owner",
+      "theme": "light",
+      "role": "owner",
+      "ownerId": "OWN-001",
+      "dataset": "owner",
+      "clock": "2026-07-03T10:42:00+09:00",
+      "url": "http://localhost:4174/a4/drivers/docs?capture=1&state=owner&theme=light",
+      "file": "pwa-driver-docs-missing-missing.png",
+      "sha256": "17b98ba7b2ce3128cefd9b5b02ee5b6d2c417f435d965e6cb7a2da22d1facc3e",
+      "geometry": {
+        "width": 390,
+        "height": 800,
+        "pageWidth": 390,
+        "mainWidth": 390,
+        "mainScrollWidth": 390,
+        "scrollY": 0
+      },
+      "diagnostics": {
+        "expectedConsoleErrors": [],
+        "unexpectedConsoleErrors": [],
+        "expectedRequestFailures": [],
+        "unexpectedRequestFailures": []
+      },
+      "ok": true,
+      "status": "automated-capture-pass",
+      "fullFile": "pwa-driver-docs-missing-missing-full.png",
+      "fullViewport": {
+        "width": 390,
+        "height": 1446
+      },
+      "fullSha256": "e4dd3f2891eb53596aec6de90784f6bfea9739bd231bce888c8a4a0e9a9d212d"
+    },
+    {
+      "key": "pwa-overview-unit-unit",
+      "scenario": "overview-unit",
+      "phase": "unit",
+      "view": "overview",
+      "app": "pwa",
+      "code": "A4-07",
+      "ac": [
+        "AC-O08",
+        "AC-O13"
+      ],
+      "state": "owner",
+      "theme": "light",
+      "role": "owner",
+      "ownerId": "OWN-001",
+      "dataset": "owner",
+      "clock": "2026-07-03T10:42:00+09:00",
+      "url": "http://localhost:4174/a4/overview?capture=1&state=owner&theme=light&site=SITE-MAPO&device=CPB-001",
+      "file": "pwa-overview-unit-unit.png",
+      "sha256": "9d9704134bb5c61f06fe9c80ecdac656ebbbebec65ba6685c63cb79904da84ee",
+      "geometry": {
+        "width": 390,
+        "height": 800,
+        "pageWidth": 390,
+        "mainWidth": 390,
+        "mainScrollWidth": 390,
+        "scrollY": 0
+      },
+      "media": {
+        "readyState": 4,
+        "paused": true
+      },
+      "diagnostics": {
+        "expectedConsoleErrors": [],
+        "unexpectedConsoleErrors": [],
+        "expectedRequestFailures": [
+          {
+            "url": "http://localhost:4174/_app/immutable/assets/front.D7bkNziN.mp4",
+            "error": "net::ERR_ABORTED"
+          },
+          {
+            "url": "http://localhost:4174/_app/immutable/assets/boom.BS2Cnj7b.mp4",
+            "error": "net::ERR_ABORTED"
+          },
+          {
+            "url": "http://localhost:4174/_app/immutable/assets/front.D7bkNziN.mp4",
+            "error": "net::ERR_ABORTED"
+          }
+        ],
+        "unexpectedRequestFailures": []
+      },
+      "ok": true,
+      "status": "automated-capture-pass"
+    }
+  ],
+  "exitCode": 0,
+  "finishedAt": "2026-09-13T07:32:01.352Z"
+}
