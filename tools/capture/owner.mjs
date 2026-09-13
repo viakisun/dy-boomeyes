@@ -288,14 +288,15 @@ try {
             markers: element.querySelectorAll('.be-marker').length,
             level: element.getAttribute('data-map-level'),
             mode: element.closest('[data-owner-stage]')?.getAttribute('data-owner-map-mode') ?? null,
+            sites: Number(element.closest('[data-owner-stage]')?.getAttribute('data-owner-sites')),
           };
         });
         check(result.map.width >= 200 && result.map.height >= 200, 'Map has no usable visible area');
-        // 상세 1 · 전국은 지역 집계 7(어느 폭이든) · 현장·호기 단계는 마포 호기 5
-        const expectedMarkers = row.view === 'detail' ? 1 : row.level === 'nation' ? 7 : 5;
+        // 상세 1 · 전국은 보유 현장 전부가 원 하나씩(수는 화면이 알려 준다) · 현장·호기 단계는 마포 호기 5
+        const expectedMarkers = row.view === 'detail' ? 1 : row.level === 'nation' ? result.map.sites : 5;
         check(
-          row.level !== 'nation' || result.map.mode === 'regions',
-          `Nation map mode must be regions (got ${result.map.mode})`,
+          row.level !== 'nation' || (result.map.mode === 'sites' && expectedMarkers > 0),
+          `Nation map must draw one circle per site (mode ${result.map.mode} · sites ${result.map.sites})`,
         );
         check(result.map.markers === expectedMarkers, `Map must show ${expectedMarkers} owned equipment marker(s)`);
         check((await page.locator('[data-map-error]').count()) === 0, 'Map tiles failed');

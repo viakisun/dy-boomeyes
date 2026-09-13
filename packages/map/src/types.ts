@@ -1,17 +1,19 @@
 import type { EquipmentState } from '@boomeyes/domain';
-/** unit = 호기 핀(기본) · site = 현장 알약(이름 + 대수) · region = 지역 집계 원(대수 + 지역명) */
-export type MarkerKind = 'unit' | 'site' | 'region';
+/** unit = 호기 핀(기본) · site = 현장 원(대수를 품은 원 + 이름표) */
+export type MarkerKind = 'unit' | 'site';
 export interface MapMarker {
   id: string;
   lat: number;
   lng: number;
   state: EquipmentState;
   label: string;
+  /** 현장 이름표의 둘째 줄(상태 한 줄) */
+  sub?: string;
   /** 짧은 지도 라벨의 전체 맥락. 스크린리더와 툴팁에서 읽는다. */
   description?: string;
   selected?: boolean;
   kind?: MarkerKind;
-  /** site·region 알약의 대수 배지 */
+  /** 현장 원 안에 드는 대수 */
   count?: number;
   /** 보관소 현장 — 상태 점 대신 사각 표식 */
   variant?: 'depot';

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { fanOffsets, resolveOverlaps } from './fan';
+import { fanOffsets, spreadCircles } from './fan';
 
 const at = (id: string, x: number, y: number) => ({ id, x, y });
 
@@ -22,24 +22,36 @@ describe('[B1-02] 겹치는 마커 펼침', () => {
   });
 });
 
-describe('[B1-02] 알약 상자 겹침 해소', () => {
+describe('[B1-02] 현장 원 밀어내기', () => {
   const at = (id: string, x: number, y: number) => ({ id, x, y });
-  it('겹치는 두 알약은 반씩 위·아래로 벌어진다', () => {
-    const off = resolveOverlaps([at('a', 100, 100), at('b', 130, 120)], { w: 112, h: 56 });
-    expect(off.get('a')!.y).toBeCloseTo(-18);
-    expect(off.get('b')!.y).toBeCloseTo(18);
+  it('겹치는 두 원은 중심 거리가 min이 될 때까지 반씩 벌어진다', () => {
+    const pts = [at('a', 100, 100), at('b', 120, 100)];
+    const off = spreadCircles(pts, 44);
+    const gap = Math.hypot(
+      pts[1]!.x + off.get('b')!.x - (pts[0]!.x + off.get('a')!.x),
+      pts[1]!.y + off.get('b')!.y - (pts[0]!.y + off.get('a')!.y),
+    );
+    expect(gap).toBeGreaterThanOrEqual(43);
+    expect(off.get('a')!.x).toBeCloseTo(-off.get('b')!.x, 5);
   });
-  it('옆으로 거의 나란한 두 알약은 가로로 벌어진다(세로 밀기보다 덜 움직임)', () => {
-    const off = resolveOverlaps([at('a', 100, 100), at('b', 200, 104)], { w: 112, h: 56 });
-    expect(off.get('a')).toEqual({ x: -6, y: 0 });
-    expect(off.get('b')).toEqual({ x: 6, y: 0 });
+  it('되당김이 있어 밀린 원이 실제 좌표 근처에 머문다 — 한 줄로 늘어서지 않는다', () => {
+    const pts = [at('a', 0, 0), at('b', 4, 2), at('c', 2, 5), at('d', 6, 6)];
+    const off = spreadCircles(pts, 44);
+    for (const p of pts) expect(Math.hypot(off.get(p.id)!.x, off.get(p.id)!.y)).toBeLessThan(44 * 2);
   });
-  it('가로로 충분히 떨어지면 건드리지 않고, 사슬(3개)도 세로 간격 ≥ 높이가 된다', () => {
-    expect(resolveOverlaps([at('a', 0, 0), at('b', 200, 0)], { w: 112, h: 56 }).get('b')).toEqual({ x: 0, y: 0 });
-    const pts = [at('a', 100, 100), at('b', 140, 130), at('c', 180, 160)];
-    const off = resolveOverlaps(pts, { w: 112, h: 56 });
-    const ys = pts.map((p) => p.y + off.get(p.id)!.y).sort((p, q) => p - q);
-    expect(ys[1]! - ys[0]!).toBeGreaterThanOrEqual(55.9);
-    expect(ys[2]! - ys[1]!).toBeGreaterThanOrEqual(55.9);
+  it('충분히 떨어진 원은 건드리지 않는다', () => {
+    const off = spreadCircles([at('a', 0, 0), at('b', 300, 300)], 44);
+    expect(off.get('a')).toEqual({ x: 0, y: 0 });
+    expect(off.get('b')).toEqual({ x: 0, y: 0 });
+  });
+  it('완전히 같은 좌표도 결정적으로 갈라진다 — 두 번 돌려도 같은 오프셋(캡처가 흔들리지 않는다)', () => {
+    const pts = [at('a', 50, 50), at('b', 50, 50), at('c', 50, 50)];
+    const one = spreadCircles(pts, 44);
+    const two = spreadCircles(pts, 44);
+    expect([...one]).toEqual([...two]);
+    const spread = pts.map((p) => ({ x: p.x + one.get(p.id)!.x, y: p.y + one.get(p.id)!.y }));
+    for (let i = 0; i < spread.length; i++)
+      for (let j = i + 1; j < spread.length; j++)
+        expect(Math.hypot(spread[j]!.x - spread[i]!.x, spread[j]!.y - spread[i]!.y)).toBeGreaterThan(0);
   });
 });

@@ -388,16 +388,12 @@ export interface OwnerMapScene {
   devices: readonly OwnerDevice[];
   site?: OwnerSite;
   device?: OwnerDevice;
-  /** nation에서 한 지역만 펼쳐 볼 때 */
-  region?: OwnerRegion;
-  /** true면 nation을 지역 7개로 집계(좁은 지도) */
-  aggregate: boolean;
   /** 목록 hover 등으로 강조할 현장·호기 id */
   focused?: string;
   animate: boolean;
   /** 상태 띠·패널·시트가 가리는 픽셀 — 카메라가 비워 둘 여백 */
   padding: { top: number; right: number; bottom: number; left: number };
-  onselect?: (kind: 'region' | 'site' | 'unit', id: string) => void;
+  onselect?: (kind: 'site' | 'unit', id: string) => void;
 }
 export const OWNER_DEPLOYMENT = { deployed: '현장 투입', stored: '보관 중', unknown: '배치 미확인' } as const;
 export const OWNER_CONNECTION = {

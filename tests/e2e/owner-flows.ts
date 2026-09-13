@@ -564,26 +564,53 @@ export function ownerFlows(app: OwnerApp) {
     await expect(ownerHost(page, 'overview')).toHaveAttribute('data-owner-sim', '0');
   });
 
-  test('[B1-02] [FR-024] [AC-O13] nation map aggregates seven regions; a region pill zooms to its sites and the chip returns', async ({
+  test('[B1-02] [FR-024] [AC-O13] nation map draws one circle per site; counts add up and name plates never overlap', async ({
     page,
   }) => {
     await startOwner(page, app);
     const overview = ownerHost(page, 'overview');
     const map = overview.locator('.be-map');
+    const stage = overview.locator('[data-owner-stage]');
     await expect(map).toHaveAttribute('data-map-ready', '', MAP);
-    await expect(map.locator('.be-marker')).toHaveCount(7);
-    await expect(overview.locator('[data-owner-stage]')).toHaveAttribute('data-owner-map-mode', 'regions');
-    // 정상 지역은 작은 점, 이상이 있는 지역만 상태색 원 — 무게가 심각도를 따른다
-    await expect(map.locator('.be-marker[data-kind="region"][data-state="normal"]')).toHaveCount(3);
-    await map.getByRole('button', { name: /^서울 · 현장 1곳/ }).click();
-    await expect(overview.locator('[data-owner-stage]')).toHaveAttribute('data-owner-map-mode', 'sites');
-    await expect(map.locator('.be-marker[data-kind="site"]')).toHaveCount(1);
-    await expect(page.getByRole('navigation', { name: '현황 경로', exact: true })).toContainText('서울');
-    await expect(overview.getByRole('list', { name: '현장 목록', exact: true }).locator('[data-site]')).toHaveCount(1);
-    if (app === 'pwa') await overview.getByRole('button', { name: '시트 펼치기', exact: true }).last().click();
-    await overview.getByRole('button', { name: '전국으로', exact: true }).click();
-    await expect(overview.locator('[data-owner-stage]')).toHaveAttribute('data-owner-map-mode', 'regions');
-    await expect(map.locator('.be-marker')).toHaveCount(7);
+    await expect(stage).toHaveAttribute('data-owner-map-mode', 'sites');
+    const sites = Number(await stage.getAttribute('data-owner-sites'));
+    const total = Number(await overview.locator('[data-owner-summary]').first().getAttribute('data-total'));
+    expect(sites).toBeGreaterThan(0);
+    await expect(map.locator('.be-marker[data-kind="site"]')).toHaveCount(sites);
+    const marks = await map.locator('.be-marker[data-kind="site"]').evaluateAll((elements) =>
+      elements.map((element) => {
+        const box = element.getBoundingClientRect();
+        const plate = element.querySelector('.be-marker__label')!.getBoundingClientRect();
+        return {
+          count: Number(element.querySelector('.be-marker__dot')?.textContent ?? '0'),
+          width: box.width,
+          height: box.height,
+          reachable: element.contains(document.elementFromPoint(box.x + box.width / 2, box.y + box.height / 2)),
+          plate: plate.width && plate.height ? { x: plate.x, y: plate.y, w: plate.width, h: plate.height } : null,
+        };
+      }),
+    );
+    // 원 안의 대수를 모두 더하면 보유 대수 — 지역으로 묶어 현장을 지우지 않는다(시안 «확정 2026-09-13»)
+    expect(marks.reduce((sum, mark) => sum + mark.count, 0)).toBe(total);
+    const touch = app === 'pwa' ? 48 : 44;
+    for (const mark of marks) {
+      expect(mark.width).toBeGreaterThanOrEqual(touch);
+      expect(mark.height).toBeGreaterThanOrEqual(touch);
+      expect(mark.reachable).toBe(true);
+    }
+    // 보이는 이름표끼리는 겹치지 않는다 — 놓을 자리가 없는 이름표는 숨고 원만 남는다
+    const plates = marks.map((mark) => mark.plate).filter((plate) => plate !== null);
+    expect(plates.length).toBeGreaterThan(0);
+    for (let i = 0; i < plates.length; i++)
+      for (let j = i + 1; j < plates.length; j++) {
+        const [a, b] = [plates[i]!, plates[j]!];
+        expect(a.x < b.x + b.w && b.x < a.x + a.w && a.y < b.y + b.h && b.y < a.y + a.h).toBe(false);
+      }
+    // 원을 누르면 그 현장으로 내려간다(목록의 행과 같은 곳으로)
+    await map.getByRole('button', { name: /^마포 주상복합 신축/ }).click();
+    await expect(page).toHaveURL(/site=SITE-MAPO/);
+    await expect(map).toHaveAttribute('data-map-level', 'site', MAP);
+    await expect(map.locator('.be-marker')).toHaveCount(5);
   });
 
   test('[B1-02] [FR-024] [AC-O12] [AC-O13] unknown site or foreign unit in the URL falls back to a valid level', async ({

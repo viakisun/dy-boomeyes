@@ -614,8 +614,13 @@ try {
           .click();
         await expect(host.locator('[data-map-error]')).toHaveCount(0);
         await expect(map).toHaveAttribute('data-map-level', 'nation');
-        await expect(map.locator('.be-marker')).toHaveCount(7);
+        await expect(map.locator('.be-marker')).toHaveCount(
+          Number(await host.locator('[data-owner-sites]').getAttribute('data-owner-sites')),
+        );
         await page.unroute(outagePattern, outage);
+        // 카드는 확인이 필요한 현장부터 보인다 — 정상인 마포에 닿으려면 전체를 펼친다
+        const allSites = host.getByRole('button', { name: /^전체 \d+개 현장$/ });
+        if (await allSites.count()) await allSites.first().click();
         await host.getByRole('list', { name: '현장 목록', exact: true }).locator('[data-site="SITE-MAPO"]').click();
         await expect(host.locator('[data-map-error]')).toHaveCount(0);
         await expect(map.locator('.be-marker')).toHaveCount(5);

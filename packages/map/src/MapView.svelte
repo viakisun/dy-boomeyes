@@ -5,7 +5,7 @@
   import { onMount } from 'svelte';
   import { Button } from '@boomeyes/ui';
   import type { MapViewProps } from './types';
-  import { fanOffsets, resolveOverlaps, FAN_PX } from './fan';
+  import { fanOffsets, spreadCircles, FAN_PX } from './fan';
   import { outlineStyle } from './outline';
   let {
     markers,
@@ -54,14 +54,79 @@
   // 수신 없음은 글자 대신 wifi-off 아이콘(lucide 경로) — '·'은 읽히지 않는다
   const OFFLINE_SVG =
     '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h.01"/><path d="M8.5 16.4a5 5 0 0 1 7 0"/><path d="M5 12.9a10 10 0 0 1 5.2-2.7"/><path d="M19 12.9a10 10 0 0 0-2-1.5"/><path d="M2 8.8a15 15 0 0 1 4.2-2.6"/><path d="M22 8.8A15 15 0 0 0 10.7 5"/><path d="m2 2 20 20"/></svg>';
-  // 겹치는 마커 펼침 — 마커 변경·줌 종료마다 화면 좌표로 다시 계산. 현장·지역 알약은 세로로 펼쳐 옆 패널에 가려지지 않게 한다.
+  // 이름표를 놓을 자리 — 원 아래가 기본이고, 막히면 우 · 좌 · 위 · 우하 · 좌하 순으로 물러난다(시안 «확정 2026-09-13»)
+  const LABEL_SLOTS = ['below', 'right', 'left', 'above', 'below-right', 'below-left'] as const;
+  const LABEL_GAP = 4;
+  // 이만큼 밀린 마커만 원래 좌표에 점과 선을 남긴다 — 1~2px 보정까지 그리면 지도가 선으로 덮인다
+  const LEADER_MIN = 6;
+  // 이름표 배치 순서 = 읽혀야 하는 순서. 이상 › 정상 › 보관 — 자리가 모자라면 보관소 이름부터 사라진다
+  const labelRank = (m: M) => (m.state !== 'normal' ? 0 : m.variant === 'depot' ? 2 : 1);
+  type Box = { x: number; y: number; w: number; h: number };
+  const overlaps = (a: Box, b: Box) => a.x < b.x + b.w && b.x < a.x + a.w && a.y < b.y + b.h && b.y < a.y + a.h;
+  /**
+   * 현장 이름표 배치 — 원(과 이미 놓인 이름표)을 피하는 첫 자리에 놓고, 없으면 숨긴다.
+   * `area`는 지도에서 실제로 보이는 부분이다 — 띠·패널·시트가 덮은 자리에 이름표를 놓으면
+   * 화면에서 사라지고(가려짐) 캡처의 자식 도달 검사가 「마커가 겹친다」로 떨어진다.
+   * 억지로 끼워 넣지 않는 이유: 이름표가 다른 원을 덮으면 그 원을 누를 수 없고(캡처의 도달 검사)
+   * 지도가 글자로 덮인다. 원 자체는 늘 남으므로 누를 것이 사라지지는 않는다.
+   */
+  function placeLabels(centers: Map<string, { x: number; y: number }>, size: { hit: number; dot: number }, area: Box) {
+    const pad = size.dot / 2 + LABEL_GAP;
+    const circles = [...centers].map(([, c]) => ({
+      x: c.x - pad,
+      y: c.y - pad,
+      w: pad * 2,
+      h: pad * 2,
+    }));
+    const boxes: Box[] = [...circles];
+    const ordered = [...markers].sort((a, b) => labelRank(a) - labelRank(b) || (a.id < b.id ? -1 : 1));
+    for (const m of ordered) {
+      const el = handles.get(m.id)?.getElement();
+      const label = el?.querySelector<HTMLElement>('.be-marker__label');
+      const c = centers.get(m.id);
+      if (!el || !label || !c) continue;
+      label.classList.remove('is-hidden');
+      const w = label.offsetWidth;
+      const h = label.offsetHeight;
+      const slot = LABEL_SLOTS.map((name) => {
+        const r = { x: 0, y: 0, w, h };
+        if (name === 'below') Object.assign(r, { x: c.x - w / 2, y: c.y + pad });
+        else if (name === 'above') Object.assign(r, { x: c.x - w / 2, y: c.y - pad - h });
+        else if (name === 'right') Object.assign(r, { x: c.x + pad, y: c.y - h / 2 });
+        else if (name === 'left') Object.assign(r, { x: c.x - pad - w, y: c.y - h / 2 });
+        // 우하·좌하는 「아래」를 좌우로 밀어 둔 자리다 — 대각으로 붙이면 제 원을 덮는다
+        else if (name === 'below-right') Object.assign(r, { x: c.x + pad * 0.7, y: c.y + pad });
+        else Object.assign(r, { x: c.x - pad * 0.7 - w, y: c.y + pad });
+        return r;
+      }).find(
+        (r) =>
+          r.x >= area.x &&
+          r.y >= area.y &&
+          r.x + r.w <= area.x + area.w &&
+          r.y + r.h <= area.y + area.h &&
+          !boxes.some((b) => overlaps(r, b)),
+      );
+      if (!slot) {
+        label.classList.add('is-hidden');
+        continue;
+      }
+      boxes.push(slot);
+      // 마커 상자(hit)의 왼쪽 위를 원점으로 하는 좌표 — 마커는 원 중심에 붙어 있다
+      label.style.left = `${Math.round(slot.x - (c.x - size.hit / 2))}px`;
+      label.style.top = `${Math.round(slot.y - (c.y - size.hit / 2))}px`;
+    }
+  }
+  // 겹치는 마커 펼침 — 마커 변경·줌 종료마다 화면 좌표로 다시 계산.
   function relayout() {
-    if (!map) return;
-    const vertical = markers.some((m) => m.kind === 'site' || m.kind === 'region');
+    if (!map || !el) return;
+    const site = markers.some((m) => m.kind === 'site');
     const points = markers.map((m) => ({ id: m.id, ...map!.project([m.lng, m.lat]) }));
-    // 현장·지역 알약(폭 ≈ 110px)은 상자 겹침을 세로로 밀어 풀고, 호기 핀은 묶음 가로 펼침
-    const off = vertical
-      ? resolveOverlaps(points, { w: FAN_PX * 2, h: FAN_PX })
+    // 현장 원은 중심 거리로 밀어 풀고(히트 영역이 겹치면 도달 검사가 깨진다), 호기 핀은 묶음 가로 펼침
+    const first = handles.get(markers[0]?.id ?? '')?.getElement();
+    const hit = first?.offsetWidth || FAN_PX;
+    const dot = first?.querySelector<HTMLElement>('.be-marker__dot')?.offsetWidth || hit;
+    const off = site
+      ? spreadCircles(points, hit)
       : fanOffsets(
           points,
           pill ? (compact ? FAN_PX : FAN_PX * 1.75) : FAN_PX, // 알약 가로(≈ 98px) · 원형 핀(48px)
@@ -71,15 +136,28 @@
       const o = off.get(id) ?? { x: 0, y: 0 };
       h.setOffset([o.x, o.y]);
     }
-    // 리더선은 호기 핀의 가로 펼침에만 — 현장·지역 알약은 점 위에 그대로 서 있다(지도 위 선은 가장 시끄러운 요소)
+    if (site) {
+      // 카메라 여백 = 띠·패널·시트가 덮은 픽셀(장면이 계산해 넘긴다) — 그 안쪽이 이름표를 놓을 자리다
+      const edge = camera?.padding ?? { top: 0, right: 0, bottom: 0, left: 0 };
+      placeLabels(
+        new Map(points.map((p) => [p.id, { x: p.x + (off.get(p.id)?.x ?? 0), y: p.y + (off.get(p.id)?.y ?? 0) }])),
+        { hit, dot },
+        {
+          x: edge.left,
+          y: edge.top,
+          w: Math.max(0, el.clientWidth - edge.left - edge.right),
+          h: Math.max(0, el.clientHeight - edge.top - edge.bottom),
+        },
+      );
+    }
+    // 밀린 마커는 원래 좌표에 점과 선을 남긴다 — 원이 실제 위치를 떠난 만큼만
     if (pill)
-      leaders = vertical
-        ? []
-        : markers.map((marker) => {
-            const point = map!.project([marker.lng, marker.lat]);
-            const o = off.get(marker.id) ?? { x: 0, y: 0 };
-            return { id: marker.id, x: point.x, y: point.y, endX: point.x + o.x, endY: point.y + o.y };
-          });
+      leaders = markers.flatMap((marker) => {
+        const point = map!.project([marker.lng, marker.lat]);
+        const o = off.get(marker.id) ?? { x: 0, y: 0 };
+        if (site && Math.hypot(o.x, o.y) < LEADER_MIN) return [];
+        return [{ id: marker.id, x: point.x, y: point.y, endX: point.x + o.x, endY: point.y + o.y }];
+      });
   }
   // 준비 표식 — 카메라 이동마다 내렸다가 다음 idle에 다시 세운다(캡처·e2e는 단계 속성까지 기다린다)
   function arm() {
@@ -127,30 +205,32 @@
     d.dataset.kind = kind;
     if (m.variant) d.dataset.variant = m.variant;
     else delete d.dataset.variant;
-    // 대수 무게(지역·현장 알약): 20대 이상 heavy · 10대 이상 mid — 배지 크기로 드러난다
-    d.dataset.weight = (m.count ?? 0) >= 20 ? 'heavy' : (m.count ?? 0) >= 10 ? 'mid' : 'light';
     d.title = m.description ?? m.label;
-    d.style.cssText = `--pin:${pill && m.state === 'normal' ? 'var(--sys-color-fg-muted)' : (COLOR[m.state] ?? COLOR.offline)}`;
-    // 상태 문법: 정상은 작은 중립 점(현장·지역) 또는 ✓(호기) · 이상은 상태색 원 + 글리프 3종(✕ · ! · 수신 없음 아이콘)
+    d.style.cssText = `--pin:${kind === 'unit' && pill && m.state === 'normal' ? 'var(--sys-color-fg-muted)' : (COLOR[m.state] ?? COLOR.offline)}`;
     const dot = d.querySelector('.be-marker__dot') as HTMLElement;
-    if (m.state === 'offline' && !(compact && kind === 'unit')) dot.innerHTML = OFFLINE_SVG;
+    const label = d.querySelector('.be-marker__label') as HTMLElement;
+    if (kind === 'site') {
+      // 현장 = 대수를 품은 원 하나(시안 «확정 2026-09-13») — 상태는 원의 색, 대수는 원 안의 수.
+      // 이름표는 원 밖에 떠 있고 자리가 없으면 숨는다(placeLabels).
+      dot.textContent = String(m.count ?? 0);
+      label.replaceChildren(
+        Object.assign(document.createElement('span'), { className: 'be-marker__name', textContent: m.label }),
+      );
+      if (m.sub)
+        label.append(
+          Object.assign(document.createElement('span'), { className: 'be-marker__state', textContent: m.sub }),
+        );
+      return;
+    }
+    // 호기 문법: 정상은 ✓ · 이상은 상태색 원 + 글리프 3종(✕ · ! · 수신 없음 아이콘)
+    if (m.state === 'offline' && !compact) dot.innerHTML = OFFLINE_SVG;
     else
-      dot.textContent =
-        compact && kind === 'unit'
-          ? m.label.replace(/호기$/, '')
-          : pill && m.state === 'normal'
-            ? kind === 'unit'
-              ? '✓'
-              : ''
-            : (GLYPH[m.state] ?? '');
-    (d.querySelector('.be-marker__label') as HTMLElement).textContent = m.label;
-    // 대수 배지는 현장·지역 알약에만 만든다(빈 자식을 남기지 않는다 — 캡처 도구의 자식 중심 도달 검사)
-    let count = d.querySelector('.be-marker__count') as HTMLElement | null;
-    if (kind !== 'unit' && m.count !== undefined) {
-      if (!count)
-        count = d.appendChild(Object.assign(document.createElement('span'), { className: 'be-marker__count' }));
-      count.textContent = String(m.count);
-    } else count?.remove();
+      dot.textContent = compact
+        ? m.label.replace(/호기$/, '')
+        : pill && m.state === 'normal'
+          ? '✓'
+          : (GLYPH[m.state] ?? '');
+    label.textContent = m.label;
   }
   function pin(m: M) {
     const d = document.createElement('button');
@@ -228,7 +308,10 @@
       seen.add(m.id);
       let h = handles.get(m.id);
       if (!h) {
-        h = new maplibregl.Marker({ element: pin(m), anchor: 'bottom' }).setLngLat([m.lng, m.lat]).addTo(map);
+        // 현장 원은 좌표 위에 앉고(anchor center), 호기 핀은 좌표를 아래 끝으로 가리킨다
+        h = new maplibregl.Marker({ element: pin(m), anchor: m.kind === 'site' ? 'center' : 'bottom' })
+          .setLngLat([m.lng, m.lat])
+          .addTo(map);
         handles.set(m.id, h);
       } else {
         h.setLngLat([m.lng, m.lat]);
@@ -378,82 +461,102 @@
     background: none;
     box-shadow: none;
   }
-  /* 현장 알약: 대수 배지(텍스트 색만 — 색 예산은 상태 점이 쓴다) */
-  .fit-markers :global(.be-marker__count) {
-    min-width: var(--sys-size-icon-md);
-    padding: 0 var(--sys-space-inline-xs);
-    border-radius: var(--sys-radius-pill);
-    background: var(--sys-color-bg-surface-sunken);
-    color: var(--sys-color-fg-muted);
-    font: var(--sys-type-label-sm);
-    font-weight: 700;
-    text-align: center;
-    font-variant-numeric: tabular-nums;
+  /* 현장 마커(시안 «확정 2026-09-13») — 대수를 품은 원 하나 + 그 옆에 뜨는 이름표.
+     마커 상자는 터치 최소치(웹 44 · PWA 48)이고 원은 그보다 작다 — 밀어내기는 상자 크기로 한다. */
+  .fit-markers :global(.be-marker[data-kind='site']) {
+    /* position은 건드리지 않는다 — MapLibre가 absolute로 배치한다(덮어쓰면 마커가 좌표를 떠난다).
+       그 absolute가 곧 이름표의 기준 상자이기도 하다. */
+    display: block;
+    width: max(var(--sys-size-touch-min), var(--sys-size-control-md));
+    height: max(var(--sys-size-touch-min), var(--sys-size-control-md));
+    min-height: 0;
+    padding: 0;
+    border: 0;
+    background: none;
+    box-shadow: none;
   }
-  /* 정상 현장·지역: 작은 중립 점 — 이상이 없는 곳이 가장 무거워 보이지 않게(무게 = 심각도) */
-  .fit-markers :global(.be-marker[data-kind='site'][data-state='normal'] .be-marker__dot),
-  .fit-markers :global(.be-marker[data-kind='region'][data-state='normal'] .be-marker__dot) {
-    width: var(--sys-size-indicator);
-    height: var(--sys-size-indicator);
-    margin-inline: calc((var(--sys-size-icon-md) - var(--sys-size-indicator)) / 2);
-    background: var(--sys-color-fg-subtle);
-  }
-  /* 보관소: 점 대신 작은 사각 표식 */
-  .fit-markers :global(.be-marker[data-variant='depot'][data-state='normal'] .be-marker__dot) {
-    border-radius: var(--sys-radius-mark);
-    background: var(--sys-color-fg-muted);
-  }
-  /* 지역 알약: 이름 label-md, 대수 배지가 무게(heavy ≥ 20 · mid ≥ 10)에 따라 커진다 */
-  .fit-markers :global(.be-marker[data-kind='region'] .be-marker__count) {
+  .fit-markers :global(.be-marker[data-kind='site'] .be-marker__dot) {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    translate: -50% -50%;
+    width: var(--sys-size-control-sm);
+    height: var(--sys-size-control-sm);
+    border: var(--sys-border-width-strong) solid var(--pin);
+    background: var(--pin);
+    color: var(--sys-color-fg-on-accent);
+    box-shadow: var(--sys-shadow-overlay);
     font: var(--sys-type-label-md);
     font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+  /* 정상 현장은 채우지 않는다 — 색은 확인이 필요한 곳의 것이다(원칙 4) */
+  .fit-markers :global(.be-marker[data-kind='site'][data-state='normal'] .be-marker__dot) {
+    background: var(--sys-color-bg-surface);
+    border-color: var(--sys-color-border-strong);
     color: var(--sys-color-fg-default);
   }
-  .fit-markers :global(.be-marker[data-weight='heavy'] .be-marker__count) {
-    font: var(--sys-type-label-lg);
-    font-weight: 700;
-    padding: 0 var(--sys-space-inline-sm);
-    background: var(--sys-color-bg-ui-active);
+  /* 보관소: 한 단계 더 물러난 회색 원 */
+  .fit-markers :global(.be-marker[data-kind='site'][data-variant='depot'][data-state='normal'] .be-marker__dot) {
+    background: var(--sys-color-bg-surface-sunken);
+    border-color: var(--sys-color-border-default);
+    color: var(--sys-color-fg-muted);
   }
-  .fit-markers :global(.be-marker[data-weight='mid'] .be-marker__count) {
-    background: var(--sys-color-bg-ui-active);
+  .fit-markers :global(.be-marker[data-kind='site'] .be-marker__label) {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0 var(--sys-space-inline-xs);
+    border-radius: var(--sys-radius-control);
+    background: var(--sys-color-bg-surface);
+    box-shadow: var(--sys-shadow-raised);
+    white-space: nowrap;
+    text-align: left;
+  }
+  .fit-markers :global(.be-marker__name) {
+    font: var(--sys-type-label-md);
+    font-weight: 600;
+  }
+  .fit-markers :global(.be-marker__state) {
+    font: var(--sys-type-label-sm);
+    color: var(--sys-color-fg-muted);
+  }
+  .fit-markers :global(.be-marker[data-state='fault'] .be-marker__state),
+  .fit-markers :global(.be-marker[data-state='caution'] .be-marker__state),
+  .fit-markers :global(.be-marker[data-state='offline'] .be-marker__state) {
+    color: var(--pin);
+    font-weight: 600;
+  }
+  /* 자리가 없는 이름표는 숨긴다 — 원은 남으므로 누를 것이 사라지지 않는다.
+     선택자는 위의 이름표 규칙(display:flex)보다 구체적이어야 한다 — 덜 구체적이면 조용히 진다. */
+  .fit-markers :global(.be-marker[data-kind='site'] .be-marker__label.is-hidden) {
+    display: none;
+  }
+  .fit-markers :global(.be-marker[data-kind='site'].is-selected .be-marker__dot) {
+    border-color: var(--sys-color-accent-border-strong);
+    outline: var(--sys-border-width-focus) solid var(--sys-color-focus-ring);
+    outline-offset: 1px;
   }
   /* 좁은 지도: 호기 번호만 담은 원형 핀(상태는 색 + aria-label) */
-  .pins-compact :global(.be-marker) {
+  .pins-compact :global(.be-marker[data-kind='unit']) {
     min-width: max(var(--sys-size-touch-min), var(--sys-size-control-md));
     padding: 0;
     justify-content: center;
     border-radius: var(--sys-radius-pill);
   }
-  .pins-compact :global(.be-marker__dot) {
+  .pins-compact :global(.be-marker[data-kind='unit'] .be-marker__dot) {
     width: var(--sys-size-icon-xl);
     height: var(--sys-size-icon-xl);
     font: var(--sys-type-label-md);
     font-weight: 700;
   }
-  /* 좁은 지도에서 현장 알약은 그대로 둔다(이름이 곧 식별자) — 원형 축약은 호기 핀만 */
-  .pins-compact :global(.be-marker[data-kind='site']),
-  .pins-compact :global(.be-marker[data-kind='region']) {
-    padding: var(--sys-space-inset-xs) var(--sys-space-inset-sm) var(--sys-space-inset-xs) var(--sys-space-inset-xs);
-    justify-content: flex-start;
-  }
-  .pins-compact :global(.be-marker[data-kind='site'] .be-marker__dot),
-  .pins-compact :global(.be-marker[data-kind='region'] .be-marker__dot) {
-    width: var(--sys-size-icon-md);
-    height: var(--sys-size-icon-md);
-    font: var(--sys-type-label-sm);
-  }
-  .pins-compact :global(.be-marker[data-kind='site'] .be-marker__label),
-  .pins-compact :global(.be-marker[data-kind='region'] .be-marker__label) {
-    position: static;
-    width: auto;
-    height: auto;
-    clip-path: none;
-    overflow: visible;
-  }
-  /* 라벨은 화면에서만 숨긴다(접근성 이름·도구의 자식 중심점 검사 유지) — 마커 중앙 1px 클립 */
+  /* 라벨은 화면에서만 숨긴다(접근성 이름·도구의 자식 중심점 검사 유지) — 마커 중앙 1px 클립.
+     현장 이름표는 좁은 지도에서도 그대로 둔다 — 자리가 없으면 placeLabels가 알아서 숨긴다. */
   /* 마커 자체는 MapLibre가 absolute로 배치한다 — position을 덮어쓰지 않는다(덮어쓰면 핀이 어긋난다) */
-  .pins-compact :global(.be-marker__label) {
+  .pins-compact :global(.be-marker[data-kind='unit'] .be-marker__label) {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -472,7 +575,7 @@
     min-height: var(--sys-size-icon-lg);
     min-width: var(--sys-size-icon-lg);
   }
-  .fit-markers :global(.be-marker.is-selected) {
+  .fit-markers :global(.be-marker[data-kind='unit'].is-selected) {
     border-color: var(--sys-color-accent-border-strong);
     background: var(--sys-color-accent-bg);
   }

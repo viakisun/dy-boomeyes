@@ -3,16 +3,8 @@
   // 상태·사유다. hover → 지도 강조, 클릭 → 현장 단계.
   // 알림은 헤더의 종이 맡는다 — 같은 것을 두 자리에 두지 않는다.
   import ArrowRight from '@lucide/svelte/icons/arrow-right';
-  import {
-    ownerHref,
-    ownerSummary,
-    type OwnerApp,
-    type OwnerRegion,
-    type OwnerSite,
-    type OwnerSnapshot,
-  } from '@boomeyes/domain';
+  import { ownerHref, ownerSummary, type OwnerApp, type OwnerSite, type OwnerSnapshot } from '@boomeyes/domain';
   import Button from '../primitives/Button.svelte';
-  import Chip from '../primitives/Chip.svelte';
   import EmptyState from '../primitives/EmptyState.svelte';
   import List from '../primitives/List.svelte';
   import SiteRow from './SiteRow.svelte';
@@ -21,25 +13,21 @@
     data,
     app,
     url,
-    region,
     focused,
     siteHref,
     onsite,
     onfocus,
-    onregion,
   }: {
     data: OwnerSnapshot;
     app: OwnerApp;
     url: URL;
-    region?: OwnerRegion;
     focused?: string;
     siteHref: (site: OwnerSite) => string;
     onsite: (site: OwnerSite) => void;
     onfocus: (id?: string) => void;
-    onregion: (region?: OwnerRegion) => void;
   } = $props();
   const summary = $derived(ownerSummary(data.devices, data.alerts));
-  const sites = $derived(region ? data.sites.filter((s) => s.region === region) : data.sites);
+  const sites = $derived(data.sites);
   // 확인할 것이 있는 현장 — 행의 둘째 줄과 같은 판정을 쓴다(두 곳이 갈리면 머리 수와 목록이 어긋난다)
   const attention = $derived(sites.filter((site) => siteCondition(site, data.devices)));
   let all = $state(false);
@@ -52,9 +40,7 @@
     <h2 id="owner-attention-title" class="text-heading-sm" tabindex="-1" data-panel-heading="nation">
       확인 필요 <span class="tabular-nums">{attention.length}개 현장 · {summary.attention}대</span>
     </h2>
-    {#if region}
-      <Chip size="md" onclick={() => onregion(undefined)}>전국으로</Chip>
-    {:else if attention.length > 0}
+    {#if attention.length > 0}
       <button type="button" class="{ownerControl()} text-body-sm text-accent-fg" onclick={() => (all = !all)}>
         {all ? '확인 필요만 보기' : `전체 ${sites.length}개 현장`}
       </button>

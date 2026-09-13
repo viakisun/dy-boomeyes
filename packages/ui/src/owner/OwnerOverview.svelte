@@ -1,5 +1,5 @@
 <script lang="ts">
-  // 운영 현황 — 드릴다운 관제: 전국(현장 알약·지역 집계) → 현장(호기 핀) → 호기(패널 + 실시간 영상).
+  // 운영 현황 — 드릴다운 관제: 전국(현장 원 하나씩) → 현장(호기 핀) → 호기(패널 + 실시간 영상).
   // 웹 lg: 무대(지도) 위에 상태 띠(좌상)와 패널(우측)이 떠 있다 · 웹 좁은 폭: 띠 → 지도 → 패널 세로 · PWA: 지도 전면 + 띠(상단) + 바텀 시트 3단(MapSheet).
   // URL이 단계를 정한다(?site= · ?device=) — 새로고침·뒤로가기가 그대로 동작한다. 목록은 보유 장비 화면에 있다.
   import { tick, type Snippet } from 'svelte';
@@ -12,7 +12,6 @@
     type OwnerDevice,
     type OwnerLevel,
     type OwnerMapScene,
-    type OwnerRegion,
     type OwnerSite,
     type OwnerViewProps,
   } from '@boomeyes/domain';
@@ -40,12 +39,11 @@
     aiShot?: Snippet<[OwnerAiEvent]>;
   } = $props();
   const level = $derived(ownerLevel(url, data));
-  let region = $state<OwnerRegion | undefined>();
   let focused = $state<string | undefined>();
   const sheet = $derived(app === 'pwa');
-  // 전국 단계는 지도가 주인공(시트 접힘 — 지역 알약 7개가 들어갈 자리), 현장·호기 단계는 패널이 보이게 절반
+  // 전국 단계는 지도가 주인공(시트 접힘 — 현장 원이 들어갈 자리), 현장·호기 단계는 패널이 보이게 절반
   let snap = $state<MapSheetSnap>(level.level === 'nation' ? 'collapsed' : 'half');
-  // 무대·띠·패널·시트 치수 — 카메라 여백과 집계 판정에 쓴다
+  // 무대·띠·패널·시트 치수 — 카메라 여백에 쓴다
   let stage = $state<HTMLDivElement>();
   let panel = $state<HTMLElement>();
   let stageWidth = $state(0);
@@ -75,8 +73,6 @@
           ? stageHeight / 2
           : Math.max(0, stageHeight - insetXl),
   );
-  // 전국은 어느 폭에서든 지역 집계 7개 — 현장 13 알약은 수도권에서 세로 기둥이 된다. 지역 원을 누르면 그 지역으로 줌인하며 현장 알약으로 풀린다
-  const aggregate = true;
   // 호기 단계는 지도 자리에 카메라 6분할이 들어간다(시안 «확정 2026-09-12») — 그 단계에는 지도가 없다.
   // 하나의 $derived로 장치와 카메라를 함께 내보내야 템플릿에서 좁혀진다.
   const wall = $derived(
@@ -126,8 +122,6 @@
     devices: siteDevices,
     site: level.site,
     device: level.device,
-    region: level.level === 'nation' ? region : undefined,
-    aggregate,
     focused: level.level === 'unit' ? level.device.id : focused,
     animate: !capture,
     // 여백 = 띠·패널·시트가 가리는 만큼 + 알약 크기(위로 50px·좌우 55px)만큼 — 가장자리 현장의 알약이 지도 밖으로 잘리지 않게
@@ -147,15 +141,14 @@
           left: (floating ? panelWidth + inset : 0) + inset * 4,
         },
     onselect: (kind, id) => {
-      if (kind === 'region') region = id as OwnerRegion;
-      else if (kind === 'site') go(siteHref(data.sites.find((s) => s.id === id)!));
+      if (kind === 'site') go(siteHref(data.sites.find((s) => s.id === id)!));
       else {
         const device = data.devices.find((d) => d.id === id);
         if (device) go(unitHref(device));
       }
     },
   });
-  const mapMode = $derived(level.level !== 'nation' ? 'units' : region ? 'sites' : 'regions');
+  const mapMode = $derived(level.level === 'nation' ? 'sites' : 'units');
 </script>
 
 {#snippet panels()}
@@ -164,12 +157,10 @@
       {data}
       {app}
       {url}
-      {region}
       {focused}
       {siteHref}
       onsite={(site) => go(siteHref(site))}
       onfocus={(id) => (focused = id)}
-      onregion={(next) => (region = next)}
     />
   {:else if level.level === 'site'}
     <SitePanel
@@ -192,15 +183,7 @@
   <div class="gap-inline-lg flex min-w-0 flex-wrap items-center justify-between">
     <div class="gap-inline-lg flex min-w-0 flex-wrap items-center">
       <h1 class="text-heading-md">운영 현황</h1>
-      <OverviewCrumbs
-        {level}
-        {region}
-        {hrefs}
-        onnavigate={(href) => {
-          region = undefined;
-          go(href);
-        }}
-      />
+      <OverviewCrumbs {level} {hrefs} onnavigate={(href) => go(href)} />
     </div>
     <span class="gap-inline-xs text-body-sm text-fg-muted inline-flex items-center"
       ><Clock class="size-size-icon-sm" aria-hidden="true" />{fmtDateTime(data.at)} 기준{#if sim}<span
@@ -216,6 +199,7 @@
       bind:clientHeight={stageHeight}
       data-owner-stage
       data-owner-map-mode={hasMap ? mapMode : undefined}
+      data-owner-sites={data.sites.length}
       class="gap-stack-sm relative flex min-w-0 flex-col {sheet && (hasMap || wall)
         ? 'min-h-layout-panel-height flex-1 overflow-hidden'
         : hasMap
@@ -301,12 +285,10 @@
             {data}
             {app}
             {url}
-            {region}
             {focused}
             {siteHref}
             onsite={(site) => go(siteHref(site))}
             onfocus={(id) => (focused = id)}
-            onregion={(next) => (region = next)}
           />
         </div>
       {/if}

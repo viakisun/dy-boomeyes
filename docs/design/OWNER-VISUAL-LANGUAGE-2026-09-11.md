@@ -376,7 +376,7 @@ Stat(전압 — 값 380 · 단위 V · 힌트 "마지막 수신 10:41" · fault�
 | Sites 레이어 → 자산 카드 → Asset Home | Trackunit, [Using the Map](https://help.trackunit.com/en/articles/236810-using-the-map-in-trackunit-manager) · [Asset Home](https://help.trackunit.com/en/articles/141031-how-do-i-navigate-in-asset-home) | 전국 현장 알약 → SitePanel → 호기 |
 | 줌에 따라 클러스터 ↔ 개별 핀 자동 전환 | Hilti ON!Track, [What is the Smart map?](https://help.ontrack3.hilti.com/hc/en-us/articles/34399800470545-What-is-the-Smart-map) | 가시 폭 760px 미만은 지역 원 7, 이상은 현장 알약 13 |
 | 지도 선택 → 사이드 패널 상세 | Geotab, [The Map](https://support.geotab.com/help/mygeotab/fleet-activity/map/the-map) | 웹 lg 우측 부유 패널 |
-| 밀집 자동 그룹화 · Live 카메라 카드 | Motive, [Fleet View 2.0](https://helpcenter.gomotive.com/hc/en-us/articles/36088175670685-Fleet-View-2-0) | 지역 집계 · OwnerLiveTile("실시간 예시" 오버레이, 점 없음) |
+| 밀집 자동 그룹화 · Live 카메라 카드 | Motive, [Fleet View 2.0](https://helpcenter.gomotive.com/hc/en-us/articles/36088175670685-Fleet-View-2-0) | ~~지역 집계~~(2026-09-13 폐기 · §11) · OwnerLiveTile("실시간 예시" 오버레이, 점 없음) |
 | 표준 바텀 시트 3상태(collapsed · half · expanded) | Material Design 2, [Sheets: bottom](https://m2.material.io/components/sheets-bottom) · Apple HIG, [Sheets](https://developer.apple.com/design/human-interface-guidelines/sheets)(medium/large 디텐트, Maps처럼 배경을 가리지 않는 시트) | MapSheet(비모달, 전국은 접힘 · 현장/호기는 절반) |
 | `cameraForBounds` · `easeTo` · `padding` | MapLibre GL JS, [Map](https://maplibre.org/maplibre-gl-js/docs/API/classes/Map/) · [FitBoundsOptions](https://maplibre.org/maplibre-gl-js/docs/API/type-aliases/FitBoundsOptions/) | `cameraForBounds(bounds,{padding,maxZoom})` → `easeTo`(여백을 지도 상태에 남기지 않음, 과다 여백은 절반으로 재시도) |
 | 비텍스트 대비 3:1 · 표적 24px 최소 | WCAG 2.2, [1.4.11 Non-text Contrast](https://www.w3.org/WAI/WCAG22/Understanding/non-text-contrast.html) · [2.5.8 Target Size (Minimum)](https://www.w3.org/WAI/WCAG22/Understanding/target-size-minimum.html) | 마커 44/48px · 캡처 도구가 자식 중심 도달을 검사 |
@@ -387,14 +387,14 @@ CARTO Positron 벡터 타일은 줌 15~18 오버줌에서 오류 이벤트 0(S0 
 ### 구조
 
 - **데이터** — `OwnerSite`(현장/보관소 · 지역 7 · 좌표 · 담당자 · 기간) · `OwnerDevice.siteId/harness/errorCode` · `ownerLevel(url)`(실존 현장, 그 현장 소속 호기만) · `ownerStrip`(가동 97 · 점검 2 · 고장 2 · 지연 2 · 보관 17) · 시드 `packages/mock/src/owner-fleet.ts`(121대: 1~120, 101 제외, +121 · 현장 14 · 결정적 격자 좌표 · 페르소나 001~005 사실 보존 · 확인 필요 6대).
-- **지도** — `MapView` `camera`(key가 바뀔 때만 이동 · `data-map-ready` 재무장 · `data-map-level`) · 마커 `kind` unit/site/region · `owner-scene.ts`(`ownerMarkers`/`ownerCamera`: 전국 7 · 지역 10 · 현장 17 · 1대 16) · `resolveOverlaps`(알약 상자 겹침을 덜 밀어도 되는 축으로) · 오류 오버레이는 스타일·소스 실패만.
-- **화면** — `OwnerOverview`(무대 = 지도 + StatusStrip + 패널/시트 · URL이 단계 · push · 이동 뒤 패널 제목 포커스) · `NationPanel`(확인 필요 알림 3 · SiteRow 13) · `SitePanel` · `UnitPanel`(OwnerLiveTile · PeriodBar · ContactCard · 전압/단선/고장코드 · 관련 서류) · `OverviewCrumbs` · `MapSheet`.
+- **지도** — `MapView` `camera`(key가 바뀔 때만 이동 · `data-map-ready` 재무장 · `data-map-level`) · 마커 `kind` unit/site · `owner-scene.ts`(`ownerMarkers`/`ownerCamera`: 전국 7 · 현장 17 · 1대 16) · `spreadCircles`(원 중심 거리 밀어내기 + 스프링 되당김) · 이름표는 여섯 후보 중 빈자리, 없으면 숨김 · 오류 오버레이는 스타일·소스 실패만.
+- **화면** — `OwnerOverview`(무대 = 지도 + StatusStrip + 패널/시트 · URL이 단계 · push · 이동 뒤 패널 제목 포커스) · `NationPanel`(확인 필요 현장 우선 · 「전체 N개 현장」으로 펼침 · SiteRow) · `SitePanel` · `UnitPanel`(OwnerLiveTile · PeriodBar · ContactCard · 전압/단선/고장코드 · 관련 서류) · `OverviewCrumbs` · `MapSheet`.
 - **시뮬레이터** — `owner-sim.ts`(mulberry32 seed 고정 · 틱 5초 · 첫 틱과 매 3틱째는 반드시 한 건 · 보관↔투입 미전환 · 페르소나 보존) · `OwnerApi.subscribe` · 셸 토글(`boomeyes.owner.sim` + `?sim=`) · 캡처·장면·e2e 기본 off(계획의 "라이브 기본 on" 대신 — 시연자가 한 번 켜면 유지된다).
 
 ### 명세와 다르게 한 것
 
-- 전국은 어느 폭에서든 지역 집계 7(2026-09-12 디자인 리뷰: 웹 1280의 현장 13 알약은 수도권에서 세로 기둥이 되고 리더선이 교차했다). 지역 알약을 누르면 그 지역으로 줌인하며 현장 알약으로 풀리고, "전국으로" 칩이 되돌린다. 리더선은 호기 핀의 가로 펼침에만 남겼다. 마커 문법: 정상 = 작은 중립 점(보관소는 사각), 이상 = 상태색 원 + 글리프 3종(✕ · ! · 수신 없음 아이콘), 대수는 배지 무게(≥ 10 mid · ≥ 20 heavy).
-- PWA 전국 단계의 시트는 접힘(계획: 절반) — 절반 시트와 상단 띠 사이 약 200px에는 지역 원 7개가 들어가지 않았다. 현장·호기 단계는 절반, 접힌 시트에서 고르면 절반으로, 전국으로 돌아오면 다시 접힘.
+- ~~전국은 어느 폭에서든 지역 집계 7~~ — 2026-09-13 사용자 지시로 시안 문법을 전면 채택했다(§11). 전국은 현장 하나에 원 하나(원 안에 대수), 지역 단계는 없다. 2026-09-12에 지역으로 묶은 이유(수도권 세로 기둥·리더선 교차)는 알약을 원으로 바꾸고 겹침 해소를 상자에서 중심 거리로 옮기면서 사라졌다.
+- PWA 전국 단계의 시트는 접힘(계획: 절반) — 절반 시트와 상단 띠 사이 약 200px에는 전국이 들어가지 않았다. 현장·호기 단계는 절반, 접힌 시트에서 고르면 절반으로, 전국으로 돌아오면 다시 접힘.
 - `z-*` 유틸리티는 빌드 CSS에 없다 — 띠·패널은 DOM 순서(지도 → 띠 → 패널)로 위에 그린다.
 - 디자인 리뷰(2026-09-12, 3페이지) 반영: 한 줄 헤더(h1 heading-md · 경로 · 기준 시각) · 상태 띠는 pill이 아니라 radius.card + raised(마커 알약과 재질 분리) · 베이스맵이 테마를 따른다(라이트 Positron · 다크 Dark Matter, 같은 CARTO) · 알약 지도에서 베이스맵 지명 text-opacity 0.55.
 - `EmptyState` danger 톤에 `role=alert`(서류 원문 없음 등 오류 상태 — 예외 도구 계약).
@@ -427,8 +427,6 @@ CARTO Positron 벡터 타일은 줌 15~18 오버줌에서 오류 이벤트 0(S0 
 ### 남은 것
 
 - `FleetSummary`는 현황에서 빠졌다(StatusStrip). 카탈로그에는 남아 있다 — 다른 쓰임이 없으면 제거.
-- 지역 알약의 상태 원은 이제 24px 한 곳(고장 1대 → 인천·경기 ✕)뿐이지만, 46대 지역을 "고장 지역"으로 읽게 하는 문제는 남는다 — 지역 알약에 "고장 1"처럼 이상 대수를 따로 붙일지 시연 뒤 판단.
-- `OwnerMapScene.aggregate`는 전국 = 항상 집계가 되면서 사실상 상수다 — 정리.
 - Esri 위성 타일 · 고객 표 회사명(G/S건설·포스코·대림·한화)을 페르소나 외 호기에 쓴 것 — DY 확인 사항(DISC 후보).
 - `ContextHeader`의 `z-sticky`도 무효(빌드 CSS 없음) — 별도 정리.
 
@@ -448,6 +446,7 @@ CARTO Positron 벡터 타일은 줌 15~18 오버줌에서 오류 이벤트 0(S0 
 | 계약 — 요청 접수 → 후보 확인 → 배정 확정·회신 | `ownerCandidates`(보관 + 종료 임박) · `machines.assignment` 5단계 · 확정이 계약 기간을 호기에 남긴다 |
 | 운전자 — 소속이고 배정이 매일 바뀐다 · 서류는 사람 4종 | 명단·서류 화면과 호기 화면의 「오늘 운전자」 한 줄. 차량 서류에서 자격증을 뺐다 |
 | 정상은 초록(텍스트·테두리·상태 점) | 원칙 4 개정 · ADR-014. 지도 마커는 시안이 ink로 그리므로 그대로 뒀다 |
+| 전국 지도는 현장마다 원 하나 — 원 안에 대수, 이름표는 빈자리를 찾아 붙고 없으면 숨는다 | `spreadCircles`(중심 거리 밀어내기 + 5% 되당김 · 결정적) · 이름표 후보 여섯(아래·우·좌·위·우하·좌하) · 배치 순서는 이상 › 정상 › 보관 · 6px 넘게 밀린 원은 실제 좌표에 점과 리더선. 밀어내기 간격과 이름표 금지 구역은 히트 영역(웹 44 · PWA 48)이다 — 원이 작아도 서로 누를 수 있어야 한다 |
 
 ### 채택하지 않은 것
 

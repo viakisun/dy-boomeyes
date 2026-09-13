@@ -71,7 +71,6 @@ const nation = (patch: Partial<OwnerMapScene> = {}): OwnerMapScene => ({
   level: 'nation',
   sites: [A, B, D],
   devices,
-  aggregate: false,
   animate: false,
   padding,
   ...patch,
@@ -84,25 +83,20 @@ describe('[B1-02] 현황 지도 장면 → 마커', () => {
     expect(worstState([devices[3]!])).toBe('normal');
     expect(worstState([devices[2]!])).toBe('offline');
   });
-  it('전국은 현장 알약(짧은 이름 + 대수), 집계면 지역 원(대수 합)', () => {
+  it('전국은 현장마다 원 하나 — 대수는 원 안, 상태 한 줄은 이름표 둘째 줄(시안 «확정 2026-09-13»)', () => {
     const sites = ownerMarkers(nation({ focused: 'SITE-BB' }));
     expect(sites.map((m) => [m.id, m.kind, m.label, m.count, m.state, m.selected])).toEqual([
       ['SITE-AA', 'site', 'AA', 2, 'fault', false],
       ['SITE-BB', 'site', 'BB', 1, 'offline', true],
       ['SITE-DD', 'site', 'DD', 1, 'normal', false],
     ]);
+    // 둘째 줄의 대수는 그 상태인 호기만 센다 — 원 안의 전체 대수와 다른 수다
+    expect(sites.map((m) => m.sub)).toEqual(['고장 1대', '수신 지연 1대', '보관']);
     expect(sites[2]!.description).toContain('보관 1대');
     expect(sites.map((m) => m.variant)).toEqual([undefined, undefined, 'depot']);
-    const regions = ownerMarkers(nation({ aggregate: true }));
-    expect(regions.map((m) => [m.id, m.kind, m.count, m.state])).toEqual([
-      ['서울', 'region', 2, 'fault'],
-      ['인천·경기', 'region', 2, 'offline'],
-    ]);
-    expect(regions[1]!.lat).toBeCloseTo((37.38 + 37.24) / 2);
-  });
-  it('지역을 고르면 집계 여부와 무관하게 그 지역 현장만', () => {
-    const m = ownerMarkers(nation({ aggregate: true, region: '인천·경기' }));
-    expect(m.map((x) => x.id)).toEqual(['SITE-BB', 'SITE-DD']);
+    // 현장 수만큼 원이 있고 원 안의 수를 더하면 보유 대수가 된다(지역 집계로 현장이 사라지지 않는다)
+    expect(sites).toHaveLength(nation().sites.length);
+    expect(sites.reduce((sum, m) => sum + (m.count ?? 0), 0)).toBe(devices.length);
   });
   it('현장·호기 단계는 호기 핀이며 선택 호기와 hover 호기를 강조한다', () => {
     const scene: OwnerMapScene = {
@@ -121,23 +115,13 @@ describe('[B1-02] 현황 지도 장면 → 마커', () => {
 });
 
 describe('[B1-02] 현황 지도 장면 → 카메라', () => {
-  it('전국은 현장 범위 · 지역은 그 지역 범위(더 깊은 최대 줌) · key가 다르다', () => {
-    const all = ownerCamera(nation());
-    expect(all).toMatchObject({
+  it('전국은 현장 전체 범위 — 단계가 하나뿐이라 key도 하나다', () => {
+    expect(ownerCamera(nation())).toMatchObject({
       key: 'nation',
       maxZoom: 7,
       bounds: [
         [126.64, 37.24],
         [127.2, 37.55],
-      ],
-    });
-    const region = ownerCamera(nation({ region: '인천·경기' }));
-    expect(region).toMatchObject({
-      key: 'nation:인천·경기',
-      maxZoom: 10,
-      bounds: [
-        [126.64, 37.24],
-        [127.2, 37.38],
       ],
     });
   });
@@ -161,10 +145,8 @@ describe('[B1-02] 현황 지도 장면 → 카메라', () => {
 });
 
 describe('[B1-02] 현황 지도 장면 → 베이스맵', () => {
-  it('전국만 타일 없는 국경 · 지역과 현장은 회색조 타일', () => {
+  it('전국만 타일 없는 국경 · 현장·호기는 회색조 타일', () => {
     expect(ownerBasemap(nation())).toEqual({ basemap: 'outline', muted: false });
-    // 지역 하나를 펼치면 줌 10 — 국경선만으로는 아무 지형도 남지 않는다
-    expect(ownerBasemap(nation({ region: '서울' }))).toEqual({ basemap: 'tiles', muted: true });
     expect(ownerBasemap({ ...nation(), level: 'site', site: A })).toEqual({ basemap: 'tiles', muted: true });
     expect(ownerBasemap({ ...nation(), level: 'unit', site: A, device: devices[0] })).toEqual({
       basemap: 'tiles',

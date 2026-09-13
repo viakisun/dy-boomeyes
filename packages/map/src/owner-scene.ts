@@ -1,14 +1,8 @@
 // 소유주 현황 장면(OwnerMapScene) → MapView 마커·카메라. 순수 함수 — 앱 OwnerPage가 스니펫 안에서 호출한다.
-import {
-  OWNER_REGIONS,
-  type EquipmentState,
-  type OwnerDevice,
-  type OwnerMapScene,
-  type OwnerSite,
-} from '@boomeyes/domain';
+import type { EquipmentState, OwnerDevice, OwnerMapScene, OwnerSite } from '@boomeyes/domain';
 import type { MapCamera, MapMarker } from './types';
 
-export const OWNER_ZOOM = { nation: 7, region: 10, site: 17, single: 16 } as const;
+export const OWNER_ZOOM = { nation: 7, site: 17, single: 16 } as const;
 const RANK: Record<EquipmentState, number> = { normal: 0, offline: 1, maintenance: 2, caution: 3, fault: 4 };
 
 /** 호기 한 대의 마커 상태 — 고장 > 점검 > 수신 지연·미장착 > 정상 */
@@ -34,44 +28,39 @@ export function unitDescription(d: OwnerDevice) {
   return `${d.unit}호기 · ${d.site}${d.connection === 'stale' ? ' · 마지막 수신 위치' : d.connection === 'detached' ? ' · 등록 보관 위치' : ''}`;
 }
 const bySite = (devices: readonly OwnerDevice[], site: OwnerSite) => devices.filter((d) => d.siteId === site.id);
-const visibleSites = (scene: OwnerMapScene) =>
-  scene.region ? scene.sites.filter((s) => s.region === scene.region) : scene.sites;
+/** 마커 둘째 줄 — 원의 색이 말하는 상태를 글로 한 번 더. 정상은 대수가 이미 원 안에 있으므로 짧게. */
+const STATE_LINE: Record<EquipmentState, string> = {
+  fault: '고장',
+  caution: '점검',
+  offline: '수신 지연',
+  maintenance: '정비',
+  normal: '정상',
+};
+function siteLine(state: EquipmentState, units: readonly OwnerDevice[], depot: boolean) {
+  if (state === 'normal') return depot ? '보관' : '정상';
+  const n = units.filter((d) => d.connection !== 'detached' && deviceState(d) === state).length;
+  return `${STATE_LINE[state]} ${n}대`;
+}
 
 export function ownerMarkers(scene: OwnerMapScene): MapMarker[] {
   if (scene.level === 'nation') {
-    const sites = visibleSites(scene);
-    if (scene.aggregate && !scene.region) {
-      return OWNER_REGIONS.flatMap((region) => {
-        const group = sites.filter((s) => s.region === region);
-        if (!group.length) return [];
-        const units = group.flatMap((s) => bySite(scene.devices, s));
-        return [
-          {
-            id: region,
-            kind: 'region' as const,
-            lat: group.reduce((sum, s) => sum + s.location.lat, 0) / group.length,
-            lng: group.reduce((sum, s) => sum + s.location.lng, 0) / group.length,
-            state: worstState(units),
-            label: region,
-            count: units.length,
-            description: `${region} · 현장 ${group.length}곳 · 호기 ${units.length}대`,
-            selected: scene.focused === region,
-          },
-        ];
-      });
-    }
-    return sites.map((site) => {
+    // 전국은 현장 하나에 원 하나다(시안 «확정 2026-09-13») — 지역 집계는 지도에서 현장을 지워
+    // 좌측 카드의 현장 목록과 대응하지 않았다. 겹침은 밀어내기와 라벨 숨김으로 푼다.
+    return scene.sites.map((site) => {
       const units = bySite(scene.devices, site);
+      const state = worstState(units);
+      const depot = site.kind === 'depot';
       return {
         id: site.id,
         kind: 'site' as const,
         lat: site.location.lat,
         lng: site.location.lng,
-        state: worstState(units),
+        state,
         label: site.short,
+        sub: siteLine(state, units, depot),
         count: units.length,
-        variant: site.kind === 'depot' ? ('depot' as const) : undefined,
-        description: `${site.name} · ${site.kind === 'depot' ? '보관' : '투입'} ${units.length}대${site.company ? ` · ${site.company}` : ''}`,
+        variant: depot ? ('depot' as const) : undefined,
+        description: `${site.name} · ${depot ? '보관' : '투입'} ${units.length}대${site.company ? ` · ${site.company}` : ''}`,
         selected: scene.focused === site.id,
       };
     });
@@ -108,23 +97,19 @@ const KOREA: [[number, number], [number, number]] = [
   [126.1, 34.3],
   [129.6, 38.3],
 ];
-/**
- * 단계별 베이스맵(시안 «확정 2026-09-12») — 전국은 타일 없는 국경, 그 아래는 회색조 타일.
- * 지역 하나를 펼친 화면은 줌 10이라 국경만으로는 아무 지형도 남지 않는다 — 타일을 쓴다.
- */
+/** 단계별 베이스맵(시안 «확정 2026-09-12») — 전국은 타일 없는 국경, 그 아래는 회색조 타일. */
 export function ownerBasemap(scene: OwnerMapScene): { basemap: 'tiles' | 'outline'; muted: boolean } {
-  const outline = scene.level === 'nation' && !scene.region;
+  const outline = scene.level === 'nation';
   return { basemap: outline ? 'outline' : 'tiles', muted: !outline };
 }
 
 export function ownerCamera(scene: OwnerMapScene): MapCamera {
   const { padding } = scene;
   if (scene.level === 'nation') {
-    const sites = visibleSites(scene);
     return {
-      key: scene.region ? `nation:${scene.region}` : 'nation',
-      bounds: sites.length ? bounds(sites.map((s) => s.location)) : KOREA,
-      maxZoom: scene.region ? OWNER_ZOOM.region : OWNER_ZOOM.nation,
+      key: 'nation',
+      bounds: scene.sites.length ? bounds(scene.sites.map((s) => s.location)) : KOREA,
+      maxZoom: OWNER_ZOOM.nation,
       padding,
     };
   }

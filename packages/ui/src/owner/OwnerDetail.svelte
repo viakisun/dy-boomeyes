@@ -59,7 +59,6 @@
           devices: [device],
           site: data.sites.find((s) => s.id === device.siteId),
           device,
-          aggregate: false,
           animate: false,
           padding: { top: 0, right: 0, bottom: 0, left: 0 },
         }
