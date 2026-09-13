@@ -901,7 +901,7 @@ cmp 층은 sys만 참조한다(ref 직접 참조 금지 — 검사로 강제). �
 
 | 컴포넌트 | 플랫폼 | 참조 | 변형(prop) | 상태 | 비고 |
 |---|---|---|---|---|---|
-| **OwnerShell** | both | V5 관제기능 · owner-experience | app web/pwa | loading/empty/error/offline/default | 소유주 4메뉴 · 반응형 WEB/PWA 셸 |
+| **OwnerShell** | both | V5 관제기능 · owner-experience | app web/pwa | loading/empty/error/offline/default | 소유주 메뉴(원천 owner_demo가 정한다) · 반응형 WEB/PWA 셸 |
 | **OwnerEntry** | both | V5 관제기능 · owner-experience | app web/pwa | loading/empty/error/offline/default | 소유주 단일 진입과 정상 운영 미리보기 |
 | **OwnerWorkspace** | both | V5 관제기능 · owner-experience | app web/pwa | loading/empty/error/offline/default | 역할·조회 상태와 목적별 화면 합성 |
 | **OwnerOverview** | both | V5 관제기능 · owner-experience | app web/pwa | loading/empty/error/offline/default | 배치 분포와 확인할 장비 |

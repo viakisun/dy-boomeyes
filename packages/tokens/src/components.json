@@ -789,7 +789,7 @@
     "ref": "V5 관제기능 · owner-experience",
     "variants": "app web/pwa",
     "states": "loading/empty/error/offline/default",
-    "note": "소유주 4메뉴 · 반응형 WEB/PWA 셸"
+    "note": "소유주 메뉴(원천 owner_demo가 정한다) · 반응형 WEB/PWA 셸"
   },
   {
     "name": "OwnerEntry",

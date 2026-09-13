@@ -62,7 +62,6 @@
     {label}
     aria-expanded={open}
     aria-controls="owner-alert-panel"
-    aria-haspopup="dialog"
     class="min-w-size-touch-min relative {open ? 'text-accent-fg bg-selected' : ''}"
     onclick={() => (open ? close() : (open = true))}
   >
