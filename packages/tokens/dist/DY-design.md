@@ -10,7 +10,7 @@
 | ref(원시) | 208 |
 | sys(시맨틱) | 308 |
 | cmp(컴포넌트) | 92 |
-| 컴포넌트 카탈로그 | 110 |
+| 컴포넌트 카탈로그 | 111 |
 | 대비 검사 | 94/94 통과 |
 
 | 산출물 | 용도 |
@@ -770,7 +770,7 @@ cmp 층은 sys만 참조한다(ref 직접 참조 금지 — 검사로 강제). �
 | `cmp.table.row-selected` | #e7f3fb | #e7f3fb | {sys.color.bg.selected} |  |
 | `cmp.table.header-fg` | #4a6879 | #4a6879 | {sys.color.fg.muted} |  |
 
-## 8. 컴포넌트 카탈로그 (110)
+## 8. 컴포넌트 카탈로그 (111)
 
 이름 PascalCase · prop 어휘 고정: `variant`(형태) · `tone`(색 의도: accent/neutral/info/success/warning/danger/progress) · `size`(sm/md/lg) · 상태 boolean(`disabled` `loading` `selected` `invalid`). 플랫폼 both = 같은 Svelte 컴포넌트가 밀도 토큰으로 두 플랫폼을 소화.
 
@@ -926,6 +926,7 @@ cmp 층은 sys만 참조한다(ref 직접 참조 금지 — 검사로 강제). �
 | **SiteRow** | both | Trackunit Sites · V5 관제기능 | site/depot · selected | default/hover/selected | IconTile(가장 나쁜 상태 톤) · 현장명 · 건설사·주소 · 호기 수 · 확인 필요 배지 · 후행 |
 | **NationPanel** | both | Samsara Fleet Overview · V5 관제기능 | region 선택 | loading/empty/error/offline/default | 전국 패널 — 확인이 필요한 장비(알림 3) · 현장 목록(SiteRow) · 전체 대수·현장 수 |
 | **SitePanel** | both | Trackunit Asset card · V5 관제기능 | site/depot | loading/empty/error/offline/default | 현장 패널 — 현장명·건설사 · 주소·기간(PeriodBar) · 담당자(ContactCard) · 투입/보관 호기(EquipmentRow) · 현장 알림 |
+| **UnitCameras** | both | 시안 «운영 현황 목업» 호기 화면 · Samsara camera wall | 웹 3×2 · PWA 2×3 | default/empty(미장착·미확보) | 호기 단계에서 지도 자리를 대신한다(시안 «확정 2026-09-12»). 타일은 앱이 넘긴 live 스니펫이 그린다 — ui는 video를 import하지 않는다. |
 | **UnitPanel** | both | Samsara preview card · V5 관제기능 H71/H77 | live/미장착/미확보 | loading/empty/error/offline/default | 호기 패널 — 호기·상태·배치 · 실시간 영상 타일 · 설치·완료·임대기간 · 담당자 · 전압·단선·고장코드 · 관련 서류 · 상세 화면 |
 | **OwnerLiveTile** | both | Motive Fleet View Live · V5 관제기능 | capture(정지)/live(자동 재생) | default | 호기 패널의 실시간 영상 타일 — 6초 샘플 루프(muted·loop·playsinline), '실시간 예시' 오버레이 + 시연 클립 캡션, 해제 시 pause·src 제거 |
 

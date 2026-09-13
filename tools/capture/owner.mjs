@@ -318,12 +318,17 @@ try {
         await page.evaluate(() => window.scrollTo(0, 0));
       }
       if (row.level === 'unit') {
-        // 호기 단계: 실시간 영상 타일이 있고 캡처에서는 자동 재생하지 않는다(포스터 프레임이 결정적)
-        const tile = page.locator('[data-live-tile] video');
-        await tile.waitFor({ state: 'visible' });
+        // 호기 단계: 지도 자리에 카메라 6분할이 들어간다(시안 «확정 2026-09-12») — 이 단계에는 지도가 없다
+        const wall = page.locator('[data-owner-cameras="CPB-001"]');
+        await wall.waitFor({ state: 'visible', timeout: 20_000 });
+        const tiles = wall.locator('[data-live-tile] video');
+        await tiles.first().waitFor({ state: 'visible' });
+        const count = await tiles.count();
+        // 카메라 수는 원천이 정한다 — 여기서 수를 박지 않고 「하나보다 많다」와 「전부 정지」만 본다
+        check(count > 1, `Unit camera wall must show every camera (got ${count})`);
         check(
-          await tile.evaluate((v) => v.paused && !!v.poster),
-          'Live tile must stay paused on its poster in capture',
+          await tiles.evaluateAll((list) => list.every((v) => v.paused && !!v.poster)),
+          'Live tiles must stay paused on their posters in capture',
         );
         check(
           (await page.locator('[data-owner-view="overview"] [data-device="CPB-001"]').count()) > 0,

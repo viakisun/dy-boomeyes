@@ -22,6 +22,7 @@
   import NationPanel from './NationPanel.svelte';
   import SitePanel from './SitePanel.svelte';
   import UnitPanel from './UnitPanel.svelte';
+  import UnitCameras from './UnitCameras.svelte';
   let {
     data,
     app,
@@ -70,7 +71,14 @@
   );
   // 전국은 어느 폭에서든 지역 집계 7개 — 현장 13 알약은 수도권에서 세로 기둥이 된다. 지역 원을 누르면 그 지역으로 줌인하며 현장 알약으로 풀린다
   const aggregate = true;
-  const hasMap = $derived(!!map && data.devices.length > 0);
+  // 호기 단계는 지도 자리에 카메라 6분할이 들어간다(시안 «확정 2026-09-12») — 그 단계에는 지도가 없다.
+  // 하나의 $derived로 장치와 카메라를 함께 내보내야 템플릿에서 좁혀진다.
+  const wall = $derived(
+    level.level === 'unit' && live
+      ? { device: level.device, cameras: data.cameras.filter((c) => c.deviceId === level.device.id) }
+      : null,
+  );
+  const hasMap = $derived(!!map && data.devices.length > 0 && !wall);
   const siteDevices = $derived(
     level.level === 'nation' ? data.devices : data.devices.filter((d) => d.siteId === level.site.id),
   );
@@ -167,7 +175,7 @@
       onfocus={(id) => (focused = id)}
     />
   {:else}
-    <UnitPanel {data} {app} {url} device={level.device} {capture} {live} />
+    <UnitPanel {data} {app} {url} device={level.device} {capture} {live} cameraWall={!!wall} />
   {/if}
 {/snippet}
 
@@ -200,13 +208,45 @@
       bind:clientHeight={stageHeight}
       data-owner-stage
       data-owner-map-mode={hasMap ? mapMode : undefined}
-      class="gap-stack-sm relative flex min-w-0 flex-col {hasMap
-        ? sheet
-          ? 'min-h-layout-panel-height flex-1 overflow-hidden'
-          : 'lg:block lg:aspect-[16/9]'
-        : ''}"
+      class="gap-stack-sm relative flex min-w-0 flex-col {sheet && (hasMap || wall)
+        ? 'min-h-layout-panel-height flex-1 overflow-hidden'
+        : hasMap
+          ? 'lg:block lg:aspect-[16/9]'
+          : wall
+            ? 'min-h-layout-panel-height'
+            : ''}"
     >
-      {#if hasMap && sheet}
+      {#if wall && sheet}
+        <!-- PWA 호기: 카메라 2×3 전면 → 상태 띠 → 시트(정보). 지도와 같은 문법을 잇는다 -->
+        <div class="absolute inset-0 overflow-y-auto">
+          <UnitCameras device={wall.device} cameras={wall.cameras} {app} {capture} live={live!} class="h-full" />
+        </div>
+        <div bind:clientHeight={stripHeight} class="top-inset-sm inset-x-inset-sm absolute">
+          <StatusStrip devices={data.devices} alerts={data.alerts} {app} {url} wrap={false} class="w-full" />
+        </div>
+        <MapSheet bind:snap label="현황 패널">
+          {@render panels()}
+        </MapSheet>
+      {:else if wall}
+        <!-- 웹 호기: 카메라 3×2와 정보 패널을 나란히 둔다. 지도 단계처럼 겹치지 않는다 —
+             영상 위에 글을 얹으면 배경이 매 프레임 바뀌어 아무것도 읽히지 않는다. -->
+        <StatusStrip devices={data.devices} alerts={data.alerts} {app} {url} />
+        <div class="gap-stack-md flex min-h-0 min-w-0 flex-1 flex-col lg:flex-row">
+          <UnitCameras
+            device={wall.device}
+            cameras={wall.cameras}
+            {app}
+            {capture}
+            live={live!}
+            class="min-w-0 flex-1"
+          />
+          <div
+            class="bg-surface rounded-card shadow-raised border-border-subtle p-inset-md lg:w-layout-inspector-width min-w-0 shrink-0 overflow-y-auto border"
+          >
+            {@render panels()}
+          </div>
+        </div>
+      {:else if hasMap && sheet}
         <!-- PWA: 지도 전면 → 상태 띠(상단 부유) → 바텀 시트(패널). DOM 순서대로 위에 그려진다 -->
         <div class="rounded-card shadow-raised absolute inset-0 flex overflow-hidden">
           {@render map!(scene)}

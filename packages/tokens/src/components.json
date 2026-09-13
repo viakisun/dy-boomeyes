@@ -963,6 +963,15 @@
     "note": "현장 패널 — 현장명·건설사 · 주소·기간(PeriodBar) · 담당자(ContactCard) · 투입/보관 호기(EquipmentRow) · 현장 알림"
   },
   {
+    "name": "UnitCameras",
+    "family": "Owner experience",
+    "platform": "both",
+    "ref": "시안 «운영 현황 목업» 호기 화면 · Samsara camera wall",
+    "variants": "웹 3×2 · PWA 2×3",
+    "states": "default/empty(미장착·미확보)",
+    "note": "호기 단계에서 지도 자리를 대신한다(시안 «확정 2026-09-12»). 타일은 앱이 넘긴 live 스니펫이 그린다 — ui는 video를 import하지 않는다."
+  },
+  {
     "name": "UnitPanel",
     "family": "Owner experience",
     "platform": "both",

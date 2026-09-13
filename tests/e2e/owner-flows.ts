@@ -167,18 +167,21 @@ export function ownerFlows(app: OwnerApp) {
     // site → unit: the unit card opens the unit panel with a playing live tile
     await overview.getByRole('list', { name: '현장 호기', exact: true }).locator('[data-device="CPB-001"]').click();
     await expect(page).toHaveURL(/site=SITE-MAPO&device=CPB-001/);
-    await expect(map).toHaveAttribute('data-map-level', 'unit', MAP);
-    await expect(map.locator('.be-marker.is-selected')).toHaveCount(1);
+    // 호기 단계는 지도 자리에 카메라 벽이 들어간다 — 그 단계에는 지도가 없다(시안 «확정 2026-09-12»)
+    await expect(overview.locator('.be-map')).toHaveCount(0);
+    const wall = overview.locator('[data-owner-cameras="CPB-001"]');
+    await expect(wall).toBeVisible();
     await expect(overview.getByRole('heading', { name: '1호기', exact: true })).toBeFocused();
-    const video = overview.locator('[data-live-tile] video');
-    await expect(video).toBeVisible();
-    await expect.poll(() => video.evaluate((v) => (v as HTMLVideoElement).paused)).toBe(false);
+    // 벽이 살아 있는지만 본다 — 여섯이 「동시에」 재생되는지는 성능 성질이라 단언하면 취약해진다
+    // (PWA는 시트가 아래를 가리므로 보이는지로도 판정하지 않는다)
+    const videos = wall.locator('[data-live-tile] video');
+    await expect(videos.first()).toBeAttached();
+    await expect.poll(() => videos.evaluateAll((list) => list.some((v) => !(v as HTMLVideoElement).paused))).toBe(true);
     for (const fact of ['김현장', '380 V', '한빛건설', '1호기 제작증']) await expect(overview).toContainText(fact);
     // reload keeps the level from the URL
     await page.reload();
-    await expect(ownerHost(page, 'overview').locator('.be-map')).toHaveAttribute('data-map-level', 'unit', MAP);
-    await expect(ownerHost(page, 'overview').locator('[data-live-tile] video')).toBeVisible();
-    // back returns one level and stops the tile; the crumb returns to the nation
+    await expect(ownerHost(page, 'overview').locator('[data-owner-cameras="CPB-001"]')).toBeVisible();
+    // back returns one level and stops the tiles; the crumb returns to the nation
     await page.goBack();
     await expect(ownerHost(page, 'overview').locator('.be-map')).toHaveAttribute('data-map-level', 'site', MAP);
     await expect(page.locator('[data-live-tile] video')).toHaveCount(0);
@@ -706,7 +709,9 @@ export function ownerFlows(app: OwnerApp) {
         const level = target in LEVELS ? `&${LEVELS[target as keyof typeof LEVELS]}` : '';
         await page.goto(`${paths[view]}${separator}capture=1&state=owner&theme=${theme}${level}`);
         await expect(ownerHost(page, view)).toBeVisible();
-        if (target in LEVELS) await expect(page.locator('.be-map')).toHaveAttribute('data-map-ready', '', MAP);
+        // 호기 단계는 지도 대신 카메라 벽이다 — 기다릴 대상이 다르다
+        if (target === 'overview-unit') await expect(page.locator('[data-owner-cameras]')).toBeVisible();
+        else if (target in LEVELS) await expect(page.locator('.be-map')).toHaveAttribute('data-map-ready', '', MAP);
         await page.evaluate(() => document.fonts.ready);
         await page.addStyleTag({ content: '*,*::before,*::after{animation:none!important;transition:none!important}' });
         await noOverflow(page);

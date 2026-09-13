@@ -38,6 +38,7 @@
     device,
     capture = false,
     live,
+    cameraWall = false,
   }: {
     data: OwnerSnapshot;
     app: OwnerApp;
@@ -45,6 +46,8 @@
     device: OwnerDevice;
     capture?: boolean;
     live?: Snippet<[OwnerCamera, string, boolean]>;
+    /** 지도 자리에 카메라 벽이 있는 화면 — 패널은 영상을 그리지 않는다 */
+    cameraWall?: boolean;
   } = $props();
   const condition = $derived(equipmentCondition(device));
   const camera = $derived(
@@ -106,7 +109,9 @@
         · 운전자 {aiEvents[0]!.driver.name}{/if}
     </Banner>
   {/if}
-  {#if live && camera?.available}
+  {#if cameraWall}
+    <!-- 카메라는 지도 자리의 벽이 보인다 — 패널이 같은 영상을 한 번 더 그리지 않는다 -->
+  {:else if live && camera?.available}
     {@render live(camera, `${device.unit}호기 ${camera.label} 실시간 예시`, capture)}
   {:else}
     <EmptyState
