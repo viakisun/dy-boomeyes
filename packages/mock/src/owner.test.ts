@@ -1,5 +1,12 @@
 import { describe, expect, it } from 'vitest';
-import { OWNER_DOC_KINDS, ownerMatches, ownerStrip, ownerSummary, type Session } from '@boomeyes/domain';
+import {
+  OWNER_DOC_KINDS,
+  OWNER_REQUEST_STATES,
+  ownerMatches,
+  ownerStrip,
+  ownerSummary,
+  type Session,
+} from '@boomeyes/domain';
 import { createOwnerApi, seedOwner } from './owner';
 
 const A = { role: 'owner', ownerId: 'OWN-001' } as const;
@@ -198,6 +205,41 @@ describe('[FR-025] 배치·이상·정보 시각의 독립성', () => {
       expect(ev.driver).not.toBeNull();
       expect(s.cameras.some((c) => c.id === ev.cameraId && c.kind === 'ai')).toBe(true);
       expect(ev.bbox).not.toBeNull();
+    }
+  });
+  it('투입 요청은 5단계가 한 번씩 나오고 배정 확정 전에는 호기가 비어 있다', async () => {
+    const s = await make().snapshot();
+    expect(s.requests.map((r) => r.state)).toEqual([...OWNER_REQUEST_STATES]);
+    for (const r of s.requests) {
+      expect(r.count).toBeGreaterThan(0);
+      expect(r.manager.phone).toMatch(/^010-/);
+      // 접수 단계는 아직 후보를 고르지 않았다
+      if (r.state === 'new') expect(r.assigned).toEqual([]);
+      // 가동·종료는 필요 대수만큼 채워져 있다
+      if (r.state === 'run' || r.state === 'done') expect(r.assigned).toHaveLength(r.count);
+      for (const id of r.assigned) expect(s.devices.some((d) => d.id === id)).toBe(true);
+    }
+  });
+  it('운전자 명단의 오늘 배정은 호기 축과 같은 사람을 가리킨다', async () => {
+    const s = await make().snapshot();
+    expect(s.drivers).toHaveLength(6);
+    for (const person of s.drivers) {
+      expect(person.licenseTo).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+      if (!person.assignedTo) continue;
+      const device = s.devices.find((d) => d.id === person.assignedTo)!;
+      // 두 곳이 따로 정하면 호기 화면과 명단이 다른 사람을 보인다
+      expect(device.driver?.id).toBe(person.id);
+    }
+  });
+  it('현장 진행률은 기간이 있는 현장에만 있고 0~1이다', async () => {
+    const s = await make().snapshot();
+    for (const site of s.sites) {
+      if (!site.period) expect(site.progress).toBeNull();
+      else {
+        expect(site.progress).not.toBeNull();
+        expect(site.progress!).toBeGreaterThanOrEqual(0);
+        expect(site.progress!).toBeLessThanOrEqual(1);
+      }
     }
   });
   it('오늘 운전자는 투입 장비에만 배정된다', async () => {

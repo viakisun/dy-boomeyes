@@ -20,6 +20,7 @@ const site = (
   location: { lat, lng },
   contact: null,
   period: null,
+  progress: null,
 });
 const device = (
   id: string,

@@ -21,6 +21,8 @@ export interface OwnerSite {
   location: { lat: number; lng: number };
   contact: { name: string; job: string; phone: string } | null;
   period: { from: string; to: string } | null;
+  /** 공정 진행률 0~1. 기간이 없으면 null(보관소) */
+  progress: number | null;
 }
 export interface OwnerDevice {
   id: string;
@@ -112,6 +114,46 @@ export interface OwnerDocument {
   expiresAt: string | null;
   sessionOnly: boolean;
 }
+/** 투입 요청의 생애 — ssot/entities.yaml machines.assignment와 같은 5단계.
+ *  소유주의 판단은 「이 기간에 낼 수 있는 장비가 있나」 하나이고 답은 보관 + 계약 종료 임박이다. */
+export const OWNER_REQUEST_STATES = ['new', 'assign', 'ship', 'run', 'done'] as const;
+export type OwnerRequestState = (typeof OWNER_REQUEST_STATES)[number];
+export const OWNER_REQUEST_LABEL: Record<OwnerRequestState, string> = {
+  new: '요청 접수',
+  assign: '배정 중',
+  ship: '운송·설치',
+  run: '가동',
+  done: '종료',
+};
+export interface OwnerRequest {
+  id: string;
+  ownerId: string;
+  siteName: string;
+  builder: string;
+  /** 현장 안전관리자 — 회신 상대 */
+  manager: { name: string; phone: string };
+  from: string;
+  to: string;
+  /** 필요 대수 */
+  count: number;
+  spec: string;
+  state: OwnerRequestState;
+  /** 배정한 호기 id. 확정 전에는 비어 있다 */
+  assigned: string[];
+  receivedAt: string;
+}
+/** 운전자 — 소유주 소속이고 배정이 매일 바뀐다(FR-027).
+ *  차량 서류(호기)와 달리 운전자 서류는 사람에 속한다. */
+export interface OwnerDriver {
+  id: string;
+  ownerId: string;
+  name: string;
+  license: string;
+  licenseTo: string;
+  phone: string;
+  /** 오늘 배정된 호기 id. 없으면 null */
+  assignedTo: string | null;
+}
 export interface OwnerAlert {
   id: string;
   deviceId: string;
@@ -161,6 +203,8 @@ export interface OwnerSnapshot {
   alerts: OwnerAlert[];
   cameras: OwnerCamera[];
   aiEvents: OwnerAiEvent[];
+  requests: OwnerRequest[];
+  drivers: OwnerDriver[];
 }
 export interface OwnerAttachment {
   name: string;

@@ -13,6 +13,7 @@ const site = (id: string, kind: OwnerSite['kind'] = 'site'): OwnerSite => ({
   location: { lat: 37.5, lng: 127 },
   contact: null,
   period: null,
+  progress: null,
 });
 const device = (id: string, siteId: string, patch: Partial<OwnerDevice> = {}): OwnerDevice => ({
   id,

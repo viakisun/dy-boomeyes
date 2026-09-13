@@ -5,6 +5,15 @@ import type { OwnerDevice, OwnerPart, OwnerSite, OwnerTelemetry } from '@boomeye
 const PHONE = '010-0000-0000';
 const contact = (name: string) => ({ name, job: '현장 담당자', phone: PHONE });
 const period = (from: string, to: string) => ({ from, to });
+/** 공정 진행률 — 시연 고정 시각(OWNER_CLOCK 2026-07-03) 기준의 기간 경과 비율.
+ *  실제 공정률이 아니라 기간 막대가 읽는 값이다 — 화면이 그 뜻으로만 쓴다. */
+const progressOf = (p: { from: string; to: string } | null) => {
+  if (!p) return null;
+  const day = (v: string) => Date.parse(`${v}T00:00:00Z`);
+  const span = day(p.to) - day(p.from);
+  if (span <= 0) return null;
+  return Math.min(1, Math.max(0, (Date.parse('2026-07-03T00:00:00Z') - day(p.from)) / span));
+};
 
 export const OWNER_SITES: readonly OwnerSite[] = [
   {
@@ -19,6 +28,7 @@ export const OWNER_SITES: readonly OwnerSite[] = [
     location: { lat: 37.55, lng: 126.94 },
     contact: contact('김현장'),
     period: period('2026-06-01', '2026-09-30'),
+    progress: progressOf(period('2026-06-01', '2026-09-30')),
   },
   {
     id: 'SITE-SONGDO',
@@ -32,6 +42,7 @@ export const OWNER_SITES: readonly OwnerSite[] = [
     location: { lat: 37.38, lng: 126.64 },
     contact: contact('이현장'),
     period: period('2026-06-01', '2026-10-31'),
+    progress: progressOf(period('2026-06-01', '2026-10-31')),
   },
   {
     id: 'SITE-PYEONGTAEK',
@@ -45,6 +56,7 @@ export const OWNER_SITES: readonly OwnerSite[] = [
     location: { lat: 36.99, lng: 127.09 },
     contact: contact('박현장'),
     period: period('2026-06-01', '2026-10-31'),
+    progress: progressOf(period('2026-06-01', '2026-10-31')),
   },
   {
     id: 'SITE-DAEJEON',
@@ -58,6 +70,7 @@ export const OWNER_SITES: readonly OwnerSite[] = [
     location: { lat: 36.35, lng: 127.35 },
     contact: contact('최현장'),
     period: period('2026-06-01', '2026-10-31'),
+    progress: progressOf(period('2026-06-01', '2026-10-31')),
   },
   {
     id: 'SITE-YONGIN',
@@ -71,6 +84,7 @@ export const OWNER_SITES: readonly OwnerSite[] = [
     location: { lat: 37.24, lng: 127.2 },
     contact: null,
     period: null,
+    progress: progressOf(null),
   },
   {
     id: 'SITE-HWASEONG',
@@ -84,6 +98,7 @@ export const OWNER_SITES: readonly OwnerSite[] = [
     location: { lat: 37.2, lng: 127.07 },
     contact: contact('정현장'),
     period: period('2026-04-15', '2026-12-31'),
+    progress: progressOf(period('2026-04-15', '2026-12-31')),
   },
   {
     id: 'SITE-DAEDEOK',
@@ -97,6 +112,7 @@ export const OWNER_SITES: readonly OwnerSite[] = [
     location: { lat: 36.39, lng: 127.4 },
     contact: contact('한현장'),
     period: period('2026-05-01', '2026-11-30'),
+    progress: progressOf(period('2026-05-01', '2026-11-30')),
   },
   {
     id: 'SITE-SEJONG',
@@ -110,6 +126,7 @@ export const OWNER_SITES: readonly OwnerSite[] = [
     location: { lat: 36.5, lng: 127.26 },
     contact: contact('오현장'),
     period: period('2026-03-01', '2027-02-28'),
+    progress: progressOf(period('2026-03-01', '2027-02-28')),
   },
   {
     id: 'SITE-GWANGJU',
@@ -123,6 +140,7 @@ export const OWNER_SITES: readonly OwnerSite[] = [
     location: { lat: 35.16, lng: 126.85 },
     contact: contact('서현장'),
     period: period('2026-05-20', '2026-12-20'),
+    progress: progressOf(period('2026-05-20', '2026-12-20')),
   },
   {
     id: 'SITE-DAEGU',
@@ -136,6 +154,7 @@ export const OWNER_SITES: readonly OwnerSite[] = [
     location: { lat: 35.87, lng: 128.6 },
     contact: contact('강현장'),
     period: period('2026-04-01', '2026-11-15'),
+    progress: progressOf(period('2026-04-01', '2026-11-15')),
   },
   {
     id: 'SITE-CHANGWON',
@@ -149,6 +168,7 @@ export const OWNER_SITES: readonly OwnerSite[] = [
     location: { lat: 35.23, lng: 128.68 },
     contact: contact('윤현장'),
     period: period('2026-02-10', '2026-10-10'),
+    progress: progressOf(period('2026-02-10', '2026-10-10')),
   },
   {
     id: 'SITE-GANGNEUNG',
@@ -162,6 +182,7 @@ export const OWNER_SITES: readonly OwnerSite[] = [
     location: { lat: 37.75, lng: 128.88 },
     contact: contact('임현장'),
     period: period('2026-05-05', '2027-01-31'),
+    progress: progressOf(period('2026-05-05', '2027-01-31')),
   },
   {
     id: 'SITE-BUSAN',
@@ -175,6 +196,7 @@ export const OWNER_SITES: readonly OwnerSite[] = [
     location: { lat: 35.18, lng: 128.97 },
     contact: contact('조현장'),
     period: period('2026-06-15', '2027-03-31'),
+    progress: progressOf(period('2026-06-15', '2027-03-31')),
   },
   {
     id: 'SITE-OTHER',
@@ -188,6 +210,7 @@ export const OWNER_SITES: readonly OwnerSite[] = [
     location: { lat: 35.18, lng: 128.97 },
     contact: contact('타사 담당자'),
     period: period('2026-06-01', '2026-10-31'),
+    progress: progressOf(period('2026-06-01', '2026-10-31')),
   },
 ];
 

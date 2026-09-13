@@ -467,6 +467,38 @@ export const OWNER_DEMO = [
   }
 ] as const satisfies readonly { view: string; menu: number; label: string; web: ScrId; pwa: ScrId; question: string; source_cells: readonly string[] }[];
 export const MACHINES = {
+  "assignment": {
+    "entity": "ENT-20",
+    "states": [
+      "new",
+      "assign",
+      "ship",
+      "run",
+      "done"
+    ],
+    "transitions": [
+      [
+        "new",
+        "assign"
+      ],
+      [
+        "assign",
+        "ship"
+      ],
+      [
+        "assign",
+        "new"
+      ],
+      [
+        "ship",
+        "run"
+      ],
+      [
+        "run",
+        "done"
+      ]
+    ]
+  },
   "task": {
     "entity": "ENT-06",
     "states": [

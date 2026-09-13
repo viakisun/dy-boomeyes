@@ -7,6 +7,8 @@ import {
   type OwnerDataset,
   type OwnerDevice,
   type OwnerDocument,
+  type OwnerDriver,
+  type OwnerRequest,
   type OwnerSnapshot,
   type Session,
 } from '@boomeyes/domain';
@@ -155,7 +157,100 @@ export function seedOwner(dataset: OwnerDataset = 'owner'): OwnerSnapshot {
     ]),
     cameras: devices.flatMap((d) => ownerCameras(d)),
     aiEvents: devices.flatMap((d) => ownerAiEvents(d)),
+    requests: dataset === 'empty' ? [] : OWNER_REQUESTS,
+    drivers: dataset === 'empty' ? [] : ownerDrivers(devices),
   };
+}
+/** 투입 요청 5건 — 상태 5단계가 한 번씩 나오게 둔다(시안 «확정 2026-09-12» · FR-026).
+ *  소유주의 판단 하나(「이 기간에 낼 수 있는 장비가 있나」)를 보이려면 배정 중 건이 필요하다. */
+const OWNER_REQUESTS: OwnerRequest[] = [
+  {
+    id: 'REQ-001',
+    ownerId: 'OWN-001',
+    siteName: '성수 2공구 신축',
+    builder: '대성건설',
+    manager: { name: '윤안전', phone: '010-0000-0101' },
+    from: '2026-08-01',
+    to: '2026-11-30',
+    count: 3,
+    spec: 'CPB 32m 이상',
+    state: 'new',
+    assigned: [],
+    receivedAt: '2026-07-03T09:10:00+09:00',
+  },
+  {
+    id: 'REQ-002',
+    ownerId: 'OWN-001',
+    siteName: '동탄 물류센터',
+    builder: '한빛건설',
+    manager: { name: '김현장', phone: '010-0000-0000' },
+    from: '2026-07-20',
+    to: '2026-10-20',
+    count: 2,
+    spec: 'CPB 32m',
+    state: 'assign',
+    assigned: ['CPB-005'],
+    receivedAt: '2026-07-02T16:40:00+09:00',
+  },
+  {
+    id: 'REQ-003',
+    ownerId: 'OWN-001',
+    siteName: '광명 지식산업센터',
+    builder: '해오름건설',
+    manager: { name: '이현장', phone: '010-0000-0002' },
+    from: '2026-07-10',
+    to: '2026-12-31',
+    count: 1,
+    spec: 'CPB 32m',
+    state: 'ship',
+    assigned: ['CPB-081'],
+    receivedAt: '2026-06-28T11:05:00+09:00',
+  },
+  {
+    id: 'REQ-004',
+    ownerId: 'OWN-001',
+    siteName: '평택 물류센터',
+    builder: '세움건설',
+    manager: { name: '박현장', phone: '010-0000-0003' },
+    from: '2026-06-01',
+    to: '2026-10-31',
+    count: 2,
+    spec: 'CPB 32m',
+    state: 'run',
+    assigned: ['CPB-003', 'CPB-004'],
+    receivedAt: '2026-05-20T10:00:00+09:00',
+  },
+  {
+    id: 'REQ-005',
+    ownerId: 'OWN-001',
+    siteName: '청주 공장 증축',
+    builder: '대성건설',
+    manager: { name: '최현장', phone: '010-0000-0004' },
+    from: '2026-03-01',
+    to: '2026-06-15',
+    count: 1,
+    spec: 'CPB 32m',
+    state: 'done',
+    assigned: ['CPB-082'],
+    receivedAt: '2026-02-14T13:30:00+09:00',
+  },
+];
+/** 운전자 6명 — 오늘 배정은 장비 축(device.driver)이 원천이고 여기서 되읽는다.
+ *  두 곳이 따로 정하면 호기 화면과 명단이 다른 사람을 보인다. */
+function ownerDrivers(devices: OwnerDevice[]): OwnerDriver[] {
+  const roster = [
+    { id: 'DRV-001', name: '김운전', license: '건설기계조종사 1종', licenseTo: '2027-04-30', phone: '010-0000-0001' },
+    { id: 'DRV-002', name: '이운전', license: '건설기계조종사 1종', licenseTo: '2026-10-12', phone: '010-0000-0002' },
+    { id: 'DRV-003', name: '박운전', license: '건설기계조종사 1종', licenseTo: '2027-02-08', phone: '010-0000-0003' },
+    { id: 'DRV-004', name: '최운전', license: '건설기계조종사 1종', licenseTo: '2026-07-25', phone: '010-0000-0004' },
+    { id: 'DRV-005', name: '정운전', license: '건설기계조종사 1종', licenseTo: '2027-09-01', phone: '010-0000-0005' },
+    { id: 'DRV-006', name: '조운전', license: '건설기계조종사 1종', licenseTo: '2027-11-19', phone: '010-0000-0006' },
+  ];
+  return roster.map((person) => ({
+    ...person,
+    ownerId: 'OWN-001',
+    assignedTo: devices.find((d) => d.driver?.id === person.id)?.id ?? null,
+  }));
 }
 /** 호기 카메라 6 — 바디캠 A·B·C · CCTV 1·2 · AI CCTV(시안 «확정 2026-09-12» · FR-042 · DISC-004).
  *  시연 영상 소스는 front·boom 둘뿐이라 여섯 타일이 같은 클립을 돌린다 — sample로 그 사실을 남기고

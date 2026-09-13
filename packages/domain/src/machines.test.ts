@@ -50,3 +50,22 @@ describe('[ENT-10] lease · [ENT-20] request 상태기계', () => {
     expect(() => transition('request', 'approved', 'review')).toThrow('전이 불가');
   });
 });
+
+describe('assignment — 투입 요청의 생애(FR-026 · 시안 «확정 2026-09-12»)', () => {
+  it('요청 접수에서 종료까지 한 방향으로 흐른다', () => {
+    expect(canTransition('assignment', 'new', 'assign')).toBe(true);
+    expect(canTransition('assignment', 'assign', 'ship')).toBe(true);
+    expect(canTransition('assignment', 'ship', 'run')).toBe(true);
+    expect(canTransition('assignment', 'run', 'done')).toBe(true);
+  });
+  it('후보가 모자라면 배정 중에서 접수로 되돌아간다', () => {
+    expect(canTransition('assignment', 'assign', 'new')).toBe(true);
+  });
+  it('단계를 건너뛰거나 종료를 되돌리지 못한다', () => {
+    expect(canTransition('assignment', 'new', 'ship')).toBe(false);
+    expect(canTransition('assignment', 'new', 'run')).toBe(false);
+    expect(canTransition('assignment', 'ship', 'assign')).toBe(false);
+    expect(canTransition('assignment', 'done', 'run')).toBe(false);
+    expect(() => transition('assignment', 'done', 'new')).toThrow();
+  });
+});

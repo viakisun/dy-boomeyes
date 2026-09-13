@@ -4709,6 +4709,43 @@
       }
     ],
     "machines": {
+      "assignment": {
+        "entity": "ENT-20",
+        "states": [
+          "new",
+          "assign",
+          "ship",
+          "run",
+          "done"
+        ],
+        "transitions": [
+          {
+            "from": "new",
+            "to": "assign",
+            "by": "후보 확인 시작(B1-13·A4-03)"
+          },
+          {
+            "from": "assign",
+            "to": "ship",
+            "by": "배정 확정·회신(N/N 충족)"
+          },
+          {
+            "from": "assign",
+            "to": "new",
+            "by": "후보 부족으로 보류"
+          },
+          {
+            "from": "ship",
+            "to": "run",
+            "by": "설치 완료·가동 시작"
+          },
+          {
+            "from": "run",
+            "to": "done",
+            "by": "기간 종료·회수"
+          }
+        ]
+      },
       "task": {
         "entity": "ENT-06",
         "states": [

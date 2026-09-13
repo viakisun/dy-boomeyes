@@ -29,6 +29,18 @@
 
 ## 상태기계
 
+### assignment (ENT-20)
+
+상태: `new` `assign` `ship` `run` `done`
+
+| from | to | 계기 |
+|---|---|---|
+| new | assign | 후보 확인 시작(B1-13·A4-03) |
+| assign | ship | 배정 확정·회신(N/N 충족) |
+| assign | new | 후보 부족으로 보류 |
+| ship | run | 설치 완료·가동 시작 |
+| run | done | 기간 종료·회수 |
+
 ### task (ENT-06)
 
 상태: `new` `assigned` `in-progress` `done` `escalated`
