@@ -1611,74 +1611,6 @@ screens:
     if:
       - IF-009
   note: V5 관제기능 I9:N25 · H71 · H77 — 소유주 데모 조회·샘플. 실제 운영 규칙 및 계약 단계 확정 아님
-- id: B1-10
-  name: 호기 상세
-  surface: B1
-  route: /b1/fleet/[device]
-  roles:
-    - owner
-  phase: 2
-  wave: 4
-  default: owner
-  states:
-    - id: owner
-      name: 소유주 기본 데이터
-    - id: empty
-      name: 보유 장비 없음
-    - id: error
-      name: 조회 실패 후 재시도
-    - id: boundaries
-      name: 미확인 배치·미연동·계약 미등록
-    - id: large
-      name: 120대 탐색
-  nav:
-    - to: B1-09
-      label: 보유 장비
-  trace:
-    task:
-      - 4.3.3
-    out: OUT-002
-    rfp:
-      - RFP-009
-    disc:
-      - DISC-052
-    if:
-      - IF-009
-  note: V5 관제기능 H60:H68 · H71 · H77 — 소유주 데모 조회·샘플. 실제 운영 규칙 및 계약 단계 확정 아님
-- id: A4-08
-  name: 호기 상세
-  surface: A4
-  route: /a4/fleet/[device]
-  roles:
-    - owner
-  phase: 2
-  wave: 4
-  default: owner
-  states:
-    - id: owner
-      name: 소유주 기본 데이터
-    - id: empty
-      name: 보유 장비 없음
-    - id: error
-      name: 조회 실패 후 재시도
-    - id: boundaries
-      name: 미확인 배치·미연동·계약 미등록
-    - id: large
-      name: 120대 탐색
-  nav:
-    - to: A4-02
-      label: 보유 장비
-  trace:
-    task:
-      - 4.3.3
-    out: OUT-002
-    rfp:
-      - RFP-009
-    disc:
-      - DISC-052
-    if:
-      - IF-009
-  note: V5 관제기능 H60:H68 · H71 · H77 — 소유주 데모 조회·샘플. 실제 운영 규칙 및 계약 단계 확정 아님
 - id: B1-11
   name: 영상
   surface: B1
@@ -2020,16 +1952,6 @@ owner_demo:
     question: 운전자 자격이 유효한가요?
     source_cells:
       - H36
-  - view: detail
-    menu: 0
-    label: 호기 상세
-    web: B1-10
-    pwa: A4-08
-    question: 계약과 현장 담당자는 누구인가요?
-    source_cells:
-      - H60:H68
-      - H71
-      - H77
   - view: video
     menu: 0
     label: 영상

@@ -23,7 +23,7 @@
 | `notifications` | A1-02 · A2-02 · A3-02 — 로컬 알림 스텁(IF-014) | 2 | draft |
 | `owner-experience` | B0-01 · A4-01 · B1-02 · B1-05 · A4-02 · A4-07~11 · B1-09~12 | 4 | draft |
 | `owner-contracts` | B1-13 · A4-03 · B1-06 · A4-05 | 4 | draft |
-| `owner-drivers` | B1-14 · A4-04 · B1-15 · A4-06 · B1-10 · A4-08 | 4 | draft |
+| `owner-drivers` | B1-14 · A4-04 · B1-15 · A4-06 · B1-02 · A4-07 | 4 | draft |
 
 ## 절차
 

@@ -36,7 +36,8 @@
   } = $props();
   // 메뉴 항목은 원천(owner_demo menu > 0)에서 온다 — 하단 내비의 열 수도 여기서 파생한다(고정 4칸 금지)
   const items = $derived(OWNER_MENU.map((v) => OWNER_DEMO.find((x) => x.view === v)!));
-  const active = $derived(view === 'detail' || view === 'video' ? 'fleet' : view);
+  // 영상은 호기 화면에서 들어온다 — 레일은 그 출발지인 운영 현황을 짚는다
+  const active = $derived(view === 'video' ? 'overview' : view);
   const dark = $derived(theme.value ? theme.value === 'dark' : theme.system);
   // 알림 자료 통로 — 워크스페이스가 읽은 스냅샷을 헤더의 종으로 올린다
   const bell = provideBell();

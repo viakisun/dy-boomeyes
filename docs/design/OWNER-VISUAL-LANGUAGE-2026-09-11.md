@@ -63,7 +63,7 @@
 | FleetSummary.svelte | 0 | 0 | 0 | 3 | 0 | 0 |
 | OwnerWorkspace.svelte | 1 | 2 | 2 | 3 | 0 | 0 |
 
-프리미티브 사용: Button · EmptyState · PageHeader · Dialog · Logo 5종. StatusPill · StatusDot · Badge · Chip · Card · KeyValueList · Stat · Tabs · Skeleton · Banner · IconButton · FileUpload · Figure · Timeline 0회. 상태 톤은 `equipmentCondition()`([core-helpers.ts:16](../../packages/ui/src/owner/core-helpers.ts#L16))이 만들지만 소비처가 `text-danger-fg / text-warning-fg / text-fg` 삼항으로 풀어 본문 굵기 그대로 색만 바꾼다([EquipmentRow.svelte:47](../../packages/ui/src/owner/EquipmentRow.svelte#L47), [OwnerDetail.svelte:116](../../packages/ui/src/owner/OwnerDetail.svelte#L116)).
+프리미티브 사용: Button · EmptyState · PageHeader · Dialog · Logo 5종. StatusPill · StatusDot · Badge · Chip · Card · KeyValueList · Stat · Tabs · Skeleton · Banner · IconButton · FileUpload · Figure · Timeline 0회. 상태 톤은 `equipmentCondition()`([core-helpers.ts:16](../../packages/ui/src/owner/core-helpers.ts#L16))이 만들지만 소비처가 `text-danger-fg / text-warning-fg / text-fg` 삼항으로 풀어 본문 굵기 그대로 색만 바꾼다([EquipmentRow.svelte:47](../../packages/ui/src/owner/EquipmentRow.svelte#L47), `OwnerDetail.svelte:116`(2026-09-14 폐기)).
 
 ### 캡처에서 보이는 흔적
 
@@ -71,9 +71,9 @@
 |---|---|
 | 지시 부제 "…의 장비와 현장을 한눈에 확인하세요" · "호기나 현장으로 찾아 계약과 담당자를 확인하세요" · "호기를 선택하고 제작증과 검사 성적서 원문을 확인하세요" · "N대에서 N건의 확인이 필요합니다" | [OwnerOverview.svelte:36](../../packages/ui/src/owner/OwnerOverview.svelte#L36) · [OwnerFleet.svelte:46](../../packages/ui/src/owner/OwnerFleet.svelte#L46) · [OwnerDocuments.svelte:167](../../packages/ui/src/owner/OwnerDocuments.svelte#L167) · [OwnerAlerts.svelte:46](../../packages/ui/src/owner/OwnerAlerts.svelte#L46) |
 | 각주 · 푸터 "전체 알림 N건 중 N건 표시 · 같은 장비에 여러 알림이 있을 수 있습니다" · "시연 기준 …" · "… · 시연용 자료 · 기준 2026. 7. 3. 10:42" | [OwnerOverview.svelte:117](../../packages/ui/src/owner/OwnerOverview.svelte#L117) · [OwnerOverview.svelte:37](../../packages/ui/src/owner/OwnerOverview.svelte#L37) · [OwnerWorkspace.svelte:115](../../packages/ui/src/owner/OwnerWorkspace.svelte#L115) |
-| 상태가 문장 "새 데이터가 도착하지 않아 현재 상태를 확인할 수 없습니다" · "읽음 표시는 장비 이상을 해소하거나 점검을 완료하지 않습니다" | [OwnerDetail.svelte:132](../../packages/ui/src/owner/OwnerDetail.svelte#L132) · [OwnerAlerts.svelte:119](../../packages/ui/src/owner/OwnerAlerts.svelte#L119) |
+| 상태가 문장 "새 데이터가 도착하지 않아 현재 상태를 확인할 수 없습니다" · "읽음 표시는 장비 이상을 해소하거나 점검을 완료하지 않습니다" | `OwnerDetail.svelte:132`(2026-09-14 폐기) · [OwnerAlerts.svelte:119](../../packages/ui/src/owner/OwnerAlerts.svelte#L119) |
 | 자리 문장 "알림을 선택하면 해당 장비의 현장 담당자와 발생 정보를 함께 확인할 수 있습니다" | [OwnerAlerts.svelte:132](../../packages/ui/src/owner/OwnerAlerts.svelte#L132) |
-| 카드가 라벨 목록 — 계약 "설치일" 행, 담당자 "현장 담당자" 라벨, 진입 미리보기 `<dl>` | [OwnerDetail.svelte:74](../../packages/ui/src/owner/OwnerDetail.svelte#L74) · [OwnerDetail.svelte:91](../../packages/ui/src/owner/OwnerDetail.svelte#L91) · [OwnerEntry.svelte:79](../../packages/ui/src/owner/OwnerEntry.svelte#L79) |
+| 카드가 라벨 목록 — 계약 "설치일" 행, 담당자 "현장 담당자" 라벨, 진입 미리보기 `<dl>` | `OwnerDetail.svelte:74`(2026-09-14 폐기) · `OwnerDetail.svelte:91`(2026-09-14 폐기) · [OwnerEntry.svelte:79](../../packages/ui/src/owner/OwnerEntry.svelte#L79) |
 | 표 머리글 텍스트 "호기 · 현장 / 장비 상태 · 수신 시각" | [OwnerFleet.svelte:120](../../packages/ui/src/owner/OwnerFleet.svelte#L120) |
 | 제품 표면의 "시연" 칩 · "예시" 라벨 | [OwnerShell.svelte:64](../../packages/ui/src/owner/OwnerShell.svelte#L64) · [OwnerEntry.svelte:58](../../packages/ui/src/owner/OwnerEntry.svelte#L58) |
 | 주인공이 작다 — 웹 운영 현황 지도 약 482×237(첫 뷰포트 1280×842의 약 11%) | web-overview |
@@ -96,7 +96,7 @@
 | 진입 B0-01 / A4-01 | 실제 로그인 폼(아이디 · 비밀번호 표시 토글 · 로그인 상태 유지 · 비밀번호 찾기 · 로그인 · 오류 한 줄) + "데모 계정으로 로그인" 보조 링크 + "데모 환경" 배지 + 도움말·약관·개인정보 푸터 — 랜딩·미리보기 없음(사용자 결정 2026-09-12) | 히어로 카피 · 미리보기 · "예시" 라벨 · 각주 · "소유주" 역할 제목 | 폼 시맨틱(autocomplete username/current-password) · mock 인증(데모 계정만 통과, DISC-020) |
 | 운영 현황 B1-02 / A4-07 | 지도 히어로(웹 12열 중 7, 7:6 비율) + 오른쪽 패널 5/12(확인할 것 · 현장별 장비, 패널 안 스크롤) · 헤더 오른쪽에 운영 구성 한 줄(inline) · 사이드바는 아이콘 레일(56px) · 검색은 보유 장비로 이동 | 부제 · 검색창 · 요약 카드 · 지도 각주 · 알림 각주 · "시연 기준" · 푸터 · 중복 집계(제목 3대 · 배지 3 · 캡션 3/3) | 지도: 한글 지명(`name:ko`) · 상태 점 + 호기 알약 핀(좁은 폭은 번호 원형 핀) · 목록 hover → 마커 강조 · AlertCard(IconTile) · 분포 막대 · display 숫자 |
 | 보유 장비 B1-09 / A4-02 | 장비 카드 열(웹: 미디어 + 정렬 열 · PWA: 미디어 카드) | 부제 · 표 머리글 텍스트 · "전체 5대 중 5대 표시" → 카운트 칩 | 스틸 썸네일 · StatusPill · Badge 배치 · 시계 메타 · 계약 D-n |
-| 호기 상세 B1-10 / A4-08 | 장비 히어로(display `1호기` · 스틸 · StatusPill · Badge · 전화/영상/서류 행동) → 지도 스니펫 · PeriodBar · 아바타 담당자 · Stat 전압 | 카드 4개 테두리 · "설치일" 행 · 수신 설명 문장 · "현장 담당자" 중복 라벨 | ContextHeader sticky · 미니맵 · PeriodBar · ContactCard · Stat · Timeline 이력 |
+| 호기 상세(2026-09-14 폐기 — 현황의 호기 단계로 합쳤다) | 장비 히어로(display `1호기` · 스틸 · StatusPill · Badge · 전화/영상/서류 행동) → 지도 스니펫 · PeriodBar · 아바타 담당자 · Stat 전압 | 카드 4개 테두리 · "설치일" 행 · 수신 설명 문장 · "현장 담당자" 중복 라벨 | ContextHeader sticky · 미니맵 · PeriodBar · ContactCard · Stat · Timeline 이력 |
 | 영상 B1-11 / A4-09 | 플레이어(첫 뷰포트 70%) + 위 Chip 2행 | 캡션 문단 · "영상 끝에서 재생이 멈춥니다" 안내 · 하단 문장 | 오버레이 StatusPill · 아이콘 재생 · KeyValueList 캡션 |
 | 장비 서류 B1-05 / A4-10 | 원문 페이지(선택 뒤 2/3) + 왼쪽 썸네일 목록 | 부제 · "시연용 원문 · 1페이지" · 첨부 안내 문단 | 썸네일 · IconTile 파일 종류 · Badge · ExternalLink |
 | 이상·점검 B1-12 / A4-11 | 선택 알림 상세(IconTile 큰 톤 · 값 · 담당자 카드) + 왼쪽 AlertCard 목록 | 부제 · "표시 3건 / 전체 3건" · 자리 문장 · "읽음 표시는…" | AlertCard · KeyValueList · ContactCard · Chip 카운트 |

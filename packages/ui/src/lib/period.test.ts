@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { periodPosition, periodProgress } from './period';
 
-describe('[B1-10] periodProgress', () => {
+describe('[B1-02] periodProgress', () => {
   it('중간 시점은 during · 경과 비율 · 남은 일수', () => {
     const r = periodProgress('2026-06-01', '2026-09-30', '2026-07-03T10:42:00+09:00');
     expect(r.state).toBe('during');

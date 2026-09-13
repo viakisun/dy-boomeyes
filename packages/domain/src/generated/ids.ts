@@ -30,7 +30,6 @@ export const SCR = {
   'A4-05': 'A4-05',
   'A4-06': 'A4-06',
   'A4-07': 'A4-07',
-  'A4-08': 'A4-08',
   'A4-09': 'A4-09',
   'A4-10': 'A4-10',
   'A4-11': 'A4-11',
@@ -44,7 +43,6 @@ export const SCR = {
   'B1-07': 'B1-07',
   'B1-08': 'B1-08',
   'B1-09': 'B1-09',
-  'B1-10': 'B1-10',
   'B1-11': 'B1-11',
   'B1-12': 'B1-12',
   'B1-13': 'B1-13',
@@ -294,7 +292,6 @@ export const SCREENS = {
   'A4-05': { name: "임대 계약", surface: 'A4', app: 'pwa', route: "/a4/leases", roles: ["owner"], phase: 2, wave: 5, default: 'lease', states: ["lease"] },
   'A4-06': { name: "운전자 서류", surface: 'A4', app: 'pwa', route: "/a4/drivers/docs", roles: ["owner"], phase: 2, wave: 4, default: 'docs', states: ["docs"] },
   'A4-07': { name: "운영 현황", surface: 'A4', app: 'pwa', route: "/a4/overview", roles: ["owner"], phase: 2, wave: 4, default: 'owner', states: ["owner","empty","error","boundaries","large","site","unit"] },
-  'A4-08': { name: "호기 상세", surface: 'A4', app: 'pwa', route: "/a4/fleet/[device]", roles: ["owner"], phase: 2, wave: 4, default: 'owner', states: ["owner","empty","error","boundaries","large"] },
   'A4-09': { name: "영상", surface: 'A4', app: 'pwa', route: "/a4/fleet/[device]/video", roles: ["owner"], phase: 2, wave: 4, default: 'owner', states: ["owner","empty","error","boundaries","large"] },
   'A4-10': { name: "장비 서류", surface: 'A4', app: 'pwa', route: "/a4/docs", roles: ["owner"], phase: 2, wave: 4, default: 'owner', states: ["owner","empty","error","boundaries","large"] },
   'A4-11': { name: "이상·점검", surface: 'A4', app: 'pwa', route: "/a4/alerts", roles: ["owner"], phase: 2, wave: 4, default: 'owner', states: ["owner","empty","error","boundaries","large"] },
@@ -308,7 +305,6 @@ export const SCREENS = {
   'B1-07': { name: "쇼케이스", surface: 'B1', app: 'web', route: "/b1/showcase", roles: ["control","maintenance","owner"], phase: 2, wave: 2, default: 'show', states: ["show"] },
   'B1-08': { name: "이벤트 복기", surface: 'B1', app: 'web', route: "/b1/events/[event]", roles: ["control","maintenance","owner"], phase: 1, wave: 2, default: 'default', states: ["default","pending","pinned"] },
   'B1-09': { name: "보유 장비", surface: 'B1', app: 'web', route: "/b1/fleet", roles: ["owner"], phase: 2, wave: 4, default: 'owner', states: ["owner","empty","error","boundaries","large"] },
-  'B1-10': { name: "호기 상세", surface: 'B1', app: 'web', route: "/b1/fleet/[device]", roles: ["owner"], phase: 2, wave: 4, default: 'owner', states: ["owner","empty","error","boundaries","large"] },
   'B1-11': { name: "영상", surface: 'B1', app: 'web', route: "/b1/fleet/[device]/video", roles: ["owner"], phase: 2, wave: 4, default: 'owner', states: ["owner","empty","error","boundaries","large"] },
   'B1-12': { name: "이상·점검", surface: 'B1', app: 'web', route: "/b1/alerts", roles: ["owner"], phase: 2, wave: 4, default: 'owner', states: ["owner","empty","error","boundaries","large"] },
   'B1-13': { name: "투입 요청·배정", surface: 'B1', app: 'web', route: "/b1/requests", roles: ["owner"], phase: 2, wave: 4, default: 'inbox', states: ["inbox","assign","empty","none","error"] },
@@ -412,19 +408,6 @@ export const OWNER_DEMO = [
     "question": "운전자 자격이 유효한가요?",
     "source_cells": [
       "H36"
-    ]
-  },
-  {
-    "view": "detail",
-    "menu": 0,
-    "label": "호기 상세",
-    "web": "B1-10",
-    "pwa": "A4-08",
-    "question": "계약과 현장 담당자는 누구인가요?",
-    "source_cells": [
-      "H60:H68",
-      "H71",
-      "H77"
     ]
   },
   {

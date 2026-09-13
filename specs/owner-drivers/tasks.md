@@ -3,7 +3,7 @@
 1. **읽기 모델·시드** — `OwnerDriver` · `OwnerDevice.driver` · `OwnerDoc.owner` 갈래 · 운전자 6명 시드 · 단위 테스트(호기 서류에 운전자 서류가 섞이지 않는지).
    DoD: `pnpm test` 통과 · `pnpm verify` exit 0. `Refs: FR-027 FR-016`
 2. **호기 «오늘 운전자» 한 줄** — `UnitPanel`·`OwnerDetail`에 추가하고 서류 목록에서 운전자 자격증을 뺀다.
-   DoD: 캡처 호기 단계 녹색 · 눈으로 확인(서류 7종에 자격증 없음). `Refs: SCR-B1-10 SCR-A4-08 FR-027`
+   DoD: 캡처 호기 단계 녹색 · 눈으로 확인(서류 7종에 자격증 없음). `Refs: SCR-B1-02 SCR-A4-07 FR-027`
 3. **명단(B1-14 · A4-04)** — 행 = 이름·면허·만료·오늘 배정·연락처 · 만료 임박 정렬 우선.
    DoD: `capture --dark --strict` 4픽스처 녹색. `Refs: SCR-B1-14 SCR-A4-04 FR-027`
 4. **운전자 서류(B1-15 · A4-06)** — 운전자별 서류·원문 열람·미비 표시.

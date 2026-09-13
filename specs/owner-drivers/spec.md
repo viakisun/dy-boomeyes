@@ -2,7 +2,7 @@
 id: SPEC-owner-drivers
 status: draft
 wave: 4
-screens: [B1-14, A4-04, B1-15, A4-06, B1-10, A4-08]
+screens: [B1-14, A4-04, B1-15, A4-06, B1-02, A4-07]
 fr: [FR-027, FR-016, FR-028, FR-024]
 ---
 # owner-drivers — 운전자 배치와 운전자 서류
@@ -19,7 +19,7 @@ fr: [FR-027, FR-016, FR-028, FR-024]
 | A4-04 | 운전자 배치 | `/a4/drivers` | 같음 |
 | B1-15 | 운전자 서류 | `/b1/drivers/docs` | docs · expiring · missing · error |
 | A4-06 | 운전자 서류 | `/a4/drivers/docs` | 같음 |
-| B1-10 · A4-08 | 호기 상세 | — | «오늘 운전자» 한 줄 |
+| B1-02 · A4-07 | 호기 화면(현황의 호기 단계) | — | «오늘 운전자» 한 줄 |
 
 ## 수용 기준
 - **AC-1** Given 운전자 6명과 오늘 배정 When 명단 → 이름 · 면허 종류 · 만료일 · 연락처 · 오늘 배정된 호기가 한 행에 보이고, 만료 임박은 warning 텍스트다 Then 배정과 자격을 한 화면에서 본다. [FR-027]

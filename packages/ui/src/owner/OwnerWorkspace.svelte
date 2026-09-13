@@ -18,7 +18,6 @@
   import OwnerFleet from './OwnerFleet.svelte';
   import OwnerRequests from './OwnerRequests.svelte';
   import OwnerDrivers from './OwnerDrivers.svelte';
-  import OwnerDetail from './OwnerDetail.svelte';
   import OwnerDocuments from './OwnerDocuments.svelte';
   import OwnerAlerts from './OwnerAlerts.svelte';
   import Button from '../primitives/Button.svelte';
@@ -153,7 +152,6 @@
     {:else if view === 'fleet'}<OwnerFleet {...viewProps} />
     {:else if view === 'requests'}<OwnerRequests {...viewProps} />
     {:else if view === 'drivers' || view === 'driver-docs'}<OwnerDrivers {...viewProps} {view} />
-    {:else if view === 'detail'}<OwnerDetail {...viewProps} {map} />
     {:else if view === 'documents'}<OwnerDocuments {...viewProps} />
     {:else if view === 'alerts'}<OwnerAlerts {...viewProps} />
     {:else if view === 'video'}{@render video(viewProps)}
