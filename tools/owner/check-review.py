@@ -23,8 +23,11 @@ import yaml
 SIZES = {"web": [(1280, 842), (1024, 842), (768, 842), (390, 800)],
          "pwa": [(375, 800), (390, 800), (430, 900), (768, 1024)]}
 # 검토안 확대 페이지: 첫 화면 아래 내용 4 + 드릴다운 현장·호기 단계 3(웹 현장·웹 호기·폰 호기)
+# 첫 화면 아래로 밀리는 내용과 주소로만 닿는 단계 — 검토안이 이것들을 확대해 싣는지 본다.
+# build-review.py의 SUPPLEMENTS와 짝이다(한쪽만 고치면 여기서 걸린다).
 EXPECTED_SUPPLEMENTS = {("web", "video", None), ("web", "documents", None), ("pwa", "detail", None), ("pwa", "documents", None),
-                        ("web", "overview", "site"), ("web", "overview", "unit"), ("pwa", "overview", "unit")}
+                        ("web", "overview", "site"), ("web", "overview", "unit"), ("pwa", "overview", "unit"),
+                        ("web", "requests", "assign")}
 
 
 def sha256(path):
