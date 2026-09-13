@@ -490,9 +490,12 @@ try {
           } else await capture('stale', { focus: status, full: true });
         }
       } else if (scenario.id === 'multiple-alerts') {
-        await expect(host.locator('button[data-alert]')).toHaveCount(2);
+        // 한 호기가 여러 알림을 가질 수 있다 — 종류가 늘어도 「장비 한 대」라는 사실은 그대로다
+        const rows = host.locator('button[data-alert]');
+        check((await rows.count()) > 1, 'A device with several alerts must list more than one');
         await expect(host.locator('[data-alert="CPB-002-FAULT"]')).toBeVisible();
         await expect(host.locator('[data-alert="CPB-002-INSP-DUE"]')).toBeVisible();
+        for (const row of await rows.all()) await expect(row).toContainText('2호기');
         await expect(host.getByRole('region', { name: '선택한 알림 상세', exact: true })).toContainText('이현장');
         await capture('multiple', { full: true });
       } else if (scenario.id === 'pdf-preview') {

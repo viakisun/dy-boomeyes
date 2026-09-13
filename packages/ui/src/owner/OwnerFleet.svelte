@@ -162,6 +162,7 @@
     <!-- 필터는 세 축뿐이다(시안) — 상태 · 현장 · 계약 종료. 축이 늘면 아무도 쓰지 않는다. -->
     <div class="gap-inline-md flex flex-wrap items-end">
       <Select
+        id="owner-fleet-filter"
         label="상태"
         value={query.filter}
         options={[
@@ -177,12 +178,14 @@
         onchange={(event) => update({ filter: event.currentTarget.value === 'all' ? '' : event.currentTarget.value })}
       />
       <Select
+        id="owner-fleet-site"
         label="현장"
         value={query.site}
         options={[{ value: 'all', label: '전체 현장' }, ...sites.map(([id, name]) => ({ value: id, label: name }))]}
         onchange={(event) => update({ site: event.currentTarget.value === 'all' ? '' : event.currentTarget.value })}
       />
       <Select
+        id="owner-fleet-expiry"
         label="계약 종료"
         value={query.expiry}
         options={[
@@ -195,6 +198,7 @@
       />
       {#if !web}
         <Select
+          id="owner-fleet-sort"
           label="정렬"
           value={query.sort}
           options={[

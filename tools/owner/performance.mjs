@@ -163,7 +163,7 @@ try {
       await expect(rows).toHaveCount(120);
       await page.evaluate(() => document.fonts.ready);
       const search = page.getByLabel('호기·현장 검색', { exact: true });
-      const filter = page.getByLabel('배치 필터', { exact: true });
+      const filter = page.getByLabel('상태', { exact: true });
       const queries = [
         { query: 'CPB-001', count: 1 },
         { query: 'CPB-', count: 120 },
