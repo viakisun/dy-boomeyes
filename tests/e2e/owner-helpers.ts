@@ -7,7 +7,6 @@ export const OWNER_PATHS = {
     entry: '/login?demo=owner',
     overview: '/b1/dash',
     fleet: '/b1/fleet',
-    detail: '/b1/fleet/CPB-001',
     video: '/b1/fleet/CPB-001/video',
     documents: '/b1/docs',
     alerts: '/b1/alerts',
@@ -20,7 +19,6 @@ export const OWNER_PATHS = {
     entry: '/a4/login',
     overview: '/a4/overview',
     fleet: '/a4/fleet',
-    detail: '/a4/fleet/CPB-001',
     video: '/a4/fleet/CPB-001/video',
     documents: '/a4/docs',
     alerts: '/a4/alerts',
@@ -34,6 +32,17 @@ export const OWNER_PATHS = {
 // 여기 적힌 것은 「표식이 붙은 안내 화면」이어야 하고, 나머지는 실제 본문이어야 한다.
 export const OWNER_UNBUILT = ['lease'] as const;
 
+/** 호기 화면은 현황의 호기 단계 하나다(시안 «확정 2026-09-12») — 현장과 호기는 짝이어야 한다. */
+export const unitPath = (app: OwnerApp, site: string, device: string, extra = '') =>
+  `${OWNER_PATHS[app].overview}?site=${site}&device=${device}${extra}`;
+/** 시드가 정한 짝 — 여기 적힌 것 말고 다른 조합은 ownerLevel이 현장 단계로 물린다. */
+export const UNIT = {
+  'CPB-001': 'SITE-MAPO',
+  'CPB-002': 'SITE-SONGDO',
+  'CPB-004': 'SITE-DAEJEON',
+  'CPB-005': 'SITE-YONGIN',
+} as const;
+
 /** 알림은 좌측 메뉴에서 내려와 헤더의 종으로 들어왔다(시안 «결정 2026-09-12»). */
 export async function openAlerts(page: Page) {
   await page.getByRole('button', { name: /^알림/ }).click();
@@ -45,15 +54,13 @@ export async function openAllSites(page: Page) {
   if (await all.count()) await all.first().click();
 }
 
-/** 장비 서류도 메뉴에서 내려왔다 — 서류는 호기에 속하므로 보유 장비 → 호기 → 서류로 연다.
+/** 장비 서류도 메뉴에서 내려왔다 — 서류는 호기에 속하므로 보유 장비 → 호기 화면 → 서류로 연다.
  *  goto는 전체 새로고침이라 메모리에 있는 시연 첨부가 사라진다 — 실제 사용자 경로를 그대로 따른다. */
 export async function openDocuments(page: Page, device = 'CPB-001') {
   await page.getByRole('navigation').getByRole('link', { name: '보유 장비', exact: true }).click();
   await page.locator(`[data-device="${device}"]`).first().click();
-  await page
-    .getByRole('link', { name: /장비 서류/ })
-    .first()
-    .click();
+  // 호기 화면의 차량 서류는 문서별 링크다 — 첫 장을 열면 그 호기의 서류 화면이 열린다
+  await page.getByRole('list', { name: '관련 서류', exact: true }).getByRole('link').first().click();
 }
 export const test = base.extend<{ ownerRuntime: void }>({
   ownerRuntime: [

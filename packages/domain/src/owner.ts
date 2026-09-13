@@ -302,14 +302,29 @@ export interface OwnerViewProps {
   sim?: boolean;
 }
 
-/** 뷰어에서 같은 호기의 상세로 복귀한다. 외부 주소·다른 호기는 복귀 경로가 될 수 없다. */
-export function ownerDetailReturn(url: URL, app: OwnerApp, device: string): string {
-  const fallback = ownerHref(url, 'detail', app, {}, device);
+/**
+ * 호기 화면의 주소 — 현황의 호기 단계다(시안 «확정 2026-09-12» · 호기 화면은 하나).
+ * 현장과 호기는 짝이어야 한다(`ownerLevel`이 그 현장 소속이 아닌 호기를 물리친다) — 부르는 쪽마다
+ * 그 짝을 다시 만들지 않도록 여기 한 곳에 둔다.
+ */
+export const ownerUnitHref = (
+  url: URL,
+  app: OwnerApp,
+  device: Pick<OwnerDevice, 'id' | 'siteId'>,
+  params: Record<string, string | null> = {},
+) => ownerHref(url, 'overview', app, { site: device.siteId, device: device.id, ...params });
+
+/** 뷰어에서 같은 호기의 화면으로 복귀한다. 외부 주소·다른 호기는 복귀 경로가 될 수 없다. */
+export function ownerUnitReturn(url: URL, app: OwnerApp, device: Pick<OwnerDevice, 'id' | 'siteId'>): string {
+  const fallback = ownerUnitHref(url, app, device);
   const raw = url.searchParams.get('return');
   if (!raw || !raw.startsWith('/') || raw.startsWith('//') || raw.includes('\\')) return fallback;
   try {
     const target = new URL(raw, url.origin);
-    return target.origin === url.origin && target.pathname === ownerPath('detail', app, device)
+    // 경로만으로는 부족하다 — 호기 화면은 주소가 하나고 호기는 쿼리에 있다
+    return target.origin === url.origin &&
+      target.pathname === ownerPath('overview', app) &&
+      target.searchParams.get('device') === device.id
       ? target.pathname + target.search
       : fallback;
   } catch {

@@ -2,7 +2,13 @@
   // 운전자 — 소유주 소속이고 배정이 매일 바뀐다(시안 «확정 2026-09-12» · FR-027).
   // 명단(오늘 배정·자격 만료)과 서류(사람 4종)를 한 화면의 두 갈래로 둔다 — 새 메뉴를 만들지 않는다.
   import Phone from '@lucide/svelte/icons/phone';
-  import { OWNER_DRIVER_DOC_KINDS, ownerHref, type OwnerDriver, type OwnerViewProps } from '@boomeyes/domain';
+  import {
+    OWNER_DRIVER_DOC_KINDS,
+    ownerHref,
+    ownerUnitHref,
+    type OwnerDriver,
+    type OwnerViewProps,
+  } from '@boomeyes/domain';
   import type { Column } from '../lib/table';
   import { cx, TONE } from '../lib/cx';
   import { dueLabel } from '../lib/format';
@@ -81,7 +87,7 @@
             {driver.name}
           {:else if column.key === 'today'}
             {@const unit = unitOf(driver)}
-            {#if unit}<a class="{ownerControl()} text-accent-fg" href={ownerHref(url, 'detail', app, {}, unit.id)}
+            {#if unit}<a class="{ownerControl()} text-accent-fg" href={ownerUnitHref(url, app, unit)}
                 >{unit.unit}호기 · {unit.site}</a
               >{:else}<span class="text-fg-muted">오늘 배정 없음</span>{/if}
           {:else if column.key === 'license'}
@@ -120,8 +126,7 @@
               </a>
             </div>
             <p class="text-body-md">
-              {#if unit}<a class="text-accent-fg" href={ownerHref(url, 'detail', app, {}, unit.id)}
-                  >{unit.unit}호기 · {unit.site}</a
+              {#if unit}<a class="text-accent-fg" href={ownerUnitHref(url, app, unit)}>{unit.unit}호기 · {unit.site}</a
                 >{:else}<span class="text-fg-muted">오늘 배정 없음</span>{/if}
             </p>
             <p class="text-body-sm {due?.soon ? 'text-warning-fg' : 'text-fg-muted'}">

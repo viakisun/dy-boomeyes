@@ -1,7 +1,6 @@
 <script lang="ts">
   // 호기 패널 — 호기·상태·배치 → 실시간 영상(앱 스니펫) → 설치·완료·임대기간(PeriodBar)·건설사 → 담당자 → 전압·단선·고장코드 → 관련 서류 → 상세 화면. 고객 V5 관제 요구의 호기 정보를 한 패널에.
   import type { Snippet } from 'svelte';
-  import ArrowRight from '@lucide/svelte/icons/arrow-right';
   import Check from '@lucide/svelte/icons/check';
   import ChevronLeft from '@lucide/svelte/icons/chevron-left';
   import FileText from '@lucide/svelte/icons/file-text';
@@ -283,10 +282,4 @@
   <Button variant="outline" tone="neutral" href={ownerHref(url, 'video', app, context, device.id)}>
     <Video class="size-size-icon-sm" aria-hidden="true" />현장 영상
   </Button>
-  <Button
-    variant="outline"
-    tone="neutral"
-    href={ownerHref(url, 'detail', app, { return: url.pathname + url.search }, device.id)}
-    >상세 화면으로 <ArrowRight class="size-size-icon-sm" aria-hidden="true" /></Button
-  >
 </section>

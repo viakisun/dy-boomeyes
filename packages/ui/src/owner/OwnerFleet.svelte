@@ -15,7 +15,7 @@
     ownerExpiryDays,
     ownerFleetRows,
     ownerFleetState,
-    ownerHref,
+    ownerUnitHref,
     ownerStrip,
     ownerSummary,
     type OwnerDevice,
@@ -113,7 +113,7 @@
   const sortBy = (key: string) =>
     update({ sort: key, dir: query.sort === key && query.dir === 'asc' ? 'desc' : 'asc' });
   function select(device: OwnerDevice) {
-    navigate(ownerHref(url, 'detail', app, { return: listReturn(url) }, device.id));
+    navigate(ownerUnitHref(url, app, device, { return: listReturn(url) }));
   }
   const ALL_COLUMNS: Column[] = [
     { key: 'unit', label: '호기', kind: 'num', sortable: true },
@@ -290,7 +290,7 @@
                 now={data.at}
                 layout="columns"
                 poster={devicePoster(data.cameras, device.id)}
-                href={ownerHref(url, 'detail', app, { return: url.pathname + url.search }, device.id)}
+                href={ownerUnitHref(url, app, device, { return: url.pathname + url.search })}
                 onselect={select}
               />
             {/snippet}

@@ -11,6 +11,8 @@ import {
   openAlerts,
   openAllSites,
   openDocuments,
+  unitPath,
+  UNIT,
   type OwnerApp,
 } from './owner-helpers';
 
@@ -73,13 +75,15 @@ export function ownerFlows(app: OwnerApp) {
     const device = devices.first();
     await expect(device).toHaveAttribute('data-device', 'CPB-001');
     await device.click();
-    const detail = ownerHost(page, 'detail');
-    await expect(detail).toContainText('CPB-001');
+    // 호기 화면은 하나다 — 목록에서 눌러도 현황의 호기 단계가 열린다(시안 «확정 2026-09-12»)
+    const unit = ownerHost(page, 'overview');
+    await expect(page).toHaveURL(/site=SITE-MAPO&device=CPB-001/);
+    await expect(unit).toContainText('CPB-001');
     for (const fact of ['마포 주상복합 신축', '한빛건설', '김현장', '010-0000-0000'])
-      await expect(detail).toContainText(fact);
-    await expect(detail).toContainText(/2026[.\-/년 ]+0?6/);
-    await expect(detail).toContainText(/2026[.\-/년 ]+0?9/);
-    await page.getByRole('link', { name: '장비 목록으로', exact: true }).click();
+      await expect(unit).toContainText(fact);
+    await expect(unit).toContainText(/2026[.\-/년 ]+0?6/);
+    await expect(unit).toContainText(/2026[.\-/년 ]+0?9/);
+    await page.getByRole('link', { name: '보유 장비 목록으로', exact: true }).click();
     await expect(search).toHaveValue('마포');
     await expect(page.getByLabel('상태', { exact: true })).toHaveValue('deployed');
     await expect(devices).toHaveCount(5);
@@ -715,7 +719,7 @@ export function ownerFlows(app: OwnerApp) {
   });
 
   for (const material of ['documents', 'video'] as const) {
-    test(`[B1-02] [FR-024] [AC-O03] [AC-O15] filtered fleet → ${material} → detail → fleet preserves context`, async ({
+    test(`[B1-02] [FR-024] [AC-O03] [AC-O15] filtered fleet → ${material} → unit → fleet preserves context`, async ({
       page,
     }) => {
       await startOwner(page, app);
@@ -723,9 +727,11 @@ export function ownerFlows(app: OwnerApp) {
       await page.getByLabel('호기·현장 검색', { exact: true }).fill('마포');
       await page.getByLabel('상태', { exact: true }).selectOption('deployed');
       await ownerHost(page, 'fleet').locator('[data-device="CPB-001"]').click();
-      const detail = ownerHost(page, 'detail');
-      await expect(detail).toContainText('CPB-001');
-      await detail.getByRole('link', { name: material === 'documents' ? /장비 서류/ : /현장 영상/ }).click();
+      const unit = ownerHost(page, 'overview');
+      await expect(unit).toContainText('CPB-001');
+      if (material === 'documents')
+        await unit.getByRole('list', { name: '관련 서류', exact: true }).getByRole('link').first().click();
+      else await unit.getByRole('link', { name: '현장 영상', exact: true }).click();
       if (material === 'documents') {
         await page.getByRole('button', { name: '1호기 제작증 열기', exact: true }).click();
         await expect(page.locator('[data-document-viewer]')).toHaveAttribute('data-doc', 'CPB-001-CERT');
@@ -736,9 +742,9 @@ export function ownerFlows(app: OwnerApp) {
         await expect(page.locator('[data-camera="CPB-001-body-a"]')).toHaveAttribute('data-mode', 'recorded');
         await expect(page.locator('[data-camera="CPB-001-body-a"] video')).toBeVisible();
       }
-      await page.getByRole('button', { name: '장비 상세로', exact: true }).click();
-      await expect(detail).toContainText('CPB-001');
-      await detail.getByRole('link', { name: '장비 목록으로', exact: true }).click();
+      await page.getByRole('button', { name: '호기 화면으로', exact: true }).click();
+      await expect(unit).toContainText('CPB-001');
+      await unit.getByRole('link', { name: '보유 장비 목록으로', exact: true }).click();
       await expect(page.getByLabel('호기·현장 검색', { exact: true })).toHaveValue('마포');
       await expect(page.getByLabel('상태', { exact: true })).toHaveValue('deployed');
       await expect(ownerHost(page, 'fleet').locator('[data-device]')).toHaveCount(5);
@@ -766,17 +772,18 @@ export function ownerFlows(app: OwnerApp) {
     page,
   }) => {
     await startOwner(page, app);
-    await page.goto(paths.detail.replace('CPB-001', 'CPB-004'));
-    await expect(ownerHost(page, 'detail')).toContainText('수신 지연');
-    await expect(ownerHost(page, 'detail')).toContainText(/08:22|8:22/);
-    await page.goto(paths.detail.replace('CPB-001', 'CPB-005'));
-    await expect(ownerHost(page, 'detail')).toContainText('단말기 미장착');
-    await expect(ownerHost(page, 'detail')).not.toContainText('0 V');
-    await page.goto(`${paths.detail}?capture=1&state=boundaries`);
-    await expect(ownerHost(page, 'detail')).toContainText('미연동');
-    await expect(ownerHost(page, 'detail')).toContainText(/미등록|등록된 계약|계약 없음/);
-    await expect(ownerHost(page, 'detail')).toContainText(/배치 미확인/);
-    await expect(ownerHost(page, 'detail')).not.toContainText('0 V');
+    await page.goto(unitPath(app, UNIT['CPB-004'], 'CPB-004'));
+    await expect(ownerHost(page, 'overview')).toContainText('수신 지연');
+    await expect(ownerHost(page, 'overview')).toContainText(/08:22|8:22/);
+    await page.goto(unitPath(app, UNIT['CPB-005'], 'CPB-005'));
+    await expect(ownerHost(page, 'overview')).toContainText('단말기 미장착');
+    // 값이 없을 때 0으로 보이지 않아야 한다 — 「380 V」의 끝자리에 걸리지 않게 경계를 준다
+    await expect(ownerHost(page, 'overview')).not.toContainText(/\b0 V/);
+    await page.goto(unitPath(app, UNIT['CPB-001'], 'CPB-001', '&capture=1&state=boundaries'));
+    await expect(ownerHost(page, 'overview')).toContainText('미연동');
+    await expect(ownerHost(page, 'overview')).toContainText(/미등록|등록된 계약|계약 없음/);
+    await expect(ownerHost(page, 'overview')).toContainText(/배치 미확인/);
+    await expect(ownerHost(page, 'overview')).not.toContainText(/\b0 V/);
   });
 
   test('[B1-02] [FR-024] [AC-O12] A cannot browse another owner device, document, camera or alert', async ({
@@ -785,7 +792,7 @@ export function ownerFlows(app: OwnerApp) {
     await startOwner(page, app);
     for (const path of [
       paths.fleet,
-      paths.detail.replace('CPB-001', 'CPB-101'),
+      unitPath(app, 'SITE-OTHER', 'CPB-101'),
       `${paths.documents}?device=CPB-101&doc=CPB-101-CERT`,
       `${paths.video}?camera=CPB-101-cctv-1`,
       `${paths.alerts}?alert=CPB-101-FAULT`,
@@ -810,9 +817,9 @@ export function ownerFlows(app: OwnerApp) {
     await expect(devices).toHaveCount(1);
     await expect(devices).toHaveAttribute('data-device', 'CPB-101');
     await devices.click();
-    await expect(ownerHost(page, 'detail')).toContainText('두번째건설');
-    await expect(ownerHost(page, 'detail')).toContainText('타사 담당자');
-    await expect(ownerHost(page, 'detail')).not.toContainText('김현장');
+    await expect(ownerHost(page, 'overview')).toContainText('두번째건설');
+    await expect(ownerHost(page, 'overview')).toContainText('타사 담당자');
+    await expect(ownerHost(page, 'overview')).not.toContainText('김현장');
   });
 
   for (const ownerId of [undefined, '']) {
@@ -851,9 +858,9 @@ export function ownerFlows(app: OwnerApp) {
     await expect(page.getByRole('button', { name: '승인', exact: true })).toHaveCount(0);
     await page.getByRole('button', { name: /읽음/ }).click();
     await expect(ownerHost(page, 'alerts')).toContainText('공급 전압 저하');
-    await page.getByRole('link', { name: /장비 상세/ }).click();
-    await expect(ownerHost(page, 'detail')).toContainText('CPB-002');
-    await expect(ownerHost(page, 'detail')).toContainText('공급 전압 저하');
+    await page.getByRole('link', { name: /호기 화면/ }).click();
+    await expect(ownerHost(page, 'overview')).toContainText('CPB-002');
+    await expect(ownerHost(page, 'overview')).toContainText('공급 전압 저하');
   });
 
   test('[B1-02] [FR-024] [AC-O08] [AC-O09] real clip advances and recorded clip ends at stated duration', async ({
@@ -886,8 +893,8 @@ export function ownerFlows(app: OwnerApp) {
     await video.evaluate((element) => (element as HTMLVideoElement).play());
     await expect.poll(() => video.evaluate((v) => (v as HTMLVideoElement).currentTime)).toBeGreaterThan(0.1);
     const removedVideo = await video.elementHandle();
-    await page.getByRole('button', { name: '장비 상세로', exact: true }).click();
-    await expect(page.locator('video')).toHaveCount(0);
+    await page.getByRole('button', { name: '호기 화면으로', exact: true }).click();
+    await expect(ownerHost(page, 'video')).toHaveCount(0);
     expect(removedVideo).not.toBeNull();
     await expect.poll(() => removedVideo!.evaluate((v) => (v as HTMLVideoElement).paused)).toBe(true);
     await removedVideo!.dispose();
@@ -1007,7 +1014,6 @@ export function ownerFlows(app: OwnerApp) {
       'overview-site',
       'overview-unit',
       'fleet',
-      'detail',
       'video',
       'documents',
       'alerts',

@@ -1,7 +1,7 @@
 <script lang="ts">
   import {
     ownerHref,
-    ownerDetailReturn,
+    ownerUnitReturn,
     type OwnerAttachment,
     type OwnerDocument,
     type OwnerViewProps,
@@ -91,7 +91,10 @@
   });
   function changeDevice(value: string) {
     cancel();
-    navigate(ownerHref(url, 'documents', app, { device: value, return: ownerDetailReturn(url, app, value) }));
+    const next = data.devices.find((d) => d.id === value);
+    navigate(
+      ownerHref(url, 'documents', app, { device: value, return: next ? ownerUnitReturn(url, app, next) : null }),
+    );
   }
   function openDocument(id: string) {
     navigate(
@@ -188,10 +191,8 @@
           {#each data.devices as item (item.id)}<option value={item.id}>{item.unit}호기 · {item.site}</option>{/each}
         </select>
       </div>
-      {#if device}<Button
-          variant="outline"
-          tone="neutral"
-          onclick={() => navigate(ownerDetailReturn(url, app, device.id))}>장비 상세로</Button
+      {#if device}<Button variant="outline" tone="neutral" onclick={() => navigate(ownerUnitReturn(url, app, device))}
+          >호기 화면으로</Button
         >{/if}
     </div>
     {#if !device}

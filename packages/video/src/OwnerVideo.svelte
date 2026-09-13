@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { ownerHref, ownerDetailReturn, type OwnerCamera, type OwnerViewProps } from '@boomeyes/domain';
+  import { ownerHref, ownerUnitReturn, type OwnerCamera, type OwnerViewProps } from '@boomeyes/domain';
   import {
     Button,
     Chip,
@@ -145,8 +145,8 @@
           tone="neutral"
           onclick={() => {
             video?.pause();
-            navigate(ownerDetailReturn(url, app, deviceId));
-          }}>장비 상세로</Button
+            navigate(ownerUnitReturn(url, app, device));
+          }}>호기 화면으로</Button
         >{/if}
     {/snippet}
   </PageHeader>

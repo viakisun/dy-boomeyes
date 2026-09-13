@@ -1,7 +1,17 @@
 import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import type { ElementHandle, Locator, Page, Route } from '@playwright/test';
-import { test, expect, startOwner, ownerHost, noOverflow, OWNER_PATHS, type OwnerApp } from './owner-helpers';
+import {
+  test,
+  expect,
+  startOwner,
+  ownerHost,
+  noOverflow,
+  OWNER_PATHS,
+  unitPath,
+  UNIT,
+  type OwnerApp,
+} from './owner-helpers';
 
 const CERTIFICATE = 'packages/mock/src/assets/owner/cpb-001-certificate.pdf';
 const PDF_NAME = 'cpb-001-certificate.pdf';
@@ -250,13 +260,11 @@ export function ownerContentFlows(app: OwnerApp) {
   }) => {
     test.setTimeout(60_000);
     await startOwner(page, app);
-    await page.goto(paths.detail);
+    await page.goto(unitPath(app, UNIT['CPB-001'], 'CPB-001'));
     const retired: ElementHandle[] = [];
     try {
       for (let visit = 0; visit < 10; visit++) {
-        await ownerHost(page, 'detail')
-          .getByRole('link', { name: /현장 영상/ })
-          .click();
+        await ownerHost(page, 'overview').getByRole('link', { name: '현장 영상', exact: true }).click();
         const video = ownerHost(page, 'video').locator('video');
         await expect(video).toBeVisible();
         await expect
@@ -271,9 +279,10 @@ export function ownerContentFlows(app: OwnerApp) {
         const handle = await video.elementHandle();
         expect(handle).not.toBeNull();
         retired.push(handle!);
-        await page.getByRole('button', { name: '장비 상세로', exact: true }).click();
-        await expect(ownerHost(page, 'detail')).toContainText('CPB-001');
-        await expect(page.locator('video')).toHaveCount(0);
+        await page.getByRole('button', { name: '호기 화면으로', exact: true }).click();
+        await expect(ownerHost(page, 'overview')).toContainText('CPB-001');
+        // 호기 화면에는 카메라 벽이 있다 — 「영상 화면의 플레이어가 사라졌는가」를 본다
+        await expect(ownerHost(page, 'video')).toHaveCount(0);
         await expect
           .poll(() =>
             handle!.evaluate((element) => {
@@ -329,26 +338,30 @@ export function ownerContentFlows(app: OwnerApp) {
     context,
   }) => {
     await startOwner(page, app);
-    await page.goto(paths.detail.replace('CPB-001', 'CPB-004'));
-    const host = ownerHost(page, 'detail');
+    await page.goto(unitPath(app, UNIT['CPB-004'], 'CPB-004'));
+    const host = ownerHost(page, 'overview');
     const status = host.getByRole('region', { name: '장비 상태', exact: true });
     await expect(status).toContainText('수신 지연');
     await expect(status).toContainText('공급 전압 · 마지막 수신값');
     await expect(status).toContainText('380');
     await expect(status).toContainText(/마지막 수신.*08:22|마지막 수신.*8:22/);
-    const before = await status.innerText();
+    // 오프라인 전후가 같은지는 같은 방식으로 읽어 견준다 — innerText를 떠 놓고 toHaveText(정규화된
+    // textContent)로 견주면 KeyValueList의 <dt>/<dd> 사이 줄바꿈 때문에 내용이 같아도 어긋난다
+    const read = () => status.innerText();
+    const before = await read();
     await context.setOffline(true);
     await expect(
       page.getByRole('status').filter({ hasText: '오프라인 · 마지막으로 불러온 화면입니다.' }),
     ).toBeVisible();
-    await expect(status).toHaveText(before);
+    await expect.poll(read).toBe(before);
     await expect(status).toContainText('현재 상태를 확인할 수 없습니다.');
-    await expect(status).not.toContainText('0 V');
+    // 「0 V」는 값이 없을 때 0으로 보이는 것을 막는 단언이다 — 「380 V」의 끝자리에 걸리지 않게 경계를 준다
+    await expect(status).not.toContainText(/\b0 V/);
     await expect(host).toContainText('최현장');
     await context.setOffline(false);
     await expect(page.getByRole('status').filter({ hasText: '오프라인 · 마지막으로 불러온 화면입니다.' })).toHaveCount(
       0,
     );
-    await expect(status).toHaveText(before);
+    await expect.poll(read).toBe(before);
   });
 }

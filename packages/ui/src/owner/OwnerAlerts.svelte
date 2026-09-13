@@ -2,7 +2,13 @@
   // 이상·점검 — Chip 필터(카운트) · 알림 목록(AlertCard button data-alert) · 선택 알림 상세(IconTile + StatusPill + KeyValueList + ContactCard + 읽음).
   import ArrowRight from '@lucide/svelte/icons/arrow-right';
   import Bell from '@lucide/svelte/icons/bell';
-  import { OWNER_ALERT_KINDS, ownerHref, ownerSummary, type OwnerAlert, type OwnerViewProps } from '@boomeyes/domain';
+  import {
+    OWNER_ALERT_KINDS,
+    ownerSummary,
+    ownerUnitHref,
+    type OwnerAlert,
+    type OwnerViewProps,
+  } from '@boomeyes/domain';
   import { OWNER_ALERT_TONE } from '../lib/cx';
   import { OWNER_ALERT_KIND_LABEL } from '../lib/labels';
   import { fmtDateTime } from '../lib/format';
@@ -140,8 +146,8 @@
             variant={selected.read ? 'outline' : 'solid'}
             tone={selected.read ? 'neutral' : 'accent'}>{selected.read ? '읽음으로 표시됨' : '읽음으로 표시'}</Button
           >
-          <Button variant="ghost" href={ownerHref(url, 'detail', app, { return: url.pathname + url.search }, device.id)}
-            >장비 상세·계약 확인 <ArrowRight class="size-size-icon-sm" aria-hidden="true" /></Button
+          <Button variant="ghost" href={ownerUnitHref(url, app, device, { return: url.pathname + url.search })}
+            >호기 화면 열기 <ArrowRight class="size-size-icon-sm" aria-hidden="true" /></Button
           >
         </div>
         {#if error}<p role="alert" class="text-danger-fg text-body-md">{error}</p>{/if}
