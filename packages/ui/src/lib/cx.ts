@@ -88,7 +88,15 @@ export const CAMERA_TONE = {
 export const SEVERITY_TONE = { critical: 'danger', warning: 'warning', info: 'info' } as const;
 export const FOCUS = 'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring';
 /** 소유주 알림 종류 → 톤 — 수신 지연도 warning(FR-034: 관측 불능을 정상처럼 두지 않는다) */
-export const OWNER_ALERT_TONE = { fault: 'danger', inspection: 'warning', connection: 'warning' } as const;
+export const OWNER_ALERT_TONE = {
+  fault: 'danger',
+  inspection: 'warning',
+  connection: 'warning',
+  ai: 'danger',
+  part: 'warning',
+  lease: 'neutral', // 종료 임박은 이상이 아니다 — 색을 쓰지 않고 자리와 아이콘으로 말한다
+  license: 'warning',
+} as const;
 /** 소유주 수신 상태 → 톤 — stale만 warning, 미연동·미장착은 중립 텍스트 */
 export const OWNER_CONNECTION_TONE = {
   current: 'neutral',

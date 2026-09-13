@@ -19,7 +19,7 @@ import {
 } from '@boomeyes/domain';
 import { LOOP_MP4, LOOP_SEC, STILL, STILL_BBOX } from '@boomeyes/video/assets';
 import { OWNER_ASSETS } from './assets/owner';
-import { OWNER_SITES, ownerFleet } from './owner-fleet';
+import { DRIVER_ROSTER, OWNER_SITES, ownerFleet } from './owner-fleet';
 import { createOwnerSim, type OwnerSim } from './owner-sim';
 
 type Options = {
@@ -159,6 +159,60 @@ export function seedOwner(dataset: OwnerDataset = 'owner'): OwnerSnapshot {
             },
           ]
         : []),
+      // 시안의 종 패널은 고장·지연·점검 말고도 AI 경고·소모품 한계·계약 종료 임박·자격 만료를 담는다.
+      // 모두 이미 있는 축에서 나온다 — 알림이 따로 사실을 만들지 않는다.
+      ...ownerAiEvents(d).map((event) => ({
+        id: `${event.id}-ALERT`,
+        deviceId: d.id,
+        kind: 'ai' as const,
+        title: event.title,
+        detail: `${event.detail}${event.driver ? ` · 그 시각 운전자 ${event.driver.name}` : ''}`,
+        at: event.at,
+        read: false,
+      })),
+      ...d.parts
+        .filter((part) => part.due)
+        .slice(0, 1)
+        .map((part) => ({
+          id: `${d.id}-PART-${part.name}`,
+          deviceId: d.id,
+          kind: 'part' as const,
+          title: `${part.name} 교체 한계`,
+          detail:
+            part.kind === 'wear'
+              ? `마모 ${part.value}% · 시연 기준 ${part.limit}%. 실제 교체 판정은 현장 점검이 필요합니다.`
+              : `교체까지 ${part.value}일 남았습니다. 실제 교체 판정은 현장 점검이 필요합니다.`,
+          at: '2026-07-03T09:40:00+09:00',
+          read: false,
+        })),
+      // 계약 종료는 현장 하나의 사실이다 — 그 현장 호기마다 한 건씩 울리면 패널이 같은 말로 찬다
+      ...(d.contract && leaseDays(d.contract.to) <= 30 && firstOfSite(devices, d)
+        ? [
+            {
+              id: `${d.siteId}-LEASE`,
+              deviceId: d.id,
+              kind: 'lease' as const,
+              title: '계약 종료 임박',
+              detail: `${d.site} 계약이 ${d.contract.to}에 끝납니다(D-${leaseDays(d.contract.to)}) · 투입 ${devices.filter((x) => x.siteId === d.siteId && x.deployment === 'deployed').length}대. 연장이나 회수를 현장과 정하세요.`,
+              at: '2026-07-03T09:05:00+09:00',
+              read: false,
+            },
+          ]
+        : []),
+      // 자격 만료도 사람 하나의 사실이다 — 그 사람이 오르는 호기마다 울리지 않는다
+      ...(d.driver && licenseSoon(d.driver.id) && firstOfDriver(devices, d)
+        ? [
+            {
+              id: `${d.driver.id}-LICENSE`,
+              deviceId: d.id,
+              kind: 'license' as const,
+              title: `${d.driver.name} 자격 만료 임박`,
+              detail: `건설기계조종사 면허가 ${licenseSoon(d.driver.id)}에 끝납니다. 갱신 전까지 배정을 조정하세요.`,
+              at: '2026-07-03T08:50:00+09:00',
+              read: false,
+            },
+          ]
+        : []),
     ]),
     cameras: devices.flatMap((d) => ownerCameras(d)),
     aiEvents: devices.flatMap((d) => ownerAiEvents(d)),
@@ -166,6 +220,20 @@ export function seedOwner(dataset: OwnerDataset = 'owner'): OwnerSnapshot {
     drivers: dataset === 'empty' ? [] : ownerDrivers(devices),
     driverDocs: dataset === 'empty' ? [] : ownerDriverDocs(ownerDrivers(devices)),
   };
+}
+const DAY = 86_400_000;
+/** 이 호기가 그 현장의 첫 호기인가 — 현장 단위 사실을 한 번만 알린다 */
+const firstOfSite = (devices: OwnerDevice[], d: OwnerDevice) => devices.find((x) => x.siteId === d.siteId)?.id === d.id;
+/** 이 호기가 그 운전자의 첫 호기인가 — 사람 단위 사실을 한 번만 알린다 */
+const firstOfDriver = (devices: OwnerDevice[], d: OwnerDevice) =>
+  devices.find((x) => x.driver?.id === d.driver?.id)?.id === d.id;
+/** 계약 종료까지 남은 일수 — 알림은 30일 이내에만 뜬다 */
+const leaseDays = (to: string) => Math.round((Date.parse(to) - Date.parse(OWNER_CLOCK)) / DAY);
+/** 30일 안에 끝나는 면허의 만료일 — 아니면 빈 문자열 */
+function licenseSoon(driverId: string) {
+  const person = DRIVER_ROSTER.find((x) => x.id === driverId);
+  if (!person) return '';
+  return leaseDays(person.licenseTo) <= 30 ? person.licenseTo : '';
 }
 /** 투입 요청 5건 — 상태 5단계가 한 번씩 나오게 둔다(시안 «확정 2026-09-12» · FR-026).
  *  소유주의 판단 하나(「이 기간에 낼 수 있는 장비가 있나」)를 보이려면 배정 중 건이 필요하다. */
@@ -303,16 +371,8 @@ function ownerDriverDocs(drivers: OwnerDriver[]): OwnerDriverDoc[] {
 /** 운전자 6명 — 오늘 배정은 장비 축(device.driver)이 원천이고 여기서 되읽는다.
  *  두 곳이 따로 정하면 호기 화면과 명단이 다른 사람을 보인다. */
 function ownerDrivers(devices: OwnerDevice[]): OwnerDriver[] {
-  const roster = [
-    { id: 'DRV-001', name: '김운전', license: '건설기계조종사 1종', licenseTo: '2027-04-30', phone: '010-0000-0001' },
-    { id: 'DRV-002', name: '이운전', license: '건설기계조종사 1종', licenseTo: '2026-10-12', phone: '010-0000-0002' },
-    { id: 'DRV-003', name: '박운전', license: '건설기계조종사 1종', licenseTo: '2027-02-08', phone: '010-0000-0003' },
-    { id: 'DRV-004', name: '최운전', license: '건설기계조종사 1종', licenseTo: '2026-07-25', phone: '010-0000-0004' },
-    { id: 'DRV-005', name: '정운전', license: '건설기계조종사 1종', licenseTo: '2027-09-01', phone: '010-0000-0005' },
-    { id: 'DRV-006', name: '조운전', license: '건설기계조종사 1종', licenseTo: '2027-11-19', phone: '010-0000-0006' },
-  ];
   return [
-    ...roster.map((person) => ({
+    ...DRIVER_ROSTER.map((person) => ({
       ...person,
       ownerId: 'OWN-001',
       assignedTo: devices.find((d) => d.driver?.id === person.id)?.id ?? null,

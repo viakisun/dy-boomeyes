@@ -3,6 +3,7 @@
   import ArrowRight from '@lucide/svelte/icons/arrow-right';
   import Bell from '@lucide/svelte/icons/bell';
   import {
+    OWNER_ALERT_KINDS,
     ownerHref,
     ownerSummary,
     type OwnerApp,
@@ -40,9 +41,9 @@
   } = $props();
   const summary = $derived(ownerSummary(data.devices, data.alerts));
   const alerts = $derived(
+    // 종류 순서는 원천(OWNER_ALERT_KINDS)이 정한다 — 종류가 늘 때 여기 표를 고치는 것을 잊지 않게
     [...new Map(data.alerts.map((alert) => [alert.id, alert])).values()].sort(
-      (a, b) =>
-        ({ fault: 0, inspection: 1, connection: 2 })[a.kind] - { fault: 0, inspection: 1, connection: 2 }[b.kind],
+      (a, b) => OWNER_ALERT_KINDS.indexOf(a.kind) - OWNER_ALERT_KINDS.indexOf(b.kind),
     ),
   );
   const shown = $derived(alerts.slice(0, 3));

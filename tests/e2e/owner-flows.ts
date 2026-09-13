@@ -246,21 +246,28 @@ export function ownerFlows(app: OwnerApp) {
     await expect(ownerHost(page, 'fleet').locator('[data-device]')).toHaveCount(120);
   });
 
-  test('[B1-02] [FR-024] [AC-O07] overview shows three of seven alerts and opens all seven', async ({ page }) => {
+  test('[B1-02] [FR-024] [AC-O07] overview shows three of all alerts and opens the rest', async ({ page }) => {
     await startOwner(page, app);
     await page.goto(`${paths.overview}?capture=1&state=boundaries`);
     const overview = ownerHost(page, 'overview');
     const preview = overview.getByRole('list', { name: '우선 확인 알림', exact: true });
     await expect(preview.getByRole('listitem')).toHaveCount(3);
-    await expect(overview).toContainText('전체 알림 7건 중 3건 표시');
+    // 전체 건수는 알림 종류가 늘면 함께 는다 — 리터럴 대신 미리보기와 전체 목록이 같은 수를 말하는지 본다
+    const shown = await overview.getByText(/전체 알림 \d+건 중 3건 표시/).innerText();
+    const total = Number(shown.match(/전체 알림 (\d+)건/)![1]);
+    expect(total).toBeGreaterThan(3);
+    // 「확인이 필요한 장비」는 장비 상태(고장·점검·지연)에서 나온다 — 알림 종류가 늘어도 그대로다
     await expect(overview.getByRole('heading', { name: '확인이 필요한 장비 6대', exact: true })).toBeVisible();
-    // Connection alerts sort last, so CPB-004 must remain reachable outside the overview limit.
+    // 수신 지연은 고장·점검 뒤로 밀린다 — 미리보기 밖이지만 전체 목록에서는 닿는다
     await expect(preview.locator('[data-device="CPB-004"]')).toHaveCount(0);
     await overview.getByRole('link', { name: '알림 전체 보기', exact: true }).click();
     const alerts = ownerHost(page, 'alerts').getByRole('region', { name: '알림 목록', exact: true });
-    await expect(alerts).toContainText('표시 7건 / 전체 7건');
-    await expect(alerts.locator('[data-alert]')).toHaveCount(7);
+    await expect(alerts).toContainText(`표시 ${total}건 / 전체 ${total}건`);
+    await expect(alerts.locator('[data-alert]')).toHaveCount(total);
     await expect(alerts.locator('[data-alert="CPB-004-STALE"]')).toBeVisible();
+    // 시안의 종 패널은 고장·지연·점검 말고도 계약 종료 임박·소모품 한계·자격 만료를 담는다
+    const kinds = ownerHost(page, 'alerts').getByRole('group', { name: '알림 종류', exact: true });
+    for (const kind of ['계약 종료 임박', '소모품 한계', '자격 만료 임박']) await expect(kinds).toContainText(kind);
   });
 
   test('[B1-02] [FR-024] [AC-O07] overview lists 13 sites of 120 devices and opens the complete fleet', async ({

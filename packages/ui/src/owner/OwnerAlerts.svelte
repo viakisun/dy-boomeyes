@@ -2,7 +2,7 @@
   // 이상·점검 — Chip 필터(카운트) · 알림 목록(AlertCard button data-alert) · 선택 알림 상세(IconTile + StatusPill + KeyValueList + ContactCard + 읽음).
   import ArrowRight from '@lucide/svelte/icons/arrow-right';
   import Bell from '@lucide/svelte/icons/bell';
-  import { ownerHref, ownerSummary, type OwnerAlert, type OwnerViewProps } from '@boomeyes/domain';
+  import { OWNER_ALERT_KINDS, ownerHref, ownerSummary, type OwnerAlert, type OwnerViewProps } from '@boomeyes/domain';
   import { OWNER_ALERT_TONE } from '../lib/cx';
   import { OWNER_ALERT_KIND_LABEL } from '../lib/labels';
   import { fmtDateTime } from '../lib/format';
@@ -28,7 +28,8 @@
   const device = $derived(selected && data.devices.find((d) => d.id === selected.deviceId));
   const kinds = $derived([
     { value: 'all', label: '전체', count: scoped.length },
-    ...(['fault', 'inspection', 'connection'] as const).map((k) => ({
+    // 이 소유주에게 실제로 있는 종류만 칩으로 — 0건 칩은 고를 이유가 없다
+    ...OWNER_ALERT_KINDS.filter((k) => scoped.some((a) => a.kind === k)).map((k) => ({
       value: k,
       label: OWNER_ALERT_KIND_LABEL[k],
       count: scoped.filter((a) => a.kind === k).length,

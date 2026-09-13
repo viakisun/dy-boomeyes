@@ -361,14 +361,15 @@ function ownerTelemetry(unit: number, offline: boolean, voltage: number | null):
     runHours: 1200 + unit * 7,
   };
 }
-/** 오늘 운전자 — 소유주 소속이고 배정이 매일 바뀐다(FR-027). 명단은 P8에서 화면이 된다. */
-const DRIVER_ROSTER = [
-  { id: 'DRV-001', name: '김운전', phone: '010-0000-0001' },
-  { id: 'DRV-002', name: '이운전', phone: '010-0000-0002' },
-  { id: 'DRV-003', name: '박운전', phone: '010-0000-0003' },
-  { id: 'DRV-004', name: '최운전', phone: '010-0000-0004' },
-  { id: 'DRV-005', name: '정운전', phone: '010-0000-0005' },
-  { id: 'DRV-006', name: '조운전', phone: '010-0000-0006' },
+/** 소속 운전자 — 오늘 배정은 매일 바뀐다(FR-027). 명단·서류·알림이 모두 이 한 벌을 읽는다:
+ *  자격 만료를 두 곳에서 정하면 명단과 알림이 다른 날을 말한다. */
+export const DRIVER_ROSTER = [
+  { id: 'DRV-001', name: '김운전', license: '건설기계조종사 1종', licenseTo: '2027-04-30', phone: '010-0000-0001' },
+  { id: 'DRV-002', name: '이운전', license: '건설기계조종사 1종', licenseTo: '2026-10-12', phone: '010-0000-0002' },
+  { id: 'DRV-003', name: '박운전', license: '건설기계조종사 1종', licenseTo: '2027-02-08', phone: '010-0000-0003' },
+  { id: 'DRV-004', name: '최운전', license: '건설기계조종사 1종', licenseTo: '2026-07-25', phone: '010-0000-0004' },
+  { id: 'DRV-005', name: '정운전', license: '건설기계조종사 1종', licenseTo: '2027-09-01', phone: '010-0000-0005' },
+  { id: 'DRV-006', name: '조운전', license: '건설기계조종사 1종', licenseTo: '2027-11-19', phone: '010-0000-0006' },
 ] as const;
 /** 설치일 = 계약 시작 + 2일(페르소나 06-01 → 06-03 유지) */
 function installedOn(from: string) {

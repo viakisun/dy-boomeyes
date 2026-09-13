@@ -3,6 +3,7 @@ import {
   ownerCandidates,
   OWNER_DOC_KINDS,
   OWNER_REQUEST_STATES,
+  ownerFleetState,
   ownerMatches,
   ownerStrip,
   ownerSummary,
@@ -50,7 +51,8 @@ describe('[FR-024] 소유주 자료 경계', () => {
     expect(sa.documents.length).toBeGreaterThan(0);
     expect(sa.documents.every((doc) => idsA.has(doc.deviceId))).toBe(true);
     expect(new Set(sb.documents.map((doc) => doc.deviceId))).toEqual(new Set(['CPB-101']));
-    expect(sb.alerts.map((a) => a.id)).toEqual(['CPB-101-FAULT']);
+    expect(sb.alerts.every((a) => a.deviceId === 'CPB-101')).toBe(true);
+    expect(sb.alerts.map((a) => a.id)).toContain('CPB-101-FAULT');
     // 새 축도 같은 경계를 지나야 한다 — 계약 요청·운전자 명단은 이름·연락처를 담는다.
     // 양쪽에 자료가 있어야 「데이터가 없어 통과」하지 않는다(시드에 OWN-002 몫을 둔다).
     expect(sa.requests.length).toBeGreaterThan(0);
@@ -98,16 +100,16 @@ describe('[FR-024] 소유주 자료 경계', () => {
 });
 
 describe('[FR-025] 배치·이상·정보 시각의 독립성', () => {
-  it('120=103+17+0, 확인은 6대/6건이며 보관은 이상으로 더하지 않는다', async () => {
+  it('120=103+17+0, 확인 필요는 장비 상태에서 나오며 보관은 이상으로 더하지 않는다', async () => {
     const s = await make().snapshot();
-    expect(ownerSummary(s.devices, s.alerts)).toEqual({
-      total: 120,
-      deployed: 103,
-      stored: 17,
-      unknown: 0,
-      attention: 6,
-      alerts: 6,
-    });
+    const summary = ownerSummary(s.devices, s.alerts);
+    expect(summary).toMatchObject({ total: 120, deployed: 103, stored: 17, unknown: 0, attention: 6 });
+    // 확인 필요 = 고장·점검·지연인 장비 수. 종 패널이 담는 종류(계약·소모품·자격)가 늘어도 이 수는 그대로다
+    expect(summary.attention).toBe(
+      s.devices.filter((d) => ['fault', 'inspection', 'stale'].includes(ownerFleetState(d))).length,
+    );
+    expect(summary.alerts).toBe(s.alerts.length);
+    expect(summary.alerts).toBeGreaterThan(summary.attention);
     expect(ownerStrip(s.devices)).toEqual({
       total: 120,
       running: 97,
@@ -127,14 +129,11 @@ describe('[FR-025] 배치·이상·정보 시각의 독립성', () => {
   });
   it('중복 알림과 한 호기의 여러 이상을 장비 대수에 중복 합산하지 않는다', async () => {
     const s = await make(A, 'boundaries').snapshot();
-    expect(ownerSummary(s.devices, [...s.alerts, ...s.alerts])).toEqual({
-      total: 120,
-      deployed: 102,
-      stored: 17,
-      unknown: 1,
-      attention: 6,
-      alerts: 7,
-    });
+    const once = ownerSummary(s.devices, s.alerts);
+    // 같은 알림이 두 번 들어와도 집계는 그대로다(실시간 도착분과 다시 읽은 목록이 겹칠 수 있다)
+    expect(ownerSummary(s.devices, [...s.alerts, ...s.alerts])).toEqual(once);
+    expect(once).toMatchObject({ total: 120, deployed: 102, stored: 17, unknown: 1, attention: 6 });
+    expect(once.alerts).toBe(s.alerts.length);
     expect(s.devices[0]!).toMatchObject({
       location: null,
       voltage: null,
@@ -345,7 +344,7 @@ describe('[FR-025] 배치·이상·정보 시각의 독립성', () => {
     const api = make();
     await api.markRead('CPB-002-FAULT');
     const s = await api.snapshot();
-    expect(s.alerts[0]!.read).toBe(true);
+    expect(s.alerts.find((a) => a.id === 'CPB-002-FAULT')!.read).toBe(true);
     expect(s.devices[1]!.fault).toBe('공급 전압 저하');
     expect(ownerSummary(s.devices, s.alerts).attention).toBe(6);
   });

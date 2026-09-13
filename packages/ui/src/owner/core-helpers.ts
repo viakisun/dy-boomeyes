@@ -58,8 +58,20 @@ export function listReturn(url: URL) {
 import TriangleAlert from '@lucide/svelte/icons/triangle-alert';
 import ClipboardCheck from '@lucide/svelte/icons/clipboard-check';
 import Radio from '@lucide/svelte/icons/radio';
+import UserRoundSearch from '@lucide/svelte/icons/user-round-search';
+import Wrench from '@lucide/svelte/icons/wrench';
+import CalendarClock from '@lucide/svelte/icons/calendar-clock';
+import IdCard from '@lucide/svelte/icons/id-card';
 /** 알림 종류 → 아이콘(lucide) — AlertCard · 알림 상세 헤더 */
-export const OWNER_ALERT_ICON = { fault: TriangleAlert, inspection: ClipboardCheck, connection: Radio } as const;
+export const OWNER_ALERT_ICON = {
+  fault: TriangleAlert,
+  inspection: ClipboardCheck,
+  connection: Radio,
+  ai: UserRoundSearch,
+  part: Wrench,
+  lease: CalendarClock,
+  license: IdCard,
+} as const;
 /** 장비의 대표 스틸 — 수신 중인 카메라 poster가 있을 때만(없으면 IconTile) */
 export const devicePoster = (cameras: { deviceId: string; available: boolean; poster: string }[], deviceId: string) =>
   cameras.find((c) => c.deviceId === deviceId && c.available)?.poster ?? null;

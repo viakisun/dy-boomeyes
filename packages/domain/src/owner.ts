@@ -171,10 +171,14 @@ export interface OwnerDriver {
   /** 오늘 배정된 호기 id. 없으면 null */
   assignedTo: string | null;
 }
+/** 종 패널이 담는 것 — 고장 · 수신 지연 · 점검 · AI 경고 · 소모품 한계 · 계약 종료 임박 ·
+ *  운전자 자격 만료(시안 «결정 2026-09-12» · FR-011 · FR-027). 모두 호기에 붙는다. */
+export const OWNER_ALERT_KINDS = ['fault', 'inspection', 'connection', 'ai', 'part', 'lease', 'license'] as const;
+export type OwnerAlertKind = (typeof OWNER_ALERT_KINDS)[number];
 export interface OwnerAlert {
   id: string;
   deviceId: string;
-  kind: 'fault' | 'inspection' | 'connection';
+  kind: OwnerAlertKind;
   title: string;
   detail: string;
   at: string;
@@ -317,7 +321,9 @@ export function ownerSummary(devices: readonly OwnerDevice[], alerts: readonly O
     deployed: count('deployed'),
     stored: count('stored'),
     unknown: count('unknown'),
-    attention: new Set(unique.map((a) => a.deviceId)).size,
+    // 「확인이 필요한 장비」는 장비의 상태다(고장·점검·지연) — 알림 종류가 늘었다고 늘지 않는다.
+    // 종 패널은 계약 종료·소모품·자격 만료까지 담지만 그것은 장비가 「확인 필요」라는 뜻이 아니다.
+    attention: devices.filter((d) => ownerStateHit(d, 'attention')).length,
     alerts: unique.length,
   };
 }

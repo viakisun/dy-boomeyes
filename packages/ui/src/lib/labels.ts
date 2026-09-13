@@ -170,7 +170,15 @@ export const PART_EVENT_LABEL: Record<PartEvent['kind'], string> = {
   discard: '폐기',
 };
 /** 소유주 알림 종류 */
-export const OWNER_ALERT_KIND_LABEL = { fault: '장비 이상', inspection: '부품 점검', connection: '수신 지연' } as const;
+export const OWNER_ALERT_KIND_LABEL = {
+  fault: '장비 이상',
+  inspection: '부품 점검',
+  connection: '수신 지연',
+  ai: 'AI 경고',
+  part: '소모품 한계',
+  lease: '계약 종료 임박',
+  license: '자격 만료 임박',
+} as const;
 /** 소유주 서류 파일 종류 */
 export const OWNER_DOC_TYPE_LABEL = {
   'application/pdf': 'PDF',
