@@ -34,9 +34,29 @@ const views = ownerViews(ROOT, registry);
 const CASES = [
   { id: 'empty-fleet', view: 'fleet', state: 'empty', frames: ['empty'], ac: ['AC-O14'] },
   { id: 'read-retry', view: 'fleet', state: 'error', frames: ['failed', 'recovered'], ac: ['AC-O14'] },
-  { id: 'missing-detail', view: 'detail', state: 'boundaries', frames: ['missing'], ac: ['AC-O05', 'AC-O14'] },
-  { id: 'stale-detail', view: 'detail', device: 'CPB-004', frames: ['stale'], ac: ['AC-O05'] },
-  { id: 'detached-detail', view: 'detail', device: 'CPB-005', frames: ['detached'], ac: ['AC-O05'] },
+  // 호기 화면은 현황의 호기 단계 하나다(2026-09-14) — 현장과 호기는 짝이어야 열린다
+  {
+    id: 'missing-unit',
+    view: 'overview',
+    state: 'boundaries',
+    query: { site: 'SITE-MAPO', device: 'CPB-001' },
+    frames: ['missing'],
+    ac: ['AC-O05', 'AC-O14'],
+  },
+  {
+    id: 'stale-unit',
+    view: 'overview',
+    query: { site: 'SITE-DAEJEON', device: 'CPB-004' },
+    frames: ['stale'],
+    ac: ['AC-O05'],
+  },
+  {
+    id: 'detached-unit',
+    view: 'overview',
+    query: { site: 'SITE-YONGIN', device: 'CPB-005' },
+    frames: ['detached'],
+    ac: ['AC-O05'],
+  },
   {
     id: 'multiple-alerts',
     view: 'alerts',
@@ -45,7 +65,13 @@ const CASES = [
     frames: ['multiple'],
     ac: ['AC-O06', 'AC-O07'],
   },
-  { id: 'offline-detail', view: 'detail', device: 'CPB-004', frames: ['offline'], ac: ['AC-O05', 'AC-O14'] },
+  {
+    id: 'offline-unit',
+    view: 'overview',
+    query: { site: 'SITE-DAEJEON', device: 'CPB-004' },
+    frames: ['offline'],
+    ac: ['AC-O05', 'AC-O14'],
+  },
   { id: 'pdf-preview', view: 'documents', query: { device: 'CPB-001' }, frames: ['dialog'], ac: ['AC-O10', 'AC-O11'] },
   {
     id: 'foreign-document',
@@ -322,7 +348,7 @@ try {
       const expectedConsole = (record) =>
         intentional(record.location.url) ||
         injected.some((entry) => record.text.includes(entry.url)) ||
-        (scenario.id === 'offline-detail' && record.text.includes('ERR_INTERNET_DISCONNECTED'));
+        (scenario.id === 'offline-unit' && record.text.includes('ERR_INTERNET_DISCONNECTED'));
       return {
         expectedConsoleErrors: consoleErrors.filter(expectedConsole),
         unexpectedConsoleErrors: consoleErrors.filter(
@@ -332,13 +358,13 @@ try {
           (record) =>
             intentional(record.url) ||
             record.error?.includes('ERR_ABORTED') ||
-            (scenario.id === 'offline-detail' && record.error?.includes('ERR_INTERNET_DISCONNECTED')),
+            (scenario.id === 'offline-unit' && record.error?.includes('ERR_INTERNET_DISCONNECTED')),
         ),
         unexpectedRequestFailures: failedRequests.filter(
           (record) =>
             !intentional(record.url) &&
             !record.error?.includes('ERR_ABORTED') &&
-            !(scenario.id === 'offline-detail' && record.error?.includes('ERR_INTERNET_DISCONNECTED')),
+            !(scenario.id === 'offline-unit' && record.error?.includes('ERR_INTERNET_DISCONNECTED')),
         ),
       };
     };
@@ -459,32 +485,30 @@ try {
         await host.getByRole('button', { name: '다시 시도', exact: true }).click();
         await expect(host.locator('[data-device]')).toHaveCount(120);
         await capture('recovered', { full: true });
-      } else if (scenario.id === 'missing-detail') {
-        for (const text of ['미연동', '계약 정보 미등록', '담당자 미등록', '배치 미확인'])
-          await expect(host).toContainText(text);
-        await expect(host).not.toContainText('0 V');
+      } else if (scenario.id === 'missing-unit') {
+        for (const text of ['미연동', '계약 정보 미등록', '배치 미확인']) await expect(host).toContainText(text);
+        // 값이 없을 때 0으로 보이지 말 것 — 「380 V」의 끝자리에 걸리지 않게 경계를 준다
+        await expect(host).not.toContainText(/\b0 V/);
         await capture('missing', { focus: host.getByRole('region', { name: '장비 상태', exact: true }), full: true });
-      } else if (
-        scenario.id === 'stale-detail' ||
-        scenario.id === 'detached-detail' ||
-        scenario.id === 'offline-detail'
-      ) {
+      } else if (scenario.id === 'stale-unit' || scenario.id === 'detached-unit' || scenario.id === 'offline-unit') {
         const status = host.getByRole('region', { name: '장비 상태', exact: true });
-        if (scenario.id === 'detached-detail') {
+        if (scenario.id === 'detached-unit') {
           await expect(status).toContainText('단말기 미장착');
           await expect(status).toContainText('수신 기록 없음');
-          await expect(status).not.toContainText('0 V');
+          await expect(status).not.toContainText(/\b0 V/);
           await capture('detached', { focus: status, full: true });
         } else {
           for (const text of ['수신 지연', '마지막 수신값', '380']) await expect(status).toContainText(text);
           await expect(status).toContainText(/마지막 수신.*0?8:22/);
-          if (scenario.id === 'offline-detail') {
-            const before = await status.innerText();
+          if (scenario.id === 'offline-unit') {
+            // 오프라인 전후가 같은지는 같은 방식으로 읽어 견준다(KeyValueList의 dt/dd 줄바꿈)
+            const read = () => status.innerText();
+            const before = await read();
             await context.setOffline(true);
             await expect(
               page.getByRole('status').filter({ hasText: '오프라인 · 마지막으로 불러온 화면입니다.' }),
             ).toBeVisible();
-            await expect(status).toHaveText(before);
+            await expect.poll(read).toBe(before);
             await capture('offline', { focus: status, full: true });
             await context.setOffline(false);
           } else await capture('stale', { focus: status, full: true });

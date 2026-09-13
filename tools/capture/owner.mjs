@@ -275,8 +275,8 @@ try {
       check((await page.locator('html').getAttribute('data-theme')) === row.theme, 'Theme mismatch');
       if (await page.locator('.be-map').count()) {
         const map = page.locator('.be-map');
-        // 준비 표식은 카메라 이동마다 다시 세워진다 — 단계 속성까지 같이 기다린다(현황 nation/site/unit · 상세 unit)
-        const mapLevel = row.level ?? (row.view === 'detail' ? 'unit' : null);
+        // 준비 표식은 카메라 이동마다 다시 세워진다 — 단계 속성까지 같이 기다린다(현황 nation/site)
+        const mapLevel = row.level ?? null;
         await page
           .locator(mapLevel ? `[data-map-ready][data-map-level="${mapLevel}"]` : '[data-map-ready]')
           .waitFor({ timeout: 20_000 });
@@ -292,8 +292,8 @@ try {
           };
         });
         check(result.map.width >= 200 && result.map.height >= 200, 'Map has no usable visible area');
-        // 상세 1 · 전국은 보유 현장 전부가 원 하나씩(수는 화면이 알려 준다) · 현장·호기 단계는 마포 호기 5
-        const expectedMarkers = row.view === 'detail' ? 1 : row.level === 'nation' ? result.map.sites : 5;
+        // 전국은 보유 현장 전부가 원 하나씩(수는 화면이 알려 준다) · 현장 단계는 마포 호기 5
+        const expectedMarkers = row.level === 'nation' ? result.map.sites : 5;
         check(
           row.level !== 'nation' || (result.map.mode === 'sites' && expectedMarkers > 0),
           `Nation map must draw one circle per site (mode ${result.map.mode} · sites ${result.map.sites})`,

@@ -25,9 +25,8 @@ SIZES = {"web": [(1280, 842), (1024, 842), (768, 842), (390, 800)],
 # 검토안 확대 페이지: 첫 화면 아래 내용 4 + 드릴다운 현장·호기 단계 3(웹 현장·웹 호기·폰 호기)
 # 첫 화면 아래로 밀리는 내용과 주소로만 닿는 단계 — 검토안이 이것들을 확대해 싣는지 본다.
 # build-review.py의 SUPPLEMENTS와 짝이다(한쪽만 고치면 여기서 걸린다).
-EXPECTED_SUPPLEMENTS = {("web", "video", None), ("web", "documents", None), ("pwa", "detail", None), ("pwa", "documents", None),
-                        ("web", "overview", "site"), ("web", "overview", "unit"), ("pwa", "overview", "unit"),
-                        ("web", "requests", "assign")}
+EXPECTED_SUPPLEMENTS = {("web", "video", None), ("web", "documents", None), ("pwa", "documents", None),
+                        ("web", "overview", "unit"), ("web", "requests", "assign")}
 
 
 def sha256(path):
@@ -158,20 +157,29 @@ def check_review(repo, manifest_path, directory, require_visual=False):
             raise ValueError(f"Review source mismatch: {key}")
     if record.get("customerReview") != "not-performed":
         raise ValueError("Generated draft cannot claim actual customer acceptance")
-    chosen = {(row["view"], row["app"]) for row in record.get("screens", [])}
-    expected = {(row["view"], app) for row in views for app in SIZES}
-    if chosen != expected or len(record.get("screens", [])) != len(expected):
+    # 본문 장면은 (화면 목적, 주소 단계) 쌍이다 — 운영 현황의 현장·호기가 본문에서 빠지지 않게 한다.
+    # 단계 목록은 ssot/meta.yaml owner_demo_levels가 정한다(생성기와 같은 원천, 여기서 다시 적지 않는다).
+    body = {(row["view"], row.get("level")) for row in record.get("screens", [])}
+    extras_early = record.get("supplements", [])
+    covered = body | {(e.get("view"), e.get("level")) for e in extras_early}
+    required = {(view["view"], level) for view in views for level in owner_levels(repo, view["view"])}
+    missing = required - covered
+    if missing:
+        raise ValueError(f"Review omits registered screen levels: {sorted(map(str, missing))}")
+    if {(v, app) for v, _ in body for app in SIZES} != {(row["view"], app) for row in views for app in SIZES}:
         raise ValueError(f"Review must contain exactly {len(views)} views for both apps")
+    if len(record.get("screens", [])) != len(body) * len(SIZES):
+        raise ValueError("Review must contain every body scene for both apps")
     capture_shots = {row["key"]: row for row in capture["shots"]}
     for row in record["screens"]:
         source = capture_shots.get(row.get("captureKey"))
-        if not source or any(source.get(key) != row.get(key) for key in ["view", "app", "sha256"]):
+        if not source or any(source.get(key) != row.get(key) for key in ["view", "level", "app", "sha256"]):
             raise ValueError("Review screen is not linked to its actual capture")
         if row.get("file") != f"screens/{source['file']}":
             raise ValueError("Review screen file disagrees with its actual capture")
         if sha256(contained_file(directory, row["file"])) != source["sha256"]:
             raise ValueError("Review image was changed after the browser capture")
-    extras = record.get("supplements", [])
+    extras = extras_early
     if {(e.get("app"), e.get("view"), e.get("level")) for e in extras} != EXPECTED_SUPPLEMENTS or len(extras) != len(EXPECTED_SUPPLEMENTS):
         raise ValueError("Review must expand all below-fold tasks and the drilldown levels")
     for extra in extras:
@@ -210,7 +218,7 @@ def check_review(repo, manifest_path, directory, require_visual=False):
     if len(images) != len(record["screens"]) + len(extras) or set(images) != {row["file"] for row in record["screens"] + extras}:
         raise ValueError("Review HTML does not contain every selected actual screen")
     script = (directory / "five-minute-demo.md").read_text()
-    if script.count("**고객의 질문:**") != len(views) or "5:00" not in script:
+    if script.count("**고객의 질문:**") != len(body) or "5:00" not in script:
         raise ValueError("Five-minute script omits scenes or its final time")
     visual_path = directory / "visual-review.json"
     visual = json.loads(visual_path.read_text()) if visual_path.exists() else None

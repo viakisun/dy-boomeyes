@@ -68,7 +68,7 @@ const report = {
     warmups: 5,
     measured: 20,
     searchFilterBudgetMs: 300,
-    detailBudgetMs: 1000,
+    unitBudgetMs: 1000,
     measurement: 'Browser input/change/click event to matching DOM plus next animation frame',
     networkExcluded: 'External map tiles and real device/media transport',
     sort: 'No sort UI exists; search and deployment-filter measured separately',
@@ -89,8 +89,9 @@ async function arm(page, selector, event, expected) {
       const matches = () => {
         if (expected.kind === 'fleet')
           return document.querySelectorAll('[data-owner-view="fleet"] [data-device]').length === expected.count;
-        const detail = document.querySelector('[data-owner-view="detail"]');
-        return detail?.textContent.includes('CPB-001') && detail.textContent.includes('김현장');
+        // 호기 화면은 현황의 호기 단계다(2026-09-14) — 목록에서 눌러도 여기가 열린다
+        const unit = document.querySelector('[data-owner-view="overview"] [data-device="CPB-001"]');
+        return unit?.textContent.includes('CPB-001') && unit.textContent.includes('김현장');
       };
       const finish = () => {
         if (state.started === null || state.elapsed !== null || !matches()) return;
@@ -140,8 +141,8 @@ try {
       dataset: 'large',
       pageErrors: [],
       failedRequests: [],
-      warmups: { search: [], filter: [], detail: [] },
-      samples: { search: [], filter: [], detail: [] },
+      warmups: { search: [], filter: [], unit: [] },
+      samples: { search: [], filter: [], unit: [] },
       summary: {},
       status: 'running',
     };
@@ -199,18 +200,18 @@ try {
       await search.fill('CPB-001');
       await expect(rows).toHaveCount(1);
       for (let i = 0; i < 25; i++) {
-        await arm(page, '[data-device="CPB-001"]', 'click', { kind: 'detail' });
+        await arm(page, '[data-device="CPB-001"]', 'click', { kind: 'unit' });
         await rows.click();
         const ms = await elapsed(page);
-        (i < 5 ? result.warmups.detail : result.samples.detail).push(ms);
-        await page.getByRole('link', { name: '장비 목록으로', exact: true }).click();
+        (i < 5 ? result.warmups.unit : result.samples.unit).push(ms);
+        await page.getByRole('link', { name: '보유 장비 목록으로', exact: true }).click();
         await expect(rows).toHaveCount(1);
         await expect(search).toHaveValue('CPB-001');
       }
       result.summary = {
         search: summarize(result.samples.search, 300),
         filter: summarize(result.samples.filter, 300),
-        detail: summarize(result.samples.detail, 1000),
+        unit: summarize(result.samples.unit, 1000),
       };
       const localFailures = result.failedRequests.filter(
         (r) => r.url.startsWith(settings.base) && !r.reason?.includes('ERR_ABORTED'),
@@ -222,7 +223,7 @@ try {
           ? 'passed'
           : 'failed';
       console.log(
-        `${app}: search p95 ${result.summary.search.p95.toFixed(1)}ms · filter p95 ${result.summary.filter.p95.toFixed(1)}ms · detail p95 ${result.summary.detail.p95.toFixed(1)}ms · ${result.status}`,
+        `${app}: search p95 ${result.summary.search.p95.toFixed(1)}ms · filter p95 ${result.summary.filter.p95.toFixed(1)}ms · unit p95 ${result.summary.unit.p95.toFixed(1)}ms · ${result.status}`,
       );
     } catch (error) {
       result.status = 'failed';

@@ -32,17 +32,20 @@ SPEC.loader.exec_module(CHECK)
 
 # Narrative templates, not a screen catalog: inventory, order, labels, questions,
 # routes and references are always read from owner_demo and capture evidence.
+# 키는 화면 목적이거나 (목적, 단계)다 — 운영 현황은 드릴다운 세 단계가 각각 본문 한 쪽을 갖는다
+# (시안의 흐름이 전국 → 현장 → 호기 한 줄기이므로 확대 페이지에 묻어 두지 않는다).
 NARRATION = {
     "entry": (15, "아이디와 비밀번호로 로그인합니다.", "시연에서는 데모 계정으로 로그인을 눌러 소유주 계정으로 들어갑니다."),
-    "overview": (45, "전국 지도에서 현장을 고르고, 현장의 호기를 눌러 영상과 정보를 봅니다.", "상태 띠로 가동·고장·점검·지연·보관 대수를 읽고, 현장마다 놓인 원(원 안의 수가 그 현장의 대수)을 누르면 현장 지도와 호기 목록, 호기를 누르면 실시간 영상·계약·담당자·전압·서류가 왼쪽 카드에 옵니다. 보관 중이라는 표시만으로 투입 가능 여부를 판단하지 않습니다."),
+    ("overview", "nation"): (25, "전국 지도에서 확인이 필요한 현장을 고릅니다.", "상태 띠로 가동·고장·점검·지연·보관 대수를 읽고, 현장마다 놓인 원(원 안의 수가 그 현장의 대수)을 봅니다. 왼쪽 카드는 확인이 필요한 현장부터 보이고 「전체 N개 현장」으로 펼칩니다."),
+    ("overview", "site"): (25, "현장 지도에서 호기의 위치와 상태를 봅니다.", "현장으로 들어가면 지도는 그 현장 배율이 되고 핀은 호기 한 대씩입니다. 왼쪽 카드에 건설사·임대 기간·현장 담당자와 투입 호기 목록이 옵니다."),
+    ("overview", "unit"): (35, "호기를 눌러 카메라 여섯 화면과 호기 정보를 봅니다.", "호기 화면은 하나입니다 — 지도·목록·알림·운전자 어디서 들어와도 같은 화면이 열립니다. 지도 자리를 카메라 6분할이 대신하고, 왼쪽 카드에 오늘 운전자·AI 경고·계약·담당자·지표·마지막 수신값·이상 이력·차량 서류·현장 영상이 이어집니다. 보관 중이라는 표시만으로 투입 가능 여부를 판단하지 않습니다."),
     "fleet": (40, "호기 또는 현장명으로 검색하고 장비를 선택합니다.", "이상이 있는 장비뿐 아니라 정상 장비와 보관 장비도 같은 목록에서 찾습니다. 표 위 오른쪽 요약(투입·고장·점검·수신 지연·보관)의 수를 누르면 그만큼만 남고, 현장 칸의 둘째 줄에서 지역과 건설사를 함께 읽습니다."),
     "requests": (40, "현장이 보낸 투입 요청을 열고 후보 호기를 배정합니다.", "소유주의 판단은 «이 기간에 낼 수 있는 장비가 있나» 하나입니다. 후보는 보관 중이거나 요청 시작 전에 계약이 끝나는 호기에서 나오고, 필요 대수를 채워야 배정을 확정합니다. 확정하면 그 호기의 계약 기간이 채워집니다."),
     "drivers": (25, "소속 운전자와 오늘 배정을 확인합니다.", "배정은 매일 바뀝니다. 오늘 어느 호기에 누가 올라가는지, 자격 만료가 임박한 사람이 있는지 한 화면에서 봅니다."),
     "driver-docs": (20, "운전자 서류 네 종의 만료와 미비를 확인합니다.", "서류는 두 갈래입니다. 차량 서류는 호기에, 자격 서류는 사람에 속합니다. 없는 서류는 빈칸이 아니라 미비로 드러납니다."),
-    "detail": (40, "계약 기간, 현장 담당자, 마지막 수신 시각을 확인합니다.", "선택한 호기를 기준으로 계약과 연락처를 확인합니다. 수신이 지연된 값은 현재 상태와 구분해서 읽고, 필요한 서류나 영상으로 이동합니다."),
     "video": (30, "타설 위치와 마스트 설치를 선택하고 가동일 저장을 재생합니다.", "영상의 용도와 시점을 따로 선택합니다. 화면의 시연 표시는 6초 샘플임을 뜻하며, 저장 영상은 끝에서 멈춥니다."),
     "documents": (25, "선택한 호기의 제작증과 검사 성적서 원문을 엽니다.", "문서 안의 장비 번호와 화면의 호기가 같은지 확인합니다. 시연 파일은 내용을 미리 본 뒤 첨부하며, 새로고침하거나 로그아웃하면 초기화됩니다."),
-    "alerts": (20, "알림의 대상 호기를 확인한 뒤 장비 상세에서 연락 정보를 봅니다.", "알림을 읽었다는 표시와 장비 문제가 해소됐다는 판단을 구분합니다. 대상 장비와 현장 연락처를 확인하는 흐름을 마칩니다."),
+    "alerts": (20, "알림의 대상 호기를 확인한 뒤 호기 화면에서 연락 정보를 봅니다.", "알림을 읽었다는 표시와 장비 문제가 해소됐다는 판단을 구분합니다. 대상 장비와 현장 연락처를 확인하는 흐름을 마칩니다."),
 }
 ASSUMPTIONS = [
     "이 문서는 내부 검토용 초안입니다. 고객 확인은 아직 진행하지 않았습니다.",
@@ -66,20 +69,40 @@ def find_font(explicit):
     raise ValueError("A Korean TTF font is required; pass --font /path/to/font.ttf")
 
 
-def context(views, capture):
-    shots = {(row["view"], row["app"], row["width"], row["height"], row["theme"]): row for row in capture["shots"] if row.get("level") in (None, "nation")}
+# 단계가 있는 화면 목적은 단계마다 본문 한 쪽을 갖는다 — 라벨 뒤에 붙일 이름(없으면 목적 라벨 그대로)
+LEVEL_LABEL = {"nation": "전국", "site": "현장", "unit": "호기"}
+
+
+def context(repo, views, capture):
+    """본문 장면 = (화면 목적, 주소 단계) 쌍. 단계 목록은 ssot/meta.yaml owner_demo_levels가 정한다.
+
+    운영 현황의 현장·호기를 확대 페이지에만 두면 문서만 보는 사람에게는 드릴다운이 없는 것처럼
+    읽힌다(2026-09-14 사용자 지적) — 시안의 흐름 그대로 한 줄기로 편다.
+    """
+    shots = {(row["view"], row.get("level"), row["app"], row["width"], row["height"], row["theme"]): row for row in capture["shots"]}
+    steps = []
+    for view in views:
+        levels = CHECK.owner_levels(repo, view["view"])
+        # 본문에 펼치는 것은 해설이 있는 단계뿐이다 — 나머지는 지금처럼 확대 페이지가 맡는다
+        expanded = [lv for lv in levels if (view["view"], lv) in NARRATION]
+        for level in (expanded or [levels[0]]):
+            steps.append((view, level))
     result = []
     elapsed = 0
-    for index, view in enumerate(views):
-        if view["view"] not in NARRATION:
-            raise ValueError(f"Narration template is missing for source view: {view['view']}")
-        seconds, action, talk = NARRATION[view["view"]]
-        next_view = views[index + 1] if index + 1 < len(views) else next(v for v in views if v["view"] == "fleet")
-        result.append({**view, "number": index + 1, "action": action, "talk": talk,
-                       "next": f"다음 화면: {next_view['label']}", "seconds": seconds,
+    for index, (view, level) in enumerate(steps):
+        key = (view["view"], level) if (view["view"], level) in NARRATION else view["view"]
+        if key not in NARRATION:
+            raise ValueError(f"Narration template is missing for source view: {key}")
+        seconds, action, talk = NARRATION[key]
+        label = f"{view['label']} — {LEVEL_LABEL[level]}" if isinstance(key, tuple) else view["label"]
+        next_step = steps[index + 1] if index + 1 < len(steps) else next(st for st in steps if st[0]["view"] == "fleet")
+        next_label = (f"{next_step[0]['label']} — {LEVEL_LABEL[next_step[1]]}"
+                      if (next_step[0]["view"], next_step[1]) in NARRATION else next_step[0]["label"])
+        result.append({**view, "level": level, "label": label, "number": index + 1, "action": action, "talk": talk,
+                       "next": f"다음 화면: {next_label}", "seconds": seconds,
                        "start": elapsed, "end": elapsed + seconds,
-                       "web_shot": shots[(view["view"], "web", 1280, 842, "light")],
-                       "pwa_shot": shots[(view["view"], "pwa", 390, 800, "light")]})
+                       "web_shot": shots[(view["view"], level, "web", 1280, 842, "light")],
+                       "pwa_shot": shots[(view["view"], level, "pwa", 390, 800, "light")]})
         elapsed += seconds
     if elapsed != 300: raise ValueError("Source narration must total exactly five minutes")
     return result
@@ -137,12 +160,11 @@ SUPPLEMENTS = [
     ("web", "video", None, "영상의 재생과 시간 조작", (76, 150, 1264, 1080), False),
     # 목록 첫 행(y≈316) 바로 위에서 자른다 — 중간에서 자르면 맨 윗줄이 반만 남는다
     ("web", "documents", None, "1호기 제작증 원문", (76, 300, 1264, 1560), True),
-    ("pwa", "detail", None, "휴대폰에서 계약과 현장 담당자 확인", (20, 620, 370, 1140), True),
     ("pwa", "documents", None, "휴대폰에서 제작증 원문 열람", (20, 490, 370, 1180), True),
-    ("web", "overview", "site", "현장 단계 — 마포 주상복합 신축의 호기 5대", (56, 160, 1280, 842), False),
-    ("web", "overview", "unit", "호기 단계 — 카메라 6분할과 호기 정보", (56, 150, 1280, 660), False),
+    # 현장·호기 단계는 본문 장면이 됐다(2026-09-14) — 같은 그림을 뒤에서 한 번 더 싣지 않는다.
+    # 호기 화면의 왼쪽 카드는 첫 화면 아래로 길게 이어지므로 그 부분만 확대한다.
+    ("web", "overview", "unit", "호기 화면의 카드 — 계약·담당자·지표·이상 이력·서류", (76, 200, 460, 830), True),
     ("web", "requests", "assign", "계약 배정 — 요청과 후보 호기", (56, 90, 1280, 780), False),
-    ("pwa", "overview", "unit", "휴대폰 호기 단계 — 지도 위 시트에서 호기 영상", (20, 300, 370, 800), True),
 ]
 
 def supplement_images(output, directory, capture):
@@ -270,7 +292,7 @@ def main():
         if repo in output.parents and repo / "docs/design/evidence" not in output.parents:
             raise ValueError("Output inside the checkout must be under docs/design/evidence to preserve the capture source fingerprint")
         views, capture = CHECK.load_evidence(repo, manifest_path)
-        scenes = context(views, capture)
+        scenes = context(repo, views, capture)
         font = find_font(args.font)
         output.mkdir(parents=True)
         (output / "screens").mkdir()
@@ -279,7 +301,7 @@ def main():
             for app in ["web", "pwa"]:
                 shot = scene[f"{app}_shot"]
                 shutil.copyfile(manifest_path.parent / shot["file"], output / "screens" / shot["file"])
-                selected.append({"view": scene["view"], "app": app, "captureKey": shot["key"],
+                selected.append({"view": scene["view"], "level": scene["level"], "app": app, "captureKey": shot["key"],
                                  "file": f"screens/{shot['file']}", "sha256": shot["sha256"]})
         supplements = supplement_images(output, manifest_path.parent, capture)
         pages = pdf_document(output, scenes, capture, font, supplements)
