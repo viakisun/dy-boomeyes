@@ -23,12 +23,14 @@ export function ownerViews(root, screensSource) {
 }
 
 /**
- * 한 화면 목적이 주소로 갖는 단계 — 캡처와 증거 검사가 같은 곳에서 읽는다.
- * 두 도구가 따로 적어 두면 단계를 더할 때 한쪽만 늘어 「예상에 없는 캡처」로 갈라진다.
- * 첫 값은 기본 화면이다(키에 접미사가 붙지 않는다).
+ * 한 화면 목적이 주소로 갖는 단계 — 원천은 `ssot/meta.yaml`의 `owner_demo_levels`다.
+ * 캡처·증거 검사·검토안이 같은 곳을 읽는다(도구마다 적어 두면 한쪽만 늘어 증거가 갈라진다).
+ * 첫 값은 기본 화면이다(키에 접미사가 붙지 않는다). 적히지 않은 목적은 단계가 없다.
  */
-export const ownerLevels = (view) =>
-  view === 'overview' ? ['nation', 'site', 'unit'] : view === 'requests' ? [undefined, 'assign'] : [undefined];
+export function ownerLevels(root, view) {
+  const meta = parse(readFileSync(join(root, 'ssot/meta.yaml'), 'utf8'));
+  return (meta.owner_demo_levels ?? {})[view] ?? [null];
+}
 
 /** 캡처 키의 단계 접미사 — 기본 화면은 빈 문자열 */
 export const levelSuffix = (level) => (level && level !== 'nation' ? `-${level}` : '');

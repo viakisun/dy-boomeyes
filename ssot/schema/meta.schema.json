@@ -129,6 +129,17 @@
         "required": ["kind", "title", "version", "role"],
         "additionalProperties": false
       }
+    },
+    "owner_demo_levels": {
+      "type": "object",
+      "description": "한 화면 목적이 주소로 갖는 단계(첫 값이 기본 화면). 캡처·증거 검사·검토안이 이 한 곳을 읽는다.",
+      "additionalProperties": {
+        "type": "array",
+        "items": {
+          "type": ["string", "null"]
+        },
+        "minItems": 2
+      }
     }
   },
   "required": [

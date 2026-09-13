@@ -33,6 +33,17 @@
     ],
     "current_wave": 2,
     "owner_demo_wave": 4,
+    "owner_demo_levels": {
+      "overview": [
+        "nation",
+        "site",
+        "unit"
+      ],
+      "requests": [
+        null,
+        "assign"
+      ]
+    },
     "schedule": [
       {
         "milestone": "설계 합의 · DISC 확정",

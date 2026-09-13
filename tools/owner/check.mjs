@@ -31,7 +31,7 @@ if (value('--captures')) {
   };
   // 단계 목록은 tools/owner/views.mjs가 정한다 — 캡처 도구와 같은 원천을 읽는다
   const required = views.flatMap((v) =>
-    ownerLevels(v.view)
+    ownerLevels(ROOT, v.view)
       .map(levelSuffix)
       .flatMap((level) =>
         ['web', 'pwa'].flatMap((app) =>

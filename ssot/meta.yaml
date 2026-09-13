@@ -28,6 +28,17 @@ current_wave: 2
 # 소유주 데모가 구현된 웨이브 — tools/capture/owner*.mjs · tools/owner/check*.{mjs,py}가
 # owner_demo에서 「web·pwa 양쪽이 이 웨이브 이하」인 화면 목적만 고른다. 계약·운전자는 웨이브 5라 아직 밖이다.
 owner_demo_wave: 4
+# 화면 목적이 주소로 갖는 단계 — 첫 값이 기본 화면(캡처 키에 접미사가 붙지 않는다).
+# 캡처(tools/capture/owner.mjs)·증거 검사(tools/owner/check.mjs)·검토안(tools/owner/*.py)이
+# 이 한 곳을 읽는다. 세 곳에 따로 적어 두면 단계를 더할 때 한쪽만 늘어 증거가 갈라진다.
+owner_demo_levels:
+  overview:
+  - nation
+  - site
+  - unit
+  requests:
+  -
+  - assign
 schedule:
 - milestone: 설계 합의 · DISC 확정
   when: 2026-07 중

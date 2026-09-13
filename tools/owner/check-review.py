@@ -53,6 +53,12 @@ def contained_file(directory, name):
     return path
 
 
+def owner_levels(repo, view):
+    """화면 목적의 주소 단계 — 원천은 ssot/meta.yaml owner_demo_levels(캡처·검사와 같은 곳)."""
+    meta = yaml.safe_load((repo / "ssot/meta.yaml").read_text())
+    return (meta.get("owner_demo_levels") or {}).get(view, [None])
+
+
 def owner_views(repo, registry, screens):
     """구현된 소유주 화면 목적 — ssot/meta.yaml owner_demo_wave 이하인 것만.
 
@@ -80,8 +86,8 @@ def load_evidence(repo, manifest_path):
     for view in views:
         if not view.get("question") or not view.get("source_cells"):
             raise ValueError(f"Missing customer question or source cells: {view['view']}")
-        # 운영 현황은 드릴다운 3단계(전국 · 현장 · 호기)를 각각 캡처한다 — 총수는 아래 expected에서 파생
-        levels = ["nation", "site", "unit"] if view["view"] == "overview" else [None]
+        # 단계는 ssot/meta.yaml owner_demo_levels가 정한다 — 총수는 아래 expected에서 파생
+        levels = owner_levels(repo, view["view"])
         for app, sizes in SIZES.items():
             screen = screens.get(view.get(app))
             if not screen or "owner" not in screen["roles"]:
@@ -230,7 +236,7 @@ def self_test(repo):
         manifest = {**fingerprint(repo), "scope": "full", "status": "automated-capture-pass", "exitCode": 0,
                     "command": ["node", "tools/capture/owner.mjs"], "shots": []}
         for view in views:
-            levels = ["nation", "site", "unit"] if view["view"] == "overview" else [None]
+            levels = owner_levels(repo, view["view"])
             for app, sizes in SIZES.items():
                 screen = screens[view[app]]
                 for level in levels:

@@ -44,7 +44,7 @@ const all = views.flatMap((view) =>
     if (!screen || !screen.roles.includes('owner')) throw new Error(`Owner screen missing or wrong role: ${view[app]}`);
     // 단계 목록은 tools/owner/views.mjs가 정한다(증거 검사와 같은 원천) —
     // 화면 하나가 주소로 두 가지 일을 하면 한쪽만 찍힌 증거는 그 화면을 본 것이 아니다.
-    const levels = ownerLevels(view.view);
+    const levels = ownerLevels(ROOT, view.view);
     return levels.flatMap((level) =>
       sizes[app].flatMap(([width, height]) =>
         ['light', 'dark'].map((theme) => ({
