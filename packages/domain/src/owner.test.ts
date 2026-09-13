@@ -184,6 +184,7 @@ describe('[FR-026] 계약 — 후보와 배정', () => {
     id: 'REQ-001',
     ownerId: 'OWN-001',
     siteName: '성수 2공구',
+    region: '서울 성동구',
     builder: '대성건설',
     manager: { name: '윤안전', phone: '010-0000-0101' },
     from: '2026-08-01',

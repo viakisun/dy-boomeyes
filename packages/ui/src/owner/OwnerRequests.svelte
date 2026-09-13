@@ -127,7 +127,7 @@
           <div class="gap-stack-xs flex flex-col">
             <p class="text-code-sm text-fg-muted">{open.id} · {relativeLabel(open.receivedAt, data.at)} 접수</p>
             <h2 class="text-heading-lg">{open.siteName}</h2>
-            <p class="text-body-md text-fg-muted">{open.builder}</p>
+            <p class="text-body-md text-fg-muted">{open.region} · {open.builder}</p>
           </div>
           <dl class="gap-stack-xs gap-x-inline-md text-body-md grid grid-cols-[auto_1fr]">
             <dt class="text-fg-muted">요청 기간</dt>
@@ -286,7 +286,10 @@
           {:else if column.key === 'site'}
             <span class="gap-stack-xs flex flex-col">
               {request.siteName}
-              <span class="text-body-sm text-fg-muted">{request.builder} · {request.manager.name}</span>
+              <!-- 둘째 줄에 지역이 먼저다(시안) — 어디로 보내는 일인지가 누가 맡는지보다 먼저 읽힌다 -->
+              <span class="text-body-sm text-fg-muted"
+                >{request.region} · {request.builder} · {request.manager.name}</span
+              >
             </span>
           {:else if column.key === 'period'}
             {ownerDate(request.from)} – {ownerDate(request.to)}
@@ -313,7 +316,9 @@
                 <span class="text-heading-sm">{request.siteName}</span>
                 <StatusPill size="sm" tone={STATE_TONE[request.state]} label={OWNER_REQUEST_LABEL[request.state]} />
               </span>
-              <span class="text-body-sm text-fg-muted">{request.builder} · {request.manager.name}</span>
+              <span class="text-body-sm text-fg-muted"
+                >{request.region} · {request.builder} · {request.manager.name}</span
+              >
               <span class="text-body-md"
                 >{ownerDate(request.from)} – {ownerDate(request.to)} · <strong>{request.count}대</strong></span
               >

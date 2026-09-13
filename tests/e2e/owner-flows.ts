@@ -102,6 +102,8 @@ export function ownerFlows(app: OwnerApp) {
     const screen = page.locator('[data-owner-requests]');
     await expect(screen).toBeVisible();
     await expect(screen.locator('[data-request]')).toHaveCount(6);
+    // 현장 둘째 줄은 지역이 먼저다(시안) — 어디로 보내는 일인지가 누가 맡는지보다 먼저 읽힌다
+    await expect(screen).toContainText('서울 성동구 · 대성건설 · 윤안전');
     // 낼 수 있는 호기가 없는 요청 — 보유 기종이 32m뿐이라 40m 사양은 후보가 0이다
     await screen.locator('[data-request="REQ-006"]').click();
     await expect(page).toHaveURL(/request=REQ-006/);
@@ -225,8 +227,39 @@ export function ownerFlows(app: OwnerApp) {
     await expect(page).toHaveURL(/group=1/);
     const groups = fleet.locator('[data-fleet-group]');
     await expect(groups).toHaveCount(13);
+    // 묶음 제목이 현장 열을 대신한다 — 지역·건설사도 여기로 올라온다(행에서는 빠진 값이다)
     await expect(groups.first()).toContainText('대');
+    await expect(fleet.locator('[data-fleet-group="SITE-MAPO"]')).toContainText('서울 마포구');
     await expect(rows).toHaveCount(120);
+  });
+
+  // 시안의 보유 장비 표는 여섯 열이고 현장이 두 줄이다. 표 위 상태 요약은 이 화면의 필터를 건다.
+  test('[B1-02] [FR-025] [AC-O02] fleet table is six columns with a two-line site cell and a tally that filters', async ({
+    page,
+  }) => {
+    await startOwner(page, app);
+    await page.getByRole('navigation').getByRole('link', { name: '보유 장비', exact: true }).click();
+    const fleet = ownerHost(page, 'fleet');
+    const rows = fleet.locator('[data-device]');
+    if (app === 'web') {
+      // 건설사는 열이 아니라 현장 셀의 둘째 줄이다 — 같은 값을 두 칸에 두지 않는다
+      await expect(fleet.getByRole('columnheader')).toHaveCount(6);
+      await expect(fleet.getByRole('columnheader', { name: '건설사' })).toHaveCount(0);
+      await expect(fleet.locator('[data-device="CPB-001"]')).toContainText('서울 마포구 · 한빛건설');
+    }
+    // 요약의 수는 눌렀을 때 실제로 그만큼 남아야 한다 — 띠와 표가 같은 술어를 쓴다는 증거다
+    const tally = fleet.locator('[data-fleet-tally]');
+    for (const key of ['fault', 'stored']) {
+      const chip = tally.locator(`[data-tally="${key}"]`);
+      const want = Number((await chip.innerText()).match(/\d+/)![0]);
+      expect(want).toBeGreaterThan(0);
+      await chip.click();
+      await expect(chip).toHaveAttribute('aria-pressed', 'true');
+      await expect(rows).toHaveCount(want);
+      await expect(fleet.getByRole('status')).toHaveText(`전체 120대 중 ${want}대 표시`);
+      await chip.click(); // 같은 칩을 다시 누르면 필터가 풀린다
+      await expect(rows).toHaveCount(120);
+    }
   });
 
   test('[B1-02] [FR-024] [AC-O04] [AC-O07] inventory axes and distinct affected devices', async ({ page }) => {

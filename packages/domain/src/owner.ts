@@ -4,7 +4,7 @@ import { FIXED_CLOCK, OWNER_DEMO, SCREENS, type ScrId } from './generated/ids';
 export type OwnerView = (typeof OWNER_DEMO)[number]['view'];
 export type OwnerApp = 'web' | 'pwa';
 export type OwnerDataset = 'owner' | 'empty' | 'boundaries' | 'large';
-/** 전국 현황의 지역 집계 단위(좁은 지도에서 현장 대신 표시) */
+/** 현장이 속한 지역(시·도 묶음) — 목록의 둘째 줄과 검색에 쓴다. 지도는 현장 하나에 원 하나다. */
 export const OWNER_REGIONS = ['서울', '인천·경기', '강원', '대전·충청', '광주·호남', '대구·경북', '부산·경남'] as const;
 export type OwnerRegion = (typeof OWNER_REGIONS)[number];
 /** 호기가 투입·보관된 장소. 보관소(depot)는 건설사·담당자·기간이 없다. */
@@ -129,6 +129,8 @@ export interface OwnerRequest {
   id: string;
   ownerId: string;
   siteName: string;
+  /** 현장 지역(시·도) — 요청 현장은 보유 현장(OwnerSite)과 겹치지 않아 조인할 곳이 없다. 값을 직접 둔다. */
+  region: string;
   builder: string;
   /** 현장 안전관리자 — 회신 상대 */
   manager: { name: string; phone: string };

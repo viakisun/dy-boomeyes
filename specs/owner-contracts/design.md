@@ -4,7 +4,7 @@
 재사용: `List` · `EquipmentRow`(후보 호기) · `StatusPill`(요청 상태) · `Badge` · `PeriodBar`(희망 기간·확정 기간) · `ContactCard`(안전관리자) · `Timeline`(요청 진행) · `EmptyState` · `Button` · `Dialog`(배정 확정 확인) · `Toast`. `B1-03 수신함`의 승인 흐름과 `EscalationTimer` 패턴을 따른다. 새 컴포넌트는 `RequestRow`(요청 한 건)와 `CandidateRow`(후보 호기 + 가용 근거) 둘로 제한하고 `components.json`에 등록한다.
 
 ## 데이터 · 상태기계
-`OwnerRequest`(신설) — `{id, siteName, builder, manager: {name, phone}, from, to, count, spec, status, assigned: string[]}`. 상태기계 5단계: `new(요청 접수) → assign(배정 중) → ship(운송·설치) → run(가동) → done(종료)`. `ssot/entities.yaml`에 등록하고 `packages/domain/src/machines.ts`에 전이와 vitest를 둔다. 후보 산출은 `ownerCandidates(devices, from, to)` — **보관 중**(`deployment === 'stored'`)과 **계약 종료 임박**(`leaseTo <= to`)만, 결정적 정렬(보관 먼저 · 종료일 오름차순 · 호기 번호).
+`OwnerRequest`(신설) — `{id, siteName, region, builder, manager: {name, phone}, from, to, count, spec, status, assigned: string[]}`. `region`은 요청 현장의 시·군·구다 — 요청 현장은 보유 현장(`OwnerSite`)과 겹치지 않아 조인할 곳이 없으므로 값을 직접 둔다. 상태기계 5단계: `new(요청 접수) → assign(배정 중) → ship(운송·설치) → run(가동) → done(종료)`. `ssot/entities.yaml`에 등록하고 `packages/domain/src/machines.ts`에 전이와 vitest를 둔다. 후보 산출은 `ownerCandidates(devices, from, to)` — **보관 중**(`deployment === 'stored'`)과 **계약 종료 임박**(`leaseTo <= to`)만, 결정적 정렬(보관 먼저 · 종료일 오름차순 · 호기 번호).
 
 ## 라우트 · 쿼리
 - 웹 `B1-13 /b1/requests` — `?request=<id>`로 우측 배정 패널을 연다(화면 전환 없음).

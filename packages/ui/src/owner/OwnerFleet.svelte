@@ -16,6 +16,8 @@
     ownerFleetRows,
     ownerFleetState,
     ownerHref,
+    ownerStrip,
+    ownerSummary,
     type OwnerDevice,
     type OwnerFleetQuery,
     type OwnerFleetSort,
@@ -49,15 +51,32 @@
     };
   });
   const rows = $derived(ownerFleetRows(data.devices, query, data.at));
+  // 표 위 상태 요약(시안 «확정 2026-09-12») — 상태 띠와 같은 수를 쓰되 여기서는 같은 화면의 필터가 걸린다.
+  // 「투입」은 배치이고 나머지는 상태다 — 띠의 첫 칸(가동 중)과 다른 수이므로 StatusStrip을 재사용하지 않는다.
+  const tally = $derived.by(() => {
+    const strip = ownerStrip(data.devices);
+    return [
+      { key: 'deployed', label: '투입', count: ownerSummary(data.devices, data.alerts).deployed, tone: '' },
+      { key: 'fault', label: '고장', count: strip.fault, tone: 'text-danger-fg' },
+      { key: 'inspection', label: '점검', count: strip.inspection, tone: 'text-warning-fg' },
+      { key: 'stale', label: '수신 지연', count: strip.stale, tone: 'text-warning-fg' },
+      { key: 'stored', label: '보관', count: strip.stored, tone: '' },
+    ];
+  });
   const grouped = $derived(url.searchParams.get('group') === '1');
   // 현장별 묶음 — 현장마다 묶음 하나(정렬은 묶음 안에서 그대로 산다).
   // 행이 현장 순서로 오지 않으므로 이어 붙이면 같은 현장이 여러 묶음이 된다.
   const groups = $derived.by(() => {
     if (!grouped) return null;
     // eslint-disable-next-line svelte/prefer-svelte-reactivity -- $derived 안의 계산용 · 반응 대상이 아니다
-    const byId = new Map<string, { id: string; name: string; rows: OwnerDevice[] }>();
+    const byId = new Map<string, { id: string; name: string; meta: string; rows: OwnerDevice[] }>();
     for (const device of rows) {
-      const group = byId.get(device.siteId) ?? { id: device.siteId, name: device.site, rows: [] };
+      const group = byId.get(device.siteId) ?? {
+        id: device.siteId,
+        name: device.site,
+        meta: [device.address, device.contract?.company].filter(Boolean).join(' · '),
+        rows: [],
+      };
       group.rows.push(device);
       byId.set(device.siteId, group);
     }
@@ -103,7 +122,6 @@
     { key: 'received', label: '마지막 수신', kind: 'date', sortable: true },
     { key: 'expiry', label: '계약 종료', kind: 'date', sortable: true },
     { key: 'attention', label: '주의', kind: 'status' },
-    { key: 'company', label: '건설사', nowrap: true },
   ];
   // 묶어 보면 현장 이름이 제목에 있다 — 같은 값을 한 번 더 세로로 반복하지 않는다
   const columns = $derived(grouped ? ALL_COLUMNS.filter((c) => c.key !== 'site') : ALL_COLUMNS);
@@ -212,14 +230,34 @@
         />
       {/if}
       <Switch label="현장별 묶어 보기" checked={grouped} onchange={(next) => update({ group: next ? '1' : '' })} />
+      {#if dirty}
+        <button type="button" class={ownerLink()} onclick={reset}>검색·필터 초기화</button>
+      {/if}
     </div>
+    <!-- 표 머리 위 한 줄: 왼쪽은 「몇 대를 보고 있는가」, 오른쪽은 상태 요약(누르면 이 화면의 필터).
+         role=status는 왼쪽 하나뿐이다 — 둘이면 e2e의 단일 매치가 깨진다. -->
     <div class="gap-inline-md flex flex-wrap items-center justify-between">
       <p role="status" class="text-body-md">
         전체 <strong>{data.devices.length}대</strong> 중 <strong>{rows.length}대</strong> 표시
       </p>
-      {#if dirty}
-        <button type="button" class={ownerLink()} onclick={reset}>검색·필터 초기화</button>
-      {/if}
+      <div class="gap-inline-xs flex flex-wrap items-center" data-fleet-tally>
+        {#each tally as item (item.key)}
+          <button
+            type="button"
+            aria-label="{item.label} {item.count}대만 보기"
+            aria-pressed={query.filter === item.key}
+            data-tally={item.key}
+            class="{ownerControl()} gap-inline-xs rounded-pill px-inset-sm hover:bg-ui-hover inline-flex items-center {query.filter ===
+            item.key
+              ? 'bg-selected'
+              : ''}"
+            onclick={() => update({ filter: query.filter === item.key ? '' : item.key })}
+          >
+            <strong class="text-label-md tabular-nums {item.count > 0 ? item.tone : ''}">{item.count}</strong>
+            <span class="text-label-md text-fg-muted">{item.label}</span>
+          </button>
+        {/each}
+      </div>
     </div>
     {#if data.devices.length === 0}
       <EmptyState
@@ -234,11 +272,12 @@
         {#snippet action()}<button type="button" class={ownerLink()} onclick={reset}>전체 장비 보기</button>{/snippet}
       </EmptyState>
     {:else}
-      {#each groups ?? [{ id: 'all', name: '', rows }] as group (group.id)}
+      {#each groups ?? [{ id: 'all', name: '', meta: '', rows }] as group (group.id)}
         {#if group.name}
+          <!-- 묶음 제목이 현장 열을 대신한다 — 지역·건설사도 여기로 올린다(행에서는 빠진 값이다) -->
           <h2 class="text-heading-sm pt-stack-sm" data-fleet-group={group.id}>
             {group.name}
-            <span class="text-fg-muted text-body-md">{group.rows.length}대</span>
+            <span class="text-fg-muted text-body-md">{group.meta}{group.meta ? ' · ' : ''}{group.rows.length}대</span>
           </h2>
         {/if}
         {#if web}
@@ -279,7 +318,13 @@
       {#if column.key === 'unit'}
         {device.unit}
       {:else if column.key === 'site'}
-        {device.site}
+        <!-- 현장은 두 줄이다(시안) — 이름 아래 지역·건설사. 건설사 열을 따로 두면 표가 일곱 칸이 된다. -->
+        <span class="gap-stack-xs flex flex-col">
+          {device.site}
+          <span class="text-body-sm text-fg-muted"
+            >{device.address}{device.contract?.company ? ` · ${device.contract.company}` : ''}</span
+          >
+        </span>
       {:else if column.key === 'state'}
         {@const state = ownerFleetState(device)}
         <span class="gap-inline-xs inline-flex items-center">
@@ -298,14 +343,12 @@
         {:else}
           <span class="text-fg-muted">—</span>
         {/if}
-      {:else if column.key === 'attention'}
+      {:else}
         <span class="gap-inline-xs inline-flex flex-wrap items-center">
           {#each attention(device) as chip (chip.key)}
             <span class="rounded-pill px-inset-xs text-label-sm {TONE[chip.tone].subtle}">{chip.label}</span>
           {/each}
         </span>
-      {:else}
-        {device.contract?.company ?? '—'}
       {/if}
     {/snippet}
   </DataTable>
