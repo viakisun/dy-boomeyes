@@ -136,7 +136,9 @@
       <div><Button onclick={refresh}>다시 시도</Button></div>
     </div>
   {:else if viewProps}
-    {#if viewProps.data.devices.length === 0}
+    <!-- 장비가 하나도 없으면 장비를 다루는 화면은 보여 줄 것이 없다. 계약·운전자는 장비 축이
+         아니라 요청·사람 축이므로 각자의 빈 화면을 그린다. -->
+    {#if viewProps.data.devices.length === 0 && view !== 'requests' && view !== 'drivers' && view !== 'driver-docs'}
       <h1 class="text-heading-xl">{title}</h1>
       <EmptyState
         title="등록된 보유 장비가 없습니다"

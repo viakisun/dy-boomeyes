@@ -187,9 +187,11 @@
       ready = true;
     });
     map.on('style.load', localize);
-    // 스타일·소스 로드 실패만 오버레이 — 개별 타일 오류(e.tile)는 깊은 줌에서 흔하고 지도는 계속 쓸 수 있다
+    // 스타일·소스 로드 실패만 오버레이 — 개별 타일 오류(e.tile)는 깊은 줌에서 흔하고 지도는 계속 쓸 수 있다.
+    // 국경 지도(outline)는 저장소 안 자료로 그리므로 네트워크 오류가 이 지도의 실패가 아니다 —
+    // 앞 단계의 타일 장애가 늦게 도착해 멀쩡한 전국 지도에 오류를 씌우지 않게 한다.
     map.on('error', (e) => {
-      if (pill && !(e as { tile?: unknown }).tile) failed = true;
+      if (pill && basemap === 'tiles' && !(e as { tile?: unknown }).tile) failed = true;
     });
     if (!camera) map.once('idle', () => el?.setAttribute('data-map-ready', ''));
     const ro =
@@ -265,13 +267,17 @@
   let styleLoaded: string | undefined;
   $effect(() => {
     const next = `${basemap}|${styleUrl}`;
-    if (!map || !ready) return;
+    // ready를 기다리지 않는다 — 첫 스타일이 실패하면 load가 늦어 교체 자체가 막혔다
+    if (!map) return;
     if (styleLoaded === undefined) {
       styleLoaded = next;
       return;
     }
     if (next === styleLoaded) return;
     styleLoaded = next;
+    // 앞 스타일의 실패를 새 스타일까지 끌고 가지 않는다 — 타일 장애 뒤 전국(국경 지도)으로
+    // 올라가면 지도는 그려지는데 오류 안내만 남아 있었다
+    failed = false;
     map.setStyle(styleSpec());
   });
   // 카메라는 그대로인데 단계만 바뀌는 경우(현장 → 호기) — 준비 표식은 유지하고 단계 속성만 갱신

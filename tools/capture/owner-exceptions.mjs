@@ -63,8 +63,26 @@ const CASES = [
     ac: ['AC-O10', 'AC-O14'],
   },
   { id: 'video-network', view: 'video', frames: ['failed', 'recovered'], ac: ['AC-O09', 'AC-O14'] },
-  { id: 'map-network', view: 'overview', frames: ['failed', 'recovered'], ac: ['AC-O13', 'AC-O14'] },
+  // 전국은 타일 없는 국경 지도라 네트워크 장애가 나지 않는다 — 장애는 타일을 쓰는 현장 단계에서 본다
+  {
+    id: 'map-network',
+    view: 'overview',
+    query: { site: 'SITE-MAPO' },
+    frames: ['failed', 'recovered'],
+    ac: ['AC-O13', 'AC-O14'],
+  },
   { id: 'overview-site', view: 'overview', query: { site: 'SITE-MAPO' }, frames: ['site'], ac: ['AC-O13'] },
+  // 계약·운전자(P7·P8) — screens.yaml이 선언한 상태가 실제로 그려지는지 본다
+  { id: 'empty-requests', view: 'requests', state: 'empty', frames: ['empty'], ac: ['AC-O14'] },
+  {
+    id: 'no-candidates',
+    view: 'requests',
+    query: { request: 'REQ-006' },
+    frames: ['none'],
+    ac: ['AC-O07', 'AC-O14'],
+  },
+  { id: 'driver-expiring', view: 'drivers', frames: ['expiring'], ac: ['AC-O07'] },
+  { id: 'driver-docs-missing', view: 'driver-docs', frames: ['missing'], ac: ['AC-O07'] },
   {
     id: 'overview-unit',
     view: 'overview',
@@ -508,20 +526,45 @@ try {
         await expect(host.getByRole('heading', { name: '마포 주상복합 신축', exact: true })).toBeVisible();
         await capture('site', { full: true });
       } else if (scenario.id === 'overview-unit') {
-        const map = host.locator('.be-map');
-        await expect(map).toHaveAttribute('data-map-level', 'unit');
-        await expect(map).toHaveAttribute('data-map-ready', '');
-        await expect(map.locator('.be-marker.is-selected')).toHaveCount(1);
-        const tile = host.locator('[data-live-tile] video');
-        await expect(tile).toBeVisible();
-        check(await tile.evaluate((v) => v.paused), 'Live tile must not autoplay in capture mode');
+        // 호기 단계에는 지도가 없다 — 그 자리를 카메라 벽이 대신한다(시안 «확정 2026-09-12»)
+        await expect(host.locator('.be-map')).toHaveCount(0);
+        const wall = host.locator('[data-owner-cameras="CPB-001"]');
+        await expect(wall).toBeVisible();
+        const tile = wall.locator('[data-live-tile] video').first();
+        await expect(tile).toBeAttached();
+        const tiles = await wall.locator('[data-live-tile] video').count();
+        check(tiles > 1, `Camera wall must hold more than one tile (got ${tiles})`);
+        check(
+          await wall.locator('[data-live-tile] video').evaluateAll((list) => list.every((v) => v.paused)),
+          'Camera wall must not autoplay in capture mode',
+        );
         for (const text of ['1호기', '김현장', '380 V', '고장코드', '1호기 제작증'])
           await expect(host).toContainText(text);
         await capture('unit', {
-          focus: host.locator('[data-live-tile]'),
+          focus: wall,
           full: true,
           media: await tile.evaluate((video) => ({ readyState: video.readyState, paused: video.paused })),
         });
+      } else if (scenario.id === 'empty-requests') {
+        await expect(host).toContainText('대기 중인 요청이 없습니다');
+        await expect(host.locator('[data-request]')).toHaveCount(0);
+        await capture('empty');
+      } else if (scenario.id === 'no-candidates') {
+        // 보유 기종이 32m뿐이라 40m 사양은 후보가 0이다 — 「낼 수 있는 호기 없음」이 자료에서 나온다
+        await expect(host).toContainText('이 기간에 낼 수 있는 호기가 없습니다');
+        await expect(host.locator('[data-candidate]')).toHaveCount(0);
+        await expect(host.getByRole('button', { name: '배정 확정 · 회신', exact: true })).toBeDisabled();
+        await capture('none', { full: true });
+      } else if (scenario.id === 'driver-expiring') {
+        // 자격 만료 임박은 명단에서 바로 읽힌다
+        await expect(host.locator('[data-driver]')).toHaveCount(6);
+        await expect(host.locator('[data-driver="DRV-004"]')).toContainText(/D-\d+/);
+        await capture('expiring', { full: true });
+      } else if (scenario.id === 'driver-docs-missing') {
+        // 없는 서류는 빈칸이 아니라 「미비」다
+        await expect(host.locator('[data-doc-state="missing"]')).toHaveCount(1);
+        await expect(host.locator('[data-doc-state="expiring"]')).toHaveCount(2);
+        await capture('missing', { full: true });
       } else if (scenario.id === 'document-network') {
         const viewer = host.locator('[data-document-viewer]');
         await expect(viewer.getByRole('alert')).toContainText('원문을 불러오지 못했습니다.');
@@ -556,16 +599,25 @@ try {
         await expect(host.locator('[data-map-error]')).toContainText('지도를 불러오지 못했습니다');
         check(injected.length > 0, 'Map outage was not injected');
         check((await map.boundingBox())?.height > 200, 'Map must occupy more than 200 pixels in the exception view');
-        // 지도가 없어도 현장 목록(13)은 그대로 — 위치 정보는 목록에서 확인할 수 있다
-        await expect(host.getByRole('list', { name: '현장 목록', exact: true }).locator('[data-site]')).toHaveCount(13);
+        // 지도가 없어도 현장 호기 목록은 그대로 — 위치 정보는 목록에서 확인할 수 있다
+        await expect(host.getByRole('list', { name: '현장 호기', exact: true }).locator('[data-device]')).toHaveCount(
+          5,
+        );
         await capture('failed', { focus: host.locator('[data-map-error]'), full: true });
-        await page.unroute(outagePattern, outage);
-        await host.getByRole('button', { name: '지도 다시 불러오기', exact: true }).click();
+        // 같은 장애에서 전국으로 올라가면 지도가 그려진다 — 국경은 저장소 안 자료라 네트워크가 필요 없다
+        await host
+          .getByRole('navigation', { name: '현황 경로', exact: true })
+          .getByRole('link', { name: '전국' })
+          .click();
         await expect(host.locator('[data-map-error]')).toHaveCount(0);
-        // 전국은 지역 집계 7(어느 폭이든)
-        await expect(map.locator('.be-marker')).toHaveCount(7);
-        await expect(map).toHaveAttribute('data-map-ready', '');
         await expect(map).toHaveAttribute('data-map-level', 'nation');
+        await expect(map.locator('.be-marker')).toHaveCount(7);
+        await page.unroute(outagePattern, outage);
+        await host.getByRole('list', { name: '현장 목록', exact: true }).locator('[data-site="SITE-MAPO"]').click();
+        await expect(host.locator('[data-map-error]')).toHaveCount(0);
+        await expect(map.locator('.be-marker')).toHaveCount(5);
+        await expect(map).toHaveAttribute('data-map-ready', '');
+        await expect(map).toHaveAttribute('data-map-level', 'site');
         await expect
           .poll(
             () =>
