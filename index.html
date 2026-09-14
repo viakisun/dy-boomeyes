@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>운영 현황 — 목업</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha384-sHL9NAb7lN7rfvG5lfHpm643Xkcjzp4jFvuavGOndn6pjVqS6ny56CAt3nsEVT4H" crossorigin="anonymous">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha384-cxOPjt7s7Iz04uaHJceBmS+qpjv2JkIHNVcuOrM+YHwZOmJGBXI00mdUXEq65HTH" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/topojson-client@3.1.0/dist/topojson-client.min.js" integrity="sha384-Ukv1p/xTma6P4/2bY5KzWBw+ydSpXmhCMtyciIQVDJ1RmOxtCYNMF1uXT9T63H67" crossorigin="anonymous"></script>
+<link rel="icon" href="/favicon.svg">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="theme-color" content="#075A60">
+<script type="module" src="/src/main.ts"></script>
+</head>
+<body>
+
+<aside class="rail" aria-label="주 메뉴">
+  <div class="logo"><i></i></div>
+  <button class="nav on" data-tab="ops" onclick="goTab('ops')"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7.5" height="7.5" rx="1.5"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="1.5"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="1.5"/><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="1.5"/></svg>운영 현황</button>
+  <button class="nav" data-tab="fleet" onclick="goTab('fleet')"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg>보유 장비</button>
+  <button class="nav" data-tab="req" onclick="goTab('req')"><svg viewBox="0 0 24 24"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4"/><path d="M9 12h6M9 16h4"/></svg>요청<span class="badge" id="rbadge"></span></button>
+  <button class="nav" data-tab="inbox" onclick="goTab('inbox')" hidden style="display:none"><svg viewBox="0 0 24 24"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2H4.5z"/><path d="M10 20a2 2 0 0 0 4 0"/></svg>알림<span class="badge" id="nbadge"></span></button>
+  <button class="nav" hidden style="display:none"><svg viewBox="0 0 24 24"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4"/><path d="M9 12h6M9 16h6"/></svg>장비 서류</button>
+</aside>
+
+<header class="top">
+  <nav class="crumb" id="crumb" aria-label="현재 위치"></nav>
+  <div class="right"><button class="bell" id="bell" onclick="toggleInbox()" aria-label="알림"><svg viewBox="0 0 24 24"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2H4.5z"/><path d="M10 20a2 2 0 0 0 4 0"/></svg><span class="badge" id="nbadge"></span></button>실시간 · 1분 전 수신<span class="avatar">한</span></div>
+</header>
+<div class="inbox" id="inbox" hidden></div>
+
+<main class="stage">
+  <section class="fleet" id="fleet" hidden></section>
+  <section class="fleet req" id="req" hidden></section>
+  <div id="map" aria-label="현장 지도"></div>
+
+  <div class="band" role="group" aria-label="장비 상태 요약" id="band"></div>
+
+  <div class="lvl" role="tablist" id="lvl" hidden>
+    <button data-l="nation">전국</button><button data-l="site">현장</button><button data-l="unit">호기</button>
+  </div>
+
+  <aside class="card" id="card"></aside>
+  <div class="wall" id="wall" hidden></div>
+  <div class="fullv" id="fullv" hidden></div>
+</main>
+
+</body>
+</html>
