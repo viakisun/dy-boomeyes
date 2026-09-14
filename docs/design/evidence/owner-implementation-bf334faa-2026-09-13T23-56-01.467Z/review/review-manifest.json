@@ -1,0 +1,738 @@
+{
+  "sourceSha": "bf334faa1ad3d46d799dbcf2bd82bfd25a5e6c32",
+  "workingTreeHash": "d2f59403ae774772909cf2cdefb0ac2f9dc83e7986e81bc91c7e5e7f5a9e19c8",
+  "registryHash": "5830cb16923e003dedb6ef6f5e0adb92412190c750acfb3eccc72de0c743ef0a",
+  "captureManifestSha256": "1ba84302afcebdb5a7bb820db71c9836297bcda5e37225bc8a985763bed1382f",
+  "captureManifest": "/Users/adminvia/devwork/_DY/boomeyes/docs/design/evidence/owner-implementation-bf334faa-2026-09-13T23-56-01.467Z/manifest.json",
+  "generatedAt": "2026-09-14T00:01:08.700223+00:00",
+  "status": "generated-awaiting-visual-review",
+  "customerReview": "not-performed",
+  "visualReview": "pending",
+  "pageCount": 25,
+  "pages": [
+    {
+      "page": 1,
+      "title": "내 장비를 찾고, 현장 확인까지"
+    },
+    {
+      "page": 2,
+      "title": "01  소유주 데모"
+    },
+    {
+      "page": 3,
+      "title": "02  운영 현황 — 전국"
+    },
+    {
+      "page": 4,
+      "title": "03  운영 현황 — 현장"
+    },
+    {
+      "page": 5,
+      "title": "04  운영 현황 — 호기"
+    },
+    {
+      "page": 6,
+      "title": "05  보유 장비"
+    },
+    {
+      "page": 7,
+      "title": "06  계약"
+    },
+    {
+      "page": 8,
+      "title": "07  운전자"
+    },
+    {
+      "page": 9,
+      "title": "08  운전자 서류"
+    },
+    {
+      "page": 10,
+      "title": "09  영상"
+    },
+    {
+      "page": 11,
+      "title": "10  장비 서류"
+    },
+    {
+      "page": 12,
+      "title": "11  이상·점검"
+    },
+    {
+      "page": 13,
+      "title": "휴대폰에서 이어서 확인하기"
+    },
+    {
+      "page": 14,
+      "title": "휴대폰에서 이어서 확인하기"
+    },
+    {
+      "page": 15,
+      "title": "휴대폰에서 이어서 확인하기"
+    },
+    {
+      "page": 16,
+      "title": "휴대폰에서 이어서 확인하기"
+    },
+    {
+      "page": 17,
+      "title": "휴대폰에서 이어서 확인하기"
+    },
+    {
+      "page": 18,
+      "title": "휴대폰에서 이어서 확인하기"
+    },
+    {
+      "page": 19,
+      "title": "영상의 재생과 시간 조작"
+    },
+    {
+      "page": 20,
+      "title": "1호기 제작증 원문"
+    },
+    {
+      "page": 21,
+      "title": "휴대폰에서 제작증 원문 열람"
+    },
+    {
+      "page": 22,
+      "title": "호기 화면의 카드 — 오늘 운전자·AI 경고·계약"
+    },
+    {
+      "page": 23,
+      "title": "계약 배정 — 요청과 후보 호기"
+    },
+    {
+      "page": 24,
+      "title": "검토 전에 알아둘 시연 조건"
+    },
+    {
+      "page": 25,
+      "title": "원문 근거와 빌드 기록"
+    }
+  ],
+  "screens": [
+    {
+      "view": "entry",
+      "level": null,
+      "app": "web",
+      "captureKey": "web-entry-1280x842-light",
+      "file": "screens/web-entry-1280x842-light.png",
+      "sha256": "90d1e082e3e4294840df99a24c4792165123a5601216c8ce81a9877aa9eebe85"
+    },
+    {
+      "view": "entry",
+      "level": null,
+      "app": "pwa",
+      "captureKey": "pwa-entry-390x800-light",
+      "file": "screens/pwa-entry-390x800-light.png",
+      "sha256": "b4bcc42e2ae56a1fb3442001fa36706793e5517bd4ceb49c8d52245f1f82330e"
+    },
+    {
+      "view": "overview",
+      "level": "nation",
+      "app": "web",
+      "captureKey": "web-overview-1280x842-light",
+      "file": "screens/web-overview-1280x842-light.png",
+      "sha256": "05f7ad7ab3806540358367e5632dd5ffca5868ffcd7411a5894775760c07defe"
+    },
+    {
+      "view": "overview",
+      "level": "nation",
+      "app": "pwa",
+      "captureKey": "pwa-overview-390x800-light",
+      "file": "screens/pwa-overview-390x800-light.png",
+      "sha256": "c0e1d2224291a6cb8510c1a9b14ccab68e40f4da3136b0fd63cc6f6c24115e37"
+    },
+    {
+      "view": "overview",
+      "level": "site",
+      "app": "web",
+      "captureKey": "web-overview-site-1280x842-light",
+      "file": "screens/web-overview-site-1280x842-light.png",
+      "sha256": "f5662d3fb532b833adc16b21b6ff69173e0046594da047177e776dbb4b42a57d"
+    },
+    {
+      "view": "overview",
+      "level": "site",
+      "app": "pwa",
+      "captureKey": "pwa-overview-site-390x800-light",
+      "file": "screens/pwa-overview-site-390x800-light.png",
+      "sha256": "f29cdf513ae74c6781fab05cb4fa12110585e72240dee3b4e714672eeefd43dd"
+    },
+    {
+      "view": "overview",
+      "level": "unit",
+      "app": "web",
+      "captureKey": "web-overview-unit-1280x842-light",
+      "file": "screens/web-overview-unit-1280x842-light.png",
+      "sha256": "ba67eb75d1642fcca64c058cacd56d825aca1b8afd81d2c5f1132e5ad5fd0818"
+    },
+    {
+      "view": "overview",
+      "level": "unit",
+      "app": "pwa",
+      "captureKey": "pwa-overview-unit-390x800-light",
+      "file": "screens/pwa-overview-unit-390x800-light.png",
+      "sha256": "963be07bc4be4b0127824d88260ad236373a91a521b4ad52675f5d778c58f0a8"
+    },
+    {
+      "view": "fleet",
+      "level": null,
+      "app": "web",
+      "captureKey": "web-fleet-1280x842-light",
+      "file": "screens/web-fleet-1280x842-light.png",
+      "sha256": "be471adf2dba9023df68b10a09172aee6505d5711765f90621e70a4e49d1ebed"
+    },
+    {
+      "view": "fleet",
+      "level": null,
+      "app": "pwa",
+      "captureKey": "pwa-fleet-390x800-light",
+      "file": "screens/pwa-fleet-390x800-light.png",
+      "sha256": "e0f93648500d3d0cdd75ec0aa8fa4e6ec42fec4a8a84d3ac669a7aea9090244e"
+    },
+    {
+      "view": "requests",
+      "level": null,
+      "app": "web",
+      "captureKey": "web-requests-1280x842-light",
+      "file": "screens/web-requests-1280x842-light.png",
+      "sha256": "d16265eea346e9bdaf226944585914319ceb70c78313d2c8e49ca711f925d510"
+    },
+    {
+      "view": "requests",
+      "level": null,
+      "app": "pwa",
+      "captureKey": "pwa-requests-390x800-light",
+      "file": "screens/pwa-requests-390x800-light.png",
+      "sha256": "decee9b5a768b22c034182dd6cc2cc7bfee63e8945892ccff80e9c608e9e971f"
+    },
+    {
+      "view": "drivers",
+      "level": null,
+      "app": "web",
+      "captureKey": "web-drivers-1280x842-light",
+      "file": "screens/web-drivers-1280x842-light.png",
+      "sha256": "12487b7317a1a0d750e29f63b86604f6d62429467ef9e367fd9e4dbb15ac1e53"
+    },
+    {
+      "view": "drivers",
+      "level": null,
+      "app": "pwa",
+      "captureKey": "pwa-drivers-390x800-light",
+      "file": "screens/pwa-drivers-390x800-light.png",
+      "sha256": "afc381bf73781ed70e4c07901f17ba505b09633e53516c776fc66ebf8320b656"
+    },
+    {
+      "view": "driver-docs",
+      "level": null,
+      "app": "web",
+      "captureKey": "web-driver-docs-1280x842-light",
+      "file": "screens/web-driver-docs-1280x842-light.png",
+      "sha256": "5a247288f5f6bd2c8797f6068a4b7da7022252a72d5b9aba1271e820d9c3d739"
+    },
+    {
+      "view": "driver-docs",
+      "level": null,
+      "app": "pwa",
+      "captureKey": "pwa-driver-docs-390x800-light",
+      "file": "screens/pwa-driver-docs-390x800-light.png",
+      "sha256": "de1ed2a640b566269d63ee4ad884bbd4e4e43015d7eb267615509152d9f4e32a"
+    },
+    {
+      "view": "video",
+      "level": null,
+      "app": "web",
+      "captureKey": "web-video-1280x842-light",
+      "file": "screens/web-video-1280x842-light.png",
+      "sha256": "246e0f70d047619700e45d24476fb607161f137f828fecbec249f8869fda299b"
+    },
+    {
+      "view": "video",
+      "level": null,
+      "app": "pwa",
+      "captureKey": "pwa-video-390x800-light",
+      "file": "screens/pwa-video-390x800-light.png",
+      "sha256": "42a6cf9a144b5c88fd25e08f3ee13f7a9d70bf37d1887a533857b0ba4c56f7a1"
+    },
+    {
+      "view": "documents",
+      "level": null,
+      "app": "web",
+      "captureKey": "web-documents-1280x842-light",
+      "file": "screens/web-documents-1280x842-light.png",
+      "sha256": "d3221760a959a7edbf589a84db28bd2b507d829a66dff537fde0d503e1405f1b"
+    },
+    {
+      "view": "documents",
+      "level": null,
+      "app": "pwa",
+      "captureKey": "pwa-documents-390x800-light",
+      "file": "screens/pwa-documents-390x800-light.png",
+      "sha256": "0ec3bd2104fa1fff47f355361a00d61d7e75c2c9731815c0aa0fc87b7ae398d3"
+    },
+    {
+      "view": "alerts",
+      "level": null,
+      "app": "web",
+      "captureKey": "web-alerts-1280x842-light",
+      "file": "screens/web-alerts-1280x842-light.png",
+      "sha256": "2c6bdcbc262a719643bc3518e825ba9850b74a0880b87d35d43e38b81dd2f27b"
+    },
+    {
+      "view": "alerts",
+      "level": null,
+      "app": "pwa",
+      "captureKey": "pwa-alerts-390x800-light",
+      "file": "screens/pwa-alerts-390x800-light.png",
+      "sha256": "dcb0185860c872f0280e31b8ad6e1aafb29a873de4fd7e740da16f0d230bf9fd"
+    }
+  ],
+  "supplements": [
+    {
+      "app": "web",
+      "view": "video",
+      "level": null,
+      "title": "영상의 재생과 시간 조작",
+      "tall": false,
+      "captureKey": "web-video-1280x842-light",
+      "sourceFile": "web-video-1280x842-light-full.png",
+      "sourceSha256": "b8dd1121c0f5267ed5c618ed4d20d58b6fe7dfcb5e1110e180dc923a5b318169",
+      "crop": [
+        76,
+        150,
+        1264,
+        1080
+      ],
+      "file": "screens/web-video-expanded.png",
+      "sha256": "c4149e30eeef39b4b37ba8b776bc0386bd244b0a42b46ac5dfda5bb794c34529"
+    },
+    {
+      "app": "web",
+      "view": "documents",
+      "level": null,
+      "title": "1호기 제작증 원문",
+      "tall": true,
+      "captureKey": "web-documents-1280x842-light",
+      "sourceFile": "web-documents-1280x842-light-full.png",
+      "sourceSha256": "110971ba1c65d4878b8e0469a8b32f175782b751b92f4159595e93901b3a5f12",
+      "crop": [
+        76,
+        300,
+        1264,
+        1560
+      ],
+      "file": "screens/web-documents-expanded.png",
+      "sha256": "5e0d63cc4de867d7134a4f495880012d1c346ebac39289d98521a1802e4a5429"
+    },
+    {
+      "app": "pwa",
+      "view": "documents",
+      "level": null,
+      "title": "휴대폰에서 제작증 원문 열람",
+      "tall": true,
+      "captureKey": "pwa-documents-390x800-light",
+      "sourceFile": "pwa-documents-390x800-light-full.png",
+      "sourceSha256": "605a599a04901f198d3a5d247de4c630401e456a4e4ddfca73ee4a2f2a324dee",
+      "crop": [
+        20,
+        490,
+        370,
+        1180
+      ],
+      "file": "screens/pwa-documents-expanded.png",
+      "sha256": "230dea2bb94c1624237afe669177de2a3433536aa6e0eb712c4a71071142e66b"
+    },
+    {
+      "app": "web",
+      "view": "overview",
+      "level": "unit",
+      "title": "호기 화면의 카드 — 오늘 운전자·AI 경고·계약",
+      "tall": true,
+      "captureKey": "web-overview-unit-1280x842-light",
+      "sourceFile": "web-overview-unit-1280x842-light-full.png",
+      "sourceSha256": "ba67eb75d1642fcca64c058cacd56d825aca1b8afd81d2c5f1132e5ad5fd0818",
+      "crop": [
+        78,
+        195,
+        444,
+        640
+      ],
+      "file": "screens/web-overview-unit-expanded.png",
+      "sha256": "bc99fa19d6b9d58dd609702918683761eade5bd4c801f4e53d62c952cf019021"
+    },
+    {
+      "app": "web",
+      "view": "requests",
+      "level": "assign",
+      "title": "계약 배정 — 요청과 후보 호기",
+      "tall": false,
+      "captureKey": "web-requests-assign-1280x842-light",
+      "sourceFile": "web-requests-assign-1280x842-light-full.png",
+      "sourceSha256": "c72090246902a8ac79c5efb975625ea4ec56d1c352bc8d2b61cbb80bea5a6957",
+      "crop": [
+        56,
+        90,
+        1280,
+        780
+      ],
+      "file": "screens/web-requests-assign-expanded.png",
+      "sha256": "7853415dd4592c5c5ce4e00a38a320b9c6fd553e80f56dab7684b3eb8e7ea4e7"
+    }
+  ],
+  "renderedPages": [
+    {
+      "page": 1,
+      "file": "rendered-pages/page-01.png",
+      "sha256": "872b2bfaa32164c26798316631264a6931fdabd0adcb57d3c0411d40cd59f6f2"
+    },
+    {
+      "page": 2,
+      "file": "rendered-pages/page-02.png",
+      "sha256": "5f28e1f578c836c0cc4bc9bdc4e3fb27fa76e32ae9cd4e65f0d6256cfb2bef42"
+    },
+    {
+      "page": 3,
+      "file": "rendered-pages/page-03.png",
+      "sha256": "2cb22eda432066a2c6fe4e138593b221f022b1274f9401d2c453fad0445bcce9"
+    },
+    {
+      "page": 4,
+      "file": "rendered-pages/page-04.png",
+      "sha256": "cd98f56d1af569cdd92b7cc4fd6394fb47f478b5e00e3b034226a050179ebebc"
+    },
+    {
+      "page": 5,
+      "file": "rendered-pages/page-05.png",
+      "sha256": "1c8267b2b492dd739543850f86dc13655a439f2c349ec95e2872233b3b56ae50"
+    },
+    {
+      "page": 6,
+      "file": "rendered-pages/page-06.png",
+      "sha256": "2fffa6eca2394accb22b63e3e25dde43e192f2fea16c2463287bfed6d10cddf4"
+    },
+    {
+      "page": 7,
+      "file": "rendered-pages/page-07.png",
+      "sha256": "0c30f60d1fcfae807cbedaea3730d26fe3f760b450f85a4284058614e4e59242"
+    },
+    {
+      "page": 8,
+      "file": "rendered-pages/page-08.png",
+      "sha256": "745fd619968ce0766d0fdb1ec3fbbe65ad5a56a36f8dd0e3ed938b2b82409fb3"
+    },
+    {
+      "page": 9,
+      "file": "rendered-pages/page-09.png",
+      "sha256": "2a7ba688e51e256a68028814aaeb0d095d9c72f90e70603c96dae0aeec6fcc1f"
+    },
+    {
+      "page": 10,
+      "file": "rendered-pages/page-10.png",
+      "sha256": "68d178fc41aad5a81bca76accda5320979d3ba367c102af7b659586d097c7e0c"
+    },
+    {
+      "page": 11,
+      "file": "rendered-pages/page-11.png",
+      "sha256": "4ccde2c0b78748b37e76b3c5ed3f569429f719e1903243b8fe4bf7310f4a2345"
+    },
+    {
+      "page": 12,
+      "file": "rendered-pages/page-12.png",
+      "sha256": "319b9c15da020bd941dd1ecc2e9d8d67f9caaf6776bbdf32288dc1db112b45f0"
+    },
+    {
+      "page": 13,
+      "file": "rendered-pages/page-13.png",
+      "sha256": "8169c125e726b26cc4f10f17b4ad1bd15e1db75dfe736f0de40f0a3cf4e83c28"
+    },
+    {
+      "page": 14,
+      "file": "rendered-pages/page-14.png",
+      "sha256": "287377ed625f8b8c9d685a012b30685ff453f2de4f021fc7e79facf0c30fbab1"
+    },
+    {
+      "page": 15,
+      "file": "rendered-pages/page-15.png",
+      "sha256": "16b976948881864b21dbac4d33bbb04235dac4b2ccc639fed4c742f3b3947679"
+    },
+    {
+      "page": 16,
+      "file": "rendered-pages/page-16.png",
+      "sha256": "4a8bc0d0b2be3eb424d033408a11488866a0d21c868c6e60c4f8caf9b784b69f"
+    },
+    {
+      "page": 17,
+      "file": "rendered-pages/page-17.png",
+      "sha256": "0f35517da9cf5511e88de5096c18c5ebbc8180c6202837dd4921d47830348f2d"
+    },
+    {
+      "page": 18,
+      "file": "rendered-pages/page-18.png",
+      "sha256": "3cebd3a20bc1bfa67c996aaa0e796b2a61103c3f576ca3526c5248c666e1c14d"
+    },
+    {
+      "page": 19,
+      "file": "rendered-pages/page-19.png",
+      "sha256": "4ea7ac92565f4e4ebb0935dd75a88d9fdedb7c7b4b0a4774f5cd33be8a41b429"
+    },
+    {
+      "page": 20,
+      "file": "rendered-pages/page-20.png",
+      "sha256": "c372e1b6909da78d2338a787f09dc32d34a8d024949bcff2fa3ae2fc7842f282"
+    },
+    {
+      "page": 21,
+      "file": "rendered-pages/page-21.png",
+      "sha256": "eb7e1f0b85a531b4ec73fae475719a16b0baea46f00b8bea3da51863baaccf44"
+    },
+    {
+      "page": 22,
+      "file": "rendered-pages/page-22.png",
+      "sha256": "117f3b993c4aafbdffca487345aff9bb42db631a0d3352c25e729ccd2e384699"
+    },
+    {
+      "page": 23,
+      "file": "rendered-pages/page-23.png",
+      "sha256": "fbc24f2946b9e187eeb5536a0ceef2b73e87e439cd0553ab87685582874acd62"
+    },
+    {
+      "page": 24,
+      "file": "rendered-pages/page-24.png",
+      "sha256": "bf2906584645d077a08c83f845432206b90315d8a619ea927292839f1384cf3a"
+    },
+    {
+      "page": 25,
+      "file": "rendered-pages/page-25.png",
+      "sha256": "118b41411bcf2c5edb55c2d530d31844c99bf2610d116d81c36b2f066013462b"
+    }
+  ],
+  "fontSha256": "876af2cd4854644e7f3e7feb2f688997fdb3343c6df6693611209c9dfb47ccec",
+  "artifacts": [
+    {
+      "file": "five-minute-demo.md",
+      "sha256": "d426fe4e38b81480951da9199d117f8675c4ed6060cf0502cb2c3750e2230598"
+    },
+    {
+      "file": "owner-review.html",
+      "sha256": "8e4ccd48284a80a7ad0d5703b5fbf5c7f47522ae73e71960040ca6fa2db78dce"
+    },
+    {
+      "file": "owner-review.pdf",
+      "sha256": "a356eccede2e3051f7d8c9efc1e26e38cf0945d1d98f9efa9c6aafa3910dd887"
+    },
+    {
+      "file": "rendered-pages/index.html",
+      "sha256": "018a35354bdd429d3c1507c0320317322af798fe69327c5312942286117e8ef2"
+    },
+    {
+      "file": "rendered-pages/page-01.png",
+      "sha256": "872b2bfaa32164c26798316631264a6931fdabd0adcb57d3c0411d40cd59f6f2"
+    },
+    {
+      "file": "rendered-pages/page-02.png",
+      "sha256": "5f28e1f578c836c0cc4bc9bdc4e3fb27fa76e32ae9cd4e65f0d6256cfb2bef42"
+    },
+    {
+      "file": "rendered-pages/page-03.png",
+      "sha256": "2cb22eda432066a2c6fe4e138593b221f022b1274f9401d2c453fad0445bcce9"
+    },
+    {
+      "file": "rendered-pages/page-04.png",
+      "sha256": "cd98f56d1af569cdd92b7cc4fd6394fb47f478b5e00e3b034226a050179ebebc"
+    },
+    {
+      "file": "rendered-pages/page-05.png",
+      "sha256": "1c8267b2b492dd739543850f86dc13655a439f2c349ec95e2872233b3b56ae50"
+    },
+    {
+      "file": "rendered-pages/page-06.png",
+      "sha256": "2fffa6eca2394accb22b63e3e25dde43e192f2fea16c2463287bfed6d10cddf4"
+    },
+    {
+      "file": "rendered-pages/page-07.png",
+      "sha256": "0c30f60d1fcfae807cbedaea3730d26fe3f760b450f85a4284058614e4e59242"
+    },
+    {
+      "file": "rendered-pages/page-08.png",
+      "sha256": "745fd619968ce0766d0fdb1ec3fbbe65ad5a56a36f8dd0e3ed938b2b82409fb3"
+    },
+    {
+      "file": "rendered-pages/page-09.png",
+      "sha256": "2a7ba688e51e256a68028814aaeb0d095d9c72f90e70603c96dae0aeec6fcc1f"
+    },
+    {
+      "file": "rendered-pages/page-10.png",
+      "sha256": "68d178fc41aad5a81bca76accda5320979d3ba367c102af7b659586d097c7e0c"
+    },
+    {
+      "file": "rendered-pages/page-11.png",
+      "sha256": "4ccde2c0b78748b37e76b3c5ed3f569429f719e1903243b8fe4bf7310f4a2345"
+    },
+    {
+      "file": "rendered-pages/page-12.png",
+      "sha256": "319b9c15da020bd941dd1ecc2e9d8d67f9caaf6776bbdf32288dc1db112b45f0"
+    },
+    {
+      "file": "rendered-pages/page-13.png",
+      "sha256": "8169c125e726b26cc4f10f17b4ad1bd15e1db75dfe736f0de40f0a3cf4e83c28"
+    },
+    {
+      "file": "rendered-pages/page-14.png",
+      "sha256": "287377ed625f8b8c9d685a012b30685ff453f2de4f021fc7e79facf0c30fbab1"
+    },
+    {
+      "file": "rendered-pages/page-15.png",
+      "sha256": "16b976948881864b21dbac4d33bbb04235dac4b2ccc639fed4c742f3b3947679"
+    },
+    {
+      "file": "rendered-pages/page-16.png",
+      "sha256": "4a8bc0d0b2be3eb424d033408a11488866a0d21c868c6e60c4f8caf9b784b69f"
+    },
+    {
+      "file": "rendered-pages/page-17.png",
+      "sha256": "0f35517da9cf5511e88de5096c18c5ebbc8180c6202837dd4921d47830348f2d"
+    },
+    {
+      "file": "rendered-pages/page-18.png",
+      "sha256": "3cebd3a20bc1bfa67c996aaa0e796b2a61103c3f576ca3526c5248c666e1c14d"
+    },
+    {
+      "file": "rendered-pages/page-19.png",
+      "sha256": "4ea7ac92565f4e4ebb0935dd75a88d9fdedb7c7b4b0a4774f5cd33be8a41b429"
+    },
+    {
+      "file": "rendered-pages/page-20.png",
+      "sha256": "c372e1b6909da78d2338a787f09dc32d34a8d024949bcff2fa3ae2fc7842f282"
+    },
+    {
+      "file": "rendered-pages/page-21.png",
+      "sha256": "eb7e1f0b85a531b4ec73fae475719a16b0baea46f00b8bea3da51863baaccf44"
+    },
+    {
+      "file": "rendered-pages/page-22.png",
+      "sha256": "117f3b993c4aafbdffca487345aff9bb42db631a0d3352c25e729ccd2e384699"
+    },
+    {
+      "file": "rendered-pages/page-23.png",
+      "sha256": "fbc24f2946b9e187eeb5536a0ceef2b73e87e439cd0553ab87685582874acd62"
+    },
+    {
+      "file": "rendered-pages/page-24.png",
+      "sha256": "bf2906584645d077a08c83f845432206b90315d8a619ea927292839f1384cf3a"
+    },
+    {
+      "file": "rendered-pages/page-25.png",
+      "sha256": "118b41411bcf2c5edb55c2d530d31844c99bf2610d116d81c36b2f066013462b"
+    },
+    {
+      "file": "screens/pwa-alerts-390x800-light.png",
+      "sha256": "dcb0185860c872f0280e31b8ad6e1aafb29a873de4fd7e740da16f0d230bf9fd"
+    },
+    {
+      "file": "screens/pwa-documents-390x800-light.png",
+      "sha256": "0ec3bd2104fa1fff47f355361a00d61d7e75c2c9731815c0aa0fc87b7ae398d3"
+    },
+    {
+      "file": "screens/pwa-documents-expanded.png",
+      "sha256": "230dea2bb94c1624237afe669177de2a3433536aa6e0eb712c4a71071142e66b"
+    },
+    {
+      "file": "screens/pwa-driver-docs-390x800-light.png",
+      "sha256": "de1ed2a640b566269d63ee4ad884bbd4e4e43015d7eb267615509152d9f4e32a"
+    },
+    {
+      "file": "screens/pwa-drivers-390x800-light.png",
+      "sha256": "afc381bf73781ed70e4c07901f17ba505b09633e53516c776fc66ebf8320b656"
+    },
+    {
+      "file": "screens/pwa-entry-390x800-light.png",
+      "sha256": "b4bcc42e2ae56a1fb3442001fa36706793e5517bd4ceb49c8d52245f1f82330e"
+    },
+    {
+      "file": "screens/pwa-fleet-390x800-light.png",
+      "sha256": "e0f93648500d3d0cdd75ec0aa8fa4e6ec42fec4a8a84d3ac669a7aea9090244e"
+    },
+    {
+      "file": "screens/pwa-overview-390x800-light.png",
+      "sha256": "c0e1d2224291a6cb8510c1a9b14ccab68e40f4da3136b0fd63cc6f6c24115e37"
+    },
+    {
+      "file": "screens/pwa-overview-site-390x800-light.png",
+      "sha256": "f29cdf513ae74c6781fab05cb4fa12110585e72240dee3b4e714672eeefd43dd"
+    },
+    {
+      "file": "screens/pwa-overview-unit-390x800-light.png",
+      "sha256": "963be07bc4be4b0127824d88260ad236373a91a521b4ad52675f5d778c58f0a8"
+    },
+    {
+      "file": "screens/pwa-requests-390x800-light.png",
+      "sha256": "decee9b5a768b22c034182dd6cc2cc7bfee63e8945892ccff80e9c608e9e971f"
+    },
+    {
+      "file": "screens/pwa-video-390x800-light.png",
+      "sha256": "42a6cf9a144b5c88fd25e08f3ee13f7a9d70bf37d1887a533857b0ba4c56f7a1"
+    },
+    {
+      "file": "screens/web-alerts-1280x842-light.png",
+      "sha256": "2c6bdcbc262a719643bc3518e825ba9850b74a0880b87d35d43e38b81dd2f27b"
+    },
+    {
+      "file": "screens/web-documents-1280x842-light.png",
+      "sha256": "d3221760a959a7edbf589a84db28bd2b507d829a66dff537fde0d503e1405f1b"
+    },
+    {
+      "file": "screens/web-documents-expanded.png",
+      "sha256": "5e0d63cc4de867d7134a4f495880012d1c346ebac39289d98521a1802e4a5429"
+    },
+    {
+      "file": "screens/web-driver-docs-1280x842-light.png",
+      "sha256": "5a247288f5f6bd2c8797f6068a4b7da7022252a72d5b9aba1271e820d9c3d739"
+    },
+    {
+      "file": "screens/web-drivers-1280x842-light.png",
+      "sha256": "12487b7317a1a0d750e29f63b86604f6d62429467ef9e367fd9e4dbb15ac1e53"
+    },
+    {
+      "file": "screens/web-entry-1280x842-light.png",
+      "sha256": "90d1e082e3e4294840df99a24c4792165123a5601216c8ce81a9877aa9eebe85"
+    },
+    {
+      "file": "screens/web-fleet-1280x842-light.png",
+      "sha256": "be471adf2dba9023df68b10a09172aee6505d5711765f90621e70a4e49d1ebed"
+    },
+    {
+      "file": "screens/web-overview-1280x842-light.png",
+      "sha256": "05f7ad7ab3806540358367e5632dd5ffca5868ffcd7411a5894775760c07defe"
+    },
+    {
+      "file": "screens/web-overview-site-1280x842-light.png",
+      "sha256": "f5662d3fb532b833adc16b21b6ff69173e0046594da047177e776dbb4b42a57d"
+    },
+    {
+      "file": "screens/web-overview-unit-1280x842-light.png",
+      "sha256": "ba67eb75d1642fcca64c058cacd56d825aca1b8afd81d2c5f1132e5ad5fd0818"
+    },
+    {
+      "file": "screens/web-overview-unit-expanded.png",
+      "sha256": "bc99fa19d6b9d58dd609702918683761eade5bd4c801f4e53d62c952cf019021"
+    },
+    {
+      "file": "screens/web-requests-1280x842-light.png",
+      "sha256": "d16265eea346e9bdaf226944585914319ceb70c78313d2c8e49ca711f925d510"
+    },
+    {
+      "file": "screens/web-requests-assign-expanded.png",
+      "sha256": "7853415dd4592c5c5ce4e00a38a320b9c6fd553e80f56dab7684b3eb8e7ea4e7"
+    },
+    {
+      "file": "screens/web-video-1280x842-light.png",
+      "sha256": "246e0f70d047619700e45d24476fb607161f137f828fecbec249f8869fda299b"
+    },
+    {
+      "file": "screens/web-video-expanded.png",
+      "sha256": "c4149e30eeef39b4b37ba8b776bc0386bd244b0a42b46ac5dfda5bb794c34529"
+    }
+  ]
+}
