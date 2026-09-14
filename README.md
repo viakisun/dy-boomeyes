@@ -5,8 +5,9 @@
 
 ```sh
 npm install
-npm run dev      # http://localhost:5173
+npm run dev      # http://localhost:4300
 npm run build    # tsc --noEmit && vite build → dist/
+npm run preview  # http://localhost:4301 — 빌드한 dist/를 정적으로
 ```
 
 ## 이 저장소가 무엇인가
