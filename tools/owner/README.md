@@ -1,5 +1,7 @@
 # 소유주 데모 검증·검토안
 
+**갱신된 검토안은 늘 [`docs/design/evidence/latest/review/owner-review.pdf`](../../docs/design/evidence/latest/review/owner-review.pdf)에 있다.** 증거 폴더 이름에는 커밋 해시와 시각이 들어가 만들 때마다 경로가 바뀌므로, `capture:owner`가 `docs/design/evidence/latest` 링크를 방금 만든 폴더로 옮긴다. 날짜가 박힌 폴더는 기록으로 남고 링크만 움직인다.
+
 원천은 `ssot/screens.yaml`의 `owner_demo`와 `specs/owner-experience`다. `current_wave`를 올리지 않고, 구현된 화면 목적(`ssot/meta.yaml owner_demo_wave` 이하 — 판정은 `tools/owner/views.mjs`)을 WEB/PWA 양쪽으로 명시적으로 검증한다.
 
 ```sh

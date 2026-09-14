@@ -2,8 +2,8 @@
 // 조합 수는 ssot/meta.yaml owner_demo_wave 이하로 구현된 화면 목적에서 파생된다 — 여기에 수를 적지 않는다(--list가 알려 준다).
 // --list performs no browser/server work. --only <view,SCR> produces partial evidence (exit 2).
 // --reuse-server uses caller-owned servers and never stops them. Default refuses occupied ports.
-import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
-import { dirname, join, resolve } from 'node:path';
+import { readFileSync, writeFileSync, mkdirSync, existsSync, rmSync, symlinkSync, lstatSync } from 'node:fs';
+import { dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawn, execFileSync } from 'node:child_process';
 import { createRequire } from 'node:module';
@@ -111,6 +111,17 @@ const stamp = new Date().toISOString().replaceAll(':', '-');
 const OUT = resolve(ROOT, option('--output', `docs/design/evidence/owner-implementation-${sha.slice(0, 8)}-${stamp}`));
 if (existsSync(join(OUT, 'manifest.json'))) throw new Error(`Evidence already exists: ${OUT}; choose a new --output`);
 mkdirSync(OUT, { recursive: true });
+// 증거 폴더 이름에는 커밋 해시와 시각이 들어가 만들 때마다 경로가 바뀐다 — 읽는 사람이 매번 찾아야 했다.
+// `docs/design/evidence/latest`가 늘 방금 만든 것을 가리킨다(검토안은 `latest/review/owner-review.pdf`).
+// 지문 계산은 docs/design/evidence를 통째로 빼므로 이 링크가 증거를 무효로 만들지 않는다.
+const LATEST = resolve(ROOT, 'docs/design/evidence/latest');
+try {
+  if (lstatSync(LATEST, { throwIfNoEntry: false })) rmSync(LATEST, { recursive: true, force: true });
+  symlinkSync(relative(dirname(LATEST), OUT), LATEST, 'dir');
+} catch (error) {
+  // 링크는 편의일 뿐이다 — 만들지 못해도 증거 생성은 계속한다
+  console.warn(`latest 링크를 갱신하지 못했습니다: ${error.message}`);
+}
 const BASE = { web: option('--web', 'http://localhost:4173'), pwa: option('--pwa', 'http://localhost:4174') };
 const ports = { web: 4173, pwa: 4174 };
 const servers = [];
