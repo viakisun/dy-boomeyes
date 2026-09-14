@@ -418,6 +418,7 @@ addEventListener('resize', () => render());
 Object.assign(window as any, {
   goTab, go, openFull, closeFull, toggleInbox, togglePick,
   render, renderFleet, renderInbox, inboxEvents, state,
+  SITES, REQS,
 });
 
 render();
