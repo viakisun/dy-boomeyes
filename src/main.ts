@@ -5,7 +5,7 @@ import { SITES, SITE_Z, LABEL, COLOR, UNIT_MSG, UNIT_TITLE, CAMVIEW, DOCS, REQS,
 declare const L: any, topojson: any;
 
 /* ---------- state ---------- */
-const state: any = { level: 'nation', site: null, unit: null, cam: 0, mode: '실시간', layout: 'B', viewer: true, tab: 'ops', q: '', fst: 'all', fsite: 'all', fexp: 'all', sort: 'attn', group: false };
+const state: any = { level: 'nation', site: null, unit: null, cam: 0, tab: 'ops', q: '', fst: 'all', fsite: 'all', fexp: 'all', sort: 'attn', group: false };
 const $ = (sel: string): any => document.querySelector(sel);
 const map = L.map('map', { zoomControl: true, attributionControl: true, minZoom: 6, maxZoom: 19, fadeAnimation: false, zoomAnimation: true, zoomSnap: 0.25, zoomDelta: 0.5 });
 map.zoomControl.setPosition('bottomright');
@@ -67,7 +67,6 @@ function render() {
   }
 }
 
-  $('#variant')?.addEventListener('click', e => { const b = (e.target as any).closest('button'); if (b) { state.layout = b.dataset.v; render(); } });
 const AI_OVERLAY = `<div class="det p" style="left:86%;top:56%;width:8%;height:32%"><span>작업자 · 4.2 m</span></div><div class="det t" style="left:78%;top:42%;width:8%;height:12%"><span>붐 끝 · 타설 중</span></div><div class="det z" style="left:54%;top:60%;width:42%;height:34%"><span>접근 주의 구역</span></div>`;
 const feedHtml = (u, i) => { const c = u.cams[i]; const ev = c[0] === 'ai' ? u.ai.filter(e => e.lvl === 'warn').length : 0; return `<div class="feed ${c[0]} ${i === state.cam ? 'on' : ''} ${ev ? 'alert' : ''}" data-cam="${i}" style="background-image:url(screens/cpb-scene.png);background-size:${CAMVIEW[i]}" onclick="openFull(${i})"><span class="live"><i></i>${c[1]}</span>${ev ? `<span class="evb">이벤트 ${ev}</span>` : ''}${c[0] === 'ai' ? AI_OVERLAY : ''}<span class="ts">10:42:0${i}</span><span class="exp">⤢</span></div>`; };
 function renderWall() { const u = state.unit; $('#wall').innerHTML = u.cams.map((c, i) => feedHtml(u, i)).join(''); fitWall(); }
@@ -95,14 +94,6 @@ function renderFull() {
     <div class="fv-strip">${u.cams.map((cc, k) => `<button class="${k === i ? 'on' : ''} ${cc[0]}" style="background-image:url(screens/cpb-scene.png);background-size:${CAMVIEW[k]}" onclick="openFull(${k})"><span>${cc[1]}</span></button>`).join('')}</div>`;
 }
 document.addEventListener('keydown', e => { if (state.full == null) return; if (e.key === 'Escape') closeFull(); if (e.key === 'ArrowLeft') openFull((state.full + state.unit.cams.length - 1) % state.unit.cams.length); if (e.key === 'ArrowRight') openFull((state.full + 1) % state.unit.cams.length); });
-function renderDock() {
-  const u = state.unit, i = state.cam, c = u.cams[i];
-  $('#dock').innerHTML = u.cams.map((c, i) => feedHtml(u, i)).join('') + (state.viewer ? `<div class="viewer ${c[0]}" style="background-image:url(screens/cpb-scene.png);background-size:${CAMVIEW[i]}"><span class="live"><i></i>LIVE · ${c[1]}</span>${c[0] === 'ai' ? AI_OVERLAY : ''}<button class="x" onclick="state.viewer=false;render()">×</button></div>` : '');
-}
-
-function placeMini() { return; }
-new ResizeObserver(() => placeMini()).observe($('#card'));
-new MutationObserver(() => requestAnimationFrame(placeMini)).observe($('#card'), { childList: true, subtree: true, attributes: true });
 function renderCrumb() {
   const s = state.site, u = state.unit;
   let h = state.level === 'nation' ? `<b>전국</b>` : `<button onclick="go('nation')">전국</button>`;
@@ -182,7 +173,7 @@ function renderReq() {
         <div class="rsec pick">
           <h3 class="sh">배정 <span>${picked.length} / ${r.n}대</span></h3>
           ${picked.length ? `<div class="pl">${picked.map(k => { const c = cands.find(x => x.u.code === k); return `<div>${c.u.num}호기 <span class="mono-s">${c.u.code}</span><button onclick="togglePick('${k}')">×</button></div>`; }).join('')}</div>` : '<p class="empty-s">우측 후보에서 호기를 고르세요</p>'}
-          <button class="confirm" ${picked.length === r.n ? '' : 'disabled'}>배정 확정 · 회신</button>
+          <button class="confirm" onclick="confirmReq()" ${picked.length === r.n && r.st === 'new' ? '' : 'disabled'}>${r.st === 'new' ? '배정 확정 · 회신' : '배정 완료'}</button>
         </div>
       </aside>
       <div class="rlist">
@@ -203,6 +194,14 @@ function togglePick(code) {
   const i = p.indexOf(code);
   if (i >= 0) p.splice(i, 1); else if (p.length < r.n) p.push(code);
   renderReq();
+}
+
+// 배정 확정 — 여기까지가 범위다. 운송·설치·가동·종료 전이는 만들지 않는다.
+// 목록·요청 배지·집계는 REQS를 다시 세므로 render() 한 번이면 따라온다.
+function confirmReq() {
+  state.req.st = 'assign';
+  state.req = null;
+  render();
 }
 
 /* ---------- fleet table ---------- */
@@ -269,7 +268,7 @@ function renderCard() {
   if (state.level === 'nation') {
     card.classList.remove('wide', 'unit');
     const warn = SITES.filter(s => warnSt.includes(s.st));
-    card.innerHTML = `<header><h2>확인 필요<small>${warn.length}개 현장 · ${SITES.flatMap(s => s.units).filter(u => warnSt.includes(u.st)).length}대</small></h2><a href="#" onclick="return false">전체 ${SITES.length}개 현장</a></header>
+    card.innerHTML = `<header><h2>확인 필요<small>${warn.length}개 현장 · ${SITES.flatMap(s => s.units).filter(u => warnSt.includes(u.st)).length}대</small></h2><a href="#" onclick="goTab('fleet');return false">전체 ${SITES.length}개 현장</a></header>
       <div class="body">${warn.map(s => `<div class="row" data-site="${s.id}" onclick="go('site', SITES.find(x=>x.id==='${s.id}'))">
         <div><div class="nm">${s.name}</div><div class="sub"><em style="color:${COLOR[s.st]}">${LABEL[s.st]}</em> · ${s.note}</div></div><div class="cnt">${s.n}대</div></div>`).join('')}</div>`;
     return;
@@ -281,12 +280,12 @@ function renderCard() {
       <div class="sec" style="border-bottom:0">
         <div class="dates"><span>${s.start}</span><span>${s.end}</span></div>
         <div class="bar"><i style="width:${s.prog*100}%"></i><b style="left:${s.prog*100}%"></b></div>
-        <div class="call"><button>☏ ${s.mgr} · 010-0000-0000</button><button class="ic" title="복사">⧉</button></div>
+        <div class="call"><button onclick="location.href='tel:${s.tel}'">☏ ${s.mgr} · ${s.tel}</button><button class="ic" title="복사" onclick="navigator.clipboard.writeText('${s.tel}');this.textContent='✓';setTimeout(()=>this.textContent='⧉',1200)">⧉</button></div>
       </div></details>`;
   if (state.level === 'site') {
     const order = {fault:0, check:1, late:2, run:3, store:4};
     const units = [...s.units].sort((a,b) => order[a.st]-order[b.st] || a.num-b.num);
-    card.innerHTML = `<header><h2>호기<small>${units.length}대</small></h2><a href="#" onclick="return false">보유 장비에서 보기</a></header>
+    card.innerHTML = `<header><h2>호기<small>${units.length}대</small></h2><a href="#" onclick="goTab('fleet');return false">보유 장비에서 보기</a></header>
       <div class="body">${units.map(u => unitRow(u)).join('')}</div>${contract}`;
     return;
   }
@@ -329,7 +328,7 @@ function unitCard(u, s, warn, since) {
       <details class="fold" ${parts[0][1] === 'wear' && parts[0][2] >= parts[0][3] - 10 ? 'open' : ''}><summary><span>소모품</span><span class="hint ${parts[0][1] === 'wear' && parts[0][2] >= parts[0][3] ? 'bad' : parts[0][1] === 'wear' && parts[0][2] >= parts[0][3] - 10 ? 'soon' : ''}">${parts[0][0]} ${parts[0][1] === 'wear' ? parts[0][2] + '%' : 'D-' + parts[0][2]} · ${u.parts.length}종</span><span class="chev"></span></summary>
         <div class="parts">${parts.map(partRow).join('')}</div></details>
       <details class="fold"><summary><span>현장 정보</span><span class="hint">${s.builder} · D-${s.dday}</span><span class="chev"></span></summary>
-        <dl class="kv"><dt>현장</dt><dd>${s.name}</dd><dt>계약</dt><dd>${s.start} – ${s.end}</dd><dt>설치일</dt><dd>${u.install}</dd><dt>담당자</dt><dd>${s.mgr} · <a href="#" onclick="return false">010-0000-0000</a></dd></dl></details>
+        <dl class="kv"><dt>현장</dt><dd>${s.name}</dd><dt>계약</dt><dd>${s.start} – ${s.end}</dd><dt>설치일</dt><dd>${u.install}</dd><dt>담당자</dt><dd>${s.mgr} · <a href="tel:${s.tel}">${s.tel}</a></dd></dl></details>
       <details class="fold"><summary><span>서류</span><span class="hint">차량 ${u.docs.length}건 · 운전자 4건</span><span class="chev"></span></summary>
         <div style="padding:0 18px 14px">
           <div class="dgrp">차량 서류</div>
@@ -416,7 +415,7 @@ addEventListener('resize', () => render());
 // 생성 HTML이 onclick="goTab('ops')" 꼴로 부른다 — 모듈 스코프라 전역에 얹어 준다.
 // 이벤트 위임으로 바꾸지 않는다: 마크업이 시안과 달라지고 코드가 는다.
 Object.assign(window as any, {
-  goTab, go, openFull, closeFull, toggleInbox, togglePick,
+  goTab, go, openFull, closeFull, toggleInbox, togglePick, confirmReq,
   render, renderFleet, renderInbox, inboxEvents, state,
   SITES, REQS,
 });

@@ -1,19 +1,19 @@
 // 시드 — Claude Design 「운영 현황 목업.html」 그대로.
 // 시안이 리터럴을 나중에 확장한다(s.units·u.parts) — 좁은 추론만 푼다
 const SITES: any[] = [
-  {id:'songdo',  name:'송도 업무시설 신축', region:'인천', addr:'인천 연수구', builder:'대양건설', lat:37.39, lon:126.64, n:8,  st:'fault', note:'2호기 공급 전압 저하', start:'2026. 04. 15.', end:'2026. 12. 20.', prog:.6, dday:99, mgr:'박현장'},
-  {id:'busan',   name:'부산 해운대 오피스', region:'부산', addr:'부산 해운대구', builder:'해성건설', lat:35.16, lon:129.16, n:14, st:'fault', note:'11호기 유압 경보', start:'2026. 02. 01.', end:'2027. 01. 31.', prog:.62, dday:141, mgr:'정현장'},
-  {id:'pt',      name:'평택 물류센터',     region:'경기', addr:'경기 평택시', builder:'한빛건설', lat:36.99, lon:127.09, n:12, st:'check', note:'3호기 수송관 점검 시기 도래', start:'2026. 05. 10.', end:'2027. 01. 10.', prog:.5, dday:120, mgr:'이현장'},
-  {id:'daegu',   name:'대구 주거단지',     region:'대구', addr:'대구 달서구', builder:'남도건설', lat:35.87, lon:128.60, n:10, st:'check', note:'23호기 정기 점검', start:'2026. 03. 01.', end:'2026. 11. 30.', prog:.72, dday:79, mgr:'최현장'},
-  {id:'daejeon', name:'대전 공동주택',     region:'대전', addr:'대전 유성구', builder:'한빛건설', lat:36.35, lon:127.38, n:6,  st:'late',  note:'4호기 마지막 수신 7. 3. 08:22', start:'2026. 06. 01.', end:'2027. 02. 28.', prog:.38, dday:120, mgr:'김현장'},
-  {id:'gn',      name:'강릉 리조트',       region:'강원', addr:'강원 강릉시', builder:'동해건설', lat:37.75, lon:128.88, n:4,  st:'late',  note:'2호기 수신 지연 3시간', start:'2026. 07. 01.', end:'2026. 12. 31.', prog:.4, dday:110, mgr:'윤현장'},
-  {id:'mapo',    name:'마포 주상복합 신축', region:'서울', addr:'서울 마포구', builder:'한빛건설', lat:37.55, lon:126.95, n:5,  st:'run', start:'2026. 06. 01.', end:'2026. 09. 30.', prog:.27, dday:89, mgr:'김현장'},
-  {id:'sejong',  name:'세종 행정타운',     region:'세종', addr:'세종시 어진동', builder:'세림건설', lat:36.48, lon:127.29, n:11, st:'run', start:'2026. 01. 15.', end:'2027. 01. 30.', prog:.66, dday:140, mgr:'오현장'},
-  {id:'cj',      name:'청주 산업단지',     region:'충북', addr:'충북 청주시', builder:'중원건설', lat:36.64, lon:127.49, n:9,  st:'run', start:'2026. 04. 01.', end:'2027. 04. 10.', prog:.44, dday:210, mgr:'장현장'},
-  {id:'gj',      name:'광주 산단 물류',    region:'광주', addr:'광주 광산구', builder:'호남건설', lat:35.16, lon:126.85, n:9,  st:'run', start:'2026. 03. 20.', end:'2026. 11. 15.', prog:.75, dday:64, mgr:'강현장'},
-  {id:'jj',      name:'전주 병원 신축',    region:'전북', addr:'전북 전주시', builder:'전북건설', lat:35.82, lon:127.15, n:7,  st:'run', start:'2026. 05. 01.', end:'2027. 01. 08.', prog:.53, dday:118, mgr:'문현장'},
-  {id:'cw',      name:'창원 공장 증축',    region:'경남', addr:'경남 창원시', builder:'경남산업', lat:35.23, lon:128.68, n:8,  st:'run', start:'2026. 04. 20.', end:'2026. 10. 14.', prog:.82, dday:32, mgr:'배현장'},
-  {id:'yongin',  name:'용인 장비 보관소',  region:'경기', addr:'경기 용인시', builder:'—', lat:37.24, lon:127.18, n:17, st:'store', start:'', end:'', prog:0, dday:0, mgr:'보관소 관리'},
+  {id:'songdo',  name:'송도 업무시설 신축', region:'인천', addr:'인천 연수구', builder:'대양건설', lat:37.39, lon:126.64, n:8,  st:'fault', note:'2호기 공급 전압 저하', start:'2026. 04. 15.', end:'2026. 12. 20.', prog:.6, dday:99, mgr:'박현장', tel:'010-0000-1201'},
+  {id:'busan',   name:'부산 해운대 오피스', region:'부산', addr:'부산 해운대구', builder:'해성건설', lat:35.16, lon:129.16, n:14, st:'fault', note:'11호기 유압 경보', start:'2026. 02. 01.', end:'2027. 01. 31.', prog:.62, dday:141, mgr:'정현장', tel:'010-0000-1202'},
+  {id:'pt',      name:'평택 물류센터',     region:'경기', addr:'경기 평택시', builder:'한빛건설', lat:36.99, lon:127.09, n:12, st:'check', note:'3호기 수송관 점검 시기 도래', start:'2026. 05. 10.', end:'2027. 01. 10.', prog:.5, dday:120, mgr:'이현장', tel:'010-0000-1203'},
+  {id:'daegu',   name:'대구 주거단지',     region:'대구', addr:'대구 달서구', builder:'남도건설', lat:35.87, lon:128.60, n:10, st:'check', note:'23호기 정기 점검', start:'2026. 03. 01.', end:'2026. 11. 30.', prog:.72, dday:79, mgr:'최현장', tel:'010-0000-1204'},
+  {id:'daejeon', name:'대전 공동주택',     region:'대전', addr:'대전 유성구', builder:'한빛건설', lat:36.35, lon:127.38, n:6,  st:'late',  note:'4호기 마지막 수신 7. 3. 08:22', start:'2026. 06. 01.', end:'2027. 02. 28.', prog:.38, dday:120, mgr:'김현장', tel:'010-0000-1205'},
+  {id:'gn',      name:'강릉 리조트',       region:'강원', addr:'강원 강릉시', builder:'동해건설', lat:37.75, lon:128.88, n:4,  st:'late',  note:'2호기 수신 지연 3시간', start:'2026. 07. 01.', end:'2026. 12. 31.', prog:.4, dday:110, mgr:'윤현장', tel:'010-0000-1206'},
+  {id:'mapo',    name:'마포 주상복합 신축', region:'서울', addr:'서울 마포구', builder:'한빛건설', lat:37.55, lon:126.95, n:5,  st:'run', start:'2026. 06. 01.', end:'2026. 09. 30.', prog:.27, dday:89, mgr:'김현장', tel:'010-0000-1207'},
+  {id:'sejong',  name:'세종 행정타운',     region:'세종', addr:'세종시 어진동', builder:'세림건설', lat:36.48, lon:127.29, n:11, st:'run', start:'2026. 01. 15.', end:'2027. 01. 30.', prog:.66, dday:140, mgr:'오현장', tel:'010-0000-1208'},
+  {id:'cj',      name:'청주 산업단지',     region:'충북', addr:'충북 청주시', builder:'중원건설', lat:36.64, lon:127.49, n:9,  st:'run', start:'2026. 04. 01.', end:'2027. 04. 10.', prog:.44, dday:210, mgr:'장현장', tel:'010-0000-1209'},
+  {id:'gj',      name:'광주 산단 물류',    region:'광주', addr:'광주 광산구', builder:'호남건설', lat:35.16, lon:126.85, n:9,  st:'run', start:'2026. 03. 20.', end:'2026. 11. 15.', prog:.75, dday:64, mgr:'강현장', tel:'010-0000-1210'},
+  {id:'jj',      name:'전주 병원 신축',    region:'전북', addr:'전북 전주시', builder:'전북건설', lat:35.82, lon:127.15, n:7,  st:'run', start:'2026. 05. 01.', end:'2027. 01. 08.', prog:.53, dday:118, mgr:'문현장', tel:'010-0000-1211'},
+  {id:'cw',      name:'창원 공장 증축',    region:'경남', addr:'경남 창원시', builder:'경남산업', lat:35.23, lon:128.68, n:8,  st:'run', start:'2026. 04. 20.', end:'2026. 10. 14.', prog:.82, dday:32, mgr:'배현장', tel:'010-0000-1212'},
+  {id:'yongin',  name:'용인 장비 보관소',  region:'경기', addr:'경기 용인시', builder:'—', lat:37.24, lon:127.18, n:17, st:'store', start:'', end:'', prog:0, dday:0, mgr:'보관소 관리', tel:'010-0000-1213'},
 ];
 const LABEL = {fault:'고장', check:'점검', late:'수신 지연', run:'정상', store:'보관'};
 const COLOR = {fault:'var(--fault)', check:'var(--check)', late:'var(--late)', run:'var(--run)', store:'var(--store)'};
