@@ -1,5 +1,8 @@
-// 인라인 on*= 가 부르는 이름이 그 앱의 window에 실제로 얹혀 있는지 앱마다 검사한다.
-// 이 어긋남은 런타임에 ReferenceError로만 드러나서 클릭이 조용히 죽는다 — 이번 작업에서 세 번 겪었다.
+// 배선 검사 — 마크업과 코드가 서로 있다고 믿는 것이 실제로 있는지 본다.
+//   1. 인라인 on*= 가 부르는 이름이 그 앱의 window에 얹혀 있나 (없으면 클릭이 조용히 죽는다)
+//   2. 코드가 $('#id') 로 찾는 요소가 그 앱 껍데기(또는 생성 HTML)에 있나
+//   3. 아무도 쓰지 않는 CSS 클래스가 남아 있나
+// 셋 다 런타임에만, 또는 영영 드러나지 않는다. 손으로 세다가 세 번 놓쳤다.
 import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 
@@ -113,5 +116,34 @@ for (const app of apps) {
   if (missing.length || missingIds.length) failed = true;
   else console.log(`  ${app}: 인라인 핸들러 ${called.size}개 · 요소 ${wantedIds.size}개 전부 있습니다 (${shell})`);
 }
+
+/* ---------- 3. 죽은 CSS ---------- */
+
+const css = readFileSync('src/style.css', 'utf8');
+// 선택자(여는 중괄호 앞)에서만 클래스를 뽑는다 — 값 안의 1.5em·a.png을 잡지 않으려고.
+// .mk.shifted 처럼 붙어 있는 뒤쪽 클래스도 세야 한다.
+const declared = new Set();
+for (const [, , selector] of css.matchAll(/(^|[};])\s*([^{};@]+?)\s*\{/g))
+  for (const [, name] of selector.matchAll(/\.([A-Za-z][\w-]*)/g)) declared.add(name);
+const codeText = [...filesUnder('src'), ...htmlFiles]
+  .filter(f => !f.endsWith('.css'))
+  .map(f => readFileSync(f, 'utf8'))
+  .join('\n');
+// class="…" · classList.…(…) · className=… 에 적힌 것.
+const inUse = new Set();
+for (const [chunk] of codeText.matchAll(/class="[^"]*"|classList\.\w+\([^)]*\)|className[^;]*/g))
+  for (const [word] of chunk.matchAll(/[A-Za-z][\w-]*/g)) inUse.add(word);
+// 클래스 이름을 값에서 만드는 곳도 있다 — class="rst ${r.status}" 처럼.
+// 그 값들은 한 낱말짜리 문자열 리터럴로 어딘가에 적혀 있다. 넓게 잡아 오탐을 없앤다.
+// 대신 「어디에도 그 낱말이 없는」 클래스만 잡히므로 검사는 느슨해진다 — 그래도 없는 것보다 낫다.
+for (const [, word] of codeText.matchAll(/['"`]([A-Za-z][\w-]*)['"`]/g)) inUse.add(word);
+
+// .leaflet-* 은 Leaflet이 직접 붙인다
+const deadCss = [...declared].filter(c => !inUse.has(c) && !c.startsWith('leaflet')).sort();
+for (const c of deadCss) console.error(`  css: 안 쓰임 — .${c}`);
+if (deadCss.length) {
+  console.error(`\n아무도 쓰지 않는 CSS 클래스 ${deadCss.length}종. 지우거나, 쓰는 곳을 만드세요.`);
+  failed = true;
+} else console.log(`  css: 클래스 ${[...declared].filter(c => !c.startsWith('leaflet')).length}종 전부 쓰입니다`);
 
 if (failed) process.exit(1);

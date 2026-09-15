@@ -4,9 +4,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "node tools/check-handlers.mjs && tsc --noEmit && vite build",
+    "build": "node tools/check-wiring.mjs && tsc --noEmit && vite build",
     "preview": "vite preview",
-    "check": "node tools/check-handlers.mjs && tsc --noEmit"
+    "check": "node tools/check-wiring.mjs && tsc --noEmit"
   },
   "devDependencies": {
     "typescript": "^5.6.3",

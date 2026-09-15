@@ -2,13 +2,16 @@
 
 CPB(콘크리트 타설 붐) 관제. 역할마다 앱이 하나다.
 
-| 앱 | 주소 | 무엇 |
-|---|---|---|
-| 소유주 | `/` | 전국 현장 → 호기 → 카메라 · 보유 장비 120대 · 현장 요청 배정 |
-| 건설사 | `/builder.html` | 우리 현장 → 호기 → 카메라. 장비를 소유하지 않으므로 보유 장비·요청 배정이 없다 |
-| 안전관리자 | (아직 없음) | 시안이 나오면 같은 자리에 붙인다 |
+| 앱 | 주소 | 누가 | 무엇 |
+|---|---|---|---|
+| `owner-web` | `/` | 사업주(장비 소유주) | 전국 현장 → 호기 → 카메라 · 보유 장비 120대 · 요청 배정 |
+| `hq-web` | `/hq-web.html` | 건설사 본사 안전관리자 | 자사 현장 → 호기 → 카메라. 읽기 전용 |
 
-로그인이 생기기 전까지 건설사는 주소로 고른다 — `/builder.html?builder=대양건설`.
+앱 이름은 `<대상>-<플랫폼>` 이다 — 한 역할이 웹과 폰을 둘 다 갖기 때문이다.
+역할 7·앱 8의 전체 지도와 각 앱이 **일부러 안 하는 것**은 [docs/APPS.md](docs/APPS.md).
+무엇이 공용이고 무엇이 전용인지는 [docs/COMPONENTS.md](docs/COMPONENTS.md).
+
+로그인이 생기기 전까지 회사는 주소로 고른다 — `/hq-web.html?company=대양건설`.
 
 ```sh
 npm install
@@ -21,8 +24,8 @@ npm run preview  # http://localhost:4301 — 빌드한 dist/를 정적으로
 ## 폴더
 
 ```
-index.html              소유주 앱의 껍데기
-builder.html            건설사 앱의 껍데기
+index.html              owner-web 의 껍데기
+hq-web.html             hq-web 의 껍데기
 src/
   shared/               역할이 늘어도 같이 쓰는 것
     types.ts            도메인 — 서버가 돌려주는 것들의 모양
@@ -37,13 +40,14 @@ src/
       site-panel · unit-panel · status-bar · inbox
     mock/               목업 데이터와 목업 서버
   apps/
-    owner/              소유주 앱
+    owner-web/          사업주 운영 WEB
       main.ts           부팅 · 화면 전환 · 인라인 핸들러 배선
       store.ts          서버에서 받아 둔 것(server)과 보고 있는 것(view)
-      views/            shell(크럼) · nation-panel · fleet · requests
-    builder/            건설사 앱
+      views/            nation-panel · fleet · requests
+    hq-web/             본사 안전관리자 WEB
       main.ts  store.ts  views/site-list.ts
-tools/check-handlers.mjs  인라인 on*= 가 부르는 이름이 실제로 있는지 앱마다 검사
+docs/APPS.md  docs/COMPONENTS.md   앱 지도 · 컴포넌트 목록
+tools/check-wiring.mjs  배선 검사 — 인라인 핸들러 · 요소 id · 죽은 CSS
 ```
 
 **`shared`에는 확신하는 것만 올린다.** 두 번째 역할이 실제로 쓸 때 옮긴다 — 미리 올리면
@@ -53,12 +57,15 @@ tools/check-handlers.mjs  인라인 on*= 가 부르는 이름이 실제로 있�
 
 ### 역할을 하나 더 만들 때
 
-1. `builder.html` 을 만들고 `<script type="module" src="/src/apps/builder/main.ts">` 를 넣는다
-2. `src/apps/builder/` 에 `main.ts` · `store.ts` · `views/` 를 둔다
+1. `<앱>.html` 을 만들고 `<script type="module" src="/src/apps/<앱>/main.ts">` 를 넣는다
+2. `src/apps/<앱>/` 에 `main.ts` · `store.ts` · `views/` 를 둔다
 3. `vite.config.ts` 의 `input` 에 한 줄 더한다
 
-`npm run check` 가 앱마다 따로 검사한다 — 어느 앱의 마크업이 그 앱에 없는 핸들러를 부르면
-막는다. 공용 조각에 한 역할 전용 동작이 섞이면 여기서 걸린다(실제로 걸렸다).
+이름은 [docs/APPS.md](docs/APPS.md)의 표에서 고른다 — 지어내지 않는다.
+
+`npm run check` 가 앱마다 따로 검사한다 — 마크업이 그 앱에 없는 핸들러를 부르거나, 코드가
+그 앱에 없는 요소를 찾으면 막는다. 공용 조각에 한 역할 전용 동작이 섞이면 여기서 걸린다
+(실제로 걸렸다). 아무도 쓰지 않는 CSS 클래스도 함께 막는다.
 
 빌드는 앱마다 따로 묶이고 `shared`는 공유 청크로 빠진다.
 
@@ -94,6 +101,9 @@ tools/check-handlers.mjs  인라인 on*= 가 부르는 이름이 실제로 있�
 시안과 달라지고 코드가 는다. 대신 `main.ts` 끝에서 `window` 에 얹고, **`npm run check` 가
 마크업이 부르는 이름과 얹은 이름이 맞는지 검사한다.** 이 어긋남은 런타임에만 드러나서
 클릭이 조용히 죽는다 — 이번 작업에서 세 번 겪었다.
+
+**핸들러 이름을 문자열로 넘기지 않는다** — 넘기면 검사기 시야를 벗어난다
+([docs/COMPONENTS.md](docs/COMPONENTS.md) 규칙 2).
 
 ## 이 저장소가 무엇인가
 

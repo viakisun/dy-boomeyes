@@ -1,4 +1,4 @@
-// 소유주 앱 — 부팅, 화면 전환, 인라인 핸들러 배선.
+// 소유주 운영 WEB (아카이브 서피스 B1) — 부팅, 화면 전환, 인라인 핸들러 배선.
 // 화면은 store.server를 읽고, 바꾸는 것은 shared/api를 거친다.
 import '../../style.css';
 import * as api from '../../shared/api';

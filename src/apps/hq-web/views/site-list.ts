@@ -1,4 +1,4 @@
-// 건설사의 현장 목록 — 소유주의 전국 지도 자리에 온다. 건설사는 현장이 몇 곳뿐이다.
+// 자사 현장 목록 — 소유주의 전국 목록 자리에 온다. 한 건설사는 현장이 몇 곳뿐이다.
 import { STATUS_COLOR, STATUS_LABEL, STATUS_ORDER } from '../../../shared/labels';
 import { server, view } from '../store';
 import type { Site } from '../../../shared/types';

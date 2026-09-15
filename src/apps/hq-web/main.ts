@@ -1,5 +1,6 @@
-// 건설사 앱 — 자기 현장과 거기 투입된 호기만 본다.
-// 소유주 앱에서 전국 지도·보유 장비·요청 배정을 뺀 것이다. 화면 조각은 shared/panels를 같이 쓴다.
+// 본사 안전관리자 WEB (아카이브 서피스 B2) — 자사 전 현장과 거기 투입된 호기를 본다.
+// 소유주 앱에서 전국 지도·보유 장비·요청 배정을 뺐다. 읽기 전용 — 직접 처리 불가.
+// 아직 없는 것: 확인 요청(B2 고유 동작)과 보고 모드. docs/APPS.md 참고.
 import '../../style.css';
 import * as map from '../../shared/map/site-map';
 import { badgeText, bindShell, setUnitMode, startApp } from '../../shared/app-shell';
@@ -9,7 +10,7 @@ import { renderBreadcrumb } from '../../shared/panels/breadcrumb';
 import { sitePanel } from '../../shared/panels/site-panel';
 import { renderStatusBar } from '../../shared/panels/status-bar';
 import { unitPanel } from '../../shared/panels/unit-panel';
-import { currentBuilder, currentSite, currentUnit, loadEverything, server, unreadAlertCount, view } from './store';
+import { currentCompany, currentSite, currentUnit, loadEverything, server, unreadAlertCount, view } from './store';
 import { siteListPanel } from './views/site-list';
 
 /* ---------- 화면 전환 ---------- */
@@ -19,7 +20,7 @@ const renderAlertBadge = () => ($('#nbadge').textContent = badgeText(unreadAlert
 function render() {
   const site = currentSite();
   renderAlertBadge();
-  renderBreadcrumb(currentBuilder(), site, currentUnit());
+  renderBreadcrumb(currentCompany(), site, currentUnit());
 
   if (!site) {
     // 이 건설사 이름으로 잡히는 현장이 없다
@@ -28,7 +29,7 @@ function render() {
     $('#card').innerHTML =
       `<header><h2>현장 없음</h2></header>` +
       `<div class="body"><div class="row"><div><div class="sub">` +
-      `${currentBuilder()} 로 등록된 현장이 없습니다.</div></div></div></div>`;
+      `${currentCompany()} 로 등록된 현장이 없습니다.</div></div></div></div>`;
     map.hideMap();
     return;
   }
@@ -60,7 +61,7 @@ function showSiteList() {
   $('#wall').hidden = true;
   document.body.className = '';
   $('#map').removeAttribute('style');
-  $('#crumb').innerHTML = `<b>${currentBuilder()}</b>`;
+  $('#crumb').innerHTML = `<b>${currentCompany()}</b>`;
   map.showNation(server.sites);
 }
 

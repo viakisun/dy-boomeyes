@@ -9,8 +9,9 @@ const sharedHead = {
     html.replace('<!-- shared:head -->', readFileSync('src/shared/head.html', 'utf8').trim()),
 };
 
-// 역할마다 앱이 하나다. 새 역할을 더하려면 두 줄이면 된다:
-//   1. <역할>.html 을 만들고 <script type="module" src="/src/apps/<역할>/main.ts">를 넣는다
+// 앱 이름은 <대상>-<플랫폼>이다 — 한 역할이 웹과 폰을 둘 다 갖기 때문이다(docs/APPS.md).
+// 새 앱을 더하려면 두 줄이면 된다:
+//   1. <앱>.html 을 만들고 <script type="module" src="/src/apps/<앱>/main.ts">를 넣는다
 //   2. 아래 input에 한 줄 더한다
 // 공용은 src/shared 에 있다. 빌드는 앱마다 따로 묶고, 공용은 공유 청크로 빠진다.
 export default defineConfig({
@@ -18,9 +19,9 @@ export default defineConfig({
   build: {
     rollupOptions: {
       input: {
-        owner: 'index.html',
-        builder: 'builder.html',
-        // safety: 'safety.html',     // 안전관리자 앱
+        'owner-web': 'index.html',
+        'hq-web': 'hq-web.html',
+        // 'site-web': 'site-web.html',   // 현장 안전관리자 (아카이브 B3)
       },
     },
   },
