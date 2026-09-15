@@ -18,10 +18,31 @@ npm run preview  # http://localhost:4301 — 빌드한 dist/를 정적으로
 
 | 파일 | 무엇 |
 |---|---|
-| `index.html` | 시안의 `<head>`·`<body>` |
-| `src/style.css` | 시안의 `<style>` |
-| `src/data.ts` | 시드 — 현장 13곳과 호기 120대를 만든다 |
-| `src/main.ts` | 화면 전환·지도·카메라·표. 시안의 `<script>` |
+| `index.html` · `src/style.css` | 시안의 `<head>`·`<body>`·`<style>` |
+| `src/types.ts` | **서버가 돌려주는 것들의 모양.** 화면은 이 타입만 안다 |
+| `src/api.ts` | **서버 경계.** 화면은 여기만 부른다 |
+| `src/mock/seed.ts` | 목업 시드 — 현장 13곳과 호기 120대를 만든다 |
+| `src/mock/server.ts` | 목업 서버 — 경로별 응답 · 지연 · 복사본 · 쓰기 보관 |
+| `src/store.ts` | 받아 둔 응답(`db`)과 화면 상태(`state`) |
+| `src/map.ts` | Leaflet — 마커 밀어내기 · 이름표 자리 찾기 |
+| `src/views/*.ts` | 화면별 렌더 — 전국 · 현장 · 호기 · 보유 장비 · 요청 · 알림 |
+| `src/main.ts` | 부팅 · 화면 전환 · 인라인 핸들러 배선 |
+
+### 서버로 바꾸려면
+
+`src/api.ts`의 `USE_MOCK`을 `false`로 두고 `BASE`에 주소를 넣는다. **화면 코드는 손대지 않는다.**
+서버가 맞춰야 할 것은 `src/mock/server.ts`가 받는 경로 그대로다.
+
+| | |
+|---|---|
+| `GET /sites` | 현장과 그 안의 호기 전부 |
+| `GET /requests` | 현장에서 온 요청 |
+| `GET /alerts` | 고장·지연·점검·AI·계약 종료 임박 |
+| `GET /requests/:id/candidates` | 그 요청에 배정할 수 있는 호기 |
+| `POST /requests/:id/assign` | `{ codes: string[] }` — 배정 확정 |
+
+목업 서버는 지연 60 ms를 주고 **복사본**을 돌려준다. 화면이 받은 것을 고쳐도 서버 쪽은
+바뀌지 않는다 — 실 HTTP와 같게 두려는 것이다. 잘못된 요청은 실서버처럼 막는다(400·404·409).
 
 시안과 어긋나는 곳이 보이면 **문서가 아니라 `design/운영 현황 목업.html`과 대조한다.**
 이전 라운드는 시안을 읽고 번역한 코드를 문서에 옮겨 적은 대응표로 고치다가 계속 어긋났다.
