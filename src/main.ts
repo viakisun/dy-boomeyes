@@ -1,11 +1,11 @@
 // 운영 현황 — Claude Design 「운영 현황 목업.html」을 파일로 나눈 것. 로직은 시안 그대로다.
 import './style.css';
-import { SITES, SITE_Z, LABEL, COLOR, UNIT_MSG, UNIT_TITLE, CAMVIEW, DOCS, REQS, REQ_ST, ll } from './data';
+import { SITES, SITE_Z, LABEL, COLOR, UNIT_MSG, CAMVIEW, REQS, REQ_ST, ll } from './data';
 
 declare const L: any, topojson: any;
 
 /* ---------- state ---------- */
-const state: any = { level: 'nation', site: null, unit: null, cam: 0, tab: 'ops', q: '', fst: 'all', fsite: 'all', fexp: 'all', sort: 'attn', group: false };
+const state: any = { level: 'nation', site: null, unit: null, tab: 'ops', q: '', fst: 'all', fsite: 'all', fexp: 'all', sort: 'attn', group: false };
 const $ = (sel: string): any => document.querySelector(sel);
 const map = L.map('map', { zoomControl: true, attributionControl: true, minZoom: 6, maxZoom: 19, fadeAnimation: false, zoomAnimation: true, zoomSnap: 0.25, zoomDelta: 0.5 });
 map.zoomControl.setPosition('bottomright');
@@ -27,7 +27,7 @@ const siteLayer = L.layerGroup();
 function goTab(t) { state.tab = t; if (t !== 'req') state.req = null; if (t !== 'ops') { state.level = 'nation'; state.unit = null; } render(); }
 function go(level, site?, unit?) {
   state.tab = 'ops';
-  state.level = level; state.site = site ?? state.site; if (unit !== state.unit) state.cam = 0; state.unit = unit ?? null; state.full = null; $('#fullv').hidden = true;
+  state.level = level; state.site = site ?? state.site; state.unit = unit ?? null; state.full = null; $('#fullv').hidden = true;
   render();
 }
 
@@ -42,17 +42,17 @@ function render() {
   if (fleet) { $('#band').classList.add('hide'); $('#wall').hidden = true; document.body.className = ''; $('#crumb').innerHTML = '<b>보유 장비</b>'; renderFleet(); return; }
   renderCrumb(); renderBand(); renderCard();
   $('#band').classList.toggle('hide', state.level === 'unit');
-  const isUnit = state.level === 'unit', v: string = isUnit ? 'B' : 'A';
-  document.body.className = 'v' + v;
-  if (v !== 'B') { $('#map').removeAttribute('style'); }
-  $('#wall').hidden = v !== 'B';
-  if (v === 'B') renderWall();
+  const isUnit = state.level === 'unit';
+  document.body.className = isUnit ? 'vB' : '';
+  if (!isUnit) { $('#map').removeAttribute('style'); }
+  $('#wall').hidden = !isUnit;
+  if (isUnit) renderWall();
   map.invalidateSize({ animate: false });
   const mapEl = $('#map');
   if (state.level === 'nation') {
     mapEl.classList.remove('site'); siteLayer.remove(); tiles.remove(); if (vectorLayer) vectorLayer.addTo(map); nationLayer.addTo(map);
     fitNation();
-  } else if (v === 'B') {
+  } else if (isUnit) {
     mapEl.classList.add('site'); nationLayer.remove(); siteLayer.remove(); tiles.remove(); mapEl.style.display = 'none';
   } else {
     mapEl.classList.add('site'); nationLayer.remove(); if (vectorLayer) vectorLayer.remove(); tiles.addTo(map); buildSiteLayer(); siteLayer.addTo(map);
@@ -60,7 +60,7 @@ function render() {
     const left = $('#card').getBoundingClientRect().right - mapEl.getBoundingClientRect().left;
     const focus = state.level === 'unit' ? L.latLng(ll(s, state.unit.d)) : b.getCenter();
     map.setView(focus, SITE_Z, { animate: false });
-    const free = { x: left + 30, y: state.level === 'unit' ? 30 : 90, w: mapEl.clientWidth - left - 70, h: mapEl.clientHeight - (state.level === 'unit' ? 60 : 130) - (v === 'C' ? 140 : 0) };
+    const free = { x: left + 30, y: state.level === 'unit' ? 30 : 90, w: mapEl.clientWidth - left - 70, h: mapEl.clientHeight - (state.level === 'unit' ? 60 : 130) };
     const p = map.latLngToContainerPoint(focus);
     map.panBy([p.x - (free.x + free.w / 2) + (state.level === 'unit' ? -70 : 0), p.y - (free.y + free.h / 2)], { animate: false });
     document.querySelectorAll('.um').forEach(el => el.classList.toggle('on', state.unit && (el as any).dataset.unit === String(state.unit.num)));
@@ -68,7 +68,7 @@ function render() {
 }
 
 const AI_OVERLAY = `<div class="det p" style="left:86%;top:56%;width:8%;height:32%"><span>작업자 · 4.2 m</span></div><div class="det t" style="left:78%;top:42%;width:8%;height:12%"><span>붐 끝 · 타설 중</span></div><div class="det z" style="left:54%;top:60%;width:42%;height:34%"><span>접근 주의 구역</span></div>`;
-const feedHtml = (u, i) => { const c = u.cams[i]; const ev = c[0] === 'ai' ? u.ai.filter(e => e.lvl === 'warn').length : 0; return `<div class="feed ${c[0]} ${i === state.cam ? 'on' : ''} ${ev ? 'alert' : ''}" data-cam="${i}" style="background-image:url(screens/cpb-scene.png);background-size:${CAMVIEW[i]}" onclick="openFull(${i})"><span class="live"><i></i>${c[1]}</span>${ev ? `<span class="evb">이벤트 ${ev}</span>` : ''}${c[0] === 'ai' ? AI_OVERLAY : ''}<span class="ts">10:42:0${i}</span><span class="exp">⤢</span></div>`; };
+const feedHtml = (u, i) => { const c = u.cams[i]; const ev = c[0] === 'ai' ? u.ai.filter(e => e.lvl === 'warn').length : 0; return `<div class="feed ${c[0]} ${ev ? 'alert' : ''}" data-cam="${i}" style="background-image:url(screens/cpb-scene.png);background-size:${CAMVIEW[i]}" onclick="openFull(${i})"><span class="live"><i></i>${c[1]}</span>${ev ? `<span class="evb">이벤트 ${ev}</span>` : ''}${c[0] === 'ai' ? AI_OVERLAY : ''}<span class="ts">10:42:0${i}</span><span class="exp">⤢</span></div>`; };
 function renderWall() { const u = state.unit; $('#wall').innerHTML = u.cams.map((c, i) => feedHtml(u, i)).join(''); fitWall(); }
 // Pick the column count (3 or 2) that gives the largest 16:9 tiles inside the wall area.
 function fitWall() {
@@ -157,9 +157,11 @@ function renderReq() {
   const r = state.req;
   const picked = r.picked || (r.picked = []);
   // Candidates: units in storage, plus units whose site contract ends before the requested start.
+  // 다른 요청이 이미 가져간 호기는 후보에서 뺀다 — 한 호기가 두 현장에 배정되지 않게.
+  const taken = new Set(REQS.filter(x => x !== r).flatMap(x => x.picked || []));
   const cands = SITES.flatMap(s => s.units.map(u => ({ u, s })))
     .filter(({ u, s }) => s.st === 'store' || (s.st !== 'store' && s.dday <= 60))
-    .filter(({ u }) => !['fault'].includes(u.st))
+    .filter(({ u }) => !['fault'].includes(u.st) && !taken.has(u.code))
     .sort((a, b) => (a.s.st === 'store' ? 0 : 1) - (b.s.st === 'store' ? 0 : 1) || a.s.dday - b.s.dday);
   const why = ({ u, s }) => s.st === 'store'
     ? `<b class="ok">보관 중</b><span>${s.name}</span>`
