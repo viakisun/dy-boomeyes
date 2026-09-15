@@ -4,12 +4,13 @@ import { $, LABEL, WARN_ST } from './ui';
 import { db, state } from './store';
 import type { Site } from './types';
 
+// Leaflet과 topojson은 CDN 전역이다 — 타입 패키지를 받지 않는다.
 declare const L: any, topojson: any;
 
 /** 현장 단계의 고정 줌. 시드가 호기 좌표를 이 줌 기준으로 만든다. */
-export const SITE_Z = 17;
+const SITE_Z = 17;
 
-export const map = L.map('map', {
+const map = L.map('map', {
   zoomControl: true,
   attributionControl: true,
   minZoom: 6,
@@ -166,11 +167,14 @@ function placeBadges() {
 /** 이름표를 배지 주변 자리 중 겹치지 않는 곳에 둔다. 확인이 필요한 현장(pri 0)이 먼저 자리를 잡는다. */
 function placeLabels() {
   if (state.level !== 'nation') return;
-  const mks: any[] = [...(document.querySelectorAll('.mk') as any)].sort((a, b) => a.dataset.pri - b.dataset.pri);
-  const taken = mks.map(m => m.querySelector('.bd').getBoundingClientRect());
-  const hit = (r: any) =>
+  const mks = [...document.querySelectorAll<HTMLElement>('.mk')].sort(
+    (a, b) => Number(a.dataset.pri) - Number(b.dataset.pri),
+  );
+  // .bd·.lb는 buildNationMarkers가 넣은 것이라 반드시 있다.
+  const taken = mks.map(m => m.querySelector('.bd')!.getBoundingClientRect());
+  const hit = (r: DOMRect) =>
     taken.some(t => r.left < t.right + 2 && r.right > t.left - 2 && r.top < t.bottom + 2 && r.bottom > t.top - 2);
-  const overlap = (r: any) =>
+  const overlap = (r: DOMRect) =>
     taken.reduce(
       (a, t) =>
         a +
@@ -179,7 +183,7 @@ function placeLabels() {
       0,
     );
   for (const m of mks) {
-    const lb = m.querySelector('.lb');
+    const lb = m.querySelector('.lb')!;
     let placed = null,
       fallback = null;
     for (const p of ['', 'pr', 'pl', 'pa', 'pbr', 'pbl']) {

@@ -30,8 +30,8 @@ export const state = {
   group: false,
 };
 
-export const site = (id = state.siteId): Site | null => db.sites.find(s => s.id === id) ?? null;
-export const unit = (siteId = state.siteId, num = state.unitNum): Unit | null =>
+const site = (id = state.siteId): Site | null => db.sites.find(s => s.id === id) ?? null;
+const unit = (siteId = state.siteId, num = state.unitNum): Unit | null =>
   site(siteId)?.units.find(u => u.num === num) ?? null;
 export const curSite = () => site();
 export const curUnit = () => unit();

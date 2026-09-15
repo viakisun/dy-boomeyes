@@ -1,6 +1,6 @@
 // 요청 — 목록과 상세(후보 고르기·배정 확정).
 // 후보는 서버가 고른다. 화면은 고른 것을 draft에 담아 두었다가 확정할 때 한 번 보낸다.
-import { $, ORDER, REQ_ST, shortRecv } from '../ui';
+import { $, REQ_ST, shortRecv } from '../ui';
 import { curReq, db, state } from '../store';
 import type { Candidate, Request } from '../types';
 
@@ -102,5 +102,3 @@ export function renderReq() {
   const r = curReq();
   $('#req').innerHTML = r ? detail(r) : list();
 }
-
-export { ORDER };

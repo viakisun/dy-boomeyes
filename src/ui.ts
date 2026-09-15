@@ -1,7 +1,7 @@
 // 화면이 함께 쓰는 표시용 상수와 조각. 서버 데이터가 아니다.
 import type { Status } from './types';
 
-export const $ = (sel: string): any => document.querySelector(sel);
+export const $ = <T extends HTMLElement = HTMLElement>(sel: string) => document.querySelector(sel) as T;
 
 export const LABEL: Record<Status, string> = {
   fault: '고장',

@@ -1,7 +1,7 @@
 // 목업 서버. 경로로 응답을 고르고, 지연을 주고, 복사본을 돌려준다.
 // 복사본인 이유: 화면이 받은 것을 고쳐도 서버 쪽이 바뀌면 안 된다(실 HTTP와 같게).
 import { buildDb } from './seed';
-import type { Alert, Candidate, Request, Site } from '../types';
+import type { Alert, Candidate, Request, Site, Unit } from '../types';
 
 const db = buildDb();
 const LATENCY = 60;
@@ -9,13 +9,12 @@ const LATENCY = 60;
 const wait = () => new Promise(r => setTimeout(r, LATENCY));
 const copy = <T>(v: T): T => JSON.parse(JSON.stringify(v));
 
-const WARN = ['fault', 'check', 'late'];
 const MSG = { fault: '공급 전압 저하', check: '수송관 점검 시기 도래' };
 
 /** 알림은 현장·호기 상태에서 서버가 만들어 준다. */
 function alerts(sites: Site[]): Alert[] {
   const out: Alert[] = [];
-  const at = (kind: Alert['kind'], t: string, s: Site, u: any, title: string, sub: string) =>
+  const at = (kind: Alert['kind'], t: string, s: Site, u: Unit | null, title: string, sub: string) =>
     out.push({
       id: title + (u ? u.code : s.id),
       kind,
@@ -77,7 +76,7 @@ function assign(reqId: string, codes: string[]): Request {
 }
 
 /** 실 HTTP와 같은 모양. 없는 경로는 던진다. */
-export async function request(method: string, path: string, body?: any): Promise<any> {
+export async function request(method: string, path: string, body?: unknown): Promise<unknown> {
   await wait();
   const cand = path.match(/^\/requests\/([\w-]+)\/candidates$/);
   const asg = path.match(/^\/requests\/([\w-]+)\/assign$/);
@@ -85,6 +84,6 @@ export async function request(method: string, path: string, body?: any): Promise
   if (method === 'GET' && path === '/requests') return copy(db.requests);
   if (method === 'GET' && path === '/alerts') return copy(alerts(db.sites));
   if (method === 'GET' && cand) return copy(candidates(cand[1]));
-  if (method === 'POST' && asg) return copy(assign(asg[1], body.codes));
+  if (method === 'POST' && asg) return copy(assign(asg[1], (body as { codes: string[] }).codes));
   throw new Error(`404 ${method} ${path}`);
 }

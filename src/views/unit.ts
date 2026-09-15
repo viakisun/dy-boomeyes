@@ -1,7 +1,6 @@
 // 호기 단계 — 좌측 상세 카드, 카메라 벽, 전체 화면 뷰어.
 import { $, AI_OVERLAY, CAMVIEW, LABEL, SCENE, UNIT_MSG, shortRecv } from '../ui';
 import { curUnit, state } from '../store';
-import { contractFold } from './site';
 import type { Part, Site, Unit } from '../types';
 
 /* ---------- 좌측 카드 ---------- */

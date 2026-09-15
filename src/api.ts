@@ -6,8 +6,8 @@ import type { Alert, Candidate, Request, Site } from './types';
 const USE_MOCK = true;
 const BASE = '/api';
 
-async function call(method: string, path: string, body?: any): Promise<any> {
-  if (USE_MOCK) return mock.request(method, path, body);
+async function call<T>(method: string, path: string, body?: unknown): Promise<T> {
+  if (USE_MOCK) return mock.request(method, path, body) as Promise<T>;
   const res = await fetch(BASE + path, {
     method,
     headers: body ? { 'content-type': 'application/json' } : undefined,
@@ -17,9 +17,9 @@ async function call(method: string, path: string, body?: any): Promise<any> {
   return res.json();
 }
 
-export const getSites = (): Promise<Site[]> => call('GET', '/sites');
-export const getRequests = (): Promise<Request[]> => call('GET', '/requests');
-export const getAlerts = (): Promise<Alert[]> => call('GET', '/alerts');
-export const getCandidates = (reqId: string): Promise<Candidate[]> => call('GET', `/requests/${reqId}/candidates`);
-export const assignRequest = (reqId: string, codes: string[]): Promise<Request> =>
-  call('POST', `/requests/${reqId}/assign`, { codes });
+export const getSites = () => call<Site[]>('GET', '/sites');
+export const getRequests = () => call<Request[]>('GET', '/requests');
+export const getAlerts = () => call<Alert[]>('GET', '/alerts');
+export const getCandidates = (reqId: string) => call<Candidate[]>('GET', `/requests/${reqId}/candidates`);
+export const assignRequest = (reqId: string, codes: string[]) =>
+  call<Request>('POST', `/requests/${reqId}/assign`, { codes });

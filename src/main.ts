@@ -16,15 +16,19 @@ import { renderInbox, unreadCount } from './views/inbox';
 /* ---------- 화면 전환 ---------- */
 
 function render() {
-  document.querySelectorAll('.rail .nav').forEach(b => b.classList.toggle('on', (b as any).dataset.tab === state.tab));
+  document
+    .querySelectorAll<HTMLElement>('.rail .nav')
+    .forEach(b => b.classList.toggle('on', b.dataset.tab === state.tab));
   const fleet = state.tab === 'fleet',
     req = state.tab === 'req';
   $('#fleet').hidden = !fleet;
   $('#req').hidden = !req;
   $('#card').hidden = fleet || req;
   $('#map').style.visibility = fleet || req ? 'hidden' : '';
-  $('#rbadge').textContent = db.requests.filter(r => r.st === 'new').length || '';
-  $('#nbadge').textContent = unreadCount() || '';
+  // 0이면 배지를 비운다 — 빈 문자열이라야 CSS가 점을 숨긴다
+  const badge = (n: number) => (n ? String(n) : '');
+  $('#rbadge').textContent = badge(db.requests.filter(r => r.st === 'new').length);
+  $('#nbadge').textContent = badge(unreadCount());
 
   if (fleet || req) {
     $('#band').classList.add('hide');
@@ -151,8 +155,9 @@ async function confirmReq() {
 }
 
 /** 보유 장비의 검색·필터·정렬·묶기. 표만 다시 그린다. */
-function setFleet(key: string, value: any, keepFocus = false) {
-  (state as any)[key] = value;
+type FleetKey = 'q' | 'fst' | 'fsite' | 'fexp' | 'sort' | 'group';
+function setFleet(key: FleetKey, value: string | boolean, keepFocus = false) {
+  (state[key] as string | boolean) = value;
   renderFleet();
   if (keepFocus) $('#fq').focus();
 }
@@ -165,6 +170,7 @@ const copyTel = (el: HTMLElement, tel: string) => {
 };
 
 // 생성 HTML이 onclick="goTab('ops')" 꼴로 부른다 — 모듈 스코프라 전역에 얹어 준다.
+// window에 얹는 것뿐이라 여기서는 any가 불가피하다.
 // 인라인 핸들러가 부르는 이름은 반드시 여기 있어야 한다. 빠지면 클릭이 조용히 죽는다.
 Object.assign(window as any, {
   go,
@@ -183,8 +189,6 @@ Object.assign(window as any, {
   copyTel,
   state,
 });
-// 검사에서 서버 경계를 직접 두드리기 위해 — 화면 코드는 이 통로를 쓰지 않는다.
-(window as any).__api = api;
 
 /* ---------- 창·키보드 ---------- */
 
@@ -201,14 +205,14 @@ document.addEventListener('keydown', e => {
 });
 
 document.addEventListener('click', e => {
-  if (!(e.target as any).closest('#inbox, #bell')) $('#inbox').hidden = true;
+  if (!(e.target as Element).closest('#inbox, #bell')) $('#inbox').hidden = true;
 });
 
 // 지도와 목록에 같은 현장·호기가 나온다. 한쪽에 올리면 양쪽이 같이 밝아진다.
 const sync = (key: string, val: string, on: boolean) =>
   document.querySelectorAll(`[data-${key}="${val}"]`).forEach(el => el.classList.toggle('hl', on));
 const hover = (on: boolean) => (e: Event) => {
-  const t = (e.target as any).closest('[data-site],[data-unit]');
+  const t = (e.target as Element).closest<HTMLElement>('[data-site],[data-unit]');
   if (!t) return;
   if (t.dataset.site) sync('site', t.dataset.site, on);
   if (t.dataset.unit) sync('unit', t.dataset.unit, on);

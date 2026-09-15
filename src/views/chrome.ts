@@ -1,5 +1,5 @@
 // 상단 크럼과 상태 띠 — 어느 단계에서나 같은 자리에 있는 것들.
-import { $, LABEL, ORDER } from '../ui';
+import { $, LABEL } from '../ui';
 import { allUnits, curSite, curUnit, state } from '../store';
 import type { Status, Unit } from '../types';
 
@@ -34,5 +34,3 @@ export function renderBand() {
     .map(([k, n, l]) => `<div class="cell ${k}"><b>${n}</b>${l}</div>`)
     .join('');
 }
-
-export { ORDER };
