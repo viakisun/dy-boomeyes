@@ -7,6 +7,7 @@ import { fitCameraGrid, renderCameraGrid, renderFullscreen } from '../../shared/
 import { $ } from '../../shared/dom';
 import { describe, hideStartupFailure, showNotice, showStartupFailure } from '../../shared/notice';
 import {
+  allUnitsWithSite,
   currentRequest,
   currentSite,
   currentUnit,
@@ -19,13 +20,14 @@ import {
   view,
 } from './store';
 import type { Level, SortKey, Tab } from './store';
-import { renderBreadcrumb, renderStatusBar } from './views/shell';
+import { renderInbox } from '../../shared/panels/inbox';
+import { sitePanel } from '../../shared/panels/site-panel';
+import { renderStatusBar } from '../../shared/panels/status-bar';
+import { unitPanel } from '../../shared/panels/unit-panel';
+import { renderBreadcrumb } from './views/shell';
 import { nationPanel } from './views/nation-panel';
-import { sitePanel } from './views/site-panel';
-import { unitPanel } from './views/unit-panel';
 import { renderFleet } from './views/fleet';
 import { renderRequests } from './views/requests';
-import { renderInbox } from './views/inbox';
 
 /* ---------- 화면 전환 ---------- */
 
@@ -64,7 +66,10 @@ function render() {
   }
 
   renderBreadcrumb();
-  renderStatusBar();
+  const units = view.level === 'nation' ? allUnitsWithSite().map(r => r.unit) : currentSite()!.units;
+  const totalLabel =
+    view.level === 'nation' ? '보유 장비' : currentSite()!.status === 'store' ? '보관 장비' : '투입 호기';
+  renderStatusBar(units, totalLabel);
   renderSidePanel();
   const atUnit = view.level === 'unit';
   $('#band').classList.toggle('hide', atUnit);
@@ -92,7 +97,8 @@ function renderSidePanel() {
   card.classList.add('wide');
   card.classList.remove('unit');
   if (view.level === 'site') {
-    card.innerHTML = sitePanel(site!);
+    const toFleet = `<a href="#" onclick="openTab('fleet');return false">보유 장비에서 보기</a>`;
+    card.innerHTML = sitePanel(site!, view.unitNumber, toFleet);
     return;
   }
   card.classList.add('unit');
@@ -140,7 +146,7 @@ const closeCamera = () => {
 function toggleInbox(open?: boolean) {
   const el = $('#inbox');
   el.hidden = open != null ? !open : !el.hidden;
-  if (!el.hidden) renderInbox();
+  if (!el.hidden) renderInbox(server.alerts, view.readAlerts);
 }
 const markAlertRead = (id: string) => {
   view.readAlerts.add(id);
@@ -148,7 +154,7 @@ const markAlertRead = (id: string) => {
 };
 const markAllAlertsRead = () => {
   server.alerts.forEach(a => view.readAlerts.add(a.id));
-  renderInbox();
+  renderInbox(server.alerts, view.readAlerts);
   render();
 };
 

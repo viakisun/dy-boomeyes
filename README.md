@@ -1,7 +1,14 @@
 # BoomEyes
 
-CPB(콘크리트 타설 붐) 관제. 지금은 **소유주 운영 현황** 한 벌이 있고, 건설사 웹과 안전관리자 앱이
-같은 `src/shared` 위에 붙을 자리를 잡아 두었다.
+CPB(콘크리트 타설 붐) 관제. 역할마다 앱이 하나다.
+
+| 앱 | 주소 | 무엇 |
+|---|---|---|
+| 소유주 | `/` | 전국 현장 → 호기 → 카메라 · 보유 장비 120대 · 현장 요청 배정 |
+| 건설사 | `/builder.html` | 우리 현장 → 호기 → 카메라. 장비를 소유하지 않으므로 보유 장비·요청 배정이 없다 |
+| 안전관리자 | (아직 없음) | 시안이 나오면 같은 자리에 붙인다 |
+
+로그인이 생기기 전까지 건설사는 주소로 고른다 — `/builder.html?builder=대양건설`.
 
 ```sh
 npm install
@@ -15,6 +22,7 @@ npm run preview  # http://localhost:4301 — 빌드한 dist/를 정적으로
 
 ```
 index.html              소유주 앱의 껍데기
+builder.html            건설사 앱의 껍데기
 src/
   shared/               역할이 늘어도 같이 쓰는 것
     types.ts            도메인 — 서버가 돌려주는 것들의 모양
@@ -25,24 +33,32 @@ src/
     format.ts  dom.ts   표시 형식 · DOM 잔심부름
     map/site-map.ts     지도. 저장소를 모르고 보여 줄 것을 인자로 받는다
     camera/camera-view.ts  카메라 6분할과 전체 화면
+    panels/             두 앱이 함께 쓰는 화면 조각
+      site-panel · unit-panel · status-bar · inbox
     mock/               목업 데이터와 목업 서버
   apps/
     owner/              소유주 앱
       main.ts           부팅 · 화면 전환 · 인라인 핸들러 배선
       store.ts          서버에서 받아 둔 것(server)과 보고 있는 것(view)
-      views/            shell · nation-panel · site-panel · unit-panel · fleet · requests · inbox
-tools/check-handlers.mjs  인라인 on*= 가 부르는 이름이 실제로 있는지 검사
+      views/            shell(크럼) · nation-panel · fleet · requests
+    builder/            건설사 앱
+      main.ts  store.ts  views/site-list.ts
+tools/check-handlers.mjs  인라인 on*= 가 부르는 이름이 실제로 있는지 앱마다 검사
 ```
 
 **`shared`에는 확신하는 것만 올린다.** 두 번째 역할이 실제로 쓸 때 옮긴다 — 미리 올리면
-쓰지도 않는 옵션이 붙는다. 지금 `apps/owner/views`의 호기 상세 카드는 건설사·안전관리자도
-쓸 법하지만, 그쪽 화면을 만들 때 옮긴다.
+쓰지도 않는 옵션이 붙는다. 호기 상세 카드·현장 카드·상태 띠·알림은 건설사가 실제로 쓰게 된
+시점에 `shared/panels` 로 옮겼고, 그때 저장소 의존을 끊고 다른 것(고른 호기, 머리말 링크)은
+인자로 바꿨다. 소유주 전용인 전국 목록·보유 장비·요청은 `apps/owner` 에 남아 있다.
 
 ### 역할을 하나 더 만들 때
 
 1. `builder.html` 을 만들고 `<script type="module" src="/src/apps/builder/main.ts">` 를 넣는다
 2. `src/apps/builder/` 에 `main.ts` · `store.ts` · `views/` 를 둔다
 3. `vite.config.ts` 의 `input` 에 한 줄 더한다
+
+`npm run check` 가 앱마다 따로 검사한다 — 어느 앱의 마크업이 그 앱에 없는 핸들러를 부르면
+막는다. 공용 조각에 한 역할 전용 동작이 섞이면 여기서 걸린다(실제로 걸렸다).
 
 빌드는 앱마다 따로 묶이고 `shared`는 공유 청크로 빠진다.
 

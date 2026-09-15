@@ -9,7 +9,7 @@ export default defineConfig({
     rollupOptions: {
       input: {
         owner: 'index.html',
-        // builder: 'builder.html',   // 건설사 웹
+        builder: 'builder.html',
         // safety: 'safety.html',     // 안전관리자 앱
       },
     },

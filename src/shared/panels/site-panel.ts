@@ -1,13 +1,12 @@
 // 현장 단계 좌측 카드 — 호기 목록과 접어 둔 계약·담당자.
-import { STATUS_COLOR, STATUS_NOTE, STATUS_ORDER } from '../../../shared/labels';
-import { view } from '../store';
-import type { Site, Unit } from '../../../shared/types';
+import { STATUS_COLOR, STATUS_NOTE, STATUS_ORDER } from '../labels';
+import type { Site, Unit } from '../types';
 
-function unitRow(site: Site, unit: Unit): string {
+function unitRow(site: Site, unit: Unit, selected: number | null): string {
   const warnCount = unit.aiEvents.filter(e => e.level === 'warn').length;
   const code = `<span style="font:400 11px var(--mono);color:var(--ink3);margin-left:4px">${unit.code}</span>`;
   return (
-    `<div class="row ${view.unitNumber === unit.number ? 'on' : ''}" data-unit="${unit.number}" ` +
+    `<div class="row ${selected === unit.number ? 'on' : ''}" data-unit="${unit.number}" ` +
     `onclick="openUnit('${site.id}',${unit.number})">` +
     `<div><div class="nm">${unit.number}호기 ${code}` +
     `${warnCount ? `<span class="aichip">AI ${warnCount}</span>` : ''}</div>` +
@@ -33,11 +32,11 @@ export function contractSection(site: Site): string {
   );
 }
 
-export function sitePanel(site: Site): string {
+/** 머리말 오른쪽 링크는 역할마다 다르다 — 소유주는 보유 장비로, 건설사는 없다. */
+export function sitePanel(site: Site, selectedUnit: number | null = null, headerLink = ''): string {
   const units = [...site.units].sort((a, b) => STATUS_ORDER[a.status] - STATUS_ORDER[b.status] || a.number - b.number);
   return (
-    `<header><h2>호기<small>${units.length}대</small></h2>` +
-    `<a href="#" onclick="openTab('fleet');return false">보유 장비에서 보기</a></header>` +
-    `<div class="body">${units.map(u => unitRow(site, u)).join('')}</div>${contractSection(site)}`
+    `<header><h2>호기<small>${units.length}대</small></h2>${headerLink}</header>` +
+    `<div class="body">${units.map(u => unitRow(site, u, selectedUnit)).join('')}</div>${contractSection(site)}`
   );
 }

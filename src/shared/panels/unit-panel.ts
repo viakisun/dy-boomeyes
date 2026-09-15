@@ -1,8 +1,8 @@
 // 호기 단계 좌측 카드 — 상태, 운전자, 실시간 수신값, 접어 둔 AI·소모품·현장·서류.
-import { AI_CAMERA_INDEX } from '../../../shared/camera/camera-view';
-import { shortLastSeen } from '../../../shared/format';
-import { STATUS_LABEL, STATUS_NOTE } from '../../../shared/labels';
-import type { Document, Part, Site, Unit } from '../../../shared/types';
+import { AI_CAMERA_INDEX } from '../camera/camera-view';
+import { shortLastSeen } from '../format';
+import { STATUS_LABEL, STATUS_NOTE } from '../labels';
+import type { Document, Part, Site, Unit } from '../types';
 
 /** 마모품이 한계에 닿았나 / 10 %p 안으로 다가왔나 */
 const isWornOut = (p: Part) => p.kind === 'wear' && p.wornPercent >= p.limitPercent;

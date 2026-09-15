@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>BoomEyes — 소유주 운영 현황</title>
+<title>BoomEyes — 건설사 현장</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -14,15 +14,13 @@
 <link rel="manifest" href="/manifest.webmanifest">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <meta name="theme-color" content="#075A60">
-<script type="module" src="/src/apps/owner/main.ts"></script>
+<script type="module" src="/src/apps/builder/main.ts"></script>
 </head>
 <body>
 
 <aside class="rail" aria-label="주 메뉴">
   <div class="logo"><i></i></div>
-  <button class="nav on" data-tab="ops" onclick="openTab('ops')"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7.5" height="7.5" rx="1.5"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="1.5"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="1.5"/><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="1.5"/></svg>운영 현황</button>
-  <button class="nav" data-tab="fleet" onclick="openTab('fleet')"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg>보유 장비</button>
-  <button class="nav" data-tab="requests" onclick="openTab('requests')"><svg viewBox="0 0 24 24"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4"/><path d="M9 12h6M9 16h4"/></svg>요청<span class="badge" id="rbadge"></span></button>
+  <button class="nav on" onclick="showSiteList()"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7.5" height="7.5" rx="1.5"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="1.5"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="1.5"/><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="1.5"/></svg>우리 현장</button>
 </aside>
 
 <header class="top">
@@ -32,8 +30,6 @@
 <div class="inbox" id="inbox" hidden></div>
 
 <main class="stage">
-  <section class="fleet" id="fleet" hidden></section>
-  <section class="fleet req" id="req" hidden></section>
   <div id="map" aria-label="현장 지도"></div>
 
   <div class="band" role="group" aria-label="장비 상태 요약" id="band"></div>
