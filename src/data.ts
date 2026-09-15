@@ -36,11 +36,11 @@ const DRIVERS = [
 ];
 // Incoming CPB requests from site safety managers.
 const REQS = [
-  { id: 'R-241', st: 'new',  site: '강서 데이터센터 신축', builder: '정은건설', region: '서울 강서구', mgr: '한안전', tel: '010-0000-1101', from: '2026. 10. 05.', to: '2027. 03. 31.', n: 3, spec: '봐 32 m · 지상 18층', at: '2시간 전' },
-  { id: 'R-240', st: 'new',  site: '김해 물류창고', builder: '남도건설', region: '경남 김해', mgr: '서안전', tel: '010-0000-1102', from: '2026. 09. 25.', to: '2027. 01. 15.', n: 2, spec: '봐 32 m', at: '어제' },
-  { id: 'R-238', st: 'assign', site: '수원 주상복합', builder: '한빛건설', region: '경기 수원', mgr: '임안전', tel: '010-0000-1103', from: '2026. 10. 01.', to: '2027. 06. 30.', n: 4, spec: '봐 32 m · 지상 24층', at: '3일 전', picked: [] },
-  { id: 'R-235', st: 'ship', site: '울산 플랜트 증설', builder: '동해건설', region: '울산 남구', mgr: '권안전', tel: '010-0000-1104', from: '2026. 09. 20.', to: '2027. 02. 28.', n: 2, spec: '봐 32 m', at: '1주 전' },
-  { id: 'R-231', st: 'done', site: '제주 리조트 증축', builder: '호남건설', region: '제주시', mgr: '고안전', tel: '010-0000-1105', from: '2026. 03. 02.', to: '2026. 08. 31.', n: 2, spec: '봐 32 m', at: '종료' },
+  { id: 'R-241', st: 'new',  site: '강서 데이터센터 신축', builder: '정은건설', region: '서울 강서구', mgr: '한안전', tel: '010-0000-1101', from: '2026. 10. 05.', to: '2027. 03. 31.', n: 3, spec: '붐 32 m · 지상 18층', at: '2시간 전' },
+  { id: 'R-240', st: 'new',  site: '김해 물류창고', builder: '남도건설', region: '경남 김해', mgr: '서안전', tel: '010-0000-1102', from: '2026. 09. 25.', to: '2027. 01. 15.', n: 2, spec: '붐 32 m', at: '어제' },
+  { id: 'R-238', st: 'assign', site: '수원 주상복합', builder: '한빛건설', region: '경기 수원', mgr: '임안전', tel: '010-0000-1103', from: '2026. 10. 01.', to: '2027. 06. 30.', n: 4, spec: '붐 32 m · 지상 24층', at: '3일 전', picked: [] },
+  { id: 'R-235', st: 'ship', site: '울산 플랜트 증설', builder: '동해건설', region: '울산 남구', mgr: '권안전', tel: '010-0000-1104', from: '2026. 09. 20.', to: '2027. 02. 28.', n: 2, spec: '붐 32 m', at: '1주 전' },
+  { id: 'R-231', st: 'done', site: '제주 리조트 증축', builder: '호남건설', region: '제주시', mgr: '고안전', tel: '010-0000-1105', from: '2026. 03. 02.', to: '2026. 08. 31.', n: 2, spec: '붐 32 m', at: '종료' },
 ];
 const REQ_ST = { new: '요청 접수', assign: '배정 중', ship: '운송·설치', run: '가동', done: '종료' };
 
