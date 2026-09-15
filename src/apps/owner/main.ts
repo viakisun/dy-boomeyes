@@ -3,9 +3,10 @@
 import '../../style.css';
 import * as api from '../../shared/api';
 import * as map from '../../shared/map/site-map';
-import { fitCameraGrid, renderCameraGrid, renderFullscreen } from '../../shared/camera/camera-view';
+import { badgeText, bindShell, setUnitMode, startApp } from '../../shared/app-shell';
+import { renderCameraGrid } from '../../shared/camera/camera-view';
 import { $ } from '../../shared/dom';
-import { describe, hideStartupFailure, showNotice, showStartupFailure } from '../../shared/notice';
+import { describe, showNotice } from '../../shared/notice';
 import {
   allUnitsWithSite,
   currentRequest,
@@ -20,19 +21,15 @@ import {
   view,
 } from './store';
 import type { Level, SortKey, Tab } from './store';
-import { renderInbox } from '../../shared/panels/inbox';
+import { renderBreadcrumb } from '../../shared/panels/breadcrumb';
 import { sitePanel } from '../../shared/panels/site-panel';
 import { renderStatusBar } from '../../shared/panels/status-bar';
 import { unitPanel } from '../../shared/panels/unit-panel';
-import { renderBreadcrumb } from './views/shell';
 import { nationPanel } from './views/nation-panel';
 import { renderFleet } from './views/fleet';
 import { renderRequests } from './views/requests';
 
 /* ---------- 화면 전환 ---------- */
-
-/** 0이면 배지를 비운다 — 빈 문자열이라야 CSS가 점을 숨긴다 */
-const badgeText = (n: number) => (n ? String(n) : '');
 
 function render() {
   document
@@ -65,17 +62,15 @@ function render() {
     return;
   }
 
-  renderBreadcrumb();
+  const atNation = view.level === 'nation';
+  renderBreadcrumb('전국', atNation ? null : currentSite(), currentUnit());
   const units = view.level === 'nation' ? allUnitsWithSite().map(r => r.unit) : currentSite()!.units;
   const totalLabel =
     view.level === 'nation' ? '보유 장비' : currentSite()!.status === 'store' ? '보관 장비' : '투입 호기';
   renderStatusBar(units, totalLabel);
   renderSidePanel();
   const atUnit = view.level === 'unit';
-  $('#band').classList.toggle('hide', atUnit);
-  document.body.className = atUnit ? 'vB' : '';
-  if (!atUnit) $('#map').removeAttribute('style');
-  $('#wall').hidden = !atUnit;
+  setUnitMode(atUnit);
 
   const site = currentSite();
   if (view.level === 'nation') map.showNation(server.sites);
@@ -129,34 +124,6 @@ function openTab(tab: Tab) {
   }
   render();
 }
-
-/* ---------- 카메라 ---------- */
-
-const openCamera = (index: number) => {
-  view.openCamera = index;
-  renderFullscreen(currentUnit(), index);
-};
-const closeCamera = () => {
-  view.openCamera = null;
-  renderFullscreen(currentUnit(), null);
-};
-
-/* ---------- 알림 ---------- */
-
-function toggleInbox(open?: boolean) {
-  const el = $('#inbox');
-  el.hidden = open != null ? !open : !el.hidden;
-  if (!el.hidden) renderInbox(server.alerts, view.readAlerts);
-}
-const markAlertRead = (id: string) => {
-  view.readAlerts.add(id);
-  toggleInbox(false);
-};
-const markAllAlertsRead = () => {
-  server.alerts.forEach(a => view.readAlerts.add(a.id));
-  renderInbox(server.alerts, view.readAlerts);
-  render();
-};
 
 /* ---------- 요청 배정 ---------- */
 
@@ -224,80 +191,34 @@ function setFleetFilter(key: FleetKey, value: string | boolean, keepFocus = fals
   if (keepFocus) $('#fq').focus();
 }
 
-/* ---------- 연락 ---------- */
-
-const dial = (tel: string) => (location.href = 'tel:' + tel);
-const copyTel = (button: HTMLElement, tel: string) => {
-  navigator.clipboard.writeText(tel).catch(() => showNotice('복사하지 못했습니다.'));
-  button.textContent = '✓';
-  setTimeout(() => (button.textContent = '⧉'), 1200);
-};
-
 // 생성 HTML이 onclick="openTab('ops')" 꼴로 부른다 — 모듈 스코프라 전역에 얹어 준다.
 // 인라인 핸들러가 부르는 이름은 반드시 여기 있어야 한다. 빠지면 클릭이 조용히 죽는다.
 // window에 얹는 것뿐이라 여기서는 any가 불가피하다.
+const shell = bindShell({
+  currentUnit,
+  view,
+  alerts: () => server.alerts,
+  readAlerts: view.readAlerts,
+  render,
+});
+
 Object.assign(window as any, {
-  openNation,
+  ...shell,
+  openRoot: openNation,
   openSite,
   openUnit,
   openTab,
-  openCamera,
-  closeCamera,
-  toggleInbox,
-  markAlertRead,
-  markAllAlertsRead,
   openRequest,
   closeRequest,
   toggleAssign,
   confirmAssignment,
   setFleetFilter,
-  dial,
-  copyTel,
   view,
 });
-
-/* ---------- 창·키보드 ---------- */
-
-new ResizeObserver(() => fitCameraGrid(currentUnit())).observe($('#wall'));
-addEventListener('resize', () => render());
-
-document.addEventListener('keydown', e => {
-  const unit = currentUnit();
-  if (view.openCamera == null || !unit) return;
-  const count = unit.cameras.length;
-  if (e.key === 'Escape') closeCamera();
-  if (e.key === 'ArrowLeft') openCamera((view.openCamera + count - 1) % count);
-  if (e.key === 'ArrowRight') openCamera((view.openCamera + 1) % count);
-});
-
-document.addEventListener('click', e => {
-  if (!(e.target as Element).closest('#inbox, #bell')) $('#inbox').hidden = true;
-});
-
-// 지도와 목록에 같은 현장·호기가 나온다. 한쪽에 올리면 양쪽이 같이 밝아진다.
-const highlight = (key: string, value: string, on: boolean) =>
-  document.querySelectorAll(`[data-${key}="${value}"]`).forEach(el => el.classList.toggle('hl', on));
-const onHover = (on: boolean) => (e: Event) => {
-  const target = (e.target as Element).closest<HTMLElement>('[data-site],[data-unit]');
-  if (!target) return;
-  if (target.dataset.site) highlight('site', target.dataset.site, on);
-  if (target.dataset.unit) highlight('unit', target.dataset.unit, on);
-};
-document.addEventListener('mouseover', onHover(true));
-document.addEventListener('mouseout', onHover(false));
 
 /* ---------- 부팅 ---------- */
 
 map.onPick(openSite, openUnit);
 map.loadCountryOutline();
 
-async function start() {
-  try {
-    await loadEverything();
-    hideStartupFailure();
-    render();
-  } catch (error) {
-    showStartupFailure(error, start);
-  }
-}
-start();
+startApp(loadEverything, render);
