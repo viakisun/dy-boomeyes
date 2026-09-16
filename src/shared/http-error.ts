@@ -8,6 +8,3 @@ export class HttpError extends Error {
     this.name = 'HttpError';
   }
 }
-
-/** 닿지 못했을 때(네트워크·CORS)는 status가 0이다 */
-export const isOffline = (e: unknown) => e instanceof HttpError && e.status === 0;

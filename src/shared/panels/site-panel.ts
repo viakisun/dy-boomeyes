@@ -17,7 +17,7 @@ function unitRow(site: Site, unit: Unit, selected: number | null): string {
 }
 
 /** 계약과 담당자는 현장마다 고정이라 카드 맨 아래 한 줄로 접어 둔다. */
-export function contractSection(site: Site): string {
+function contractSection(site: Site): string {
   if (site.status === 'store') return '';
   const percent = site.progress * 100;
   return (
