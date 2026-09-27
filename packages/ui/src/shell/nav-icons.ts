@@ -56,6 +56,11 @@ export const NAV_ICON: Record<ScrId, Component> = {
   'A4-04': Users,
   'A4-05': FilePenLine,
   'A4-06': FileText,
+  'A4-07': LayoutDashboard,
+  'A4-08': Truck,
+  'A4-09': Monitor,
+  'A4-10': FileText,
+  'A4-11': Bell,
   // B0 로그인
   'B0-01': LogIn,
   // B1 운영사 관제
@@ -67,6 +72,10 @@ export const NAV_ICON: Record<ScrId, Component> = {
   'B1-06': FilePenLine,
   'B1-07': Presentation,
   'B1-08': RotateCcwClock,
+  'B1-09': Truck,
+  'B1-10': Truck,
+  'B1-11': Monitor,
+  'B1-12': Bell,
   // B2 건설사 본사
   'B2-02': MapIcon,
   'B2-03': MapPin,
